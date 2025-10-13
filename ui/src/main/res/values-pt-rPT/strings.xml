@@ -46,7 +46,7 @@
     <string name="my_vault">O meu cofre</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome do item (obrigatório)</string>
-    <string name="send_name_required">"Nome do Send (obrigatório)"</string>
+    <string name="send_name_required">Nome do Send (obrigatório)</string>
     <string name="no">Não</string>
     <string name="notes">Notas</string>
     <string name="private_notes">Notas privadas</string>
@@ -101,7 +101,7 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation_title">Definir o tempo limite da sessão para \"Terminar sessão\"?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Definir o tempo limite da sessão para “Terminar sessão”?</string>
     <string name="vault_timeout_log_out_confirmation_message">Após o período de tempo limite, a sessão será terminada. Terá de estar ligado à Internet para iniciar sessão e aceder novamente ao seu cofre. As suas definições e PIN guardados neste dispositivo não serão alterados.</string>
     <string name="logging_in">A iniciar sessão…</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
@@ -161,10 +161,10 @@
     <string name="items">Itens</string>
     <string name="items_for_uri">Itens para %1$s</string>
     <string name="no_items_for_uri">Não existem itens no seu cofre para %1$s.</string>
-    <string name="no_items_for_vault">Não existem itens no seu cofre que correspondam a \"%1$s\"</string>
+    <string name="no_items_for_vault">Não existem itens no seu cofre que correspondam a “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">Procure uma credencial ou adicione uma nova</string>
     <string name="disabled">Desativado</string>
-    <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
+    <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã “Definições”.</string>
     <string name="autofill_title">Preencher automaticamente</string>
     <string name="autofill_or_view">Pretende preencher automaticamente ou ver este item?</string>
     <string name="search">Procurar</string>
@@ -364,10 +364,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="default_uri_match_detection">Deteção de correspondência de URI predefinida</string>
     <string name="default_uri_match_detection_description">A deteção de correspondência de URI controla a forma como o Bitwarden identifica sugestões de preenchimento automático.</string>
     <string name="theme">Tema</string>
-    <string name="theme_description">Altere o tema de cores da aplicação.</string>
+    <string name="theme_description">Altere o tema da aplicação</string>
     <string name="copy_notes">Copiar nota</string>
-    <string name="exit">Sair</string>
-    <string name="exit_confirmation">Tem a certeza de que pretende sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir a palavra-passe mestra ao reiniciar a app?</string>
     <string name="pin_require_master_password_restart">Pretende exigir o desbloqueio com a sua palavra-passe mestra quando a aplicação é reiniciada?</string>
     <string name="ask_to_add_item">Pedir para adicionar um item</string>
@@ -396,7 +394,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador</string>
     <string name="unable_to_save_attachment">Ocorreu um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</string>
     <string name="save_attachment_success">Anexo guardado com sucesso</string>
-    <string name="autofill_tile_accessibility_required">Por favor, ative o \"Serviço de acessibilidade de preenchimento automático\" nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
+    <string name="autofill_tile_accessibility_required">Por favor, ative o “Serviço de acessibilidade de preenchimento automático” nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
     <string name="autofill_tile_uri_not_found">Nenhum campo de palavra-passe detetado</string>
     <string name="soft_deleting">A mover para o lixo…</string>
     <string name="item_soft_deleted">O item foi movido para o lixo.</string>
@@ -740,7 +738,7 @@ Pretende mudar para esta conta?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Saiba mais sobre formas de evitar o bloqueio da conta</annotation></string>
     <string name="help_with_server_geolocations">Ajuda com a geolocalização do servidor.</string>
     <string name="email_address_required">Endereço de e-mail (obrigatório)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Selecione o link no e-mail enviado para verificar o seu endereço de e-mail e continuar a criar a sua conta. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Selecione o link no e-mail enviado para verificar o seu endereço de e-mail e continuar a criar a sua conta.</string>
     <string name="change_email_address">Alterar o endereço de e-mail</string>
     <string name="next">Seguinte</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não pode recuperar uma palavra-passe mestra perdida ou esquecida.</string>
@@ -758,9 +756,16 @@ Pretende mudar para esta conta?</string>
     <string name="allow_bitwarden_authenticator_syncing">Permitir a sincronização do autenticador</string>
     <string name="there_was_an_issue_validating_the_registration_token">Ocorreu um problema com a validação do token de registo.</string>
     <string name="turn_on_autofill">Ativar o preenchimento automático</string>
+    <string name="autofill_setup">Configuração do preenchimento automático</string>
+    <string name="turn_on_browser_autofill_integration">Ativar a integração do preenchimento automático do navegador</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Está a utilizar um navegador que requer permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Está a utilizar navegadores que requerem permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Está a utilizar um navegador que requer permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe. Ative a sua integração de preenchimento automático preferida abaixo.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Está a utilizar navegadores que requerem permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe. Ative o preenchimento automático para todos os navegadores instalados para continuar.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utilize o preenchimento automático para iniciar sessão nas suas contas com um simples toque.</string>
     <string name="turn_on_later">Ativar mais tarde</string>
     <string name="turn_on_autofill_later">Ativar o preenchimento automático mais tarde?</string>
+    <string name="turn_on_browser_autofill_integration_later">Ativar a integração do preenchimento automático do navegador mais tarde?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Pode voltar a concluir este passo a qualquer altura nas Definições.</string>
     <string name="what_bitwarden_has_to_offer">Pode agora explorar tudo o que o Bitwarden tem para oferecer e começar a gerir as suas palavras-passe de forma segura.</string>
     <string name="youre_all_set">Tudo a postos!</string>
@@ -848,8 +853,8 @@ Pretende mudar para esta conta?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Junte as palavras em qualquer ordem para formar a sua frase de acesso. <annotation emphasis="bold">Utilize hífenes, espaços ou deixe-as como uma palavra longa</annotation> — a escolha é sua!</string>
     <string name="make_it_yours">Torne-a sua</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Acrescente um número ou símbolo</annotation> para a tornar ainda mais forte. Agora tem uma frase de acesso única, segura e memorizável!</string>
-    <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
-    <string name="check_out_the_passphrase_generator">"Dê uma vista de olhos no gerador de frases de acesso"</string>
+    <string name="need_some_inspiration">Precisa de alguma inspiração?</string>
+    <string name="check_out_the_passphrase_generator">Dê uma vista de olhos no gerador de frases de acesso</string>
     <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. A cadeia de certificados ou as definições de proxy no seu dispositivo ou no seu servidor Bitwarden podem não estar corretamente configuradas.</string>
     <string name="copy_private_key">Copiar chave privada</string>
     <string name="login_credentials">Credenciais de início de sessão</string>
@@ -867,7 +872,7 @@ Pretende mudar para esta conta?</string>
     <string name="import_client_certificate">Importar certificado de cliente</string>
     <string name="enter_the_client_certificate_password_and_alias">Introduza a palavra-passe do certificado do cliente e o nome alternativo pretendido para este certificado.</string>
     <string name="alias">Nome alternativo</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Utilize o gerador para criar palavras-passe, frases de acesso e nomes de utilizador seguros. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Utilize o gerador para criar palavras-passe, frases de acesso e nomes de utilizador seguros.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">As frases de acesso são palavras-passe fortes que são frequentemente mais fáceis de memorizar e de escrever do que as palavras-passe aleatórias. São úteis para iniciar sessão em contas onde o Preenchimento automático não está disponível, como um serviço de streaming na sua TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Os nomes de utilizador únicos acrescentam uma camada extra de segurança e podem ajudar a impedir que os hackers encontrem as suas contas.</string>
     <string name="coachmark_1_of_6">1 DE 6</string>
@@ -876,8 +881,8 @@ Pretende mudar para esta conta?</string>
     <string name="coachmark_4_of_6">4 DE 6</string>
     <string name="coachmark_5_of_6">5 DE 6</string>
     <string name="coachmark_6_of_6">6 DE 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Utilize estas opções para ajustar a sua palavra-passe consoante os requisitos do site da sua conta.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Depois de guardar a sua nova palavra-passe no Bitwarden, não se esqueça de a atualizar no site da sua conta. "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Utilize estas opções para ajustar a sua palavra-passe de acordo com os requisitos do site da sua conta.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Depois de guardar a sua nova palavra-passe no Bitwarden, não se esqueça de a atualizar no site da sua conta.</string>
     <string name="verify_your_identity">Verifique a sua identidade</string>
     <string name="error_loading_certificate">Erro ao carregar o certificado</string>
     <string name="certificate_alias">Alias do certificado</string>
@@ -906,7 +911,7 @@ Pretende mudar para esta conta?</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Utilizar a integração do preenchimento automático do Chrome (Beta)</string>
+    <string name="use_chrome_beta_autofill_integration">Utilizar a integração do preenchimento automático do Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Uma vez ativado, será direcionado para as definições do Brave para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Sem pasta</string>
@@ -950,7 +955,7 @@ Pretende mudar para esta conta?</string>
     <string name="log_deleted">Registo eliminado</string>
     <string name="app_settings">Definições da app</string>
     <string name="replace_existing_certificate">Substituir o certificado existente?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Já existe um certificado com o pseudónimo \"%s\". Deseja substituí-lo? \nSubstituir o certificado pode afetar a sua ligação a quaisquer ambientes que o utilizem atualmente.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Já existe um certificado com o pseudónimo “%s”. Deseja substituí-lo? \nSubstituir o certificado pode afetar a sua ligação a quaisquer ambientes que o utilizem atualmente.</string>
     <string name="replace_certificate">Substituir o certificado</string>
     <string name="unable_to_read_certificate">Não é possível ler o certificado.</string>
     <string name="cannot_delete_your_account">Não é possível eliminar a sua conta</string>
@@ -963,7 +968,7 @@ Pretende mudar para esta conta?</string>
     <string name="use_dynamic_colors">Utilizar cores dinâmicas</string>
     <string name="use_dynamic_colors_question">Utilizar cores dinâmicas?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Este esquema de cores aplica automaticamente as cores do sistema ao Bitwarden com base no seu papel de parede atual. Essas cores podem não atender a todas as diretrizes de acessibilidade.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione “Confiar” para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>
     <string name="trusted_by_you_learn_more">Estas são aplicações ou navegadores em que o Bitwarden não confia por defeito, mas que são confiadas por si para realizar operações de chave de acesso.</string>
@@ -984,7 +989,6 @@ Pretende mudar para esta conta?</string>
     <string name="delete_x">Eliminar %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Falha ao decifrar a cifra. Contacte o suporte.</string>
     <string name="decryption_error">Erro de desencriptação</string>
-    <string name="add_item_rotation">Adicionar rotação de item</string>
     <string name="scan_a_qr_code">Ler um código QR</string>
     <string name="cannot_add_authenticator_key">Não é possível adicionar uma chave de autenticação?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Ative a permissão da câmara para utilizar o digitalizador</string>
@@ -1011,7 +1015,7 @@ Pretende mudar para esta conta?</string>
     <string name="use_your_device_camera_to_scan_codes">Utilize a câmara do seu dispositivo para ler códigos</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Digitalize o código QR nas suas definições de verificação de dois passos para qualquer conta.</string>
     <string name="sign_in_using_unique_codes">Inicie sessão utilizando códigos únicos</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Ao utilizar a verificação de dois passos, introduz o seu nome de utilizador e palavra-passe e um código gerado nesta aplicação.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Ao utilizar a verificação de dois passos, introduz o seu nome de utilizador e palavra-passe e um código gerado nesta app.</string>
     <string name="skip">Saltar</string>
     <string name="help">Ajuda</string>
     <string name="launch_tutorial">Iniciar tutorial</string>
@@ -1061,9 +1065,9 @@ Pretende mudar para esta conta?</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada a partir da app Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
     <string name="required_information_missing">Informações necessárias em falta</string>
-    <string name="required_information_missing_message">"A informação necessária está em falta (por exemplo, \"serviços\" ou \"segredo\"). Verifique o seu ficheiro e tente novamente. Visite bitwarden.com/help para obter suporte"</string>
-    <string name="file_could_not_be_processed">"O ficheiro não pôde ser processado"</string>
-    <string name="file_could_not_be_processed_message">"O ficheiro não pôde ser processado. Certifique-se de que se trata de um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help"</string>
+    <string name="required_information_missing_message">A informação necessária está em falta (por exemplo, \"serviços\" ou \"segredo\"). Verifique o seu ficheiro e tente novamente. Visite bitwarden.com/help para obter suporte</string>
+    <string name="file_could_not_be_processed">O ficheiro não pôde ser processado</string>
+    <string name="file_could_not_be_processed_message">O ficheiro não pôde ser processado. Certifique-se de que se trata de um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help</string>
     <string name="get_help">Obter ajuda</string>
     <string name="expand_advanced_options">Expandir opções avançadas</string>
     <string name="local_items_are_expanded_click_to_collapse">Os itens locais estão expandidos, clique para recolher.</string>
@@ -1087,18 +1091,46 @@ Pretende mudar para esta conta?</string>
     <string name="default_uri_match_detection_description_advanced_options">A deteção de correspondência de URI controla como o Bitwarden identifica sugestões de preenchimento automático.\n<annotation emphasis="bold">Aviso:</annotation> \"Começa com\" é uma opção avançada com maior risco de expor credenciais.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com um risco acrescido de exposição de credenciais.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">A \"Expressão regular\" é uma opção avançada com um risco acrescido de expor credenciais se for utilizada incorretamente.</string>
-    <string name="credential_import_was_cancelled">A importação de credenciais foi cancelada. Não foram importadas credenciais.</string>
+    <string name="later">Mais tarde</string>
+    <string name="encryption_settings_updated">Definições de encriptação atualizadas</string>
+    <string name="update_your_encryption_settings">Atualize as suas definições de encriptação</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">As novas definições de encriptação recomendadas irão melhorar a segurança da sua conta. Introduza a sua palavra-passe mestra para atualizar agora.</string>
+    <string name="import_was_cancelled_in_the_selected_app">A importação de credenciais na app selecionada foi cancelada. Não foram importados itens.</string>
     <string name="import_cancelled">Importação cancelada</string>
-    <string name="your_items_have_been_successfully_imported">Os seus itens foram importados com sucesso e podem agora ser visualizados no seu cofre.</string>
-    <string name="import_saved_items">Importar itens guardados</string>
-    <string name="import_your_credentials_from_another_password_manager">Importe as suas credenciais, incluindo chaves de acesso, palavras-passe, cartões de crédito e quaisquer informações de identidade pessoal de outro gestor de palavras-passe.</string>
-    <string name="return_to_your_vault">Voltar ao seu cofre</string>
-    <string name="select_a_credential_manager_to_import_items_from">Selecione um gestor de credenciais a partir do qual importar itens.</string>
     <string name="no_items_imported">Nenhum item importado</string>
-    <string name="no_items_received_from_the_selected_credential_manager">Não foram recebidos quaisquer itens do gestor de credenciais selecionado.</string>
+    <string name="no_items_received_from_the_selected_app">Não foram recebidos itens da app selecionada.</string>
     <string name="vault_sync_failed">Falha na sincronização do cofre</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Os seus itens foram importados com sucesso, mas não foi possível sincronizar o cofre. Os itens importados não serão visíveis no seu cofre até que a sincronização seja efetuada.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Os seus itens foram importados com sucesso, mas não serão visíveis no seu cofre até que a sincronização seja efetuada.</string>
     <string name="there_was_a_problem_importing_your_items">Ocorreu um problema ao importar os seus itens. Por favor, tente novamente. Se o problema persistir, contacte o suporte.</string>
-    <string name="importing_items">A importar itens…</string>
-    <string name="uploading_items">A carregar itens…</string>
+    <string name="saving_items">A guardar itens…</string>
+    <string name="unable_to_import_your_items">Não é possível importar os seus itens</string>
+    <string name="import_from_computer">Importar do computador</string>
+    <string name="import_from_another_app">Importar doutra app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d item foi importado para o seu cofre.</item>
+        <item quantity="other">%1$d itens foram importados para o seu cofre.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Ativar o preenchimento automático do navegador para continuar a preencher as palavras-passe</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">O seu navegador foi atualizado recentemente, o que desativou o preenchimento automático do Bitwarden. Para continuar a preencher as suas palavras-passe com o Bitwarden, ative o preenchimento automático do navegador nas definições de preenchimento automático.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Os seus navegadores foram atualizados recentemente, o que desativou o preenchimento automático do Bitwarden. Para continuar a preencher as suas palavras-passe com o Bitwarden, ative o preenchimento automático do navegador para todos os navegadores instalados nas definições de preenchimento automático.</string>
+    <string name="not_now">Agora não</string>
+    <string name="import_from_bitwarden">Importar do Bitwarden</string>
+    <string name="select_account">Selecionar conta</string>
+    <string name="no_accounts_available">Não existem contas disponíveis</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">Não tem nenhuma conta da qual possa importar. A política de segurança da sua organização pode restringir a importação de itens do Bitwarden para outra app.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Importação restrita, não é possível importar cartões desta conta.</string>
+    <string name="verify_your_master_password">Verifique a sua palavra-passe mestra</string>
+    <string name="having_trouble_with_autofill">Está a ter problemas com o preenchimento automático?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Aceda à documentação de ajuda e resolução de problemas aqui</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importe palavras-passe, chaves de acesso e outros tipos de itens do seu cofre Bitwarden.</string>
+    <string name="items_to_import">Itens a importar</string>
+    <string name="exporting_items">A exportar itens…</string>
+    <string name="export_failed">Falha na exportação</string>
+    <string name="passwords">Palavras-passe</string>
+    <string name="passkeys">Chaves de acesso</string>
+    <string name="import_verb">Importar</string>
+    <string name="why_is_this_step_required">Porque é que este passo é necessário?</string>
+    <string name="kdf_update_failed_active_account_not_found">Falha na atualização do Kdf, conta ativa não encontrada. Por favor, tente novamente ou entre em contacto connosco.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas configurações kdf. Por favor, tente novamente ou entre em contacto connosco.</string>
+    <string name="the_import_request_could_not_be_processed">O pedido de importação não pôde ser processado.</string>
 </resources>
