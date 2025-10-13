@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.util.getLocalFileData
+import timber.log.Timber
 import java.io.File
 import java.time.Clock
 
@@ -80,9 +81,11 @@ internal class IntentManagerImpl(
     ) {
         val providerPackageName = CustomTabsClient.getPackageName(activity, null).toString()
         if (CustomTabsClient.isAuthTabSupported(activity, providerPackageName)) {
+            Timber.d("Launching uri with AuthTab for $providerPackageName")
             AuthTabIntent.Builder().build().launch(launcher, uri, "bitwarden")
         } else {
             // Fall back to a Custom Tab.
+            Timber.d("Launching uri with CustomTabs fallback for $providerPackageName")
             startCustomTabsActivity(uri = uri)
         }
     }

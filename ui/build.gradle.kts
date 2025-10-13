@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
