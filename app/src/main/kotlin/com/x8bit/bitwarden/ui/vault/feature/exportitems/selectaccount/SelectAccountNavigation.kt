@@ -40,3 +40,13 @@ fun NavController.navigateToSelectAccountScreen(
         navOptions = navOptions,
     )
 }
+
+/**
+ * Pop up to the [SelectAccountScreen].
+ */
+fun NavController.popUpToSelectAccountScreen() {
+    popBackStack(
+        route = SelectAccountRoute,
+        inclusive = false,
+    )
+}

@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.popUpToSelectAccountScreen
 import kotlinx.serialization.Serializable
 
 /**
@@ -34,6 +35,7 @@ fun NavGraphBuilder.reviewExportDestination(
     composableWithPushTransitions<ReviewExportRoute> {
         ReviewExportScreen(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToAccountSelection = { navController.popUpToSelectAccountScreen() },
         )
     }
 }
