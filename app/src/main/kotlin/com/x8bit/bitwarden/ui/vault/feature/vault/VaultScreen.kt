@@ -426,9 +426,12 @@ private fun VaultDialogs(
                 title = stringResource(
                     id = BitwardenString.enable_browser_autofill_to_keep_filling_passwords,
                 ),
-                message = pluralStringResource(
-                    id = BitwardenPlurals.your_browser_recently_updated_how_autofill_works,
-                    count = dialogState.browserCount,
+                message = stringResource(
+                    id = if (dialogState.browserCount > 1) {
+                        BitwardenString.your_browser_recently_updated_how_autofill_works_plural
+                    } else {
+                        BitwardenString.your_browser_recently_updated_how_autofill_works_singular
+                    },
                 ),
                 confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
                 dismissButtonText = stringResource(id = BitwardenString.not_now),
