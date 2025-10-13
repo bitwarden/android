@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 private const val KEY_STATE = "state"
@@ -76,6 +77,13 @@ class VerifyPasswordViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        // TODO: This is required because there is an OS-level leak occurring that leaves the
+        //   ViewModel in memory. We should remove this when that leak is fixed. (BIT-2287)
+        mutableStateFlow.update { it.copy(input = "") }
+        super.onCleared()
     }
 
     override fun handleAction(action: VerifyPasswordAction) {
@@ -165,6 +173,7 @@ class VerifyPasswordViewModel @Inject constructor(
         when (action.result) {
             is ValidatePasswordResult.Success -> {
                 if (action.result.isValid) {
+                    clearInputs()
                     sendEvent(
                         VerifyPasswordEvent.PasswordVerified(
                             state.accountSummaryListItem.userId,
@@ -189,6 +198,7 @@ class VerifyPasswordViewModel @Inject constructor(
             VaultUnlockResult.Success -> {
                 // A successful unlock result means the provided password is correct so we can
                 // consider the password verified and send the event.
+                clearInputs()
                 sendEvent(
                     VerifyPasswordEvent.PasswordVerified(
                         state.accountSummaryListItem.userId,
@@ -279,6 +289,10 @@ class VerifyPasswordViewModel @Inject constructor(
             )
         }
     }
+
+    private fun clearInputs() {
+        mutableStateFlow.update { it.copy(input = "") }
+    }
 }
 
 /**
@@ -290,7 +304,8 @@ class VerifyPasswordViewModel @Inject constructor(
 @Parcelize
 data class VerifyPasswordState(
     val accountSummaryListItem: AccountSelectionListItem,
-    val input: String = "",
+    // We never want this saved since the input is sensitive data.
+    @IgnoredOnParcel val input: String = "",
     val dialog: DialogState? = null,
 ) : Parcelable {
 
