@@ -230,6 +230,7 @@ class VaultLockManagerImpl(
                                                 )
                                             }
                                     }
+                                    migratePinProtectedUserKeyIfNeeded(userId = userId)
                                 }
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
@@ -270,6 +271,31 @@ class VaultLockManagerImpl(
                 onFailure = { setVaultToLocked(userId = userId) },
                 onSuccess = { setVaultToUnlocked(userId = userId) },
             )
+    }
+
+    /**
+     * Migrates the PIN-protected user key for the given user if needed.
+     *
+     * If an encrypted PIN exists and no PIN-protected user key envelope is present,
+     * enrolls the PIN with the encrypted PIN and stores the resulting envelope.
+     * Optionally marks the envelope as in-memory only if the PIN-protected user key is not present.
+     *
+     * @param userId The ID of the user for whom to migrate the PIN-protected user key.
+     */
+    private suspend fun migratePinProtectedUserKeyIfNeeded(userId: String) {
+        val encryptedPin = authDiskSource.getEncryptedPin(userId) ?: return
+        if (authDiskSource.getPinProtectedUserKeyEnvelope(userId) != null) return
+
+        val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
+        vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
+            .onSuccess { enrollPinResponse ->
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId,
+                    enrollPinResponse.pinProtectedUserKeyEnvelope,
+                    inMemoryOnly,
+                )
+                authDiskSource.storePinProtectedUserKey(userId, null)
+            }
     }
 
     /**
