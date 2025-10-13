@@ -238,7 +238,7 @@ private fun ReviewExportContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(BitwardenString.import_verb),
+            label = stringResource(BitwardenString.import_items),
             onClick = onImportItemsClick,
             modifier = Modifier
                 .fillMaxWidth()
