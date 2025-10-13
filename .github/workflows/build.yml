@@ -241,48 +241,48 @@ jobs:
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
         env:
-          UPLOAD-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-KEYSTORE-PASSWORD }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreRelease \
           storeFile:app_upload-keystore.jks \
-          storePassword:$UPLOAD-KEYSTORE-PASSWORD \
+          storePassword:$UPLOAD_KEYSTORE_PASSWORD \
           keyAlias:upload \
-          keyPassword:$UPLOAD-KEYSTORE-PASSWORD
+          keyPassword:$UPLOAD_KEYSTORE_PASSWORD
 
       - name: Generate beta Play Store bundle
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         env:
-          UPLOAD-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEYSTORE-PASSWORD }}
-          UPLOAD-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEY-PASSWORD }}
+          UPLOAD_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEYSTORE-PASSWORD }}
+          UPLOAD_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreBeta \
           storeFile:app_beta_upload-keystore.jks \
-          storePassword:$UPLOAD-BETA-KEYSTORE-PASSWORD \
+          storePassword:$UPLOAD_BETA_KEYSTORE_PASSWORD \
           keyAlias:bitwarden-beta-upload \
-          keyPassword:$UPLOAD-BETA-KEYSTORE-PASSWORD
+          keyPassword:$UPLOAD_BETA_KEY_PASSWORD
 
       - name: Generate release Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
+          PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreReleaseApk \
           storeFile:app_play-keystore.jks \
-          storePassword:$PLAY-KEYSTORE-PASSWORD \
+          storePassword:$PLAY_KEYSTORE_PASSWORD \
           keyAlias:bitwarden \
-          keyPassword:$PLAY-KEYSTORE-PASSWORD
+          keyPassword:$PLAY_KEYSTORE_PASSWORD
 
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
-          PLAY-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
+          PLAY_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
+          PLAY_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreBetaApk \
           storeFile:app_beta_play-keystore.jks \
-          storePassword:$PLAY-BETA-KEYSTORE-PASSWORD \
+          storePassword:$PLAY_BETA_KEYSTORE_PASSWORD \
           keyAlias:bitwarden-beta \
-          keyPassword:$PLAY-BETA-KEY-PASSWORD
+          keyPassword:$PLAY_BETA_KEY_PASSWORD
 
       - name: Generate debug Play Store APKs
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
@@ -559,14 +559,14 @@ jobs:
 
       - name: Generate F-Droid Beta Artifacts
         env:
-          FDROID-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEYSTORE-PASSWORD }}
-          FDROID-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEY-PASSWORD }}
+          FDROID_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEYSTORE-PASSWORD }}
+          FDROID_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidBetaApk \
           storeFile:app_beta_fdroid-keystore.jks \
-          storePassword:$FDROID-BETA-KEYSTORE-PASSWORD \
+          storePassword:$FDROID_BETA_KEYSTORE_PASSWORD \
           keyAlias:bitwarden-beta \
-          keyPassword:$FDROID-BETA-KEY-PASSWORD
+          keyPassword:$FDROID_BETA_KEY_PASSWORD
 
       - name: Upload F-Droid .apk artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
