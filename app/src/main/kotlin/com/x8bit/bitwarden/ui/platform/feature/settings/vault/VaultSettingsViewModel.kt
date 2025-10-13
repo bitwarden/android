@@ -30,6 +30,9 @@ class VaultSettingsViewModel @Inject constructor(
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
+            showImportItemsChevron = featureFlagManager.getFeatureFlag(
+                key = FlagKey.CredentialExchangeProtocolImport,
+            ),
         )
     },
 ) {
@@ -47,6 +50,12 @@ class VaultSettingsViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
             .map { VaultSettingsAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.CredentialExchangeProtocolImport)
+            .map { VaultSettingsAction.Internal.ImportFeatureUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -70,6 +79,10 @@ class VaultSettingsViewModel @Inject constructor(
             is VaultSettingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
+
+            is VaultSettingsAction.Internal.ImportFeatureUpdated -> {
+                handleImportFeatureUpdated(action)
+            }
         }
     }
 
@@ -77,6 +90,12 @@ class VaultSettingsViewModel @Inject constructor(
         action: VaultSettingsAction.Internal.SnackbarDataReceived,
     ) {
         sendEvent(VaultSettingsEvent.ShowSnackbar(action.data))
+    }
+
+    private fun handleImportFeatureUpdated(
+        action: VaultSettingsAction.Internal.ImportFeatureUpdated,
+    ) {
+        mutableStateFlow.update { it.copy(showImportItemsChevron = action.isEnabled) }
     }
 
     private fun handleImportLoginsCardDismissClicked() {
@@ -122,6 +141,7 @@ class VaultSettingsViewModel @Inject constructor(
  */
 data class VaultSettingsState(
     val showImportActionCard: Boolean,
+    val showImportItemsChevron: Boolean,
 )
 
 /**
@@ -197,6 +217,13 @@ sealed class VaultSettingsAction {
      * Internal actions not performed by user interation
      */
     sealed class Internal : VaultSettingsAction() {
+        /**
+         * Indicates that the import feature flag has been updated.
+         */
+        data class ImportFeatureUpdated(
+            val isEnabled: Boolean,
+        ) : Internal()
+
         /**
          * Indicates user first time state has changed.
          */
