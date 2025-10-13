@@ -80,7 +80,8 @@ class UserLogoutManagerImpl(
         // Save any data that will still need to be retained after otherwise clearing all dat
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+        val pinProtectedUserKeyEnvelope = authDiskSource
+            .getPinProtectedUserKeyEnvelope(userId = userId)
 
         switchUserIfAvailable(
             currentUserId = userId,
@@ -102,9 +103,9 @@ class UserLogoutManagerImpl(
                 vaultTimeoutAction = vaultTimeoutAction,
             )
         }
-        authDiskSource.storePinProtectedUserKey(
+        authDiskSource.storePinProtectedUserKeyEnvelope(
             userId = userId,
-            pinProtectedUserKey = pinProtectedUserKey,
+            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
         )
     }
 

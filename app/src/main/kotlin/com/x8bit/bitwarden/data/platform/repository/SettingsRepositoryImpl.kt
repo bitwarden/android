@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -293,7 +294,11 @@ class SettingsRepositoryImpl(
             ?.let { userId ->
                 authDiskSource
                     .getPinProtectedUserKeyFlow(userId)
-                    .map { it != null }
+                    .combine(
+                        authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId),
+                    ) { pinProtectedUserKey, pinProtectedUserKeyEnvelope ->
+                        pinProtectedUserKey != null || pinProtectedUserKeyEnvelope != null
+                    }
             }
             ?: flowOf(false)
 
@@ -403,7 +408,7 @@ class SettingsRepositoryImpl(
             ?.userDecryptionOptions
             ?.hasMasterPassword != false
         val timeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        val hasPin = authDiskSource.getPinProtectedUserKey(userId = userId) != null
+        val hasPin = authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId) != null
         val hasBiometrics = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
         // The timeout action cannot be "lock" if you do not have master password, pin, or
         // biometrics unlock enabled.

@@ -1284,8 +1284,8 @@ class AuthRepositoryImpl(
             ?.activeAccount
             ?.profile
             ?: return ValidatePinResult.Error(error = NoActiveUserException())
-        val pinProtectedUserKey = authDiskSource
-            .getPinProtectedUserKey(userId = activeAccount.userId)
+        val pinProtectedUserKeyEnvelope = authDiskSource
+            .getPinProtectedUserKeyEnvelope(userId = activeAccount.userId)
             ?: return ValidatePinResult.Error(
                 error = MissingPropertyException("Pin Protected User Key"),
             )
@@ -1293,7 +1293,7 @@ class AuthRepositoryImpl(
             .validatePin(
                 userId = activeAccount.userId,
                 pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKey = pinProtectedUserKeyEnvelope,
             )
             .fold(
                 onSuccess = { ValidatePinResult.Success(isValid = it) },
