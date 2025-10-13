@@ -150,6 +150,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 id = "mockId-1",
                 name = "mockName-1",
                 isSelected = true,
+                isDefaultUserCollection = false,
             ),
         )
         val expectedState = createVaultMoveToOrganizationState(

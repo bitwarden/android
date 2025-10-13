@@ -524,7 +524,7 @@ class CipherViewExtensionsTest {
 
         val expected = createSecureNoteViewState(
             cipherView = mockCipherView,
-            availableOwners = listOf(ORGANIZATION_OWNER),
+            availableOwners = listOf(ORGANIZATION_OWNER_DEFAULT_COLLECTION),
             availableFolders = listOf(NO_FOLDER_ITEM),
         )
 
@@ -803,6 +803,20 @@ private val ORGANIZATION_OWNER = VaultAddEditState.Owner(
             id = "mockId-1",
             name = "mockName-1",
             isSelected = true,
+            isDefaultUserCollection = false,
+        ),
+    ),
+)
+
+private val ORGANIZATION_OWNER_DEFAULT_COLLECTION = VaultAddEditState.Owner(
+    id = "mockOrganizationId-1",
+    name = "organizationName",
+    collections = listOf(
+        VaultCollection(
+            id = "mockId-1",
+            name = "mockName-1",
+            isSelected = true,
+            isDefaultUserCollection = true,
         ),
     ),
 )

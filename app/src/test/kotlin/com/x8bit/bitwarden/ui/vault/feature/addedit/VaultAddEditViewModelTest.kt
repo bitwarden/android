@@ -4806,6 +4806,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             id = "mockId-1",
                             name = "mockName-1",
                             isSelected = isCollectionSelected,
+                            isDefaultUserCollection = false,
                         ),
                     )
                 } else {
@@ -4823,6 +4824,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 id = "mockId-1",
                 name = "mockName-1",
                 isSelected = false,
+                isDefaultUserCollection = false,
             ),
         )
 
