@@ -127,11 +127,15 @@ jobs:
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Format Release Notes
+        env:
+          RELEASE_NOTES: ${{ inputs.release-notes }}
         run: |
-          FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          FORMATTED_MESSAGE="$(echo "$RELEASE_NOTES" | sed 's/  /\n/g')"
+          {
+            echo "RELEASE_NOTES<<EOF"
+            printf '%s\n' "$FORMATTED_MESSAGE"
+            echo "EOF"
+          }  >> "$GITHUB_ENV"
 
       - name: Promote Play Store version to production
         env:
