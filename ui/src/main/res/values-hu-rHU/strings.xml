@@ -1110,8 +1110,8 @@ Szeretnénk átváltani erre a fiókra?</string>
         <item quantity="other">%1$d elem lett importálva a széfbe.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Engedélyezzük a böngészőben az automatikus kitöltést a jelszavak folyamatos kitöltéséhez.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">A böngésző nemrégiben frissült, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngésző automatikus kiltöltés funkciót az automatikus kitöltés beállításaiban.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">A böngészők nemrégiben frissültek, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngészők automatikus kiltöltés funkcióját az automatikus kitöltés beállításaiban.</string>
     <string name="not_now">Most nem</string>
     <string name="import_from_bitwarden">Importálás a Bitwardenből</string>
     <string name="select_account">Fiók kiválasztása</string>
@@ -1127,9 +1127,11 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="export_failed">Az exportálás sikertelen volt.</string>
     <string name="passwords">Jelszavak</string>
     <string name="passkeys">Hozzáférési kulcsok</string>
-    <string name="import_verb">Importálás</string>
     <string name="why_is_this_step_required">Miért szükséges ez a lépés?</string>
     <string name="kdf_update_failed_active_account_not_found">A Kdf frissítés sikertelen volt, aktív fiók nem található. Próbáljuk újra vagy vegyük fel a kapcsolatot a szolgáltatóval.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Hiba történt a kdf beállítások frissítésének kísérlete során. Próbáljuk újra vagy vegyük fel a kapcsolatot a szolgáltatóval.</string>
     <string name="the_import_request_could_not_be_processed">Az importálási kérelmet nem lehetett feldolgozni.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

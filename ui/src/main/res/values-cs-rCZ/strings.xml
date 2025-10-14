@@ -1124,8 +1124,8 @@ při opakování problémů.</string>
         <item quantity="other">%1$d položek bylo importováno do Vašeho trezoru.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Povolit automatické vyplňování prohlížeče pro zachování vyplňování hesel</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Váš prohlížeč nedávno aktualizoval, jak funguje automatické vyplňování. Chcete-li pokračovat ve vyplňování hesel Bitwardenem, povolte automatické vyplňování prohlížeče.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Vaše prohlížeče byly nedávno aktualizovány a tím bylo zakázáno automatické vyplňování. Chcete-li pokračovat ve vyplňování hesel Bitwardenem, povolte automatické vyplňování prohlížeče.</string>
     <string name="not_now">Nyní ne</string>
     <string name="import_from_bitwarden">Importovat z Bitwardenu</string>
     <string name="select_account">Vybrat účet</string>
@@ -1141,9 +1141,11 @@ při opakování problémů.</string>
     <string name="export_failed">Export se nezdařil</string>
     <string name="passwords">Hesla</string>
     <string name="passkeys">Přístupové klíče</string>
-    <string name="import_verb">Importovat</string>
     <string name="why_is_this_step_required">Proč je tento krok vyžadován?</string>
     <string name="kdf_update_failed_active_account_not_found">Aktualizace KDF se nezdařila, aktivní účet nebyl nalezen. Zkuste to znovu nebo nás kontaktujte.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Při pokusu o aktualizaci nastavení KDF došlo k chybě. Zkuste to znovu nebo nás kontaktujte.</string>
     <string name="the_import_request_could_not_be_processed">Požadavek na import nelze zpracovat.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>
