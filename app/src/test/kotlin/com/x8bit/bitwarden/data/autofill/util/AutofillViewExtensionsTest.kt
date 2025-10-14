@@ -28,6 +28,7 @@ class AutofillViewExtensionsTest {
         isFocused = false,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
 
     @BeforeEach
@@ -349,4 +350,47 @@ class AutofillViewExtensionsTest {
         // Verify
         assertNull(actual)
     }
+
+    @Test
+    fun `buildUriOrNull should return website URI when present`() {
+        // Setup
+        val autofillViewData = autofillViewData.copy(website = WEBSITE)
+        val autofillView = AutofillView.Login.Username(data = autofillViewData)
+
+        // Test
+        val actual = autofillView.buildUriOrNull(packageName = PACKAGE_NAME)
+
+        // Verify
+        assertEquals(WEBSITE, actual)
+    }
+
+    @Test
+    fun `buildUriOrNull should return package name URI when website is null`() {
+        // Setup
+        val autofillViewData = autofillViewData.copy(website = null)
+        val autofillView = AutofillView.Login.Username(data = autofillViewData)
+        val expected = "androidapp://$PACKAGE_NAME"
+
+        // Test
+        val actual = autofillView.buildUriOrNull(packageName = PACKAGE_NAME)
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `buildUriOrNull should return null when website and packageName are null`() {
+        // Setup
+        val autofillViewData = autofillViewData.copy(website = null)
+        val autofillView = AutofillView.Login.Username(data = autofillViewData)
+
+        // Test
+        val actual = autofillView.buildUriOrNull(packageName = null)
+
+        // Verify
+        assertNull(actual)
+    }
 }
+
+private const val PACKAGE_NAME: String = "com.google"
+private const val WEBSITE: String = "https://www.google.com"

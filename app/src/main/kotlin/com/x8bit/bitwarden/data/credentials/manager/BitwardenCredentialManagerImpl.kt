@@ -323,6 +323,7 @@ class BitwardenCredentialManagerImpl(
             createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
             selectedCipherView = selectedCipherView,
             clientData = clientData,
+            callingPackageName = callingAppInfo.packageName,
         )
     }
 
@@ -347,6 +348,7 @@ class BitwardenCredentialManagerImpl(
             createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
             selectedCipherView = selectedCipherView,
             clientData = clientData,
+            callingPackageName = callingAppInfo.packageName,
         )
     }
 
@@ -356,6 +358,7 @@ class BitwardenCredentialManagerImpl(
         createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
         selectedCipherView: CipherView,
         clientData: ClientData,
+        callingPackageName: String,
     ): Fido2RegisterCredentialResult = vaultSdkSource
         .registerFido2Credential(
             request = RegisterFido2CredentialRequest(
@@ -370,7 +373,9 @@ class BitwardenCredentialManagerImpl(
             ),
             fido2CredentialStore = this,
         )
-        .map { it.toAndroidAttestationResponse() }
+        .map {
+            it.toAndroidAttestationResponse(callingPackageName = callingPackageName)
+        }
         .mapCatching { json.encodeToString(it) }
         .fold(
             onSuccess = { Fido2RegisterCredentialResult.Success(it) },

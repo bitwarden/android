@@ -16,6 +16,7 @@ class AutofillPartitionExtensionsTest {
         isFocused = false,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
     private val autofillDataValidText: AutofillView.Data = AutofillView.Data(
         autofillId = mockk(),
@@ -24,6 +25,7 @@ class AutofillPartitionExtensionsTest {
         isFocused = false,
         textValue = TEXT_VALUE,
         hasPasswordTerms = false,
+        website = null,
     )
 
     //region Card tests

@@ -312,21 +312,26 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ValidatePasswordResultReceive should send PasswordVerified event when result is Success and isValid is true`() =
+    fun `ValidatePasswordResultReceive should send PasswordVerified event and clear input when result is Success and isValid is true`() =
         runTest {
-            createViewModel().also { viewModel ->
-                viewModel.trySendAction(
-                    VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
-                        ValidatePasswordResult.Success(isValid = true),
-                    ),
-                )
-                viewModel.eventFlow.test {
-                    assertEquals(
-                        VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
-                        awaitItem(),
+            createViewModel(state = DEFAULT_STATE.copy(input = "mockInput"))
+                .also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
+                            ValidatePasswordResult.Success(isValid = true),
+                        ),
                     )
+                    assertEquals(
+                        DEFAULT_STATE.copy(input = ""),
+                        viewModel.stateFlow.value,
+                    )
+                    viewModel.eventFlow.test {
+                        assertEquals(
+                            VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
         }
 
     @Suppress("MaxLineLength")
@@ -372,21 +377,26 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UnlockVaultResultReceive should send PasswordVerified event when vault unlock result is Success`() =
+    fun `UnlockVaultResultReceive should send PasswordVerified event and clear inputs when vault unlock result is Success`() =
         runTest {
-            createViewModel().also { viewModel ->
-                viewModel.trySendAction(
-                    VerifyPasswordAction.Internal.UnlockVaultResultReceive(
-                        VaultUnlockResult.Success,
-                    ),
-                )
-                viewModel.eventFlow.test {
-                    assertEquals(
-                        VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
-                        awaitItem(),
+            createViewModel(state = DEFAULT_STATE.copy(input = "mockInput"))
+                .also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.Internal.UnlockVaultResultReceive(
+                            VaultUnlockResult.Success,
+                        ),
                     )
+                    assertEquals(
+                        DEFAULT_STATE.copy(input = ""),
+                        viewModel.stateFlow.value,
+                    )
+                    viewModel.eventFlow.test {
+                        assertEquals(
+                            VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
         }
 
     @Test

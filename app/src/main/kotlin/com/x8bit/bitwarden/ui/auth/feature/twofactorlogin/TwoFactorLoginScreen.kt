@@ -61,8 +61,10 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
+import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.composition.LocalNfcManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -74,6 +76,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun TwoFactorLoginScreen(
     onNavigateBack: () -> Unit,
     viewModel: TwoFactorLoginViewModel = hiltViewModel(),
+    authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
     nfcManager: NfcManager = LocalNfcManager.current,
 ) {
@@ -105,11 +108,11 @@ fun TwoFactorLoginScreen(
             }
 
             is TwoFactorLoginEvent.NavigateToDuo -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
+                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.duo)
             }
 
             is TwoFactorLoginEvent.NavigateToWebAuth -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
+                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.webAuthn)
             }
 
             is TwoFactorLoginEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)

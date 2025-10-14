@@ -70,7 +70,7 @@ dependencies {
     // Test environment dependencies:
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.square.turbine)
 }

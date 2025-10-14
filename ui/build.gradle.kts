@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
@@ -80,7 +81,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
@@ -93,7 +94,7 @@ dependencies {
     testFixturesImplementation(libs.androidx.navigation.compose)
     testFixturesImplementation(libs.google.hilt.android.testing)
     testFixturesImplementation(platform(libs.junit.bom))
-    testFixturesImplementation(libs.junit.junit5)
+    testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
     testFixturesImplementation(libs.mockk.mockk)

@@ -95,16 +95,21 @@ class AutofillParserImpl(
             .firstOrNull { it.data.isFocused }
             ?: autofillViews.firstOrNull()
 
+        if (focusedView == null) {
+            // The view is unfillable if there are no focused views.
+            return AutofillRequest.Unfillable
+        }
+
         val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
         )
-        val uri = traversalDataList.buildUriOrNull(
+        val uri = focusedView.buildUriOrNull(
             packageName = packageName,
         )
 
         val blockListedURIs = settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS
-        if (focusedView == null || blockListedURIs.contains(uri)) {
-            // The view is unfillable if there are no focused views or the URI is block listed.
+        if (blockListedURIs.contains(uri)) {
+            // The view is unfillable if the URI is block listed.
             return AutofillRequest.Unfillable
         }
 
@@ -165,7 +170,7 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
         .mapNotNull { windowNode ->
             windowNode
                 .rootViewNode
-                ?.traverse()
+                ?.traverse(parentWebsite = null)
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
@@ -243,16 +248,17 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
  */
-private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
+private fun AssistStructure.ViewNode.traverse(
+    parentWebsite: String?,
+): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
     var idPackage: String? = this.idPackage
-    var website: String? = this.website
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView()
+    toAutofillView(parentWebsite = parentWebsite)
         ?.run(mutableAutofillViewList::add)
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
 
@@ -260,7 +266,7 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
         getChildAt(i)
-            .traverse()
+            .traverse(parentWebsite = website)
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
@@ -273,10 +279,6 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
                 ) {
                     idPackage = viewNodeTraversalData.idPackage
                 }
-                // Get the first non-null website.
-                if (website == null) {
-                    website = viewNodeTraversalData.website
-                }
             }
     }
 
@@ -286,6 +288,5 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
         autofillViews = mutableAutofillViewList,
         idPackage = idPackage,
         ignoreAutofillIds = mutableIgnoreAutofillIdList,
-        website = website,
     )
 }
