@@ -421,8 +421,9 @@ data class VaultMoveToOrganizationState(
 
             val selectableCollections: List<VaultCollection>
                 get() {
-                    val collections =
-                        organizations.first { it.id == selectedOrganizationId }.collections
+                    val collections = organizations
+                        .first { it.id == selectedOrganizationId }
+                        .collections
                     return collections.filter {
                         !it.isDefaultUserCollection ||
                             isDefaultUserCollectionSelected
@@ -431,11 +432,14 @@ data class VaultMoveToOrganizationState(
 
             private val isDefaultUserCollectionSelected: Boolean
                 get() =
-                    cipherToMove?.collectionIds?.any { collectionId ->
-                        selectedOrganization.collections.any {
-                            it.id == collectionId && it.isDefaultUserCollection
+                    cipherToMove
+                        ?.collectionIds
+                        ?.any { collectionId ->
+                            selectedOrganization.collections.any {
+                                it.id == collectionId && it.isDefaultUserCollection
+                            }
                         }
-                    } ?: false
+                        ?: false
 
             /**
              * Models an organization.
