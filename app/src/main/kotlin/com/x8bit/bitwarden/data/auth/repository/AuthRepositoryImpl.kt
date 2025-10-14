@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -2046,10 +2047,19 @@ class AuthRepositoryImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val userId = accountProfile.userId
+        val kdfParams = (initUserCryptoMethod as? InitUserCryptoMethod.Password)
+            ?.let {
+                accountProfile
+                    .userDecryptionOptions
+                    ?.masterPasswordUnlock
+                    ?.kdf
+                    ?.toKdf()
+            } ?: accountProfile.toSdkParams()
+
         return vaultRepository.unlockVault(
             userId = userId,
             email = accountProfile.email,
-            kdf = accountProfile.toSdkParams(),
+            kdf = kdfParams,
             privateKey = privateKey,
             signingKey = signingKey,
             securityState = securityState,
