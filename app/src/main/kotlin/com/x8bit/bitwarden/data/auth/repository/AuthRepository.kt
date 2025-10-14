@@ -6,6 +6,7 @@ import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -44,7 +45,11 @@ import kotlinx.coroutines.flow.StateFlow
  * Provides an API for observing an modifying authentication state.
  */
 @Suppress("TooManyFunctions")
-interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateManager {
+interface AuthRepository :
+    AuthenticatorProvider,
+    AuthRequestManager,
+    KdfManager,
+    UserStateManager {
     /**
      * Models the current auth state.
      */

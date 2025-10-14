@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
@@ -12,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
@@ -32,6 +34,7 @@ fun UserStateJson.toRemovedPasswordUserStateJson(
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = null,
             keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
         )
     val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
     val updatedAccount = account.copy(profile = updatedProfile)
@@ -54,6 +57,23 @@ fun UserStateJson.toUpdatedUserStateJson(
     val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
+    val userDecryptionOptions = syncResponse
+        .userDecryption
+        ?.let { syncUserDecryption ->
+            profile
+                .userDecryptionOptions
+                ?.copy(masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock)
+                ?: UserDecryptionOptionsJson(
+                    hasMasterPassword = syncUserDecryption.masterPasswordUnlock != null,
+                    trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = null,
+                    masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock,
+                )
+        }
+        ?: profile
+            .userDecryptionOptions
+            ?.copy(masterPasswordUnlock = null)
+
     val updatedProfile = profile
         .copy(
             avatarColorHex = syncProfile.avatarColor,
@@ -61,6 +81,7 @@ fun UserStateJson.toUpdatedUserStateJson(
             hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
+            userDecryptionOptions = userDecryptionOptions,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this
@@ -90,7 +111,32 @@ fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
                     hasMasterPassword = true,
                     keyConnectorUserDecryptionOptions = null,
                     trustedDeviceUserDecryptionOptions = null,
+                    masterPasswordUnlock = null,
                 ),
+        )
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this
+        .copy(
+            accounts = accounts
+                .toMutableMap()
+                .apply {
+                    replace(activeUserId, updatedAccount)
+                },
+        )
+}
+
+/**
+ * Updates the [UserStateJson] KDF settings to minimum requirements.
+ */
+fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson {
+    val account = this.activeAccount
+    val profile = account.profile
+    val updatedProfile = profile
+        .copy(
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+            kdfMemory = null,
+            kdfParallelism = null,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this

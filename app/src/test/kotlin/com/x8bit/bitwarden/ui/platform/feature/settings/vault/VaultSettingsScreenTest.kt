@@ -29,11 +29,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
-    private val mutableStateFlow = MutableStateFlow(
-        VaultSettingsState(
-            showImportActionCard = false,
-        ),
-    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     val viewModel = mockk<VaultSettingsViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
@@ -158,3 +154,8 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
             .assertIsNotDisplayed()
     }
 }
+
+private val DEFAULT_STATE: VaultSettingsState = VaultSettingsState(
+    showImportActionCard = false,
+    showImportItemsChevron = true,
+)

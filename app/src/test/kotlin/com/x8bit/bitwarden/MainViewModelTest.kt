@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import androidx.browser.auth.AuthTabIntent
 import androidx.core.os.bundleOf
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptResult
@@ -18,7 +19,8 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.ShareManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -27,6 +29,12 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -119,6 +127,9 @@ class MainViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { switchAccount(any()) } returns SwitchAccountResult.NoChange
         coEvery { validateEmailToken(any(), any()) } returns EmailTokenResult.Success
+        every { setWebAuthResult(webAuthResult = any()) } just runs
+        every { setSsoCallbackResult(result = any()) } just runs
+        every { setDuoCallbackTokenResult(tokenResult = any()) } just runs
     }
     private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
     private val vaultRepository = mockk<VaultRepository> {
@@ -136,8 +147,8 @@ class MainViewModelTest : BaseViewModelTest() {
     private val environmentRepository = mockk<EnvironmentRepository>(relaxed = true) {
         every { loadEnvironmentForEmail(any()) } returns true
     }
-    private val intentManager: IntentManager = mockk {
-        every { getShareDataFromIntent(any()) } returns null
+    private val shareManager: ShareManager = mockk {
+        every { getShareDataOrNull(any()) } returns null
     }
     private val bitwardenCredentialManager = mockk<BitwardenCredentialManager> {
         every { isUserVerified } returns true
@@ -183,6 +194,9 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
             Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -215,6 +229,9 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
             Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -459,8 +476,8 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -847,8 +864,8 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -1166,6 +1183,51 @@ class MainViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
     }
 
+    @Test
+    fun `on DuoResult should setDuoCallbackTokenResult with result`() = runTest {
+        val tokenResult = DuoCallbackTokenResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getDuoCallbackTokenResult() } returns tokenResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.DuoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setDuoCallbackTokenResult(tokenResult = tokenResult)
+        }
+    }
+
+    @Test
+    fun `on SsoResult should setSsoCallbackResult with result`() = runTest {
+        val result = SsoCallbackResult.Success(state = null, code = "code")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getSsoCallbackResult() } returns result
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.SsoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setSsoCallbackResult(result = result)
+        }
+    }
+
+    @Test
+    fun `on WebAuthnResult should setWebAuthResult with result`() = runTest {
+        val webAuthResult = WebAuthResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getWebAuthResult() } returns webAuthResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.WebAuthnResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setWebAuthResult(webAuthResult = webAuthResult)
+        }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1175,7 +1237,7 @@ class MainViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         bitwardenCredentialManager = bitwardenCredentialManager,
-        intentManager = intentManager,
+        shareManager = shareManager,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRepository = authRepository,

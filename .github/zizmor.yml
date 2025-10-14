@@ -1,0 +1,5 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        bitwarden/gh-actions/*: ref-pin

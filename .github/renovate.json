@@ -27,6 +27,9 @@
       ],
       "matchManagers": [
         "gradle"
+      ],
+      "excludePackageNames": [
+        "com.github.bumptech.glide:compose"
       ]
     },
     {

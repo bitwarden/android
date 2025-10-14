@@ -61,16 +61,20 @@ class FilledDataBuilderTest {
                 password = password,
                 username = username,
                 subtitle = "Subtitle",
+                website = URI,
             )
             val filledItemPassword: FilledItem = mockk()
             val filledItemUsername: FilledItem = mockk()
             val autofillViewPassword: AutofillView.Login.Password = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(password) } returns filledItemPassword
             }
             val autofillViewUsernameOne: AutofillView.Login.Username = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(username) } returns filledItemUsername
             }
             val autofillViewUsernameTwo: AutofillView.Login.Username = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(username) } returns null
             }
             val autofillPartition = AutofillPartition.Login(
@@ -341,15 +345,8 @@ class FilledDataBuilderTest {
                 partition = autofillPartition,
                 uri = URI,
             )
-            val filledPartition = FilledPartition(
-                autofillCipher = autofillCipher,
-                filledItems = emptyList(),
-                inlinePresentationSpec = null,
-            )
             val expected = FilledData(
-                filledPartitions = listOf(
-                    filledPartition,
-                ),
+                filledPartitions = emptyList(),
                 ignoreAutofillIds = ignoreAutofillIds,
                 originalPartition = autofillPartition,
                 uri = URI,
@@ -396,14 +393,17 @@ class FilledDataBuilderTest {
                 password = password,
                 username = username,
                 subtitle = "Subtitle",
+                website = URI,
             )
 
             val filledItemPassword: FilledItem = mockk()
             val filledItemUsername: FilledItem = mockk()
             val autofillViewPassword: AutofillView.Login.Password = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(password) } returns filledItemPassword
             }
             val autofillViewUsername: AutofillView.Login.Username = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(username) } returns filledItemUsername
             }
             val autofillPartition = AutofillPartition.Login(
@@ -490,13 +490,16 @@ class FilledDataBuilderTest {
                 password = password,
                 username = username,
                 subtitle = "Subtitle",
+                website = URI,
             )
             val filledItemPassword: FilledItem = mockk()
             val filledItemUsername: FilledItem = mockk()
             val autofillViewPassword: AutofillView.Login.Password = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(password) } returns filledItemPassword
             }
             val autofillViewUsername: AutofillView.Login.Username = mockk {
+                every { data } returns mockk { every { website } returns URI }
                 every { buildFilledItemOrNull(username) } returns filledItemUsername
             }
             val autofillPartition = AutofillPartition.Login(

@@ -32,6 +32,7 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
+                ForceUpdateKdfSettings,
                 CipherKeyEncryption,
             )
         }
@@ -68,6 +69,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
         override val keyName: String = "bitwarden-authentication-enabled"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
+     */
+    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
+        override val keyName: String = "pm-18021-force-update-kdf-settings"
         override val defaultValue: Boolean = false
     }
 

@@ -20,18 +20,6 @@
                 <data android:host="*.bitwarden.pw" />
                 <data android:pathPattern="/redirect-connector.*" />
             </intent-filter>
-
-            <!-- Handle Credential Exchange transfer requests -->
-            <intent-filter
-                android:autoVerify="true"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="androidx.identitycredentials.action.IMPORT_CREDENTIALS" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:mimeType="application/octet-stream"
-                    android:scheme="content"
-                    tools:ignore="AppLinkUriRelativeFilterGroupError" />
-            </intent-filter>
         </activity>
     </application>
 

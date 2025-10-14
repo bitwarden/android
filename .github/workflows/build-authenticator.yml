@@ -42,19 +42,25 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
+        env:
+          INPUTS: ${{ toJson(inputs) }}
         run: |
-          echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```json' >> $GITHUB_STEP_SUMMARY
-          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "<details><summary>Job Inputs</summary>"
+            echo ""
+            echo '```json'
+            echo "$INPUTS"
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Cache Gradle files
         uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
@@ -111,6 +117,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Configure Ruby
         uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
@@ -145,27 +153,27 @@ jobs:
           mkdir -p ${{ github.workspace }}/secrets
           mkdir -p ${{ github.workspace }}/keystores
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name authenticator_apk-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_apk-keystore.jks --output none
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name authenticator_aab-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_aab-keystore.jks --output none
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name com.bitwarden.authenticator-google-services.json --file ${{ github.workspace }}/authenticator/src/google-services.json --output none
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name com.bitwarden.authenticator.dev-google-services.json --file ${{ github.workspace }}/authenticator/src/debug/google-services.json --output none
 
       - name: Download Firebase credentials
-        if : ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
         run: |
           mkdir -p ${{ github.workspace }}/secrets
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name authenticator_play_firebase-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json --output none
 
       - name: Download Play Store credentials
@@ -176,7 +184,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/secrets
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
       - name: AZ Logout
@@ -186,10 +194,10 @@ jobs:
         if: ${{ inputs.publish-to-play-store }}
         run: |
           bundle exec fastlane run validate_play_store_json_key \
-          json_key:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }}
+          json_key:"${{ github.workspace }}/secrets/authenticator_play_store-creds.json"
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Cache Gradle files
         uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
@@ -219,44 +227,54 @@ jobs:
       - name: Update app CI Build info
         run: |
           ./scripts/update_app_ci_build_info.sh \
-          $GITHUB_REPOSITORY \
-          $GITHUB_REF_NAME \
-          $GITHUB_SHA \
-          $GITHUB_RUN_ID \
-          $GITHUB_RUN_ATTEMPT
+          "$GITHUB_REPOSITORY" \
+          "$GITHUB_REF_NAME" \
+          "$GITHUB_SHA" \
+          "$GITHUB_RUN_ID" \
+          "$GITHUB_RUN_ATTEMPT"
 
       - name: Increment version
+        env:
+          DEFAULT_VERSION_CODE: ${{ github.run_number }}
+          INPUT_VERSION_CODE: "${{ inputs.version-code }}"
+          INPUT_VERSION_NAME: ${{ inputs.version-name }}
         run: |
-          DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
-          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
+          VERSION_CODE="${INPUT_VERSION_CODE:-$DEFAULT_VERSION_CODE}"
+          VERSION_NAME_INPUT="${INPUT_VERSION_NAME:-}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:$VERSION_CODE \
-          versionName:${{ inputs.version-name || '' }}
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME_INPUT"
 
           regex='appVersionName = "([^"]+)"'
           if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
-          echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
+          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'aab' }}
+        env:
+          STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-STORE-PASSWORD }}
+          KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-KEY-PASSWORD }}
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
-          storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-STORE-PASSWORD }}' \
-          keyAlias:authenticatorupload \
-          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-KEY-PASSWORD }}'
+          storeFile:"${{ github.workspace }}/keystores/authenticator_aab-keystore.jks" \
+          storePassword:"$STORE_PASSWORD" \
+          keyAlias:"authenticatorupload" \
+          keyPassword:"$KEY_PASSWORD"
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
+        env:
+          STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-STORE-PASSWORD }}
+          KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-KEY-PASSWORD }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
-          storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-STORE-PASSWORD }}' \
-          keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-KEY-PASSWORD }}'
+          storeFile:"${{ github.workspace }}/keystores/authenticator_apk-keystore.jks" \
+          storePassword:"$STORE_PASSWORD" \
+          keyAlias:"bitwardenauthenticator" \
+          keyPassword:"$KEY_PASSWORD"
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
@@ -312,7 +330,7 @@ jobs:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
           bundle exec fastlane distributeAuthenticatorReleaseBundleToFirebase \
-          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
+          serviceCredentialsFile:"$FIREBASE_CREDS_PATH"
 
       # Only publish bundles to Play Store when `publish-to-play-store` is true while building
       # bundles
@@ -322,4 +340,4 @@ jobs:
           PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
         run: |
           bundle exec fastlane publishAuthenticatorReleaseToGooglePlayStore \
-          serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \
+          serviceCredentialsFile:"$PLAY_STORE_CREDS_FILE" \

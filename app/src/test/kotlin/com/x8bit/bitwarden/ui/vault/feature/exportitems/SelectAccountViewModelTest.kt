@@ -2,25 +2,32 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountAction
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountEvent
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountState
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountViewModel
+import io.mockk.Ordering
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -46,18 +53,83 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns mutablePersonalOwnershipPolicyFlow
     }
+    private val specialCircumstanceManager = mockk<SpecialCircumstanceManager> {
+        every { specialCircumstance } returns SpecialCircumstance.CredentialExchangeExport(
+            data = DEFAULT_IMPORT_REQUEST,
+        )
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
-
         assertEquals(
             SelectAccountState(
-                accountSelectionListItems = persistentListOf(),
+                importRequest = DEFAULT_IMPORT_REQUEST,
+                viewState = SelectAccountState.ViewState.Loading,
             ),
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    fun `initial load should emit ValidateImportRequest event before observing selection data`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                assertEquals(
+                    SelectAccountEvent.ValidateImportRequest(
+                        importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+                    ),
+                    awaitItem(),
+                )
+
+                verify(exactly = 0) {
+                    authRepository.userStateFlow
+                    policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
+                }
+            }
+        }
+
+    @Test
+    fun `ValidateImportRequestResultReceive should show Error content when request is invalid`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                SelectAccountAction.ValidateImportRequestResultReceive(
+                    isValid = false,
+                ),
+            )
+
+            assertEquals(
+                SelectAccountState(
+                    importRequest = DEFAULT_IMPORT_REQUEST,
+                    viewState = SelectAccountState.ViewState.Error(
+                        message = BitwardenString
+                            .the_import_request_could_not_be_processed
+                            .asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `ValidateImportRequestResultReceive should observe selection data when request is valid`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                SelectAccountAction.ValidateImportRequestResultReceive(
+                    isValid = true,
+                ),
+            )
+
+            verify(Ordering.ORDERED) {
+                authRepository.userStateFlow
+                policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            }
+        }
 
     @Test
     fun `state is updated when single account with no organization is emitted`() = runTest {
@@ -79,7 +151,12 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            SelectAccountState(accountSelectionListItems = persistentListOf(expectedItem)),
+            SelectAccountState(
+                importRequest = DEFAULT_IMPORT_REQUEST,
+                viewState = SelectAccountState.ViewState.Content(
+                    accountSelectionListItems = persistentListOf(expectedItem),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -117,7 +194,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             SelectAccountState(
-                accountSelectionListItems = persistentListOf(),
+                importRequest = DEFAULT_IMPORT_REQUEST,
+                viewState = SelectAccountState.ViewState.NoItems,
             ),
             viewModel.stateFlow.value,
         )
@@ -163,7 +241,12 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                SelectAccountState(accountSelectionListItems = persistentListOf(expectedItem)),
+                SelectAccountState(
+                    importRequest = DEFAULT_IMPORT_REQUEST,
+                    viewState = SelectAccountState.ViewState.Content(
+                        accountSelectionListItems = persistentListOf(expectedItem),
+                    ),
+                ),
                 viewModel.stateFlow.value,
             )
         }
@@ -172,6 +255,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
     fun `when CloseClick action is sent, CancelExport event is emitted`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
+            // Skip the request validation event
+            skipItems(1)
             viewModel.trySendAction(SelectAccountAction.CloseClick)
             assertEquals(SelectAccountEvent.CancelExport, awaitItem())
         }
@@ -182,6 +267,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
+                // Skip the request validation event
+                skipItems(1)
                 viewModel.trySendAction(
                     SelectAccountAction.AccountClick(
                         DEFAULT_ACCOUNT.userId,
@@ -199,6 +286,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
     private fun createViewModel(): SelectAccountViewModel = SelectAccountViewModel(
         authRepository = authRepository,
         policyManager = policyManager,
+        specialCircumstanceManager = specialCircumstanceManager,
     )
 }
 
@@ -225,4 +313,8 @@ private val DEFAULT_ACCOUNT = UserState.Account(
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
+)
+private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
+    uri = mockk(),
+    requestJson = "mockRequestJson",
 )

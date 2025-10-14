@@ -14,14 +14,18 @@ class SdkClientManagerImpl(
     sdkRepoFactory: SdkRepositoryFactory,
     private val featureFlagManager: FeatureFlagManager,
     private val clientProvider: suspend (userId: String?) -> Client = { userId ->
-        Client(settings = null).apply {
-            platform().loadFlags(featureFlagManager.sdkFeatureFlags)
-            userId?.let {
-                platform().state().apply {
-                    registerCipherRepository(sdkRepoFactory.getCipherRepository(userId = it))
+        Client(
+            tokenProvider = sdkRepoFactory.getClientManagedTokens(userId = userId),
+            settings = null,
+        )
+            .apply {
+                platform().loadFlags(featureFlagManager.sdkFeatureFlags)
+                userId?.let {
+                    platform().state().apply {
+                        registerCipherRepository(sdkRepoFactory.getCipherRepository(userId = it))
+                    }
                 }
             }
-        }
     },
 ) : SdkClientManager {
     private val userIdToClientMap = mutableMapOf<String?, Client>()

@@ -10,6 +10,7 @@ import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -41,6 +42,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -141,6 +143,7 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
+        kdfManager: KdfManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -154,6 +157,7 @@ object VaultManagerModule {
             userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
+            kdfManager = kdfManager,
         )
 
     @Provides
@@ -203,9 +207,11 @@ object VaultManagerModule {
         vaultSdkSource: VaultSdkSource,
         ciphersService: CiphersService,
         vaultSyncManager: VaultSyncManager,
+        json: Json,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        json = json,
     )
 }

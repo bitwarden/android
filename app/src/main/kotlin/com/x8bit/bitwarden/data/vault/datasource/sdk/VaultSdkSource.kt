@@ -6,6 +6,7 @@ import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
@@ -491,4 +492,13 @@ interface VaultSdkSource {
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>>
+
+    /**
+     * Updates the KDF settings for the user with the given [userId].
+     */
+    suspend fun makeUpdateKdf(
+        userId: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<UpdateKdfResponse>
 }

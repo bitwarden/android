@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
+import androidx.browser.auth.AuthTabIntent
+import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.parcelize.Parcelize
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -61,18 +64,37 @@ fun generateUriForSso(
 fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
     val localData = data
     return if (action == Intent.ACTION_VIEW && localData?.host == SSO_HOST) {
-        val state = localData.getQueryParameter("state")
-        val code = localData.getQueryParameter("code")
-        if (code != null) {
-            SsoCallbackResult.Success(
-                state = state,
-                code = code,
-            )
-        } else {
-            SsoCallbackResult.MissingCode
-        }
+        localData.getSsoCallbackResult()
     } else {
         null
+    }
+}
+
+/**
+ * Retrieves an [SsoCallbackResult] from an [AuthTabIntent.AuthResult]. There are two possible
+ * cases.
+ *
+ * - [SsoCallbackResult.MissingCode]: The code is missing.
+ * - [SsoCallbackResult.Success]: The relevant data is present.
+ */
+@OmitFromCoverage
+fun AuthTabIntent.AuthResult.getSsoCallbackResult(): SsoCallbackResult =
+    when (this.resultCode) {
+        AuthTabIntent.RESULT_OK -> this.resultUri.getSsoCallbackResult()
+        AuthTabIntent.RESULT_CANCELED -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_UNKNOWN_CODE -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_VERIFICATION_FAILED -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> SsoCallbackResult.MissingCode
+        else -> SsoCallbackResult.MissingCode
+    }
+
+private fun Uri?.getSsoCallbackResult(): SsoCallbackResult {
+    val state = this?.getQueryParameter("state")
+    val code = this?.getQueryParameter("code")
+    return if (code != null) {
+        SsoCallbackResult.Success(state = state, code = code)
+    } else {
+        SsoCallbackResult.MissingCode
     }
 }
 

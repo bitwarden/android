@@ -47,6 +47,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param isEnabled Whether or not the button is enabled.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param dialogSubtitle The subtitle to apply to the dialog.
  * @param supportingText A optional supporting text that will appear below the text field.
  * @param tooltip A nullable [TooltipData], representing the tooltip icon.
  * @param insets Inner padding to be applied withing the card.
@@ -64,6 +65,7 @@ fun BitwardenMultiSelectButton(
     onOptionSelected: (String) -> Unit,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
+    dialogSubtitle: String? = null,
     isEnabled: Boolean = true,
     supportingText: String? = null,
     tooltip: TooltipData? = null,
@@ -74,6 +76,7 @@ fun BitwardenMultiSelectButton(
 ) {
     BitwardenMultiSelectButton(
         label = label,
+        dialogSubtitle = dialogSubtitle,
         options = options.map { MultiSelectOption.Row(it) }.toImmutableList(),
         selectedOption = selectedOption?.let { MultiSelectOption.Row(it) },
         onOptionSelected = { onOptionSelected(it.title) },
@@ -130,6 +133,7 @@ fun BitwardenMultiSelectButton(
     onOptionSelected: (MultiSelectOption.Row) -> Unit,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
+    dialogSubtitle: String? = null,
     isEnabled: Boolean = true,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     tooltip: TooltipData? = null,
@@ -161,6 +165,7 @@ fun BitwardenMultiSelectButton(
     if (shouldShowDialog) {
         BitwardenSelectionDialog(
             title = label,
+            subTitle = dialogSubtitle,
             onDismissRequest = { shouldShowDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(

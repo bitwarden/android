@@ -100,8 +100,7 @@ class SettingsDiskSourceImpl(
 
     private val mutableScreenCaptureAllowedFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableVaultRegisteredForExportFlow =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+    private val mutableVaultRegisteredForExportFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIsDynamicColorsEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
@@ -247,7 +246,6 @@ class SettingsDiskSourceImpl(
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
-        storeVaultRegisteredForExport(userId = userId, isRegistered = null)
         storeAppResumeScreen(userId = userId, screenData = null)
 
         // The following are intentionally not cleared so they can be
@@ -509,17 +507,17 @@ class SettingsDiskSourceImpl(
         getMutableShowImportLoginsSettingBadgeFlow(userId)
             .onSubscription { emit(getShowImportLoginsSettingBadge(userId)) }
 
-    override fun getVaultRegisteredForExport(userId: String): Boolean? =
-        getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId))
+    override fun getAppRegisteredForExport(): Boolean? =
+        getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT)
 
-    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?) {
-        putBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId), isRegistered)
-        getMutableVaultRegisteredForExportFlow(userId).tryEmit(isRegistered)
+    override fun storeAppRegisteredForExport(isRegistered: Boolean?) {
+        putBoolean(IS_VAULT_REGISTERED_FOR_EXPORT, isRegistered)
+        mutableVaultRegisteredForExportFlow.tryEmit(isRegistered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
-        getMutableVaultRegisteredForExportFlow(userId)
-            .onSubscription { emit(getVaultRegisteredForExport(userId)) }
+    override fun getAppRegisteredForExportFlow(userId: String): Flow<Boolean?> =
+        mutableVaultRegisteredForExportFlow
+            .onSubscription { emit(getAppRegisteredForExport()) }
 
     override fun getAddCipherActionCount(): Int? = getInt(
         key = ADD_ACTION_COUNT,
@@ -648,12 +646,6 @@ class SettingsDiskSourceImpl(
         mutableShowImportLoginsSettingBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
-
-    private fun getMutableVaultRegisteredForExportFlow(
-        userId: String,
-    ): MutableSharedFlow<Boolean?> = mutableVaultRegisteredForExportFlow.getOrPut(userId) {
-        bufferedMutableSharedFlow(replay = 1)
-    }
 
     /**
      * Migrates the user-scoped screen capture state to an app-wide state.

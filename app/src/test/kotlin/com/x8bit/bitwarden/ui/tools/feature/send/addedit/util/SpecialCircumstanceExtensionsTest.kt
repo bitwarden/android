@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import android.net.Uri
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
@@ -22,7 +22,7 @@ class SpecialCircumstanceExtensionsTest {
             isHideByDefaultChecked = false,
         )
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.TextSend(
+            data = ShareData.TextSend(
                 subject = "",
                 text = text,
             ),
@@ -46,7 +46,7 @@ class SpecialCircumstanceExtensionsTest {
             displaySize = null,
         )
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.FileSend(
+            data = ShareData.FileSend(
                 fileData = FileData(
                     fileName = fileName,
                     uri = uri,
@@ -71,7 +71,7 @@ class SpecialCircumstanceExtensionsTest {
     fun `toSendName with TextSend should return subject`() {
         val subject = "Subject"
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.TextSend(
+            data = ShareData.TextSend(
                 subject = subject,
                 text = "",
             ),
@@ -87,7 +87,7 @@ class SpecialCircumstanceExtensionsTest {
     fun `toSendName with FileSend should return file name`() {
         val fileName = "File Name"
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.FileSend(
+            data = ShareData.FileSend(
                 fileData = FileData(
                     fileName = fileName,
                     uri = mockk(),

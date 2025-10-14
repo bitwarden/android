@@ -6,20 +6,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The empty state for the item search screen.
@@ -37,10 +36,10 @@ fun ItemSearchEmptyContent(
         Icon(
             painter = painterResource(id = BitwardenDrawable.ic_search_wide),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .size(74.dp)
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -49,11 +48,11 @@ fun ItemSearchEmptyContent(
             Text(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .semantics { testTag = "NoSearchResultsLabel" }
+                    .testTag("NoSearchResultsLabel")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
                 text = it(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
             )
         }
 

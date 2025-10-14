@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -12,18 +11,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
-import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorSearchTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
+import com.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 
@@ -40,7 +39,7 @@ fun ItemSearchScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
     val context = LocalContext.current
-    val resources = context.resources
+    val resources = LocalResources.current
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -58,14 +57,15 @@ fun ItemSearchScreen(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            AuthenticatorSearchTopAppBar(
+            BitwardenSearchTopAppBar(
                 modifier = Modifier
-                    .semantics { testTag = "SearchFieldEntry" }
+                    .testTag("SearchFieldEntry")
                     .bottomDivider(),
                 searchTerm = state.searchTerm,
                 placeholder = stringResource(id = BitwardenString.search_codes),
                 onSearchTermChange = searchHandlers.onSearchTermChange,
                 scrollBehavior = scrollBehavior,
+                clearIconContentDescription = stringResource(id = BitwardenString.clear),
                 navigationIcon = NavigationIcon(
                     navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = BitwardenString.back),
@@ -73,24 +73,20 @@ fun ItemSearchScreen(
                 ),
             )
         },
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is ItemSearchState.ViewState.Content -> {
                 ItemSearchContent(
                     viewState = viewState,
                     searchHandlers = searchHandlers,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues = innerPadding),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is ItemSearchState.ViewState.Empty -> {
                 ItemSearchEmptyContent(
                     viewState = viewState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues = innerPadding),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

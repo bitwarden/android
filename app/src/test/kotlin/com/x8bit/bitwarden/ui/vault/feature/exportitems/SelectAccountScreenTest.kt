@@ -1,12 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems
 
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
@@ -34,6 +37,9 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
     private val mockEventFlow = bufferedMutableSharedFlow<SelectAccountEvent>()
 
     private val credentialExchangeCompletionManager = mockk<CredentialExchangeCompletionManager>()
+    private val credentialExchangeRequestValidator = mockk<CredentialExchangeRequestValidator> {
+        every { validate(any()) } returns true
+    }
     private val viewModel = mockk<SelectAccountViewModel> {
         every { eventFlow } returns mockEventFlow
         every { stateFlow } returns mockkStateFlow
@@ -44,6 +50,7 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent(
             credentialExchangeCompletionManager = credentialExchangeCompletionManager,
+            credentialExchangeRequestValidator = credentialExchangeRequestValidator,
         ) {
             SelectAccountScreen(
                 onAccountSelected = { onAccountSelectedCalled = true },
@@ -124,6 +131,42 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
 
             assertTrue(onAccountSelectedCalled)
         }
+
+    @Test
+    fun `NoItemsContent should be displayed according to state`() = runTest {
+        mockkStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = SelectAccountState.ViewState.NoItems,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("No accounts available")
+            .isDisplayed()
+
+        composeTestRule
+            .onNodeWithText(
+                text = "You don't have any accounts you can import from.",
+                substring = true,
+            )
+            .isDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Select an account")
+            .isNotDisplayed()
+    }
+
+    @Test
+    fun `Loading content should be displayed according to state`() = runTest {
+        mockkStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = SelectAccountState.ViewState.Loading,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Loading")
+            .isDisplayed()
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -146,22 +189,29 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     isLoggedIn = true,
     isVaultUnlocked = false,
 )
+private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
+    uri = mockk(),
+    requestJson = "mockRequestJson",
+)
 
 private val DEFAULT_STATE = SelectAccountState(
-    accountSelectionListItems = persistentListOf(
-        AccountSelectionListItem(
-            userId = ACTIVE_ACCOUNT_SUMMARY.userId,
-            email = ACTIVE_ACCOUNT_SUMMARY.email,
-            initials = "AA",
-            avatarColorHex = "#FFFF0000",
-            isItemRestricted = false,
-        ),
-        AccountSelectionListItem(
-            userId = LOCKED_ACCOUNT_SUMMARY.userId,
-            email = LOCKED_ACCOUNT_SUMMARY.email,
-            initials = "LU",
-            avatarColorHex = "#FF00FF00",
-            isItemRestricted = false,
+    viewState = SelectAccountState.ViewState.Content(
+        accountSelectionListItems = persistentListOf(
+            AccountSelectionListItem(
+                userId = ACTIVE_ACCOUNT_SUMMARY.userId,
+                email = ACTIVE_ACCOUNT_SUMMARY.email,
+                initials = "AA",
+                avatarColorHex = "#FFFF0000",
+                isItemRestricted = false,
+            ),
+            AccountSelectionListItem(
+                userId = LOCKED_ACCOUNT_SUMMARY.userId,
+                email = LOCKED_ACCOUNT_SUMMARY.email,
+                initials = "LU",
+                avatarColorHex = "#FF00FF00",
+                isItemRestricted = false,
+            ),
         ),
     ),
+    importRequest = DEFAULT_IMPORT_REQUEST,
 )

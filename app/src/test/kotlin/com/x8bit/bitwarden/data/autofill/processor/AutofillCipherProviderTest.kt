@@ -604,6 +604,7 @@ private const val LOGIN_NAME = "John's Login"
 private const val LOGIN_PASSWORD = "Password123"
 private const val LOGIN_SUBTITLE = "John Doe"
 private const val LOGIN_USERNAME = "John-Bitwarden"
+private const val URI: String = "androidapp://com.x8bit.bitwarden"
 private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     cipherId = LOGIN_WITH_TOTP_CIPHER_ID,
     isTotpEnabled = true,
@@ -611,6 +612,7 @@ private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     password = LOGIN_PASSWORD,
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
+    website = URI,
 )
 private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     cipherId = LOGIN_WITHOUT_TOTP_CIPHER_ID,
@@ -619,5 +621,5 @@ private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     password = LOGIN_PASSWORD,
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
+    website = URI,
 )
-private const val URI: String = "androidapp://com.x8bit.bitwarden"

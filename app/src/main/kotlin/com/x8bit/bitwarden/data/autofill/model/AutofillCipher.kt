@@ -66,6 +66,7 @@ sealed class AutofillCipher {
         override val subtitle: String,
         val password: String,
         val username: String,
+        val website: String,
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_globe

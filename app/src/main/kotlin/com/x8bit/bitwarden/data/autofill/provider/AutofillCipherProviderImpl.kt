@@ -127,6 +127,7 @@ class AutofillCipherProviderImpl(
                     password = cipherView.login?.password.orEmpty(),
                     subtitle = cipherView.subtitle.orEmpty(),
                     username = cipherView.login?.username.orEmpty(),
+                    website = uri,
                 )
             }
     }

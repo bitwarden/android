@@ -4,8 +4,11 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -18,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
@@ -83,6 +87,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -112,6 +117,7 @@ class UserStateJsonExtensionsTest {
                 hasMasterPassword = true,
                 trustedDeviceUserDecryptionOptions = null,
                 keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
@@ -136,6 +142,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -222,6 +229,7 @@ class UserStateJsonExtensionsTest {
                             every { isTwoFactorEnabled } returns false
                             every { creationDate } returns ZonedDateTime
                                 .parse("2024-09-13T01:00:00.00Z")
+                            every { userDecryption } returns null
                         }
                     },
                 ),
@@ -266,6 +274,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = null,
                                 trustedDeviceUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -309,6 +318,7 @@ class UserStateJsonExtensionsTest {
                 hasMasterPassword = true,
                 keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
                 trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+                masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
@@ -328,6 +338,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
                                 trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -396,6 +407,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = AccountTokensJson(
@@ -509,6 +521,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = AccountTokensJson(
@@ -629,6 +642,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -746,6 +760,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -863,6 +878,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -984,6 +1000,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1082,6 +1099,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                                     keyConnectorUrl = "keyConnectorUrl",
                                 ),
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1157,6 +1175,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1262,6 +1281,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1381,6 +1401,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1432,4 +1453,425 @@ class UserStateJsonExtensionsTest {
                 ),
         )
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should create UserDecryptionOptionsJson when null and syncResponse has masterPasswordUnlock`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson>(relaxed = true) {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "avatarColor"
+                every { securityStamp } returns "securityStamp"
+                every { isPremium } returns false
+                every { isPremiumFromOrganization } returns false
+                every { isTwoFactorEnabled } returns true
+                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns UserDecryptionJson(
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            )
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "avatarColor",
+                            stamp = "securityStamp",
+                            hasPremium = false,
+                            isTwoFactorEnabled = true,
+                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should update existing UserDecryptionOptionsJson with masterPasswordUnlock`() {
+        val trustedDeviceOptions = TrustedDeviceUserDecryptionOptionsJson(
+            encryptedPrivateKey = "encryptedPrivateKey",
+            encryptedUserKey = "encryptedUserKey",
+            hasAdminApproval = true,
+            hasLoginApprovingDevice = false,
+            hasManageResetPasswordPermission = true,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = null,
+            ),
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson> {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "newAvatarColor"
+                every { securityStamp } returns "newSecurityStamp"
+                every { isPremium } returns true
+                every { isPremiumFromOrganization } returns false
+                every { isTwoFactorEnabled } returns true
+                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns UserDecryptionJson(
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            )
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "newAvatarColor",
+                            stamp = "newSecurityStamp",
+                            hasPremium = true,
+                            isTwoFactorEnabled = true,
+                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should update existing UserDecryptionOptionsJson when syncResponse has no userDecryption`() {
+        val keyConnectorOptions = KeyConnectorUserDecryptionOptionsJson("keyConnectorUrl")
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = keyConnectorOptions,
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            ),
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson> {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "updatedAvatarColor"
+                every { securityStamp } returns "updatedSecurityStamp"
+                every { isPremium } returns false
+                every { isPremiumFromOrganization } returns true
+                every { isTwoFactorEnabled } returns false
+                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns null
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "updatedAvatarColor",
+                            stamp = "updatedSecurityStamp",
+                            hasPremium = true,
+                            isTwoFactorEnabled = false,
+                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = keyConnectorOptions,
+                                masterPasswordUnlock = null,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should update KDF settings to minimum values`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = "stamp",
+            organizationId = null,
+            avatarColorHex = "avatarColorHex",
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUserStateJsonKdfUpdatedMinimums should preserve other profile data while updating KDF`() {
+        val userDecryptionOptions = UserDecryptionOptionsJson(
+            hasMasterPassword = true,
+            trustedDeviceUserDecryptionOptions = null,
+            keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "test@example.com",
+            isEmailVerified = true,
+            name = "Test User",
+            stamp = "securityStamp",
+            organizationId = "orgId",
+            avatarColorHex = "#FF0000",
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 100000,
+            kdfMemory = 32,
+            kdfParallelism = 8,
+            userDecryptionOptions = userDecryptionOptions,
+            isTwoFactorEnabled = true,
+            creationDate = ZonedDateTime.parse("2024-01-01T00:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(
+                environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.bitwarden.com"),
+            ),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should only update active user account`() {
+        val activeProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "active@example.com",
+            isEmailVerified = true,
+            name = "Active User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val inactiveProfile = AccountJson.Profile(
+            userId = "inactiveUserId",
+            email = "inactive@example.com",
+            isEmailVerified = true,
+            name = "Inactive User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 500000,
+            kdfMemory = 8,
+            kdfParallelism = 2,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-08-13T01:00:00.00Z"),
+        )
+        val activeAccount = AccountJson(
+            profile = activeProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val inactiveAccount = AccountJson(
+            profile = inactiveProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf(
+                "activeUserId" to activeAccount,
+                "inactiveUserId" to inactiveAccount,
+            ),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to activeAccount.copy(
+                        profile = activeProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                    "inactiveUserId" to inactiveAccount, // Should remain unchanged
+                ),
+            ),
+            result,
+        )
+    }
 }
+
+private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockDataJson(
+    salt = "mockSalt",
+    kdf = mockk(),
+    masterKeyWrappedUserKey = "masterKeyWrappedUserKeyMock",
+)

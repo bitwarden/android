@@ -75,6 +75,7 @@ class FilledDataExtensionsTest {
                         isFocused = true,
                         textValue = null,
                         hasPasswordTerms = false,
+                        website = "uri",
                     ),
                 ),
             ),

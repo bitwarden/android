@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -52,11 +53,12 @@ dependencies {
     implementation(libs.androidx.credentials.providerevents)
     implementation(libs.androidx.credentials.providerevents.play.services)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization)
     implementation(libs.timber)
 
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
