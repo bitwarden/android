@@ -26,15 +26,19 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 
 /**
  * A design component action card, which contains a title, action button, and a dismiss button
@@ -44,8 +48,9 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param actionText The text content on the CTA button.
  * @param onActionClick The action to perform when the CTA button is clicked.
  * @param onDismissClick Optional action to perform when the dismiss button is clicked.
- * @param leadingContent Optional content to display on the leading side of the
- * [cardTitle] [Text].
+ * @param cardSubtitle The subtitle of the card.
+ * @param secondaryButton The optional data for a secondary button.
+ * @param leadingContent Optional content to display on the leading side of the [cardTitle] [Text].
  */
 @Suppress("LongMethod")
 @Composable
@@ -56,6 +61,7 @@ fun BitwardenActionCard(
     modifier: Modifier = Modifier,
     onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
+    secondaryButton: BitwardenButtonData? = null,
     leadingContent: @Composable (() -> Unit)? = null,
 ) {
     Card(
@@ -132,6 +138,16 @@ fun BitwardenActionCard(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
+        secondaryButton?.let {
+            BitwardenTextButton(
+                label = it.label(),
+                onClick = it.onClick,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .nullableTestTag(tag = it.testTag)
+                    .fillMaxWidth(),
+            )
+        }
         Spacer(modifier = Modifier.height(height = 16.dp))
     }
 }
@@ -199,6 +215,10 @@ private fun BitwardenActionCardWithSubtitle_preview() {
             actionText = "Action",
             onActionClick = {},
             onDismissClick = {},
+            secondaryButton = BitwardenButtonData(
+                label = "Learn More".asText(),
+                onClick = {},
+            ),
             leadingContent = {
                 NotificationBadge(
                     notificationCount = 1,
