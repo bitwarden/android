@@ -759,10 +759,10 @@
     <string name="turn_on_autofill">Uključi auto-ispunu</string>
     <string name="autofill_setup">Postavke auto-ispune</string>
     <string name="turn_on_browser_autofill_integration">Uključi integraciju auto-ispune preglednika</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Koristiš preglednik koji zahtijeva posebno dopuštenje za automatsku ispunu lozinki putem Bitwardena.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Koristiš preglednike koji zahtijevaju posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Koristiš preglednik koji zahtijeva posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena. Omogući željenu integraciju automatske ispune u nastavku.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Koristiš preglednike koji zahtijevaju posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena. Omogući željenu integraciju automatske ispune u nastavku.</string>
     <string name="use_autofill_to_log_into_your_accounts">Koristi auto-ispunu za prijavu u svoje račune jednim dodirom.</string>
     <string name="turn_on_later">Uključi kasnije</string>
     <string name="turn_on_autofill_later">Kasnije uključi auto-ispunu?</string>
@@ -1096,10 +1096,10 @@ bilo kakav problem.</string>
     <string name="default_uri_match_detection_description_advanced_options">Otkrivanje podudaranja URI-ja upravlja kako Bitwarden identificira prijedloge za auto-ispunu.\n<annotation emphasis="bold">Upozorenje:</annotation>„Počinje s” je napredna mogućnost s povećanim rizikom curenja vjerodajnica u slučaju krivog korištenja.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Počinje s” je napredna mogućnost s povećnim rizikom od otkrivanja vjerodajnica.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Regularni izraz” je napredna mogućnost s povećanim rizikom curenja vjerodajnica u slučaju krivog korištenja.</string>
-    <string name="later">Later</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="later">Kasnije</string>
+    <string name="encryption_settings_updated">Postavke šifriranje su ažurirane</string>
+    <string name="update_your_encryption_settings">Ažuriraj svoje postakve šifriranja</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Nove preporučene postavke šifriranja poboljšat će sigurnost tvojeg računa. Za ažuriranje, unesi svoju glavnu lozinku.</string>
     <string name="import_was_cancelled_in_the_selected_app">Uvoz vjerodajnica je otkazan u odabranoj aplikaciji. Niti jedna stavka nije uvezena.</string>
     <string name="import_cancelled">Uvoz otkazan</string>
     <string name="no_items_imported">Niti jedna stavka nije uvezena</string>
@@ -1117,8 +1117,8 @@ bilo kakav problem.</string>
         <item quantity="other">U tvoj je trezor uvezeno %1$d stavki.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Za nastavk korištenja auto-ispune lozinki, omogući ovu postavku u svom pregledniku</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Tvoj je preglednik nedavno ažurirao način rada automatskog ispunjavanja. Za nastavak korištenja auto-ispune s Bitwardenom, omogući automatsko ispunjavanje u postavkama tvog preglednika.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Tvoji su preglednici nedavno ažurirali način rada automatskog ispunjavanja. Za nastavak korištenja auto-ispune s Bitwardenom, omogući automatsko ispunjavanje u postavkama tvojih preglednika.</string>
     <string name="not_now">Ne sada</string>
     <string name="import_from_bitwarden">Uvezi iz Bitwardena</string>
     <string name="select_account">Odaberi račun</string>
@@ -1134,9 +1134,11 @@ bilo kakav problem.</string>
     <string name="export_failed">Izvoz nije uspio</string>
     <string name="passwords">Lozinke</string>
     <string name="passkeys">Pristupni ključevi</string>
-    <string name="import_verb">Uvoz</string>
     <string name="why_is_this_step_required">Zašto je potreban ovaj korak?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
-    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="kdf_update_failed_active_account_not_found">Ažuriranje KDF-a nije uspjelo, aktivni račun nije pronađen. Pokušaj ponovno ili nas kontaktiraj.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Došlo je do pogreške prilikom pokušaja ažuriranja tvojih KDF postavki. Pokušaj ponovno ili nas kontaktiraj.</string>
+    <string name="the_import_request_could_not_be_processed">Zahtjev za uvoz nije mogao biti obrađen.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>
