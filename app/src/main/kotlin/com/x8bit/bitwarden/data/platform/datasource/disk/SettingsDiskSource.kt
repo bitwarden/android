@@ -354,21 +354,21 @@ interface SettingsDiskSource {
     fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has registered for export via the credential exchange
+     * Gets whether or not the application has registered for export via the credential exchange
      * protocol.
      */
-    fun getVaultRegisteredForExport(userId: String): Boolean?
+    fun getAppRegisteredForExport(): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has registered for export via
+     * Stores the given value for whether or not the application has registered for export via
      * the credential exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?)
+    fun storeAppRegisteredForExport(isRegistered: Boolean?)
 
     /**
-     * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
+     * Emits updates that track [getAppRegisteredForExport].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
+    fun getAppRegisteredForExportFlow(userId: String): Flow<Boolean?>
 
     /**
      * Gets the number of qualifying add cipher actions for the device.

@@ -3,7 +3,8 @@ package com.x8bit.bitwarden.ui.platform.manager.di
 import android.content.Context
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.ShareManager
+import com.bitwarden.ui.platform.manager.share.ShareManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManagerImpl
@@ -14,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -30,19 +30,6 @@ object PlatformUiManagerModule {
 
     @Provides
     @Singleton
-    fun provideIntentManager(
-        @ApplicationContext context: Context,
-        clock: Clock,
-        buildInfoManager: BuildInfoManager,
-    ): IntentManager =
-        IntentManager.create(
-            context = context,
-            clock = clock,
-            buildInfoManager = buildInfoManager,
-        )
-
-    @Provides
-    @Singleton
     fun provideResourceManager(@ApplicationContext context: Context): ResourceManager =
         ResourceManagerImpl(context = context)
 
@@ -52,5 +39,15 @@ object PlatformUiManagerModule {
         dispatcherManager: DispatcherManager,
     ): SnackbarRelayManager = SnackbarRelayManagerImpl(
         dispatcherManager = dispatcherManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideShareManager(
+        @ApplicationContext context: Context,
+        buildInfoManager: BuildInfoManager,
+    ): ShareManager = ShareManagerImpl(
+        context = context,
+        buildInfoManager = buildInfoManager,
     )
 }

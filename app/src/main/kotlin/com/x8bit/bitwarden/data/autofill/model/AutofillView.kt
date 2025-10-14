@@ -16,6 +16,7 @@ sealed class AutofillView {
      * @param isFocused Whether the view is currently focused.
      * @param textValue A text value that represents the input present in the field.
      * @param hasPasswordTerms Indicates that the field includes password terms.
+     * @param website website associated with this view.
      */
     data class Data(
         val autofillId: AutofillId,
@@ -24,6 +25,7 @@ sealed class AutofillView {
         val isFocused: Boolean,
         val textValue: String?,
         val hasPasswordTerms: Boolean,
+        val website: String?,
     )
 
     /**

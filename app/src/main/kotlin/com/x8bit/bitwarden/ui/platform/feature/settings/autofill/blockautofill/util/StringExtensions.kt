@@ -44,6 +44,6 @@ fun String.validateUri(existingUris: List<String>): Text? {
  * Checks if the string matches a specific URI pattern.
  */
 fun String.isValidPattern(): Boolean {
-    val pattern = "^(https?|androidapp)://([A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*)(/.*)?$".toRegex()
+    val pattern = "^(https?|androidapp)://([A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*)(/.*)?$".toRegex()
     return matches(pattern)
 }

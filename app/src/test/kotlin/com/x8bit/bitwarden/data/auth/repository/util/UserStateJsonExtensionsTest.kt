@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
@@ -1679,6 +1680,192 @@ class UserStateJsonExtensionsTest {
                 ),
             ),
             originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should update KDF settings to minimum values`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = "stamp",
+            organizationId = null,
+            avatarColorHex = "avatarColorHex",
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUserStateJsonKdfUpdatedMinimums should preserve other profile data while updating KDF`() {
+        val userDecryptionOptions = UserDecryptionOptionsJson(
+            hasMasterPassword = true,
+            trustedDeviceUserDecryptionOptions = null,
+            keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "test@example.com",
+            isEmailVerified = true,
+            name = "Test User",
+            stamp = "securityStamp",
+            organizationId = "orgId",
+            avatarColorHex = "#FF0000",
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 100000,
+            kdfMemory = 32,
+            kdfParallelism = 8,
+            userDecryptionOptions = userDecryptionOptions,
+            isTwoFactorEnabled = true,
+            creationDate = ZonedDateTime.parse("2024-01-01T00:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(
+                environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.bitwarden.com"),
+            ),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should only update active user account`() {
+        val activeProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "active@example.com",
+            isEmailVerified = true,
+            name = "Active User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val inactiveProfile = AccountJson.Profile(
+            userId = "inactiveUserId",
+            email = "inactive@example.com",
+            isEmailVerified = true,
+            name = "Inactive User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 500000,
+            kdfMemory = 8,
+            kdfParallelism = 2,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-08-13T01:00:00.00Z"),
+        )
+        val activeAccount = AccountJson(
+            profile = activeProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val inactiveAccount = AccountJson(
+            profile = inactiveProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf(
+                "activeUserId" to activeAccount,
+                "inactiveUserId" to inactiveAccount,
+            ),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to activeAccount.copy(
+                        profile = activeProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                    "inactiveUserId" to inactiveAccount, // Should remain unchanged
+                ),
+            ),
+            result,
         )
     }
 }

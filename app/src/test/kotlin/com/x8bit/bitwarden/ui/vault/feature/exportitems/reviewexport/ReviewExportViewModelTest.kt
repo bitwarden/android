@@ -366,7 +366,7 @@ private val DEFAULT_REQUEST_DATA = ImportCredentialsRequestData(
     requestJson = "mockRequestJson",
 )
 private val DEFAULT_STATE: ReviewExportState = ReviewExportState(
-    importCredentialsRequest = DEFAULT_REQUEST_DATA,
+    importCredentialsRequestData = DEFAULT_REQUEST_DATA,
     viewState = ReviewExportState.ViewState(
         itemTypeCounts = ReviewExportState.ItemTypeCounts(),
     ),

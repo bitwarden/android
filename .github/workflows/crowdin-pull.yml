@@ -4,7 +4,7 @@ run-name: Crowdin Pull - ${{ github.event_name == 'workflow_dispatch' && 'Manual
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 5'
+    - cron: "0 0 * * 5"
 
 jobs:
   crowdin-sync:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main

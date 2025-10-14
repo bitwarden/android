@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 * * * 1-5' # Every hour on the hour on weekdays
-
 permissions:
   contents: write
   id-token: write

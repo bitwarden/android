@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -43,6 +45,7 @@ class UserLogoutManagerTest {
         every { clearData(any()) } just runs
         every { storeVaultTimeoutInMinutes(any(), any()) } just runs
         every { storeVaultTimeoutAction(any(), any()) } just runs
+        every { storeAppRegisteredForExport(any()) } just runs
     }
     private val pushDiskSource: PushDiskSource = mockk {
         coEvery { clearData(any()) } just runs
@@ -59,6 +62,9 @@ class UserLogoutManagerTest {
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any()) } just runs
     }
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
+        coEvery { unregister() } returns UnregisterExportResult.Success
+    }
 
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
@@ -71,17 +77,21 @@ class UserLogoutManagerTest {
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = FakeDispatcherManager(),
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
         )
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout for single account should clear data associated with the given user and null out the user state`() {
+    fun `logout for single account should clear data associated with the given user, null out the user state, and unregister app for export`() {
         val userId = USER_ID_1
         every { authDiskSource.userState } returns SINGLE_USER_STATE_1
 
         userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
 
-        verify { authDiskSource.userState = null }
+        coVerify {
+            authDiskSource.userState = null
+            credentialExchangeRegistryManager.unregister()
+        }
         assertDataCleared(userId = userId)
     }
 

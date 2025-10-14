@@ -238,7 +238,7 @@ private fun ReviewExportContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(BitwardenString.import_verb),
+            label = stringResource(BitwardenString.import_items),
             onClick = onImportItemsClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -304,7 +304,7 @@ private fun ReviewExportContent_preview() {
     BitwardenTheme {
         ReviewExportContent(
             state = ReviewExportState(
-                importCredentialsRequest = ImportCredentialsRequestData(
+                importCredentialsRequestData = ImportCredentialsRequestData(
                     uri = Uri.EMPTY,
                     requestJson = "",
                 ),
