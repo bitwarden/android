@@ -1,12 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport
 
 import android.net.Uri
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
@@ -28,6 +31,7 @@ import org.junit.Test
 class ReviewExportScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onSelectAnotherAccountCalled = false
     private val credentialExchangeCompletionManager = mockk<CredentialExchangeCompletionManager> {
         every { completeCredentialExport(any()) } just runs
     }
@@ -46,6 +50,7 @@ class ReviewExportScreenTest : BitwardenComposeTest() {
         ) {
             ReviewExportScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToAccountSelection = { onSelectAnotherAccountCalled = true },
                 viewModel = mockViewModel,
             )
         }
@@ -134,11 +139,52 @@ class ReviewExportScreenTest : BitwardenComposeTest() {
             mockViewModel.trySendAction(ReviewExportAction.NavigateBackClick)
         }
     }
+
+    @Test
+    fun `EmptyContent should be displayed when no items to import`() {
+        // Verify initial state is ReviewExportContent
+        composeTestRule
+            .onNodeWithText("No items available to import")
+            .assertIsNotDisplayed()
+
+        mockStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ReviewExportState.ViewState.NoItems,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("No items available to import")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `SelectAnotherAccount click should send SelectAnotherAccountClick action`() {
+        mockStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ReviewExportState.ViewState.NoItems,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Select a different account")
+            .performClick()
+
+        verify {
+            mockViewModel.trySendAction(ReviewExportAction.SelectAnotherAccountClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE = ReviewExportState(
-    viewState = ReviewExportState.ViewState(
-        itemTypeCounts = ReviewExportState.ItemTypeCounts(),
+    viewState = ReviewExportState.ViewState.Content(
+        itemTypeCounts = ReviewExportState.ItemTypeCounts(
+            passwordCount = 1,
+            passkeyCount = 1,
+            identityCount = 1,
+            cardCount = 1,
+            secureNoteCount = 1,
+        ),
     ),
     importCredentialsRequestData = ImportCredentialsRequestData(
         uri = Uri.EMPTY,
