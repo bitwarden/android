@@ -6988,7 +6988,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `unlockVault uses user decryption options for KDF when init method is password`() =
         runTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS

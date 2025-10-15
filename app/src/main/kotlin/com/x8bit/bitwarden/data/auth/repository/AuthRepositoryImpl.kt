@@ -2054,7 +2054,8 @@ class AuthRepositoryImpl(
                     ?.masterPasswordUnlock
                     ?.kdf
                     ?.toKdf()
-            } ?: accountProfile.toSdkParams()
+            }
+            ?: accountProfile.toSdkParams()
 
         return vaultRepository.unlockVault(
             userId = userId,
