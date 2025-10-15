@@ -1126,9 +1126,11 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

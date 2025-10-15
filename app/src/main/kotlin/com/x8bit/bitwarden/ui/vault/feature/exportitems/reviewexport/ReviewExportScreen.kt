@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
-import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -40,6 +38,8 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
+import com.bitwarden.ui.platform.components.content.BitwardenEmptyContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -72,10 +72,12 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport.handlers.re
  * export process.
  * Defaults to the manager provided by [LocalCredentialExchangeCompletionManager].
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewExportScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToAccountSelection: () -> Unit,
     viewModel: ReviewExportViewModel = hiltViewModel(),
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
@@ -86,6 +88,7 @@ fun ReviewExportScreen(
     EventsEffect(viewModel) {
         when (it) {
             is ReviewExportEvent.NavigateBack -> onNavigateBack()
+            is ReviewExportEvent.NavigateToAccountSelection -> onNavigateToAccountSelection()
             is ReviewExportEvent.CompleteExport -> {
                 credentialExchangeCompletionManager.completeCredentialExport(it.result)
             }
@@ -107,14 +110,39 @@ fun ReviewExportScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
     ) {
-        ReviewExportContent(
-            state = state,
-            onImportItemsClick = handler.onImportItemsClick,
-            onCancelClick = handler.onCancelClick,
-            modifier = Modifier
-                .fillMaxSize()
-                .standardHorizontalMargin(),
-        )
+        when (val viewState = state.viewState) {
+            ReviewExportState.ViewState.NoItems -> {
+                BitwardenEmptyContent(
+                    title = stringResource(BitwardenString.no_items_available_to_import),
+                    text = stringResource(
+                        BitwardenString
+                            .your_vault_may_be_empty_or_import_some_item_types_isnt_supported,
+                    ),
+                    primaryButton = BitwardenButtonData(
+                        label = BitwardenString.select_a_different_account.asText(),
+                        testTag = "SelectADifferentAccountButton",
+                        onClick = handler.onSelectAnotherAccountClick,
+                    ),
+                    secondaryButton = BitwardenButtonData(
+                        label = BitwardenString.cancel.asText(),
+                        testTag = "NoItemsCancelButton",
+                        onClick = handler.onCancelClick,
+                    ),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            is ReviewExportState.ViewState.Content -> {
+                ReviewExportContent(
+                    content = viewState,
+                    onImportItemsClick = handler.onImportItemsClick,
+                    onCancelClick = handler.onCancelClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
     }
 }
 
@@ -153,7 +181,7 @@ private fun ReviewExportDialogs(
  * This composable lays out the illustrative image, titles, list of items to export,
  * and action buttons.
  *
- * @param state The current [ReviewExportState] to render.
+ * @param content The current [ReviewExportState] to render.
  * @param onImportItemsClick Callback invoked when the "Import Items" button is clicked.
  * @param onCancelClick Callback invoked when the "Cancel" button is clicked.
  * @param modifier The modifier to be applied to the content root.
@@ -161,7 +189,7 @@ private fun ReviewExportDialogs(
 @Suppress("LongMethod")
 @Composable
 private fun ReviewExportContent(
-    state: ReviewExportState,
+    content: ReviewExportState.ViewState.Content,
     onImportItemsClick: () -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -211,27 +239,27 @@ private fun ReviewExportContent(
 
         ItemCountRow(
             label = stringResource(BitwardenString.passwords).asText(),
-            itemCount = state.viewState.itemTypeCounts.passwordCount,
+            itemCount = content.itemTypeCounts.passwordCount,
             cardStyle = CardStyle.Top(),
         )
         ItemCountRow(
             label = stringResource(BitwardenString.passkeys).asText(),
-            itemCount = state.viewState.itemTypeCounts.passkeyCount,
+            itemCount = content.itemTypeCounts.passkeyCount,
             cardStyle = CardStyle.Middle(),
         )
         ItemCountRow(
             label = stringResource(BitwardenString.identities).asText(),
-            itemCount = state.viewState.itemTypeCounts.identityCount,
+            itemCount = content.itemTypeCounts.identityCount,
             cardStyle = CardStyle.Middle(),
         )
         ItemCountRow(
             label = stringResource(BitwardenString.cards).asText(),
-            itemCount = state.viewState.itemTypeCounts.cardCount,
+            itemCount = content.itemTypeCounts.cardCount,
             cardStyle = CardStyle.Middle(),
         )
         ItemCountRow(
             label = stringResource(BitwardenString.secure_notes).asText(),
-            itemCount = state.viewState.itemTypeCounts.secureNoteCount,
+            itemCount = content.itemTypeCounts.secureNoteCount,
             cardStyle = CardStyle.Bottom,
         )
 
@@ -298,24 +326,23 @@ private fun ItemCountRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, name = "Review Export Content")
 @Composable
 private fun ReviewExportContent_preview() {
-    BitwardenTheme {
+    ExportItemsScaffold(
+        navIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
+        navigationIconContentDescription = stringResource(BitwardenString.close),
+        onNavigationIconClick = { },
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+    ) {
         ReviewExportContent(
-            state = ReviewExportState(
-                importCredentialsRequestData = ImportCredentialsRequestData(
-                    uri = Uri.EMPTY,
-                    requestJson = "",
-                ),
-                viewState = ReviewExportState.ViewState(
-                    itemTypeCounts = ReviewExportState.ItemTypeCounts(
-                        passwordCount = 14,
-                        passkeyCount = 14,
-                        identityCount = 3,
-                        cardCount = 4,
-                        secureNoteCount = 5,
-                    ),
+            content = ReviewExportState.ViewState.Content(
+                itemTypeCounts = ReviewExportState.ItemTypeCounts(
+                    passwordCount = 14,
+                    passkeyCount = 14,
+                    identityCount = 3,
+                    secureNoteCount = 5,
                 ),
             ),
             onImportItemsClick = {},
@@ -323,6 +350,38 @@ private fun ReviewExportContent_preview() {
             modifier = Modifier
                 .fillMaxSize()
                 .standardHorizontalMargin(),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, name = "Review Export Empty Content")
+@Composable
+private fun ReviewExportContent_NoItems_preview() {
+    ExportItemsScaffold(
+        navIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
+        navigationIconContentDescription = stringResource(BitwardenString.close),
+        onNavigationIconClick = { },
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+    ) {
+        BitwardenEmptyContent(
+            title = stringResource(BitwardenString.no_items_available_to_import),
+            text = stringResource(
+                BitwardenString
+                    .your_vault_may_be_empty_or_import_some_item_types_isnt_supported,
+            ),
+            primaryButton = BitwardenButtonData(
+                label = BitwardenString.select_a_different_account.asText(),
+                testTag = "SelectADifferentAccountButton",
+                onClick = { },
+            ),
+            secondaryButton = BitwardenButtonData(
+                label = BitwardenString.cancel.asText(),
+                testTag = "NoItemsCancelButton",
+                onClick = { },
+            ),
+            modifier = Modifier
+                .fillMaxSize(),
         )
     }
 }

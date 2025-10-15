@@ -1122,9 +1122,11 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="export_failed">Ekspor gagal</string>
     <string name="passwords">Sandi</string>
     <string name="passkeys">Kunci sandi</string>
-    <string name="import_verb">Impor</string>
     <string name="why_is_this_step_required">Kenapa langkah ini harus dilakukan?</string>
     <string name="kdf_update_failed_active_account_not_found">Gagal memperbarui Kdf, tidak ada akun aktif. Silakan coba lagi atau hubungi kami.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Terjadi kesalahan saat mencoba memperbarui pengaturan Kdf Anda. Coba lagi atau hubungi kami.</string>
     <string name="the_import_request_could_not_be_processed">Permintaan impor tidak dapat diproses.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

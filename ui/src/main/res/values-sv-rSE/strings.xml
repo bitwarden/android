@@ -758,7 +758,7 @@ Vill du byta till detta konto?</string>
     <string name="turn_on_autofill">Slå på Autofyll</string>
     <string name="autofill_setup">Konfigurera autofyll</string>
     <string name="turn_on_browser_autofill_integration">Slå på integration för autofyll i webbläsaren</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Du använder en webbläsare som kräver särskilda behörigheter för Bitwarden för att autofylla dina lösenord.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
@@ -1128,9 +1128,11 @@ Vill du byta till detta konto?</string>
     <string name="export_failed">Exporten misslyckades</string>
     <string name="passwords">Lösenord</string>
     <string name="passkeys">Inloggningsnycklar</string>
-    <string name="import_verb">Importera</string>
     <string name="why_is_this_step_required">Varför krävs detta steg?</string>
     <string name="kdf_update_failed_active_account_not_found">Uppdatering av kdf misslyckades, aktivt konto hittades inte. Försök igen eller kontakta oss.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ett fel inträffade vid försök att uppdatera dina kdf-inställningar. Försök igen eller kontakta oss.</string>
     <string name="the_import_request_could_not_be_processed">Importbegäran kunde inte behandlas.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

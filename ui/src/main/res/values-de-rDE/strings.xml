@@ -1110,8 +1110,8 @@ Möchtest du zu diesem Konto wechseln?</string>
         <item quantity="other">%1$d Einträge wurden in deinen Tresor importiert.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Aktiviere Browser-Auto-Ausfüllen, um weiterhin Passwörter auszufüllen</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Dein Browser wurde kürzlich aktualisiert, was die Auto-Ausfüllen-Funktion von Bitwarden deaktiviert hat. Um deine Passwörter weiterhin mit Bitwarden auszufüllen, aktiviere Browser Auto-Ausfüllen in den Auto-Ausfüllen-Einstellungen.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Deine Browser wurden kürzlich aktualisiert, was die Auto-Ausfüllen-Funktion von Bitwarden deaktiviert hat. Um deine Passwörter weiterhin mit Bitwarden auszufüllen, aktiviere Browser Auto-Ausfüllen in den Auto-Ausfüllen-Einstellungen.</string>
     <string name="not_now">Nicht jetzt</string>
     <string name="import_from_bitwarden">Aus Bitwarden importieren</string>
     <string name="select_account">Konto auswählen</string>
@@ -1127,9 +1127,11 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="export_failed">Export fehlgeschlagen</string>
     <string name="passwords">Passwörter</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Importieren</string>
     <string name="why_is_this_step_required">Warum ist dieser Schritt erforderlich?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF-Aktualisierung fehlgeschlagen, aktives Konto nicht gefunden. Bitte versuche es erneut oder kontaktiere uns.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Beim Versuch, deine KDF-Einstellungen zu aktualisieren, ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere uns.</string>
     <string name="the_import_request_could_not_be_processed">Die Importanfrage konnte nicht verarbeitet werden.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>
