@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.model
+package com.bitwarden.authenticator.ui.platform.components.listitem.model
 
 import android.os.Parcelable
 import com.bitwarden.ui.platform.components.icon.model.IconData

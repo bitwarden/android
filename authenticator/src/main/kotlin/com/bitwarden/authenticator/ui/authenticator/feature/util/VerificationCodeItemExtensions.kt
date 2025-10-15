@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.util
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
@@ -11,7 +11,8 @@ import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCo
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,
     sharedVerificationCodesState: SharedVerificationCodesState,
-) = VerificationCodeDisplayItem(
+    allowLongPressActions: Boolean,
+): VerificationCodeDisplayItem = VerificationCodeDisplayItem(
     id = id,
     title = issuer ?: label ?: "--",
     subtitle = if (issuer != null) {
@@ -24,10 +25,7 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
-    allowLongPressActions = when (source) {
-        is AuthenticatorItem.Source.Local -> true
-        is AuthenticatorItem.Source.Shared -> false
-    },
+    allowLongPressActions = allowLongPressActions,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {
         // Shared items should never show "Copy to Bitwarden vault" action:

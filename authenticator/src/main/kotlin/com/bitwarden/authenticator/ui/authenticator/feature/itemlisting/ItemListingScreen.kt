@@ -43,10 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.components.header.AuthenticatorExpandingHeader
+import com.bitwarden.authenticator.ui.platform.components.listitem.VaultVerificationCodeItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.util.startAuthenticatorAppSettings
@@ -371,25 +372,16 @@ private fun ItemListingContent(
             itemsIndexed(
                 items = state.favoriteItems,
                 key = { _, it -> "favorite_item_${it.id}" },
-            ) { index, it ->
+            ) { index, item ->
                 VaultVerificationCodeItem(
-                    authCode = it.authCode,
-                    primaryLabel = it.title,
-                    secondaryLabel = it.subtitle,
-                    periodSeconds = it.periodSeconds,
-                    timeLeftSeconds = it.timeLeftSeconds,
-                    alertThresholdSeconds = it.alertThresholdSeconds,
-                    startIcon = it.startIcon,
-                    onItemClick = { onItemClick(it.authCode) },
-                    onDropdownMenuClick = { action ->
-                        onDropdownMenuClick(action, it)
-                    },
-                    showMoveToBitwarden = it.showMoveToBitwarden,
-                    allowLongPress = it.allowLongPressActions,
+                    displayItem = item,
+                    onItemClick = { onItemClick(item.authCode) },
+                    onDropdownMenuClick = { action -> onDropdownMenuClick(action, item) },
                     cardStyle = state.favoriteItems.toListItemCardStyle(index = index),
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .animateItem(),
                 )
             }
         }
@@ -422,21 +414,11 @@ private fun ItemListingContent(
             itemsIndexed(
                 items = state.itemList,
                 key = { _, it -> "local_item_${it.id}" },
-            ) { index, it ->
+            ) { index, item ->
                 VaultVerificationCodeItem(
-                    authCode = it.authCode,
-                    primaryLabel = it.title,
-                    secondaryLabel = it.subtitle,
-                    periodSeconds = it.periodSeconds,
-                    timeLeftSeconds = it.timeLeftSeconds,
-                    alertThresholdSeconds = it.alertThresholdSeconds,
-                    startIcon = it.startIcon,
-                    onItemClick = { onItemClick(it.authCode) },
-                    onDropdownMenuClick = { action ->
-                        onDropdownMenuClick(action, it)
-                    },
-                    showMoveToBitwarden = it.showMoveToBitwarden,
-                    allowLongPress = it.allowLongPressActions,
+                    displayItem = item,
+                    onItemClick = { onItemClick(item.authCode) },
+                    onDropdownMenuClick = { action -> onDropdownMenuClick(action, item) },
                     cardStyle = state.itemList.toListItemCardStyle(index = index),
                     modifier = Modifier
                         .standardHorizontalMargin()
@@ -449,7 +431,7 @@ private fun ItemListingContent(
         when (state.sharedItems) {
             is SharedCodesDisplayState.Codes -> {
                 state.sharedItems.sections.forEachIndexed { index, section ->
-                    item(key = "sharedSection_${section.label}") {
+                    item(key = "sharedSection_${section.id}") {
                         AuthenticatorExpandingHeader(
                             label = section.label(),
                             isExpanded = section.isExpanded,
@@ -473,21 +455,13 @@ private fun ItemListingContent(
                         itemsIndexed(
                             items = section.codes,
                             key = { _, code -> "code_${code.id}" },
-                        ) { index, it ->
+                        ) { index, item ->
                             VaultVerificationCodeItem(
-                                authCode = it.authCode,
-                                primaryLabel = it.title,
-                                secondaryLabel = it.subtitle,
-                                periodSeconds = it.periodSeconds,
-                                timeLeftSeconds = it.timeLeftSeconds,
-                                alertThresholdSeconds = it.alertThresholdSeconds,
-                                startIcon = it.startIcon,
-                                onItemClick = { onItemClick(it.authCode) },
+                                displayItem = item,
+                                onItemClick = { onItemClick(item.authCode) },
                                 onDropdownMenuClick = { action ->
-                                    onDropdownMenuClick(action, it)
+                                    onDropdownMenuClick(action, item)
                                 },
-                                showMoveToBitwarden = it.showMoveToBitwarden,
-                                allowLongPress = it.allowLongPressActions,
                                 cardStyle = section.codes.toListItemCardStyle(index = index),
                                 modifier = Modifier
                                     .standardHorizontalMargin()

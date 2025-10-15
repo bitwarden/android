@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.model
+package com.bitwarden.authenticator.ui.platform.components.listitem.model
 
 import android.os.Parcelable
 import com.bitwarden.ui.util.Text
@@ -35,7 +35,7 @@ sealed class SharedCodesDisplayState : Parcelable {
     /**
      * Utility function to determine if there are any codes synced.
      */
-    fun isEmpty() = when (this) {
+    fun isEmpty(): Boolean = when (this) {
         is Codes -> this.sections.isEmpty()
         Error -> true
     }

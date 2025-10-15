@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model
+package com.bitwarden.authenticator.ui.platform.components.listitem.model
 
 /**
  * Enum representing the available actions in the Vault dropdown menu.

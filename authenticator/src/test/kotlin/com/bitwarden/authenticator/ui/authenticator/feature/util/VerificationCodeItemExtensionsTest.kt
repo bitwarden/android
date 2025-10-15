@@ -5,7 +5,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.util.createMockSha
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -51,6 +51,7 @@ class VerificationCodeItemExtensionsTest {
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -58,6 +59,7 @@ class VerificationCodeItemExtensionsTest {
             nonFavoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                allowLongPressActions = true,
             ),
         )
     }
@@ -86,6 +88,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -93,6 +96,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -100,6 +104,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.FeatureNotEnabled,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -107,6 +112,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Loading,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -114,6 +120,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.OsVersionNotSupported,
+                allowLongPressActions = true,
             ),
         )
         assertEquals(
@@ -121,6 +128,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.SyncNotEnabled,
+                allowLongPressActions = true,
             ),
         )
 
@@ -132,6 +140,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Success(emptyList()),
+                allowLongPressActions = true,
             ),
         )
     }
@@ -168,6 +177,7 @@ class VerificationCodeItemExtensionsTest {
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                allowLongPressActions = false,
             ),
         )
     }
