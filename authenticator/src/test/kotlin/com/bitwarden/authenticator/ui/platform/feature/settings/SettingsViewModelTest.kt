@@ -47,6 +47,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { sharedCodesStateFlow } returns mutableSharedCodesFlow
     }
     private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
+    private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -54,6 +55,9 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { defaultSaveOptionFlow } returns mutableDefaultSaveOptionFlow
         every { isUnlockWithBiometricsEnabled } returns true
         every { isCrashLoggingEnabled } returns true
+        every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedStateFlow
+        every { isScreenCaptureAllowed } answers { mutableScreenCaptureAllowedStateFlow.value }
+        every { isScreenCaptureAllowed = any() } just runs
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
 
@@ -197,6 +201,31 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on AllowScreenCaptureToggled should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+            val newScreenCaptureAllowedValue = true
+
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AllowScreenCaptureToggle(
+                    newScreenCaptureAllowedValue,
+                ),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.isScreenCaptureAllowed = newScreenCaptureAllowedValue
+            }
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(allowScreenCapture = true),
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ) = SettingsViewModel(
@@ -231,4 +260,5 @@ private val DEFAULT_STATE = SettingsState(
     version = BitwardenString.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
+    allowScreenCapture = false,
 )
