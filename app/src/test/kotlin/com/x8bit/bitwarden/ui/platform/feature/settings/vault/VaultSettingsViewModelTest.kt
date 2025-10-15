@@ -31,7 +31,13 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
-    private val featureFlagManager = mockk<FeatureFlagManager>()
+    private val mutableFeatureFlagFlow = bufferedMutableSharedFlow<Boolean>()
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) } returns true
+        every {
+            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolImport)
+        } returns mutableFeatureFlagFlow
+    }
 
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager> {
@@ -151,6 +157,25 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
             mutableSnackbarSharedFlow.tryEmit(expectedSnackbarData)
             assertEquals(VaultSettingsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
+    }
+
+    @Test
+    fun `CredentialExchangeProtocolImport flag changes should update state accordingly`() {
+        val viewModel = createViewModel()
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
+        )
+        mutableFeatureFlagFlow.tryEmit(false)
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+        )
+        mutableFeatureFlagFlow.tryEmit(true)
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
+        )
     }
 
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(

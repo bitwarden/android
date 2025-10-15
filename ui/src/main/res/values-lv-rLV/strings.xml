@@ -1117,8 +1117,8 @@ Vai pārslēgties uz šo kontu?</string>
         <item quantity="other">Glabātavā tika ievietoti %1$d vienumi.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Jāiespējo pārlūka automātiskā aizpilde, lai turpinātu aizpildīt paroles</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Tavs pārlūks nesen ir atjaunināts, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, pārlūka automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Tavi pārlūki nesen ir atjaunināti, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, visos uzstādītajos pārlūkos automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
     <string name="not_now">Ne tagad</string>
     <string name="import_from_bitwarden">Ievietot no Bitwarden</string>
     <string name="select_account">Atlasīt kontu</string>
@@ -1134,9 +1134,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="export_failed">Izgūšana neizdevās</string>
     <string name="passwords">Paroles</string>
     <string name="passkeys">Piekļuves atslēgas</string>
-    <string name="import_verb">Ievietot</string>
     <string name="why_is_this_step_required">Kādēļ šis solis ir nepieciešams?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF atjaunināšana neizdevās, netika atrasts konts. Lūgums mēģināt vēlreiz vai sazināties ar mums.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">KDF iestatījumu atjaunināšanas laikā atgadījās kļūda. Lūgums mēģināt vēlreiz vai sazināties ar mums.</string>
     <string name="the_import_request_could_not_be_processed">Ievietošanas pieprasījumu nevarēja apstrādāt.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

@@ -1111,8 +1111,8 @@ Wilt u naar dit account wisselen?</string>
         <item quantity="other">%1$d items in je kluis geïmporteerd.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Automatisch aanvullen van browser inschakelen om het invullen van wachtwoorden te behouden</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Je browsers zijn onlangs bijgewerkt waardoor automatisch invullen door Bitwarden is uitgeschakeld. Om je wachtwoorden met Bitwarden in te blijven vullen, moet je automatisch invullen inschakelen via de instellingen van al je geïnstalleerde webbrowsers.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Je browsers zijn onlangs bijgewerkt waardoor automatisch invullen door Bitwarden is uitgeschakeld. Om je wachtwoorden met Bitwarden in te blijven vullen, moet je automatisch invullen inschakelen via de instellingen van al je geïnstalleerde webbrowsers.</string>
     <string name="not_now">Niet nu</string>
     <string name="import_from_bitwarden">Importeer van Bitwarden</string>
     <string name="select_account">Account selecteren</string>
@@ -1128,9 +1128,11 @@ Wilt u naar dit account wisselen?</string>
     <string name="export_failed">Exporteren mislukt</string>
     <string name="passwords">Wachtwoorden</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Importeren</string>
     <string name="why_is_this_step_required">Waarom is deze stap nodig?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update mislukt, actief account niet gevonden. Probeer het opnieuw of neem contact met ons op.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Er is een fout opgetreden tijdens het bijwerken van de kdf-instellingen. Probeer het opnieuw of neem contact met ons op.</string>
     <string name="the_import_request_could_not_be_processed">Het importverzoek kon niet worden verwerkt.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>
