@@ -181,9 +181,17 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserAutoUnlockKeys[userId] = userAutoUnlockKey
     }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     override fun getPinProtectedUserKey(userId: String): String? =
         storedPinProtectedUserKeys[userId]?.first
 
+    @Deprecated(
+        "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -193,6 +201,10 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutablePinProtectedUserKeyFlow(userId).tryEmit(pinProtectedUserKey)
     }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     override fun getPinProtectedUserKeyFlow(userId: String): Flow<String?> =
         getMutablePinProtectedUserKeyFlow(userId)
             .onSubscription {

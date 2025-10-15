@@ -216,6 +216,10 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Retrieves a pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     fun getPinProtectedUserKey(userId: String): String?
 
     /**
@@ -229,6 +233,10 @@ interface AuthDiskSource : AppIdProvider {
      * When [inMemoryOnly] is `true`, the value will only be available via a call to
      * [getPinProtectedUserKey] during the current app session.
      */
+    @Deprecated(
+        message = "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -250,6 +258,10 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Retrieves a flow for the pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     fun getPinProtectedUserKeyFlow(userId: String): Flow<String?>
 
     /**

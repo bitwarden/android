@@ -202,9 +202,9 @@ class SettingsRepositoryTest {
 
         // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
         // effect on the currently stored values since we have a way to unlock the vault.
-        fakeAuthDiskSource.storePinProtectedUserKey(
+        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
             userId = USER_ID,
-            pinProtectedUserKey = "pinProtectedKey",
+            pinProtectedUserKeyEnvelope = "pinProtectedKey",
         )
         fakeSettingsDiskSource.apply {
             storeVaultTimeoutInMinutes(
