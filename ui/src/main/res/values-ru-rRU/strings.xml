@@ -1123,8 +1123,8 @@
         <item quantity="other">%1$d элемента были импортированы в ваше хранилище.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Включите автозаполнение браузера, чтобы пароли продолжали заполняться</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Недавно ваш браузер получил обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках браузера.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Недавно ваши браузеры получили обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках всех установленных браузеров.</string>
     <string name="not_now">Не сейчас</string>
     <string name="import_from_bitwarden">Импортировать из Bitwarden</string>
     <string name="select_account">Выберите аккаунт</string>
@@ -1140,9 +1140,11 @@
     <string name="export_failed">Не удалось экспортировать</string>
     <string name="passwords">Пароли</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Импорт</string>
     <string name="why_is_this_step_required">Почему необходим этот шаг?</string>
     <string name="kdf_update_failed_active_account_not_found">Ошибка обновления Kdf, активный аккаунт не найден. Пожалуйста, попробуйте еще раз или свяжитесь с нами.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">При попытке обновить настройки kdf произошла ошибка. Пожалуйста, повторите попытку или свяжитесь с нами.</string>
     <string name="the_import_request_could_not_be_processed">Запрос на импорт не может быть обработан.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

@@ -1129,9 +1129,11 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="export_failed">Xaricə köçürmə uğursuz oldu</string>
     <string name="passwords">Parollar</string>
     <string name="passkeys">Keçid açarları</string>
-    <string name="import_verb">Daxilə köçür</string>
     <string name="why_is_this_step_required">Bu addım niyə tələb olunur?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF güncəlləməsi uğursuz olud, aktiv hesab tapılmadı. Lütfən yenidən sınayın və ya bizim əlaqə saxlayın.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">KDF ayarlarınızı güncəlləməyə çalışarkən xəta baş verdi. Lütfən yenidən sınayın və ya bizimlə əlaqə saxlayın.</string>
     <string name="the_import_request_could_not_be_processed">Daxilə köçürmə tələbi emal oluna bilmədi.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

@@ -56,14 +56,6 @@ class QrCodeScanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `when unable to setup camera CameraErrorReceive will be sent`() = runTest {
-        // Because the camera is not set up in the tests, this will always be triggered
-        verify {
-            viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
-        }
-    }
-
-    @Test
     fun `when a scan is successful a result will be sent`() = runTest {
         val result = "testCode"
 

@@ -97,7 +97,7 @@ fun BitwardenExpandableFloatingActionButton(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(
-                    space = 12.dp,
+                    space = 8.dp,
                     alignment = Alignment.Bottom,
                 ),
                 contentPadding = PaddingValues(bottom = 16.dp),
@@ -167,7 +167,7 @@ private fun ExpandableFabOption(
         ) {
             Text(
                 text = expandableFabOption.label(),
-                style = BitwardenTheme.typography.labelSmall,
+                style = BitwardenTheme.typography.labelLarge,
                 modifier = Modifier.padding(all = 8.dp),
             )
             Icon(

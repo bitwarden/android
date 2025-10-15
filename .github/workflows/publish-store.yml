@@ -1,5 +1,6 @@
 name: Publish to Google Play
-run-name: "Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}"
+run-name:  >
+  ${{ inputs.dry-run && ' (Dry Run)' || '' }}Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}
 on:
   workflow_dispatch:
     inputs:
@@ -46,6 +47,10 @@ on:
           - production
           - Fastlane Automation Target
         required: true
+      dry-run:
+        description: "Dry-Run, Run the workflow without publishing to the store"
+        type: boolean
+        default: false
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -54,6 +59,7 @@ permissions:
   contents: read
   packages: read
   id-token: write
+  actions: write
 
 jobs:
   promote:
@@ -168,3 +174,17 @@ jobs:
             releaseNotes:"$RELEASE_NOTES" \
             track:"$TRACK_FROM" \
             trackPromoteTo:"$TRACK_TARGET"
+
+      - name: Enable Publish Github Release Workflow
+        env:
+          PRODUCT: ${{ inputs.product }}
+        run: |
+          if ${{ inputs.dry-run }} ; then
+            gh workflow view publish-github-release-bwpm.yml
+            exit 0
+          fi
+          if [ "$PRODUCT" = "Password Manager" ]; then
+            gh workflow enable publish-github-release-bwpm.yml
+          elif [ "$PRODUCT" = "Authenticator" ]; then
+            gh workflow enable publish-github-release-bwa.yml
+          fi

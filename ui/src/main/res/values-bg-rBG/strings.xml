@@ -1113,8 +1113,8 @@
         <item quantity="other">%1$d елемента бяха внесени в трезора.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Включете автоматичното попълване в браузъра си, за да продължите да се възползвате от тази функционалност</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Вашият браузър е бил обновен наскоро, и това е изключило автоматичното попълване чрез Битуорден. За да продължите да попълвате паролите си ползвайки Битуорден, включете автоматичното попълване в настройките на браузъра си.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Вашият браузър е бил обновен наскоро, и това е изключило автоматичното попълване чрез Битуорден. За да продължите да попълвате паролите си ползвайки Битуорден, включете автоматичното попълване в настройките на браузъра си.</string>
     <string name="not_now">Не сега</string>
     <string name="import_from_bitwarden">Внасяне от Битуорден</string>
     <string name="select_account">Изберете акаунт</string>
@@ -1130,9 +1130,11 @@
     <string name="export_failed">Изнасянето не беше успешно</string>
     <string name="passwords">Пароли</string>
     <string name="passkeys">Секретни ключове</string>
-    <string name="import_verb">Внасяне</string>
     <string name="why_is_this_step_required">Защо е нужна тази стъпка?</string>
     <string name="kdf_update_failed_active_account_not_found">Обновяването на KDF беше неуспешно. Не е намерен активен акаунт. Опитайте отново или се свържете с нас.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Възникна грешка при опита за обновяване на настройките на KDF. Опитайте отново или се свържете с нас.</string>
     <string name="the_import_request_could_not_be_processed">Заявката за внасяне не може да бъде обработена.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>
