@@ -58,6 +58,7 @@ class SettingsViewModel @Inject constructor(
             accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
             defaultSaveOption = settingsRepository.defaultSaveOption,
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
+            isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         ),
 ) {
 
@@ -125,6 +126,11 @@ class SettingsViewModel @Inject constructor(
         when (action) {
             is SettingsAction.SecurityClick.UnlockWithBiometricToggle -> {
                 handleBiometricsSetupClick(action)
+            }
+
+            is SettingsAction.SecurityClick.AllowScreenCaptureToggle -> {
+                settingsRepository.isScreenCaptureAllowed = action.enabled
+                mutableStateFlow.update { it.copy(allowScreenCapture = action.enabled) }
             }
         }
     }
@@ -319,6 +325,7 @@ class SettingsViewModel @Inject constructor(
             isSubmitCrashLogsEnabled: Boolean,
             accountSyncState: AccountSyncState,
             sharedAccountsState: SharedVerificationCodesState,
+            isScreenCaptureAllowed: Boolean,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
@@ -343,6 +350,7 @@ class SettingsViewModel @Inject constructor(
                 defaultSaveOption = defaultSaveOption,
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
+                allowScreenCapture = isScreenCaptureAllowed,
             )
         }
     }
@@ -362,6 +370,7 @@ data class SettingsState(
     val dialog: Dialog?,
     val version: Text,
     val copyrightInfo: Text,
+    val allowScreenCapture: Boolean,
 ) : Parcelable {
 
     /**
@@ -460,13 +469,18 @@ sealed class SettingsAction(
     }
 
     /**
-     * Indicates the user clicked the Unlock with biometrics button.
+     * Models actions for the Security section of settings.
      */
     sealed class SecurityClick : SettingsAction() {
         /**
          * Indicates the user clicked unlock with biometrics toggle.
          */
         data class UnlockWithBiometricToggle(val enabled: Boolean) : SecurityClick()
+
+        /**
+         * Indicates the user clicked allow screen capture toggle.
+         */
+        data class AllowScreenCaptureToggle(val enabled: Boolean) : SecurityClick()
     }
 
     /**

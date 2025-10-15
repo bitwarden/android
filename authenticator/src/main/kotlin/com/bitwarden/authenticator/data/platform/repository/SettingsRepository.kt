@@ -68,14 +68,14 @@ interface SettingsRepository {
     var isScreenCaptureAllowed: Boolean
 
     /**
-     * A set of Bitwarden account IDs that have previously been synced.
-     */
-    var previouslySyncedBitwardenAccountIds: Set<String>
-
-    /**
      * Whether or not screen capture is allowed for the current user.
      */
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
+
+    /**
+     * A set of Bitwarden account IDs that have previously been synced.
+     */
+    var previouslySyncedBitwardenAccountIds: Set<String>
 
     /**
      * Clears any previously stored encrypted user key used with biometrics for the current user.
