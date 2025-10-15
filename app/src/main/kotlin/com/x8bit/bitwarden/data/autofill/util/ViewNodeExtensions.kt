@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.AutofillHint
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import timber.log.Timber
 
 /**
  * The default web URI scheme.
@@ -50,6 +51,7 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  * it doesn't have a supported hint and isn't an input field, we also return null.
  */
 fun AssistStructure.ViewNode.toAutofillView(): AutofillView? {
+    Timber.tag("AUTOFILL").e("AutofillViewData: $website -- $supportedAutofillHint -- $isFocused")
     val nonNullAutofillId = this.autofillId ?: return null
     if (this.supportedAutofillHint == null && !this.isInputField) return null
     val autofillOptions = this
