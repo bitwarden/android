@@ -9,11 +9,11 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -605,8 +605,9 @@ private val SHARED_VERIFICATION_ITEMS = listOf(
 
 private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
     it.toDisplayItem(
-        AUTHENTICATOR_ALERT_SECONDS,
-        SharedVerificationCodesState.AppNotInstalled,
+        alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+        sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
+        allowLongPressActions = true,
     )
 }
 

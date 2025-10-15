@@ -7,8 +7,8 @@ import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVer
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -163,7 +163,7 @@ private val LOCAL_DISPLAY_ITEMS = listOf(
         ),
         subtitle = LOCAL_ITEMS[0].label,
         favorite = false,
-        allowLongPressActions = true,
+        allowLongPressActions = false,
         showMoveToBitwarden = true,
     ),
 )

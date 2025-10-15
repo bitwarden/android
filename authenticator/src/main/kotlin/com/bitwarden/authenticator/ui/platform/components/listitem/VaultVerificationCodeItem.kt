@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
+package com.bitwarden.authenticator.ui.platform.components.listitem
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -30,9 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.platform.base.util.cardBackground
 import com.bitwarden.ui.platform.base.util.cardPadding
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
@@ -40,6 +41,40 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+
+/**
+ * The verification code item displayed to the user.
+ *
+ * @param displayItem he model containing all relevant data to be displayed.
+ * @param onItemClick The lambda function to be invoked when the item is clicked.
+ * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
+ * @param cardStyle The card style to be applied to this item.
+ * @param modifier The modifier for the item.
+ */
+@Composable
+fun VaultVerificationCodeItem(
+    displayItem: VerificationCodeDisplayItem,
+    onItemClick: () -> Unit,
+    onDropdownMenuClick: (VaultDropdownMenuAction) -> Unit,
+    cardStyle: CardStyle,
+    modifier: Modifier = Modifier,
+) {
+    VaultVerificationCodeItem(
+        authCode = displayItem.authCode,
+        primaryLabel = displayItem.title,
+        secondaryLabel = displayItem.subtitle,
+        periodSeconds = displayItem.periodSeconds,
+        timeLeftSeconds = displayItem.timeLeftSeconds,
+        alertThresholdSeconds = displayItem.alertThresholdSeconds,
+        startIcon = displayItem.startIcon,
+        onItemClick = onItemClick,
+        onDropdownMenuClick = onDropdownMenuClick,
+        allowLongPress = displayItem.allowLongPressActions,
+        showMoveToBitwarden = displayItem.showMoveToBitwarden,
+        cardStyle = cardStyle,
+        modifier = modifier,
+    )
+}
 
 /**
  * The verification code item displayed to the user.
@@ -55,6 +90,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
  * @param allowLongPress Whether long-press interactions are enabled for the item.
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
+ * @param cardStyle The card style to be applied to this item.
  * @param modifier The modifier for the item.
  */
 @Suppress("LongMethod", "MagicNumber")
@@ -178,7 +214,7 @@ fun VaultVerificationCodeItem(
                     )
                 },
             )
-            HorizontalDivider()
+            BitwardenHorizontalDivider()
             DropdownMenuItem(
                 text = {
                     Text(text = stringResource(id = BitwardenString.edit))
@@ -195,7 +231,7 @@ fun VaultVerificationCodeItem(
                 },
             )
             if (showMoveToBitwarden) {
-                HorizontalDivider()
+                BitwardenHorizontalDivider()
                 DropdownMenuItem(
                     text = {
                         Text(text = stringResource(id = BitwardenString.copy_to_bitwarden_vault))
@@ -214,7 +250,7 @@ fun VaultVerificationCodeItem(
                     },
                 )
             }
-            HorizontalDivider()
+            BitwardenHorizontalDivider()
             DropdownMenuItem(
                 text = {
                     Text(text = stringResource(id = BitwardenString.delete_item))
