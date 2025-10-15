@@ -18,6 +18,9 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -166,7 +169,7 @@ class ItemSearchViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             SharedVerificationCodesState.SyncNotEnabled,
-                -> SharedCodesDisplayState.Codes(emptyList())
+                -> SharedCodesDisplayState.Codes(persistentListOf())
 
             is SharedVerificationCodesState.Success -> {
                 sharedData
@@ -184,15 +187,17 @@ class ItemSearchViewModel @Inject constructor(
 
             else -> {
                 ItemSearchState.ViewState.Content(
-                    itemList = filteredLocalCodes.map {
-                        it.toDisplayItem(
-                            alertThresholdSeconds = 7,
-                            sharedVerificationCodesState = authenticatorRepository
-                                .sharedCodesStateFlow
-                                .value,
-                            allowLongPressActions = false,
-                        )
-                    },
+                    itemList = filteredLocalCodes
+                        .map {
+                            it.toDisplayItem(
+                                alertThresholdSeconds = 7,
+                                sharedVerificationCodesState = authenticatorRepository
+                                    .sharedCodesStateFlow
+                                    .value,
+                                allowLongPressActions = false,
+                            )
+                        }
+                        .toImmutableList(),
                     sharedItems = sharedItemsState,
                 )
             }
@@ -219,7 +224,7 @@ data class ItemSearchState(
          */
         @Parcelize
         data class Content(
-            val itemList: List<VerificationCodeDisplayItem>,
+            val itemList: ImmutableList<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
         ) : ViewState() {
             /**

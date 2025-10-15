@@ -665,8 +665,8 @@ private fun ContentPreview() {
         ItemListingContent(
             state = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = listOf(
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(
                     VerificationCodeDisplayItem(
                         id = "",
                         title = "Local item",
@@ -681,13 +681,13 @@ private fun ContentPreview() {
                     ),
                 ),
                 sharedItems = SharedCodesDisplayState.Codes(
-                    sections = listOf(
+                    sections = persistentListOf(
                         SharedCodesDisplayState.SharedCodesAccountSection(
                             id = "id",
                             label =
                                 "longemailaddress+verification+codes@email.com | Bitawrden.eu (1)"
                                     .asText(),
-                            codes = listOf(
+                            codes = persistentListOf(
                                 VerificationCodeDisplayItem(
                                     id = "",
                                     title = "Shared item",
