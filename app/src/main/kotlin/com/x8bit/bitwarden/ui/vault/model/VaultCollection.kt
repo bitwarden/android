@@ -9,10 +9,12 @@ import kotlinx.parcelize.Parcelize
  * @property id the collection id.
  * @property name the collection name.
  * @property isSelected if the collection is selected or not.
+ * @property isDefaultUserCollection if the collection is the user default collection or not.
  */
 @Parcelize
 data class VaultCollection(
     val id: String,
     val name: String,
     val isSelected: Boolean,
+    val isDefaultUserCollection: Boolean,
 ) : Parcelable

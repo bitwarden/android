@@ -266,6 +266,8 @@ private fun UserState.Account.toAvailableOwners(
                                     ?.contains(collection.id))
                                     ?: (selectedCollectionId != null &&
                                         collection.id == selectedCollectionId),
+                                isDefaultUserCollection =
+                                    collection.type == CollectionType.DEFAULT_USER_COLLECTION,
                             )
                         },
                 )
