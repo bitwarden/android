@@ -535,6 +535,14 @@ class VaultRepositoryImpl(
                     pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
                     inMemoryOnly = true,
                 )
+                authDiskSource.storeEncryptedPin(
+                    userId = userId,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
+                authDiskSource.storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                )
             }
     }
 

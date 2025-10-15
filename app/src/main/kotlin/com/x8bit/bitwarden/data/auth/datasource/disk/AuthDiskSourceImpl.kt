@@ -146,6 +146,7 @@ class AuthDiskSourceImpl(
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
         storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+        storePinProtectedUserKeyEnvelope(userId = userId, pinProtectedUserKeyEnvelope = null)
         storeEncryptedPin(userId = userId, encryptedPin = null)
         storePrivateKey(userId = userId, privateKey = null)
         storeAccountKeys(userId = userId, accountKeys = null)
@@ -333,6 +334,10 @@ class AuthDiskSourceImpl(
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId = userId)) }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     override fun getPinProtectedUserKey(userId: String): String? =
         inMemoryPinProtectedUserKeys[userId]
             ?: getString(key = PIN_PROTECTED_USER_KEY_KEY.appendIdentifier(userId))
@@ -343,6 +348,10 @@ class AuthDiskSourceImpl(
                 key = PIN_PROTECTED_USER_KEY_KEY_ENVELOPE.appendIdentifier(userId),
             )
 
+    @Deprecated(
+        "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -371,6 +380,10 @@ class AuthDiskSourceImpl(
         getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
     }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     override fun getPinProtectedUserKeyFlow(userId: String): Flow<String?> =
         getMutablePinProtectedUserKeyFlow(userId)
             .onSubscription { emit(getPinProtectedUserKey(userId = userId)) }

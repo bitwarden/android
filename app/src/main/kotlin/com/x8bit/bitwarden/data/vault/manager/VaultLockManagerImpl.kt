@@ -293,11 +293,18 @@ class VaultLockManagerImpl(
         vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
             .onSuccess { enrollPinResponse ->
                 authDiskSource.storePinProtectedUserKeyEnvelope(
-                    userId,
-                    enrollPinResponse.pinProtectedUserKeyEnvelope,
-                    inMemoryOnly,
+                    userId = userId,
+                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
+                    inMemoryOnly = inMemoryOnly,
                 )
-                authDiskSource.storePinProtectedUserKey(userId, null)
+                authDiskSource.storeEncryptedPin(
+                    userId = userId,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
+                authDiskSource.storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                )
             }
     }
 
