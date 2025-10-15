@@ -1236,39 +1236,35 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun `isVaultRegisteredForExport should return false if no value exists`() {
-        assertFalse(settingsRepository.isVaultRegisteredForExport(userId = "userId"))
+    fun `isAppRegisteredForExport should return false if no value exists`() {
+        assertFalse(settingsRepository.isAppRegisteredForExport())
     }
 
     @Test
-    fun `isVaultRegisteredForExport should return true if it exists`() {
-        val userId = "userId"
-        fakeSettingsDiskSource.storeVaultRegisteredForExport(userId = userId, isRegistered = true)
-        assertTrue(settingsRepository.isVaultRegisteredForExport(userId = userId))
+    fun `isAppRegisteredForExport should return true if it exists`() {
+        fakeSettingsDiskSource.storeAppRegisteredForExport(isRegistered = true)
+        assertTrue(settingsRepository.isAppRegisteredForExport())
     }
 
     @Test
-    fun `storeVaultRegisteredForExport should store value of true to disk`() {
-        val userId = "userId"
-        settingsRepository.storeVaultRegisteredForExport(userId = userId, isRegistered = true)
-        assertTrue(fakeSettingsDiskSource.getVaultRegisteredForExport(userId = userId))
+    fun `storeAppRegisteredForExport should store value of true to disk`() {
+        settingsRepository.storeAppRegisteredForExport(isRegistered = true)
+        assertTrue(fakeSettingsDiskSource.getAppRegisteredForExport())
     }
 
     @Test
-    fun `getVaultRegisteredForExportFlow should react to changes in SettingsDiskSource`() =
+    fun `getAppRegisteredForExportFlow should react to changes in SettingsDiskSource`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             settingsRepository
-                .getVaultRegisteredForExportFlow(userId = USER_ID)
+                .getAppRegisteredForExportFlow(userId = USER_ID)
                 .test {
                     assertFalse(awaitItem())
-                    fakeSettingsDiskSource.storeVaultRegisteredForExport(
-                        userId = USER_ID,
+                    fakeSettingsDiskSource.storeAppRegisteredForExport(
                         isRegistered = true,
                     )
                     assertTrue(awaitItem())
-                    fakeSettingsDiskSource.storeVaultRegisteredForExport(
-                        userId = USER_ID,
+                    fakeSettingsDiskSource.storeAppRegisteredForExport(
                         isRegistered = false,
                     )
                     assertFalse(awaitItem())

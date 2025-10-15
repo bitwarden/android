@@ -7,6 +7,9 @@ import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.MasterPasswordAuthenticationData
+import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -1485,6 +1488,64 @@ class VaultSdkSourceTest {
                 cipherList = mockCipherList,
             )
             assertTrue(result.isFailure)
+        }
+
+    @Test
+    fun `makeUpdateKdf should return results when successful`() = runTest {
+        val kdf = mockk<Kdf>()
+        val updateKdfResponse = UpdateKdfResponse(
+            masterPasswordAuthenticationData = MasterPasswordAuthenticationData(
+                kdf = kdf,
+                salt = "mockSalt",
+                masterPasswordAuthenticationHash = "mockHash",
+            ),
+            masterPasswordUnlockData = MasterPasswordUnlockData(
+                kdf = kdf,
+                masterKeyWrappedUserKey = "mockKey",
+                salt = "mockSalt",
+            ),
+            oldMasterPasswordAuthenticationData = MasterPasswordAuthenticationData(
+                kdf = kdf,
+                salt = "mockSalt",
+                masterPasswordAuthenticationHash = "mockHash",
+            ),
+        )
+        coEvery {
+            clientCrypto.makeUpdateKdf(
+                password = "mockPassword",
+                kdf = kdf,
+            )
+        } returns updateKdfResponse
+
+        val result = vaultSdkSource.makeUpdateKdf(
+            userId = "mockUserId",
+            password = "mockPassword",
+            kdf = kdf,
+        )
+
+        assertEquals(
+            updateKdfResponse.asSuccess(),
+            result,
+        )
+    }
+
+    @Test
+    fun `makeUpdateKdf should return Failure when Bitwarden exception is thrown`() =
+        runTest {
+            val kdf = mockk<Kdf>()
+            val error = BitwardenException.Crypto(CryptoException.MissingKey("mockException"))
+            coEvery {
+                clientCrypto.makeUpdateKdf(
+                    password = "mockPassword",
+                    kdf = kdf,
+                )
+            } throws error
+            val result = vaultSdkSource.makeUpdateKdf(
+                userId = "mockUserId",
+                password = "mockPassword",
+                kdf = kdf,
+            )
+            assertEquals(error.asFailure(), result)
         }
 }
 

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 
+import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -55,6 +56,8 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
                                     isSelected = currentCipher
                                         .collectionIds
                                         .contains(collection.id),
+                                    isDefaultUserCollection =
+                                        collection.type == CollectionType.DEFAULT_USER_COLLECTION,
                                 )
                             },
                     )

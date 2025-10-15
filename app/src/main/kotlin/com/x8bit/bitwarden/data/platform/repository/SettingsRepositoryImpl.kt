@@ -590,23 +590,23 @@ class SettingsRepositoryImpl(
         settingsDiskSource.storeUseHasLoggedInPreviously(userId)
     }
 
-    override fun isVaultRegisteredForExport(userId: String): Boolean {
-        return settingsDiskSource.getVaultRegisteredForExport(userId) == true
+    override fun isAppRegisteredForExport(): Boolean {
+        return settingsDiskSource.getAppRegisteredForExport() == true
     }
 
-    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean) {
-        settingsDiskSource.storeVaultRegisteredForExport(userId, isRegistered)
+    override fun storeAppRegisteredForExport(isRegistered: Boolean) {
+        settingsDiskSource.storeAppRegisteredForExport(isRegistered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean> {
+    override fun getAppRegisteredForExportFlow(userId: String): StateFlow<Boolean> {
         return settingsDiskSource
-            .getVaultRegisteredForExportFlow(userId)
+            .getAppRegisteredForExportFlow(userId)
             .map { it ?: false }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
                 initialValue = settingsDiskSource
-                    .getVaultRegisteredForExport(userId)
+                    .getAppRegisteredForExport()
                     ?: false,
             )
     }

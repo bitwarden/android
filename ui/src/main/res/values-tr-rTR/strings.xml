@@ -46,7 +46,7 @@
     <string name="my_vault">Kasam</string>
     <string name="name">Ad</string>
     <string name="item_name_required">Hesap adı (gerekli)</string>
-    <string name="send_name_required">"Send adı (gerekli)"</string>
+    <string name="send_name_required">Send adı (gerekli)</string>
     <string name="no">Hayır</string>
     <string name="notes">Notlar</string>
     <string name="private_notes">Özel notlar</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 dakika</string>
     <string name="four_hours">4 saat</string>
     <string name="immediately">Hemen</string>
-    <string name="vault_timeout_log_out_confirmation_title">Oturum zaman aşımı \"Çıkış yap\" olarak ayarlansın mı?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden oturum açıp kasaya erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Oturum zaman aşımı “Çıkış yap” olarak ayarlansın mı?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden oturum açıp kasaya erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.zaman aşımı</string>
     <string name="logging_in">Giriş yapılıyor…</string>
     <string name="login_to_bitwarden">Bitwarden\'a giriş yap</string>
     <string name="master_password_confirmation_val_message">Parola onayı doğru değil.</string>
@@ -164,7 +164,7 @@
     <string name="no_items_for_vault">Kasanızda “%1$s” ile eşleşen kayıt yok</string>
     <string name="search_for_a_login_or_add_a_new_login">Hesap ara veya yeni hesap ekle</string>
     <string name="disabled">Devre dışı</string>
-    <string name="bitwarden_autofill_service_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden Otomatik Doldurma Hizmeti\'dir. Bu özellik hakkında daha fazla bilgi almak için \"Ayarlar\" ekranına gidin.</string>
+    <string name="bitwarden_autofill_service_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden Otomatik Doldurma Hizmeti\'dir. Bu özellik hakkında daha fazla bilgi almak için “Ayarlar” ekranına gidin.</string>
     <string name="autofill_title">Otomatik doldur</string>
     <string name="autofill_or_view">Bu kaydı otomatik doldurmak veya görüntülemek ister misiniz?</string>
     <string name="search">Ara</string>
@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Kodu yeniden gönder</string>
     <string name="verification_email_not_sent">Doğrulama e-postası gönderilemedi. Yeniden deneyin.</string>
     <string name="verification_email_sent">Doğrulama e-postası gönderildi</string>
-    <string name="yubi_key_instruction">Devam etmek için YubiKey NEO anahtarınızı cihazınızın arkasına doğru tutun veya YubiKey\'i cihazınızın USB portuna takıp düğmesine dokunun.</string>
+    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey güvenlik anahtarı</string>
     <string name="add_new_attachment">Yeni dosya ekle</string>
     <string name="attachments">Dosyalar</string>
@@ -366,8 +366,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Uygulamanın renk temasını değiştir</string>
     <string name="copy_notes">Notu kopyala</string>
-    <string name="exit">Çıkış</string>
-    <string name="exit_confirmation">Bitwarden\'dan çıkmak istediğinize emin misiniz?</string>
     <string name="require_master_password_on_app_restart">Uygulama yeniden başlatıldığında ana parola sorulsun mu?</string>
     <string name="pin_require_master_password_restart">Uygulama yeniden başlatılınca ana parola girilmesine zorunlu tutmak ister misiniz?</string>
     <string name="ask_to_add_item">Hesap eklemeyi öner</string>
@@ -396,7 +394,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="password_generator_policy_in_effect">Bir veya daha fazla kuruluş ilkesi üreteç ayarlarınızı etkiliyor</string>
     <string name="unable_to_save_attachment">Bu ek kaydedilirken bir sorun oluştu. Sorun devam ederse eki web kasasından kaydedebilirsiniz.</string>
     <string name="save_attachment_success">Dosya başarıyla kaydedildi</string>
-    <string name="autofill_tile_accessibility_required">Otomatik doldurma kutusunu kullanmak için lütfen Bitwarden ayarlarından \"Otomatik doldurma erişilebilirlik hizmeti\"ni açın.</string>
+    <string name="autofill_tile_accessibility_required">Otomatik doldurma kutusunu kullanmak için lütfen Bitwarden ayarlarından “Otomatik Doldurma Erişilebilirlik Hizmeti”ni açın.</string>
     <string name="autofill_tile_uri_not_found">Parola alanı tespit edilemedi</string>
     <string name="soft_deleting">Çöp kutusuna gönderiliyor…</string>
     <string name="item_soft_deleted">Kayıt çöp kutusuna gönderildi.</string>
@@ -451,7 +449,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="expires_at">%s tarihinde süresi dolacak</string>
     <string name="expires_tomorrow">Yarın süresi doluyor</string>
     <string name="expires_on">%s tarihinde süresi dolacak</string>
-    <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
+    <string name="stops_logging_on">%1$s adresinde %2$s saatinde oturum açmayı durdurur</string>
     <string name="maximum_access_count">Maksimum erişim sayısı</string>
     <string name="maximum_access_count_info">Bunu ayarlarsanız maksimum erişim sayısına ulaşıldıktan sonra bu Send\'e erişilemeyecektir.</string>
     <string name="maximum_access_count_reached">Maksimum erişim sayısına ulaşıldı</string>
@@ -739,7 +737,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesabınıza erişimi kaybetmemenin yollarını öğrenin</annotation></string>
     <string name="help_with_server_geolocations">Sunucu konumları hakkında yardım.</string>
     <string name="email_address_required">Eposta adresi (gerekli)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"E-posta adresinizi onaylayarak hesap açılışına devam etmek için e-postadaki bağlantıya tıklayın. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">E-posta adresinizi onaylayarak hesap açılışına devam etmek için e-postadaki bağlantıya tıklayın.</string>
     <string name="change_email_address">E-posta adresini değiştir</string>
     <string name="next">İleri</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden, unuttuğunuz veya kaybettiğiniz ana parolaları kurtaramaz.</string>
@@ -757,9 +755,16 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="allow_bitwarden_authenticator_syncing">Authenticator ile eşitlemeye izin ver</string>
     <string name="there_was_an_issue_validating_the_registration_token">Kayıt erişim anahtarını doğrulamada bir sorun oluştu.</string>
     <string name="turn_on_autofill">Otomatik doldurmayı etkinleştir</string>
+    <string name="autofill_setup">Otomatik doldurma kurulumu</string>
+    <string name="turn_on_browser_autofill_integration">Tarayıcıda otomatik doldurma entegrasyonunu etkinleştirin</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izinler gerektiren tarayıcılar kullanıyorsunuz.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izinler gerektiren tarayıcılar kullanıyorsunuz.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izin gerektiren bir tarayıcı kullanıyorsunuz. Tercih ettiğiniz otomatik doldurma entegrasyonunu aşağıdan etkinleştirin.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izin gerektiren tarayıcılar kullanıyorsunuz. Devam etmek için yüklü tarayıcılarınızda otomatik doldurma entegrasyonunu etkinleştirin.</string>
     <string name="use_autofill_to_log_into_your_accounts">Hesaplarınıza tek dokunuşla giriş yapmak için otomatik doldurmayı kullanabilirsiniz.</string>
     <string name="turn_on_later">Daha sonra etkinleştir</string>
     <string name="turn_on_autofill_later">Otomatik doldurma daha sonra mı etkinleştirilsin?</string>
+    <string name="turn_on_browser_autofill_integration_later">Tarayıcıda otomatik doldurma entegrasyonu şimdilik etkinleştirilmesin mi?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">İstediğiniz zaman Ayarlar\'a girerek bu adımı tamamlayabilirsiniz.</string>
     <string name="what_bitwarden_has_to_offer">Artık kayıtlı parolalarınızı kullanarak uygulamalara ve web sitelerine giriş yapmak için otomatik doldurmayı kullanabilirsiniz. Bitwarden\'ın sunduğu tüm imkânları keşfetmeye hazırsınız.</string>
     <string name="youre_all_set">Artık hazırsınız!</string>
@@ -790,14 +795,14 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Kayıtlı hesaplarınızı dışa aktarın</string>
     <string name="delete_this_file_after_import_is_complete">İçe aktarma tamamlandıktan sonra bu dosyayı silmelisiniz.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Bilgisayarınızda yeni bir tarayıcı sekmesi açın ve &lt;annotation emphasis="bold"&gt;%1$s&lt;/annotation&gt;&lt;/annotation&gt; adresine gidin</string>
     <string name="log_in_to_the_bitwarden_web_app">Bitwarden web uygulamasına giriş yapın.</string>
     <string name="step_2_of_3">Adım 2/3</string>
     <string name="log_in_to_bitwarden">Bitwarden’a giriş yapın</string>
     <string name="step_3_of_3">Adım 3/3</string>
     <string name="import_logins_to_bitwarden">Hesapları Bitwarden’a aktarın</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
-    <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwarden navigasyonunda, <annotation emphasis="bold">Araçlar</annotation> seçeneğini bulun ve <annotation emphasis="bold">Verileri içe aktar</annotation> seçeneğini seçin</string>
+    <string name="fill_out_the_form_and_import_your_saved_password_file">Formu doldurun ve <annotation emphasis="bold">kaydedilmiş parola dosyanızı içe aktarın.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Güvenliğiniz için, <annotation emphasis="bold">kayıtlı parola dosyanızı sildiğinizden emin olun.</annotation></string>
     <string name="need_help_check_out_import_help">Yardıma mı ihtiyacınız var? <annotation link="importHelp">İçe aktarma yardımına</annotation> göz atın.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Dışa aktardığınız dosyayı bilgisayarınızda kolayca bulabileceğiniz bir yere <annotation emphasis="bold">kaydedin</annotation>.</string>
@@ -842,21 +847,21 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="cxp_import">CXP içe aktarma</string>
     <string name="cxp_export">CXP dışa aktarma</string>
     <string name="choose_three_or_four_random_words">Rastgele üç veya dört kelime seçin</string>
-    <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
+    <string name="pick_three_or_four_random_unrelated_words">Kolayca hatırlayabileceğiniz üç veya dört rastgele, birbiriyle ilgisiz kelime seçin. Sevdiğiniz <annotation emphasis="bold">nesneleri, yerleri veya şeyleri</annotation> düşünün.</string>
     <string name="combine_those_words_together">Bu kelimeleri bir araya getirin</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Parolayı oluşturmak için kelimeleri istediğiniz sırayla birleştirin. <annotation emphasis="bold">Tire, boşluk kullanın veya tek bir uzun kelime olarak bırakın</annotation>—seçim sizin!</string>
     <string name="make_it_yours">Kişiselleştirin</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
-    <string name="need_some_inspiration">"İlhama mı ihtiyacınız var?"</string>
-    <string name="check_out_the_passphrase_generator">"Parola oluşturucuya göz atın"</string>
-    <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger">Daha da güçlü hale getirmek için <annotation emphasis="bold">bir sayı veya sembol ekleyin</annotation>. Artık benzersiz, güvenli ve hatırlanması kolay bir parolaya sahipsiniz!</string>
+    <string name="need_some_inspiration">İlhama mı ihtiyacınız var?</string>
+    <string name="check_out_the_passphrase_generator">Parola oluşturucuya göz atın</string>
+    <string name="we_couldnt_verify_the_servers_certificate">Sunucunun sertifikasını doğrulayamadık. Cihazınızda veya Bitwarden sunucunuzda sertifika zinciri veya proxy ayarları doğru şekilde yapılandırılmamış olabilir.</string>
     <string name="copy_private_key">Özel anahtarı kopyala</string>
     <string name="login_credentials">HESAP BİLGİLERİ</string>
     <string name="autofill_options">OTOMATİK DOLDURMA SEÇENEKLERİ</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Yeni ve benzersiz bir parola üretmek için bu düğmeyi kullanın.</string>
     <string name="coachmark_1_of_3">1/3</string>
     <string name="coachmark_2_of_3">2/3</string>
-    <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+    <string name="you_ll_only_need_to_set_up_authenticator_key">Sadece kodla iki faktörlü kimlik doğrulama gerektiren hesaplar için Kimlik Doğrulama Anahtarı\'nı ayarlamanız gerekir. Anahtar, oturum açmak için kullanabileceğiniz altı basamaklı kodları sürekli olarak oluşturacaktır.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bu hesaba otomatik doldurmayı kullanarak erişmek için bir web adresi eklemeniz gerekir.</string>
     <string name="learn_about_new_logins">Yeni hesap ekleme hakkında bilgi alın</string>
@@ -866,17 +871,17 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="import_client_certificate">İstemci sertifikasını içe aktar</string>
     <string name="enter_the_client_certificate_password_and_alias">İstemci sertifikası parolasını ve bu sertifika için istenen diğer adı girin.</string>
     <string name="alias">Takma Ad</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Güvenli parolalar, parola cümleleri ve kullanıcı adları üretmek için üreteci kullanın. "</string>
-    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
-    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Güvenli parolalar, parola cümleleri ve kullanıcı adları üretmek için üreteci kullanın.</string>
+    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Parola ifadeleri, rastgele parolalara göre genellikle hatırlanması ve yazılması daha kolay olan güçlü parolalardır. TV\'nizdeki bir akış hizmeti gibi Otomatik Doldurma özelliğinin kullanılamadığı hesaplara giriş yapmak için kullanışlıdırlar.</string>
+    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Benzersiz kullanıcı adları ekstra bir güvenlik katmanı sağlar ve bilgisayar korsanlarının hesaplarınızı bulmasını önlemeye yardımcı olabilir.</string>
     <string name="coachmark_1_of_6">1/6</string>
     <string name="coachmark_2_of_6">2/6</string>
     <string name="coachmark_3_of_6">3/6</string>
     <string name="coachmark_4_of_6">4/6</string>
     <string name="coachmark_5_of_6">5/6</string>
     <string name="coachmark_6_of_6">6/6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Kimliğinizi doğrulayın</string>
     <string name="error_loading_certificate">Sertifika yüklenirken hata oluştu</string>
     <string name="certificate_alias">Sertifika takma adı</string>
@@ -887,7 +892,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="unsupported_certificate_type">Desteklenmeyen sertifika türü</string>
     <string name="certificate_password_incorrect">Sertifika parolası hatalı</string>
     <string name="invalid_certificate_chain">Geçersiz sertifika zinciri</string>
-    <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+    <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistem sertifikası kullanmak, sertifikayı Bitwarden ile saklamaktan daha az güvenlidir. Devam ettiğinizde, zaten yüklü bir sistem sertifikası varsa, mevcut sistem sertifikalarının listesi görüntülenir.</string>
     <string name="link">Bağlantı</string>
     <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Ana bilgisayar URL\'si istekte yer almadığı için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_app_signature_is_invalid">Uygulama imzası geçersiz olduğu için geçiş anahtarı işlemi başarısız oldu.</string>
@@ -905,22 +910,22 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
     <string name="use_brave_autofill_integration">Brave otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
-    <string name="use_chrome_beta_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
+    <string name="use_chrome_beta_autofill_integration">Chrome Beta otomatik doldurma entegrasyonunu kullan</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilen tarayıcılarda desteklenen web siteleri için oturum açma bilgilerinin doldurulmasını iyileştirir. Etkinleştirildiğinde, üçüncü taraf otomatik doldurma özelliğini etkinleştirmek için tarayıcı ayarlarına yönlendirilirsiniz.</string>
     <string name="show_more">Daha fazla göster</string>
     <string name="no_folder">Klasör yok</string>
     <string name="show_less">Daha az göster</string>
     <string name="add_field">Alan ekle</string>
     <string name="share_error_details">Hata ayrıntılarını paylaş</string>
-    <string name="flight_recorder">Flight recorder</string>
-    <string name="flight_recorder_help">Flight recorder help</string>
+    <string name="flight_recorder">Uçuş kaydedici</string>
+    <string name="flight_recorder_help">Uçuş kaydedici yardımı</string>
     <string name="view_recorded_logs">Kaydedilen günlükleri görüntüle</string>
-    <string name="enable_flight_recorder_title">Enable flight recorder</string>
+    <string name="enable_flight_recorder_title">Uçuş kaydediciyi etkinleştir</string>
     <string name="recorded_logs_title">Kaydedilen günlükler</string>
     <string name="no_logs_recorded">Hiçbir kayıt bulunamadı</string>
     <string name="experiencing_an_issue">Sorun mu yaşıyorsunuz?</string>
-    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
-    <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Geçici günlüğü etkinleştirerek günlükleri yerel olarak toplayın ve inceleyin. Etkinleştirildiğinde, uygulama durumları ve ağ çağrıları günlüğe kaydedilebilir; hassas kasa bilgileri asla kaydedilmez.</string>
+    <string name="to_get_started_set_a_logging_duration">Başlamak için, günlük kaydı süresini ayarlayın. Bu süre sonunda günlük kaydı otomatik olarak kapanır ve sorunları yeniden oluştururken etkinlikleri yakalamak için zaman kazanırsınız.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Günlükler 30 gün sonra otomatik olarak silinecektir. Bitwarden günlük verilerinize yalnızca siz paylaştığınızda erişebilir.</string>
     <string name="for_details_on_what_is_and_isnt_logged">Nelerin günlüğe kaydedilip kaydedilmediği hakkında ayrıntılı bilgi için\n<annotation link="helpCenter">Bitwarden yardım merkezini ziyaret edin.</annotation></string>
     <string name="logging_duration">Log kayıt süresi</string>
@@ -941,15 +946,15 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="key_connector_domain">Key Connector alan adı:</string>
     <string name="key_connector_organization">Kuruluş:</string>
     <string name="password_no_longer_required_confirm_domain">Aşağıdaki organizasyonun üyeleri için artık ana parola gerekmemektedir. Lütfen alan adını organizasyon yöneticinizle doğrulayın.</string>
-    <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
-    <string name="flight_recorder_banner_title">Flight recorder on</string>
+    <string name="please_confirm_domain_with_admin">Lütfen aşağıdaki etki alanını kuruluş yöneticinizle onaylayın.\n\Key Connector etki alanı:\n%1$s</string>
+    <string name="flight_recorder_banner_title">Uçuş kaydedici etkin</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
     <string name="go_to_settings">Ayarlara git</string>
     <string name="all_logs_deleted">Tüm günlükler silindi</string>
     <string name="log_deleted">Günlük silindi</string>
     <string name="app_settings">Uygulama ayarları</string>
     <string name="replace_existing_certificate">Mevcut sertifika değiştirilsin mi?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Sertifikayı değiştir</string>
     <string name="unable_to_read_certificate">Sertifika okunamıyor.</string>
     <string name="cannot_delete_your_account">Hesabınız silinemiyor</string>
@@ -958,20 +963,20 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="view_file_send">Send dosyasını göster</string>
     <string name="view_text_send">Send metnini göster</string>
     <string name="delete_send">Send\'i sil</string>
-    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="missing_send_resync_your_vault">Kayıp Gönder kasayı yeniden senkronize et</string>
     <string name="use_dynamic_colors">Dinamik renkler kullan</string>
     <string name="use_dynamic_colors_question">Dinamik renkler kullanılsın mı?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik renkler sistem renklerini kullandığı için erişilebilirlik yönergelerine uygun olmayabilir.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
-    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Tarayıcı güvenilir olmadığı için anahtar işlemi başarısız oldu.</string>
     <string name="trust">Güven</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you_learn_more">Bunlar, Bitwarden\'ın varsayılan olarak güvenmediği, ancak sizin anahtar işlemlerini gerçekleştirmek için güvendiğiniz uygulamalar veya tarayıcılardır.</string>
+    <string name="trusted_by_community_learn_more">Bunlar Google Play Store\'da bulunmayan uygulamalardır, ancak Bitwarden, topluluk üyeleri bunları kullandıktan ve güvenli olarak bildirdikten sonra şifre anahtarı işlemlerini gerçekleştirmeleri için bu uygulamalara güvenmektedir.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
     <string name="trusted_by_you">Sizin Tarafınızdan Güvenilen</string>
     <string name="trusted_by_the_community">Topluluk Tarafından Güvenilen</string>
     <string name="trusted_by_google">Google Tarafından Güvenilen</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">Kullanıcıları kimlik avı girişimlerinden korumak için, Bitwarden varsayılan olarak yalnızca Google veya Bitwarden topluluğu tarafından güvenilir bulunan uygulamalar veya web tarayıcıları aracılığıyla şifre anahtarı işlemlerini tamamlar.</string>
     <string name="about_privileged_applications">Ayrıcalıklı uygulamalar hakkında</string>
     <string name="learn_more_about_privileged_apps">Öncelikli uygulamalar hakkında daha fazla bilgi edinin</string>
     <string name="privileged_apps">Öncelikli uygulamalar</string>
@@ -983,7 +988,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="delete_x">%s sil</string>
     <string name="failed_to_decrypt_cipher_contact_support">Şifrenin şifresi çözülemedi. Destekle iletişime geçin.</string>
     <string name="decryption_error">Deşifre hatası</string>
-    <string name="add_item_rotation">Öğe rotasyonu ekle</string>
     <string name="scan_a_qr_code">QR kodu tara</string>
     <string name="cannot_add_authenticator_key">Kimlik doğrulayıcı anahtarını ekleyemediniz mi?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Tarayıcıyı kullanmak için kamera iznini etkinleştirin</string>
@@ -998,8 +1002,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="collapse_advanced_options">Gelişmiş seçenekleri daralt</string>
     <string name="number_of_digits">Basamak sayısı</string>
     <plurals name="refresh_period_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
     </plurals>
     <string name="item_saved">Hesap kaydedildi</string>
     <string name="information">Bilgi</string>
@@ -1060,9 +1064,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden uygulamasından eşitlenen hesap</string>
     <string name="local_codes">Yerel kodlar (%1$d)</string>
     <string name="required_information_missing">Gerekli bilgiler eksik</string>
-    <string name="required_information_missing_message">"Gerekli bilgiler eksik (örn. ‘services’ or ‘secret’). Dosyanızı kontrol edip yeniden deneyin. Destek için bitwarden.com/help adresini ziyaret edebilirsiniz"</string>
-    <string name="file_could_not_be_processed">"Dosya işlenemedi"</string>
-    <string name="file_could_not_be_processed_message">"Dosya işlenemedi. Geçerli bir JSON olduğunu kontrol edip yeniden deneyin. Yardıma ihtiyacınız varsa bitwarden.com/help adresini ziyaret edebilirsiniz"</string>
+    <string name="required_information_missing_message">Gerekli bilgiler eksik (örn. ‘services’ or ‘secret’). Dosyanızı kontrol edip yeniden deneyin. Destek için bitwarden.com/help adresini ziyaret edebilirsiniz</string>
+    <string name="file_could_not_be_processed">Dosya işlenemedi</string>
+    <string name="file_could_not_be_processed_message">Dosya işlenemedi. Geçerli bir JSON olduğunu kontrol edip yeniden deneyin. Yardıma ihtiyacınız varsa bitwarden.com/help adresini ziyaret edebilirsiniz</string>
     <string name="get_help">Yardım al</string>
     <string name="expand_advanced_options">Gelişmiş seçenekleri genişlet</string>
     <string name="local_items_are_expanded_click_to_collapse">Yerel öğeler genişletildi, daraltmak için tıklayın.</string>
@@ -1071,33 +1075,63 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
     <string name="error_cannot_decrypt">[hata: deşifre edilemiyor]</string>
     <string name="copy_error_report">Hata raporunu kopyala</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu kasa öğesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden, %1$d kasa ögesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</item>
+        <item quantity="other">Bitwarden, %1$d kasa ögesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s için kart seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
     <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
-    <string name="import_cancelled">Import cancelled</string>
-    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
-    <string name="import_saved_items">Import saved items</string>
-    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
-    <string name="return_to_your_vault">Return to your vault</string>
-    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
-    <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
-    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="importing_items">Importing items…</string>
-    <string name="uploading_items">Uploading items…</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” kullanırken kimlik bilgilerini nasıl güvende tutabileceğiniz hakkında daha fazla bilgi edinin.</string>
+    <string name="are_you_sure_you_want_to_use">“%1$s” kullanmak istediğinizden emin misiniz?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI eşleşmesi algılama, Bitwarden\'ın otomatik doldurma önerilerini nasıl tanımladığını kontrol eder.\n<annotation emphasis="bold">Uyarı:</annotation> “Düzenli ifade”, yanlış kullanıldığında kimlik bilgilerinin açığa çıkma riskini artıran gelişmiş bir seçenektir.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI eşleşmesi algılama, Bitwarden\'ın otomatik doldurma önerilerini nasıl tanımladığını kontrol eder.\n<annotation emphasis="bold">Uyarı:</annotation> “İle başlar” seçeneği, kimlik bilgilerinin açığa çıkma riskini artıran gelişmiş bir seçenektir.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“İle başla” gelişmiş bir seçenektir ve kimlik bilgilerini açığa çıkarma riski taşır.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Düzenli ifade”, yanlış kullanıldığında kimlik bilgilerinin açığa çıkma riskini artıran gelişmiş bir seçenektir.</string>
+    <string name="later">Daha sonra</string>
+    <string name="encryption_settings_updated">Şifreleme ayarları güncellendi</string>
+    <string name="update_your_encryption_settings">Şifreleme ayarlarınızı güncelleyin</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Seçilen uygulamada kimlik bilgilerinin içe aktarılması iptal edildi. Hiçbir kayıt içe aktarılmadı.</string>
+    <string name="import_cancelled">İçe aktarım iptal edildi</string>
+    <string name="no_items_imported">Hiçbir kayıt içe aktarılmadı</string>
+    <string name="no_items_received_from_the_selected_app">Seçilen uygulamadan alınan kayıt yok.</string>
+    <string name="vault_sync_failed">Kasa senkronizasyonu başarısız oldu</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Kayıtlarınız başarıyla içe aktarıldı, ancak senkronizasyon gerçekleştirilene kadar kasada görünmeyeceklerdir.</string>
+    <string name="there_was_a_problem_importing_your_items">Kayıtlarınızı içe aktarırken bir sorun oluştu. Lütfen tekrar deneyin. Sorun devam ederse destek ekibiyle iletişime geçin.</string>
+    <string name="saving_items">Kayıtlar kaydediliyor…</string>
+    <string name="unable_to_import_your_items">Kayıtlarınız içe aktarılamıyor</string>
+    <string name="import_from_computer">Bilgisayardan içe aktar</string>
+    <string name="import_from_another_app">Başka bir uygulamadan içe aktar</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d kayıt kasaya aktarıldı.</item>
+        <item quantity="other">%1$d kayıt kasaya aktarıldı.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Parolaları doldurmaya devam etmek için tarayıcıda otomatik doldurma etkinleştirin</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="not_now">Şimdi değil</string>
+    <string name="import_from_bitwarden">Bitwarden\'dan içe aktar</string>
+    <string name="select_account">Hesap seç</string>
+    <string name="no_accounts_available">Hesap mevcut değil</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
+    <string name="verify_your_master_password">Ana parolanızı doğrulayın</string>
+    <string name="having_trouble_with_autofill">Otomatik doldurmayla ilgili sorun mu yaşıyorsunuz?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Yardım ve sorun giderme belgelerine buradan erişin</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Parolaları, geçiş anahtarlarını ve diğer kayıtları Bitwarden kasanızdan içe aktarın.</string>
+    <string name="items_to_import">İçe aktarılacak kayıtlar</string>
+    <string name="exporting_items">Kayıtlar dışa aktarılıyor…</string>
+    <string name="export_failed">Dışa aktarma başarısız oldu</string>
+    <string name="passwords">Parolalar</string>
+    <string name="passkeys">Geçiş anahtarları</string>
+    <string name="why_is_this_step_required">Bu adım neden gerekli?</string>
+    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
+    <string name="the_import_request_could_not_be_processed">İçe aktarma isteği işleme alınamadı.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
 </resources>

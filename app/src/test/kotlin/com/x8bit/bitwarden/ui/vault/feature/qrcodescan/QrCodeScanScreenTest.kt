@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.test.onNodeWithText
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -53,14 +53,6 @@ class QrCodeScanScreenTest : BitwardenComposeTest() {
     fun `on NavigateToManualCodeEntry event should invoke onNavigateToManualCodeEntryScreen`() {
         mutableEventFlow.tryEmit(QrCodeScanEvent.NavigateToManualCodeEntry)
         assertTrue(onNavigateToManualCodeEntryScreenCalled)
-    }
-
-    @Test
-    fun `when unable to setup camera CameraErrorReceive will be sent`() = runTest {
-        // Because the camera is not set up in the tests, this will always be triggered
-        verify {
-            viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
-        }
     }
 
     @Test

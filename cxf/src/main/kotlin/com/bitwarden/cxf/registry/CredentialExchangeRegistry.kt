@@ -29,5 +29,5 @@ interface CredentialExchangeRegistry {
      *
      * @return True if the unregistration was successful, false otherwise.
      */
-    suspend fun unregister(): RegisterExportResponse
+    suspend fun unregister(): Result<RegisterExportResponse>
 }

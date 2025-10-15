@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
+import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.credentials.providerevents.exception.ImportCredentialsException
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -48,14 +50,15 @@ class ReviewExportViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<ReviewExportState, ReviewExportEvent, ReviewExportAction>(
     initialState = ReviewExportState(
-        importCredentialsRequest = requireNotNull(
+        importCredentialsRequestData = requireNotNull(
             specialCircumstanceManager
                 .specialCircumstance
                 ?.toImportCredentialsRequestDataOrNull(),
         ),
-        viewState = ReviewExportState.ViewState(
+        viewState = ReviewExportState.ViewState.Content(
             itemTypeCounts = ReviewExportState.ItemTypeCounts(),
         ),
+        dialog = null,
     ),
 ) {
 
@@ -73,6 +76,7 @@ class ReviewExportViewModel @Inject constructor(
             is ReviewExportAction.CancelClick -> handleCancelClicked()
             is ReviewExportAction.DismissDialog -> handleDismissDialog()
             is ReviewExportAction.NavigateBackClick -> handleBackClick()
+            is ReviewExportAction.SelectAnotherAccountClick -> handleSelectAnotherAccountClick()
             is ReviewExportAction.Internal -> handleInternalAction(action)
         }
     }
@@ -96,7 +100,7 @@ class ReviewExportViewModel @Inject constructor(
                             onSuccess = { payload ->
                                 ExportCredentialsResult.Success(
                                     payload = payload,
-                                    uri = state.importCredentialsRequest.uri,
+                                    uri = state.importCredentialsRequestData.uri,
                                 )
                             },
                             onFailure = { error ->
@@ -111,7 +115,13 @@ class ReviewExportViewModel @Inject constructor(
     }
 
     private fun handleCancelClicked() {
-        sendEvent(ReviewExportEvent.NavigateBack)
+        sendEvent(
+            ReviewExportEvent.CompleteExport(
+                ExportCredentialsResult.Failure(
+                    ImportCredentialsCancellationException(),
+                ),
+            ),
+        )
     }
 
     private fun handleDismissDialog() {
@@ -120,6 +130,10 @@ class ReviewExportViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(ReviewExportEvent.NavigateBack)
+    }
+
+    private fun handleSelectAnotherAccountClick() {
+        sendEvent(ReviewExportEvent.NavigateToAccountSelection)
     }
 
     private fun handleInternalAction(action: ReviewExportAction.Internal) {
@@ -168,7 +182,7 @@ class ReviewExportViewModel @Inject constructor(
     private fun handleVaultDataError(data: DataState.Error<DecryptCipherListResult>) {
         mutableStateFlow.update {
             it.copy(
-                viewState = it.viewState.copy(
+                viewState = ReviewExportState.ViewState.Content(
                     itemTypeCounts = data.data.toItemTypeCounts(),
                 ),
                 dialog = ReviewExportState.DialogState.General(
@@ -253,10 +267,17 @@ class ReviewExportViewModel @Inject constructor(
         clearDialog: Boolean,
     ) {
         mutableStateFlow.update {
+            val itemTypeCounts = data.data.toItemTypeCounts()
+            val viewState = if (itemTypeCounts.hasItemsToExport) {
+                ReviewExportState.ViewState.Content(
+                    itemTypeCounts = itemTypeCounts,
+                )
+            } else {
+                ReviewExportState.ViewState.NoItems
+            }
+
             it.copy(
-                viewState = it.viewState.copy(
-                    itemTypeCounts = data.data.toItemTypeCounts(),
-                ),
+                viewState = viewState,
                 dialog = it.dialog.takeUnless { clearDialog },
             )
         }
@@ -274,16 +295,27 @@ data class ReviewExportState(
     val viewState: ViewState,
     val dialog: DialogState? = null,
     // Internally used properties
-    val importCredentialsRequest: ImportCredentialsRequestData,
+    val importCredentialsRequestData: ImportCredentialsRequestData,
 ) : Parcelable {
 
     /**
      * Represents the view state with item type counts.
      */
     @Parcelize
-    data class ViewState(
-        val itemTypeCounts: ItemTypeCounts,
-    ) : Parcelable
+    sealed class ViewState : Parcelable {
+
+        /**
+         * Represents the content state with item type counts.
+         */
+        data class Content(
+            val itemTypeCounts: ItemTypeCounts,
+        ) : ViewState()
+
+        /**
+         * Represents the state when there are no items to be exported.
+         */
+        data object NoItems : ViewState()
+    }
 
     /**
      * Represents the counts of different item types to be exported.
@@ -295,7 +327,17 @@ data class ReviewExportState(
         val identityCount: Int = 0,
         val cardCount: Int = 0,
         val secureNoteCount: Int = 0,
-    ) : Parcelable
+    ) : Parcelable {
+        /**
+         * Whether there are any items to be exported.
+         */
+        @IgnoredOnParcel
+        val hasItemsToExport: Boolean = passwordCount > 0 ||
+            passkeyCount > 0 ||
+            identityCount > 0 ||
+            cardCount > 0 ||
+            secureNoteCount > 0
+    }
 
     /**
      * Represents the possible dialog states for the Review Import screen.
@@ -351,6 +393,11 @@ sealed class ReviewExportAction {
     data object NavigateBackClick : ReviewExportAction()
 
     /**
+     * Action triggered when the Select another account button is clicked by the user.
+     */
+    data object SelectAnotherAccountClick : ReviewExportAction()
+
+    /**
      * Internal actions that the [ReviewExportViewModel] itself may send.
      */
     sealed class Internal : ReviewExportAction() {
@@ -381,6 +428,11 @@ sealed class ReviewExportEvent {
      * the import process.
      */
     data object NavigateBack : ReviewExportEvent()
+
+    /**
+     * Event to navigate to account selection.
+     */
+    data object NavigateToAccountSelection : ReviewExportEvent()
 
     /**
      * Event indicating that the import attempt has completed.

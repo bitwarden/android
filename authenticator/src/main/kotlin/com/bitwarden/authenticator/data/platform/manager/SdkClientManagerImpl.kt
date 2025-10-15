@@ -9,7 +9,9 @@ import com.bitwarden.sdk.Client
 class SdkClientManagerImpl(
     private val clientProvider: suspend () -> Client = {
         Client(
-            tokenProvider = Token(),
+            tokenProvider = object : ClientManagedTokens {
+                override suspend fun getAccessToken(): String? = null
+            },
             settings = null,
         )
     },
@@ -20,14 +22,5 @@ class SdkClientManagerImpl(
 
     override fun destroyClient() {
         client = null
-    }
-
-    /**
-     * The token provider to pass to the SDK.
-     */
-    private class Token : ClientManagedTokens {
-        override suspend fun getAccessToken(): String? {
-            return null
-        }
     }
 }

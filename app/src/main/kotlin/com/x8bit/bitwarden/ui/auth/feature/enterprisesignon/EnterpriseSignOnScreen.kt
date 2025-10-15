@@ -41,6 +41,8 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
  * The top level composable for the Enterprise Single Sign On screen.
@@ -52,6 +54,7 @@ fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSetPassword: () -> Unit,
     onNavigateToTwoFactorLogin: (email: String, orgIdentifier: String) -> Unit,
+    authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
 ) {
@@ -61,7 +64,7 @@ fun EnterpriseSignOnScreen(
             EnterpriseSignOnEvent.NavigateBack -> onNavigateBack()
 
             is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
-                intentManager.startCustomTabsActivity(event.uri)
+                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.sso)
             }
 
             is EnterpriseSignOnEvent.NavigateToSetPassword -> {

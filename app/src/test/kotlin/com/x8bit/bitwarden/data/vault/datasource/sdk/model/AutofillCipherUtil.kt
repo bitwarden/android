@@ -12,4 +12,5 @@ fun createMockPasswordCredentialAutofillCipherLogin() = AutofillCipher.Login(
     password = "mock-password",
     username = "mock-username",
     subtitle = "Subtitle",
+    website = "website",
 )

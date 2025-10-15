@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.bitwarden.ui.platform.components.content
 
 import androidx.compose.foundation.layout.Arrangement
@@ -15,17 +17,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 
 /**
  * A Bitwarden-themed, re-usable empty state.
+ *
+ * @param text The primary text to display.
+ * @param modifier The [Modifier] to be applied to the layout.
+ * @param illustrationData Optional illustration to display above the text.
+ * @param labelTestTag A test tag for the primary text.
+ * @param title Optional title to display above the primary text.
+ * @param titleTestTag A test tag for the title.
+ * @param primaryButton Optional primary button to display.
+ * @param secondaryButton Optional secondary button to display.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenEmptyContent(
     text: String,
@@ -34,6 +51,8 @@ fun BitwardenEmptyContent(
     labelTestTag: String? = null,
     title: String? = null,
     titleTestTag: String? = null,
+    primaryButton: BitwardenButtonData? = null,
+    secondaryButton: BitwardenButtonData? = null,
 ) {
     Column(
         modifier = modifier,
@@ -70,6 +89,40 @@ fun BitwardenEmptyContent(
                 .standardHorizontalMargin()
                 .nullableTestTag(tag = labelTestTag),
         )
+
+        // If either of the optional buttons are present add a spacer between the text and the
+        // buttons.
+        if (primaryButton != null || secondaryButton != null) {
+            Spacer(Modifier.height(12.dp))
+        }
+
+        primaryButton?.let {
+            BitwardenFilledButton(
+                label = it.label(),
+                onClick = it.onClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .nullableTestTag(tag = it.testTag),
+            )
+        }
+
+        // If both buttons are visible add the standard button spacing.
+        if (primaryButton != null && secondaryButton != null) {
+            Spacer(Modifier.height(8.dp))
+        }
+
+        secondaryButton?.let {
+            BitwardenOutlinedButton(
+                label = it.label(),
+                onClick = it.onClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .nullableTestTag(tag = it.testTag),
+            )
+        }
+
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -84,6 +137,16 @@ private fun BitwardenEmptyContent_preview() {
             text = "There is no content to display",
             labelTestTag = "EmptyContentLabel",
             illustrationData = IconData.Local(BitwardenDrawable.ic_empty_vault),
+            primaryButton = BitwardenButtonData(
+                label = "Primary button".asText(),
+                testTag = "EmptyContentPositiveButton",
+                onClick = { },
+            ),
+            secondaryButton = BitwardenButtonData(
+                label = "Secondary button".asText(),
+                testTag = "EmptyContentNegativeButton",
+                onClick = { },
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .standardHorizontalMargin(),

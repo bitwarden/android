@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -28,12 +29,20 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * Represents a Bitwarden-styled dialog for entering your master password.
  *
+ * @param title The title of the dialog.
+ * @param message The message of the dialog.
+ * @param confirmButtonText The text of the confirm button.
+ * @param dismissButtonText The text of the dismiss button.
  * @param onConfirmClick called when the confirm button is clicked and emits the entered password.
  * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
  * tapping outside of it).
  */
 @Composable
 fun BitwardenMasterPasswordDialog(
+    title: String = stringResource(id = BitwardenString.password_confirmation),
+    message: String = stringResource(id = BitwardenString.password_confirmation_desc),
+    confirmButtonText: String = stringResource(id = BitwardenString.submit),
+    dismissButtonText: String = stringResource(id = BitwardenString.cancel),
     onConfirmClick: (masterPassword: String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -42,14 +51,14 @@ fun BitwardenMasterPasswordDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = BitwardenString.cancel),
+                label = dismissButtonText,
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag("DismissAlertButton"),
             )
         },
         confirmButton = {
-            BitwardenTextButton(
-                label = stringResource(id = BitwardenString.submit),
+            BitwardenFilledButton(
+                label = confirmButtonText,
                 isEnabled = masterPassword.isNotEmpty(),
                 onClick = { onConfirmClick(masterPassword) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
@@ -57,7 +66,7 @@ fun BitwardenMasterPasswordDialog(
         },
         title = {
             Text(
-                text = stringResource(id = BitwardenString.password_confirmation),
+                text = title,
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("AlertTitleText"),
             )
@@ -65,7 +74,7 @@ fun BitwardenMasterPasswordDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(id = BitwardenString.password_confirmation_desc),
+                    text = message,
                     style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.testTag("AlertContentText"),
                 )

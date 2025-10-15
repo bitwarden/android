@@ -4,24 +4,33 @@ import android.util.Base64
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.x8bit.bitwarden.data.credentials.model.Fido2AttestationResponse
 
+private const val BINANCE_PACKAGE_NAME = "com.binance.dev"
+
 /**
  * Converts the SDK attestation response to a [Fido2AttestationResponse] that can be serialized into
  * the expected system JSON.
  */
-@Suppress("MaxLineLength")
-fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResponse(): Fido2AttestationResponse =
-    Fido2AttestationResponse(
+fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResponse(
+    callingPackageName: String?,
+): Fido2AttestationResponse {
+    val registrationResponse = Fido2AttestationResponse.RegistrationResponse(
+        clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
+        attestationObject = response.attestationObject.base64EncodeForFido2Response(),
+        transports = response.transports.takeUnless {
+            // Setting transports as null, otherwise Binance labels the passkey broken
+            // PM-26734 remove this flow if not necessary anymore
+            callingPackageName == BINANCE_PACKAGE_NAME
+        },
+        publicKeyAlgorithm = response.publicKeyAlgorithm,
+        publicKey = response.publicKey?.base64EncodeForFido2Response(),
+        authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
+    )
+
+    return Fido2AttestationResponse(
         id = id,
         type = ty,
         rawId = rawId.base64EncodeForFido2Response(),
-        response = Fido2AttestationResponse.RegistrationResponse(
-            clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
-            attestationObject = response.attestationObject.base64EncodeForFido2Response(),
-            transports = response.transports,
-            publicKeyAlgorithm = response.publicKeyAlgorithm,
-            publicKey = response.publicKey?.base64EncodeForFido2Response(),
-            authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
-        ),
+        response = registrationResponse,
         clientExtensionResults = clientExtensionResults
             .credProps
             ?.rk
@@ -34,6 +43,7 @@ fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResp
             } ?: Fido2AttestationResponse.ClientExtensionResults(),
         authenticatorAttachment = authenticatorAttachment,
     )
+}
 
 /**
  * Attestation response fields of type [ByteArray] must be base 64 encoded in a url safe format

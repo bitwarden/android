@@ -46,12 +46,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val decryptCipherListResultFlow = MutableStateFlow<DataState<DecryptCipherListResult>>(
-        DataState.Loaded(
-            data = DecryptCipherListResult(
-                successes = emptyList(),
-                failures = emptyList(),
-            ),
-        ),
+        DataState.Loaded(data = createMockDecryptCipherListResult(number = 1)),
     )
     private val vaultRepository = mockk<VaultRepository> {
         every { decryptCipherListResultStateFlow } returns decryptCipherListResultFlow
@@ -68,13 +63,42 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class Initialization {
+    inner class State {
         @Test
-        fun `initial state is correct when SavedStateHandle is empty`() =
-            runTest {
-                val viewModel = createViewModel()
-                assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        fun `State should be NoItems when no items to export`() = runTest {
+            val initialState = ReviewExportState(
+                viewState = ReviewExportState.ViewState.NoItems,
+                dialog = null,
+                importCredentialsRequestData = DEFAULT_REQUEST_DATA,
+            )
+            decryptCipherListResultFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = emptyList(),
+                    failures = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
             }
+        }
+
+        @Test
+        fun `State should be Content when items to export`() = runTest {
+            val expectedState = ReviewExportState(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
+                        passwordCount = 1,
+                    ),
+                ),
+                dialog = null,
+                importCredentialsRequestData = DEFAULT_REQUEST_DATA,
+            )
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
     }
 
     @Nested
@@ -83,12 +107,13 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
         @Test
         fun `ImportItemsClick shows loading, and calls exportVaultDataToCxf with all active items if there are no item restrictions`() =
             runTest {
-                val mockActiveCipherListView = createMockCipherListView(
+                val mockActiveCardCipherListView = createMockCipherListView(
                     number = 1,
                     type = CipherListViewType.Card(
                         createMockCardListView(number = 1),
                     ),
                 )
+                val mockActiveLoginCipherListView = createMockCipherListView(number = 1)
                 val mockDeletedCipherListView = createMockCipherListView(
                     number = 1,
                     isDeleted = true,
@@ -98,14 +123,20 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                         createMockDecryptCipherListResult(
                             number = 1,
                             successes = listOf(
-                                mockActiveCipherListView,
+                                mockActiveLoginCipherListView,
+                                mockActiveCardCipherListView,
                                 mockDeletedCipherListView,
                             ),
                         ),
                     ),
                 )
                 coEvery {
-                    vaultRepository.exportVaultDataToCxf(listOf(mockActiveCipherListView))
+                    vaultRepository.exportVaultDataToCxf(
+                        listOf(
+                            mockActiveLoginCipherListView,
+                            mockActiveCardCipherListView,
+                        ),
+                    )
                 } just awaits
 
                 val viewModel = createViewModel()
@@ -114,8 +145,8 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 // Check for loading dialog
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        viewState = DEFAULT_STATE.viewState.copy(
-                            itemTypeCounts = DEFAULT_STATE.viewState.itemTypeCounts.copy(
+                        viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                            itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
                                 cardCount = 1,
                             ),
                         ),
@@ -127,7 +158,12 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 )
 
                 coVerify {
-                    vaultRepository.exportVaultDataToCxf(listOf(mockActiveCipherListView))
+                    vaultRepository.exportVaultDataToCxf(
+                        listOf(
+                            mockActiveLoginCipherListView,
+                            mockActiveCardCipherListView,
+                        ),
+                    )
                 }
             }
 
@@ -207,24 +243,41 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `CancelClicked sends NavigateBack event`() = runTest {
+        fun `NavigateToAccountSelection sends SelectAnotherAccount event`() = runTest {
             val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ReviewExportAction.SelectAnotherAccountClick)
+                assertEquals(
+                    ReviewExportEvent.NavigateToAccountSelection,
+                    awaitItem(),
+                )
+            }
+        }
 
+        @Test
+        fun `CancelClicked sends CompleteExport event`() = runTest {
+            val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ReviewExportAction.CancelClick)
-                assertEquals(ReviewExportEvent.NavigateBack, awaitItem())
+                assertTrue(awaitItem() is ReviewExportEvent.CompleteExport)
             }
         }
 
         @Test
         fun `DismissDialog clears dialog from state`() = runTest {
-            decryptCipherListResultFlow.value = DataState.Loading
             val viewModel = createViewModel()
+            val exception = IllegalStateException()
+            decryptCipherListResultFlow.value = DataState.Error(
+                error = exception,
+                data = createMockDecryptCipherListResult(number = 1),
+            )
             // Check for loading dialog
             assertEquals(
                 DEFAULT_STATE.copy(
-                    dialog = ReviewExportState.DialogState.Loading(
-                        BitwardenString.loading.asText(),
+                    dialog = ReviewExportState.DialogState.General(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = exception,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -254,8 +307,8 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = DEFAULT_STATE.copy(
-                    viewState = DEFAULT_STATE.viewState.copy(
-                        itemTypeCounts = DEFAULT_STATE.viewState.itemTypeCounts.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                        itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
                             passwordCount = 1,
                         ),
                     ),
@@ -283,8 +336,8 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = DEFAULT_STATE.copy(
-                    viewState = DEFAULT_STATE.viewState.copy(
-                        itemTypeCounts = DEFAULT_STATE.viewState.itemTypeCounts.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                        itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
                             passwordCount = 1,
                         ),
                     ),
@@ -312,8 +365,8 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = DEFAULT_STATE.copy(
-                    viewState = DEFAULT_STATE.viewState.copy(
-                        itemTypeCounts = DEFAULT_STATE.viewState.itemTypeCounts.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                        itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
                             passwordCount = 1,
                         ),
                     ),
@@ -365,11 +418,14 @@ private val DEFAULT_REQUEST_DATA = ImportCredentialsRequestData(
     uri = MOCK_URI,
     requestJson = "mockRequestJson",
 )
-private val DEFAULT_STATE: ReviewExportState = ReviewExportState(
-    importCredentialsRequest = DEFAULT_REQUEST_DATA,
-    viewState = ReviewExportState.ViewState(
-        itemTypeCounts = ReviewExportState.ItemTypeCounts(),
+private val DEFAULT_CONTENT_VIEW_STATE = ReviewExportState.ViewState.Content(
+    itemTypeCounts = ReviewExportState.ItemTypeCounts(
+        passwordCount = 1,
     ),
+)
+private val DEFAULT_STATE: ReviewExportState = ReviewExportState(
+    importCredentialsRequestData = DEFAULT_REQUEST_DATA,
+    viewState = DEFAULT_CONTENT_VIEW_STATE,
 )
 private const val DEFAULT_USER_ID: String = "activeUserId"
 private val DEFAULT_USER_STATE = UserState(

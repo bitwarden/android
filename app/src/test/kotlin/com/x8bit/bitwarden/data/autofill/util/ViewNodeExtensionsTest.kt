@@ -29,6 +29,7 @@ class ViewNodeExtensionsTest {
         isFocused = expectedIsFocused,
         textValue = TEXT_VALUE,
         hasPasswordTerms = false,
+        website = null,
     )
     private val testAutofillValue: AutofillValue = mockk()
     private val mockHtmlInfo: HtmlInfo = mockk {
@@ -46,10 +47,12 @@ class ViewNodeExtensionsTest {
         every { inputType } returns 1
         every { isFocused } returns expectedIsFocused
         every { htmlInfo } returns mockHtmlInfo
+        every { website } returns null
     }
 
     @BeforeEach
     fun setup() {
+        mockkStatic(AssistStructure.ViewNode::website)
         mockkStatic(HtmlInfo::isInputField)
         mockkStatic(HtmlInfo::isPasswordField)
         mockkStatic(Int::isPasswordInputType)
@@ -72,6 +75,7 @@ class ViewNodeExtensionsTest {
 
     @AfterEach
     fun teardown() {
+        unmockkStatic(AssistStructure.ViewNode::website)
         unmockkStatic(HtmlInfo::isInputField)
         unmockkStatic(HtmlInfo::isPasswordField)
         unmockkStatic(Int::isPasswordInputType)
@@ -93,7 +97,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -121,7 +125,7 @@ class ViewNodeExtensionsTest {
         } returns monthValue
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -137,7 +141,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_MONTH_HINTS
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -152,7 +156,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.forEach { idEntry ->
             every { viewNode.idEntry } returns idEntry
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for idEntry: $idEntry")
         }
@@ -167,7 +171,7 @@ class ViewNodeExtensionsTest {
         )
         SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
     }
@@ -182,7 +186,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -197,7 +201,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_YEAR_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -213,7 +217,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_YEAR_HINTS
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -227,7 +231,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
         every { mockHtmlInfo.isInputField } returns true
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -241,7 +245,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_DATE_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -256,7 +260,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_DATE_HINTS
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -271,7 +275,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -286,7 +290,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_NUMBER_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -300,7 +304,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_NUMBER_HINTS
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -315,7 +319,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -330,7 +334,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -344,7 +348,7 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
         assertEquals(expected, actual)
     }
 
@@ -357,7 +361,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach { idEntry ->
             every { viewNode.idEntry } returns idEntry
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for idEntry: $idEntry")
         }
@@ -372,7 +376,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -386,7 +390,7 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARDHOLDER_NAME_HINTS
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
         assertEquals(expected, actual)
     }
 
@@ -399,7 +403,7 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -413,7 +417,7 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_PASSWORD_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView()
+            val actual = viewNode.toAutofillView(parentWebsite = null)
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -428,8 +432,47 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.isPasswordField() } returns true
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toAutofillView should return AutofillView Login Username with internal website`() {
+        // Setup
+        val website = "website"
+        val expected = AutofillView.Login.Username(
+            data = autofillViewData.copy(website = website),
+        )
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.website } returns website
+        every { viewNode.className } returns "android.widget.EditText"
+        every { any<Int>().isPasswordInputType } returns false
+        every { any<Int>().isUsernameInputType } returns true
+
+        // Test
+        val actual = viewNode.toAutofillView(parentWebsite = null)
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toAutofillView should return AutofillView Login Username with external website`() {
+        // Setup
+        val website = "website"
+        val expected = AutofillView.Login.Username(
+            data = autofillViewData.copy(website = website),
+        )
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.className } returns "android.widget.EditText"
+        every { any<Int>().isPasswordInputType } returns false
+        every { any<Int>().isUsernameInputType } returns true
+
+        // Test
+        val actual = viewNode.toAutofillView(parentWebsite = website)
+
+        // Verify
         assertEquals(expected, actual)
     }
 
@@ -446,7 +489,7 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -465,7 +508,7 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -480,7 +523,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.htmlInfo.isInputField } returns false
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertNull(actual)
@@ -494,7 +537,7 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
 
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         assertEquals(expected, actual)
     }
@@ -511,7 +554,7 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHintOne, autofillHintTwo)
 
         // Test
-        val actual = viewNode.toAutofillView()
+        val actual = viewNode.toAutofillView(parentWebsite = null)
 
         // Verify
         assertEquals(expected, actual)
@@ -1207,6 +1250,7 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isPasswordInputType } returns false
         every { any<Int>().isUsernameInputType } returns false
         every { viewNode.htmlInfo.hints() } returns emptyList()
+        every { viewNode.website } returns null
     }
 }
 

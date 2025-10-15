@@ -54,7 +54,9 @@ class StringExtensionsTest {
             "https://a",
             "http://a.com",
             "https://subdomain.example.com",
+            "https://example.com/path_with_underscores",
             "androidapp://com.example.app",
+            "androidapp://com.example.app/path_with_underscores",
         )
 
         val invalidUris = listOf(
