@@ -274,8 +274,9 @@ private fun SecuritySettings(
         label = stringResource(id = BitwardenString.security),
     )
 
-    if (biometricsManager.isBiometricsSupported) {
-        Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(8.dp))
+    val hasBiometrics = biometricsManager.isBiometricsSupported
+    if (hasBiometrics) {
         UnlockWithBiometricsRow(
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
@@ -289,6 +290,7 @@ private fun SecuritySettings(
 
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
+        hasBiometrics = hasBiometrics,
         onValueChange = onScreenCaptureChange,
         modifier = Modifier
             .fillMaxWidth()
@@ -440,7 +442,7 @@ private fun UnlockWithBiometricsRow(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenSwitch(
         modifier = modifier,
-        cardStyle = CardStyle.Full,
+        cardStyle = CardStyle.Top(),
         label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
@@ -465,6 +467,7 @@ private fun UnlockWithBiometricsRow(
 @Composable
 private fun ScreenCaptureRow(
     currentValue: Boolean,
+    hasBiometrics: Boolean,
     onValueChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -480,7 +483,11 @@ private fun ScreenCaptureRow(
                 shouldShowScreenCaptureConfirmDialog = true
             }
         },
-        cardStyle = CardStyle.Full,
+        cardStyle = if (hasBiometrics) {
+            CardStyle.Bottom
+        } else {
+            CardStyle.Full
+        },
         modifier = modifier,
     )
 
@@ -488,7 +495,7 @@ private fun ScreenCaptureRow(
         BitwardenTwoButtonDialog(
             title = stringResource(BitwardenString.allow_screen_capture),
             message = stringResource(
-                BitwardenString.are_you_sure_you_want_to_enable_screen_capture,
+                id = BitwardenString.are_you_sure_you_want_to_enable_screen_capture,
             ),
             confirmButtonText = stringResource(BitwardenString.yes),
             dismissButtonText = stringResource(id = BitwardenString.cancel),

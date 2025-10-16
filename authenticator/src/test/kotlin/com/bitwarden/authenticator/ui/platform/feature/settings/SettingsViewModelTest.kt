@@ -201,7 +201,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on AllowScreenCaptureToggled should update value in state and SettingsRepository`() =
         runTest {

@@ -129,8 +129,7 @@ class SettingsViewModel @Inject constructor(
             }
 
             is SettingsAction.SecurityClick.AllowScreenCaptureToggle -> {
-                settingsRepository.isScreenCaptureAllowed = action.enabled
-                mutableStateFlow.update { it.copy(allowScreenCapture = action.enabled) }
+                handleAllowScreenCaptureToggle(action)
             }
         }
     }
@@ -177,6 +176,13 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handleAllowScreenCaptureToggle(
+        action: SettingsAction.SecurityClick.AllowScreenCaptureToggle,
+    ) {
+        settingsRepository.isScreenCaptureAllowed = action.enabled
+        mutableStateFlow.update { it.copy(allowScreenCapture = action.enabled) }
     }
 
     private fun handleVaultClick(action: SettingsAction.DataClick) {
