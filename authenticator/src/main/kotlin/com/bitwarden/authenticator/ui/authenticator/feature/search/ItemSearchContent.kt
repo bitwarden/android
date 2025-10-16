@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
 import com.bitwarden.authenticator.ui.platform.components.listitem.VaultVerificationCodeItem
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -53,7 +55,7 @@ fun ItemSearchContent(
             VaultVerificationCodeItem(
                 displayItem = item,
                 onItemClick = { searchHandlers.onItemClick(item.authCode) },
-                onDropdownMenuClick = { },
+                onDropdownMenuClick = { searchHandlers.onDropdownMenuClick(it, item) },
                 cardStyle = viewState.itemList.toListItemCardStyle(index = index),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,6 +72,7 @@ fun ItemSearchContent(
         sharedCodes(
             sharedItems = viewState.sharedItems,
             onCopyClick = searchHandlers.onItemClick,
+            onDropdownMenuClick = searchHandlers.onDropdownMenuClick,
         )
 
         item {
@@ -82,6 +85,7 @@ fun ItemSearchContent(
 private fun LazyListScope.sharedCodes(
     sharedItems: SharedCodesDisplayState,
     onCopyClick: (authCode: String) -> Unit,
+    onDropdownMenuClick: (VaultDropdownMenuAction, VerificationCodeDisplayItem) -> Unit,
 ) {
     when (sharedItems) {
         is SharedCodesDisplayState.Codes -> {
@@ -101,7 +105,7 @@ private fun LazyListScope.sharedCodes(
                     VaultVerificationCodeItem(
                         displayItem = item,
                         onItemClick = { onCopyClick(item.authCode) },
-                        onDropdownMenuClick = { },
+                        onDropdownMenuClick = { onDropdownMenuClick(it, item) },
                         cardStyle = section.codes.toListItemCardStyle(index = index),
                         modifier = Modifier
                             .fillMaxWidth()
