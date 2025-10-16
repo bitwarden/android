@@ -17,6 +17,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -75,7 +77,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             ItemSearchState.ViewState.Content(
                 itemList = LOCAL_DISPLAY_ITEMS,
-                sharedItems = SharedCodesDisplayState.Codes(sections = emptyList()),
+                sharedItems = SharedCodesDisplayState.Codes(sections = persistentListOf()),
             ),
             viewModel.stateFlow.value.viewState,
         )
@@ -91,8 +93,10 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ItemSearchState.ViewState.Content(
-                itemList = LOCAL_DISPLAY_ITEMS.map { it.copy(showMoveToBitwarden = false) },
-                sharedItems = SharedCodesDisplayState.Codes(sections = emptyList()),
+                itemList = LOCAL_DISPLAY_ITEMS
+                    .map { it.copy(showMoveToBitwarden = false) }
+                    .toImmutableList(),
+                sharedItems = SharedCodesDisplayState.Codes(sections = persistentListOf()),
             ),
             viewModel.stateFlow.value.viewState,
         )
@@ -122,7 +126,7 @@ private val SHARED_ITEMS = listOf(
 )
 
 private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
-    sections = listOf(
+    sections = persistentListOf(
         SharedCodesDisplayState.SharedCodesAccountSection(
             id = "mockUserId-2",
             label = BitwardenString.shared_accounts_header.asText(
@@ -130,7 +134,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                 "mockkEnvironmentLabel-2",
                 1,
             ),
-            codes = listOf(
+            codes = persistentListOf(
                 VerificationCodeDisplayItem(
                     id = "mockId-2",
                     title = "mockIssuer-2",
@@ -149,7 +153,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
     ),
 )
 
-private val LOCAL_DISPLAY_ITEMS = listOf(
+private val LOCAL_DISPLAY_ITEMS = persistentListOf(
     VerificationCodeDisplayItem(
         id = LOCAL_ITEMS[0].id,
         authCode = LOCAL_ITEMS[0].code,

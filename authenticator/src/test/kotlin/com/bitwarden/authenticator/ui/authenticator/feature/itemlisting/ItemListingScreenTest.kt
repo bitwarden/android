@@ -9,10 +9,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
-import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
 import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -27,6 +27,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
@@ -117,8 +118,8 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
                 sharedItems = SharedCodesDisplayState.Error,
             ),
         )
@@ -130,9 +131,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
             ),
         )
 
@@ -146,12 +147,10 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
                 sharedItems = SharedCodesDisplayState.Codes(
-                    sections = listOf(
-                        SHARED_ACCOUNTS_SECTION,
-                    ),
+                    sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
                 ),
             ),
         )
@@ -229,9 +228,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    favoriteItems = emptyList(),
-                    itemList = emptyList(),
-                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    favoriteItems = persistentListOf(),
+                    itemList = persistentListOf(),
+                    sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                     actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
                 ),
             )
@@ -247,9 +246,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    favoriteItems = emptyList(),
-                    itemList = emptyList(),
-                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    favoriteItems = persistentListOf(),
+                    itemList = persistentListOf(),
+                    sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                     actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
                 ),
             )
@@ -279,9 +278,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `on sync with bitwarden action card dismiss in full state should send SyncWithBitwardenDismiss`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
             ),
         )
@@ -308,9 +307,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `on download bitwarden click in full state should send DownloadBitwardenClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
             ),
         )
@@ -337,9 +336,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `on download bitwarden dismiss in full state should send DownloadBitwardenDismiss`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
             ),
         )
@@ -354,8 +353,8 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = listOf(LOCAL_CODE),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Error,
             ),
         )
@@ -383,8 +382,8 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = listOf(LOCAL_CODE.copy(showMoveToBitwarden = false)),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(LOCAL_CODE.copy(showMoveToBitwarden = false)),
                 sharedItems = SharedCodesDisplayState.Error,
             ),
         )
@@ -403,9 +402,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
                     actionCard = ItemListingState.ActionCardState.None,
-                    favoriteItems = emptyList(),
-                    itemList = emptyList(),
-                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    favoriteItems = persistentListOf(),
+                    itemList = persistentListOf(),
+                    sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 ),
             )
         }
@@ -428,12 +427,10 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = listOf(LOCAL_CODE),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Codes(
-                    sections = listOf(
-                        SHARED_ACCOUNTS_SECTION,
-                    ),
+                    sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
                 ),
             ),
         )
@@ -450,12 +447,12 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     @Test
     fun `shared codes header click should emit SectionExpandedClick`() {
         val sharedItems = SharedCodesDisplayState.Codes(
-            sections = listOf(SHARED_ACCOUNTS_SECTION),
+            sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
         )
         val viewState = ItemListingState.ViewState.Content(
             actionCard = ItemListingState.ActionCardState.None,
-            favoriteItems = emptyList(),
-            itemList = listOf(LOCAL_CODE),
+            favoriteItems = persistentListOf(),
+            itemList = persistentListOf(LOCAL_CODE),
             sharedItems = sharedItems,
         )
         mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
@@ -472,12 +469,12 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     @Test
     fun `shared codes header should be displayed and collapsed when syncing is enabled`() {
         val sharedItems = SharedCodesDisplayState.Codes(
-            sections = listOf(SHARED_ACCOUNTS_SECTION),
+            sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
         )
         val viewState = ItemListingState.ViewState.Content(
             actionCard = ItemListingState.ActionCardState.None,
-            favoriteItems = emptyList(),
-            itemList = listOf(LOCAL_CODE),
+            favoriteItems = persistentListOf(),
+            itemList = persistentListOf(LOCAL_CODE),
             sharedItems = sharedItems,
         )
         mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
@@ -493,7 +490,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = viewState.copy(
                 sharedItems = sharedItems.copy(
-                    sections = listOf(SHARED_ACCOUNTS_SECTION.copy(isExpanded = false)),
+                    sections = persistentListOf(SHARED_ACCOUNTS_SECTION.copy(isExpanded = false)),
                 ),
             ),
         )
@@ -512,12 +509,10 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = listOf(LOCAL_CODE),
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Codes(
-                    sections = listOf(
-                        SHARED_ACCOUNTS_SECTION,
-                    ),
+                    sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
                 ),
             ),
         )
@@ -555,7 +550,7 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
 private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccountSection(
     id = "id",
     label = "test@test.com | bitwarden.com (1)".asText(),
-    codes = listOf(
+    codes = persistentListOf(
         VerificationCodeDisplayItem(
             id = "1",
             title = "bitwarden.com",

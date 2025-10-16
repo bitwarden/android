@@ -6,6 +6,7 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedC
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Convert [SharedVerificationCodesState.Success] into [SharedCodesDisplayState.Codes].
@@ -40,12 +41,12 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
                     it.key.environmentLabel,
                     it.value.size,
                 ),
-                codes = it.value,
+                codes = it.value.toImmutableList(),
                 isExpanded = currentSections
                     .find { section -> section.id == it.key.userId }
                     ?.isExpanded
                     ?: true,
             )
         }
-        .let { SharedCodesDisplayState.Codes(it) }
+        .let { SharedCodesDisplayState.Codes(it.toImmutableList()) }
 }
