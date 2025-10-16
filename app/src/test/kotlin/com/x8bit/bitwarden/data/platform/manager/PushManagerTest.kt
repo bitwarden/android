@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.di.CoreModule
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -55,6 +57,10 @@ class PushManagerTest {
         coEvery { putDeviceToken(any()) } returns Unit.asSuccess()
     }
 
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.NoLogoutOnKdfChange) } returns false
+    }
+
     private lateinit var pushManager: PushManager
 
     @BeforeEach
@@ -66,6 +72,7 @@ class PushManagerTest {
             dispatcherManager = dispatcherManager,
             clock = clock,
             json = CoreModule.providesJson(),
+            featureFlagManager = mockFeatureFlagManager,
         )
     }
 
@@ -139,6 +146,10 @@ class PushManagerTest {
         @Suppress("MaxLineLength")
         fun `onMessageReceived with logout with kdf change as reason should not emit to logoutFlow`() =
             runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                } returns true
+
                 val accountTokens = AccountTokensJson(
                     accessToken = "accessToken",
                     refreshToken = "refreshToken",
@@ -177,6 +188,9 @@ class PushManagerTest {
             @Test
             fun `onMessageReceived with logout with KDF reason do not emits to logoutFlow`() =
                 runTest {
+                    every {
+                        mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                    } returns true
                     pushManager.logoutFlow.test {
                         pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
                         expectNoEvents()
@@ -613,6 +627,9 @@ class PushManagerTest {
             @Test
             fun `onMessageReceived with logout with kdf reason does not emit to logoutFlow`() =
                 runTest {
+                    every {
+                        mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                    } returns true
                     pushManager.logoutFlow.test {
                         pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
                         expectNoEvents()

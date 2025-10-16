@@ -80,6 +80,14 @@ sealed class FlagKey<out T : Any> {
         override val defaultValue: Boolean = false
     }
 
+    /**
+     *  Data object holding the feature flag key for the No Logout On KDF Change feature.
+     */
+    data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
+        override val keyName: String = "pm-23995-no-logout-on-kdf-change"
+        override val defaultValue: Boolean = false
+    }
+
     //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.
