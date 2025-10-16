@@ -292,18 +292,19 @@ class VaultLockManagerImpl(
         val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
         vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
             .onSuccess { enrollPinResponse ->
+                authDiskSource.storeEncryptedPin(
+                    userId = userId,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
                 authDiskSource.storePinProtectedUserKeyEnvelope(
                     userId = userId,
                     pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
                     inMemoryOnly = inMemoryOnly,
                 )
-                authDiskSource.storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
-                )
                 authDiskSource.storePinProtectedUserKey(
                     userId = userId,
                     pinProtectedUserKey = null,
+                    inMemoryOnly = inMemoryOnly,
                 )
             }
     }

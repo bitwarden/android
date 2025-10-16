@@ -530,18 +530,19 @@ class VaultRepositoryImpl(
                 encryptedPin = encryptedPin,
             )
             .onSuccess { enrollPinResponse ->
+                authDiskSource.storeEncryptedPin(
+                    userId = userId,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
                 authDiskSource.storePinProtectedUserKeyEnvelope(
                     userId = userId,
                     pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
                     inMemoryOnly = true,
                 )
-                authDiskSource.storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
-                )
                 authDiskSource.storePinProtectedUserKey(
                     userId = userId,
                     pinProtectedUserKey = null,
+                    inMemoryOnly = true,
                 )
             }
     }
