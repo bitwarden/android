@@ -52,6 +52,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -157,6 +158,13 @@ fun SettingsScreen(
                         )
                     }
                 },
+                onScreenCaptureChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
+                        )
+                    }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             VaultSettings(
@@ -256,8 +264,8 @@ private fun SecuritySettings(
     state: SettingsState,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onBiometricToggle: (Boolean) -> Unit,
+    onScreenCaptureChange: (Boolean) -> Unit,
 ) {
-    if (!biometricsManager.isBiometricsSupported) return
     Spacer(modifier = Modifier.height(height = 12.dp))
     BitwardenListHeaderText(
         modifier = Modifier
@@ -265,18 +273,35 @@ private fun SecuritySettings(
             .padding(horizontal = 16.dp),
         label = stringResource(id = BitwardenString.security),
     )
+
     Spacer(modifier = Modifier.height(8.dp))
-    UnlockWithBiometricsRow(
+    val hasBiometrics = biometricsManager.isBiometricsSupported
+    if (hasBiometrics) {
+        UnlockWithBiometricsRow(
+            modifier = Modifier
+                .testTag("UnlockWithBiometricsSwitch")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+            isChecked = state.isUnlockWithBiometricsEnabled,
+            onBiometricToggle = { onBiometricToggle(it) },
+            biometricsManager = biometricsManager,
+        )
+    }
+
+    ScreenCaptureRow(
+        currentValue = state.allowScreenCapture,
+        cardStyle = if (hasBiometrics) {
+            CardStyle.Bottom
+        } else {
+            CardStyle.Full
+        },
+        onValueChange = onScreenCaptureChange,
         modifier = Modifier
-            .testTag("UnlockWithBiometricsSwitch")
             .fillMaxWidth()
+            .testTag(tag = "AllowScreenCaptureSwitch")
             .standardHorizontalMargin(),
-        isChecked = state.isUnlockWithBiometricsEnabled,
-        onBiometricToggle = { onBiometricToggle(it) },
-        biometricsManager = biometricsManager,
     )
 }
-
 //endregion
 
 //region Data settings
@@ -421,7 +446,7 @@ private fun UnlockWithBiometricsRow(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenSwitch(
         modifier = modifier,
-        cardStyle = CardStyle.Full,
+        cardStyle = CardStyle.Top(),
         label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
@@ -441,6 +466,47 @@ private fun UnlockWithBiometricsRow(
             }
         },
     )
+}
+
+@Composable
+private fun ScreenCaptureRow(
+    currentValue: Boolean,
+    cardStyle: CardStyle,
+    onValueChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowScreenCaptureConfirmDialog by remember { mutableStateOf(false) }
+
+    BitwardenSwitch(
+        label = stringResource(id = BitwardenString.allow_screen_capture),
+        isChecked = currentValue,
+        onCheckedChange = {
+            if (currentValue) {
+                onValueChange(false)
+            } else {
+                shouldShowScreenCaptureConfirmDialog = true
+            }
+        },
+        cardStyle = cardStyle,
+        modifier = modifier,
+    )
+
+    if (shouldShowScreenCaptureConfirmDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(BitwardenString.allow_screen_capture),
+            message = stringResource(
+                id = BitwardenString.are_you_sure_you_want_to_enable_screen_capture,
+            ),
+            confirmButtonText = stringResource(BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            onConfirmClick = {
+                onValueChange(true)
+                shouldShowScreenCaptureConfirmDialog = false
+            },
+            onDismissClick = { shouldShowScreenCaptureConfirmDialog = false },
+            onDismissRequest = { shouldShowScreenCaptureConfirmDialog = false },
+        )
+    }
 }
 
 //endregion Data settings
