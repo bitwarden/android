@@ -135,6 +135,24 @@ class PushManagerTest {
             }
         }
 
+        @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with kdf change as reason should not emit to logoutFlow`() =
+            runTest {
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                authDiskSource.userState =
+                    UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
+
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
         @Nested
         inner class LoggedOutUserState {
             @BeforeEach
@@ -155,6 +173,15 @@ class PushManagerTest {
                     )
                 }
             }
+
+            @Test
+            fun `onMessageReceived with logout with KDF reason do not emits to logoutFlow`() =
+                runTest {
+                    pushManager.logoutFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
+                }
 
             @Test
             fun `onMessageReceived with ciphers emits to fullSyncFlow`() = runTest {
@@ -518,6 +545,14 @@ class PushManagerTest {
             }
 
             @Test
+            fun `onMessageReceived with logout with kdf reason does nothing`() = runTest {
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
+            @Test
             fun `onMessageReceived with sync ciphers does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
@@ -574,6 +609,15 @@ class PushManagerTest {
                     )
                 }
             }
+
+            @Test
+            fun `onMessageReceived with logout with kdf reason does not emit to logoutFlow`() =
+                runTest {
+                    pushManager.logoutFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
+                }
 
             @Test
             fun `onMessageReceived with sync ciphers emits to fullSyncFlow`() = runTest {
@@ -905,6 +949,16 @@ private val LOGOUT_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
+
+private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "11",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z",
+      "PushNotificationLogOutReason": "0"
     }""",
 )
 

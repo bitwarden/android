@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PushNotificationLogOutReason
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -157,8 +158,13 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.UserNotification>(
                         string = notification.payload,
                     )
-                    .userId
-                    ?.let { mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(it)) }
+                    .takeIf {
+                        it.pushNotificationLogOutReason != PushNotificationLogOutReason.KDF_CHANGE
+                    }
+                    ?.userId
+                    ?.let {
+                        mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = it))
+                    }
             }
 
             NotificationType.SYNC_CIPHER_CREATE,
