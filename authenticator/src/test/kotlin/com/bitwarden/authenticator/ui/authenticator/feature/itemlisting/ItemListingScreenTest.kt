@@ -19,7 +19,6 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
 import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
@@ -538,7 +537,6 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     }
 }
 
-private val APP_THEME = AppTheme.DEFAULT
 private const val ALERT_THRESHOLD = 7
 
 private val LOCAL_CODE = VerificationCodeDisplayItem(
@@ -575,7 +573,6 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
 )
 
 private val DEFAULT_STATE = ItemListingState(
-    appTheme = APP_THEME,
     alertThresholdSeconds = ALERT_THRESHOLD,
     viewState = ItemListingState.ViewState.NoItems(
         actionCard = ItemListingState.ActionCardState.None,

@@ -136,7 +136,7 @@ private fun BitwardenEmptyContent_preview() {
             titleTestTag = "TitleTestTag",
             text = "There is no content to display",
             labelTestTag = "EmptyContentLabel",
-            illustrationData = IconData.Local(BitwardenDrawable.ic_empty_vault),
+            illustrationData = IconData.Local(BitwardenDrawable.ill_pin),
             primaryButton = BitwardenButtonData(
                 label = "Primary button".asText(),
                 testTag = "EmptyContentPositiveButton",

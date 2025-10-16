@@ -27,7 +27,6 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -59,8 +58,7 @@ class ItemListingViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
-        settingsRepository.appTheme,
-        settingsRepository.authenticatorAlertThresholdSeconds,
+        alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null,
     ),
@@ -70,12 +68,6 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        settingsRepository
-            .appThemeStateFlow
-            .map { ItemListingAction.Internal.AppThemeChangeReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -253,10 +245,6 @@ class ItemListingViewModel @Inject constructor(
                 handleDeleteItemReceive(internalAction.result)
             }
 
-            is ItemListingAction.Internal.AppThemeChangeReceive -> {
-                handleAppThemeChangeReceive(internalAction.appTheme)
-            }
-
             ItemListingAction.Internal.FirstTimeUserSyncReceive -> {
                 handleFirstTimeUserSync()
             }
@@ -270,12 +258,6 @@ class ItemListingViewModel @Inject constructor(
                 withDismissAction = true,
             ),
         )
-    }
-
-    private fun handleAppThemeChangeReceive(appTheme: AppTheme) {
-        mutableStateFlow.update {
-            it.copy(appTheme = appTheme)
-        }
     }
 
     private fun handleDeleteItemReceive(result: DeleteItemResult) {
@@ -730,7 +712,6 @@ const val ISSUER = "issuer"
  */
 @Parcelize
 data class ItemListingState(
-    val appTheme: AppTheme,
     val alertThresholdSeconds: Int,
     val viewState: ViewState,
     val dialog: DialogState?,
@@ -1035,11 +1016,6 @@ sealed class ItemListingAction {
          * Indicates a result for deleting an item has been received.
          */
         data class DeleteItemReceive(val result: DeleteItemResult) : Internal()
-
-        /**
-         * Indicates app theme change has been received.
-         */
-        data class AppThemeChangeReceive(val appTheme: AppTheme) : Internal()
 
         /**
          * Indicates that a user synced with Bitwarden for the first time.

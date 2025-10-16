@@ -18,8 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -31,9 +29,9 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Top level composable for the unlock screen.
@@ -114,8 +112,7 @@ fun UnlockScreen(
                     .width(220.dp)
                     .height(74.dp)
                     .fillMaxWidth(),
-                colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-                painter = painterResource(id = BitwardenDrawable.ic_logo_horizontal),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_logo_horizontal),
                 contentDescription = stringResource(BitwardenString.bitwarden_authenticator),
             )
             Spacer(modifier = Modifier.height(32.dp))
