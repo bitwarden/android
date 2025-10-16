@@ -677,7 +677,7 @@ private fun ContentPreview() {
                         authCode = "123456",
                         favorite = false,
                         showMoveToBitwarden = true,
-                        allowLongPressActions = true,
+                        showOverflow = true,
                     ),
                 ),
                 sharedItems = SharedCodesDisplayState.Codes(
@@ -698,7 +698,7 @@ private fun ContentPreview() {
                                     authCode = "123456",
                                     favorite = false,
                                     showMoveToBitwarden = false,
-                                    allowLongPressActions = false,
+                                    showOverflow = false,
                                 ),
                             ),
                             isExpanded = true,

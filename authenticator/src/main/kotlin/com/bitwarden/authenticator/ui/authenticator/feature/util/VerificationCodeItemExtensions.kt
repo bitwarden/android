@@ -11,7 +11,7 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,
     sharedVerificationCodesState: SharedVerificationCodesState,
-    allowLongPressActions: Boolean,
+    showOverflow: Boolean,
 ): VerificationCodeDisplayItem = VerificationCodeDisplayItem(
     id = id,
     title = issuer ?: label ?: "--",
@@ -25,7 +25,7 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
-    allowLongPressActions = allowLongPressActions,
+    showOverflow = showOverflow,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {
         // Shared items should never show "Copy to Bitwarden vault" action:

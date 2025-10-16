@@ -2,7 +2,10 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -359,8 +362,10 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             ),
         )
         composeTestRule
-            .onNodeWithText("issuer")
-            .performTouchInput { longClick() }
+            .onNodeWithText(text = "issuer")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More"))
+            .performClick()
 
         composeTestRule
             .onNodeWithText(text = "Copy to Bitwarden vault")
@@ -543,7 +548,7 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
     alertThresholdSeconds = 7,
     authCode = "123456",
     favorite = false,
-    allowLongPressActions = true,
+    showOverflow = true,
     showMoveToBitwarden = true,
 )
 
@@ -560,7 +565,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
             alertThresholdSeconds = ALERT_THRESHOLD,
             authCode = "123456",
             favorite = false,
-            allowLongPressActions = false,
+            showOverflow = false,
             showMoveToBitwarden = false,
         ),
     ),

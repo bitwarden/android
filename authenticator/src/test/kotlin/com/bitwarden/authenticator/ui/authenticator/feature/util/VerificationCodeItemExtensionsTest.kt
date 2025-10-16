@@ -29,7 +29,7 @@ class VerificationCodeItemExtensionsTest {
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
             favorite = (favoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
-            allowLongPressActions = true,
+            showOverflow = true,
             showMoveToBitwarden = false,
         )
 
@@ -42,7 +42,7 @@ class VerificationCodeItemExtensionsTest {
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = nonFavoriteItem.code,
             favorite = (nonFavoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
-            allowLongPressActions = true,
+            showOverflow = true,
             showMoveToBitwarden = false,
         )
 
@@ -51,7 +51,7 @@ class VerificationCodeItemExtensionsTest {
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -59,7 +59,7 @@ class VerificationCodeItemExtensionsTest {
             nonFavoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
     }
@@ -79,7 +79,7 @@ class VerificationCodeItemExtensionsTest {
                 alertThresholdSeconds = alertThresholdSeconds,
                 authCode = item.code,
                 favorite = false,
-                allowLongPressActions = true,
+                showOverflow = true,
                 showMoveToBitwarden = false,
             )
 
@@ -88,7 +88,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -96,7 +96,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -104,7 +104,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.FeatureNotEnabled,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -112,7 +112,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Loading,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -120,7 +120,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.OsVersionNotSupported,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
         assertEquals(
@@ -128,7 +128,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.SyncNotEnabled,
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
 
@@ -140,7 +140,7 @@ class VerificationCodeItemExtensionsTest {
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Success(emptyList()),
-                allowLongPressActions = true,
+                showOverflow = true,
             ),
         )
     }
@@ -168,7 +168,7 @@ class VerificationCodeItemExtensionsTest {
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
             favorite = false,
-            allowLongPressActions = false,
+            showOverflow = false,
             showMoveToBitwarden = false,
         )
 
@@ -177,7 +177,7 @@ class VerificationCodeItemExtensionsTest {
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
-                allowLongPressActions = false,
+                showOverflow = false,
             ),
         )
     }

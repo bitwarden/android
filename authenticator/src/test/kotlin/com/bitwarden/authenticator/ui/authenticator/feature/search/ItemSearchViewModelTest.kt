@@ -144,7 +144,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                     alertThresholdSeconds = 7,
                     authCode = "mockCode-2",
                     favorite = false,
-                    allowLongPressActions = false,
+                    showOverflow = false,
                     showMoveToBitwarden = false,
                 ),
             ),
@@ -167,7 +167,7 @@ private val LOCAL_DISPLAY_ITEMS = persistentListOf(
         ),
         subtitle = LOCAL_ITEMS[0].label,
         favorite = false,
-        allowLongPressActions = false,
+        showOverflow = false,
         showMoveToBitwarden = true,
     ),
 )
