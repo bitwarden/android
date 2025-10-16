@@ -7,7 +7,7 @@ on:
 permissions:
   contents: write
   id-token: write
-  actions: read
+  actions: write
 
 jobs:
   publish-release-authenticator:
