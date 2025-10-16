@@ -447,7 +447,10 @@ private fun UnlockWithBiometricsRow(
     BitwardenSwitch(
         modifier = modifier,
         cardStyle = CardStyle.Top(),
-        label = stringResource(BitwardenString.unlock_with_biometrics),
+        label = stringResource(id = BitwardenString.lock_app),
+        subtext = stringResource(
+            id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
+        ),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
             if (toggled) {
