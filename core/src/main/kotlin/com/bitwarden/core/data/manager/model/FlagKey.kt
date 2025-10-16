@@ -34,6 +34,7 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
                 CipherKeyEncryption,
+                NoLogoutOnKdfChange,
             )
         }
     }
