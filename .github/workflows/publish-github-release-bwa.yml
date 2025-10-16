@@ -1,4 +1,4 @@
-name: Publish Password Manager and Authenticator GitHub Release as newest
+name: Publish Authenticator GitHub Release as newest
 
 on:
   workflow_dispatch:
