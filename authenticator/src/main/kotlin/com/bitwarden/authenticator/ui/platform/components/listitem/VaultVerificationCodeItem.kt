@@ -1,39 +1,27 @@
 package com.bitwarden.authenticator.ui.platform.components.listitem
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
-import com.bitwarden.ui.platform.base.util.cardBackground
-import com.bitwarden.ui.platform.base.util.cardPadding
-import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.core.util.persistentListOfNotNull
+import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
@@ -69,7 +57,7 @@ fun VaultVerificationCodeItem(
         startIcon = displayItem.startIcon,
         onItemClick = onItemClick,
         onDropdownMenuClick = onDropdownMenuClick,
-        allowLongPress = displayItem.allowLongPressActions,
+        showOverflow = displayItem.showOverflow,
         showMoveToBitwarden = displayItem.showMoveToBitwarden,
         cardStyle = cardStyle,
         modifier = modifier,
@@ -88,7 +76,7 @@ fun VaultVerificationCodeItem(
  * @param startIcon The leading icon for the item.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
  * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
- * @param allowLongPress Whether long-press interactions are enabled for the item.
+ * @param showOverflow Whether overflow menu should be available or not.
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param cardStyle The card style to be applied to this item.
  * @param modifier The modifier for the item.
@@ -105,166 +93,107 @@ fun VaultVerificationCodeItem(
     startIcon: IconData,
     onItemClick: () -> Unit,
     onDropdownMenuClick: (VaultDropdownMenuAction) -> Unit,
-    allowLongPress: Boolean,
+    showOverflow: Boolean,
     showMoveToBitwarden: Boolean,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowDropdownMenu by remember { mutableStateOf(value = false) }
-    Box(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .testTag(tag = "Item")
-                .defaultMinSize(minHeight = 60.dp)
-                .cardBackground(cardStyle = cardStyle)
-                .then(
-                    if (allowLongPress) {
-                        Modifier.combinedClickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(
-                                color = BitwardenTheme.colorScheme.background.pressed,
-                            ),
-                            onClick = onItemClick,
-                            onLongClick = { shouldShowDropdownMenu = true },
-                        )
-                    } else {
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(
-                                color = BitwardenTheme.colorScheme.background.pressed,
-                            ),
-                            onClick = onItemClick,
-                        )
-                    },
-                )
-                .cardPadding(
-                    cardStyle = cardStyle,
-                    paddingValues = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+    Row(
+        modifier = modifier
+            .testTag(tag = "Item")
+            .defaultMinSize(minHeight = 60.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
+                onClick = onItemClick,
+                paddingStart = 16.dp,
+                paddingEnd = 4.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
+    ) {
+        BitwardenIcon(
+            iconData = startIcon,
+            tint = BitwardenTheme.colorScheme.icon.primary,
+            modifier = Modifier.size(size = 24.dp),
+        )
+
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.weight(weight = 1f),
         ) {
-            BitwardenIcon(
-                iconData = startIcon,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-                modifier = Modifier.size(24.dp),
-            )
-
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.weight(1f),
-            ) {
-                if (!primaryLabel.isNullOrEmpty()) {
-                    Text(
-                        modifier = Modifier.testTag("Name"),
-                        text = primaryLabel,
-                        style = BitwardenTheme.typography.bodyLarge,
-                        color = BitwardenTheme.colorScheme.text.primary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-
-                if (!secondaryLabel.isNullOrEmpty()) {
-                    Text(
-                        modifier = Modifier.testTag("Username"),
-                        text = secondaryLabel,
-                        style = BitwardenTheme.typography.bodyMedium,
-                        color = BitwardenTheme.colorScheme.text.secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
+            if (!primaryLabel.isNullOrEmpty()) {
+                Text(
+                    modifier = Modifier.testTag(tag = "Name"),
+                    text = primaryLabel,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
 
-            BitwardenCircularCountdownIndicator(
-                modifier = Modifier.testTag("CircularCountDown"),
-                timeLeftSeconds = timeLeftSeconds,
-                periodSeconds = periodSeconds,
-                alertThresholdSeconds = alertThresholdSeconds,
-            )
-
-            Text(
-                modifier = Modifier.testTag("AuthCode"),
-                text = authCode.chunked(3).joinToString(" "),
-                style = BitwardenTheme.typography.sensitiveInfoSmall,
-                color = BitwardenTheme.colorScheme.text.primary,
-            )
+            if (!secondaryLabel.isNullOrEmpty()) {
+                Text(
+                    modifier = Modifier.testTag(tag = "Username"),
+                    text = secondaryLabel,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
 
-        DropdownMenu(
-            expanded = shouldShowDropdownMenu,
-            onDismissRequest = { shouldShowDropdownMenu = false },
-            shape = BitwardenTheme.shapes.menu,
-            containerColor = BitwardenTheme.colorScheme.background.primary,
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text(text = stringResource(id = BitwardenString.copy))
-                },
-                onClick = {
-                    shouldShowDropdownMenu = false
-                    onDropdownMenuClick(VaultDropdownMenuAction.COPY_CODE)
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = BitwardenDrawable.ic_copy),
-                        contentDescription = stringResource(id = BitwardenString.copy),
-                    )
-                },
-            )
-            BitwardenHorizontalDivider()
-            DropdownMenuItem(
-                text = {
-                    Text(text = stringResource(id = BitwardenString.edit))
-                },
-                onClick = {
-                    shouldShowDropdownMenu = false
-                    onDropdownMenuClick(VaultDropdownMenuAction.EDIT)
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = BitwardenDrawable.ic_edit_item),
-                        contentDescription = stringResource(BitwardenString.edit),
-                    )
-                },
-            )
-            if (showMoveToBitwarden) {
-                BitwardenHorizontalDivider()
-                DropdownMenuItem(
-                    text = {
-                        Text(text = stringResource(id = BitwardenString.copy_to_bitwarden_vault))
-                    },
-                    onClick = {
-                        shouldShowDropdownMenu = false
-                        onDropdownMenuClick(VaultDropdownMenuAction.COPY_TO_BITWARDEN)
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(id = BitwardenDrawable.ic_arrow_right),
-                            contentDescription = stringResource(
-                                id = BitwardenString.copy_to_bitwarden_vault,
-                            ),
+        BitwardenCircularCountdownIndicator(
+            modifier = Modifier.testTag(tag = "CircularCountDown"),
+            timeLeftSeconds = timeLeftSeconds,
+            periodSeconds = periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+        )
+
+        Text(
+            modifier = Modifier.testTag(tag = "AuthCode"),
+            text = authCode.chunked(size = 3).joinToString(separator = " "),
+            style = BitwardenTheme.typography.sensitiveInfoSmall,
+            color = BitwardenTheme.colorScheme.text.primary,
+        )
+
+        if (showOverflow) {
+            BitwardenOverflowActionItem(
+                contentDescription = stringResource(id = BitwardenString.more),
+                menuItemDataList = persistentListOfNotNull(
+                    OverflowMenuItemData(
+                        text = stringResource(id = BitwardenString.copy),
+                        onClick = { onDropdownMenuClick(VaultDropdownMenuAction.COPY_CODE) },
+                    ),
+                    OverflowMenuItemData(
+                        text = stringResource(id = BitwardenString.edit),
+                        onClick = { onDropdownMenuClick(VaultDropdownMenuAction.EDIT) },
+                    ),
+                    if (showMoveToBitwarden) {
+                        OverflowMenuItemData(
+                            text = stringResource(id = BitwardenString.copy_to_bitwarden_vault),
+                            onClick = {
+                                onDropdownMenuClick(VaultDropdownMenuAction.COPY_TO_BITWARDEN)
+                            },
                         )
+                    } else {
+                        null
                     },
-                )
-            }
-            BitwardenHorizontalDivider()
-            DropdownMenuItem(
-                text = {
-                    Text(text = stringResource(id = BitwardenString.delete_item))
-                },
-                onClick = {
-                    shouldShowDropdownMenu = false
-                    onDropdownMenuClick(VaultDropdownMenuAction.DELETE)
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = BitwardenDrawable.ic_delete_item),
-                        contentDescription = stringResource(id = BitwardenString.delete_item),
-                    )
-                },
+                    OverflowMenuItemData(
+                        text = stringResource(id = BitwardenString.delete_item),
+                        onClick = { onDropdownMenuClick(VaultDropdownMenuAction.DELETE) },
+                    ),
+                ),
+                vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
+                testTag = "Options",
+            )
+        } else {
+            BitwardenStandardIconButton(
+                vectorIconRes = BitwardenDrawable.ic_copy,
+                contentDescription = stringResource(id = BitwardenString.copy),
+                onClick = onItemClick,
             )
         }
     }
@@ -285,7 +214,7 @@ private fun VerificationCodeItem_preview() {
             startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             onItemClick = {},
             onDropdownMenuClick = {},
-            allowLongPress = true,
+            showOverflow = true,
             modifier = Modifier.padding(horizontal = 16.dp),
             showMoveToBitwarden = true,
             cardStyle = CardStyle.Full,

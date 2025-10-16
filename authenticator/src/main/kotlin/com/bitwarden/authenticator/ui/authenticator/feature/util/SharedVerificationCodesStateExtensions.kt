@@ -27,7 +27,7 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
                 // Always map based on Error state, because shared codes will never
                 // show "Copy to Bitwarden vault" action.
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
-                allowLongPressActions = false,
+                showOverflow = false,
             ),
         )
     }

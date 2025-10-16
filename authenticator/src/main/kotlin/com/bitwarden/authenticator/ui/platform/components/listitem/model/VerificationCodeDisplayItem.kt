@@ -22,6 +22,6 @@ data class VerificationCodeDisplayItem(
         testTag = "BitwardenIcon",
     ),
     val favorite: Boolean,
-    val allowLongPressActions: Boolean,
+    val showOverflow: Boolean,
     val showMoveToBitwarden: Boolean,
 ) : Parcelable

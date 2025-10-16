@@ -194,7 +194,7 @@ class ItemSearchViewModel @Inject constructor(
                                 sharedVerificationCodesState = authenticatorRepository
                                     .sharedCodesStateFlow
                                     .value,
-                                allowLongPressActions = false,
+                                showOverflow = false,
                             )
                         }
                         .toImmutableList(),

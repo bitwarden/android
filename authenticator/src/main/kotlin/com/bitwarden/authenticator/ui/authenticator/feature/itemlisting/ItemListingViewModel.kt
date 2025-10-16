@@ -512,7 +512,7 @@ class ItemListingViewModel @Inject constructor(
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,
-                            allowLongPressActions = true,
+                            showOverflow = true,
                         )
                     }
                     .toImmutableList(),
@@ -524,7 +524,7 @@ class ItemListingViewModel @Inject constructor(
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,
-                            allowLongPressActions = true,
+                            showOverflow = true,
                         )
                     }
                     .toImmutableList(),

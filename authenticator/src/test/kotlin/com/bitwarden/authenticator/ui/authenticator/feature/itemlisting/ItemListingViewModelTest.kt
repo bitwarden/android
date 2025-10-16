@@ -571,7 +571,7 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
     alertThresholdSeconds = 7,
     authCode = "123456",
     favorite = false,
-    allowLongPressActions = true,
+    showOverflow = true,
     showMoveToBitwarden = true,
 )
 
@@ -620,7 +620,7 @@ private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
     it.toDisplayItem(
         alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
         sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
-        allowLongPressActions = true,
+        showOverflow = true,
     )
 }
 
