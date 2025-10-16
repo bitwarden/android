@@ -59,6 +59,7 @@ class ReviewExportViewModel @Inject constructor(
             itemTypeCounts = ReviewExportState.ItemTypeCounts(),
         ),
         dialog = null,
+        hasOtherAccounts = (authRepository.userStateFlow.value?.accounts?.size ?: 0) > 1,
     ),
 ) {
 
@@ -296,6 +297,7 @@ data class ReviewExportState(
     val dialog: DialogState? = null,
     // Internally used properties
     val importCredentialsRequestData: ImportCredentialsRequestData,
+    val hasOtherAccounts: Boolean,
 ) : Parcelable {
 
     /**

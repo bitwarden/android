@@ -70,6 +70,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 viewState = ReviewExportState.ViewState.NoItems,
                 dialog = null,
                 importCredentialsRequestData = DEFAULT_REQUEST_DATA,
+                hasOtherAccounts = true,
             )
             decryptCipherListResultFlow.value = DataState.Loaded(
                 data = DecryptCipherListResult(
@@ -93,6 +94,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 ),
                 dialog = null,
                 importCredentialsRequestData = DEFAULT_REQUEST_DATA,
+                hasOtherAccounts = true,
             )
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -426,6 +428,7 @@ private val DEFAULT_CONTENT_VIEW_STATE = ReviewExportState.ViewState.Content(
 private val DEFAULT_STATE: ReviewExportState = ReviewExportState(
     importCredentialsRequestData = DEFAULT_REQUEST_DATA,
     viewState = DEFAULT_CONTENT_VIEW_STATE,
+    hasOtherAccounts = true,
 )
 private const val DEFAULT_USER_ID: String = "activeUserId"
 private val DEFAULT_USER_STATE = UserState(
