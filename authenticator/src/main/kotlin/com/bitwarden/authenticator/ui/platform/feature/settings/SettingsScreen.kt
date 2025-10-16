@@ -290,7 +290,11 @@ private fun SecuritySettings(
 
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        hasBiometrics = hasBiometrics,
+        cardStyle = if (hasBiometrics) {
+            CardStyle.Bottom
+        } else {
+            CardStyle.Full
+        },
         onValueChange = onScreenCaptureChange,
         modifier = Modifier
             .fillMaxWidth()
@@ -467,7 +471,7 @@ private fun UnlockWithBiometricsRow(
 @Composable
 private fun ScreenCaptureRow(
     currentValue: Boolean,
-    hasBiometrics: Boolean,
+    cardStyle: CardStyle,
     onValueChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -483,11 +487,7 @@ private fun ScreenCaptureRow(
                 shouldShowScreenCaptureConfirmDialog = true
             }
         },
-        cardStyle = if (hasBiometrics) {
-            CardStyle.Bottom
-        } else {
-            CardStyle.Full
-        },
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 
