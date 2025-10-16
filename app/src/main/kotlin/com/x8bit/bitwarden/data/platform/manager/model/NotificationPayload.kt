@@ -50,9 +50,15 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class UserNotification(
-        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("UserId", "userId")
+        override val userId: String?,
+
         @Contextual
-        @JsonNames("Date", "date") val date: ZonedDateTime?,
+        @JsonNames("Date", "date")
+        val date: ZonedDateTime?,
+
+        @JsonNames("PushNotificationLogOutReason", "pushNotificationLogOutReason")
+        val pushNotificationLogOutReason: PushNotificationLogOutReason?,
     ) : NotificationPayload()
 
     /**
