@@ -1,0 +1,24 @@
+name: Publish Password Manager GitHub Release as newest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * 1-5' # Every hour on the hour on weekdays
+
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+
+jobs:
+  publish-release-password-manager:
+    name: Publish Password Manager Release
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
+    with:
+      release_name: "Password Manager"
+      workflow_name: "publish-github-release-bwpm.yml"
+      credentials_filename: "play_creds.json"
+      project_type: android
+      check_release_command: >
+        bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production
+    secrets: inherit

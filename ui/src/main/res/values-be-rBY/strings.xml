@@ -31,7 +31,7 @@
     <string name="invalid_master_password">Памылковы асноўны пароль. Паспрабуйце яшчэ раз.</string>
     <string name="invalid_pin">Памылковы PIN. Паспрабуйце яшчэ раз.</string>
     <string name="launch">Запусціць</string>
-    <string name="log_in_verb">Log in</string>
+    <string name="log_in_verb">Увайсці</string>
     <string name="log_in_noun">Лагін</string>
     <string name="log_out">Выйсці</string>
     <string name="logout_confirmation">Вы сапраўды хочаце выйсці?</string>
@@ -61,7 +61,7 @@
     <string name="submit">Адправіць</string>
     <string name="sync">Сінхранізаваць</string>
     <string name="uri">URI</string>
-    <string name="website_uri">Website (URI)</string>
+    <string name="website_uri">Вэб-сайт (URI)</string>
     <string name="username">Імя карыстальніка</string>
     <string name="validation_field_required">Поле %1$s з\'яўляецца абавязковым.</string>
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
@@ -104,7 +104,7 @@
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
     <string name="logging_in">Logging in…</string>
-    <string name="login_to_bitwarden">Log in to Bitwarden</string>
+    <string name="login_to_bitwarden">Увайсці ў Bitwarden</string>
     <string name="master_password_confirmation_val_message">Няправільна пацвярджэнне пароля.</string>
     <string name="master_password_description">Асноўны пароль — гэта ключ, які выкарыстоўваецца для доступу да вашага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць асноўны пароль немагчыма ў выпадку, калі вы яго забылі.</string>
     <string name="master_password_hint">Падказка да асноўнага пароля (неабавязкова)</string>
@@ -126,7 +126,7 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Новы элемент</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -145,7 +145,7 @@
     <string name="retype_master_password_required">Re-type master password (required)</string>
     <string name="search_vault">Пошук у сховішчы</string>
     <string name="select">Выбраць</string>
-    <string name="item_details">Item details</string>
+    <string name="item_details">Падрабязнасці элемента</string>
     <string name="item_updated">Элемент абноўлены.</string>
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
@@ -163,7 +163,7 @@
     <string name="items">Элементы</string>
     <string name="items_for_uri">Элементы для %1$s</string>
     <string name="no_items_for_uri">У вашым сховішчы адсутнічаюць элементы для %1$s.</string>
-    <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+    <string name="no_items_for_vault">У вашым сховішчы адсутнічаюць элементы, якія адпавядаюць \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Адключана</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
@@ -288,7 +288,7 @@
     <string name="select_type_field">Які тып карыстальніцкага поля вы хочаце дадаць?</string>
     <string name="remove">Выдаліць</string>
     <string name="new_uri">Новы URI</string>
-    <string name="add_website">Add website</string>
+    <string name="add_website">Дадаць вэб-сайт</string>
     <string name="base_domain">Асноўны дамен</string>
     <string name="default_text">Default (%1$s)</string>
     <string name="exact">Дакладна</string>
@@ -306,7 +306,7 @@
     <string name="invalid_email">Памылковы адрас электроннай пошты.</string>
     <string name="cards">Карткі</string>
     <string name="identities">Пасведчанні</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Ідэнтыфікацыя</string>
     <string name="logins">Лагіны</string>
     <string name="secure_notes">Абароненыя нататкі</string>
     <string name="personal_details">Personal Details</string>
@@ -330,7 +330,7 @@
     <string name="type">Тып</string>
     <string name="move_down">Перамясціць уніз</string>
     <string name="move_up">Перамясціць уверх</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Уладальнік</string>
     <string name="no_collections_to_list">У спісе адсутнічаюць калекцыі.</string>
     <string name="moved_item_to_org">%1$s перамешчана ў %2$s.</string>
     <string name="select_one_collection">Вы павінны выбраць прынамсі адну калекцыю.</string>
@@ -388,7 +388,7 @@
     <string name="code_sent">Код адпраўлены!</string>
     <string name="confirm_your_identity">Пацвердзіце сваю асобу для працягу.</string>
     <string name="export_vault_warning">Пры экспартаванні файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць або адпраўляць па неабароненых каналах (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</string>
-    <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
+    <string name="export_vault_file_pw_protect_info">Гэты экспартаваны файл будзе абаронены паролем, які неабходна будзе ўвесці для яго расшыфроўкі.</string>
     <string name="export_vault_confirmation_title">Пацвердзіць экспартаванне сховішча</string>
     <string name="warning">Папярэджанне</string>
     <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
@@ -461,7 +461,7 @@
     <string name="password_info">Па магчымасці запытваць у карыстальнікаў пароль для доступу да гэтага Send.</string>
     <string name="remove_password">Выдаліць пароль</string>
     <string name="removing_send_password">Выдаленне пароля</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Пароль выдалены</string>
     <string name="add_a_send">Дадаць Send</string>
     <string name="copy_link">Скапіяваць спасылку</string>
     <string name="share_link">Абагуліць спасылку</string>
@@ -626,7 +626,7 @@
     <string name="approve_with_master_password">Ухваліць з дапамогай асноўнага пароля</string>
     <string name="turn_off_using_public_device">Turn off using a public device</string>
     <string name="remember_this_device">Запомніць гэту прыладу</string>
-    <string name="passkey">Passkey</string>
+    <string name="passkey">Ключ доступу</string>
     <string name="passkey_will_not_be_copied">Passkey will not be copied</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</string>
     <string name="master_password_re_prompt_help">Дапамога з паўторным запытам асноўнага пароля</string>
@@ -644,7 +644,7 @@
     <string name="the_urix_is_already_blocked">Гэты URI %1$s ужо заблакіраваны</string>
     <string name="login_approved">Уваход ухвалены</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
-    <string name="log_in_with_device">Log in with device</string>
+    <string name="log_in_with_device">Увайсці з іншай прылады</string>
     <string name="logging_in_on">Увайсці на</string>
     <string name="logging_in_on_with_colon">Logging in on:</string>
     <string name="vault">Сховішча</string>
@@ -686,10 +686,10 @@
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
-    <string name="confirm_file_password">Confirm file password</string>
-    <string name="file_password">File password</string>
+    <string name="confirm_file_password">Пацвердзіць пароль файла</string>
+    <string name="file_password">Пароль файла</string>
     <string name="password_protected">Password Protected</string>
-    <string name="password_used_to_export">This password will be used to export and import this file</string>
+    <string name="password_used_to_export">Гэты пароль будзе выкарыстоўвацца для экспартавання і імпартавання гэтага файла</string>
     <string name="autofill_suggestion">Autofill suggestion</string>
     <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
     <string name="launch_web_authn">Launch WebAuthn</string>
@@ -705,7 +705,7 @@
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
-    <string name="email_verified">Email verified</string>
+    <string name="email_verified">Email пацверджаны</string>
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
     <string name="security_prioritized">Security, prioritized</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
@@ -724,7 +724,7 @@
     <string name="set_up_later">Set up later</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Пацвердзіць</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -743,7 +743,7 @@
     <string name="email_address_required">Email address (required)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Change email address</string>
-    <string name="next">Next</string>
+    <string name="next">Далей</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
@@ -754,7 +754,7 @@
         <item quantity="many">%d characters</item>
         <item quantity="other">%d characters</item>
     </plurals>
-    <string name="expired_link">Expired link</string>
+    <string name="expired_link">Пратэрмінаваная спасылка</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>
     <string name="authenticator_sync">Authenticator Sync</string>
@@ -775,12 +775,12 @@
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">Падказка да асноўнага пароля</string>
     <string name="new_master_password_hint">New master password hint</string>
-    <string name="get_started">Get started</string>
+    <string name="get_started">Пачатак працы</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-    <string name="new_login">New login</string>
+    <string name="new_login">Новы лагін</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Import saved logins</string>
@@ -804,7 +804,7 @@
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
     <string name="step_2_of_3">Step 2 of 3</string>
-    <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
+    <string name="log_in_to_bitwarden">Увайсці ў Bitwarden</string>
     <string name="step_3_of_3">Step 3 of 3</string>
     <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
@@ -823,22 +823,22 @@
     <string name="import_successful">Import Successful!</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">Зразумела</string>
     <string name="no_logins_were_imported">No logins were imported</string>
-    <string name="import_error">Import error</string>
+    <string name="import_error">Памылка імпартавання</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
-    <string name="type_ssh_key">SSH key</string>
+    <string name="type_ssh_key">Ключ SSH</string>
     <string name="public_key">Public key</string>
     <string name="private_key">Private key</string>
     <string name="ssh_keys">SSH keys</string>
-    <string name="copy_public_key">Copy public key</string>
-    <string name="copy_fingerprint">Copy fingerprint</string>
+    <string name="copy_public_key">Скапіяваць публічны ключ</string>
+    <string name="copy_fingerprint">Скапіяваць адбітак пальца</string>
     <string name="enable_notifications">Enable notifications</string>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="done_text">Done</string>
+    <string name="done_text">Гатова</string>
     <string name="page_number_x_of_y">%1$s of %2$s</string>
     <string name="copy_identity_name">Copy identity name</string>
     <string name="copy_company">Copy company</string>
@@ -861,7 +861,7 @@
     <string name="need_some_inspiration">Need some inspiration?</string>
     <string name="check_out_the_passphrase_generator">Check out the passphrase generator</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="copy_private_key">Copy private key</string>
+    <string name="copy_private_key">Скапіяваць прыватны ключ</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
@@ -935,7 +935,7 @@
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 гадзіна</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -968,7 +968,7 @@
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Выдаліць Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1138,10 +1138,14 @@
     <string name="exporting_items">Exporting items…</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
+    <string name="passkeys">Ключы доступу</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

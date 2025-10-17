@@ -126,7 +126,7 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Nov element</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -163,7 +163,7 @@
     <string name="items">Elementi</string>
     <string name="items_for_uri">Elementi za %1$s</string>
     <string name="no_items_for_uri">V vašem trezorju ni elementov za %1$s.</string>
-    <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+    <string name="no_items_for_vault">V vašem trezorju ni elementov, ki bi ustrezali \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Onemogočeno</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
@@ -389,7 +389,7 @@ Scanning will happen automatically.</string>
     <string name="code_sent">Koda poslana!</string>
     <string name="confirm_your_identity">Potrdite svojo identiteto za nadaljevanje.</string>
     <string name="export_vault_warning">This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
-    <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
+    <string name="export_vault_file_pw_protect_info">Ta izvoz bo zaščiten z geslom; to geslo bo potrebno tudi pri uvozu.</string>
     <string name="export_vault_confirmation_title">Confirm vault export</string>
     <string name="warning">Opozorilo</string>
     <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
@@ -462,7 +462,7 @@ Scanning will happen automatically.</string>
     <string name="password_info">Require this password to view the Send.</string>
     <string name="remove_password">Odstrani geslo</string>
     <string name="removing_send_password">Odstranjevanje gesla</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Geslo odstranjeno</string>
     <string name="add_a_send">Dodaj pošiljko</string>
     <string name="copy_link">Kopiraj povezavo</string>
     <string name="share_link">Deli povezavo</string>
@@ -645,7 +645,7 @@ Do you want to switch to this account?</string>
     <string name="the_urix_is_already_blocked">The URI %1$s is already blocked</string>
     <string name="login_approved">Login approved</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
-    <string name="log_in_with_device">Log in with device</string>
+    <string name="log_in_with_device">Prijava z napravo</string>
     <string name="logging_in_on">Logging in on</string>
     <string name="logging_in_on_with_colon">Logging in on:</string>
     <string name="vault">Vault</string>
@@ -687,10 +687,10 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
-    <string name="confirm_file_password">Confirm file password</string>
-    <string name="file_password">File password</string>
+    <string name="confirm_file_password">Potrdi geslo datoteke</string>
+    <string name="file_password">Geslo datoteke</string>
     <string name="password_protected">Password Protected</string>
-    <string name="password_used_to_export">This password will be used to export and import this file</string>
+    <string name="password_used_to_export">Pri izvozu in uvozu te datoteke bo potrebno vpisati geslo</string>
     <string name="autofill_suggestion">Autofill suggestion</string>
     <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
     <string name="launch_web_authn">Launch WebAuthn</string>
@@ -824,7 +824,7 @@ Do you want to switch to this account?</string>
     <string name="import_successful">Import Successful!</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">Razumem</string>
     <string name="no_logins_were_imported">No logins were imported</string>
     <string name="import_error">Import error</string>
     <string name="logins_imported">Logins imported</string>
@@ -936,7 +936,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 ura</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -969,7 +969,7 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Izbriši pošiljko</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1140,9 +1140,13 @@ Do you want to switch to this account?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

@@ -327,7 +327,7 @@ Scanning will happen automatically.</string>
     <string name="type">ಪ್ರಕಾರ</string>
     <string name="move_down">ಕೆಳಕ್ಕೆ ಸರಿಸು</string>
     <string name="move_up">ಮೇಲಕ್ಕೆ ಸರಿಸಿ</string>
-    <string name="owner">Owner</string>
+    <string name="owner">ಮಾಲೀಕರು</string>
     <string name="no_collections_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಗ್ರಹಗಳಿಲ್ಲ.</string>
     <string name="moved_item_to_org">%1$s moved to %2$s.</string>
     <string name="select_one_collection">ನೀವು ಕನಿಷ್ಠ ಒಂದು ಸಂಗ್ರಹವನ್ನು ಆರಿಸಬೇಕು.</string>
@@ -436,7 +436,7 @@ Scanning will happen automatically.</string>
     <string name="send">ಕಳುಹಿಸಿ</string>
     <string name="send_details">Send Details</string>
     <string name="all_sends">ಎಲ್ಲಾ ಕಳುಹಿಸುತ್ತದೆ</string>
-    <string name="text">Text</string>
+    <string name="text">ಪಠ್ಯ</string>
     <string name="text_to_share">Text to share</string>
     <string name="type_text">ಪಠ್ಯ</string>
     <string name="hide_text_by_default">ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸುವಾಗ, ಪಠ್ಯವನ್ನು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಮರೆಮಾಡಿ</string>
@@ -721,7 +721,7 @@ Do you want to switch to this account?</string>
     <string name="set_up_later">Set up later</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">ದೃಢೀಕರಿಸಿ</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -930,7 +930,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">೧ ಗಂಟೆ</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -963,7 +963,7 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">ಅಳಿಸಿ ಕಳುಹಿಸಿ</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1128,9 +1128,13 @@ Do you want to switch to this account?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

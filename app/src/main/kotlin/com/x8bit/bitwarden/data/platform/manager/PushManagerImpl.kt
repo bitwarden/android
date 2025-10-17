@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.manager.DispatcherManager
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PushNotificationLogOutReason
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -44,12 +46,14 @@ private val PUSH_TOKEN_UPDATE_DELAY: Duration = 7.days
 /**
  * Primary implementation of [PushManager].
  */
+@Suppress("LongParameterList")
 class PushManagerImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
     private val pushDiskSource: PushDiskSource,
     private val pushService: PushService,
     private val clock: Clock,
     private val json: Json,
+    private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
 ) : PushManager {
     private val ioScope = CoroutineScope(dispatcherManager.io)
@@ -157,8 +161,15 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.UserNotification>(
                         string = notification.payload,
                     )
-                    .userId
-                    ?.let { mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(it)) }
+                    .takeUnless {
+                        featureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange) &&
+                            it.pushNotificationLogOutReason ==
+                            PushNotificationLogOutReason.KDF_CHANGE
+                    }
+                    ?.userId
+                    ?.let {
+                        mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = it))
+                    }
             }
 
             NotificationType.SYNC_CIPHER_CREATE,

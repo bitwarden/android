@@ -29,7 +29,7 @@
     <string name="internet_connection_required_message">চালিয়ে যাওয়ার আগে দয়া করে ইন্টারনেটে সংযোগ করুন।</string>
     <string name="internet_connection_required_title">ইন্টারনেট সংযোগ প্রয়োজন</string>
     <string name="invalid_master_password">Invalid master password. Try again.</string>
-    <string name="invalid_pin">Invalid PIN. Try again.</string>
+    <string name="invalid_pin">অবৈধ পিন। আবার চেষ্টা করুন।</string>
     <string name="launch">Launch</string>
     <string name="log_in_verb">লগ ইন করুন</string>
     <string name="log_in_noun">লগইন</string>
@@ -67,7 +67,7 @@
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
     <string name="value_has_been_copied">%1$s copied</string>
     <string name="verify_master_password">প্রধান পাসওয়ার্ড যাচাইকরণ</string>
-    <string name="verify_pin">Verify PIN</string>
+    <string name="verify_pin">পিন যাচাই করুন</string>
     <string name="view">দেখুন</string>
     <string name="yes">হ্যাঁ</string>
     <string name="account">অ্যাকাউন্ট</string>
@@ -1128,9 +1128,13 @@ Do you want to switch to this account?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

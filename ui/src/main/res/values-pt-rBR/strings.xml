@@ -914,7 +914,7 @@ Você deseja mudar para esta conta?</string>
     <string name="use_chrome_beta_autofill_integration">Usar integração com o preenchimento automático do Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Assim que ativado, você será direcionado para as configurações do navegador para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
-    <string name="no_folder">Nenhuma pasta</string>
+    <string name="no_folder">Sem pasta</string>
     <string name="show_less">Mostrar menos</string>
     <string name="add_field">Adicionar campo</string>
     <string name="share_error_details">Compartilhar detalhes do erro</string>
@@ -994,7 +994,7 @@ quaisquer problema.</string>
     <string name="scan_a_qr_code">Ler um código QR</string>
     <string name="cannot_add_authenticator_key">Não consegue adicionar a chave do autenticador?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Conceda permissão ao uso da câmera para usar o leitor</string>
-    <string name="empty_item_list">Lista de Itens Vazios</string>
+    <string name="empty_item_list">Lista de itens vazia</string>
     <string name="you_dont_have_items_to_display">Você não tem nenhum item para exibir.</string>
     <string name="empty_item_list_instruction">Adicione um novo código para proteger suas contas.</string>
     <string name="add_code">Adicionar código</string>
@@ -1113,8 +1113,8 @@ quaisquer problema.</string>
         <item quantity="other">%1$d itens foram importados para o seu cofre.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Ative o preenchimento automático do navegador para continuar preenchendo senhas</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">O seu navegador foi atualizado recentemente, e isso desativou o preenchimento automático do Bitwarden. Para continuar preenchendo suas senhas com o Bitwarden, ative o preenchimento automático de navegador nas configurações de preenchimento automático.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Os seus navegadores foram atualizados recentemente, e isso desativou o preenchimento automático do Bitwarden. Para continuar preenchendo suas senhas com o Bitwarden, ative o preenchimento automático de navegador nas configurações de preenchimento automático.</string>
     <string name="not_now">Agora não</string>
     <string name="import_from_bitwarden">Importar do Bitwarden</string>
     <string name="select_account">Selecionar conta</string>
@@ -1130,9 +1130,13 @@ quaisquer problema.</string>
     <string name="export_failed">Falha ao exportar</string>
     <string name="passwords">Senhas</string>
     <string name="passkeys">Chaves de acesso</string>
-    <string name="import_verb">Importar</string>
     <string name="why_is_this_step_required">Por que esta etapa é necessária?</string>
     <string name="kdf_update_failed_active_account_not_found">Falha na atualização da KDF, conta ativa não encontrada. Tente novamente ou entre em contato conosco.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas configurações da KDF. Tente novamente ou entre em contato conosco.</string>
     <string name="the_import_request_could_not_be_processed">A solicitação de importação não pôde ser processada.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Seu cofre está vazio, ou não é permitido importar certos tipos de itens na sua conta.</string>
+    <string name="no_items_available_to_import">Nenhum item disponível para importar</string>
+    <string name="select_a_different_account">Selecione uma conta diferente</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

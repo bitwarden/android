@@ -165,7 +165,7 @@
     <string name="no_items_for_vault">Glabātavā nav vienumu, kas atbilst \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Meklēt pieteikšanās vienumu vai pievienot jaunu</string>
     <string name="disabled">Atspējots</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir ar Bitwarden automātiskās aizpildes pakalpojumu. Vairāk par Bitwarden automātisko aizpildi var uzzināt iestatījumu skatā.</string>
     <string name="autofill_title">Automātiskā aizpilde</string>
     <string name="autofill_or_view">Automātiski aizpildīt vai apskatīt šo vienumu?</string>
     <string name="search">Meklēt</string>
@@ -173,7 +173,7 @@
     <string name="authenticator_app_title">Autentificētāja lietotne</string>
     <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
     <string name="enter_verification_code_email">Jāievada 6 ciparu apliecinājuma kods, kas tika nosūtīts uz %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada kods, kas tika nosūtīts e-pastā, lai apliecinātu savu identitāti.</string>
     <string name="recovery_code_title">Atkopes kods</string>
     <string name="remember">Atcerēties</string>
     <string name="remember_email">Atcerēties e-pasta adresi</string>
@@ -396,7 +396,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="password_generator_policy_in_effect">Viens vai vairāki apvienības nosacījumi ietekmē veidotāja iestatījumus</string>
     <string name="unable_to_save_attachment">Šī pielikuma saglabāšanā radās sarežgījumi. Ja tie turpina pastāvēt, to var saglabāt tīmekļa glabātavā.</string>
     <string name="save_attachment_success">Pielikums veiksmīgi saglabāts</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Lūgums iespējot \"Automātiskās aizpildes pieejamības pakalpojums\" Bitwarden iestatījumos, lai izmantotu automātiskās aizpildes laukumu.</string>
     <string name="autofill_tile_uri_not_found">Paroļu lauki netika atrasti</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Vienums tika pārvietots uz atkritni.</string>
@@ -740,7 +740,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Uzzināt par veidiem, kā nepieļaut nepiekļūšanu kontam</annotation></string>
     <string name="help_with_server_geolocations">Palīdzība par servera ģeogrāfiskajām atrašanās vietām.</string>
     <string name="email_address_required">E-pasta adrese (nepieciešama)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Jāatver e-pasta ziņojumā esošā saite, lai apliecininātu savu e-pasta adresi un turpinātu sava konta izveidi.</string>
     <string name="change_email_address">Nomainīt e-pasta adresi</string>
     <string name="next">Turpināt</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nevar atkopt pazaudētu vai aizmirstu galveno paroli.</string>
@@ -771,7 +771,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="turn_on_browser_autofill_integration_later">Ieslēgt pārlūka automātiskās aizpildes iekļaušanu vēlāk?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Pie šī soļa pabeigšanas var agriezties jebkurā brīdī iestatījumos.</string>
     <string name="what_bitwarden_has_to_offer">Tagad var izmantot automātisko aizpildi, lai pieteiktos lietotnēs un tīmekļvietnēs ar savām saglabātajām parolēm. Tagad ir izpētāms viss pārējais, kas ir Bitwarden piedāvājumā.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Viss ir gatavs.</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Kļūda savienojuma izveidošanā ar Duo pakalpojumu. Jāizmanto cits divpakāpju pieteikšanās veids vai jāvēršas pie Duo pēc palīdzības.</string>
     <string name="master_password_hint_not_specified">Galvenās paroles norāde</string>
     <string name="new_master_password_hint">Jaunā galvenās paroles norāde</string>
@@ -811,7 +811,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="need_help_check_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Šis nav atzīts Bitwarden serveris. Var būt nepieciešams vērsties pie nodrošinātāja, lai pārbaudītu, vai atjaunināt savu serveri.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Sinhronizē pieteikšanās vienumus...</string>
     <string name="download_the_browser_extension">Lejupielādēt pārlūka paplašinājumu</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Jādodas uz bitwarden.com/download, lai iekļautu Bitwarden savā iecienītākajā pārlūkā, lai iegūtu nevainojamu pieredzi.</string>
     <string name="use_the_web_app">Izmantot tīmekļa lietotni</string>
@@ -869,13 +869,13 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="coachmark_3_of_3">3. no 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Jāpievieno tīmekļa adrese, lai izmantotu automātisko aizpildi, lai piekļūtu šim kontam.</string>
     <string name="learn_about_new_logins">Uzzināt par jauniem pieteikšanās vienumiem</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Mēs izrādīsim galvenās jaunu pieteikšanās vienumu pievienošanas iespējas.</string>
     <string name="explore_the_generator">Izpētīt veidotāju</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Drošas pieteikšanās informācijas izveidošanas iepazīšana soli pa solim.</string>
     <string name="import_client_certificate">Ievietot klienta sertifikātu</string>
     <string name="enter_the_client_certificate_password_and_alias">Jāievada klienta sertifikāta parole un vēlamais aizstājvārds.</string>
     <string name="alias">Aizstājvārds</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Veidotājs ir izmantojams, lai izveidotu drošas paroles, paroļu vārdkopas un lietotājvārdus.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Paroļu vārdkopas ir spēcīgas paroles, kuras bieži vien ir vieglāk atcerēties un rakstīt nekā nejaušas paroles. Tās ir noderīgas, lai pieteiktos kontos, kuros automātiskā aizpilde nav pieejama, piemēram, straumēšanas pakalpojumā tālrādī.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Neatkārtojami lietotājvārdi pievieno papildu drošības slāni un var palīdzēt, lai traucētu urķiem kontu atrašanā.</string>
     <string name="coachmark_1_of_6">1 NO 6</string>
@@ -884,8 +884,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="coachmark_4_of_6">4 NO 6</string>
     <string name="coachmark_5_of_6">5 NO 6</string>
     <string name="coachmark_6_of_6">6 NO 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Šīs iespējas ir izmantojamas, lai pielāgotu savas paroles atbilstību konta tīmekļvietnes prasībām.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Pēc savas jaunās paroles saglabāšanas Bitwarden nevajadzētu aizmirst par tās atjaunināšanu sava konta tīmekļvietnē.</string>
     <string name="verify_your_identity">Apliecināt savu identitāti</string>
     <string name="error_loading_certificate">Kļūda sertifikāta ielādēšanā</string>
     <string name="certificate_alias">Sertifikāta aizstājvārds</string>
@@ -1117,8 +1117,8 @@ Vai pārslēgties uz šo kontu?</string>
         <item quantity="other">Glabātavā tika ievietoti %1$d vienumi.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Jāiespējo pārlūka automātiskā aizpilde, lai turpinātu aizpildīt paroles</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Tavs pārlūks nesen ir atjaunināts, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, pārlūka automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Tavi pārlūki nesen ir atjaunināti, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, visos uzstādītajos pārlūkos automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
     <string name="not_now">Ne tagad</string>
     <string name="import_from_bitwarden">Ievietot no Bitwarden</string>
     <string name="select_account">Atlasīt kontu</string>
@@ -1134,9 +1134,13 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="export_failed">Izgūšana neizdevās</string>
     <string name="passwords">Paroles</string>
     <string name="passkeys">Piekļuves atslēgas</string>
-    <string name="import_verb">Ievietot</string>
     <string name="why_is_this_step_required">Kādēļ šis solis ir nepieciešams?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF atjaunināšana neizdevās, netika atrasts konts. Lūgums mēģināt vēlreiz vai sazināties ar mums.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">KDF iestatījumu atjaunināšanas laikā atgadījās kļūda. Lūgums mēģināt vēlreiz vai sazināties ar mums.</string>
     <string name="the_import_request_could_not_be_processed">Ievietošanas pieprasījumu nevarēja apstrādāt.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Glabātava var būt tukša vai kontam nav atļauta dažu vienumu veidu ievietošana.</string>
+    <string name="no_items_available_to_import">Nav pieejams neviens ievietojams vienums</string>
+    <string name="select_a_different_account">Atlasīt citu kontu</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

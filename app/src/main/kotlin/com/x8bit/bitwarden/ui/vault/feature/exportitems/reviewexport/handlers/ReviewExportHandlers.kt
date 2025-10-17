@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport.ReviewExpor
  */
 data class ReviewExportHandlers(
     val onImportItemsClick: () -> Unit,
+    val onSelectAnotherAccountClick: () -> Unit,
     val onCancelClick: () -> Unit,
     val onDismissDialog: () -> Unit,
     val onNavigateBackClick: () -> Unit,
@@ -35,6 +36,9 @@ data class ReviewExportHandlers(
         fun create(viewModel: ReviewExportViewModel): ReviewExportHandlers = ReviewExportHandlers(
             onImportItemsClick = {
                 viewModel.trySendAction(ReviewExportAction.ImportItemsClick)
+            },
+            onSelectAnotherAccountClick = {
+                viewModel.trySendAction(ReviewExportAction.SelectAnotherAccountClick)
             },
             onCancelClick = {
                 viewModel.trySendAction(ReviewExportAction.CancelClick)

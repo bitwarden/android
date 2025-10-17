@@ -164,7 +164,7 @@
     <string name="no_items_for_vault">Nincs elem a széfben \"%1$s\" egyezéssel.</string>
     <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
     <string name="disabled">Letiltva</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">A legeszerűbben a Bitwarden Automata-kitöltő Szolgáltatással tud belépést hozzáadni széfjéhez. A Beállításokben többet tudhat meg a Bitwarden Automat-kitöltő szolgáltatásról.</string>
     <string name="autofill_title">Automatikus kitöltés</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
     <string name="search">Keresés</string>
@@ -172,7 +172,7 @@
     <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
     <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
     <string name="enter_verification_code_email">6 számjegyű ellenőrző kód megadása, ami %1$s e-mail címre lett küldve.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Nem ismerhető fel ez az eszköz. Írjuk be az email címünkre küldött kódot a személyazonosság igazolásához.</string>
     <string name="recovery_code_title">Helyreállító kód</string>
     <string name="remember">Megjegyzés</string>
     <string name="remember_email">Email cím megjegyzése</string>
@@ -737,7 +737,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">További információ a fiókzárolás megelőzésének módjairól</annotation></string>
     <string name="help_with_server_geolocations">Segítség szerver geolokációval.</string>
     <string name="email_address_required">Email cím (kötelező)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Válasszuk ki az emailben található hivatkozást az email cím ellenőrzéséhez és folytassuk a fiók létrehozását. </string>
     <string name="change_email_address">Email cím megváltoztatása</string>
     <string name="next">Következő</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
@@ -767,7 +767,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="turn_on_browser_autofill_integration_later">A böngésző automatikus kitöltési integrációjának bekapcsolása?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Bármikor be tudja fejezni ezt a lépést a Beállításokban.</string>
     <string name="what_bitwarden_has_to_offer">Mostantól az automatikus kitöltéssel bejelentkezhetünk az alkalmazásokba és webhelyekre a mentett jelszavakkal. Most mindent felfedezhetünk, amit a Bitwarden kínál.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Készen is vagyunk!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól.</string>
     <string name="master_password_hint_not_specified">Mesterjelszó emlékeztető</string>
     <string name="new_master_password_hint">Új mesterjelszó kérés</string>
@@ -807,7 +807,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="need_help_check_out_import_help">Segítségre van szükség? Nézzük meg az importálás súgót.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Mentsük el az exportált fájlt olyan helyre a számítógépen, ahol könnyen megtalálhatjuk.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ez nem egy felismert Bitwarden szerver. Konzultálhatunk a szolgáltatóval vagy frissítsük a szervert.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Bejelentkezések szinkronizálása...</string>
     <string name="download_the_browser_extension">Böngésző bővítmény letöltése</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Keressük fel  a bitwarden.com/download webhelyet és integráljuk a Bitwardent kedvenc böngészőbe a zökkenőmentes élmény érdekében.</string>
     <string name="use_the_web_app">Webalkalmazás használata</string>
@@ -865,13 +865,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Meg kell adnia egy webcímet, hogy az automatikus kitöltést használjunk a fiók eléréséhez.</string>
     <string name="learn_about_new_logins">További információ az új bejelentkezésekről</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Végigmegyünk az új bejelentkezés hozzáadásához szükséges legfontosabb funkciókon.</string>
     <string name="explore_the_generator">A generátor felfedezése</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Tudjunk meg többet a biztonságos bejelentkezési hitelesítő adatok létrehozásáról egy vezetett bemutatóval.</string>
     <string name="import_client_certificate">Ügyfél tanúsítvány importálása</string>
     <string name="enter_the_client_certificate_password_and_alias">Adjuk meg az ügyfél tanúsítvány jelszavát és a tanúsítvány kívánt álnevét.</string>
     <string name="alias">Álnév</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Használjuk a generátort biztonságos jelszavak, jelmondatok és felhasználónevek létrehozásához.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">A jelmondatok erős jelszavak, amelyeket gyakran könnyebb megjegyezni és begépelni, mint a véletlenszerű jelszavakat. Hasznosak az olyan fiókokba bejelentkezéshez, ahol az Automatikus kitöltés nem érhető el, például a tévén a streaming szolgáltatásba.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Az egyedi felhasználónevek további biztonsági réteget adnak és megakadályozhatják, hogy a hackerek megtalálják a fiókokat.</string>
     <string name="coachmark_1_of_6">1/6</string>
@@ -880,8 +880,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="coachmark_4_of_6">4/6</string>
     <string name="coachmark_5_of_6">5/6</string>
     <string name="coachmark_6_of_6">6/6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Ezekkel az opciókkal állíthatjuk be a jelszót a fiók követelményeihez.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Miután elmentettük az új jelszót a Bitwardenbe, ne felejtsük el frissíteni azt a fiók webhelyén. </string>
     <string name="verify_your_identity">Személyazonosság ellenőrzése</string>
     <string name="error_loading_certificate">Hiba történt a tanúsítványok betöltésekor.</string>
     <string name="certificate_alias">Tanúsítvány álnév</string>
@@ -1110,8 +1110,8 @@ Szeretnénk átváltani erre a fiókra?</string>
         <item quantity="other">%1$d elem lett importálva a széfbe.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Engedélyezzük a böngészőben az automatikus kitöltést a jelszavak folyamatos kitöltéséhez.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">A böngésző nemrégiben frissült, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngésző automatikus kiltöltés funkciót az automatikus kitöltés beállításaiban.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">A böngészők nemrégiben frissültek, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngészők automatikus kiltöltés funkcióját az automatikus kitöltés beállításaiban.</string>
     <string name="not_now">Most nem</string>
     <string name="import_from_bitwarden">Importálás a Bitwardenből</string>
     <string name="select_account">Fiók kiválasztása</string>
@@ -1127,9 +1127,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="export_failed">Az exportálás sikertelen volt.</string>
     <string name="passwords">Jelszavak</string>
     <string name="passkeys">Hozzáférési kulcsok</string>
-    <string name="import_verb">Importálás</string>
     <string name="why_is_this_step_required">Miért szükséges ez a lépés?</string>
     <string name="kdf_update_failed_active_account_not_found">A Kdf frissítés sikertelen volt, aktív fiók nem található. Próbáljuk újra vagy vegyük fel a kapcsolatot a szolgáltatóval.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Hiba történt a kdf beállítások frissítésének kísérlete során. Próbáljuk újra vagy vegyük fel a kapcsolatot a szolgáltatóval.</string>
     <string name="the_import_request_could_not_be_processed">Az importálási kérelmet nem lehetett feldolgozni.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Előfordulhat, hogy a széf üres vagy egyes elemtípusok importálása nem engedélyezett a fiókhoz.</string>
+    <string name="no_items_available_to_import">Nincsenek elérhető importálandó elemek.</string>
+    <string name="select_a_different_account">Válasszunk egy másik fiókot.</string>
+    <string name="verify_your_account_email_address">Fiók email cím ellenőrzése</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Írjuk be azt a 6 számjegyű kódot, amely emailben lett elküldve az alábbi címre.</string>
 </resources>

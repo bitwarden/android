@@ -13,13 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
+import com.bitwarden.authenticator.ui.platform.components.listitem.VaultVerificationCodeItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -50,10 +51,11 @@ fun ItemSearchContent(
             }
         }
 
-        itemsIndexed(viewState.itemList) { index, it ->
+        itemsIndexed(viewState.itemList) { index, item ->
             VaultVerificationCodeItem(
-                displayItem = it,
-                onCopyClick = searchHandlers.onItemClick,
+                displayItem = item,
+                onItemClick = { searchHandlers.onItemClick(item.authCode) },
+                onDropdownMenuClick = { searchHandlers.onDropdownMenuClick(it, item) },
                 cardStyle = viewState.itemList.toListItemCardStyle(index = index),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,6 +72,7 @@ fun ItemSearchContent(
         sharedCodes(
             sharedItems = viewState.sharedItems,
             onCopyClick = searchHandlers.onItemClick,
+            onDropdownMenuClick = searchHandlers.onDropdownMenuClick,
         )
 
         item {
@@ -82,6 +85,7 @@ fun ItemSearchContent(
 private fun LazyListScope.sharedCodes(
     sharedItems: SharedCodesDisplayState,
     onCopyClick: (authCode: String) -> Unit,
+    onDropdownMenuClick: (VaultDropdownMenuAction, VerificationCodeDisplayItem) -> Unit,
 ) {
     when (sharedItems) {
         is SharedCodesDisplayState.Codes -> {
@@ -97,16 +101,15 @@ private fun LazyListScope.sharedCodes(
                     Spacer(Modifier.height(height = 12.dp))
                 }
 
-                itemsIndexed(section.codes) { index, it ->
+                itemsIndexed(section.codes) { index, item ->
                     VaultVerificationCodeItem(
-                        displayItem = it,
-                        onCopyClick = onCopyClick,
+                        displayItem = item,
+                        onItemClick = { onCopyClick(item.authCode) },
+                        onDropdownMenuClick = { onDropdownMenuClick(it, item) },
                         cardStyle = section.codes.toListItemCardStyle(index = index),
                         modifier = Modifier
                             .fillMaxWidth()
-                            // There is some built-in padding to the menu button that
-                            // makes up the visual difference here.
-                            .padding(start = 16.dp, end = 12.dp),
+                            .standardHorizontalMargin(),
                     )
                 }
             }
@@ -118,31 +121,9 @@ private fun LazyListScope.sharedCodes(
                     text = stringResource(BitwardenString.shared_codes_error),
                     color = BitwardenTheme.colorScheme.text.secondary,
                     style = BitwardenTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier.standardHorizontalMargin(),
                 )
             }
         }
     }
-}
-
-@Composable
-private fun VaultVerificationCodeItem(
-    displayItem: VerificationCodeDisplayItem,
-    cardStyle: CardStyle,
-    onCopyClick: (authCode: String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    VaultVerificationCodeItem(
-        authCode = displayItem.authCode,
-        issuer = displayItem.title,
-        periodSeconds = displayItem.periodSeconds,
-        timeLeftSeconds = displayItem.timeLeftSeconds,
-        alertThresholdSeconds = displayItem.alertThresholdSeconds,
-        supportingLabel = displayItem.subtitle,
-        startIcon = displayItem.startIcon,
-        onCopyClick = { onCopyClick(displayItem.authCode) },
-        onItemClick = { onCopyClick(displayItem.authCode) },
-        cardStyle = cardStyle,
-        modifier = modifier,
-    )
 }

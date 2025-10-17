@@ -1128,9 +1128,13 @@ Pretende mudar para esta conta?</string>
     <string name="export_failed">Falha na exportação</string>
     <string name="passwords">Palavras-passe</string>
     <string name="passkeys">Chaves de acesso</string>
-    <string name="import_verb">Importar</string>
     <string name="why_is_this_step_required">Porque é que este passo é necessário?</string>
     <string name="kdf_update_failed_active_account_not_found">Falha na atualização do Kdf, conta ativa não encontrada. Por favor, tente novamente ou entre em contacto connosco.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas configurações kdf. Por favor, tente novamente ou entre em contacto connosco.</string>
     <string name="the_import_request_could_not_be_processed">O pedido de importação não pôde ser processado.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">O seu cofre pode estar vazio ou a importação de alguns tipos de itens pode não ser permitida para a sua conta.</string>
+    <string name="no_items_available_to_import">Não há itens disponíveis para importar</string>
+    <string name="select_a_different_account">Selecione uma conta diferente</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

@@ -31,7 +31,7 @@
     <string name="invalid_master_password">अवैध मुख्य पासवर्ड. पुनः प्रयत्न करा.</string>
     <string name="invalid_pin">अवैध पिन. पुनः प्रयत्न करा.</string>
     <string name="launch">उघडा</string>
-    <string name="log_in_verb">Log in</string>
+    <string name="log_in_verb">प्रवेश करा</string>
     <string name="log_in_noun">प्रवेश</string>
     <string name="log_out">बाहेर पडा</string>
     <string name="logout_confirmation">नक्की बाहेर पडायचे?</string>
@@ -61,7 +61,7 @@
     <string name="submit">पाठवा</string>
     <string name="sync">संकालन</string>
     <string name="uri">URI</string>
-    <string name="website_uri">Website (URI)</string>
+    <string name="website_uri">वेबसाइट (URI)</string>
     <string name="username">Username</string>
     <string name="validation_field_required">The %1$s field is required.</string>
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
@@ -186,7 +186,7 @@
     <string name="unable_to_download_file">Unable to download file.</string>
     <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
-    <string name="authenticator_key">Authenticator key</string>
+    <string name="authenticator_key">ऑथेंटिकेटर की</string>
     <string name="verification_code_totp">Verification code (TOTP)</string>
     <string name="authenticator_key_added">Authenticator key added.</string>
     <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
@@ -533,7 +533,7 @@ Scanning will happen automatically.</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
     <string name="scan_qr_code">QR कोड स्कॅन करा</string>
     <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
-    <string name="authenticator_key_scanner">Authenticator key</string>
+    <string name="authenticator_key_scanner">ऑथेंटिकेटर की</string>
     <string name="authenticator_key_help">Authenticator key help</string>
     <string name="enter_key_manually">Enter key manually</string>
     <string name="add_totp">Add TOTP</string>
@@ -1128,9 +1128,13 @@ Do you want to switch to this account?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

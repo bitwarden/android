@@ -761,10 +761,10 @@
     <string name="turn_on_autofill">Омогућите ауто-пуњење</string>
     <string name="autofill_setup">Подешавање за ауто-попуњавање</string>
     <string name="turn_on_browser_autofill_integration">Укључите интеграцију ауто-пуњења прегледача</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Користите прегледач који захтева посебне дозволе да би Bitwarden аутоматски попунио ваше лозинке.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Користите прегледач који захтева посебне дозволе да би Bitwarden аутоматски попунио ваше лозинке.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Користите прегледач који захтева посебне дозволе да би Bitwarden аутоматски попунио ваше лозинке. Омогућите жељену интеграцију аутоматског попуњавања испод.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Користите прегледаче који захтевају посебне дозволе за Bitwarden да аутоматски попуњава ваше лозинке. Омогућите аутоматско попуњавање за све инсталиране прегледаче да бисте наставили.</string>
     <string name="use_autofill_to_log_into_your_accounts">Користите ауто-пуњење да бисте се пријавили на своје налоге једним додиром.</string>
     <string name="turn_on_later">Упалити касније</string>
     <string name="turn_on_autofill_later">Упалити ауто-пуњење касније?</string>
@@ -960,7 +960,7 @@
     <string name="log_deleted">Извештај је избрисан</string>
     <string name="app_settings">Подешавања апликације</string>
     <string name="replace_existing_certificate">Замените постојећи сертификат?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Сертификат са тим алиасом \"%s\" веш постији. Да се промени?\nЗаменити сертификат може утицати на вашу везу са било којим срединама које тренутно користе.</string>
     <string name="replace_certificate">Преписати сертификат</string>
     <string name="unable_to_read_certificate">Није могуће прочитати сертификат.</string>
     <string name="cannot_delete_your_account">Није могуће избрисати Ваш налог</string>
@@ -973,7 +973,7 @@
     <string name="use_dynamic_colors">Користи динамичке боје</string>
     <string name="use_dynamic_colors_question">Користити динамичке боје?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамичне боје користе боје система и не могу да испуне све смернице за приступачност.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операција лозинке није успела јер прегледач (%1$s) није препознат. Изаберите „Повери“ да бисте додали %1$s на листу локално поузданих апликација.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операција кључа за приступ није успела јер прегледач није поуздан.</string>
     <string name="trust">Повери</string>
     <string name="trusted_by_you_learn_more">Ово су апликације или прегледачи који Bitwarden не верује стандардно, али ВИ верујее да урадите операције са кључом за приступ.</string>
@@ -1098,7 +1098,7 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Почиње са“ је напредна опција са повећаним ризиком од откривања акредитива.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регуларни израз“ је напредна опција са повећаним ризиком од откривања акредитива ако се неправилно користе.</string>
-    <string name="later">Later</string>
+    <string name="later">Касније</string>
     <string name="encryption_settings_updated">Encryption settings updated</string>
     <string name="update_your_encryption_settings">Update your encryption settings</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
@@ -1136,9 +1136,13 @@
     <string name="export_failed">Извоз није успео</string>
     <string name="passwords">Лозинке</string>
     <string name="passkeys">Приступни кључеви</string>
-    <string name="import_verb">Увоз</string>
     <string name="why_is_this_step_required">Зашто је потребан овај корак?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

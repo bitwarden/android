@@ -2684,6 +2684,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                         id = "mockCollectionId-2",
                         name = "mockCollectionName-2",
                         isSelected = false,
+                        isDefaultUserCollection = false,
                     ),
                 ),
             )
@@ -4444,6 +4445,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 id = "mockCollectionId-new",
                 name = "mockCollectionName-new",
                 isSelected = true,
+                isDefaultUserCollection = false,
             ),
         )
 
@@ -4470,6 +4472,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 id = "mockCollectionId-2",
                 name = "mockCollectionName-2",
                 isSelected = false,
+                isDefaultUserCollection = false,
             ),
         )
 

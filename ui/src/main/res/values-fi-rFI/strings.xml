@@ -85,7 +85,7 @@
     <string name="edit_card">Muokkaa korttia</string>
     <string name="edit_identity">Muokkaa henkilöllisyyttä</string>
     <string name="edit_note">Muokkaa muistiota</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Muokkaa SSH avainta</string>
     <string name="enter_email_for_hint">Syötä tilisi sähköpostiosoite saadaksesi pääsalasanan vihjeen.</string>
     <string name="favorite">Suosikki</string>
     <string name="unfavorite">Poista suosikeista</string>
@@ -156,7 +156,7 @@
     <string name="view_card">Näytä kortti</string>
     <string name="view_identity">Näytä henkilöllisyys</string>
     <string name="view_note">Näytä muistio</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Näytä SSH-avain</string>
     <string name="web_vault">Bitwarden Verkkoholvi</string>
     <string name="items">Kohteet</string>
     <string name="items_for_uri">Kohteet palvelulle %1$s</string>
@@ -164,15 +164,15 @@
     <string name="no_items_for_vault">Holvissasi ei ole kohdetta \"%1$s\" vastavia tietoja</string>
     <string name="search_for_a_login_or_add_a_new_login">Hae kirjautumistietoa tai lisää uusi</string>
     <string name="disabled">Ei käytössä</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="bitwarden_autofill_service_alert2">Uusien kirjautumistietojen lisääminen on kötevintä Bitwardenin automaattitäytön palvelun avulla. Asetuksista löydät lisätietoja palvelusta.</string>
+    <string name="autofill_title">Automaattitäyttö</string>
     <string name="autofill_or_view">Haluatko täyttää kohteen automaattisesti vai tarkastella sitä?</string>
     <string name="search">Etsi</string>
     <string name="learn_org">Lisätietoja organisaatioista</string>
     <string name="authenticator_app_title">Todennussovellus</string>
     <string name="enter_verification_code_app">Syötä todennussovelluksesi näyttämä kuusinumeroinen todennuskoodi.</string>
     <string name="enter_verification_code_email">Syötä osoitteeseen %1$s lähetetty kuusinumeroinen todennuskoodi.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Laitetta ei tunnistettu. Vahvista henkilöllisyytesi syöttämällä sähköpostitse saamasi koodi.</string>
     <string name="recovery_code_title">Palautuskoodi</string>
     <string name="remember">Muista</string>
     <string name="remember_email">Muista sähköpostiosoite</string>
@@ -458,7 +458,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="password_info">Halutessasi, vaadi käyttäjiä syöttämään salasana Sendin avaamiseksi.</string>
     <string name="remove_password">Poista salasana</string>
     <string name="removing_send_password">Poistetaan salasana</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Salasana poistettiin</string>
     <string name="add_a_send">Lisää Send</string>
     <string name="copy_link">Kopioi linkki</string>
     <string name="share_link">Jaa linkki</string>
@@ -467,8 +467,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="edit_send">Muokkaa Sendiä</string>
     <string name="edit_file_send">Edit file Send</string>
     <string name="edit_text_send">Edit text Send</string>
-    <string name="add_file_send">New file Send</string>
-    <string name="add_text_send">New text Send</string>
+    <string name="add_file_send">Uusi tiedosto-Send</string>
+    <string name="add_text_send">Uusi teksti-Send</string>
     <string name="are_you_sure_delete_send">Haluatko varmasti poistaa Sendin?</string>
     <string name="send_deleted">Send poistettiin</string>
     <string name="send_updated">Send updated</string>
@@ -738,11 +738,11 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
     <string name="help_with_server_geolocations">Ohjeita palvelinsijainneista.</string>
     <string name="email_address_required">Sähköpostiosoite (vaaditaan)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Vahvista sähköpostiosoitteesi ja jatka tilisi luontia avaamalla viestissä oleva linkki.</string>
     <string name="change_email_address">Vaihda sähköpostiosoite</string>
     <string name="next">Seuraava</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden ei voi palauttaa kadonnutta tai unohtunutta pääsalasanaa.</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden ei voi nollata kadonnutta tai unohtunutta pääsalasanaa.</string>
     <string name="choose_your_master_password">Valitse pääsalasanasi</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Suojaa tietosi valitsemalla ainutlaatuinen ja vahva salasana.</string>
     <plurals name="minimum_characters">
@@ -768,7 +768,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Voit palata viimeistelemään tämän vaiheen milloin tahansa asetuksista.</string>
     <string name="what_bitwarden_has_to_offer">Nyt voit kirjautua sovelluksiin ja verkkosivustoille tallennetuilla salasanoillasi, ja olet vapaa tutustumaan Bitwardenin muihin ominaisuuksiin.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Kaikki on valmista!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua.</string>
     <string name="master_password_hint_not_specified">Pääsalasanan vihje</string>
     <string name="new_master_password_hint">Uusi pääsalasanan vihje</string>
@@ -776,7 +776,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="save_and_protect_your_data">Tallenna ja suojaa tietojasi</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">Uusi kirjautumistieto</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Jaa tiedostoja ja dataa turvallisesti kenen tahansa kanssa millä tahansa alustalla. Tiedot pysyvät päästä päähän salattuina ja altistuminen rajoitetaan.</string>
     <string name="send_sensitive_information_safely">Lähetä arkaluonteisia tietoja turvallisesti</string>
     <string name="import_saved_logins">Tuo tallennetut kirjautumistiedot</string>
     <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
@@ -807,8 +807,8 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
-    <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Tätä ei tunnistettu Bitwarden-palvelimeksi. Tarkista tiedot palveluntarjoajaltasi tai päivitä palvelimesi.</string>
+    <string name="syncing_logins_loading_message">Kirjautumistietoja synkronoidaan...</string>
     <string name="download_the_browser_extension">Lataa selaimen laajennus</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Käytä verkkosovellusta</string>
@@ -866,9 +866,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
     <string name="learn_about_new_logins">Lisätietoja uusista kirjautumistiedoista</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Sinut opastetaan uuden kirjautumistiedon lisäämisen läpi.</string>
     <string name="explore_the_generator">Tutustu generaattoriin</string>
-    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Tutustu opastetusti turvallisten kirjautumistietojen luontiin.</string>
     <string name="import_client_certificate">Import client certificate</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
     <string name="alias">Alias</string>
@@ -908,7 +908,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">Itse ylläpidetyn palvelimen URL-osoite</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Käytä Chromen automaattitäytön integrointia</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
@@ -918,18 +918,18 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="show_less">Näytä vähemmän</string>
     <string name="add_field">Lisää kenttä</string>
     <string name="share_error_details">Jaa virhetiedot</string>
-    <string name="flight_recorder">Flight recorder</string>
+    <string name="flight_recorder">Musta laatikko</string>
     <string name="flight_recorder_help">Flight recorder help</string>
-    <string name="view_recorded_logs">View recorded logs</string>
-    <string name="enable_flight_recorder_title">Enable flight recorder</string>
-    <string name="recorded_logs_title">Recorded logs</string>
-    <string name="no_logs_recorded">No logs recorded</string>
-    <string name="experiencing_an_issue">Experiencing an issue?</string>
-    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+    <string name="view_recorded_logs">Näytä tallennetut lokit</string>
+    <string name="enable_flight_recorder_title">Aktivoi musta laatikko</string>
+    <string name="recorded_logs_title">Tallennetut lokit</string>
+    <string name="no_logs_recorded">Lokeja ei ole tallennettu</string>
+    <string name="experiencing_an_issue">Oletko kohdannut ongelmia?</string>
+    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Aktivoi tilapäinen lokikirjaus paikallista tallennusta ja tarkastelua varten. Kun käytössä, sovelluksen tilat ja verkkopyynnöt saatetaan kirjata – ei koskaan arkaluonteisia holvin tietoja.</string>
     <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">Lokitiedot poistetaan automaattisesti 30 päivän kuluttua. Bitwarden voi tarkastella lokitietojasi vain, jos jaat ne.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
-    <string name="logging_duration">Logging duration</string>
+    <string name="logging_duration">Lokikirjauksen kesto</string>
     <string name="flight_recorder_one_hour">1 tunti</string>
     <string name="flight_recorder_eight_hours">8 tuntia</string>
     <string name="flight_recorder_twenty_four_hours">24 tuntia</string>
@@ -946,7 +946,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
     <string name="key_connector_domain">Key Connector domain:</string>
     <string name="key_connector_organization">Organisaatio:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+    <string name="password_no_longer_required_confirm_domain">Pääsalasanaa ei enää tarvita tämän organisaation jäsenille. Ole hyvä ja vahvista alla oleva verkkotunnus organisaation ylläpitäjän kanssa.</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
@@ -959,7 +959,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>
-    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="cannot_delete_your_account_explanation">Toimintoa ei voida suorittaa, koska tilisi on organisaation omistama. Saat lisätietoja olemalla yhteydessä organisaatiosi ylläpitoon.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">Näytä tiedosto-Send</string>
     <string name="view_text_send">Näytä teksti-Send</string>
@@ -988,7 +988,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="decryption_error">Virhe salauksen purussa</string>
     <string name="scan_a_qr_code">Skannaa QR-koodi</string>
     <string name="cannot_add_authenticator_key">Eikä todennusavaimen lisääminen onnistu?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Anna kameran käyttöoikeus käyttääksesi skannausta</string>
@@ -1125,12 +1125,16 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
+    <string name="export_failed">Vienti epäonnistui</string>
+    <string name="passwords">Salasanat</string>
+    <string name="passkeys">Pääsyavaimet</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

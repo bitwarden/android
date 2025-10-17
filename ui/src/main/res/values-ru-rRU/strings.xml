@@ -166,7 +166,7 @@
     <string name="no_items_for_vault">В вашем хранилище нет элементов, совпадающих с \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Поиск или добавление нового логина</string>
     <string name="disabled">Отключено</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">Самый простой способ добавить новые логины в ваше хранилище – это служба автозаполнения Bitwarden. Дополнительные сведения об использовании службы автозаполнения Bitwarden в разделе \'Настройки\'.</string>
     <string name="autofill_title">Автозаполнение</string>
     <string name="autofill_or_view">Выполнить автозаполнение или просмотреть этот элемент?</string>
     <string name="search">Поиск</string>
@@ -174,7 +174,7 @@
     <string name="authenticator_app_title">Приложение-аутентификатор</string>
     <string name="enter_verification_code_app">Введите 6-значный код подтверждения из вашего приложения-аутентификатора.</string>
     <string name="enter_verification_code_email">Введите 6-значный код подтверждения, который был отправлен на %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Мы не распознали это устройство. Введите код, отправленный на ваш email, чтобы подтвердить вашу личность.</string>
     <string name="recovery_code_title">Код восстановления</string>
     <string name="remember">Запомнить</string>
     <string name="remember_email">Запомнить email</string>
@@ -398,7 +398,7 @@
     <string name="password_generator_policy_in_effect">На настройки генератора влияют одна или несколько политик организации</string>
     <string name="unable_to_save_attachment">Возникла проблема с сохранением этого вложения. Если проблема не исчезнет, вы можете сохранить его из веб-хранилища.</string>
     <string name="save_attachment_success">Вложение успешно сохранено</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Пожалуйста, включите службу специальных возможностей автозаполнения в настройках Bitwarden для использования панели автозаполнения.</string>
     <string name="autofill_tile_uri_not_found">Полей ввода пароля не обнаружено</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Элемент отправлен в корзину.</string>
@@ -742,7 +742,7 @@
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Узнайте о способах предотвращения блокировки аккаунта</annotation></string>
     <string name="help_with_server_geolocations">Справка по геолокации сервера.</string>
     <string name="email_address_required">Email (обязательно)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Кликните ссылку в письме, чтобы подтвердить свой адрес email и продолжить создание у аккаунта.</string>
     <string name="change_email_address">Изменить адрес email</string>
     <string name="next">Далее</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не может восстановить утерянный или забытый мастер-пароль.</string>
@@ -774,7 +774,7 @@
     <string name="turn_on_browser_autofill_integration_later">Включить интеграцию с автозаполнением браузера позже?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Вы можете вернуться к выполнению этого шага в любое время в Настройках.</string>
     <string name="what_bitwarden_has_to_offer">Теперь вы можете изучить все возможности Bitwarden и начать безопасно управлять своими паролями.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Все готово!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo.</string>
     <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
     <string name="new_master_password_hint">Новая подсказка к мастер-паролю</string>
@@ -814,7 +814,7 @@
     <string name="need_help_check_out_import_help">Нужна помощь? Ознакомьтесь с <annotation link="importHelp">помощью по импорту</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Сохраните экспортированный файл</annotation> на компьютере, где его можно будет легко найти.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Этот сервер Bitwarden не распознан. Возможно вам следует связаться с провайдером или изменить свой сервер.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Синхронизация логинов...</string>
     <string name="download_the_browser_extension">Скачать расширение браузера</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Перейдите на bitwarden.com/download для интеграции Bitwarden в ваш любимый браузер для удобной работы.</string>
     <string name="use_the_web_app">Использовать веб-приложение</string>
@@ -872,13 +872,13 @@
     <string name="coachmark_3_of_3">3 ИЗ 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Вы должны добавить веб-адрес, чтобы использовать автозаполнение для доступа к этому аккаунту.</string>
     <string name="learn_about_new_logins">Узнайте о новых логинах</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Мы расскажем вам о ключевых функциях добавления нового логина.</string>
     <string name="explore_the_generator">Исследуйте генератор</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Узнайте больше о создании надежных учетных данных, просмотрев гид.</string>
     <string name="import_client_certificate">Импорт клиентского сертификата</string>
     <string name="enter_the_client_certificate_password_and_alias">Введите пароль клиентского сертификата и его название.</string>
     <string name="alias">Название</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Используйте генератор для создания надежных паролей, парольных фраз и имен пользователей.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Парольные фразы - это надежные пароли, которые зачастую легче запомнить и ввести, чем случайные пароли. Они полезны для входа в аккаунты, в которых автозаполнение недоступно, например в стриминговый сервис на телевизоре.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Уникальные имена пользователей обеспечивают дополнительный уровень безопасности и могут предотвратить поиск ваших аккаунтов хакерами.</string>
     <string name="coachmark_1_of_6">1 ИЗ 6</string>
@@ -887,8 +887,8 @@
     <string name="coachmark_4_of_6">4 ИЗ 6</string>
     <string name="coachmark_5_of_6">5 ИЗ 6</string>
     <string name="coachmark_6_of_6">6 ИЗ 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Используйте эти параметры, чтобы настроить пароль в соответствии с требованиями сайтов для вашего аккаунта.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">После того как вы сохраните новый пароль в Bitwarden, не забудьте обновить его на сайте вашего аккаунта.</string>
     <string name="verify_your_identity">Подтвердите вашу личность</string>
     <string name="error_loading_certificate">Ошибка загрузки сертификата</string>
     <string name="certificate_alias">Псевдоним сертификата</string>
@@ -1123,8 +1123,8 @@
         <item quantity="other">%1$d элемента были импортированы в ваше хранилище.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Включите автозаполнение браузера, чтобы пароли продолжали заполняться</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Недавно ваш браузер получил обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках браузера.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Недавно ваши браузеры получили обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках всех установленных браузеров.</string>
     <string name="not_now">Не сейчас</string>
     <string name="import_from_bitwarden">Импортировать из Bitwarden</string>
     <string name="select_account">Выберите аккаунт</string>
@@ -1140,9 +1140,13 @@
     <string name="export_failed">Не удалось экспортировать</string>
     <string name="passwords">Пароли</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Импорт</string>
     <string name="why_is_this_step_required">Почему необходим этот шаг?</string>
     <string name="kdf_update_failed_active_account_not_found">Ошибка обновления Kdf, активный аккаунт не найден. Пожалуйста, попробуйте еще раз или свяжитесь с нами.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">При попытке обновить настройки kdf произошла ошибка. Пожалуйста, повторите попытку или свяжитесь с нами.</string>
     <string name="the_import_request_could_not_be_processed">Запрос на импорт не может быть обработан.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Возможно, ваше хранилище пусто, или импорт некоторых типов элементов запрещен для вашего аккаунта.</string>
+    <string name="no_items_available_to_import">Нет элементов, доступных для импорта</string>
+    <string name="select_a_different_account">Выберите другой аккаунт</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

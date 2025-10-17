@@ -49,6 +49,7 @@ fun NavGraphBuilder.itemListingGraph(
         )
         itemSearchDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToEdit = navigateToEditItem,
         )
         qrCodeScanDestination(
             onNavigateBack = { navController.popBackStack() },

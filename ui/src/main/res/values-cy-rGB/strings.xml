@@ -31,7 +31,7 @@
     <string name="invalid_master_password">Prif gyfrinair annilys. Rhowch gynnig arall arni.</string>
     <string name="invalid_pin">PIN annilys. Rhowch gynnig arall arni.</string>
     <string name="launch">Lansio</string>
-    <string name="log_in_verb">Log in</string>
+    <string name="log_in_verb">Mewngofnodi</string>
     <string name="log_in_noun">Mewngofnodi</string>
     <string name="log_out">Allgofnodi</string>
     <string name="logout_confirmation">Ydych chi\'n siŵr eich bod am allgofnodi?</string>
@@ -67,7 +67,7 @@
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
     <string name="value_has_been_copied">%1$s wedi\'i gopïo</string>
     <string name="verify_master_password">Gwirio\'r prif gyfrinair</string>
-    <string name="verify_pin">Verify PIN</string>
+    <string name="verify_pin">Gwirio\'r PIN</string>
     <string name="view">Gweld</string>
     <string name="yes">Ydw</string>
     <string name="account">Cyfrif</string>
@@ -104,7 +104,7 @@
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
     <string name="logging_in">Logging in…</string>
-    <string name="login_to_bitwarden">Log in to Bitwarden</string>
+    <string name="login_to_bitwarden">Mewngofnodi i Bitwarden</string>
     <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
     <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
     <string name="master_password_hint">Awgrym o\'ch prif gyfrinair (dewisol)</string>
@@ -122,13 +122,13 @@
     <string name="never">byth</string>
     <string name="new_item_created">Eitem wedi\'i hychwanegu</string>
     <string name="no_cards">There are no cards in your vault.</string>
-    <string name="new_card">New card</string>
+    <string name="new_card">Cerdyn newydd</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
-    <string name="new_identity">New identity</string>
+    <string name="new_identity">Hunaniaeth newydd</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Eitem newydd</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -729,7 +729,7 @@ Do you want to switch to this account?</string>
     <string name="set_up_later">Set up later</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Cadarnhau</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -782,12 +782,12 @@ Do you want to switch to this account?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">Awgrym o\'ch prif gyfrinair</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-    <string name="new_login">New login</string>
+    <string name="new_login">Manylion mewngofnodi newydd</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Import saved logins</string>
@@ -811,7 +811,7 @@ Do you want to switch to this account?</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
     <string name="step_2_of_3">Step 2 of 3</string>
-    <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
+    <string name="log_in_to_bitwarden">Mewngofnodi i Bitwarden</string>
     <string name="step_3_of_3">Step 3 of 3</string>
     <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
@@ -830,14 +830,14 @@ Do you want to switch to this account?</string>
     <string name="import_successful">Import Successful!</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">Iawn</string>
     <string name="no_logins_were_imported">No logins were imported</string>
     <string name="import_error">Import error</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
-    <string name="type_ssh_key">SSH key</string>
-    <string name="public_key">Public key</string>
-    <string name="private_key">Private key</string>
+    <string name="type_ssh_key">Allwedd SSH</string>
+    <string name="public_key">Allwedd gyhoeddus</string>
+    <string name="private_key">Allwedd breifat</string>
     <string name="ssh_keys">SSH keys</string>
     <string name="copy_public_key">Copy public key</string>
     <string name="copy_fingerprint">Copy fingerprint</string>
@@ -942,7 +942,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">ar ôl awr</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -1152,9 +1152,13 @@ Do you want to switch to this account?</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
-    <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

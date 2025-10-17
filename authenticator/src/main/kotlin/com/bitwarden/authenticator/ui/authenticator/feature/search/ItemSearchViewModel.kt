@@ -5,23 +5,32 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.removeDiacritics
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -36,11 +45,13 @@ class ItemSearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val authenticatorRepository: AuthenticatorRepository,
+    private val authenticatorBridgeManager: AuthenticatorBridgeManager,
 ) : BaseViewModel<ItemSearchState, ItemSearchEvent, ItemSearchAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ItemSearchState(
             searchTerm = "",
             viewState = ItemSearchState.ViewState.Empty(message = null),
+            dialog = null,
         ),
 ) {
 
@@ -57,27 +68,92 @@ class ItemSearchViewModel @Inject constructor(
 
     override fun handleAction(action: ItemSearchAction) {
         when (action) {
-            is ItemSearchAction.BackClick -> {
-                sendEvent(ItemSearchEvent.NavigateBack)
+            is ItemSearchAction.BackClick -> handleBackClick()
+            is ItemSearchAction.ConfirmDeleteClick -> handleConfirmDeleteClick(action)
+            is ItemSearchAction.DismissDialog -> handleDismissDialog()
+            is ItemSearchAction.SearchTermChange -> handleSearchTermChange(action)
+            is ItemSearchAction.ItemClick -> handleItemClick(action)
+            is ItemSearchAction.DropdownMenuClick -> handleDropdownMenuClick(action)
+            is ItemSearchAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleBackClick() {
+        sendEvent(ItemSearchEvent.NavigateBack)
+    }
+
+    private fun handleConfirmDeleteClick(action: ItemSearchAction.ConfirmDeleteClick) {
+        mutableStateFlow.update {
+            it.copy(dialog = ItemSearchState.DialogState.Loading)
+        }
+
+        viewModelScope.launch {
+            trySendAction(
+                ItemSearchAction.Internal.DeleteItemReceive(
+                    result = authenticatorRepository.hardDeleteItem(action.itemId),
+                ),
+            )
+        }
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleSearchTermChange(action: ItemSearchAction.SearchTermChange) {
+        mutableStateFlow.update { it.copy(searchTerm = action.searchTerm) }
+        recalculateViewState()
+    }
+
+    private fun handleItemClick(action: ItemSearchAction.ItemClick) {
+        clipboardManager.setText(action.authCode)
+    }
+
+    private fun handleDropdownMenuClick(action: ItemSearchAction.DropdownMenuClick) {
+        when (action.menuAction) {
+            VaultDropdownMenuAction.COPY_CODE -> clipboardManager.setText(action.item.authCode)
+            VaultDropdownMenuAction.COPY_TO_BITWARDEN -> {
+                viewModelScope.launch {
+                    val item = authenticatorRepository
+                        .getItemStateFlow(itemId = action.item.id)
+                        .first { it.data != null }
+                    val isSuccess = authenticatorBridgeManager.startAddTotpLoginItemFlow(
+                        totpUri = item.data?.toOtpAuthUriString().orEmpty(),
+                    )
+                    sendAction(ItemSearchAction.Internal.AddTotpLoginItemFlowResult(isSuccess))
+                }
             }
 
-            is ItemSearchAction.SearchTermChange -> {
-                mutableStateFlow.update { it.copy(searchTerm = action.searchTerm) }
-                recalculateViewState()
+            VaultDropdownMenuAction.EDIT -> {
+                sendEvent(ItemSearchEvent.NavigateToEditItem(action.item.id))
             }
 
-            is ItemSearchAction.ItemClick -> {
-                clipboardManager.setText(action.authCode)
-                sendEvent(
-                    event = ItemSearchEvent.ShowToast(
-                        message = BitwardenString.value_has_been_copied.asText(action.authCode),
-                    ),
-                )
+            VaultDropdownMenuAction.DELETE -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ItemSearchState.DialogState.DeleteConfirmationPrompt(
+                            message = BitwardenString
+                                .do_you_really_want_to_permanently_delete_this_cannot_be_undone
+                                .asText(),
+                            itemId = action.item.id,
+                        ),
+                    )
+                }
             }
+        }
+    }
 
+    private fun handleInternalAction(action: ItemSearchAction.Internal) {
+        when (action) {
             is ItemSearchAction.Internal.AuthenticatorDataReceive -> {
                 handleAuthenticatorDataReceive(action)
             }
+
+            is ItemSearchAction.Internal.AddTotpLoginItemFlowResult -> {
+                handleAddTotpLoginItemFlowResult(action)
+            }
+
+            is ItemSearchAction.Internal.DeleteItemReceive -> handleDeleteItemReceive(action)
         }
     }
 
@@ -89,6 +165,40 @@ class ItemSearchViewModel @Inject constructor(
                 localCodes = localItems,
                 sharedData = action.sharedData,
             )
+        }
+    }
+
+    private fun handleAddTotpLoginItemFlowResult(
+        action: ItemSearchAction.Internal.AddTotpLoginItemFlowResult,
+    ) {
+        if (action.isSuccess) return
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ItemSearchState.DialogState.Error(
+                    title = BitwardenString.something_went_wrong.asText(),
+                    message = BitwardenString.please_try_again.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun handleDeleteItemReceive(action: ItemSearchAction.Internal.DeleteItemReceive) {
+        when (action.result) {
+            DeleteItemResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ItemSearchState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            DeleteItemResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(ItemSearchEvent.ShowSnackbar(BitwardenString.item_deleted.asText()))
+            }
         }
     }
 
@@ -166,7 +276,7 @@ class ItemSearchViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             SharedVerificationCodesState.SyncNotEnabled,
-                -> SharedCodesDisplayState.Codes(emptyList())
+                -> SharedCodesDisplayState.Codes(persistentListOf())
 
             is SharedVerificationCodesState.Success -> {
                 sharedData
@@ -184,14 +294,17 @@ class ItemSearchViewModel @Inject constructor(
 
             else -> {
                 ItemSearchState.ViewState.Content(
-                    itemList = filteredLocalCodes.map {
-                        it.toDisplayItem(
-                            alertThresholdSeconds = 7,
-                            sharedVerificationCodesState = authenticatorRepository
-                                .sharedCodesStateFlow
-                                .value,
-                        )
-                    },
+                    itemList = filteredLocalCodes
+                        .map {
+                            it.toDisplayItem(
+                                alertThresholdSeconds = 7,
+                                sharedVerificationCodesState = authenticatorRepository
+                                    .sharedCodesStateFlow
+                                    .value,
+                                showOverflow = true,
+                            )
+                        }
+                        .toImmutableList(),
                     sharedItems = sharedItemsState,
                 )
             }
@@ -207,6 +320,7 @@ class ItemSearchViewModel @Inject constructor(
 data class ItemSearchState(
     val searchTerm: String,
     val viewState: ViewState,
+    val dialog: DialogState?,
 ) : Parcelable {
     /**
      * Represents the specific view state for the search screen.
@@ -218,7 +332,7 @@ data class ItemSearchState(
          */
         @Parcelize
         data class Content(
-            val itemList: List<VerificationCodeDisplayItem>,
+            val itemList: ImmutableList<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
         ) : ViewState() {
             /**
@@ -238,6 +352,36 @@ data class ItemSearchState(
         @Parcelize
         data class Empty(val message: Text?) : ViewState()
     }
+
+    /**
+     * Display a dialog on the [ItemSearchScreen].
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Displays a prompt to confirm item deletion.
+         */
+        @Parcelize
+        data class DeleteConfirmationPrompt(
+            val message: Text,
+            val itemId: String,
+        ) : DialogState()
+
+        /**
+         * Displays the loading dialog to the user.
+         */
+        @Parcelize
+        data object Loading : DialogState()
+
+        /**
+         * Displays a generic error dialog to the user.
+         */
+        @Parcelize
+        data class Error(
+            val title: Text,
+            val message: Text,
+            val throwable: Throwable? = null,
+        ) : DialogState()
+    }
 }
 
 /**
@@ -250,9 +394,27 @@ sealed class ItemSearchAction {
     data object BackClick : ItemSearchAction()
 
     /**
+     * User has dismissed a dialog.
+     */
+    data object DismissDialog : ItemSearchAction()
+
+    /**
      * User updated the search term.
      */
     data class SearchTermChange(val searchTerm: String) : ItemSearchAction()
+
+    /**
+     * The user clicked confirm when prompted to delete an item.
+     */
+    data class ConfirmDeleteClick(val itemId: String) : ItemSearchAction()
+
+    /**
+     * Represents an action triggered when the user clicks an item in the dropdown menu.
+     */
+    data class DropdownMenuClick(
+        val menuAction: VaultDropdownMenuAction,
+        val item: VerificationCodeDisplayItem,
+    ) : ItemSearchAction()
 
     /**
      * User clicked a row item.
@@ -271,6 +433,20 @@ sealed class ItemSearchAction {
             val localData: DataState<List<VerificationCodeItem>>,
             val sharedData: SharedVerificationCodesState,
         ) : Internal()
+
+        /**
+         * Indicates the result of the add totp login item flow.
+         */
+        data class AddTotpLoginItemFlowResult(
+            val isSuccess: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates a result for deleting an item has been received.
+         */
+        data class DeleteItemReceive(
+            val result: DeleteItemResult,
+        ) : Internal()
     }
 }
 
@@ -285,9 +461,30 @@ sealed class ItemSearchEvent {
     data object NavigateBack : ItemSearchEvent()
 
     /**
-     * Show a toast with the given [message].
+     * Navigate to the edit item screen.
      */
-    data class ShowToast(val message: Text) : ItemSearchEvent()
+    data class NavigateToEditItem(val itemId: String) : ItemSearchEvent()
+
+    /**
+     * Show a Snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ItemSearchEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 private enum class SortPriority {

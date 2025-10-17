@@ -5,7 +5,7 @@
     <string name="add_item">添加项目</string>
     <string name="an_error_has_occurred">发生错误</string>
     <string name="apply">应用</string>
-    <string name="back">后退</string>
+    <string name="back">返回</string>
     <string name="cancel">取消</string>
     <string name="copy">复制</string>
     <string name="copy_password">复制密码</string>
@@ -925,7 +925,7 @@
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">启用临时日志记录，以在本地收集和检查日志。启用后，可能会记录应用程序状态和网络调用，但绝不会记录敏感的密码库信息。</string>
     <string name="to_get_started_set_a_logging_duration">要开始使用，请设置日志记录持续时间，以便您在复现问题时捕获相关活动。
 日志记录将在该时间段后自动停用。</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">日志将在 30 天后自动删除。只有当您共享它时，Bitwarden 才能访问您的日志数据。</string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">日志将在 30 天后自动删除。只有当您分享它时，Bitwarden 才能访问您的日志数据。</string>
     <string name="for_details_on_what_is_and_isnt_logged">要了解哪些内容会被记录、哪些不会被记录，请访问\n<annotation link="helpCenter">Bitwarden 帮助中心</annotation>。</string>
     <string name="logging_duration">日志记录持续时间</string>
     <string name="flight_recorder_one_hour">1 小时</string>
@@ -1106,8 +1106,8 @@
         <item quantity="other">%1$d 个项目已导入到您的密码库。</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">启用浏览器自动填充以继续使用密码填充功能</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中启用浏览器自动填充功能。</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中为所有已安装的浏览器启用浏览器自动填充功能。</string>
     <string name="not_now">以后再说</string>
     <string name="import_from_bitwarden">从 Bitwarden 导入</string>
     <string name="select_account">选择账户</string>
@@ -1123,9 +1123,13 @@
     <string name="export_failed">导出失败</string>
     <string name="passwords">密码</string>
     <string name="passkeys">通行密钥</string>
-    <string name="import_verb">导入</string>
     <string name="why_is_this_step_required">为什么需要这个步骤？</string>
     <string name="kdf_update_failed_active_account_not_found">KDF 更新失败，未找到活动的账户。请重试或联系我们。</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">尝试更新您的 KDF 设置时发生错误。请重试或联系我们。</string>
     <string name="the_import_request_could_not_be_processed">无法处理导入请求。</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">您的密码库可能是空的，或者您的账户不允许导入某些项目类型。</string>
+    <string name="no_items_available_to_import">没有可供导入的项目</string>
+    <string name="select_a_different_account">选择其他账户</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

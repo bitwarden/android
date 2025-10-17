@@ -1109,8 +1109,8 @@ các vấn đề.</string>
         <item quantity="other">%1$d mục đã được nhập vào kho của bạn.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Bật Tự động điền trình duyệt để tiếp tục điền mật khẩu</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Trình duyệt của bạn vừa được cập nhật, điều này đã vô hiệu hóa tính năng tự động điền của Bitwarden. Để tiếp tục tự động điền bằng Bitwarden, hãy bật tính năng tự động điền của trình duyệt trong cài đặt tự động điền.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Trình duyệt của bạn đã được cập nhật gần đây, điều này đã vô hiệu hóa tính năng tự động điền của Bitwarden. Để tiếp tục điền mật khẩu bằng Bitwarden, hãy bật tính năng tự động điền trình duyệt cho tất cả các trình duyệt đã cài đặt trong cài đặt tự động điền.</string>
     <string name="not_now">Để sau</string>
     <string name="import_from_bitwarden">Nhập từ Bitwarden</string>
     <string name="select_account">Chọn tài khoản</string>
@@ -1126,9 +1126,13 @@ các vấn đề.</string>
     <string name="export_failed">Xuất thất bại</string>
     <string name="passwords">Mật khẩu</string>
     <string name="passkeys">Các mã khóa</string>
-    <string name="import_verb">Nhập</string>
     <string name="why_is_this_step_required">Tại sao bước này là bắt buộc?</string>
     <string name="kdf_update_failed_active_account_not_found">Cập nhật KDF thất bại, không tìm thấy tài khoản đang hoạt động. Vui lòng thử lại hoặc liên hệ với chúng tôi.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Đã xảy ra lỗi khi cố gắng cập nhật cài đặt KDF của bạn. Vui lòng thử lại hoặc liên hệ với chúng tôi.</string>
     <string name="the_import_request_could_not_be_processed">Không thể xử lý yêu cầu nhập.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Kho của bạn có thể trống, hoặc tài khoản của bạn không được phép nhập một số loại mục.</string>
+    <string name="no_items_available_to_import">Không có mục nào để nhập</string>
+    <string name="select_a_different_account">Chọn một tài khoản khác</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

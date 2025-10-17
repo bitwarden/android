@@ -1105,8 +1105,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
         <item quantity="other">%1$d item telah diimpor ke brankas Anda.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Aktifkan Isi Otomatis browser untuk tetap mengisi sandi</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Browser Anda baru saja diperbarui, yang menyebabkan isi otomatis Bitwarden nonaktif. Untuk tetap mengisi sandi dengan Bitwarden, aktifkan isi otomatis browser di pengaturan isi otomatis.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Browser Anda baru saja diperbarui, yang menyebabkan isi otomatis Bitwarden nonaktif. Untuk tetap mengisi sandi dengan Bitwarden, aktifkan isi otomatis browser di pengaturan isi otomatis.</string>
     <string name="not_now">Lain kali</string>
     <string name="import_from_bitwarden">Impor dari Bitwarden</string>
     <string name="select_account">Pilih akun</string>
@@ -1122,9 +1122,13 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="export_failed">Ekspor gagal</string>
     <string name="passwords">Sandi</string>
     <string name="passkeys">Kunci sandi</string>
-    <string name="import_verb">Impor</string>
     <string name="why_is_this_step_required">Kenapa langkah ini harus dilakukan?</string>
     <string name="kdf_update_failed_active_account_not_found">Gagal memperbarui Kdf, tidak ada akun aktif. Silakan coba lagi atau hubungi kami.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Terjadi kesalahan saat mencoba memperbarui pengaturan Kdf Anda. Coba lagi atau hubungi kami.</string>
     <string name="the_import_request_could_not_be_processed">Permintaan impor tidak dapat diproses.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Brankas Anda mungkin kosong, atau mengimpor beberapa jenis item yang tidak diizinkan untuk akun Anda.</string>
+    <string name="no_items_available_to_import">Tidak ada item yang tersedia untuk diimpor</string>
+    <string name="select_a_different_account">Pilih akun berbeda</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

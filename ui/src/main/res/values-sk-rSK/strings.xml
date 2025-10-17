@@ -166,7 +166,7 @@
     <string name="no_items_for_vault">Vo vašom trezore nie sú žiadne položky, ktoré zodpovedajú \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
     <string name="disabled">Vypnuté</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
     <string name="autofill_title">Automatické vypĺňanie</string>
     <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
     <string name="search">Hladať</string>
@@ -174,7 +174,7 @@
     <string name="authenticator_app_title">Overovacia aplikácia</string>
     <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
     <string name="enter_verification_code_email">Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný e-mailom na %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Toto zariadenie nepoznáme. Na overenie vašej totožnosti zadajte kód, ktorý bol zaslaný na váš e-mail.</string>
     <string name="recovery_code_title">Záchranný kód</string>
     <string name="remember">Zapamätať si</string>
     <string name="remember_email">Zapamätať si e-mail</string>
@@ -398,7 +398,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_generator_policy_in_effect">Jedno alebo viac nastavení organizácie ovplyvňujú vaše nastavenia generátora</string>
     <string name="unable_to_save_attachment">Nastal problem pri ukladaní prílohy. Ak problém pretrváva, môžete je uložiť z Webového trezora.</string>
     <string name="save_attachment_success">Príloha úspešne uložená</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Zapnite \"Služba uľahčenia prístupu automatického vypĺňania\" v nastaveniach Bitwardenu, aby ste mohli používať dlaždicu na automatické vypĺňanie.</string>
     <string name="autofill_tile_uri_not_found">Nenájdené žiadne políčka na heslo</string>
     <string name="soft_deleting">Presúva sa do koša…</string>
     <string name="item_soft_deleted">Položka bola poslaná do koša.</string>
@@ -742,7 +742,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Prečítajte si o spôsoboch, ako zabrániť zablokovaniu účtu</annotation></string>
     <string name="help_with_server_geolocations">Pomoc pri určovaní geografickej polohy servera.</string>
     <string name="email_address_required">E-mailová adresa (povinná)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Vyberte odkaz v e-maile, aby ste overili e-mailovú adresu a pokračujte vo vytváraní účtu.</string>
     <string name="change_email_address">Zmeniť e-mailovú adresu</string>
     <string name="next">Ďalej</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nemôže obnoviť stratené alebo zabudnuté hlavné heslo.</string>
@@ -774,7 +774,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="turn_on_browser_autofill_integration_later">Zapnúť integráciu automatického vyplňovania v prehliadači neskôr?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">K tomuto kroku sa môžete kedykoľvek vrátiť a dokončiť ho v Nastaveniach.</string>
     <string name="what_bitwarden_has_to_offer">Na prihlasovanie do aplikácií a webových lokalít pomocou uložených hesiel môžete teraz používať automatické vypĺňanie. Teraz môžete preskúmať všetko ostatné, čo Bitwarden ponúka.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Všetko je pripravené!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
     <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
     <string name="new_master_password_hint">Nová nápoveď pre hlavné heslo</string>
@@ -872,13 +872,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="coachmark_3_of_3">3 z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Ak chcete používať automatické vypĺňanie na prístup k tomuto účtu, musíte pridať webovú adresu.</string>
     <string name="learn_about_new_logins">Viac o nových prihláseniach</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Prevedieme vás kľúčovými funkciami na pridanie nového prihlásenia.</string>
     <string name="explore_the_generator">Preskúmajte generátor</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Ďalšie informácie o generovaní bezpečných prihlasovacích údajov získate pomocou prehliadky so sprievodcom.</string>
     <string name="import_client_certificate">Import klientskeho certifikátu</string>
     <string name="enter_the_client_certificate_password_and_alias">Zadajte heslo klientskeho certifikátu a požadovaný alias pre tento certifikát.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Pomocou generátora môžete vytvárať bezpečné heslá, prístupové frázy a používateľské mená.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Prístupové frázy sú silné heslá, ktoré sa často ľahšie pamätajú a zadávajú ako náhodné heslá. Sú užitočné pri prihlasovaní do účtov, kde nie je k dispozícii funkcia automatického vypĺňania, napríklad do streamovacej služby na televízore.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unikátne používateľské mená predstavujú ďalšiu úroveň zabezpečenia a môžu pomôcť zabrániť hackerom nájsť vaše účty.</string>
     <string name="coachmark_1_of_6">1 Z 6</string>
@@ -887,8 +887,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="coachmark_4_of_6">4 Z 6</string>
     <string name="coachmark_5_of_6">5 Z 6</string>
     <string name="coachmark_6_of_6">6 Z 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Tieto možnosti môžete použiť na úpravu hesla, aby spĺňalo požiadavky webovej stránky.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Po uložení nového hesla do Bitwardenu ho nezabudnite aktualizovať na webovej stránke účtu.</string>
     <string name="verify_your_identity">Overte svoju totožnosť</string>
     <string name="error_loading_certificate">Chyba pri načítaní certifikátu</string>
     <string name="certificate_alias">Alias certifikátu</string>
@@ -1123,8 +1123,8 @@ Chcete prepnúť na tento účet?</string>
         <item quantity="other">%1$d položiek bolo importovaných do vášho trezora.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Povolenie funkcie automatického vypĺňania v prehliadači na ponechanie vypĺňania hesiel</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Váš prehliadač bol nedávno aktualizovaný, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadači v nastaveniach automatického vypĺňania.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Vaše prehliadače boli nedávno aktualizované, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadačoch v nastaveniach automatického vypĺňania.</string>
     <string name="not_now">Teraz nie</string>
     <string name="import_from_bitwarden">Importovať z Bitwardenu</string>
     <string name="select_account">Vyberte účet</string>
@@ -1140,9 +1140,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="export_failed">Export zlyhal</string>
     <string name="passwords">Heslá</string>
     <string name="passkeys">Prístupové kľúče</string>
-    <string name="import_verb">Importovať</string>
     <string name="why_is_this_step_required">Prečo je tento krok potrebný?</string>
     <string name="kdf_update_failed_active_account_not_found">Aktualizácia Kdf zlyhala, aktívny účet nebol nájdený. Skúste to znova alebo nás kontaktujte.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Pri pokuse o aktualizáciu nastavení kdf došlo k chybe. Skúste to znova alebo nás kontaktujte.</string>
     <string name="the_import_request_could_not_be_processed">Požiadavku na import nebolo možné spracovať.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Váš trezor môže byť prázdny, alebo importovanie niektorých typov položiek nie je pre váš účet povolený.</string>
+    <string name="no_items_available_to_import">K dispozícii nie sú žiadne položky na importovanie</string>
+    <string name="select_a_different_account">Vyberte iný účet</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

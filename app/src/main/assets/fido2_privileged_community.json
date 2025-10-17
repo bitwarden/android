@@ -51,6 +51,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "org.ironfoxoss.ironfox.nightly",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C5:E2:91:B5:A5:71:F9:C8:CD:9A:97:99:C2:C9:4E:02:EC:97:03:94:88:93:F2:CA:75:6D:67:B9:42:04:F9:04"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "org.mozilla.fennec_fdroid",
         "signatures": [
           {

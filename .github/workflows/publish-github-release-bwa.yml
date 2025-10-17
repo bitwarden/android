@@ -1,0 +1,23 @@
+name: Publish Authenticator GitHub Release as newest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * 1-5' # Every hour on the hour on weekdays
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+
+jobs:
+  publish-release-authenticator:
+    name: Publish Authenticator Release
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
+    with:
+      release_name: "Authenticator"
+      workflow_name: "publish-github-release-bwa.yml"
+      credentials_filename: "authenticator_play_store-creds.json"
+      project_type: android
+      check_release_command: >
+        bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production
+    secrets: inherit

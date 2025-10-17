@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -10,8 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,35 +19,40 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * The search screen for authenticator items.
  */
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemSearchScreen(
     viewModel: ItemSearchViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToEdit: (String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
-    val context = LocalContext.current
-    val resources = LocalResources.current
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ItemSearchEvent.NavigateBack -> onNavigateBack()
-            is ItemSearchEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message(resources), Toast.LENGTH_SHORT)
-                    .show()
-            }
+            is ItemSearchEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+            is ItemSearchEvent.NavigateToEditItem -> onNavigateToEdit(event.itemId)
         }
     }
+
+    ItemSearchDialogs(
+        dialogState = state.dialog,
+        searchHandlers = searchHandlers,
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -73,6 +75,7 @@ fun ItemSearchScreen(
                 ),
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (val viewState = state.viewState) {
             is ItemSearchState.ViewState.Content -> {
@@ -90,5 +93,40 @@ fun ItemSearchScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ItemSearchDialogs(
+    dialogState: ItemSearchState.DialogState?,
+    searchHandlers: SearchHandlers,
+) {
+    when (dialogState) {
+        is ItemSearchState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                throwable = dialogState.throwable,
+                onDismissRequest = searchHandlers.onDismissDialog,
+            )
+        }
+
+        is ItemSearchState.DialogState.DeleteConfirmationPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.delete),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(id = BitwardenString.okay),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = { searchHandlers.onConfirmDeleteClick(dialogState.itemId) },
+                onDismissClick = searchHandlers.onDismissDialog,
+                onDismissRequest = searchHandlers.onDismissDialog,
+            )
+        }
+
+        ItemSearchState.DialogState.Loading -> {
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.loading))
+        }
+
+        null -> Unit
     }
 }

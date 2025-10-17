@@ -1112,8 +1112,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
         <item quantity="other">%1$d element seyfinizə köçürüldü.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Parolları doldurmağa davam etmək üçün brauzer Avto-doldurma fəallaşdır</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Brauzeriniz təzəlikcə güncəllənib və bu, Bitwarden-in avto-doldurma özəlliyini sıradan çıxardıb. Parollarınızı Bitwarden ilə doldurmağa davam etmək üçün avto-doldurma ayarlarında brauzer avto-doldurmanı fəallaşdırın.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Brauzerləriniz təzəlikcə güncəllənib və bu, Bitwarden-in avto-doldurma özəlliyini sıradan çıxardıb. Parollarınızı Bitwarden ilə doldurmağa davam etmək üçün quraşdırdığınız bütün brauzerlərin avto-doldurma ayarlarında brauzer avto-doldurmanı fəallaşdırın.</string>
     <string name="not_now">İndi yox</string>
     <string name="import_from_bitwarden">Bitwarden-dən daxilə köçür</string>
     <string name="select_account">Hesab seç</string>
@@ -1129,9 +1129,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="export_failed">Xaricə köçürmə uğursuz oldu</string>
     <string name="passwords">Parollar</string>
     <string name="passkeys">Keçid açarları</string>
-    <string name="import_verb">Daxilə köçür</string>
     <string name="why_is_this_step_required">Bu addım niyə tələb olunur?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF güncəlləməsi uğursuz olud, aktiv hesab tapılmadı. Lütfən yenidən sınayın və ya bizim əlaqə saxlayın.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">KDF ayarlarınızı güncəlləməyə çalışarkən xəta baş verdi. Lütfən yenidən sınayın və ya bizimlə əlaqə saxlayın.</string>
     <string name="the_import_request_could_not_be_processed">Daxilə köçürmə tələbi emal oluna bilmədi.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Ya seyfiniz boşdur, ya da hesabınız üçün bəzi element növlərinin daxilə köçürülməsinə icazə verilmir.</string>
+    <string name="no_items_available_to_import">Daxilə köçürüləcək element yoxdur</string>
+    <string name="select_a_different_account">Fərqli bir hesab seçin</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

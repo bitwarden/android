@@ -10,8 +10,9 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.VerifyPas
  */
 data class VerifyPasswordHandlers(
     val onNavigateBackClick: () -> Unit,
-    val onUnlockClick: () -> Unit,
+    val onContinueClick: () -> Unit,
     val onInputChanged: (String) -> Unit,
+    val onSendCodeClick: () -> Unit,
     val onDismissDialog: () -> Unit,
 ) {
 
@@ -26,13 +27,16 @@ data class VerifyPasswordHandlers(
                 onNavigateBackClick = {
                     viewModel.trySendAction(VerifyPasswordAction.NavigateBackClick)
                 },
-                onUnlockClick = {
-                    viewModel.trySendAction(VerifyPasswordAction.UnlockClick)
+                onContinueClick = {
+                    viewModel.trySendAction(VerifyPasswordAction.ContinueClick)
                 },
                 onInputChanged = {
                     viewModel.trySendAction(
                         VerifyPasswordAction.PasswordInputChangeReceive(it),
                     )
+                },
+                onSendCodeClick = {
+                    viewModel.trySendAction(VerifyPasswordAction.ResendCodeClick)
                 },
                 onDismissDialog = {
                     viewModel.trySendAction(VerifyPasswordAction.DismissDialog)
