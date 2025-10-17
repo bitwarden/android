@@ -59,7 +59,7 @@ class ReviewExportViewModel @Inject constructor(
             itemTypeCounts = ReviewExportState.ItemTypeCounts(),
         ),
         dialog = null,
-        hasOtherAccounts = (authRepository.userStateFlow.value?.accounts?.size ?: 0) > 1,
+        hasOtherAccounts = authRepository.userStateFlow.value?.accounts.orEmpty().size > 1,
     ),
 ) {
 
