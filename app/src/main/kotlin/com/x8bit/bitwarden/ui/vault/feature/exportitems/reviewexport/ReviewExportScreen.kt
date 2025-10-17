@@ -118,11 +118,15 @@ fun ReviewExportScreen(
                         BitwardenString
                             .your_vault_may_be_empty_or_import_some_item_types_isnt_supported,
                     ),
-                    primaryButton = BitwardenButtonData(
-                        label = BitwardenString.select_a_different_account.asText(),
-                        testTag = "SelectADifferentAccountButton",
-                        onClick = handler.onSelectAnotherAccountClick,
-                    ),
+                    primaryButton = if (state.hasOtherAccounts) {
+                        BitwardenButtonData(
+                            label = BitwardenString.select_a_different_account.asText(),
+                            testTag = "SelectADifferentAccountButton",
+                            onClick = handler.onSelectAnotherAccountClick,
+                        )
+                    } else {
+                        null
+                    },
                     secondaryButton = BitwardenButtonData(
                         label = BitwardenString.cancel.asText(),
                         testTag = "NoItemsCancelButton",
