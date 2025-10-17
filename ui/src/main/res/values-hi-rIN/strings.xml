@@ -31,7 +31,7 @@
     <string name="invalid_master_password">मास्टर पासवर्ड गलत है। वापस कोशिश करें।</string>
     <string name="invalid_pin">पिन गलत है। वापस कोशिश करें।</string>
     <string name="launch">खोलें</string>
-    <string name="log_in_verb">Log in</string>
+    <string name="log_in_verb">Log In</string>
     <string name="log_in_noun">लॉगइन</string>
     <string name="log_out">लॉगआउट करें</string>
     <string name="logout_confirmation">पक्का लॉगआउट करें?</string>
@@ -161,7 +161,7 @@
     <string name="items">आइटम</string>
     <string name="items_for_uri">%1$s के लिए आइटम</string>
     <string name="no_items_for_uri">%1$s के लिए आपकी तिजोरी में कोई आइटम नहीं हैं।</string>
-    <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+    <string name="no_items_for_vault">आपके तिजोरी में ऐसी कोई भी चीज़ नहीं है जो \"%1$s\" से मेल खाती है</string>
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">बंद</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
@@ -929,7 +929,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 घंटा</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -962,7 +962,7 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send"> Send हटाए</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1126,7 +1126,7 @@ Do you want to switch to this account?</string>
     <string name="exporting_items">Exporting items…</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="passkeys">पासकी</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1134,4 +1134,6 @@ Do you want to switch to this account?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

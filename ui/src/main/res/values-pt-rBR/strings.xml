@@ -914,7 +914,7 @@ Você deseja mudar para esta conta?</string>
     <string name="use_chrome_beta_autofill_integration">Usar integração com o preenchimento automático do Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Assim que ativado, você será direcionado para as configurações do navegador para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
-    <string name="no_folder">Nenhuma pasta</string>
+    <string name="no_folder">Sem pasta</string>
     <string name="show_less">Mostrar menos</string>
     <string name="add_field">Adicionar campo</string>
     <string name="share_error_details">Compartilhar detalhes do erro</string>
@@ -1134,7 +1134,9 @@ quaisquer problema.</string>
     <string name="kdf_update_failed_active_account_not_found">Falha na atualização da KDF, conta ativa não encontrada. Tente novamente ou entre em contato conosco.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas configurações da KDF. Tente novamente ou entre em contato conosco.</string>
     <string name="the_import_request_could_not_be_processed">A solicitação de importação não pôde ser processada.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Seu cofre está vazio, ou não é permitido importar certos tipos de itens na sua conta.</string>
+    <string name="no_items_available_to_import">Nenhum item disponível para importar</string>
+    <string name="select_a_different_account">Selecione uma conta diferente</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

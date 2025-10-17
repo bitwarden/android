@@ -45,7 +45,7 @@
     <string name="more">Περισσότερα</string>
     <string name="my_vault">Η κρύπτη μου</string>
     <string name="name">Όνομα</string>
-    <string name="item_name_required">Item name (required)</string>
+    <string name="item_name_required">Όνομα στοιχείου (απαιτείται)</string>
     <string name="send_name_required">Send name (required)</string>
     <string name="no">Όχι</string>
     <string name="notes">Σημειώσεις</string>
@@ -85,7 +85,7 @@
     <string name="edit_card">Επεξεργασία κάρτας</string>
     <string name="edit_identity">Επεξεργασία ταυτότητας</string>
     <string name="edit_note">Επεξεργασία σημείωσης</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Επεξεργασία κλειδιού SSH</string>
     <string name="enter_email_for_hint">Εισάγετε την διεύθυνση ηλ. ταχειδρομείου του λογαριασμού σας, προκειμένου για να λάβετε υπόδειξη του κύριου κωδικού προσβασής σας.</string>
     <string name="favorite">Αγαπημένο</string>
     <string name="unfavorite">Αφαίρεση από τα αγαπημένα</string>
@@ -143,7 +143,7 @@
     <string name="retype_master_password_required">Πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης (απαιτείται)</string>
     <string name="search_vault">Αναζήτηση στο θυσαυ/κιό</string>
     <string name="select">Επιλογή</string>
-    <string name="item_details">Item details</string>
+    <string name="item_details">Λεπτομέρειες στοιχείου</string>
     <string name="item_updated">Το στοιχείο αποθηκεύτηκε</string>
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
@@ -156,7 +156,7 @@
     <string name="view_card">Προβολή κάρτας</string>
     <string name="view_identity">Προβολή ταυτότητας</string>
     <string name="view_note">Προβολή σημείωσης</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Προβολή κλειδιού SSH</string>
     <string name="web_vault">Διαδικτυακό θυσαυ/κιο Bitwarden</string>
     <string name="items">Στοιχεία</string>
     <string name="items_for_uri">Στοιχεία για %1$s</string>
@@ -164,15 +164,15 @@
     <string name="no_items_for_vault">Δεν υπάρχουν αντικείμενα στη κρύπτη σας που ταιριάζουν με \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Αναζητήστε μια σύνδεση ή προσθέστε μια νέα σύνδεση</string>
     <string name="disabled">Απενεργοποιημένο</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="bitwarden_autofill_service_alert2">Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στο vault σας, είναι με την υπηρεσία αυτόματης συμπλήρωσης του Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της, μεταβαίνοντας στις \"Ρυθμίσεις\".</string>
+    <string name="autofill_title">Αυτόματη συμπλήρωση</string>
     <string name="autofill_or_view">Θέλετε αυτόματη συμπλήρωση ή να δείτε αυτό το στοιχείο;</string>
     <string name="search">Αναζήτηση</string>
     <string name="learn_org">Μάθετε για τους οργανισμούς</string>
     <string name="authenticator_app_title">Εφαρμογή αυθεντικοποίησης</string>
     <string name="enter_verification_code_app">Εισάγετε τον 6ψήφιο κωδικό από την εφαρμογή επαλήθευσης.</string>
     <string name="enter_verification_code_email">Εισαγωγή 6ψήφιου κωδικού επαλήθευσης που σταλθηκε με μήνυμα στο %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Δεν αναγνωρίζουμε αυτή τη συσκευή. Εισάγετε τον κωδικό που στάλθηκε στο email σας για να επαληθεύσετε την ταυτότητά σας.</string>
     <string name="recovery_code_title">Κωδικός ανάκτησης</string>
     <string name="remember">Απομνημόνευση</string>
     <string name="remember_email">Απομνημόνευση email</string>
@@ -437,7 +437,7 @@
     <string name="send_details">Send Details</string>
     <string name="all_sends">Όλα τα Sends</string>
     <string name="text">Κείμενο</string>
-    <string name="text_to_share">Text to share</string>
+    <string name="text_to_share">Κείμενο προς κοινοποίηση</string>
     <string name="type_text">Κείμενο</string>
     <string name="hide_text_by_default">Κατά την πρόσβαση σε αυτό το Send, αποκρύψτε το κείμενο από προεπιλογή</string>
     <string name="type_file">Αρχείο</string>
@@ -458,7 +458,7 @@
     <string name="password_info">Προαιρετικά απαιτείται κωδικός πρόσβασης για τους χρήστες για να έχουν πρόσβαση σε αυτό το Send.</string>
     <string name="remove_password">Αφαίρεση κωδικού πρόσβασης</string>
     <string name="removing_send_password">Αφαίρεση κωδικού...</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Ο κωδικός πρόσβασης αφαιρέθηκε</string>
     <string name="add_a_send">Προσθήκη Send</string>
     <string name="copy_link">Αντιγραφή συνδέσμου</string>
     <string name="share_link">Κοινοποίηση συνδέσμου</string>
@@ -742,7 +742,7 @@
     <string name="change_email_address">Αλλαγή διεύθυνσης ηλ. ταχυδρομείου</string>
     <string name="next">Επόμενο</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Το Bitwarden δεν μπορεί να ανακτήσει έναν χαμένο ή ξεχασμένο κύριο κωδικό πρόσβασης.</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Το Bitwarden δεν μπορεί να ανακτήσει έναν χαμένο ή ξεχασμένο κύριο κωδικό πρόσβασης.</string>
     <string name="choose_your_master_password">Επιλέξτε τον κύριο κωδικό πρόσβασης σας</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Επιλέξτε έναν μοναδικό και ισχυρό κωδικό πρόσβασης για να διατηρήσετε τις πληροφορίες σας ασφαλείς.</string>
     <plurals name="minimum_characters">
@@ -768,7 +768,7 @@
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Μπορείτε να επιστρέψετε για να ολοκληρώσετε αυτό το βήμα ανά πάσα στιγμή στις Ρυθμίσεις.</string>
     <string name="what_bitwarden_has_to_offer">Μπορείτε πλέον να χρησιμοποιείτε την αυτόματη συμπλήρωση για να συνδέεστε σε εφαρμογές και ιστοτόπους με τους αποθηκευμένους κωδικούς πρόσβασής σας. Τώρα, μπορείτε να εξερευνήσετε όλα όσα έχει να προσφέρει το Bitwarden.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Όλα έτοιμα!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Σφάλμα κατά τη σύνδεση με την υπηρεσία Duo. Χρησιμοποιήστε μια διαφορετική μέθοδο σύνδεσης δύο βημάτων ή επικοινωνήστε με την Duo για βοήθεια.</string>
     <string name="master_password_hint_not_specified">Υπόδειξη κύριου κωδικού πρόσβασης</string>
     <string name="new_master_password_hint">New master password hint</string>
@@ -808,7 +808,7 @@
     <string name="need_help_check_out_import_help">Χρειάζεστε βοήθεια; Ρίξτε μια ματιά στο <annotation link="importHelp">βοήθεια για εισαγωγή</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Αποθηκεύστε το εξαγόμενο αρχείο</annotation> κάπου στον υπολογιστή σας όπου μπορείτε να το βρείτε εύκολα.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Αυτός δεν είναι αναγνωρισμένος διακομιστής Bitwarden. Μπορεί να χρειαστεί να ελέγξετε με τον πάροχο σας ή να ενημερώσετε τον διακομιστή σας.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Συγχρονισμός συνδέσεων...</string>
     <string name="download_the_browser_extension">Κατεβάστε την επέκταση περιηγητή</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Πηγαίνετε στο bitwarden.com/download για να ενσωματώσετε το Bitwarden στο αγαπημένο σας πρόγραμμα περιήγησης για μια απρόσκοπτη εμπειρία.</string>
     <string name="use_the_web_app">Χρήση της εφαρμογής web</string>
@@ -865,9 +865,9 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Θα χρειαστεί μόνο να ρυθμίσετε το Κλειδί Ταυτοποίησης για συνδέσεις που απαιτούν έλεγχο ταυτότητας δύο παραγόντων με κωδικό. Το κλειδί θα παράγει συνεχώς εξαψήφιους κώδικες που μπορείτε να χρησιμοποιήσετε για να συνδεθείτε.</string>
     <string name="coachmark_3_of_3">3 από 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Πρέπει να προσθέσετε μια διεύθυνση ιστού για να χρησιμοποιήσετε την αυτόματη συμπλήρωση για να αποκτήσετε πρόσβαση σε αυτόν το λογαριασμό.</string>
-    <string name="learn_about_new_logins">Learn about new logins</string>
+    <string name="learn_about_new_logins">Μάθετε για νέες συνδέσεις</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
-    <string name="explore_the_generator">Explore the generator</string>
+    <string name="explore_the_generator">Εξερευνήστε τη γεννήτρια</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
     <string name="import_client_certificate">Import client certificate</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
@@ -908,7 +908,7 @@
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">Διεύθυνση URL διακομιστή αυτοεξυπηρετητή</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
@@ -950,7 +950,7 @@
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
-    <string name="go_to_settings">Go to settings</string>
+    <string name="go_to_settings">Μετάβαση στις ρυθμίσεις</string>
     <string name="all_logs_deleted">All logs deleted</string>
     <string name="log_deleted">Log deleted</string>
     <string name="app_settings">Ρυθμίσεις εφαρμογής</string>
@@ -959,11 +959,11 @@
     <string name="replace_certificate">Αντικατάσταση πιστοποιητικού</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>
-    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="cannot_delete_your_account_explanation">Αυτή η ενέργεια δεν μπορεί να ολοκληρωθεί επειδή ο λογαριασμός σας ανήκει σε έναν οργανισμό. Επικοινωνήστε με το διαχειριστή του οργανισμού σας για πρόσθετες λεπτομέρειες.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Διαγραφή Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -988,7 +988,7 @@
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="decryption_error">Σφάλμα αποκρυπτογράφησης</string>
     <string name="scan_a_qr_code">Σαρώστε έναν κωδικό QR</string>
     <string name="cannot_add_authenticator_key">Αδυναμία προσθήκης κλειδιού ταυτοποίησης;</string>
     <string name="enable_camera_permission_to_use_the_scanner">Ενεργοποιήστε την άδεια πρόσβασης στην κάμερα για χρήση του σαρωτή</string>
@@ -1125,9 +1125,9 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">Αποτυχία εξαγωγής</string>
+    <string name="passwords">Κωδικοί</string>
+    <string name="passkeys">Κλειδιά πρόσβασης</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

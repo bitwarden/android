@@ -143,7 +143,7 @@
     <string name="retype_master_password_required">É preciso o contrasinal mestre</string>
     <string name="search_vault">Buscar na caixa forte</string>
     <string name="select">Seleccionar</string>
-    <string name="item_details">Item details</string>
+    <string name="item_details">Detalles do entrada</string>
     <string name="item_updated">Entrada gardada</string>
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
@@ -164,8 +164,8 @@
     <string name="no_items_for_vault">Non hai entradas coincidentes para \"%1$s\" na caixa forte</string>
     <string name="search_for_a_login_or_add_a_new_login">Buscar unha credencial ou engadir unha nova</string>
     <string name="disabled">Deshabilitado</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="bitwarden_autofill_service_alert2">O xeito máis sinxelo de engadir credenciais á túa caixa forte é dende o Servizo de Autoenchido de Bitwarden. Aprende máis do Servizo de Autoenchido de Bitwarden na pantalla de \"Axustes\".</string>
+    <string name="autofill_title">Autoencher</string>
     <string name="autofill_or_view">Queres autoencher ou ver esta entrada?</string>
     <string name="search">Busca</string>
     <string name="learn_org">Aprende sobre as organizacións</string>
@@ -305,7 +305,7 @@ Escanearase automaticamente.</string>
     <string name="invalid_email">Correo electrónico non válido.</string>
     <string name="cards">Tarxetas</string>
     <string name="identities">Identidades</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Identificación</string>
     <string name="logins">Credenciais</string>
     <string name="secure_notes">Notas seguras</string>
     <string name="personal_details">Personal Details</string>
@@ -327,7 +327,7 @@ Escanearase automaticamente.</string>
     <string name="type">Tipo</string>
     <string name="move_down">Baixar</string>
     <string name="move_up">Subir</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Propietario</string>
     <string name="no_collections_to_list">Non hai coleccións que listar.</string>
     <string name="moved_item_to_org">%1$s movido a %2$s.</string>
     <string name="select_one_collection">Debes seleccionar polo menos unha colección.</string>
@@ -394,7 +394,7 @@ Escanearase automaticamente.</string>
     <string name="password_generator_policy_in_effect">As directivas da organización están afectando á configuración do xerador</string>
     <string name="unable_to_save_attachment">Houbo un problema exportando a caixa forte. Se o problema persiste, terás que exportalo dende a páxina web.</string>
     <string name="save_attachment_success">Anexo gardado</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Por favor habilita o \"Servizo de Accesibilidade de Autoenchido\" de Bitwarden para usar o botón de autoenchido.</string>
     <string name="autofill_tile_uri_not_found">Non se detectan campos de contrasinal</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">A entrada moveuse ó lixo.</string>
@@ -458,7 +458,7 @@ Escanearase automaticamente.</string>
     <string name="password_info">Opcionalmente pódese requirir un contrasinal para acceder ó Send.</string>
     <string name="remove_password">Eliminar contrasinal</string>
     <string name="removing_send_password">Eliminando contrasinal</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Contrasinal eliminado</string>
     <string name="add_a_send">Novo Send</string>
     <string name="copy_link">Copiar ligazón</string>
     <string name="share_link">Compartir ligazón</string>
@@ -467,8 +467,8 @@ Escanearase automaticamente.</string>
     <string name="edit_send">Editar Send</string>
     <string name="edit_file_send">Edit file Send</string>
     <string name="edit_text_send">Edit text Send</string>
-    <string name="add_file_send">New file Send</string>
-    <string name="add_text_send">New text Send</string>
+    <string name="add_file_send">Novo Send de arquivo</string>
+    <string name="add_text_send">Novo Send de texto</string>
     <string name="are_you_sure_delete_send">Seguro que queres eliminar este Send?</string>
     <string name="send_deleted">Send eliminado</string>
     <string name="send_updated">Send updated</string>
@@ -742,7 +742,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="change_email_address">Cambiar o enderezo electrónico</string>
     <string name="next">Seguinte</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden non pode recuperar contrasinais mestres oxidados ou perdidos.</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden non pode recuperar contrasinais mestres oxidados ou perdidos.</string>
     <string name="choose_your_master_password">Escolle un contrasinal mestre</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolle un contrasinal único e seguro para ofrecer a túa información.</string>
     <plurals name="minimum_characters">
@@ -768,7 +768,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Podes volver a facer este paso en calquera momento dende os Axustes.</string>
     <string name="what_bitwarden_has_to_offer">Xa podes explorar todo o que ofrece Bitwarden e xestionar os teus contrasinais de forma segura.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Todo listo!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro conectando co servizo de Duo. Usa un método de verificación en 2 pasos alternativo ou contacta con Duo.</string>
     <string name="master_password_hint_not_specified">Obter pista do contrasinal mestre</string>
     <string name="new_master_password_hint">New master password hint</string>
@@ -808,7 +808,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="need_help_check_out_import_help">Precisas axuda? Bótalle un ollo á <annotation link="importHelp">axuda de importado</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Garda o arquivo exportado</annotation> nalgún lugar do teu computador onde o atopes doadamente.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este non é un servidor de Bitwarden recoñecido. Pode que teñas que comprobalo co teu provedor ou actualizar o servidor.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Sincronizando credenciais...</string>
     <string name="download_the_browser_extension">Descarga a extensión de navegador</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Visita bitwarden.com/download e integra Bitwarden no teu navegador favorito para unha experiencia completa.</string>
     <string name="use_the_web_app">Usa a aplicación web</string>
@@ -908,7 +908,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">URL do servidor de aloxamento propio</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
@@ -930,7 +930,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 hora</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -963,7 +963,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Eliminar Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -988,7 +988,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="decryption_error">Erro de descifrado</string>
     <string name="scan_a_qr_code">Escanear un código QR</string>
     <string name="cannot_add_authenticator_key">Non se pode engadir a Clave de autenticación?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Activa o permiso de cámara para empregar o escáner</string>
@@ -1125,9 +1125,9 @@ Queres comprobalo dende esa conta?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">Exportado falido</string>
+    <string name="passwords">Contrasinais</string>
+    <string name="passkeys">Claves de acceso</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>
