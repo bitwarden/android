@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.AutofillHint
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import timber.log.Timber
 
 /**
  * The default web URI scheme.
@@ -49,37 +50,29 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  * doesn't contain a valid autofillId, it isn't an a view setup for autofill, so we return null. If
  * it doesn't have a supported hint and isn't an input field, we also return null.
  */
-fun AssistStructure.ViewNode.toAutofillView(
-    parentWebsite: String?,
-): AutofillView? =
-    this
-        .autofillId
-        // We only care about nodes with a valid `AutofillId`.
-        ?.let { nonNullAutofillId ->
-            if (supportedAutofillHint != null || this.isInputField) {
-                val autofillOptions = this
-                    .autofillOptions
-                    .orEmpty()
-                    .map { it.toString() }
-
-                val autofillViewData = AutofillView.Data(
-                    autofillId = nonNullAutofillId,
-                    autofillOptions = autofillOptions,
-                    autofillType = this.autofillType,
-                    isFocused = this.isFocused,
-                    textValue = this.autofillValue?.extractTextValue(),
-                    hasPasswordTerms = this.hasPasswordTerms(),
-                    website = this.website ?: parentWebsite,
-                )
-                buildAutofillView(
-                    autofillOptions = autofillOptions,
-                    autofillViewData = autofillViewData,
-                    autofillHint = supportedAutofillHint,
-                )
-            } else {
-                null
-            }
-        }
+fun AssistStructure.ViewNode.toAutofillView(): AutofillView? {
+    Timber.tag("AUTOFILL").e("AutofillViewData: $website -- $supportedAutofillHint -- $isFocused")
+    val nonNullAutofillId = this.autofillId ?: return null
+    if (this.supportedAutofillHint == null && !this.isInputField) return null
+    val autofillOptions = this
+        .autofillOptions
+        .orEmpty()
+        .map { it.toString() }
+    val autofillViewData = AutofillView.Data(
+        autofillId = nonNullAutofillId,
+        autofillOptions = autofillOptions,
+        autofillType = this.autofillType,
+        isFocused = this.isFocused,
+        textValue = this.autofillValue?.extractTextValue(),
+        hasPasswordTerms = this.hasPasswordTerms(),
+        website = this.website,
+    )
+    return buildAutofillView(
+        autofillOptions = autofillOptions,
+        autofillViewData = autofillViewData,
+        autofillHint = this.supportedAutofillHint,
+    )
+}
 
 /**
  * The first supported autofill hint for this view node, or null if none are found.
