@@ -102,12 +102,11 @@ class BitwardenCredentialManagerImpl(
     override suspend fun registerPasswordCredential(
         createPasswordRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
-    ): PasswordRegisterResult {
-        return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
+    ): PasswordRegisterResult =
+        when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
             is CreateCipherResult.Error -> PasswordRegisterResult.Error.InternalError
             CreateCipherResult.Success -> PasswordRegisterResult.Success
         }
-    }
 
     override fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
