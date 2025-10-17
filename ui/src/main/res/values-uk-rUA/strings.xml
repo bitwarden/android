@@ -1139,9 +1139,9 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">Не вдалося експортувати</string>
+    <string name="passwords">Паролі</string>
+    <string name="passkeys">Ключі доступу</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1149,4 +1149,6 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

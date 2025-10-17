@@ -61,7 +61,7 @@
     <string name="submit">Trimitere</string>
     <string name="sync">Sincronizare</string>
     <string name="uri">URI</string>
-    <string name="website_uri">Website (URI)</string>
+    <string name="website_uri">Site web (URI)</string>
     <string name="username">Nume utilizator</string>
     <string name="validation_field_required">Câmpul %1$s este necesar.</string>
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
@@ -125,7 +125,7 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Element nou</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -173,7 +173,7 @@
     <string name="authenticator_app_title">Aplicația Autentificator</string>
     <string name="enter_verification_code_app">Introducere cod de verificare din 6 cifre din aplicația de autentificare.</string>
     <string name="enter_verification_code_email">Introducere cod de verificare din 6 cifre, care a fost trimis prin e-mail la %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Dispozitiv nerecunoscut. Introdu codul trimis pe email pentru a verifica identitatea.</string>
     <string name="recovery_code_title">Cod de recuperare</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>
@@ -288,7 +288,7 @@ Scanarea se va face automat.</string>
     <string name="select_type_field">Ce tip de câmp particularizat doriți să adăugați?</string>
     <string name="remove">Ștergere</string>
     <string name="new_uri">URI nou</string>
-    <string name="add_website">Add website</string>
+    <string name="add_website">Adăugare site</string>
     <string name="base_domain">Domeniu de bază</string>
     <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exact</string>
@@ -306,7 +306,7 @@ Scanarea se va face automat.</string>
     <string name="invalid_email">Adresă de e-mail greșită.</string>
     <string name="cards">Carduri</string>
     <string name="identities">Identități</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Identificare</string>
     <string name="logins">Conectări</string>
     <string name="secure_notes">Note securizate</string>
     <string name="personal_details">Personal Details</string>
@@ -329,7 +329,7 @@ Scanarea se va face automat.</string>
     <string name="type">Tip</string>
     <string name="move_down">Mutare în jos</string>
     <string name="move_up">Mutare în sus</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Proprietar</string>
     <string name="no_collections_to_list">Nu există colecții de afișat.</string>
     <string name="moved_item_to_org">%1$s s-a mutat la %2$s.</string>
     <string name="select_one_collection">Trebuie să selectați cel puțin o colecție.</string>
@@ -460,7 +460,7 @@ Scanarea se va face automat.</string>
     <string name="password_info">Opțional, este necesară o parolă pentru ca utilizatorii să acceseze acest Send.</string>
     <string name="remove_password">Eliminare parolă</string>
     <string name="removing_send_password">Se elimină parola</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Parolă eliminată</string>
     <string name="add_a_send">Adăugați un Send</string>
     <string name="copy_link">Copiere link</string>
     <string name="share_link">Partajare link</string>
@@ -686,9 +686,9 @@ Doriți să comutați la acest cont?</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Operațiunea cheie de acces a eșuat din cauza lipsei legăturilor activelor</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Operațiunea cheie de acces a eșuat deoarece aplicația nu a putut fi verificată</string>
     <string name="confirm_file_password">Confirmați parola fișierului</string>
-    <string name="file_password">File password</string>
+    <string name="file_password">Parola fișierului</string>
     <string name="password_protected">Password Protected</string>
-    <string name="password_used_to_export">This password will be used to export and import this file</string>
+    <string name="password_used_to_export">Această parolă se va folosi pentru exportul și importul acestui fișier</string>
     <string name="autofill_suggestion">Sugestie autocompletare</string>
     <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
     <string name="launch_web_authn">Lansare WebAuthn</string>
@@ -714,8 +714,8 @@ Doriți să comutați la acest cont?</string>
     <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
     <string name="your_data_when_and_where_you_need_it">Your data, when and where you need it</string>
     <string name="welcome_message_4">Save unlimited passwords across unlimited devices with Bitwarden mobile, browser, and desktop apps.</string>
-    <string name="remove_passkey">Remove passkey</string>
-    <string name="passkey_removed">Passkey removed</string>
+    <string name="remove_passkey">Înlăturare parolă</string>
+    <string name="passkey_removed">Parolă eliminată</string>
     <string name="what_makes_a_password_strong">Ce face o parolă puternică?</string>
     <string name="a_secure_memorable_password">A secure, memorable password</string>
     <string name="account_setup">Configurare cont</string>
@@ -754,7 +754,7 @@ Doriți să comutați la acest cont?</string>
     </plurals>
     <string name="expired_link">Link expirat</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
-    <string name="restart_registration">Restart registration</string>
+    <string name="restart_registration">Reporniți înregistrarea</string>
     <string name="authenticator_sync">Authenticator Sync</string>
     <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
     <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
@@ -773,12 +773,12 @@ Doriți să comutați la acest cont?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">Indiciu pentru parola principală</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-    <string name="new_login">New login</string>
+    <string name="new_login">Autentificare nouă</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Import saved logins</string>
@@ -821,22 +821,22 @@ Doriți să comutați la acest cont?</string>
     <string name="import_successful">Import Successful!</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">Am înțeles</string>
     <string name="no_logins_were_imported">No logins were imported</string>
-    <string name="import_error">Import error</string>
+    <string name="import_error">Eroare de importare</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
-    <string name="type_ssh_key">SSH key</string>
+    <string name="type_ssh_key">Cheie SSH</string>
     <string name="public_key">Public key</string>
     <string name="private_key">Private key</string>
     <string name="ssh_keys">SSH keys</string>
-    <string name="copy_public_key">Copy public key</string>
-    <string name="copy_fingerprint">Copy fingerprint</string>
+    <string name="copy_public_key">Copiază cheia de siguranța publică</string>
+    <string name="copy_fingerprint">Copiați amprenta</string>
     <string name="enable_notifications">Enable notifications</string>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="done_text">Done</string>
+    <string name="done_text">Făcut</string>
     <string name="page_number_x_of_y">%1$s of %2$s</string>
     <string name="copy_identity_name">Copy identity name</string>
     <string name="copy_company">Copy company</string>
@@ -859,7 +859,7 @@ Doriți să comutați la acest cont?</string>
     <string name="need_some_inspiration">Need some inspiration?</string>
     <string name="check_out_the_passphrase_generator">Check out the passphrase generator</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="copy_private_key">Copy private key</string>
+    <string name="copy_private_key">Copiază cheia de siguranța privată</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
@@ -886,7 +886,7 @@ Doriți să comutați la acest cont?</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
     <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
-    <string name="verify_your_identity">Verify your identity</string>
+    <string name="verify_your_identity">Verificați- vă identitatea</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
     <string name="import_certificate">Import certificate</string>
@@ -933,7 +933,7 @@ Doriți să comutați la acest cont?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 oră</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -966,7 +966,7 @@ Doriți să comutați la acest cont?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Ștergere Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1132,8 +1132,8 @@ Doriți să comutați la acest cont?</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
     <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="passwords">Parole</string>
+    <string name="passkeys">Chei de acces</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1141,4 +1141,6 @@ Doriți să comutați la acest cont?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

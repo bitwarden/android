@@ -440,7 +440,7 @@ Scanning will happen automatically.</string>
     <string name="text_to_share">Text to share</string>
     <string name="type_text">Text</string>
     <string name="hide_text_by_default">When accessing the Send, hide the text by default</string>
-    <string name="type_file">File</string>
+    <string name="type_file">ගොනුව</string>
     <string name="deletion_date">Deletion date</string>
     <string name="deletion_time">Deletion time</string>
     <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
@@ -930,7 +930,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">පැය 1</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -963,7 +963,7 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">යවන්න මකන්න</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1135,4 +1135,6 @@ Do you want to switch to this account?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

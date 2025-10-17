@@ -61,7 +61,7 @@
     <string name="submit">Indsend</string>
     <string name="sync">Synk</string>
     <string name="uri">URI</string>
-    <string name="website_uri">Website (URI)</string>
+    <string name="website_uri">Websted (URI)</string>
     <string name="username">Brugernavn</string>
     <string name="validation_field_required">Feltet %1$s er obligatorisk.</string>
     <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
@@ -118,13 +118,13 @@
     <string name="never">Aldrig</string>
     <string name="new_item_created">Emne tilføjet</string>
     <string name="no_cards">There are no cards in your vault.</string>
-    <string name="new_card">New card</string>
+    <string name="new_card">Nyt kort</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
-    <string name="new_identity">New identity</string>
+    <string name="new_identity">Ny identitet</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Nyt emne</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -143,7 +143,7 @@
     <string name="retype_master_password_required">Skriv hovedadgangskode igen (obligatorisk)</string>
     <string name="search_vault">Søg i boks</string>
     <string name="select">Vælg</string>
-    <string name="item_details">Item details</string>
+    <string name="item_details">Emnedetaljer</string>
     <string name="item_updated">Emne gemt</string>
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
@@ -164,15 +164,15 @@
     <string name="no_items_for_vault">Der er ingen emner i boksen matchende \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Søg efter eller tilføj et nyt login</string>
     <string name="disabled">Deaktiveret</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="bitwarden_autofill_service_alert2">Den letteste måde at føje nye logins til boksen er fra Bitwarden Autoudfyldningstjeneste. Læs mere om brugen af Bitwarden Autoudfyldningstjeneste ved at gå til skærmen \"Indstillinger\".</string>
+    <string name="autofill_title">Autoudfyld</string>
     <string name="autofill_or_view">Skal dette emne autoudfyldes eller vises?</string>
     <string name="search">Søg</string>
     <string name="learn_org">Læs om organisationer</string>
     <string name="authenticator_app_title">Godkender-app</string>
     <string name="enter_verification_code_app">Angiv den 6-cifrede bekræftelseskode fra godkender-appen.</string>
     <string name="enter_verification_code_email">Angiv den 6-cifrede bekræftelseskode e-mailet til %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Denne enhed er ikke genkendt. Angiv koden i den tilsendte e-mail for at bekræfte identiteten.</string>
     <string name="recovery_code_title">Gendannelseskode</string>
     <string name="remember">Husk</string>
     <string name="remember_email">Husk e-mail</string>
@@ -287,7 +287,7 @@ Skanning vil ske automatisk.</string>
     <string name="select_type_field">Hvilken type tilpasset felt ønskes tilføjet?</string>
     <string name="remove">Fjern</string>
     <string name="new_uri">Ny URI</string>
-    <string name="add_website">Add website</string>
+    <string name="add_website">Tilføj websted</string>
     <string name="base_domain">Basisdomæne</string>
     <string name="default_text">Default (%1$s)</string>
     <string name="exact">Nøjagtig</string>
@@ -305,12 +305,12 @@ Skanning vil ske automatisk.</string>
     <string name="invalid_email">Ugyldig e-mailadresse.</string>
     <string name="cards">Kort</string>
     <string name="identities">Identiteter</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Identifikation</string>
     <string name="logins">Logins</string>
     <string name="secure_notes">Sikre notater</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
-    <string name="check_password_for_data_breaches">Check password for data breaches</string>
+    <string name="check_password_for_data_breaches">Tjek adgangskode for datalæk</string>
     <plurals name="password_exposed">
         <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
         <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
@@ -327,7 +327,7 @@ Skanning vil ske automatisk.</string>
     <string name="type">Type</string>
     <string name="move_down">Flyt ned</string>
     <string name="move_up">Flyt op</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Ejer</string>
     <string name="no_collections_to_list">Der er ingen samlinger at vise.</string>
     <string name="moved_item_to_org">%1$s flyttet til %2$s.</string>
     <string name="select_one_collection">Mindst én samling skal vælges.</string>
@@ -394,7 +394,7 @@ Skanning vil ske automatisk.</string>
     <string name="password_generator_policy_in_effect">En eller flere organisationspolitikker påvirker generatorindstillingerne</string>
     <string name="unable_to_save_attachment">Et problem opstod med at gemme denne vedhæftning. Fortsætter problemet, gem den i stedet fra web-boksen.</string>
     <string name="save_attachment_success">Vedhæftning gemt</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld-tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
     <string name="autofill_tile_uri_not_found">Ingen adgangskodefelter fundet</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Emne er sendt til papirkurven.</string>
@@ -458,7 +458,7 @@ Skanning vil ske automatisk.</string>
     <string name="password_info">Valgfrit brugeradgangskodekrav for at tilgå denne Send.</string>
     <string name="remove_password">Fjern adgangskode</string>
     <string name="removing_send_password">Fjerner adgangskode</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Adgangskode fjernet</string>
     <string name="add_a_send">Ny Send</string>
     <string name="copy_link">Kopiér link</string>
     <string name="share_link">Del link</string>
@@ -742,7 +742,7 @@ Skift til denne konto?</string>
     <string name="change_email_address">Skift e-mailadresse</string>
     <string name="next">Næste</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden kan ikke gendanne en mistet eller glemt hovedadgangskode.</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden kan ikke nulstille en mistet eller glemt hovedadgangskode.</string>
     <string name="choose_your_master_password">Vælg hovedadgangskode</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Vælg en unik og stærk adgangskode for at holde brugeroplysningerne sikre.</string>
     <plurals name="minimum_characters">
@@ -768,7 +768,7 @@ Skift til denne konto?</string>
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Dette trin kan når som helst fuldføres via Indstillinger.</string>
     <string name="what_bitwarden_has_to_offer">Man kan nu tjekke alt det andet, Bitwarden har at tilbyde, og begynde at håndtere sine adgangskoder sikkert.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Så er alt klar!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fejl under oprettelse af forbindelse til Duo-tjenesten. Brug en anden totrins-indlogningsmetode eller kontakt Duo for hjælp.</string>
     <string name="master_password_hint_not_specified">Hovedadgangskodetip</string>
     <string name="new_master_password_hint">New master password hint</string>
@@ -808,7 +808,7 @@ Skift til denne konto?</string>
     <string name="need_help_check_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Gem den eksporterede fil et sted på computeren, hvor man nemt kan finde den.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dette er ikke en genkendt Bitwarden-server. Man skal muligvis tjekke med sin udbyder eller opdatere sin server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Synker logins...</string>
     <string name="download_the_browser_extension">Download webbrowserudvidelsen</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gå til bitwarden.com/download for at integrere Bitwarden i den foretrukne webbrowser for en problemfri oplevelse.</string>
     <string name="use_the_web_app">Brug web-appen</string>
@@ -859,14 +859,14 @@ Skift til denne konto?</string>
     <string name="copy_private_key">Kopiér privat nøgle</string>
     <string name="login_credentials">Login-legitimationsoplysninger</string>
     <string name="autofill_options">Autoudfyldningsindstillinger</string>
-    <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+    <string name="use_this_button_to_generate_a_new_unique_password">Brug denne knap til at generere en ny unik adgangskode.</string>
     <string name="coachmark_1_of_3">1 OF 3</string>
     <string name="coachmark_2_of_3">2 OF 3</string>
-    <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+    <string name="you_ll_only_need_to_set_up_authenticator_key">Man behøver kun opsætte Godkendelsesnøgle for logins, som kræver tofaktorgodkendelse med en kode. Nøglen vil løbende generere sekscifrede koder, man kan bruge til indlogning.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
-    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Man skal tilføje en webadresse for at bruge autofyldning for at tilgå denne konto.</string>
     <string name="learn_about_new_logins">Læs om nye logins</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vi vil gennemgå de vigtigste funktioner for at tilføje et nyt login.</string>
     <string name="explore_the_generator">Tjek generatoren ud</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Find ud af mere om generering af sikre loginoplysninger med en guidet tur.</string>
     <string name="import_client_certificate">Importér klientcertifikat</string>
@@ -908,7 +908,7 @@ Skift til denne konto?</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">URL til selv-hostet server</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
@@ -930,7 +930,7 @@ Skift til denne konto?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 time</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -950,7 +950,7 @@ Skift til denne konto?</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
-    <string name="go_to_settings">Go to settings</string>
+    <string name="go_to_settings">Gå til Indstillinger</string>
     <string name="all_logs_deleted">All logs deleted</string>
     <string name="log_deleted">Log deleted</string>
     <string name="app_settings">App settings</string>
@@ -959,11 +959,11 @@ Skift til denne konto?</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>
-    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="cannot_delete_your_account_explanation">Denne handling kan ikke fuldføres, da kontoen ejes af en organisation. Kontakt organisationsadministratoren for yderligere detaljer.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Slet Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -988,7 +988,7 @@ Skift til denne konto?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="decryption_error">Dekrypteringsfejl</string>
     <string name="scan_a_qr_code">Skan en QR-kode</string>
     <string name="cannot_add_authenticator_key">Kan ikke tilføje godkendelsesnøgle?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Tildel kameratilladelse for brug af skanneren</string>
@@ -1125,9 +1125,9 @@ Skift til denne konto?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">Eksport mislykkedes</string>
+    <string name="passwords">Adgangskoder</string>
+    <string name="passkeys">Adgangsnøgler</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@ Skift til denne konto?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

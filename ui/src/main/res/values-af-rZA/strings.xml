@@ -124,7 +124,7 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">Nuwe item</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -161,7 +161,7 @@
     <string name="items">Items</string>
     <string name="items_for_uri">Items vir %1$s</string>
     <string name="no_items_for_uri">Daar is geen items in u kluis vir %1$s nie.</string>
-    <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+    <string name="no_items_for_vault">Daar is geen items in jou kluis wat met \"%1$s\" ooreenstem nie</string>
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Gedeaktiveer</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
@@ -327,7 +327,7 @@ Skandering gebeur outomaties.</string>
     <string name="type">Tipe</string>
     <string name="move_down">Skuif af</string>
     <string name="move_up">Skuif op</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Eienaar</string>
     <string name="no_collections_to_list">Daar is geen versamelings om te lys nie.</string>
     <string name="moved_item_to_org">%1$s geskuif na %2$s.</string>
     <string name="select_one_collection">U moet ten minste een versameling kies.</string>
@@ -458,7 +458,7 @@ Skandering gebeur outomaties.</string>
     <string name="password_info">Vereis opsioneel ’n wagwoord vir gebruikers om toegang tot hierdie Send te verkry.</string>
     <string name="remove_password">Verwyder wagwoord</string>
     <string name="removing_send_password">Verwyder tans wagwoord</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Wagwoord geverwydered</string>
     <string name="add_a_send">Voeg ’n Send toe</string>
     <string name="copy_link">Kopieer skakel</string>
     <string name="share_link">Deel skakel</string>
@@ -683,7 +683,7 @@ Wil u na die rekening omskakel?</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
-    <string name="confirm_file_password">Confirm file password</string>
+    <string name="confirm_file_password">Bevesting lêer-wagwoord</string>
     <string name="file_password">File password</string>
     <string name="password_protected">Password Protected</string>
     <string name="password_used_to_export">This password will be used to export and import this file</string>
@@ -721,7 +721,7 @@ Wil u na die rekening omskakel?</string>
     <string name="set_up_later">Set up later</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Bevestig</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -740,7 +740,7 @@ Wil u na die rekening omskakel?</string>
     <string name="email_address_required">Email address (required)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Change email address</string>
-    <string name="next">Next</string>
+    <string name="next">Volgende</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
@@ -772,7 +772,7 @@ Wil u na die rekening omskakel?</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
     <string name="master_password_hint_not_specified">Master password hint</string>
     <string name="new_master_password_hint">New master password hint</string>
-    <string name="get_started">Get started</string>
+    <string name="get_started">Val weg</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">New login</string>
@@ -820,7 +820,7 @@ Wil u na die rekening omskakel?</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
     <string name="got_it">Got it</string>
     <string name="no_logins_were_imported">No logins were imported</string>
-    <string name="import_error">Import error</string>
+    <string name="import_error">Invoer fout</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
     <string name="type_ssh_key">SSH key</string>
@@ -833,7 +833,7 @@ Wil u na die rekening omskakel?</string>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="done_text">Done</string>
+    <string name="done_text">Klaar</string>
     <string name="page_number_x_of_y">%1$s of %2$s</string>
     <string name="copy_identity_name">Copy identity name</string>
     <string name="copy_company">Copy company</string>
@@ -930,7 +930,7 @@ Wil u na die rekening omskakel?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 uur</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -963,7 +963,7 @@ Wil u na die rekening omskakel?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">Skrap Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1135,4 +1135,6 @@ Wil u na die rekening omskakel?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

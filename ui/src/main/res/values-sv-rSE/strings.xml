@@ -394,7 +394,7 @@ Skanningen sker automatiskt.</string>
     <string name="password_generator_policy_in_effect">En eller flera organisationspolicyer påverkar dina generatorinställningar</string>
     <string name="unable_to_save_attachment">Det gick inte att spara bilagan. Om problemet kvarstår kan du spara den från webbvalvet.</string>
     <string name="save_attachment_success">Bilagan sparades</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Slå på \"Autofill Accessibility Service\" från Bitwarden Settings för att använda Autofill-kaklet.</string>
     <string name="autofill_tile_uri_not_found">Inga lösenordsfält hittades</string>
     <string name="soft_deleting">Skickar till papperskorg…</string>
     <string name="item_soft_deleted">Objektet har skickats till papperskorgen.</string>
@@ -1133,6 +1133,8 @@ Vill du byta till detta konto?</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ett fel inträffade vid försök att uppdatera dina kdf-inställningar. Försök igen eller kontakta oss.</string>
     <string name="the_import_request_could_not_be_processed">Importbegäran kunde inte behandlas.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
+    <string name="no_items_available_to_import">Inga objekt tillgängliga att importera</string>
+    <string name="select_a_different_account">Välj ett annat konto</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

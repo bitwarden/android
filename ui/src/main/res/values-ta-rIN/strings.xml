@@ -164,7 +164,7 @@
     <string name="no_items_for_vault">உம் பெட்டகத்தில் “%1$s”-உடன் பொருந்தும் உருப்படிகள் இல்லை</string>
     <string name="search_for_a_login_or_add_a_new_login">உள்நுழைவைத் தேடு அல்லது புது உள்நுழைவைச் சேர்</string>
     <string name="disabled">முடக்கத்தில்</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">புதிய உள்நுழைவுகளை உங்கள் பெட்டகத்தில் சேர்க்க எளிதான வழி, பிட்வார்டன் தானாக நிரப்புதல் சேவையிலிருந்து ஆகும். \"அமைப்புகள்\" திரைக்குச் சென்று பிட்வார்டன் தானாக நிரப்புதல் சேவையைப் பயன்படுத்துவது பற்றி மேலும் அறிக.</string>
     <string name="autofill_title">தானியங்குநிரப்பு</string>
     <string name="autofill_or_view">இவ்வுருப்படியை தன்னிரப்ப அல்லது பார்க்க வேண்டுமா?</string>
     <string name="search">தேடுக</string>
@@ -172,7 +172,7 @@
     <string name="authenticator_app_title">அங்கீகரிப்பான் செயலி</string>
     <string name="enter_verification_code_app">உங்கள் அங்கீகார செயலியிலிருந்து ௬ இலக்க சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.</string>
     <string name="enter_verification_code_email">%1$s க்கு மின்னஞ்சல் செய்த ௬ இலக்க சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">இந்த சாதனத்தை நாங்கள் அடையாளம் காணவில்லை. உங்கள் அடையாளத்தைச் சரிபார்க்க உங்கள் மின்னஞ்சலுக்கு அனுப்பப்பட்ட குறியீட்டை உள்ளிடவும்.</string>
     <string name="recovery_code_title">மீட்புக் குறியீடு</string>
     <string name="remember">நினைவில் கொள்ளுங்கள்</string>
     <string name="remember_email">மின்னஞ்சலை நினைவில் கொள்ளுங்கள்</string>
@@ -394,7 +394,7 @@
     <string name="password_generator_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது உருவாக்கி அமைப்புகளை பாதிக்கிறது</string>
     <string name="unable_to_save_attachment">இவ்விணைப்பை சேமிப்பதில் ஏதோ சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து இதைச் சேமிக்கலாம்.</string>
     <string name="save_attachment_success">சேர்ப்பு வெற்றிகரமாக சேமிக்கப்பட்டது</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">தானாக நிரப்புதல் டைலை பயன்படுத்த பிட்வார்டன் அமைப்புகளிலிருந்து \"தானாக நிரப்புதல் அணுகல் சேவை\" என்பதை இயக்கவும்.</string>
     <string name="autofill_tile_uri_not_found">கடவுச்சொல் புலங்களேதும் கண்டறியப்படவில்லை</string>
     <string name="soft_deleting">குப்பைக்கு அனுப்புகிறது…</string>
     <string name="item_soft_deleted">உருப்படி குப்பைக்கு அனுப்பப்பட்டது.</string>
@@ -738,7 +738,7 @@
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">கணக்கு லாக் அவுட்டைத் தடுப்பதற்கான வழிகளைப் பற்றி அறிக</annotation></string>
     <string name="help_with_server_geolocations">சர்வர் புவிஇருப்பிடங்களுடன் உதவி.</string>
     <string name="email_address_required">மின்னஞ்சல் முகவரி (தேவை)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்க்கவும், உங்கள் கணக்கை உருவாக்குவதைத் தொடரவும் மின்னஞ்சலில் உள்ள இணைப்பைத் தேர்ந்தெடுக்கவும்.</string>
     <string name="change_email_address">மின்னஞ்சல் முகவரியை மாற்று</string>
     <string name="next">அடுத்து</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">தொலைந்த அல்லது மறக்கப்பட்ட முதன்மை கடவுச்சொல்லை Bitwarden மீட்டெடுக்க முடியாது.</string>
@@ -768,7 +768,7 @@
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">அமைப்புகளில் எந்த நேரத்திலும் இந்த படிநிலையை முடிக்க நீங்கள் திரும்பலாம்.</string>
     <string name="what_bitwarden_has_to_offer">இப்போது நீங்கள் Bitwarden வழங்க வேண்டிய அனைத்தையும் ஆராயலாம் மற்றும் உங்கள் கடவுச்சொற்களை பாதுகாப்பாக நிர்வகிக்கத் தொடங்கலாம்.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">நீங்கள் தயாராக உள்ளீர்கள்!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo சேவைடன் இணைப்பதில் பிழை. வேறு இரண்டு-படி உள்நுழைவு முறையைப் பயன்படுத்தவும் அல்லது உதவிக்கு Duo-ஐ தொடர்பு கொள்ளவும்.</string>
     <string name="master_password_hint_not_specified">முதன்மை கடவுச்சொல் குறிப்பு</string>
     <string name="new_master_password_hint">புதிய முதன்மை கடவுச்சொல் குறிப்பு</string>
@@ -866,13 +866,13 @@
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">இந்த கணக்கை அணுக தானியங்கு நிரப்புதலைப் பயன்படுத்த ஒரு வலை முகவரியைச் சேர்க்க வேண்டும்.</string>
     <string name="learn_about_new_logins">புதிய உள்நுழைவுகளைப் பற்றி அறிக</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">புதிய உள்நுழைவைச் சேர்ப்பதற்கான முக்கிய அம்சங்கள் பற்றி நாங்கள் உங்களுக்கு விளக்குவோம்.</string>
     <string name="explore_the_generator">ஜெனரேட்டரை ஆராயுங்கள்</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">வழிகாட்டப்பட்ட சுற்றுப்பயணத்துடன் பாதுகாப்பான உள்நுழைவு சான்றுகளை உருவாக்குவது பற்றி மேலும் அறிக.</string>
     <string name="import_client_certificate">வாடிக்கையாளர் சான்றிதழை இறக்குமதி செய்</string>
     <string name="enter_the_client_certificate_password_and_alias">வாடிக்கையாளர் சான்றிதழ் கடவுச்சொல் மற்றும் இந்த சான்றிதழுக்கான விரும்பிய புனைப்பெயரை உள்ளிடவும்.</string>
     <string name="alias">புனைப்பெயர்</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">பாதுகாப்பான கடவுச்சொற்கள், கடவுக்குறிச்சொற்கள் மற்றும் பயனர்பெயர்களை உருவாக்க ஜெனரேட்டரைப் பயன்படுத்தவும்.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">கடவுச்சொற்றொடர்கள் வலுவான கடவுச்சொற்கள் ஆகும், அவை சீரற்ற கடவுச்சொற்களை விட நினைவில் கொள்ளவும் தட்டச்சு செய்யவும் எளிதானவை. உங்கள் டிவியில் உள்ள ஸ்ட்ரீமிங் சேவை போன்ற தானியங்கு நிரப்புதல் கிடைக்காத கணக்குகளில் உள்நுழைய அவை உதவியாக இருக்கும்.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">தனிப்பட்ட பயனர்பெயர்கள் பாதுகாப்பின் ஒரு கூடுதல் அடுக்கைச் சேர்க்கின்றன மற்றும் ஹேக்கர்கள் உங்கள் கணக்குகளைக் கண்டுபிடிப்பதைத் தடுக்க உதவும்.</string>
     <string name="coachmark_1_of_6">1/6</string>
@@ -881,8 +881,8 @@
     <string name="coachmark_4_of_6">4/6</string>
     <string name="coachmark_5_of_6">5/6</string>
     <string name="coachmark_6_of_6">6/6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">உங்கள் கணக்கு வலைத்தளத்தின் தேவைகளைப் பூர்த்தி செய்ய உங்கள் கடவுச்சொல்லை சரிசெய்ய இந்த விருப்பங்களைப் பயன்படுத்தவும்.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">உங்கள் புதிய கடவுச்சொல்லை பிட்வார்டனில் சேமித்த பிறகு, உங்கள் கணக்கு வலைத்தளத்தில் அதைப் புதுப்பிக்க மறக்க வேண்டாம்.</string>
     <string name="verify_your_identity">உங்கள் அடையாளத்தை சரிபார்க்கவும்</string>
     <string name="error_loading_certificate">சான்றிதழை ஏற்றுவதில் பிழை</string>
     <string name="certificate_alias">சான்றிதழ் புனைப்பெயர்</string>
@@ -1125,9 +1125,9 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">ஏற்றுமதி தோல்வியடைந்தது</string>
+    <string name="passwords">கடவுச்சொற்கள்</string>
+    <string name="passkeys">கடவுவிசைகள்</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

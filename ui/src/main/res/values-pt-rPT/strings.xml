@@ -1135,4 +1135,6 @@ Pretende mudar para esta conta?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">O seu cofre pode estar vazio ou a importação de alguns tipos de itens pode não ser permitida para a sua conta.</string>
     <string name="no_items_available_to_import">Não há itens disponíveis para importar</string>
     <string name="select_a_different_account">Selecione uma conta diferente</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>
