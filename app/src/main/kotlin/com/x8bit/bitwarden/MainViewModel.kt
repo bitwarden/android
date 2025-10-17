@@ -377,7 +377,6 @@ class MainViewModel @Inject constructor(
             }
 
             createCredentialRequest != null -> {
-                //TODO only force verification for passkeys??
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
