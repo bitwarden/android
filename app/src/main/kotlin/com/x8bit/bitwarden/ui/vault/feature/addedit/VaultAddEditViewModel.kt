@@ -496,8 +496,8 @@ class VaultAddEditViewModel @Inject constructor(
             else ->
                 showCredentialErrorDialog(
                     BitwardenString
-                    .credential_operation_failed_because_the_request_is_invalid
-                    .asText(),
+                        .credential_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 )
         }
     }
@@ -2430,8 +2430,8 @@ data class VaultAddEditState(
 
     val shouldShowMoveToOrganization: Boolean
         get() = !isAddItemMode &&
-            !isCipherInCollection &&
-            hasOrganizations
+                !isCipherInCollection &&
+                hasOrganizations
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
