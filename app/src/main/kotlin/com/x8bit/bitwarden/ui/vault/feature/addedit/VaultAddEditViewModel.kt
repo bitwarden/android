@@ -495,7 +495,9 @@ class VaultAddEditViewModel @Inject constructor(
 
             else ->
                 showCredentialErrorDialog(
-                    BitwardenString.credential_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString
+                    .credential_operation_failed_because_the_request_is_invalid
+                    .asText(),
                 )
         }
     }
