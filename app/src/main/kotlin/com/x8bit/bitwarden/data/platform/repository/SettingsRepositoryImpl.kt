@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -293,7 +294,11 @@ class SettingsRepositoryImpl(
             ?.let { userId ->
                 authDiskSource
                     .getPinProtectedUserKeyFlow(userId)
-                    .map { it != null }
+                    .combine(
+                        authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId),
+                    ) { pinProtectedUserKey, pinProtectedUserKeyEnvelope ->
+                        pinProtectedUserKey != null || pinProtectedUserKeyEnvelope != null
+                    }
             }
             ?: flowOf(false)
 
@@ -403,7 +408,7 @@ class SettingsRepositoryImpl(
             ?.userDecryptionOptions
             ?.hasMasterPassword != false
         val timeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        val hasPin = authDiskSource.getPinProtectedUserKey(userId = userId) != null
+        val hasPin = authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId) != null
         val hasBiometrics = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
         // The timeout action cannot be "lock" if you do not have master password, pin, or
         // biometrics unlock enabled.
@@ -527,21 +532,27 @@ class SettingsRepositoryImpl(
         val userId = activeUserId ?: return
         unconfinedScope.launch {
             vaultSdkSource
-                .derivePinKey(
+                .enrollPin(
                     userId = userId,
                     pin = pin,
                 )
                 .fold(
-                    onSuccess = { derivePinKeyResponse ->
+                    onSuccess = { enrollPinResponse ->
                         authDiskSource.apply {
                             storeEncryptedPin(
                                 userId = userId,
-                                encryptedPin = derivePinKeyResponse.encryptedPin,
+                                encryptedPin = enrollPinResponse.userKeyEncryptedPin,
                             )
+                            storePinProtectedUserKeyEnvelope(
+                                userId = userId,
+                                pinProtectedUserKeyEnvelope =
+                                    enrollPinResponse.pinProtectedUserKeyEnvelope,
+                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                            )
+                            // Remove any legacy pin protected user keys.
                             storePinProtectedUserKey(
                                 userId = userId,
-                                pinProtectedUserKey = derivePinKeyResponse.pinProtectedUserKey,
-                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                                pinProtectedUserKey = null,
                             )
                         }
                     },
@@ -560,6 +571,10 @@ class SettingsRepositoryImpl(
             storeEncryptedPin(
                 userId = userId,
                 encryptedPin = null,
+            )
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = null,
             )
             authDiskSource.storePinProtectedUserKey(
                 userId = userId,

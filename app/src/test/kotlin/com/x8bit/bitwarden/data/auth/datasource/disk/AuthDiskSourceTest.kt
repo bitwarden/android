@@ -331,6 +331,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
@@ -821,6 +822,63 @@ class AuthDiskSourceTest {
             )
         assertEquals(
             mockPinProtectedUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `storePinProtectedUserKeyEnvelope should update result flow from getPinProtectedUserKeyEnvelopeFlow`() =
+        runTest {
+            val topSecretKey = "topsecret"
+            val mockUserId = "mockUserId"
+            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(mockUserId).test {
+                assertNull(awaitItem())
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = mockUserId,
+                    pinProtectedUserKeyEnvelope = topSecretKey,
+                )
+                assertEquals(topSecretKey, awaitItem())
+            }
+        }
+
+    @Test
+    fun `getPinProtectedUserKeyEnvelope should pull from SharedPreferences`() {
+        val pinProtectedUserKeyEnvelopeBaseKey =
+            "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKeyEnvelope = "mockPinProtectedUserKeyEnvelope"
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${pinProtectedUserKeyEnvelopeBaseKey}_$mockUserId",
+                    mockPinProtectedUserKeyEnvelope,
+                )
+            }
+        val actual = authDiskSource.getPinProtectedUserKeyEnvelope(userId = mockUserId)
+        assertEquals(
+            mockPinProtectedUserKeyEnvelope,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePinProtectedUserKeyEnvelope should pull from SharedPreferences`() {
+        val pinProtectedUserKeyEnvelopeBaseKey =
+            "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKeyEnvelope = "mockPinProtectedUserKeyEnvelope"
+        authDiskSource.storePinProtectedUserKeyEnvelope(
+            userId = mockUserId,
+            pinProtectedUserKeyEnvelope = mockPinProtectedUserKeyEnvelope,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${pinProtectedUserKeyEnvelopeBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockPinProtectedUserKeyEnvelope,
             actual,
         )
     }

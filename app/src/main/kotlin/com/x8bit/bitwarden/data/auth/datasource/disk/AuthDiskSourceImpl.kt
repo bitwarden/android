@@ -37,6 +37,7 @@ private const val INVALID_UNLOCK_ATTEMPTS_KEY = "invalidUnlockAttempts"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
 private const val PIN_PROTECTED_USER_KEY_KEY = "pinKeyEncryptedUserKey"
+private const val PIN_PROTECTED_USER_KEY_KEY_ENVELOPE = "pinKeyEncryptedUserKeyEnvelope"
 private const val ENCRYPTED_PIN_KEY = "protectedPin"
 private const val ORGANIZATIONS_KEY = "organizations"
 private const val ORGANIZATION_KEYS_KEY = "encOrgKeys"
@@ -67,6 +68,7 @@ class AuthDiskSourceImpl(
     AuthDiskSource {
 
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
+    private val inMemoryPinProtectedUserKeyEnvelopes = mutableMapOf<String, String?>()
     private val mutableShouldUseKeyConnectorFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
     private val mutableOrganizationsFlowMap =
@@ -81,6 +83,8 @@ class AuthDiskSourceImpl(
     private val mutableBiometricUnlockKeyFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val mutablePinProtectedUserKeyFlowMap =
+        mutableMapOf<String, MutableSharedFlow<String?>>()
+    private val mutablePinProtectedUserKeyEnvelopeFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
@@ -142,6 +146,7 @@ class AuthDiskSourceImpl(
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
         storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+        storePinProtectedUserKeyEnvelope(userId = userId, pinProtectedUserKeyEnvelope = null)
         storeEncryptedPin(userId = userId, encryptedPin = null)
         storePrivateKey(userId = userId, privateKey = null)
         storeAccountKeys(userId = userId, accountKeys = null)
@@ -329,10 +334,24 @@ class AuthDiskSourceImpl(
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId = userId)) }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     override fun getPinProtectedUserKey(userId: String): String? =
         inMemoryPinProtectedUserKeys[userId]
             ?: getString(key = PIN_PROTECTED_USER_KEY_KEY.appendIdentifier(userId))
 
+    override fun getPinProtectedUserKeyEnvelope(userId: String): String? =
+        inMemoryPinProtectedUserKeyEnvelopes[userId]
+            ?: getString(
+                key = PIN_PROTECTED_USER_KEY_KEY_ENVELOPE.appendIdentifier(userId),
+            )
+
+    @Deprecated(
+        "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -347,9 +366,31 @@ class AuthDiskSourceImpl(
         getMutablePinProtectedUserKeyFlow(userId).tryEmit(pinProtectedUserKey)
     }
 
+    override fun storePinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean,
+    ) {
+        inMemoryPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope
+        if (inMemoryOnly) return
+        putString(
+            key = PIN_PROTECTED_USER_KEY_KEY_ENVELOPE.appendIdentifier(userId),
+            value = pinProtectedUserKeyEnvelope,
+        )
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
+    }
+
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     override fun getPinProtectedUserKeyFlow(userId: String): Flow<String?> =
         getMutablePinProtectedUserKeyFlow(userId)
             .onSubscription { emit(getPinProtectedUserKey(userId = userId)) }
+
+    override fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?> =
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId)
+            .onSubscription { emit(getPinProtectedUserKeyEnvelope(userId = userId)) }
 
     override fun getTwoFactorToken(email: String): String? =
         getString(key = TWO_FACTOR_TOKEN_KEY.appendIdentifier(email))
@@ -576,6 +617,12 @@ class AuthDiskSourceImpl(
     private fun getMutablePinProtectedUserKeyFlow(
         userId: String,
     ): MutableSharedFlow<String?> = mutablePinProtectedUserKeyFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
+
+    private fun getMutablePinProtectedUserKeyEnvelopeFlow(
+        userId: String,
+    ): MutableSharedFlow<String?> = mutablePinProtectedUserKeyEnvelopeFlowMap.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
 

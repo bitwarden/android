@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -75,30 +75,26 @@ interface VaultSdkSource {
     ): Result<DeriveKeyConnectorResult>
 
     /**
-     * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later
-     * unlock their vault via a call to [initializeCrypto] with [InitUserCryptoMethod.Pin].
+     * Protects the current user key with the provided PIN. This can be used to later unlock
+     * their vault via a call to [initializeCrypto] with [InitUserCryptoMethod.PinEnvelope].
      *
      * This should only be called after a successful call to [initializeCrypto] for the associated
      * user.
      */
-    suspend fun derivePinKey(
+    suspend fun enrollPin(
         userId: String,
         pin: String,
-    ): Result<DerivePinKeyResponse>
+    ): Result<EnrollPinResponse>
 
     /**
-     * Derives a pin-protected user key from the given [encryptedPin] for the given [userId]. This
-     * value must be derived from a previous call to [derivePinKey] with a plaintext PIN. This can
-     * be used to later unlock their vault via a call to [initializeCrypto] with
-     * [InitUserCryptoMethod.Pin].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
+     * Protects the current user key with the provided PIN. The result can be stored and later
+     * used to initialize another client instance by using the PIN and the PIN key with
+     * [initializeCrypto]. The provided pin is encrypted with the user key.
      */
-    suspend fun derivePinProtectedUserKey(
+    suspend fun enrollPinWithEncryptedPin(
         userId: String,
         encryptedPin: String,
-    ): Result<String>
+    ): Result<EnrollPinResponse>
 
     /**
      * Validate the user pin using the [pinProtectedUserKey].

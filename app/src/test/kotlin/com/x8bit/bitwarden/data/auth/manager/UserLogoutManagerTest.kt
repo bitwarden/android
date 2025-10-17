@@ -34,7 +34,12 @@ import java.time.ZonedDateTime
 class UserLogoutManagerTest {
     private val authDiskSource: AuthDiskSource = mockk {
         every { storeAccountTokens(userId = any(), accountTokens = null) } just runs
-        every { storePinProtectedUserKey(userId = any(), pinProtectedUserKey = any()) } just runs
+        every {
+            storePinProtectedUserKeyEnvelope(
+                userId = any(),
+                pinProtectedUserKeyEnvelope = any(),
+            )
+        } just runs
         every { userState = any() } just runs
         every { clearData(any()) } just runs
     }
@@ -137,8 +142,9 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+
         every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
@@ -164,9 +170,9 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKey(
+            authDiskSource.storePinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
         }
     }
@@ -186,7 +192,7 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
         every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
@@ -206,9 +212,9 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKey(
+            authDiskSource.storePinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
         }
     }
@@ -223,14 +229,14 @@ class UserLogoutManagerTest {
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId)
+        } returns pinProtectedUserKey
+        every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
-        every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
-        } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
 
@@ -249,9 +255,9 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKey(
+            authDiskSource.storePinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
         }
     }
