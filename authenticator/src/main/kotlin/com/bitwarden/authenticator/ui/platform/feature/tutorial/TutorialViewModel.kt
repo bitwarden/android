@@ -92,7 +92,7 @@ data class TutorialState(
          */
         @Parcelize
         data object IntroSlide : TutorialSlide() {
-            override val image: Int get() = BitwardenDrawable.ic_tutorial_verification_codes
+            override val image: Int get() = BitwardenDrawable.img_authenticator
             override val title: Int get() = BitwardenString.secure_your_accounts_with_bitwarden_authenticator
             override val message: Int get() = BitwardenString.get_verification_codes_for_all_your_accounts
         }
@@ -102,7 +102,7 @@ data class TutorialState(
          */
         @Parcelize
         data object QrScannerSlide : TutorialSlide() {
-            override val image: Int get() = BitwardenDrawable.ic_tutorial_qr_scanner
+            override val image: Int get() = BitwardenDrawable.lock
             override val title: Int get() = BitwardenString.use_your_device_camera_to_scan_codes
             override val message: Int get() = BitwardenString.scan_the_qr_code_in_your_2_step_verification_settings_for_any_account
         }
@@ -112,7 +112,7 @@ data class TutorialState(
          */
         @Parcelize
         data object UniqueCodesSlide : TutorialSlide() {
-            override val image: Int get() = BitwardenDrawable.ic_tutorial_2fa
+            override val image: Int get() = BitwardenDrawable.ill_pin
             override val title: Int get() = BitwardenString.sign_in_using_unique_codes
             override val message: Int get() = BitwardenString.when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app
         }

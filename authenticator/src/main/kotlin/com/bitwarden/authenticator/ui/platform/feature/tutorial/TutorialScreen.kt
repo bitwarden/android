@@ -190,7 +190,7 @@ private fun TutorialScreenPortrait(
         Image(
             painter = rememberVectorPainter(id = state.image),
             contentDescription = null,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(size = 124.dp),
         )
 
         Text(
@@ -223,7 +223,7 @@ private fun TutorialScreenLandscape(
         Image(
             painter = rememberVectorPainter(id = state.image),
             contentDescription = null,
-            modifier = Modifier.size(132.dp),
+            modifier = Modifier.size(size = 124.dp),
         )
 
         Spacer(modifier = Modifier.weight(1f))
