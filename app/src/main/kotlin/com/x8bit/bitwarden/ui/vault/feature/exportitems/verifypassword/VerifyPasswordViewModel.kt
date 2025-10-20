@@ -56,6 +56,12 @@ class VerifyPasswordViewModel @Inject constructor(
                 ?.firstOrNull { it.userId == args.userId }
                 ?: throw IllegalStateException("Account not found")
 
+            val singleAccount = authRepository
+                .userStateFlow
+                .value
+                ?.accounts
+                ?.size == 1
+
             val restrictedItemPolicyOrgIds = policyManager
                 .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
                 .filter { it.isEnabled }
@@ -81,6 +87,7 @@ class VerifyPasswordViewModel @Inject constructor(
                         .any { it.id in restrictedItemPolicyOrgIds },
                 ),
                 showResendCodeButton = !account.hasMasterPassword,
+                hasOtherAccounts = !singleAccount,
             )
         },
 ) {
@@ -138,7 +145,11 @@ class VerifyPasswordViewModel @Inject constructor(
     }
 
     private fun handleNavigateBackClick() {
-        sendEvent(VerifyPasswordEvent.NavigateBack)
+        if (state.hasOtherAccounts) {
+            sendEvent(VerifyPasswordEvent.NavigateBack)
+        } else {
+            sendEvent(VerifyPasswordEvent.CancelExport)
+        }
     }
 
     private fun handleContinueClick() {
@@ -421,17 +432,19 @@ data class VerifyPasswordState(
     val accountSummaryListItem: AccountSelectionListItem,
     val title: Text,
     val subtext: Text?,
-    // We never want this saved since the input is sensitive data.
-    @IgnoredOnParcel val input: String = "",
-    val dialog: DialogState? = null,
-    val showResendCodeButton: Boolean = false,
+    val hasOtherAccounts: Boolean,
+// We never want this saved since the input is sensitive data.
+@IgnoredOnParcel
+val input: String = "",
+val dialog: DialogState? = null,
+val showResendCodeButton: Boolean = false,
 ) : Parcelable {
 
     /**
      * Whether the unlock button should be enabled.
      */
     val isContinueButtonEnabled: Boolean
-        get() = input.isNotBlank() && dialog !is DialogState.Loading
+    get() = input.isNotBlank() && dialog !is DialogState.Loading
 
     /**
      * Represents the state of a dialog.
@@ -476,8 +489,13 @@ sealed class VerifyPasswordEvent {
     data class PasswordVerified(val userId: String) : VerifyPasswordEvent()
 
     /**
-     * Show a snackbar with the given data.
+     * Cancel the export request.
      */
+    data object CancelExport : VerifyPasswordEvent()
+
+    /**
+    * Show a snackbar with the given data .
+    */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
     ) : VerifyPasswordEvent() {
