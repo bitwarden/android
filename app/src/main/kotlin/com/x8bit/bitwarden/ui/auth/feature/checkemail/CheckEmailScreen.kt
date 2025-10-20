@@ -117,7 +117,7 @@ private fun CheckEmailContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.open_email),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_open_email),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

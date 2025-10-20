@@ -231,7 +231,7 @@ private fun SetupAutoFillContentHeader(
 @Composable
 private fun OrderedHeaderContent() {
     BitwardenGifImage(
-        resId = BitwardenDrawable.img_setup_autofill,
+        resId = BitwardenDrawable.gif_setup_autofill,
         modifier = Modifier
             .clip(
                 RoundedCornerShape(

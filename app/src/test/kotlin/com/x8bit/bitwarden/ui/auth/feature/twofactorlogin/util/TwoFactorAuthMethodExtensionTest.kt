@@ -139,10 +139,10 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `imageRes returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenDrawable.img_authenticator,
-            TwoFactorAuthMethod.EMAIL to BitwardenDrawable.img_new_device_verification,
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenDrawable.ill_authenticator,
+            TwoFactorAuthMethod.EMAIL to BitwardenDrawable.ill_new_device_verification,
             TwoFactorAuthMethod.DUO to null,
-            TwoFactorAuthMethod.YUBI_KEY to BitwardenDrawable.yubi_key,
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenDrawable.img_yubi_key,
             TwoFactorAuthMethod.U2F to null,
             TwoFactorAuthMethod.REMEMBER to null,
             TwoFactorAuthMethod.DUO_ORGANIZATION to null,

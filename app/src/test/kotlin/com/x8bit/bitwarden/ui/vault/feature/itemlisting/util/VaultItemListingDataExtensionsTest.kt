@@ -946,7 +946,7 @@ class VaultItemListingDataExtensionsTest {
                 message = BitwardenString.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
                 buttonText = BitwardenString.new_item.asText(),
-                vectorRes = BitwardenDrawable.img_folder_question,
+                vectorRes = BitwardenDrawable.ill_folder_question,
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,

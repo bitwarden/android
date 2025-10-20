@@ -235,7 +235,7 @@ private fun InitialImportLoginsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_import_logins),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_import_logins),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -433,7 +433,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
     ) {
         Spacer(Modifier.height(24.dp))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_secure_devices),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_secure_devices),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

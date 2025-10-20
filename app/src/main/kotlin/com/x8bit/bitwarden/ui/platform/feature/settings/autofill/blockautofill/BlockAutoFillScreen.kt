@@ -222,7 +222,7 @@ private fun BlockAutoFillNoItems(
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
             painter = rememberVectorPainter(
-                id = BitwardenDrawable.blocked_uri,
+                id = BitwardenDrawable.ill_blocked_uri,
             ),
             contentDescription = null,
             modifier = Modifier

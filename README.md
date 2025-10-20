@@ -4,7 +4,6 @@
 
 - [Compatibility](#compatibility)
 - [Setup](#setup)
-- [Theme](#theme)
 - [Dependencies](#dependencies)
 
 ## Compatibility
@@ -92,25 +91,6 @@ chmod +x .git/hooks/pre-commit
 
 echo "detekt pre-commit hook installed successfully to .git/hooks/pre-commit"
 ```
-
-## Theme
-
-### Icons & Illustrations
-
-The app supports light mode, dark mode and dynamic colors. Most icons in the app will display correctly using tinting but multi-tonal icons and illustrations require extra processing in order to be displayed properly with dynamic colors.
-
-All illustrations and multi-tonal icons require the svg paths to be tagged with the `name` attribute in order for each individual path to be tinted the appropriate color. Any untagged path will not be tinted and the resulting image will be incorrect.
-
-The supported tags are as follows:
-
-* outline
-* primary
-* secondary
-* tertiary
-* accent
-* logo
-* navigation
-* navigationActiveAccent
 
 ## Dependencies
 
