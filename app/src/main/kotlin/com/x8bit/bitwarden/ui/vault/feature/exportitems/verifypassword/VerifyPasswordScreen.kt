@@ -20,8 +20,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
+import com.bitwarden.cxf.manager.model.ExportCredentialsResult
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -47,6 +51,8 @@ fun VerifyPasswordScreen(
     onNavigateBack: () -> Unit,
     onPasswordVerified: (userId: String) -> Unit,
     viewModel: VerifyPasswordViewModel = hiltViewModel(),
+    credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
+        LocalCredentialExchangeCompletionManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -55,6 +61,16 @@ fun VerifyPasswordScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             VerifyPasswordEvent.NavigateBack -> onNavigateBack()
+            VerifyPasswordEvent.CancelExport -> {
+                credentialExchangeCompletionManager
+                    .completeCredentialExport(
+                        exportResult = ExportCredentialsResult.Failure(
+                            error = ImportCredentialsCancellationException(
+                                errorMessage = "User cancelled import.",
+                            ),
+                        ),
+                    )
+            }
 
             is VerifyPasswordEvent.PasswordVerified -> {
                 onPasswordVerified(event.userId)
@@ -69,7 +85,11 @@ fun VerifyPasswordScreen(
 
     ExportItemsScaffold(
         navIcon = rememberVectorPainter(
-            BitwardenDrawable.ic_back,
+            id = if (state.hasOtherAccounts) {
+                BitwardenDrawable.ic_back
+            } else {
+                BitwardenDrawable.ic_close
+            },
         ),
         onNavigationIconClick = handler.onNavigateBackClick,
         navigationIconContentDescription = stringResource(BitwardenString.back),
@@ -188,6 +208,7 @@ private fun VerifyPasswordContent_Preview() {
         email = "john.doe@example.com",
     )
     val state = VerifyPasswordState(
+        hasOtherAccounts = true,
         accountSummaryListItem = accountSummaryListItem,
     )
     VerifyPasswordContent(
