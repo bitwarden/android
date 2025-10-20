@@ -39,7 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.methodName
+import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
@@ -299,7 +299,7 @@ class VaultLockManagerImpl(
 
         val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
 
-        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.methodName()}")
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
 
         vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
             .onSuccess { enrollPinResponse ->

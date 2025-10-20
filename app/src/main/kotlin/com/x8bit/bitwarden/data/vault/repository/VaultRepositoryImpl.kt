@@ -40,7 +40,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.methodName
+import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -543,7 +543,7 @@ class VaultRepositoryImpl(
             )
         if (existingPinProtectedUserKeyEnvelope != null) return
 
-        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.methodName()}")
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
 
         vaultSdkSource
             .enrollPinWithEncryptedPin(
