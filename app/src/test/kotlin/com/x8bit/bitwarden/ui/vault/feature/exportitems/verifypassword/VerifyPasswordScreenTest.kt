@@ -262,4 +262,5 @@ private val DEFAULT_STATE = VerifyPasswordState(
     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     input = "",
     dialog = null,
+    hasOtherAccounts = true,
 )

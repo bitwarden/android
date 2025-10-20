@@ -86,6 +86,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                             isItemRestricted = false,
                             initials = DEFAULT_USER_STATE.activeAccount.initials,
                         ),
+                        hasOtherAccounts = true,
                     ),
                     it.stateFlow.value,
                 )
@@ -108,6 +109,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             .also {
                 assertEquals(
                     VerifyPasswordState(
+                        hasOtherAccounts = true,
                         accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM
                             .copy(isItemRestricted = true),
                     ),
@@ -571,6 +573,36 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
         ),
+
+        UserState.Account(
+            userId = "activeUserId2",
+            name = "Active User Two",
+            email = "active+two@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = listOf(
+                Organization(
+                    id = DEFAULT_ORGANIZATION_ID,
+                    name = "Organization User Two",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.USER,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
+                ),
+            ),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
+        ),
     ),
 )
 private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
@@ -581,6 +613,7 @@ private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
     initials = DEFAULT_USER_STATE.activeAccount.initials,
 )
 private val DEFAULT_STATE = VerifyPasswordState(
+    hasOtherAccounts = true,
     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     input = "",
     dialog = null,

@@ -1441,10 +1441,30 @@ class RootNavViewModelTest : BaseViewModelTest() {
                     requestJson = "mockRequestJson",
                 ),
             )
-        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE)
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.CredentialExchangeExport,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when SpecialCircumstance is CredentialExchangeExport and only has 1 account, the nav state should be CredentialExchangeExportSkipAccountSelection`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = mockk(),
+                    requestJson = "mockRequestJson",
+                ),
+            )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.CredentialExchangeExportSkipAccountSelection(
+                userId = "activeUserId",
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -1470,6 +1490,51 @@ private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
             userId = "activeUserId",
             name = "name",
             email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            firstTimeState = FirstTimeState(false),
+            onboardingStatus = OnboardingStatus.COMPLETE,
+        ),
+    ),
+)
+
+private val MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "name",
+            email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            firstTimeState = FirstTimeState(false),
+            onboardingStatus = OnboardingStatus.COMPLETE,
+        ),
+
+        UserState.Account(
+            userId = "activeUserTwoId",
+            name = "name two",
+            email = "email two",
             avatarColorHex = "avatarColorHex",
             environment = Environment.Us,
             isPremium = true,
