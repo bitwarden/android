@@ -14,4 +14,5 @@ fun InitUserCryptoMethod.methodName(): String =
         is InitUserCryptoMethod.Password -> "Password"
         is InitUserCryptoMethod.Pin -> "Pin"
         is InitUserCryptoMethod.PinEnvelope -> "Pin Envelope"
+        is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
     }
