@@ -239,6 +239,7 @@ class VaultLockManagerImpl(
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
                                         updateKdfIfNeeded(initUserCryptoMethod)
+                                        migratePinProtectedUserKeyIfNeeded(userId = userId)
                                         setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
@@ -273,6 +274,39 @@ class VaultLockManagerImpl(
                 onFailure = { setVaultToLocked(userId = userId) },
                 onSuccess = { setVaultToUnlocked(userId = userId) },
             )
+    }
+
+    /**
+     * Migrates the PIN-protected user key for the given user if needed.
+     *
+     * If an encrypted PIN exists and no PIN-protected user key envelope is present,
+     * enrolls the PIN with the encrypted PIN and stores the resulting envelope.
+     * Optionally marks the envelope as in-memory only if the PIN-protected user key is not present.
+     *
+     * @param userId The ID of the user for whom to migrate the PIN-protected user key.
+     */
+    private suspend fun migratePinProtectedUserKeyIfNeeded(userId: String) {
+        val encryptedPin = authDiskSource.getEncryptedPin(userId) ?: return
+        if (authDiskSource.getPinProtectedUserKeyEnvelope(userId) != null) return
+
+        val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
+        vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
+            .onSuccess { enrollPinResponse ->
+                authDiskSource.storeEncryptedPin(
+                    userId = userId,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = userId,
+                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
+                    inMemoryOnly = inMemoryOnly,
+                )
+                authDiskSource.storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                    inMemoryOnly = inMemoryOnly,
+                )
+            }
     }
 
     /**

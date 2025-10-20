@@ -92,13 +92,13 @@ class UserStateManagerTest {
                 )
 
                 fakeAuthDiskSource.apply {
-                    storePinProtectedUserKey(
+                    storePinProtectedUserKeyEnvelope(
                         userId = USER_ID_1,
-                        pinProtectedUserKey = "pinProtectedUseKey",
+                        pinProtectedUserKeyEnvelope = "pinProtectedUseKey",
                     )
-                    storePinProtectedUserKey(
+                    storePinProtectedUserKeyEnvelope(
                         userId = USER_ID_2,
-                        pinProtectedUserKey = "pinProtectedUseKey",
+                        pinProtectedUserKeyEnvelope = "pinProtectedUseKey",
                     )
                     userState = MULTI_USER_STATE
                 }
@@ -137,13 +137,13 @@ class UserStateManagerTest {
                 )
 
                 fakeAuthDiskSource.apply {
-                    storePinProtectedUserKey(
+                    storePinProtectedUserKeyEnvelope(
                         userId = USER_ID_1,
-                        pinProtectedUserKey = null,
+                        pinProtectedUserKeyEnvelope = null,
                     )
-                    storePinProtectedUserKey(
+                    storePinProtectedUserKeyEnvelope(
                         userId = USER_ID_2,
-                        pinProtectedUserKey = null,
+                        pinProtectedUserKeyEnvelope = null,
                     )
                     storeOrganizations(
                         userId = USER_ID_1,

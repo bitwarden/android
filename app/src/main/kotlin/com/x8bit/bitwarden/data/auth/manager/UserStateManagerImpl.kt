@@ -156,7 +156,7 @@ class UserStateManagerImpl(
     private fun getVaultUnlockType(
         userId: String,
     ): VaultUnlockType = authDiskSource
-        .getPinProtectedUserKey(userId = userId)
+        .getPinProtectedUserKeyEnvelope(userId = userId)
         ?.let { VaultUnlockType.PIN }
         ?: VaultUnlockType.MASTER_PASSWORD
 }
