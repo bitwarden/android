@@ -442,11 +442,17 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on FirstTimeUserSyncReceive should emit ShowFirstTimeSyncSnackbar`() = runTest {
+    fun `on FirstTimeUserSyncReceive should emit ShowSnackbar`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             firstTimeAccountSyncChannel.send(Unit)
-            assertEquals(ItemListingEvent.ShowFirstTimeSyncSnackbar, awaitItem())
+            assertEquals(
+                ItemListingEvent.ShowSnackbar(
+                    message = BitwardenString.account_synced_from_bitwarden_app.asText(),
+                    withDismissAction = true,
+                ),
+                awaitItem(),
+            )
         }
     }
 

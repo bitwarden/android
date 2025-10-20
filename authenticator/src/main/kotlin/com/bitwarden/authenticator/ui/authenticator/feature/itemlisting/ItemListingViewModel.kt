@@ -26,6 +26,7 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -263,7 +264,12 @@ class ItemListingViewModel @Inject constructor(
     }
 
     private fun handleFirstTimeUserSync() {
-        sendEvent(ItemListingEvent.ShowFirstTimeSyncSnackbar)
+        sendEvent(
+            event = ItemListingEvent.ShowSnackbar(
+                message = BitwardenString.account_synced_from_bitwarden_app.asText(),
+                withDismissAction = true,
+            ),
+        )
     }
 
     private fun handleAppThemeChangeReceive(appTheme: AppTheme) {
@@ -887,9 +893,25 @@ sealed class ItemListingEvent {
     ) : ItemListingEvent()
 
     /**
-     * Show a Snackbar letting the user know accounts have synced.
+     * Show a Snackbar with the given [data].
      */
-    data object ShowFirstTimeSyncSnackbar : ItemListingEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ItemListingEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
