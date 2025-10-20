@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
@@ -15,6 +16,7 @@ import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -81,8 +83,32 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
             .onNodeWithText("You vault is locked. Verify your master password to continue.")
 
         composeTestRule
-            .onNodeWithText("Unlock")
+            .onNodeWithText("Continue")
             .assertIsNotEnabled()
+    }
+
+    @Test
+    fun `otp state should be correct`() = runTest {
+        mockStateFlow.emit(
+            DEFAULT_STATE.copy(
+                title = BitwardenString.verify_your_account_email_address.asText(),
+                subtext = BitwardenString
+                    .enter_the_6_digit_code_that_was_emailed_to_the_address_below
+                    .asText(),
+                showResendCodeButton = true,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Verify your account email address")
+
+        composeTestRule
+            .onNodeWithText("Enter the 6-digit code that was emailed to the address below")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Resend code")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -105,10 +131,6 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Master password")
             .performTextInput("abc123")
-
-        composeTestRule
-            .onNodeWithTag("PasswordVisibilityToggle")
-            .performClick()
         verify {
             viewModel.trySendAction(
                 VerifyPasswordAction.PasswordInputChangeReceive("abc123"),
@@ -117,26 +139,37 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `Unlock button should should update based on input`() = runTest {
+    fun `Continue button should should update based on input`() = runTest {
         composeTestRule
-            .onNodeWithText("Unlock")
+            .onNodeWithText("Continue")
             .assertIsNotEnabled()
 
         mockStateFlow.emit(DEFAULT_STATE.copy(input = "abc123"))
 
         composeTestRule
-            .onNodeWithText("Unlock")
+            .onNodeWithText("Continue")
             .assertIsEnabled()
     }
 
     @Test
-    fun `Unlock button should send UnlockClick action`() = runTest {
+    fun `Continue button should send ContinueClick action`() = runTest {
         mockStateFlow.emit(DEFAULT_STATE.copy(input = "abc123"))
         composeTestRule
-            .onNodeWithText("Unlock")
+            .onNodeWithText("Continue")
             .performClick()
         verify {
-            viewModel.trySendAction(VerifyPasswordAction.UnlockClick)
+            viewModel.trySendAction(VerifyPasswordAction.ContinueClick)
+        }
+    }
+
+    @Test
+    fun `Resend code button should send SendCodeClick action`() = runTest {
+        mockStateFlow.emit(DEFAULT_STATE.copy(showResendCodeButton = true))
+        composeTestRule
+            .onNodeWithText("Resend code")
+            .performClick()
+        verify {
+            viewModel.trySendAction(VerifyPasswordAction.ResendCodeClick)
         }
     }
 
@@ -259,6 +292,8 @@ private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
     initials = DEFAULT_USER_STATE.activeAccount.initials,
 )
 private val DEFAULT_STATE = VerifyPasswordState(
+    title = BitwardenString.verify_your_master_password.asText(),
+    subtext = null,
     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     input = "",
     dialog = null,

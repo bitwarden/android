@@ -7,6 +7,7 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedC
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -15,7 +16,7 @@ class SharedVerificationCodesStateTest {
     @Test
     fun `toSharedCodesDisplayState on empty list should return empty list`() {
         val state = SharedVerificationCodesState.Success(emptyList())
-        val expected = SharedCodesDisplayState.Codes(emptyList())
+        val expected = SharedCodesDisplayState.Codes(persistentListOf())
         assertEquals(
             expected,
             state.toSharedCodesDisplayState(ALERT_THRESHOLD),
@@ -59,7 +60,7 @@ class SharedVerificationCodesStateTest {
             ),
         )
         val expected = SharedCodesDisplayState.Codes(
-            sections = listOf(
+            sections = persistentListOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
                     label = BitwardenString.shared_accounts_header.asText(
@@ -67,7 +68,7 @@ class SharedVerificationCodesStateTest {
                         "bitwarden.com",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "123456",
                             periodSeconds = 30,
@@ -76,7 +77,7 @@ class SharedVerificationCodesStateTest {
                             title = "--",
                             subtitle = null,
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),
@@ -90,7 +91,7 @@ class SharedVerificationCodesStateTest {
                         "bitwarden.eu",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "987654",
                             periodSeconds = 30,
@@ -99,7 +100,7 @@ class SharedVerificationCodesStateTest {
                             title = "issuer",
                             subtitle = "accountName",
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),
@@ -151,7 +152,7 @@ class SharedVerificationCodesStateTest {
             ),
         )
         val expected = SharedCodesDisplayState.Codes(
-            sections = listOf(
+            sections = persistentListOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
                     label = BitwardenString.shared_accounts_header.asText(
@@ -159,7 +160,7 @@ class SharedVerificationCodesStateTest {
                         "bitwarden.com",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "123456",
                             periodSeconds = 30,
@@ -168,7 +169,7 @@ class SharedVerificationCodesStateTest {
                             title = "--",
                             subtitle = null,
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),
@@ -182,7 +183,7 @@ class SharedVerificationCodesStateTest {
                         "bitwarden.eu",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "987654",
                             periodSeconds = 30,
@@ -191,7 +192,7 @@ class SharedVerificationCodesStateTest {
                             title = "issuer",
                             subtitle = "accountName",
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),

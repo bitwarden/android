@@ -5,12 +5,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -65,6 +68,15 @@ class VerifyPasswordViewModel @Inject constructor(
                 .map { it.organizationId }
 
             VerifyPasswordState(
+                title = if (account.hasMasterPassword) {
+                    BitwardenString.verify_your_master_password.asText()
+                } else {
+                    BitwardenString.verify_your_account_email_address.asText()
+                },
+                subtext = BitwardenString
+                    .enter_the_6_digit_code_that_was_emailed_to_the_address_below
+                    .asText()
+                    .takeUnless { account.hasMasterPassword },
                 accountSummaryListItem = AccountSelectionListItem(
                     userId = args.userId,
                     avatarColorHex = account.avatarColorHex,
@@ -74,6 +86,7 @@ class VerifyPasswordViewModel @Inject constructor(
                         .organizations
                         .any { it.id in restrictedItemPolicyOrgIds },
                 ),
+                showResendCodeButton = !account.hasMasterPassword,
                 hasOtherAccounts = !singleAccount,
             )
         },
@@ -84,6 +97,16 @@ class VerifyPasswordViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+
+        if (stateFlow.value.showResendCodeButton) {
+            viewModelScope.launch {
+                sendAction(
+                    VerifyPasswordAction.Internal.SendOtpCodeResultReceive(
+                        result = authRepository.requestOneTimePasscode(),
+                    ),
+                )
+            }
+        }
     }
 
     override fun onCleared() {
@@ -99,8 +122,8 @@ class VerifyPasswordViewModel @Inject constructor(
                 handleNavigateBackClick()
             }
 
-            VerifyPasswordAction.UnlockClick -> {
-                handleUnlockClick()
+            VerifyPasswordAction.ContinueClick -> {
+                handleContinueClick()
             }
 
             is VerifyPasswordAction.PasswordInputChangeReceive -> {
@@ -109,6 +132,10 @@ class VerifyPasswordViewModel @Inject constructor(
 
             VerifyPasswordAction.DismissDialog -> {
                 handleDismissDialog()
+            }
+
+            VerifyPasswordAction.ResendCodeClick -> {
+                handleResendCodeClick()
             }
 
             is VerifyPasswordAction.Internal -> {
@@ -125,7 +152,7 @@ class VerifyPasswordViewModel @Inject constructor(
         }
     }
 
-    private fun handleUnlockClick() {
+    private fun handleContinueClick() {
         if (state.input.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
@@ -165,6 +192,23 @@ class VerifyPasswordViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
+    private fun handleResendCodeClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VerifyPasswordState.DialogState.Loading(
+                    message = BitwardenString.sending.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            sendAction(
+                VerifyPasswordAction.Internal.SendOtpCodeResultReceive(
+                    result = authRepository.requestOneTimePasscode(),
+                ),
+            )
+        }
+    }
+
     private fun handleInternalAction(action: VerifyPasswordAction.Internal) {
         when (action) {
             is VerifyPasswordAction.Internal.ValidatePasswordResultReceive -> {
@@ -173,6 +217,14 @@ class VerifyPasswordViewModel @Inject constructor(
 
             is VerifyPasswordAction.Internal.UnlockVaultResultReceive -> {
                 handleUnlockVaultResultReceive(action)
+            }
+
+            is VerifyPasswordAction.Internal.SendOtpCodeResultReceive -> {
+                handleSendOtpCodeResultReceive(action)
+            }
+
+            is VerifyPasswordAction.Internal.VerifyOtpResultReceive -> {
+                handleVerifyOtpResultReceive(action)
             }
         }
     }
@@ -232,6 +284,60 @@ class VerifyPasswordViewModel @Inject constructor(
         }
     }
 
+    private fun handleSendOtpCodeResultReceive(
+        action: VerifyPasswordAction.Internal.SendOtpCodeResultReceive,
+    ) {
+        when (val result = action.result) {
+            is RequestOtpResult.Error -> {
+                val message = result.message?.asText()
+                    ?: BitwardenString.generic_error_message.asText()
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VerifyPasswordState.DialogState.General(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = message,
+                        ),
+                    )
+                }
+            }
+
+            RequestOtpResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = null)
+                }
+                sendEvent(
+                    VerifyPasswordEvent.ShowSnackbar(BitwardenString.code_sent.asText()),
+                )
+            }
+        }
+    }
+
+    private fun handleVerifyOtpResultReceive(
+        action: VerifyPasswordAction.Internal.VerifyOtpResultReceive,
+    ) {
+        when (action.result) {
+            is VerifyOtpResult.Verified -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(
+                    VerifyPasswordEvent.PasswordVerified(
+                        state.accountSummaryListItem.userId,
+                    ),
+                )
+            }
+
+            is VerifyOtpResult.NotVerified -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VerifyPasswordState.DialogState.General(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_verification_code.asText(),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
     private fun switchAccountAndVerifyPassword() {
         val switchAccountResult = authRepository
             .switchAccount(userId = state.accountSummaryListItem.userId)
@@ -255,7 +361,15 @@ class VerifyPasswordViewModel @Inject constructor(
         val userId = state.accountSummaryListItem.userId
 
         viewModelScope.launch {
-            if (vaultRepository.isVaultUnlocked(userId)) {
+            if (state.showResendCodeButton) {
+                sendAction(
+                    VerifyPasswordAction.Internal.VerifyOtpResultReceive(
+                        result = authRepository.verifyOneTimePasscode(
+                            oneTimePasscode = state.input,
+                        ),
+                    ),
+                )
+            } else if (vaultRepository.isVaultUnlocked(userId)) {
                 // If the vault is already unlocked, validate the password directly.
                 sendAction(
                     VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
@@ -311,21 +425,26 @@ class VerifyPasswordViewModel @Inject constructor(
  * @param accountSummaryListItem The account summary to display.
  * @param input The current password input.
  * @param dialog The current dialog state, or null if no dialog is shown.
+ * @param showResendCodeButton Whether to show the send code button.
  */
 @Parcelize
 data class VerifyPasswordState(
     val accountSummaryListItem: AccountSelectionListItem,
+    val title: Text,
+    val subtext: Text?,
     val hasOtherAccounts: Boolean,
-    // We never want this saved since the input is sensitive data.
-    @IgnoredOnParcel val input: String = "",
-    val dialog: DialogState? = null,
+// We never want this saved since the input is sensitive data.
+@IgnoredOnParcel
+val input: String = "",
+val dialog: DialogState? = null,
+val showResendCodeButton: Boolean = false,
 ) : Parcelable {
 
     /**
      * Whether the unlock button should be enabled.
      */
-    val isUnlockButtonEnabled: Boolean
-        get() = input.isNotBlank() && dialog !is DialogState.Loading
+    val isContinueButtonEnabled: Boolean
+    get() = input.isNotBlank() && dialog !is DialogState.Loading
 
     /**
      * Represents the state of a dialog.
@@ -373,6 +492,27 @@ sealed class VerifyPasswordEvent {
      * Cancel the export request.
      */
     data object CancelExport : VerifyPasswordEvent()
+
+    /**
+    * Show a snackbar with the given data .
+    */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : VerifyPasswordEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
@@ -385,14 +525,19 @@ sealed class VerifyPasswordAction {
     data object NavigateBackClick : VerifyPasswordAction()
 
     /**
-     * Represents a click on the unlock button.
+     * Represents a click on the Continue button.
      */
-    data object UnlockClick : VerifyPasswordAction()
+    data object ContinueClick : VerifyPasswordAction()
 
     /**
      * Dismiss the current dialog.
      */
     data object DismissDialog : VerifyPasswordAction()
+
+    /**
+     * Represents a click on the resend code button.
+     */
+    data object ResendCodeClick : VerifyPasswordAction()
 
     /**
      * Represents a change in the password input.
@@ -420,5 +565,17 @@ sealed class VerifyPasswordAction {
         data class UnlockVaultResultReceive(
             val vaultUnlockResult: VaultUnlockResult,
         ) : Internal()
+
+        /**
+         * Represents a result of requesting an OTP code.
+         * @param result The result of requesting an OTP code.
+         */
+        data class SendOtpCodeResultReceive(val result: RequestOtpResult) : Internal()
+
+        /**
+         * Represents a result of verifying an OTP code.
+         * @param result The result of verifying an OTP code.
+         */
+        data class VerifyOtpResultReceive(val result: VerifyOtpResult) : Internal()
     }
 }

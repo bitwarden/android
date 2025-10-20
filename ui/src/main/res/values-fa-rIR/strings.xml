@@ -164,15 +164,15 @@
     <string name="no_items_for_vault">هیچ موردی در گاوصندوق شما وجود ندارد که با \"%1$s\" مطابقت داشته باشد</string>
     <string name="search_for_a_login_or_add_a_new_login">یک ورود را جستجو کنید یا یک ورود جدید اضافه کنید</string>
     <string name="disabled">غیرفعال شد</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="bitwarden_autofill_service_alert2">ساده‌ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان استفاده از سرویس پر کردن خودکار Bitwarden است. با رفتن به صفحه \"تنظیمات\" درباره‌ی استفاده از سرویس پر کردن خودکار Bitwarden اطلاعات بیشتری کسب کنید.</string>
+    <string name="autofill_title">پر کردن خودکار</string>
     <string name="autofill_or_view">آیا می‌خواهید این مورد را به صورت خودکار پر کنید یا مشاهده کنید؟</string>
     <string name="search">جستجو</string>
     <string name="learn_org">درباره سازمان‌ها اطلاعات کسب کنید</string>
     <string name="authenticator_app_title">برنامه احراز هویت</string>
     <string name="enter_verification_code_app">کد ۶ رقمی تأیید را از برنامه احراز هویت وارد کنید.</string>
     <string name="enter_verification_code_email">کد ۶ رقمی تأیید را که به %1$s ایمیل شده را وارد کنید.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">ما این دستگاه را نمی‌شناسیم. برای تأیید هویت خود، کدی را که به ایمیلتان ارسال شده وارد کنید.</string>
     <string name="recovery_code_title">کد بازیابی</string>
     <string name="remember">به خاطر بسپار</string>
     <string name="remember_email">ایمیل را به خاطر بسپار</string>
@@ -394,7 +394,7 @@
     <string name="password_generator_policy_in_effect">یک یا چند سیاست سازمان بر تنظیمات تولید کننده شما تأثیر می‌گذارد</string>
     <string name="unable_to_save_attachment">هنگام ذخیره این پیوست مشکلی رخ داد. اگر مشکل همچنان ادامه داشت، می‌توانید آن را از گاوصندوق وب ذخیره کنید.</string>
     <string name="save_attachment_success">پیوست با موفقیت ذخیره شد.</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">لطفاً برای استفاده از کاشی پر کردن خودکار، \"سرویس دسترسی پر کردن خودکار\" را از تنظیمات Bitwarden فعال کنید.</string>
     <string name="autofill_tile_uri_not_found">هیچ فیلدی برای کلمه عبور شناسایی نشد</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">مورد به سطل زباله فرستاده شد.</string>
@@ -738,7 +738,7 @@
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">با روش‌های جلوگیری از قفل شدن حساب کاربری آشنا شوید</annotation></string>
     <string name="help_with_server_geolocations">کمک با مکان‌های جغرافیایی سرور.</string>
     <string name="email_address_required">نشانی ایمیل (الزامی)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">پیوند موجود در ایمیل را انتخاب کنید تا نشانی ایمیل خود را تأیید کرده و روند ایجاد حساب کاربری را ادامه دهید.</string>
     <string name="change_email_address">تغییر نشانی ایمیل</string>
     <string name="next">بعدی</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden نمی‌تواند کلمه عبور اصلی گمشده یا فراموش‌شده را بازیابی کند.</string>
@@ -768,7 +768,7 @@
     <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">می‌توانید هر زمان برای تکمیل این مرحله به بخش تنظیمات مراجعه کنید.</string>
     <string name="what_bitwarden_has_to_offer">اکنون می‌توانید از تمامی امکانات Bitwarden استفاده کرده و شروع به مدیریت امن کلمات عبور خود کنید.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">همه چیز آماده است!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">خطا در اتصال به سرویس Duo. از روش ورود دو مرحله‌ای دیگری استفاده کنید یا برای دریافت کمک با Duo تماس بگیرید.</string>
     <string name="master_password_hint_not_specified">یادآور کلمه عبور اصلی</string>
     <string name="new_master_password_hint">یادآور کلمه عبور اصلی جدید</string>
@@ -808,7 +808,7 @@
     <string name="need_help_check_out_import_help">نیاز به کمک دارید؟ به <annotation link="importHelp">راهنمای درون ریزی </annotation> مراجعه کنید.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">پرونده برون ریزی شده را ذخیره کنید</annotation> در مکانی روی رایانه‌تان که به‌راحتی بتوانید آن را پیدا کنید.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">این یک سرور معتبر Bitwarden نیست. ممکن است لازم باشد با ارائه‌دهنده خود بررسی کنید یا سرور را به‌روزرسانی نمایید.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">همگام‌سازی ورودها...</string>
     <string name="download_the_browser_extension">افزونه مرورگر را بارگیری کنید</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">به نشانی bitwarden.com/download بروید تا Bitwarden را در مرورگر مورد علاقه‌تان یکپارچه‌سازی کنید و تجربه‌ای روان داشته باشید.</string>
     <string name="use_the_web_app">از برنامه وب استفاده کنید</string>
@@ -866,13 +866,13 @@
     <string name="coachmark_3_of_3">۳ از ۳</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">برای استفاده از قابلیت پر کردن خودکار جهت دسترسی به این حساب کاربری، باید یک نشانی وب اضافه کنید.</string>
     <string name="learn_about_new_logins">درباره ورودهای جدید بیشتر بدانید</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">ما شما را با ویژگی‌های کلیدی برای افزودن یک ورود جدید راهنمایی می‌کنیم.</string>
     <string name="explore_the_generator">تولید کننده را بررسی کنید</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">با یک راهنمای قدم به قدم، بیشتر درباره ایجاد اطلاعات ورود امن بیاموزید.</string>
     <string name="import_client_certificate">گواهی‌نامه مشتری را وارد کنید</string>
     <string name="enter_the_client_certificate_password_and_alias">کلمه عبور گواهی‌نامه مشتری و نام مستعار مورد نظر برای این گواهی‌نامه را وارد کنید.</string>
     <string name="alias">نام مستعار</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">از تولیدکننده استفاده کنید تا کلمات عبور، عبارات عبور و نام‌های کاربری امن بسازید.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">عبارات عبور، کلمات عبور قوی‌ای هستند که نسبت به کلمات تصادفی معمولاً آسان‌تر به خاطر سپرده شده و نوشته می‌شوند. این عبارات برای ورود به حساب‌های کاربری که قابلیت پر کردن خودکار ندارند، مانند سرویس‌های پخش فیلم روی تلویزیون، بسیار مفید هستند.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">نام‌های کاربری منحصربه‌فرد یک لایه امنیتی اضافی ایجاد می‌کنند و می‌توانند به جلوگیری از دسترسی هکرها به حساب‌های کاربری شما کمک کنند.</string>
     <string name="coachmark_1_of_6">۱ از ۶</string>
@@ -881,8 +881,8 @@
     <string name="coachmark_4_of_6">۴ از ۶</string>
     <string name="coachmark_5_of_6">۵ از ۶</string>
     <string name="coachmark_6_of_6">۶ از ۶</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">از این گزینه‌ها استفاده کنید تا کلمه عبور خود را مطابق با الزامات وب‌سایت حساب کاربری‌تان تنظیم کنید.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">بعد از اینکه کلمه عبور جدیدتان را در Bitwarden ذخیره کردید، فراموش نکنید آن را در وب‌سایت حساب کاربری‌تان هم به‌روزرسانی کنید.</string>
     <string name="verify_your_identity">هویت خود را تأیید کنید</string>
     <string name="error_loading_certificate">خطا در بارگذاری گواهی‌نامه</string>
     <string name="certificate_alias">نام مستعار گواهی‌نامه</string>
@@ -988,7 +988,7 @@
     <string name="installed_apps">برنامه‌های نصب شده</string>
     <string name="delete_x">حذف %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="decryption_error">خطای رمزگشایی</string>
     <string name="scan_a_qr_code">Scan a QR code</string>
     <string name="cannot_add_authenticator_key">نمی‌توانید کلید احراز هویت را اضافه کنید؟</string>
     <string name="enable_camera_permission_to_use_the_scanner">اجازه دوربین را برای استفاده از اسکنر فعال کنید</string>
@@ -1125,9 +1125,9 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
-    <string name="passkeys">Passkeys</string>
+    <string name="export_failed">برون ریزی ناموفق</string>
+    <string name="passwords">کلمه‌های عبور</string>
+    <string name="passkeys">کلیدهای عبور</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

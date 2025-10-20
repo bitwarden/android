@@ -34,6 +34,7 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
                 CipherKeyEncryption,
+                NoLogoutOnKdfChange,
             )
         }
     }
@@ -77,6 +78,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
         override val keyName: String = "pm-18021-force-update-kdf-settings"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the No Logout On KDF Change feature.
+     */
+    data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
+        override val keyName: String = "pm-23995-no-logout-on-kdf-change"
         override val defaultValue: Boolean = false
     }
 

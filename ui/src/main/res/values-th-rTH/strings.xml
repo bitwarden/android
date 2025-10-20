@@ -434,7 +434,7 @@ Scanning will happen automatically.</string>
     <string name="send">Send</string>
     <string name="send_details">Send Details</string>
     <string name="all_sends">Sends ทั้งหมด</string>
-    <string name="text">Text</string>
+    <string name="text">ข้อความ</string>
     <string name="text_to_share">Text to share</string>
     <string name="type_text">ข้อความ</string>
     <string name="hide_text_by_default">When accessing the Send, hide the text by default</string>
@@ -704,7 +704,7 @@ Do you want to switch to this account?</string>
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
     <string name="security_prioritized">Security, prioritized</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
-    <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
+    <string name="welcome_message_2">ตั้งค่าการปลดล็อกด้วยไบโอเมตริกซ์และการกรอกข้อมูลอัตโนมัติ เพื่อลงชื่อเข้าใช้บัญชีของคุณโดยไม่ต้องพิมพ์แม้แต่ตัวอักษรเดียว</string>
     <string name="quick_and_easy_login">Quick and easy login</string>
     <string name="level_up_your_logins">Level up your logins</string>
     <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
@@ -767,7 +767,7 @@ Do you want to switch to this account?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">รับคำใบ้เกี่ยวกับรหัสผ่านหลักของคุณ</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
@@ -830,7 +830,7 @@ Do you want to switch to this account?</string>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="done_text">Done</string>
+    <string name="done_text">เสร็จสิ้น</string>
     <string name="page_number_x_of_y">%1$s of %2$s</string>
     <string name="copy_identity_name">Copy identity name</string>
     <string name="copy_company">Copy company</string>
@@ -927,7 +927,7 @@ Do you want to switch to this account?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
+    <string name="flight_recorder_one_hour">1 ชั่วโมง</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
@@ -960,7 +960,7 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="delete_send">ลบ Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="use_dynamic_colors">Use dynamic colors</string>
     <string name="use_dynamic_colors_question">Use dynamic colors?</string>
@@ -1129,4 +1129,6 @@ Do you want to switch to this account?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>
