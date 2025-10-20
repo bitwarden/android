@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -326,7 +327,12 @@ class VaultRepositoryImpl(
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                        userId = userId,
+                        initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = decryptedUserKey,
+                        ),
+                    )
                 }
             }
     }
@@ -350,7 +356,13 @@ class VaultRepositoryImpl(
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                        userId = userId,
+                        initUserCryptoMethod = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    )
                 }
             }
     }
@@ -516,14 +528,23 @@ class VaultRepositoryImpl(
      * unlocks during this current app session.
      *
      * If the user's vault has not yet been unlocked, this call will do nothing.
+     *
+     * @param userId The ID of the user to check.
+     * @param initUserCryptoMethod The method used to initialize the user's crypto.
      */
-    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(userId: String) {
+    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
         val existingPinProtectedUserKeyEnvelope = authDiskSource
             .getPinProtectedUserKeyEnvelope(
                 userId = userId,
             )
         if (existingPinProtectedUserKeyEnvelope != null) return
+
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
+
         vaultSdkSource
             .enrollPinWithEncryptedPin(
                 userId = userId,
@@ -544,6 +565,7 @@ class VaultRepositoryImpl(
                     pinProtectedUserKey = null,
                     inMemoryOnly = true,
                 )
+                Timber.d("[Auth] Set PIN-protected user key in memory")
             }
     }
 

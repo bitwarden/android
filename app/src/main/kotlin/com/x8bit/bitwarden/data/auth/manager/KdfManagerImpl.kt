@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonKdfUpdatedMi
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import timber.log.Timber
 import kotlin.collections.get
 
 /**
@@ -71,6 +72,7 @@ class KdfManagerImpl(
                 onSuccess = {
                     authDiskSource.userState = authDiskSource.userState
                         ?.toUserStateJsonKdfUpdatedMinimums()
+                    Timber.d("[Auth] Upgraded user's KDF to minimums")
                     UpdateKdfMinimumsResult.Success
                 },
                 onFailure = { UpdateKdfMinimumsResult.Error(error = it) },
