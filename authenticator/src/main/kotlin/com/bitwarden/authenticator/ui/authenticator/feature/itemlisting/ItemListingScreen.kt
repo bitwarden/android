@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -25,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -70,6 +68,8 @@ import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -79,7 +79,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 
 /**
  * Displays the item listing screen.
@@ -108,9 +107,7 @@ fun ItemListingScreen(
             viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick)
         }
     }
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ItemListingEvent.NavigateBack -> onNavigateBack()
@@ -140,11 +137,8 @@ fun ItemListingScreen(
                 intentManager.startBitwardenAccountSettings()
             }
 
-            is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
-                // Message property is overridden by FirstTimeSyncSnackbarHost:
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar("")
-                }
+            is ItemListingEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(snackbarData = event.data)
             }
         }
     }
@@ -214,7 +208,7 @@ fun ItemListingScreen(
                 ),
             )
         },
-        snackbarHost = { FirstTimeSyncSnackbarHost(state = snackbarHostState) },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (val currentState = state.viewState) {
             is ItemListingState.ViewState.Content -> {
