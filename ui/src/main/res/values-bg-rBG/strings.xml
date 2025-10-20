@@ -1134,7 +1134,9 @@
     <string name="kdf_update_failed_active_account_not_found">Обновяването на KDF беше неуспешно. Не е намерен активен акаунт. Опитайте отново или се свържете с нас.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Възникна грешка при опита за обновяване на настройките на KDF. Опитайте отново или се свържете с нас.</string>
     <string name="the_import_request_could_not_be_processed">Заявката за внасяне не може да бъде обработена.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Трезорът Ви може би е празен, или внасянето на някои видове елементи може да не е позволено за акаунта Ви.</string>
+    <string name="no_items_available_to_import">Няма елементи налични за внасяне</string>
+    <string name="select_a_different_account">Изберете друг акаунт</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

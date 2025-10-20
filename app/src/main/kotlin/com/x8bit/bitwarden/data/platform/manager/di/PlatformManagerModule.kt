@@ -302,6 +302,7 @@ object PlatformManagerModule {
         dispatcherManager: DispatcherManager,
         clock: Clock,
         json: Json,
+        featureFlagManager: FeatureFlagManager,
     ): PushManager = PushManagerImpl(
         authDiskSource = authDiskSource,
         pushDiskSource = pushDiskSource,
@@ -309,6 +310,7 @@ object PlatformManagerModule {
         dispatcherManager = dispatcherManager,
         clock = clock,
         json = json,
+        featureFlagManager = featureFlagManager,
     )
 
     @Provides

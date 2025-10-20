@@ -20,6 +20,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.concat
 import io.mockk.every
 import io.mockk.just
@@ -175,6 +176,38 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
                 .onNode(isDialog())
                 .assertDoesNotExist()
         }
+
+    @Test
+    fun `on allow screen capture confirm should send AllowScreenCaptureToggle`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule.onNodeWithText("Yes").performClick()
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AllowScreenCaptureToggle(true),
+            )
+        }
+    }
+
+    @Test
+    fun `on allow screen capture cancel should dismiss dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on allow screen capture row click should display confirm enable screen capture dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Allow screen capture")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -194,4 +227,5 @@ private val DEFAULT_STATE = SettingsState(
     version = BitwardenString.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
+    allowScreenCapture = false,
 )

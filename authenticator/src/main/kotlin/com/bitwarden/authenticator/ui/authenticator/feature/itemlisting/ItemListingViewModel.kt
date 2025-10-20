@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
-import android.net.Uri
 import android.os.Parcelable
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
@@ -18,11 +18,11 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -31,6 +31,9 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -478,7 +481,7 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             SharedVerificationCodesState.SyncNotEnabled,
-                -> SharedCodesDisplayState.Codes(emptyList())
+                -> SharedCodesDisplayState.Codes(persistentListOf())
 
             is SharedVerificationCodesState.Success -> {
                 val viewState = state.viewState as? ItemListingState.ViewState.Content
@@ -506,19 +509,25 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
-                            sharedVerificationCodesState =
-                                authenticatorRepository.sharedCodesStateFlow.value,
+                            sharedVerificationCodesState = authenticatorRepository
+                                .sharedCodesStateFlow
+                                .value,
+                            showOverflow = true,
                         )
-                    },
+                    }
+                    .toImmutableList(),
                 itemList = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
-                            sharedVerificationCodesState =
-                                authenticatorRepository.sharedCodesStateFlow.value,
+                            sharedVerificationCodesState = authenticatorRepository
+                                .sharedCodesStateFlow
+                                .value,
+                            showOverflow = true,
                         )
-                    },
+                    }
+                    .toImmutableList(),
                 sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
             )
@@ -586,15 +595,18 @@ class ItemListingViewModel @Inject constructor(
     private fun handleSectionExpandedClick(action: ItemListingAction.SectionExpandedClick) {
         updateSharedItems { codes ->
             codes.copy(
-                sections = codes.sections.map {
-                    it.copy(
-                        isExpanded = if (it == action.section) {
-                            !it.isExpanded
-                        } else {
-                            it.isExpanded
-                        },
-                    )
-                },
+                sections = codes
+                    .sections
+                    .map {
+                        it.copy(
+                            isExpanded = if (it == action.section) {
+                                !it.isExpanded
+                            } else {
+                                it.isExpanded
+                            },
+                        )
+                    }
+                    .toImmutableList(),
             )
         }
     }
@@ -627,7 +639,7 @@ class ItemListingViewModel @Inject constructor(
         }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
-        val uri = Uri.parse(this)
+        val uri = this.toUri()
 
         val type = AuthenticatorItemType
             .entries
@@ -743,8 +755,8 @@ data class ItemListingState(
         @Parcelize
         data class Content(
             val actionCard: ActionCardState,
-            val favoriteItems: List<VerificationCodeDisplayItem>,
-            val itemList: List<VerificationCodeDisplayItem>,
+            val favoriteItems: ImmutableList<VerificationCodeDisplayItem>,
+            val itemList: ImmutableList<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
         ) : ViewState() {
 

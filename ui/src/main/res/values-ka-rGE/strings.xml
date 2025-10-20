@@ -31,7 +31,7 @@
     <string name="invalid_master_password">Invalid master password. Try again.</string>
     <string name="invalid_pin">Invalid PIN. Try again.</string>
     <string name="launch">Launch</string>
-    <string name="log_in_verb">Log in</string>
+    <string name="log_in_verb">შესვლა</string>
     <string name="log_in_noun">Login</string>
     <string name="log_out">Log out</string>
     <string name="logout_confirmation">Are you sure you want to log out?</string>
@@ -124,7 +124,7 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
+    <string name="new_item">ახალი ჩანაწერი</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -165,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Disabled</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="autofill_title">ავტომატური შევსება</string>
     <string name="autofill_or_view">Do you want to autofill or view this item?</string>
     <string name="search">Search</string>
     <string name="learn_org">Learn about organizations</string>
@@ -305,7 +305,7 @@ Scanning will happen automatically.</string>
     <string name="invalid_email">Invalid email address.</string>
     <string name="cards">Cards</string>
     <string name="identities">Identities</string>
-    <string name="identification">Identification</string>
+    <string name="identification">იდენტიფიკაცია</string>
     <string name="logins">Logins</string>
     <string name="secure_notes">Secure notes</string>
     <string name="personal_details">Personal Details</string>
@@ -327,7 +327,7 @@ Scanning will happen automatically.</string>
     <string name="type">Type</string>
     <string name="move_down">Move down</string>
     <string name="move_up">Move Up</string>
-    <string name="owner">Owner</string>
+    <string name="owner">მფლობელი</string>
     <string name="no_collections_to_list">There are no collections to list.</string>
     <string name="moved_item_to_org">%1$s moved to %2$s.</string>
     <string name="select_one_collection">You must select at least one collection.</string>
@@ -700,9 +700,9 @@ Do you want to switch to this account?</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
-    <string name="check_your_email">Check your email</string>
+    <string name="check_your_email">შეამოწმეთ თქვენი ელფოსტა</string>
     <string name="open_email_app">Open email app</string>
-    <string name="email_verified">Email verified</string>
+    <string name="email_verified">ელფოსტა გადამოწმებულია</string>
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
     <string name="security_prioritized">Security, prioritized</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
@@ -721,7 +721,7 @@ Do you want to switch to this account?</string>
     <string name="set_up_later">Set up later</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">დადასტურება</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -770,7 +770,7 @@ Do you want to switch to this account?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">მთავარი პაროლის მინიშნება</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
@@ -818,9 +818,9 @@ Do you want to switch to this account?</string>
     <string name="import_successful">Import Successful!</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
     <string name="bitwarden_tools">Bitwarden Tools</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">გავიგე</string>
     <string name="no_logins_were_imported">No logins were imported</string>
-    <string name="import_error">Import error</string>
+    <string name="import_error">შემოტანის შეცდომა</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
     <string name="type_ssh_key">SSH key</string>
@@ -833,7 +833,7 @@ Do you want to switch to this account?</string>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="done_text">Done</string>
+    <string name="done_text">დასრულებული</string>
     <string name="page_number_x_of_y">%1$s of %2$s</string>
     <string name="copy_identity_name">Copy identity name</string>
     <string name="copy_company">Copy company</string>
@@ -1135,4 +1135,6 @@ Do you want to switch to this account?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

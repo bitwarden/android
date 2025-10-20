@@ -165,14 +165,14 @@
     <string name="search_for_a_login_or_add_a_new_login">Rechercher un login ou ajouter un nouveau login</string>
     <string name="disabled">Non</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="autofill_title">Saisie automatique</string>
     <string name="autofill_or_view">Voulez-vous saisir automatiquement ou afficher cet élément ?</string>
     <string name="search">Rechercher</string>
     <string name="learn_org">En savoir plus sur les organisations</string>
     <string name="authenticator_app_title">Application d\'authentification</string>
     <string name="enter_verification_code_app">Saisissez le code de vérification à 6 chiffres depuis votre application d\'authentification.</string>
     <string name="enter_verification_code_email">Saisissez le code de vérification à 6 chiffres qui a été envoyé par courriel à %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">Nous ne reconnaissons pas cet appareil. Saisissez le code envoyé à votre adresse courriel pour vérifier votre identité.</string>
     <string name="recovery_code_title">Code de récupération</string>
     <string name="remember">Rappelez-vous</string>
     <string name="remember_email">Se souvenir de l\'e-mail</string>
@@ -866,7 +866,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="coachmark_3_of_3">3 SUR 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Vous devez ajouter une adresse Web afin d\'utiliser la saisie automatique pour accéder à ce compte.</string>
     <string name="learn_about_new_logins">En savoir plus sur la création d\'identifiants</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Nous vous guiderons à travers les fonctionnalités clés pour ajouter de nouveaux identifiants de connexion.</string>
     <string name="explore_the_generator">Découvrir le générateur</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Apprenez-en plus sur la génération d\'identifiants de connexion sécurisés grâce à une visite guidée.</string>
     <string name="import_client_certificate">Importer un certificat client</string>
@@ -1126,7 +1126,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
     <string name="export_failed">Export failed</string>
-    <string name="passwords">Passwords</string>
+    <string name="passwords">Mots de passe</string>
     <string name="passkeys">Clés d\'accès</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
@@ -1135,4 +1135,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>

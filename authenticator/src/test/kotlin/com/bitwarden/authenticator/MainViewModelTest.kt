@@ -31,6 +31,7 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on AppThemeChanged should update state`() = runTest {
         mainViewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            eventFlow.skipItems(count = 2)
             assertEquals(
                 MainState(theme = AppTheme.DEFAULT),
                 stateFlow.awaitItem(),
@@ -42,7 +43,7 @@ class MainViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 MainEvent.UpdateAppTheme(osTheme = AppTheme.DARK.osValue),
-                eventFlow.expectMostRecentItem(),
+                eventFlow.awaitItem(),
             )
         }
 

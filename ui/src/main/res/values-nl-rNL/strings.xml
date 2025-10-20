@@ -164,7 +164,7 @@
     <string name="no_items_for_vault">Er zijn geen items in je kluis die overeenkomen met \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Zoeken naar een login of een login toevoegen</string>
     <string name="disabled">Uitgeschakeld</string>
-    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
+    <string name="bitwarden_autofill_service_alert2">De makkelijkste manier om nieuwe logins toe te voegen aan je kluis is via de Bitwarden Automatisch invullen dienst. Leer meer over het gebruik van de Bitwarden Automatisch invullen dienst door naar het scherm \"Instellingen\" te gaan.</string>
     <string name="autofill_title">Automatisch invullen</string>
     <string name="autofill_or_view">Wilt je dit item automatisch invullen of bekijken?</string>
     <string name="search">Zoeken</string>
@@ -172,7 +172,7 @@
     <string name="authenticator_app_title">Authenticatie-app</string>
     <string name="enter_verification_code_app">Voer de 6-cijferige verificatiecode uit je authenticatie-app in.</string>
     <string name="enter_verification_code_email">Voer de 6-cijferige verificatiecode in die via e-mail is verstuurd naar %1$s.</string>
-    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">We herkennen dit apparaat niet. Voer de code in die naar je e-mail is verzonden om je identiteit te verifiëren.</string>
     <string name="recovery_code_title">Herstelcode</string>
     <string name="remember">Onthouden</string>
     <string name="remember_email">E-mailadres onthouden</string>
@@ -394,7 +394,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="password_generator_policy_in_effect">Een of meer organisatiebeleidseisen heeft invloed op de instellingen van je generator.</string>
     <string name="unable_to_save_attachment">Er ging iets mis met het bewaren van deze bijlage. Als het probleem aanhoudt, kun je het bewaren via de webkluis.</string>
     <string name="save_attachment_success">Bijlage succesvol opgeslagen</string>
-    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
+    <string name="autofill_tile_accessibility_required">Zet \"Automatisch invullen toegankelijkheidsservice\" aan bij Bitwarden Instellingen om de Autofill tegel te gebruiken.</string>
     <string name="autofill_tile_uri_not_found">Geen wachtwoordvelden gevonden</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Item verplaatst naar de prullenbak.</string>
@@ -738,7 +738,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Lees meer over manieren om te voorkomen dat je wordt buitengesloten van je account</annotation></string>
     <string name="help_with_server_geolocations">Ondersteuning met servergeolocaties.</string>
     <string name="email_address_required">E-mailadres (verplicht)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Gebruik de link in het e-mailbericht om je e-mailadres te verifiëren en door te gaan met het aanmaken van je account.</string>
     <string name="change_email_address">E-mailadres aanpassen</string>
     <string name="next">Volgende</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden kan een verloren of vergeten hoofdwachtwoord niet herstellen.</string>
@@ -768,7 +768,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="turn_on_browser_autofill_integration_later">Automatisch aanvullen in browser later inschakelen?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Je kunt deze stap op ieder moment afronden via Instellingen.</string>
     <string name="what_bitwarden_has_to_offer">Je kunt nu automatisch invullen om in te loggen op apps en websites met je opgeslagen wachtwoorden. Nu kun je alles ontdekken wat Bitwarden te bieden heeft.</string>
-    <string name="youre_all_set">You’re all set!</string>
+    <string name="youre_all_set">Je bent helemaal klaar!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fout bij het verbinden met de Duo-service. Gebruik een andere tweestapsaanmeldingsmethode of neem contact op met Duo voor hulp.</string>
     <string name="master_password_hint_not_specified">Hoofdwachtwoordhint</string>
     <string name="new_master_password_hint">Nieuwe hoofdwachtwoordhint</string>
@@ -808,7 +808,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="need_help_check_out_import_help">Hulp nodig? Bekijk importhulp.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Sla het geëxporteerde bestand ergens op je computer waar je deze gemakkelijk kunt vinden.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dit is geen herkende Bitwarden-server. Je moet mogelijk controleren met je provider of je server bijwerken.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Inloggegevens synchroniseren...</string>
     <string name="download_the_browser_extension">Browserextensie downloaden</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Ga naar bitwarden.com/download om Bitwarden in je favoriete browser te integreren voor een naadloze werking.</string>
     <string name="use_the_web_app">Webapp gebruiken</string>
@@ -866,13 +866,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="coachmark_3_of_3">3 VAN 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Je moet een webadres toevoegen om auto-invullen te gebruiken om toegang te krijgen tot dit account.</string>
     <string name="learn_about_new_logins">Meer informatie over nieuwe logins</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We doorlopen de belangrijkste functies voor het toevoegen van een nieuwe login.</string>
     <string name="explore_the_generator">Ontdek de generator</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Leer meer over het genereren van veilige logingegevens met een begeleide tour.</string>
     <string name="import_client_certificate">Clientcertificaat importeren</string>
     <string name="enter_the_client_certificate_password_and_alias">Voer het wachtwoord van het clientcertificaat en de gewenste alias voor dit certificaat in.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Gebruik de generator om sterke wachtwoorden, wachtwoordzinnen en gebruikersnamen te genereren.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Wachtwoordzinnen zijn sterke wachtwoorden die vaak makkelijker zijn te onthouden en typen dan willekeurige wachtwoorden. Ze helpen om in te loggen op accounts waar auto-invullen niet beschikbaar is, zoals een streaming-service op je TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unieke gebruikersnamen voegen een extra beveiligingslaag toe en helpen te voorkomen dat hackers je accounts vinden.</string>
     <string name="coachmark_1_of_6">1 VAN 6</string>
@@ -881,8 +881,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="coachmark_4_of_6">4 VAN 6</string>
     <string name="coachmark_5_of_6">5 VAN 6</string>
     <string name="coachmark_6_of_6">6 VAN 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Gebruik deze opties om je wachtwoord aan de vereisten van je websiteaccount aan te passen.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Vergeet je wachtwoord niet bij te werken op de website van je account nadat je je nieuwe wachtwoord in Bitwarden hebt opgeslagen.</string>
     <string name="verify_your_identity">Verifieer je identiteit</string>
     <string name="error_loading_certificate">Fout bij laden van certificaat</string>
     <string name="certificate_alias">Certificaatalias</string>
@@ -1132,7 +1132,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="kdf_update_failed_active_account_not_found">Kdf update mislukt, actief account niet gevonden. Probeer het opnieuw of neem contact met ons op.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Er is een fout opgetreden tijdens het bijwerken van de kdf-instellingen. Probeer het opnieuw of neem contact met ons op.</string>
     <string name="the_import_request_could_not_be_processed">Het importverzoek kon niet worden verwerkt.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Je kluis is mogelijk leeg of het importeren van sommige itemtypen is niet toegestaan voor je account.</string>
+    <string name="no_items_available_to_import">Geen items beschikbaar om te importeren</string>
+    <string name="select_a_different_account">Een ander account selecteren</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
 </resources>
