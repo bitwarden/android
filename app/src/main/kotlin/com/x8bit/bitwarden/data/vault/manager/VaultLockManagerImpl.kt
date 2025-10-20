@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.methodName
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
@@ -239,7 +240,10 @@ class VaultLockManagerImpl(
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
                                         updateKdfIfNeeded(initUserCryptoMethod)
-                                        migratePinProtectedUserKeyIfNeeded(userId = userId)
+                                        migratePinProtectedUserKeyIfNeeded(
+                                            userId = userId,
+                                            initUserCryptoMethod = initUserCryptoMethod,
+                                        )
                                         setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
@@ -284,12 +288,19 @@ class VaultLockManagerImpl(
      * Optionally marks the envelope as in-memory only if the PIN-protected user key is not present.
      *
      * @param userId The ID of the user for whom to migrate the PIN-protected user key.
+     * @param initUserCryptoMethod The method used to initialize the user's crypto.
      */
-    private suspend fun migratePinProtectedUserKeyIfNeeded(userId: String) {
+    private suspend fun migratePinProtectedUserKeyIfNeeded(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
         val encryptedPin = authDiskSource.getEncryptedPin(userId) ?: return
         if (authDiskSource.getPinProtectedUserKeyEnvelope(userId) != null) return
 
         val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
+
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.methodName()}")
+
         vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
             .onSuccess { enrollPinResponse ->
                 authDiskSource.storeEncryptedPin(
@@ -306,6 +317,11 @@ class VaultLockManagerImpl(
                     pinProtectedUserKey = null,
                     inMemoryOnly = inMemoryOnly,
                 )
+                if (inMemoryOnly) {
+                    Timber.d("[Auth] Set PIN-protected user key in memory")
+                } else {
+                    Timber.d("[Auth] Migrated from legacy PIN to PIN-protected user key envelope")
+                }
             }
     }
 
