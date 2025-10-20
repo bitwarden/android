@@ -418,8 +418,10 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .onNodeWithText("Account synced from Bitwarden app")
             .assertIsNotDisplayed()
 
-        // Send ShowFirstTimeSyncSnackbar event
-        mutableEventFlow.tryEmit(ItemListingEvent.ShowFirstTimeSyncSnackbar)
+        // Send ShowSnackbar event
+        mutableEventFlow.tryEmit(
+            ItemListingEvent.ShowSnackbar(message = "Account synced from Bitwarden app".asText()),
+        )
 
         // Make sure the snackbar is showing:
         composeTestRule
