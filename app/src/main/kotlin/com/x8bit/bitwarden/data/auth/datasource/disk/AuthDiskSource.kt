@@ -216,7 +216,16 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Retrieves a pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     fun getPinProtectedUserKey(userId: String): String?
+
+    /**
+     * Retrieves a pin-protected user key envelope for the given [userId].
+     */
+    fun getPinProtectedUserKeyEnvelope(userId: String): String?
 
     /**
      * Stores a pin-protected user key for the given [userId].
@@ -224,6 +233,10 @@ interface AuthDiskSource : AppIdProvider {
      * When [inMemoryOnly] is `true`, the value will only be available via a call to
      * [getPinProtectedUserKey] during the current app session.
      */
+    @Deprecated(
+        message = "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -231,9 +244,30 @@ interface AuthDiskSource : AppIdProvider {
     )
 
     /**
+     * Stores a pin-protected user key envelope for the given [userId].
+     *
+     * When [inMemoryOnly] is `true`, the value will only be available via a call to
+     * [getPinProtectedUserKeyEnvelope] during the current app session.
+     */
+    fun storePinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean = false,
+    )
+
+    /**
      * Retrieves a flow for the pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     fun getPinProtectedUserKeyFlow(userId: String): Flow<String?>
+
+    /**
+     * Retrieves a flow for the pin-protected user key envelope for the given [userId].
+     */
+    fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?>
 
     /**
      * Gets a two-factor auth token using a user's [email].

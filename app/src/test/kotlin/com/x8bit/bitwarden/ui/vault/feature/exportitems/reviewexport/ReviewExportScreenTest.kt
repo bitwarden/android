@@ -174,6 +174,19 @@ class ReviewExportScreenTest : BitwardenComposeTest() {
             mockViewModel.trySendAction(ReviewExportAction.SelectAnotherAccountClick)
         }
     }
+
+    @Test
+    fun `SelectAnotherAccount should not be visible when user do not have other accounts`() {
+        mockStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ReviewExportState.ViewState.NoItems,
+                hasOtherAccounts = false,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Select a different account")
+            .assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE = ReviewExportState(
@@ -190,5 +203,6 @@ private val DEFAULT_STATE = ReviewExportState(
         uri = Uri.EMPTY,
         requestJson = "",
     ),
+    hasOtherAccounts = true,
     dialog = null,
 )

@@ -17,7 +17,6 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.every
@@ -39,7 +38,6 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
     private val mutableAuthenticatorAlertThresholdFlow =
         MutableStateFlow(AUTHENTICATOR_ALERT_SECONDS)
-    private val mutableAppThemeFlow = MutableStateFlow(APP_THEME)
     private val mutableVerificationCodesFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mutableSharedCodesFlow =
@@ -57,14 +55,12 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val encodingManager: BitwardenEncodingManager = mockk()
     private val settingsRepository: SettingsRepository = mockk {
-        every { appTheme } returns mutableAppThemeFlow.value
         every {
             authenticatorAlertThresholdSeconds
         } returns mutableAuthenticatorAlertThresholdFlow.value
         every {
             authenticatorAlertThresholdSecondsFlow
         } returns mutableAuthenticatorAlertThresholdFlow
-        every { appThemeStateFlow } returns mutableAppThemeFlow
         every { hasUserDismissedDownloadBitwardenCard } returns false
     }
 
@@ -442,11 +438,17 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on FirstTimeUserSyncReceive should emit ShowFirstTimeSyncSnackbar`() = runTest {
+    fun `on FirstTimeUserSyncReceive should emit ShowSnackbar`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             firstTimeAccountSyncChannel.send(Unit)
-            assertEquals(ItemListingEvent.ShowFirstTimeSyncSnackbar, awaitItem())
+            assertEquals(
+                ItemListingEvent.ShowSnackbar(
+                    message = BitwardenString.account_synced_from_bitwarden_app.asText(),
+                    withDismissAction = true,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -553,10 +555,8 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val APP_THEME: AppTheme = mockk()
 private const val AUTHENTICATOR_ALERT_SECONDS = 7
 private val DEFAULT_STATE = ItemListingState(
-    appTheme = APP_THEME,
     alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
     viewState = ItemListingState.ViewState.Loading,
     dialog = null,

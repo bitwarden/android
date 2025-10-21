@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -326,7 +327,12 @@ class VaultRepositoryImpl(
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                        userId = userId,
+                        initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = decryptedUserKey,
+                        ),
+                    )
                 }
             }
     }
@@ -350,7 +356,13 @@ class VaultRepositoryImpl(
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                        userId = userId,
+                        initUserCryptoMethod = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    )
                 }
             }
     }
@@ -360,17 +372,34 @@ class VaultRepositoryImpl(
     ): VaultUnlockResult {
         val userId = activeUserId
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(
-                error = MissingPropertyException("Pin protected key"),
-            )
-        return this.unlockVaultForUser(
-            userId = userId,
-            initUserCryptoMethod = InitUserCryptoMethod.Pin(
-                pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
-            ),
-        )
+
+        return authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+            ?.let { pinProtectedUserKeyEnvelope ->
+                this.unlockVaultForUser(
+                    userId = userId,
+                    initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
+                        pin = pin,
+                        pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                    ),
+                )
+            }
+            ?: run {
+                // This is needed to support unlocking with a legacy pin protected user key.
+                // Once the vault is unlocked, the user's pin protected user key is migrated to
+                // a pin protected user key envelope.
+                val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+                    ?: return VaultUnlockResult.InvalidStateError(
+                        error = MissingPropertyException("Pin protected key"),
+                    )
+
+                this.unlockVaultForUser(
+                    userId = userId,
+                    initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                        pin = pin,
+                        pinProtectedUserKey = pinProtectedUserKey,
+                    ),
+                )
+            }
     }
 
     override suspend fun generateTotp(
@@ -499,22 +528,44 @@ class VaultRepositoryImpl(
      * unlocks during this current app session.
      *
      * If the user's vault has not yet been unlocked, this call will do nothing.
+     *
+     * @param userId The ID of the user to check.
+     * @param initUserCryptoMethod The method used to initialize the user's crypto.
      */
-    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(userId: String) {
+    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
-        val existingPinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-        if (existingPinProtectedUserKey != null) return
+        val existingPinProtectedUserKeyEnvelope = authDiskSource
+            .getPinProtectedUserKeyEnvelope(
+                userId = userId,
+            )
+        if (existingPinProtectedUserKeyEnvelope != null) return
+
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
+
         vaultSdkSource
-            .derivePinProtectedUserKey(
+            .enrollPinWithEncryptedPin(
                 userId = userId,
                 encryptedPin = encryptedPin,
             )
-            .onSuccess { pinProtectedUserKey ->
-                authDiskSource.storePinProtectedUserKey(
+            .onSuccess { enrollPinResponse ->
+                authDiskSource.storeEncryptedPin(
                     userId = userId,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
+                )
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = userId,
+                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
                     inMemoryOnly = true,
                 )
+                authDiskSource.storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                    inMemoryOnly = true,
+                )
+                Timber.d("[Auth] Set PIN-protected user key in memory")
             }
     }
 

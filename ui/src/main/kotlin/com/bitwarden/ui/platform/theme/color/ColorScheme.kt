@@ -179,7 +179,7 @@ fun dynamicBitwardenColorScheme(
             primary = materialColorScheme.background,
             secondary = materialColorScheme.surfaceContainer,
             tertiary = materialColorScheme.surfaceContainerHighest,
-            alert = materialColorScheme.error,
+            alert = materialColorScheme.inverseSurface,
             scrim = materialColorScheme.scrim.copy(alpha = 0.4f),
             pressed = materialColorScheme.onSurfaceVariant,
         ),
