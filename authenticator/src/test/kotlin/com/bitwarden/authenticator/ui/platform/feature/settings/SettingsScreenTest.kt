@@ -208,6 +208,17 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `on use dynamic colors row click should send DynamicColorChange event`() {
+        composeTestRule
+            .onNodeWithText(text = "Use dynamic colors")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(true))
+        }
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -215,8 +226,10 @@ private val APP_THEME = AppTheme.DEFAULT
 private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
 private val DEFAULT_STATE = SettingsState(
     appearance = SettingsState.Appearance(
-        APP_LANGUAGE,
-        APP_THEME,
+        language = APP_LANGUAGE,
+        theme = APP_THEME,
+        isDynamicColorsSupported = true,
+        isDynamicColorsEnabled = false,
     ),
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,

@@ -204,10 +204,17 @@ fun SettingsScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
-                state = state,
+                state = state.appearance,
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
+                    }
+                },
+                onDynamicColorChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            SettingsAction.AppearanceChange.DynamicColorChange(it),
+                        )
                     }
                 },
             )
@@ -518,8 +525,9 @@ private fun ScreenCaptureRow(
 
 @Composable
 private fun ColumnScope.AppearanceSettings(
-    state: SettingsState,
+    state: SettingsState.Appearance,
     onThemeSelection: (theme: AppTheme) -> Unit,
+    onDynamicColorChange: (isEnabled: Boolean) -> Unit,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier
@@ -529,19 +537,33 @@ private fun ColumnScope.AppearanceSettings(
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
     ThemeSelectionRow(
-        currentSelection = state.appearance.theme,
+        currentSelection = state.theme,
         onThemeSelection = onThemeSelection,
+        cardStyle = if (state.isDynamicColorsSupported) CardStyle.Top() else CardStyle.Full,
         modifier = Modifier
             .testTag("ThemeChooser")
             .standardHorizontalMargin()
             .fillMaxWidth(),
     )
+    if (state.isDynamicColorsSupported) {
+        BitwardenSwitch(
+            label = stringResource(id = BitwardenString.use_dynamic_colors),
+            isChecked = state.isDynamicColorsEnabled,
+            onCheckedChange = onDynamicColorChange,
+            cardStyle = CardStyle.Bottom,
+            modifier = Modifier
+                .testTag(tag = "DynamicColorsSwitch")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
 private fun ThemeSelectionRow(
     currentSelection: AppTheme,
     onThemeSelection: (AppTheme) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     resources: Resources = LocalResources.current,
 ) {
@@ -555,7 +577,7 @@ private fun ThemeSelectionRow(
                 .first { it.displayLabel(resources) == selectedOptionLabel }
             onThemeSelection(selectedOption)
         },
-        cardStyle = CardStyle.Full,
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 }
