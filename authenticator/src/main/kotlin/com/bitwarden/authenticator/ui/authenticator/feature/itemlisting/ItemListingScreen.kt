@@ -332,22 +332,26 @@ private fun ItemListingContent(
 ) {
     var isLocalHeaderExpanded by rememberSaveable { mutableStateOf(value = true) }
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        item(key = "action_card") {
-            ActionCard(
-                actionCardState = state.actionCard,
-                onDownloadBitwardenClick = onDownloadBitwardenClick,
-                onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
-                onSyncWithBitwardenClick = onSyncWithBitwardenClick,
-                onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
-                onSyncLearnMoreClick = onSyncLearnMoreClick,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .padding(top = 12.dp, bottom = 16.dp)
-                    .animateItem(),
-            )
+        state.actionCard?.let {
+            item(key = "action_card") {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                ActionCard(
+                    actionCardState = it,
+                    onDownloadBitwardenClick = onDownloadBitwardenClick,
+                    onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
+                    onSyncWithBitwardenClick = onSyncWithBitwardenClick,
+                    onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
+                    onSyncLearnMoreClick = onSyncLearnMoreClick,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .animateItem(),
+                )
+            }
         }
+
         if (state.favoriteItems.isNotEmpty()) {
             item(key = "favorites_header") {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.favorites),
                     supportingLabel = state.favoriteItems.count().toString(),
@@ -398,6 +402,10 @@ private fun ItemListingContent(
                         .standardHorizontalMargin()
                         .animateItem(),
                 )
+            }
+        } else if (state.sharedItems.isEmpty()) {
+            item(key = "local_items_spacer") {
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
@@ -494,7 +502,7 @@ private fun ItemListingContent(
 @Suppress("LongMethod")
 @Composable
 fun EmptyItemListingContent(
-    actionCardState: ItemListingState.ActionCardState,
+    actionCardState: ItemListingState.ActionCardState?,
     onAddCodeClick: () -> Unit,
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
@@ -508,22 +516,24 @@ fun EmptyItemListingContent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = when (actionCardState) {
-            ItemListingState.ActionCardState.None -> Arrangement.Center
+            null -> Arrangement.Center
             ItemListingState.ActionCardState.DownloadBitwardenApp -> Arrangement.Top
             ItemListingState.ActionCardState.SyncWithBitwarden -> Arrangement.Top
         },
     ) {
-        ActionCard(
-            actionCardState = actionCardState,
-            onDownloadBitwardenClick = onDownloadBitwardenClick,
-            onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
-            onSyncWithBitwardenClick = onSyncWithBitwardenClick,
-            onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
-            onSyncLearnMoreClick = onSyncLearnMoreClick,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .padding(top = 12.dp, bottom = 16.dp),
-        )
+        actionCardState?.let {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            ActionCard(
+                actionCardState = it,
+                onDownloadBitwardenClick = onDownloadBitwardenClick,
+                onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
+                onSyncWithBitwardenClick = onSyncWithBitwardenClick,
+                onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
+                onSyncLearnMoreClick = onSyncLearnMoreClick,
+                modifier = Modifier.standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
 
         Column(
             modifier = modifier
@@ -620,8 +630,6 @@ private fun ActionCard(
                 },
             )
         }
-
-        ItemListingState.ActionCardState.None -> Unit
     }
 }
 
@@ -646,7 +654,7 @@ private fun ContentPreview() {
     BitwardenTheme {
         ItemListingContent(
             state = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(
                     VerificationCodeDisplayItem(

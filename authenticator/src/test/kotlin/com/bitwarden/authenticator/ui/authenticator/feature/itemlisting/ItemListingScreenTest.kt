@@ -119,7 +119,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `shared accounts error message should show when view is Content with SharedCodesDisplayState Error`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(),
                 sharedItems = SharedCodesDisplayState.Error,
@@ -132,7 +132,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
 
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(),
                 sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -148,7 +148,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `clicking shared accounts verification code item should send ItemClick action`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(),
                 sharedItems = SharedCodesDisplayState.Codes(
@@ -354,7 +354,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `clicking Copy to Bitwarden vault should send DropdownMenuClick with COPY_TO_BITWARDEN`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Error,
@@ -385,7 +385,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `Copy to Bitwarden vault long press action should not show when showMoveToBitwarden is false`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(LOCAL_CODE.copy(showMoveToBitwarden = false)),
                 sharedItems = SharedCodesDisplayState.Error,
@@ -405,7 +405,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                     favoriteItems = persistentListOf(),
                     itemList = persistentListOf(),
                     sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -432,7 +432,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `local codes header should be displayed and expanded when syncing is enabled`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Codes(
@@ -442,7 +442,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText("Local codes (1)")
+            .onNodeWithText(text = "LOCAL CODES (1)")
             .assertIsDisplayed()
 
         composeTestRule
@@ -456,7 +456,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
         )
         val viewState = ItemListingState.ViewState.Content(
-            actionCard = ItemListingState.ActionCardState.None,
+            actionCard = null,
             favoriteItems = persistentListOf(),
             itemList = persistentListOf(LOCAL_CODE),
             sharedItems = sharedItems,
@@ -464,7 +464,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
 
         composeTestRule
-            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .onNodeWithTextAfterScroll(text = "TEST@TEST.COM | BITWARDEN.COM (1)")
             .performClick()
 
         verify {
@@ -478,7 +478,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             sections = persistentListOf(SHARED_ACCOUNTS_SECTION),
         )
         val viewState = ItemListingState.ViewState.Content(
-            actionCard = ItemListingState.ActionCardState.None,
+            actionCard = null,
             favoriteItems = persistentListOf(),
             itemList = persistentListOf(LOCAL_CODE),
             sharedItems = sharedItems,
@@ -486,7 +486,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
 
         composeTestRule
-            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .onNodeWithTextAfterScroll(text = "TEST@TEST.COM | BITWARDEN.COM (1)")
             .assertIsDisplayed()
 
         composeTestRule
@@ -502,7 +502,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .onNodeWithTextAfterScroll(text = "TEST@TEST.COM | BITWARDEN.COM (1)")
             .assertIsDisplayed()
 
         composeTestRule
@@ -514,7 +514,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     fun `local codes should be displayed based on expanding header state`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(LOCAL_CODE),
                 sharedItems = SharedCodesDisplayState.Codes(
@@ -528,7 +528,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Local codes (1)")
+            .onNodeWithText(text = "LOCAL CODES (1)")
             .performClick()
 
         composeTestRule
@@ -575,7 +575,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
 private val DEFAULT_STATE = ItemListingState(
     alertThresholdSeconds = ALERT_THRESHOLD,
     viewState = ItemListingState.ViewState.NoItems(
-        actionCard = ItemListingState.ActionCardState.None,
+        actionCard = null,
     ),
     dialog = null,
 )
