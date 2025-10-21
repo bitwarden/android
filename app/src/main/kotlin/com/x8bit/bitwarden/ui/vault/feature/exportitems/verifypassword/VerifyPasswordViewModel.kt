@@ -444,7 +444,7 @@ data class VerifyPasswordState(
      * Whether the unlock button should be enabled.
      */
     val isContinueButtonEnabled: Boolean
-    get() = input.isNotBlank() && dialog !is DialogState.Loading
+        get() = input.isNotBlank() && dialog !is DialogState.Loading
 
     /**
      * Represents the state of a dialog.
