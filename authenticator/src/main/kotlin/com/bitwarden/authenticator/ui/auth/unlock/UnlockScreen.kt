@@ -117,7 +117,7 @@ fun UnlockScreen(
             )
             Spacer(modifier = Modifier.height(32.dp))
             BitwardenFilledButton(
-                label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
+                label = stringResource(id = BitwardenString.unlock),
                 onClick = {
                     biometricsManager.promptBiometrics(
                         onSuccess = onBiometricsUnlock,
