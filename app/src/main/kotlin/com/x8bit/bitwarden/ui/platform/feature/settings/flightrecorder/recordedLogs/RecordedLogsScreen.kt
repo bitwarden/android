@@ -135,7 +135,7 @@ fun RecordedLogsScreen(
                 BitwardenEmptyContent(
                     text = stringResource(id = BitwardenString.no_logs_recorded),
                     illustrationData = IconData.Local(
-                        iconRes = BitwardenDrawable.il_secure_devices,
+                        iconRes = BitwardenDrawable.ill_secure_devices,
                     ),
                     modifier = Modifier.fillMaxSize(),
                 )

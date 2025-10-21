@@ -355,7 +355,7 @@ private fun VaultScreenScaffold(
                         )
                     }
                     VaultNoItems(
-                        vectorRes = BitwardenDrawable.img_vault_items,
+                        vectorRes = BitwardenDrawable.ill_vault_items,
                         headerText = stringResource(
                             id = BitwardenString.save_and_protect_your_data,
                         ),

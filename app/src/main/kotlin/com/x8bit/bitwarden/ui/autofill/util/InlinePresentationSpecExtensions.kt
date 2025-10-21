@@ -67,7 +67,7 @@ fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
         } else {
             autofillAppInfo.context.getString(BitwardenString.my_vault)
         },
-        iconRes = BitwardenDrawable.icon,
+        iconRes = BitwardenDrawable.logo_bitwarden_icon,
         shouldTintIcon = false,
     )
 

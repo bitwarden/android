@@ -534,7 +534,7 @@ fun EmptyItemListingContent(
         ) {
 
             Image(
-                painter = rememberVectorPainter(id = BitwardenDrawable.img_authenticator),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ill_authenticator),
                 contentDescription = stringResource(id = BitwardenString.empty_item_list),
                 modifier = Modifier
                     .size(size = 100.dp)

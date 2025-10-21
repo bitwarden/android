@@ -12,7 +12,7 @@
     <!-- Launch theme (for auto dark/light based on system) -->
     <style name="LaunchTheme" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/BaseTheme</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_rounded</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_shield_icon</item>
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
 </resources>
