@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -25,17 +25,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,16 +67,16 @@ import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 
 /**
  * Displays the item listing screen.
@@ -108,9 +105,7 @@ fun ItemListingScreen(
             viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick)
         }
     }
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ItemListingEvent.NavigateBack -> onNavigateBack()
@@ -140,11 +135,8 @@ fun ItemListingScreen(
                 intentManager.startBitwardenAccountSettings()
             }
 
-            is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
-                // Message property is overridden by FirstTimeSyncSnackbarHost:
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar("")
-                }
+            is ItemListingEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(snackbarData = event.data)
             }
         }
     }
@@ -214,7 +206,7 @@ fun ItemListingScreen(
                 ),
             )
         },
-        snackbarHost = { FirstTimeSyncSnackbarHost(state = snackbarHostState) },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (val currentState = state.viewState) {
             is ItemListingState.ViewState.Content -> {
@@ -261,7 +253,6 @@ fun ItemListingScreen(
             is ItemListingState.ViewState.NoItems -> {
                 EmptyItemListingContent(
                     actionCardState = currentState.actionCard,
-                    appTheme = state.appTheme,
                     onAddCodeClick = remember(viewModel) {
                         { launcher.launch(Manifest.permission.CAMERA) }
                     },
@@ -504,7 +495,6 @@ private fun ItemListingContent(
 @Composable
 fun EmptyItemListingContent(
     actionCardState: ItemListingState.ActionCardState,
-    appTheme: AppTheme,
     onAddCodeClick: () -> Unit,
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
@@ -544,18 +534,11 @@ fun EmptyItemListingContent(
         ) {
 
             Image(
-                modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(
-                    id = when (appTheme) {
-                        AppTheme.DARK -> BitwardenDrawable.ic_empty_vault_dark
-                        AppTheme.LIGHT -> BitwardenDrawable.ic_empty_vault_light
-                        AppTheme.DEFAULT -> BitwardenDrawable.ic_empty_vault
-                    },
-                ),
-                contentDescription = stringResource(
-                    id = BitwardenString.empty_item_list,
-                ),
-                contentScale = ContentScale.Fit,
+                painter = rememberVectorPainter(id = BitwardenDrawable.img_authenticator),
+                contentDescription = stringResource(id = BitwardenString.empty_item_list),
+                modifier = Modifier
+                    .size(size = 100.dp)
+                    .fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -647,7 +630,6 @@ private fun ActionCard(
 private fun EmptyListingContentPreview() {
     EmptyItemListingContent(
         modifier = Modifier.padding(horizontal = 16.dp),
-        appTheme = AppTheme.DEFAULT,
         onAddCodeClick = { },
         actionCardState = ItemListingState.ActionCardState.DownloadBitwardenApp,
         onDownloadBitwardenClick = { },
