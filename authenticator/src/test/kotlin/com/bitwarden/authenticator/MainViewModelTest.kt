@@ -21,6 +21,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
+        every { isScreenCaptureAllowed } returns false
     }
     private val fakeServerConfigRepository = FakeServerConfigRepository()
     private val mainViewModel: MainViewModel = MainViewModel(
@@ -31,14 +32,20 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on AppThemeChanged should update state`() = runTest {
         mainViewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            eventFlow.skipItems(count = 2)
+            eventFlow.skipItems(count = 1)
             assertEquals(
-                MainState(theme = AppTheme.DEFAULT),
+                MainState(
+                    theme = AppTheme.DEFAULT,
+                    isScreenCaptureAllowed = false,
+                ),
                 stateFlow.awaitItem(),
             )
             mainViewModel.trySendAction(MainAction.Internal.ThemeUpdate(theme = AppTheme.DARK))
             assertEquals(
-                MainState(theme = AppTheme.DARK),
+                MainState(
+                    theme = AppTheme.DARK,
+                    isScreenCaptureAllowed = false,
+                ),
                 stateFlow.awaitItem(),
             )
             assertEquals(
@@ -57,9 +64,37 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         mainViewModel.eventFlow.test {
             // Ignore the events that are fired off by flows in the ViewModel init
-            skipItems(2)
+            skipItems(1)
             mainViewModel.trySendAction(MainAction.OpenDebugMenu)
             assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
         }
     }
+
+    @Test
+    fun `changes in the allowed screen capture value should update the state`() {
+        val viewModel = createViewModel()
+
+        assertEquals(
+            MainState(
+                theme = AppTheme.DEFAULT,
+                isScreenCaptureAllowed = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        mutableScreenCaptureAllowedFlow.value = true
+
+        assertEquals(
+            MainState(
+                theme = AppTheme.DEFAULT,
+                isScreenCaptureAllowed = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    private fun createViewModel() = MainViewModel(
+        settingsRepository = settingsRepository,
+        configRepository = fakeServerConfigRepository,
+    )
 }

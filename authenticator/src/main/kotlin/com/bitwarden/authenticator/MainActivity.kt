@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            handleScreenCaptureSettingChange(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             val navController = rememberNavController()
             observeViewModelEvents(navController)
             LocalManagerProvider {
@@ -95,10 +96,6 @@ class MainActivity : AppCompatActivity() {
             .eventFlow
             .onEach { event ->
                 when (event) {
-                    is MainEvent.ScreenCaptureSettingChange -> {
-                        handleScreenCaptureSettingChange(event)
-                    }
-
                     MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
                     is MainEvent.UpdateAppTheme -> {
                         AppCompatDelegate.setDefaultNightMode(event.osTheme)
@@ -122,8 +119,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.OpenDebugMenu)
     }
 
-    private fun handleScreenCaptureSettingChange(event: MainEvent.ScreenCaptureSettingChange) {
-        if (event.isAllowed) {
+    private fun handleScreenCaptureSettingChange(isScreenCaptureAllowed: Boolean) {
+        if (isScreenCaptureAllowed) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)

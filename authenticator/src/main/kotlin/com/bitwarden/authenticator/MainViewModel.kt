@@ -25,6 +25,7 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
+        isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
     ),
 ) {
 
@@ -37,7 +38,7 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .isScreenCaptureAllowedStateFlow
             .onEach { isAllowed ->
-                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
+                mutableStateFlow.update { it.copy(isScreenCaptureAllowed = isAllowed) }
             }
             .launchIn(viewModelScope)
         viewModelScope.launch {
@@ -91,6 +92,7 @@ class MainViewModel @Inject constructor(
 @Parcelize
 data class MainState(
     val theme: AppTheme,
+    val isScreenCaptureAllowed: Boolean,
 ) : Parcelable
 
 /**
@@ -135,11 +137,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Event indicating a change in the screen capture setting.
-     */
-    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 
     /**
      * Indicates that the app theme has been updated.
