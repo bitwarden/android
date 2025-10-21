@@ -59,7 +59,7 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod", "MaxLineLength", "LongMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
@@ -90,7 +90,9 @@ class RootNavViewModel @Inject constructor(
 
             specialCircumstance is SpecialCircumstance.CredentialExchangeExport -> {
                 if (userState.accounts.size == 1) {
-                    RootNavState.CredentialExchangeExportSkipAccountSelection(userId = userState.accounts.first().userId)
+                    RootNavState.CredentialExchangeExportSkipAccountSelection(
+                        userId = userState.accounts.first().userId,
+                    )
                 } else {
                     RootNavState.CredentialExchangeExport
                 }

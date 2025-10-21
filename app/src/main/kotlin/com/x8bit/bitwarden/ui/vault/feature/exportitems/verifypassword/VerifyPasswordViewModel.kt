@@ -433,11 +433,11 @@ data class VerifyPasswordState(
     val title: Text,
     val subtext: Text?,
     val hasOtherAccounts: Boolean,
-// We never want this saved since the input is sensitive data.
-@IgnoredOnParcel
-val input: String = "",
-val dialog: DialogState? = null,
-val showResendCodeButton: Boolean = false,
+    // We never want this saved since the input is sensitive data.
+    @IgnoredOnParcel
+    val input: String = "",
+    val dialog: DialogState? = null,
+    val showResendCodeButton: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -494,8 +494,8 @@ sealed class VerifyPasswordEvent {
     data object CancelExport : VerifyPasswordEvent()
 
     /**
-    * Show a snackbar with the given data .
-    */
+     * Show a snackbar with the given data.
+     */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
     ) : VerifyPasswordEvent() {
