@@ -61,6 +61,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
@@ -473,25 +474,25 @@ private fun AccountSecurityDialogs(
 @Composable
 private fun SessionTimeoutPolicyRow(
     vaultTimeoutPolicyMinutes: Int?,
-    vaultTimeoutPolicyAction: String?,
+    vaultTimeoutPolicyAction: PolicyInformation.VaultTimeout.Action?,
     modifier: Modifier = Modifier,
 ) {
     // Show the policy warning if applicable.
-    if (vaultTimeoutPolicyMinutes != null || !vaultTimeoutPolicyAction.isNullOrBlank()) {
+    if (vaultTimeoutPolicyMinutes != null || vaultTimeoutPolicyAction != null) {
         // Calculate the hours and minutes to show in the policy label.
         val hours = vaultTimeoutPolicyMinutes?.floorDiv(MINUTES_PER_HOUR)
         val minutes = vaultTimeoutPolicyMinutes?.mod(MINUTES_PER_HOUR)
 
         // Get the localized version of the action.
-        val action = if (vaultTimeoutPolicyAction == "lock") {
-            BitwardenString.lock.asText()
-        } else {
-            BitwardenString.log_out.asText()
+        val action = when (vaultTimeoutPolicyAction) {
+            PolicyInformation.VaultTimeout.Action.LOCK -> BitwardenString.lock.asText()
+            PolicyInformation.VaultTimeout.Action.LOGOUT -> BitwardenString.log_out.asText()
+            null -> BitwardenString.log_out.asText()
         }
 
         val policyText = if (hours == null || minutes == null) {
             BitwardenString.vault_timeout_action_policy_in_effect.asText(action)
-        } else if (vaultTimeoutPolicyAction.isNullOrBlank()) {
+        } else if (vaultTimeoutPolicyAction == null) {
             BitwardenString.vault_timeout_policy_in_effect.asText(hours, minutes)
         } else {
             BitwardenString.vault_timeout_policy_with_action_in_effect.asText(
@@ -629,7 +630,7 @@ private fun SessionCustomTimeoutRow(
 @Composable
 private fun SessionTimeoutActionRow(
     isEnabled: Boolean,
-    vaultTimeoutPolicyAction: String?,
+    vaultTimeoutPolicyAction: PolicyInformation.VaultTimeout.Action?,
     selectedVaultTimeoutAction: VaultTimeoutAction,
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
     modifier: Modifier = Modifier,

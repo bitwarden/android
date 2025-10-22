@@ -23,6 +23,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -602,7 +603,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 vaultTimeoutPolicyMinutes = 100,
-                vaultTimeoutPolicyAction = "lock",
+                vaultTimeoutPolicyAction = PolicyInformation.VaultTimeout.Action.LOCK,
             )
         }
         val bothText = "Your organization policies are affecting your vault timeout. " +
