@@ -122,6 +122,18 @@ sealed class PolicyInformation {
         val minutes: Int?,
 
         @SerialName("action")
-        val action: String?,
-    ) : PolicyInformation()
+        val action: Action?,
+    ) : PolicyInformation() {
+        /**
+         * The action to take when the vault timeout is reached.
+         */
+        @Serializable
+        enum class Action {
+            @SerialName("lock")
+            LOCK,
+
+            @SerialName("logOut")
+            LOGOUT,
+        }
+    }
 }
