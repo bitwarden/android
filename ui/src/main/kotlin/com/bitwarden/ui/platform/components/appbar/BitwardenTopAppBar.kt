@@ -143,14 +143,12 @@ fun BitwardenTopAppBar(
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
             collapsedHeight = minimumHeight,
-            expandedHeight = 96.dp,
             title = {
-                // The height of the component is controlled and will only allow for 1 extra row,
-                // making adding any arguments for softWrap and minLines superfluous.
                 Text(
                     text = title,
                     style = BitwardenTheme.typography.titleLarge,
                     overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
                     modifier = Modifier.testTag(tag = "PageTitleLabel"),
                 )
             },
