@@ -42,8 +42,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mutableSharedCodesFlow =
         MutableStateFlow<SharedVerificationCodesState>(SharedVerificationCodesState.Loading)
-    private val firstTimeAccountSyncChannel: Channel<Unit> =
-        Channel(capacity = Channel.UNLIMITED)
+    private val firstTimeAccountSyncChannel: Channel<Unit> = Channel(capacity = Channel.UNLIMITED)
 
     private val authenticatorRepository: AuthenticatorRepository = mockk {
         every { totpCodeFlow } returns emptyFlow()
@@ -89,7 +88,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when local items are empty and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns true
@@ -122,7 +121,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when there are local items and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
                 sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -140,7 +139,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should be Error when shared state is Error `() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
                 sharedItems = SharedCodesDisplayState.Error,
@@ -157,7 +156,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should be Codes with empty list when shared state is Success `() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS
                     .map { it.copy(showMoveToBitwarden = true) }
                     .toImmutableList(),
@@ -179,7 +178,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should show items even when local items are empty`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
@@ -194,7 +193,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow viewState value should be NoItems when both local and shared codes are empty`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = persistentListOf(),
                 itemList = persistentListOf(),
                 sharedItems = SHARED_DISPLAY_ITEMS,
@@ -222,7 +221,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                     favoriteItems = LOCAL_FAVORITE_ITEMS,
                     itemList = LOCAL_NON_FAVORITE_ITEMS,
                     sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -243,7 +242,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.NoItems(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                 ),
             )
             every { settingsRepository.hasUserDismissedDownloadBitwardenCard = true } just runs
@@ -270,7 +269,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                     favoriteItems = LOCAL_FAVORITE_ITEMS,
                     itemList = LOCAL_NON_FAVORITE_ITEMS,
                     sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -292,7 +291,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.NoItems(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                 ),
             )
             every { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true } just runs
@@ -324,7 +323,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when local items are empty and shared state is SyncNotEnabled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns true
@@ -357,7 +356,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show sync with bitwarden card when there are local items and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
                 sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
@@ -518,7 +517,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `on SectionExpandedClick should update expanded state for clicked section`() = runTest {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS
                     .map { it.copy(showMoveToBitwarden = true) }
                     .toImmutableList(),

@@ -15,6 +15,7 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +40,7 @@ fun AuthenticatorExpandingHeader(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
+            .clip(shape = BitwardenTheme.shapes.content)
             .clickable(
                 onClickLabel = onClickLabel,
                 onClick = onClick,
@@ -53,10 +55,10 @@ fun AuthenticatorExpandingHeader(
             label = "expanderIconRotationAnimation",
         )
         Text(
-            text = label,
-            style = BitwardenTheme.typography.labelMedium,
+            text = label.uppercase(),
+            style = BitwardenTheme.typography.eyebrowMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
-            modifier = Modifier.weight(1f, fill = false),
+            modifier = Modifier.weight(weight = 1f, fill = false),
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         Icon(
