@@ -236,21 +236,26 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `VerifyOtpResultReceive verified should send event`() = runTest {
-            createViewModel().also { viewModel ->
-                viewModel.trySendAction(
-                    VerifyPasswordAction.Internal.VerifyOtpResultReceive(
-                        VerifyOtpResult.Verified,
-                    ),
-                )
-
-                viewModel.eventFlow.test {
-                    assertEquals(
-                        VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
-                        awaitItem(),
+        fun `VerifyOtpResultReceive verified should send event and clear input`() = runTest {
+            createViewModel(state = DEFAULT_STATE.copy(input = "123"))
+                .also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.Internal.VerifyOtpResultReceive(
+                            VerifyOtpResult.Verified,
+                        ),
                     )
+
+                    viewModel.eventFlow.test {
+                        assertEquals(
+                            VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
+                            awaitItem(),
+                        )
+                    }
+
+                    viewModel.stateFlow.test {
+                        assertEquals(DEFAULT_STATE, awaitItem())
+                    }
                 }
-            }
         }
 
         @Test
