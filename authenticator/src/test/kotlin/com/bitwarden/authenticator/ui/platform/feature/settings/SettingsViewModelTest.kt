@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.authenticator.BuildConfig
@@ -13,6 +14,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.Defau
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -48,6 +50,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
     private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
+    private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -58,6 +61,9 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedStateFlow
         every { isScreenCaptureAllowed } answers { mutableScreenCaptureAllowedStateFlow.value }
         every { isScreenCaptureAllowed = any() } just runs
+        every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
+        every { isDynamicColorsEnabled = any() } just runs
+        every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
 
@@ -65,11 +71,14 @@ class SettingsViewModelTest : BaseViewModelTest() {
     fun setup() {
         mockkStatic(SharedVerificationCodesState::isSyncWithBitwardenEnabled)
         every { MOCK_SHARED_CODES_STATE.isSyncWithBitwardenEnabled } returns false
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
     }
 
     @AfterEach
     fun teardown() {
         unmockkStatic(SharedVerificationCodesState::isSyncWithBitwardenEnabled)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
@@ -225,6 +234,35 @@ class SettingsViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `on DynamicColorChange should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.AppearanceChange.DynamicColorChange(isEnabled = true),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.isDynamicColorsEnabled = true
+            }
+        }
+
+    @Test
+    fun `on DynamicColorsUpdated should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(SettingsAction.Internal.DynamicColorsUpdated(isEnabled = true))
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    appearance = DEFAULT_APPEARANCE_STATE.copy(isDynamicColorsEnabled = true),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ) = SettingsViewModel(
@@ -245,11 +283,14 @@ private val CLOCK = Clock.fixed(
     ZoneOffset.UTC,
 )
 private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
+private val DEFAULT_APPEARANCE_STATE = SettingsState.Appearance(
+    language = APP_LANGUAGE,
+    theme = APP_THEME,
+    isDynamicColorsSupported = true,
+    isDynamicColorsEnabled = false,
+)
 private val DEFAULT_STATE = SettingsState(
-    appearance = SettingsState.Appearance(
-        APP_LANGUAGE,
-        APP_THEME,
-    ),
+    appearance = DEFAULT_APPEARANCE_STATE,
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,
     showSyncWithBitwarden = true,

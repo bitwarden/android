@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,20 +26,25 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
+        isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
     ),
 ) {
 
     init {
         settingsRepository
             .appThemeStateFlow
-            .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .map { MainAction.Internal.ThemeUpdate(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
-
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { MainAction.Internal.DynamicColorUpdate(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         settingsRepository
             .isScreenCaptureAllowedStateFlow
-            .onEach { isAllowed ->
-                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
-            }
+            .map { MainEvent.ScreenCaptureSettingChange(it) }
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
         viewModelScope.launch {
             configRepository.getServerConfig(forceRefresh = false)
@@ -47,15 +53,26 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
-            is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: MainAction.Internal) {
+        when (action) {
+            is MainAction.Internal.DynamicColorUpdate -> handleDynamicColorUpdate(action)
+            is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
         }
     }
 
     private fun handleOpenDebugMenu() {
         sendEvent(MainEvent.NavigateToDebugMenu)
+    }
+
+    private fun handleDynamicColorUpdate(action: MainAction.Internal.DynamicColorUpdate) {
+        mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isEnabled) }
     }
 
     private fun handleThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -91,6 +108,7 @@ class MainViewModel @Inject constructor(
 @Parcelize
 data class MainState(
     val theme: AppTheme,
+    val isDynamicColorsEnabled: Boolean,
 ) : Parcelable
 
 /**
@@ -116,6 +134,12 @@ sealed class MainAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
+        /**
+         * Indicates that dynamic colors have been enabled or disabled.
+         */
+        data class DynamicColorUpdate(
+            val isEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the app theme has changed.
