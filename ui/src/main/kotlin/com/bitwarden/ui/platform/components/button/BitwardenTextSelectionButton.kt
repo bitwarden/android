@@ -33,6 +33,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
+import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
@@ -163,7 +164,6 @@ fun BitwardenTextSelectionButton(
                         Icon(
                             painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
                             contentDescription = null,
-                            tint = BitwardenTheme.colorScheme.icon.primary,
                             modifier = Modifier.minimumInteractiveComponentSize(),
                         )
                         actions()
@@ -172,7 +172,11 @@ fun BitwardenTextSelectionButton(
             },
             value = selectedOption.orEmpty(),
             onValueChange = {},
-            colors = bitwardenTextFieldButtonColors(),
+            colors = if (enabled) {
+                bitwardenTextFieldButtonColors()
+            } else {
+                bitwardenTextFieldColors()
+            },
             modifier = Modifier
                 .nullableTestTag(tag = textFieldTestTag)
                 .fillMaxWidth(),
