@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
-            handleScreenCaptureSettingChange(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
+            updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             val navController = rememberNavController()
             observeViewModelEvents(navController)
             LocalManagerProvider {
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.OpenDebugMenu)
     }
 
-    private fun handleScreenCaptureSettingChange(isScreenCaptureAllowed: Boolean) {
+    private fun updateScreenCapture(isScreenCaptureAllowed: Boolean) {
         if (isScreenCaptureAllowed) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {

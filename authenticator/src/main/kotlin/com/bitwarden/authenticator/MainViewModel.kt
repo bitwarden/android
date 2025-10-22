@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,10 +38,10 @@ class MainViewModel @Inject constructor(
 
         settingsRepository
             .isScreenCaptureAllowedStateFlow
-            .onEach { isAllowed ->
-                mutableStateFlow.update { it.copy(isScreenCaptureAllowed = isAllowed) }
-            }
+            .map { MainAction.Internal.ScreenCaptureUpdate(it) }
+            .onEach(::trySendAction)
             .launchIn(viewModelScope)
+
         viewModelScope.launch {
             configRepository.getServerConfig(forceRefresh = false)
         }
@@ -52,6 +53,10 @@ class MainViewModel @Inject constructor(
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+
+            is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(
+                isAllowed = action.isScreenCaptureEnabled,
+            )
         }
     }
 
@@ -76,6 +81,10 @@ class MainViewModel @Inject constructor(
             intent = action.intent,
             isFirstIntent = false,
         )
+    }
+
+    private fun handleScreenCaptureUpdate(isAllowed: Boolean) {
+        mutableStateFlow.update { it.copy(isScreenCaptureAllowed = isAllowed) }
     }
 
     private fun handleIntent(
@@ -124,6 +133,13 @@ sealed class MainAction {
          */
         data class ThemeUpdate(
             val theme: AppTheme,
+        ) : Internal()
+
+        /**
+         * Indicates that the screen capture state has changed.
+         */
+        data class ScreenCaptureUpdate(
+            val isScreenCaptureEnabled: Boolean,
         ) : Internal()
     }
 }
