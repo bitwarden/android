@@ -41,7 +41,7 @@ jobs:
     name: Calculate Version Name and Number
     uses: bitwarden/android/.github/workflows/_version.yml@PM-22157/independent-version-names
     with:
-      base_version_number: 12200
+      base_version_number: 11000
       version_name: ${{ inputs.version-name }}
       version_number: ${{ inputs.version-number }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
@@ -241,10 +241,11 @@ jobs:
 
       - name: Increment version
         env:
+          BASE_VERSION_CODE: ${{ needs.version.outputs.base_version_number }}
           VERSION_CODE: ${{ needs.version.outputs.version_number }}
           VERSION_NAME: ${{ needs.version.outputs.version_name }}
         run: |
-          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
+          VERSION_CODE="${VERSION_CODE:-$((BASE_VERSION_CODE + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:$VERSION_NAME
@@ -542,13 +543,13 @@ jobs:
           "$GITHUB_RUN_ID" \
           "$GITHUB_RUN_ATTEMPT"
 
-      # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
         env:
+          BASE_VERSION_CODE: ${{ needs.version.outputs.base_version_number }}
           VERSION_CODE: ${{ needs.version.outputs.version_number }}
           VERSION_NAME: ${{ needs.version.outputs.version_name }}
         run: |
-          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
+          VERSION_CODE="${VERSION_CODE:-$((BASE_VERSION_CODE + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:$VERSION_NAME
