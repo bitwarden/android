@@ -12,14 +12,16 @@ import kotlinx.serialization.json.JsonNames
 @OptIn(ExperimentalSerializationApi::class)
 data class MasterPasswordUnlockDataJson(
     @SerialName("salt")
+    @JsonNames("Salt")
     val salt: String,
 
     @SerialName("kdf")
+    @JsonNames("Kdf")
     val kdf: KdfJson,
 
     // TODO: PM-26397 this was done due to naming inconsistency server side,
     //  should be cleaned up when server side is updated
     @SerialName("masterKeyWrappedUserKey")
-    @JsonNames("masterKeyEncryptedUserKey")
+    @JsonNames("MasterKeyWrappedUserKey", "masterKeyEncryptedUserKey", "MasterKeyEncryptedUserKey")
     val masterKeyWrappedUserKey: String,
 )
