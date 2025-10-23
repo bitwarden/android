@@ -39,7 +39,7 @@ permissions:
 jobs:
   version:
     name: Calculate Version Name and Number
-    uses: bitwarden/android/.github/workflows/_version.yml@PM-22157/independent-version-names
+    uses: bitwarden/android/.github/workflows/_version.yml@main
     with:
       app_codename: "bwpm"
       # Start from 11000 to prevent collisions with mobile build version codes

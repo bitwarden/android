@@ -38,7 +38,7 @@ permissions:
 jobs:
   version:
     name: Calculate Version Name and Number
-    uses: bitwarden/android/.github/workflows/_version.yml@PM-22157/independent-version-names
+    uses: bitwarden/android/.github/workflows/_version.yml@main
     with:
       app_codename: "bwa"
       base_version_number: 0
