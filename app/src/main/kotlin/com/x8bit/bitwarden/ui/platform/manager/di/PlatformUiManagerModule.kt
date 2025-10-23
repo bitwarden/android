@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.platform.manager.di
 import android.content.Context
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.manager.BidiTextManager
+import com.bitwarden.ui.platform.manager.dsl.bidiTextManager
 import com.bitwarden.ui.platform.manager.share.ShareManager
 import com.bitwarden.ui.platform.manager.share.ShareManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
@@ -50,4 +52,8 @@ object PlatformUiManagerModule {
         context = context,
         buildInfoManager = buildInfoManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideBidiTextManager(): BidiTextManager = bidiTextManager()
 }
