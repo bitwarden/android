@@ -10,6 +10,9 @@
 # Actions and workflow changes.
 .github/ @bitwarden/dept-development-mobile
 
+# Claude related files
+.claude/ @bitwarden/team-ai-sme
+
 # Auth
 # app/src/main/java/com/x8bit/bitwarden/data/auth @bitwarden/team-auth-dev
 # app/src/main/java/com/x8bit/bitwarden/ui/auth @bitwarden/team-auth-dev
