@@ -17,12 +17,12 @@ Start with high-level assessment of the change's purpose and approach. Read PR/c
 
 Systematically check each area against Bitwarden standards documented in CLAUDE.md:
 
-1. **Architecture** (CLAUDE.md:11): Follow patterns in docs/ARCHITECTURE.md
+1. **Architecture**: Follow patterns in docs/ARCHITECTURE.md
    - MVVM + UDF (ViewModels with StateFlow, Compose UI)
    - Hilt DI (interface injection, @HiltViewModel)
    - Repository pattern and proper data flow
 
-2. **Style** (CLAUDE.md:12): Adhere to docs/STYLE_AND_BEST_PRACTICES.md
+2. **Style**: Adhere to docs/STYLE_AND_BEST_PRACTICES.md
    - Naming conventions, code organization, formatting
    - Kotlin idioms (immutability, null safety, coroutines)
 
@@ -32,13 +32,13 @@ Systematically check each area against Bitwarden standards documented in CLAUDE.
    - API compatibility and deprecation warnings
    - Resource references and manifest requirements
 
-4. **Testing** (CLAUDE.md:75): Verify appropriate test coverage
+4. **Testing**: Verify appropriate test coverage
    - Unit tests for business logic and utility functions
    - Integration tests for complex workflows
    - UI tests for user-facing features when applicable
    - Test coverage for edge cases and error scenarios
 
-5. **Security** (CLAUDE.md:49-56): Given Bitwarden's security-focused nature
+5. **Security**: Given Bitwarden's security-focused nature
    - Proper handling of sensitive data
    - Secure storage practices (Android Keystore)
    - Authentication and authorization patterns
