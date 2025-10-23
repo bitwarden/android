@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""
+SessionStart Hook - Initialize session logs
+
+Runs when Claude Code starts a new session or resumes an existing session.
+Creates empty log files (JSON and Markdown) for the session.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+# Add hooks directory to path to import logging_utils
+hooks_dir = Path(__file__).parent
+sys.path.insert(0, str(hooks_dir))
+
+from logging_utils import get_logger
+
+
+def main():
+    """Initialize session logs."""
+    try:
+        # Read hook input from stdin
+        hook_input = json.load(sys.stdin)
+
+        # Get logger instance
+        logger = get_logger(hook_input)
+
+        # Initialize log files
+        logger.initialize_logs()
+
+        # Success
+        sys.exit(0)
+
+    except Exception as e:
+        # Log error but don't block session start
+        print(f"SessionStart hook error: {e}", file=sys.stderr)
+        sys.exit(0)  # Exit 0 to not block session
+
+
+if __name__ == "__main__":
+    main()

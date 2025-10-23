@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""
+PostToolUse Hook - Log tool uses and subagent invocations
+
+Runs after each tool completes successfully.
+Logs all tool uses with special handling for Task tool (subagent invocations).
+"""
+
+import json
+import sys
+from pathlib import Path
+
+# Add hooks directory to path
+hooks_dir = Path(__file__).parent
+sys.path.insert(0, str(hooks_dir))
+
+from logging_utils import get_logger
+
+
+def main():
+    """Log tool use."""
+    try:
+        # Read hook input from stdin
+        hook_input = json.load(sys.stdin)
+
+        # Get logger instance
+        logger = get_logger(hook_input)
+
+        # Extract tool information
+        tool_name = hook_input.get("tool_name", "Unknown")
+        tool_input = hook_input.get("tool_input", {})
+        tool_response = hook_input.get("tool_response", {})
+
+        # Log the tool use
+        logger.append_event("ToolUse", {
+            "tool_name": tool_name,
+            "tool_input": tool_input,
+            "tool_response": tool_response
+        })
+
+        # Success
+        sys.exit(0)
+
+    except Exception as e:
+        # Don't block tool execution on logging errors
+        print(f"PostToolUse hook error: {e}", file=sys.stderr)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""
+SubagentStop Hook - Log subagent completion
+
+Runs when a subagent finishes executing.
+Logs the subagent completion event.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+# Add hooks directory to path
+hooks_dir = Path(__file__).parent
+sys.path.insert(0, str(hooks_dir))
+
+from logging_utils import get_logger
+
+
+def main():
+    """Log subagent completion."""
+    try:
+        # Read hook input from stdin
+        hook_input = json.load(sys.stdin)
+
+        # Get logger instance
+        logger = get_logger(hook_input)
+
+        # Log subagent stop event
+        logger.append_event("SubagentStop", {})
+
+        # Success
+        sys.exit(0)
+
+    except Exception as e:
+        # Don't block subagent completion on logging errors
+        print(f"SubagentStop hook error: {e}", file=sys.stderr)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

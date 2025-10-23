@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""
+Stop Hook - Log Claude's response
+
+Runs when Claude finishes responding.
+Reads the transcript to extract Claude's latest response and logs it.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+# Add hooks directory to path
+hooks_dir = Path(__file__).parent
+sys.path.insert(0, str(hooks_dir))
+
+from logging_utils import get_logger
+
+
+def extract_latest_response(transcript_data):
+    """Extract Claude's most recent response from transcript entry."""
+    if not transcript_data:
+        return ""
+
+    # Handle JSONL format - transcript_data is a single entry with a "message" field
+    if "message" in transcript_data:
+        msg = transcript_data.get("message", {})
+        if msg.get("role") == "assistant":
+            content = msg.get("content", [])
+            if isinstance(content, list):
+                text_parts = [c.get("text", "") for c in content if c.get("type") == "text"]
+                return "\n".join(text_parts)
+            elif isinstance(content, str):
+                return content
+
+    # Fallback: Handle old format with "messages" array
+    elif "messages" in transcript_data:
+        messages = transcript_data.get("messages", [])
+        for msg in reversed(messages):
+            if msg.get("role") == "assistant":
+                content = msg.get("content", [])
+                if isinstance(content, list):
+                    text_parts = [c.get("text", "") for c in content if c.get("type") == "text"]
+                    return "\n".join(text_parts)
+                elif isinstance(content, str):
+                    return content
+
+    return ""
+
+
+def main():
+    """Log Claude's response."""
+    try:
+        # Read hook input from stdin
+        hook_input = json.load(sys.stdin)
+
+        # Debug: Write hook input to a debug file
+        debug_log = Path(__file__).parent.parent / "logs" / "stop_hook_debug.json"
+        debug_log.parent.mkdir(parents=True, exist_ok=True)
+        with open(debug_log, "a") as f:
+            f.write(json.dumps({
+                "timestamp": __import__('datetime').datetime.now().isoformat(),
+                "hook_input_keys": list(hook_input.keys()),
+                "transcript_path": hook_input.get("transcript_path"),
+                "has_transcript": bool(hook_input.get("transcript_path"))
+            }) + "\n")
+
+        # Get logger instance
+        logger = get_logger(hook_input)
+
+        # Read transcript to get Claude's response
+        transcript_path = hook_input.get("transcript_path")
+        if transcript_path:
+            transcript_data = logger.read_transcript(transcript_path)
+
+            # Debug: Log transcript parsing results
+            with open(debug_log, "a") as f:
+                f.write(json.dumps({
+                    "stage": "after_read_transcript",
+                    "has_transcript_data": bool(transcript_data),
+                    "transcript_keys": list(transcript_data.keys()) if transcript_data else None
+                }) + "\n")
+
+            if transcript_data:
+                response = extract_latest_response(transcript_data)
+
+                # Debug: Log response extraction results
+                with open(debug_log, "a") as f:
+                    f.write(json.dumps({
+                        "stage": "after_extract_response",
+                        "has_response": bool(response),
+                        "response_length": len(response) if response else 0
+                    }) + "\n")
+
+                if response:
+                    logger.append_event("ClaudeResponse", {"response": response})
+                else:
+                    with open(debug_log, "a") as f:
+                        f.write(json.dumps({"error": "response extracted but empty"}) + "\n")
+            else:
+                with open(debug_log, "a") as f:
+                    f.write(json.dumps({"error": "transcript_data is None or empty"}) + "\n")
+        else:
+            # Debug: Log that transcript_path was missing
+            with open(debug_log, "a") as f:
+                f.write(json.dumps({"error": "transcript_path missing"}) + "\n")
+
+        # Success
+        sys.exit(0)
+
+    except Exception as e:
+        # Don't block Claude's response on logging errors
+        debug_log = Path(__file__).parent.parent / "logs" / "stop_hook_debug.json"
+        with open(debug_log, "a") as f:
+            f.write(json.dumps({"error": str(e)}) + "\n")
+        print(f"Stop hook error: {e}", file=sys.stderr)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
