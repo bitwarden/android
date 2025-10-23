@@ -15,14 +15,14 @@ Start with high-level assessment of the change's purpose and approach. Read PR/c
 
 ### Step 2: Verify Compliance
 
-Systematically check each area against Bitwarden standards documented in CLAUDE.md:
+Systematically check each area against Bitwarden standards documented in `CLAUDE.md`:
 
-1. **Architecture**: Follow patterns in docs/ARCHITECTURE.md
-   - MVVM + UDF (ViewModels with StateFlow, Compose UI)
-   - Hilt DI (interface injection, @HiltViewModel)
+1. **Architecture**: Follow patterns in `docs/ARCHITECTURE.md`
+   - MVVM + UDF (ViewModels with `StateFlow`, Compose UI)
+   - Hilt DI (interface injection, `@HiltViewModel`)
    - Repository pattern and proper data flow
 
-2. **Style**: Adhere to docs/STYLE_AND_BEST_PRACTICES.md
+2. **Style**: Adhere to `docs/STYLE_AND_BEST_PRACTICES.md`
    - Naming conventions, code organization, formatting
    - Kotlin idioms (immutability, null safety, coroutines)
 
@@ -47,7 +47,7 @@ Systematically check each area against Bitwarden standards documented in CLAUDE.
 
 ### Step 3: Document Findings
 
-Identify specific violations with file:line_number references. Be precise about locations.
+Identify specific violations with `file:line_number` references. Be precise about locations.
 
 ### Step 4: Provide Recommendations
 
@@ -77,13 +77,13 @@ Note well-implemented patterns (briefly, without elaboration). Keep positive fee
 This PR adds biometric authentication to the login flow, implementing MVVM pattern with proper state management.
 
 ## Critical Issues
-- app/login/LoginViewModel.kt:45 - Mutable state exposed; use StateFlow instead of MutableStateFlow
-- data/auth/BiometricRepository.kt:120 - Missing null safety check on biometricPrompt result
+- `app/login/LoginViewModel.kt:45` - Mutable state exposed; use `StateFlow` instead of `MutableStateFlow`
+- `data/auth/BiometricRepository.kt:120` - Missing null safety check on `biometricPrompt` result
 
 ## Suggested Improvements
 - Consider extracting biometric prompt logic to separate use case class
 - Add integration tests for biometric failure scenarios
-- app/login/LoginScreen.kt:89 - Consider using existing BitwardenButton component
+- `app/login/LoginScreen.kt:89` - Consider using existing `BitwardenButton` component
 
 ## Good Practices
 - Proper Hilt DI usage throughout
@@ -91,8 +91,8 @@ This PR adds biometric authentication to the login flow, implementing MVVM patte
 - Clear separation of concerns
 
 ## Action Items
-1. Fix mutable state exposure in LoginViewModel
-2. Add null safety check in BiometricRepository
+1. Fix mutable state exposure in `LoginViewModel`
+2. Add null safety check in `BiometricRepository`
 3. Consider adding integration tests for error flows
 ```
 
