@@ -22,6 +22,6 @@ data class MasterPasswordUnlockDataJson(
     // TODO: PM-26397 this was done due to naming inconsistency server side,
     //  should be cleaned up when server side is updated
     @SerialName("masterKeyWrappedUserKey")
-    @JsonNames("MasterKeyWrappedUserKey", "masterKeyEncryptedUserKey", "MasterKeyEncryptedUserKey")
+    @JsonNames("masterKeyEncryptedUserKey", "MasterKeyEncryptedUserKey")
     val masterKeyWrappedUserKey: String,
 )

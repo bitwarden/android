@@ -220,10 +220,10 @@ class VaultLockManagerImpl(
                                 .toVaultUnlockResult()
                                 .also {
                                     hashAndStoreMasterPassword(
-                                        initUserCryptoMethod,
-                                        email,
-                                        kdf,
-                                        userId,
+                                        initUserCryptoMethod = initUserCryptoMethod,
+                                        email = email,
+                                        kdf = kdf,
+                                        userId = userId,
                                     )
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
@@ -262,7 +262,9 @@ class VaultLockManagerImpl(
             val password = when (initUserCryptoMethod) {
                 is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
                 is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-                else -> ""
+                else -> throw IllegalStateException(
+                    "Invalid initUserCryptoMethod ${initUserCryptoMethod.logTag}.",
+                )
             }
 
             // Save the master password hash.
