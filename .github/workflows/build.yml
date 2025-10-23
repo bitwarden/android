@@ -41,6 +41,7 @@ jobs:
     name: Calculate Version Name and Number
     uses: bitwarden/android/.github/workflows/_version.yml@PM-22157/independent-version-names
     with:
+      app_codename: "bwpm"
       # Start from 11000 to prevent collisions with mobile build version codes
       base_version_number: 11000
       version_name: ${{ inputs.version-name }}
