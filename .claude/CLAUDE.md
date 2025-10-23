@@ -2,9 +2,7 @@
 
 Core directives for maintaining code quality and consistency in the Bitwarden Android project.
 
----
-
-## ⭐ Core Directives
+## Core Directives
 
 **You MUST follow these directives at all times.**
 
@@ -17,9 +15,7 @@ Core directives for maintaining code quality and consistency in the Bitwarden An
 7. **Use Established Patterns**: Leverage existing components before creating new ones
 8. **File References**: Use file:line_number format when referencing code
 
----
-
-## 🎯 Code Quality Standards
+## Code Quality Standards
 
 ### Module Organization
 
@@ -39,14 +35,13 @@ Core directives for maintaining code quality and consistency in the Bitwarden An
 - **`:cxf`** - Android Credential Exchange (CXF/CXP) integration layer
 
 ### Patterns Enforcement
+
 - **MVVM + UDF**: ViewModels with StateFlow, Compose UI
 - **Hilt DI**: Interface injection, @HiltViewModel, @Inject constructor
 - **Testing**: JUnit 5, MockK, Turbine for Flow testing
 - **Error Handling**: Sealed Result types, no throws in business logic
 
----
-
-## 🔒 Security Requirements
+## Security Requirements
 
 **Every change must consider:**
 - Zero-knowledge architecture preservation
@@ -55,31 +50,30 @@ Core directives for maintaining code quality and consistency in the Bitwarden An
 - Secure data storage patterns
 - Threat model implications
 
----
-
-## 📋 Workflow Practices
+## Workflow Practices
 
 ### Before Implementation
+
 1. Read relevant architecture documentation
 2. Search for existing patterns to follow
 3. Identify affected modules and dependencies
 4. Consider security implications
 
 ### During Implementation
+
 1. Follow existing code style in surrounding files
 2. Write tests alongside implementation
 3. Add KDoc to all public APIs
 4. Validate against architecture guidelines
 
 ### After Implementation
+
 1. Ensure all tests pass
 2. Verify compilation succeeds
 3. Review security considerations
 4. Update relevant documentation
 
----
-
-## 🚫 Anti-Patterns
+## Anti-Patterns
 
 **Avoid these:**
 - Creating new patterns when established ones exist
@@ -90,35 +84,19 @@ Core directives for maintaining code quality and consistency in the Bitwarden An
 - Undocumented public APIs
 - Tight coupling between modules
 
----
+## Communication & Decision-Making
 
-## 💬 Communication & Decision-Making
+Always clarify ambiguous requirements before implementing. Use specific questions:
+- "Should this use [Approach A] or [Approach B]?"
+- "This affects [X]. Proceed or review first?"
+- "Expected behavior for [specific requirement]?"
 
-**Never work on assumptions. Always clarify when:**
-- Requirements are ambiguous or incomplete
-- Multiple implementation approaches are possible
-- High-impact architectural decisions are needed
-- Security implications are unclear
-- Module placement or responsibility is uncertain
-- Breaking changes to public APIs are considered
-- External dependencies or third-party libraries are involved
-
-**Ask the user for clarification using specific questions:**
-- "Should this feature use [Approach A] or [Approach B]?"
-- "This change affects [X]. Should I proceed or would you like to review first?"
-- "I need clarification on [specific requirement]. What is the expected behavior?"
-
-**Defer high-impact decisions to the user:**
-- Architecture pattern changes
-- Module restructuring
-- Public API modifications
-- Security mechanism changes
-- Database schema migrations
+Defer high-impact decisions to the user:
+- Architecture/module changes, public API modifications
+- Security mechanisms, database migrations
 - Third-party library additions
 
----
-
-## 📚 Reference Documentation
+## Reference Documentation
 
 Critical resources:
 - `docs/ARCHITECTURE.md` - Architecture patterns and principles
