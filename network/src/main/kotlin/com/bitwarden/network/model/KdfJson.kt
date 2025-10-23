@@ -8,15 +8,15 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class KdfJson(
-    @SerialName("KdfType")
+    @SerialName("kdfType")
     val kdfType: KdfTypeJson,
 
-    @SerialName("Iterations")
+    @SerialName("iterations")
     val iterations: Int,
 
-    @SerialName("Memory")
+    @SerialName("memory")
     val memory: Int?,
 
-    @SerialName("Parallelism")
+    @SerialName("parallelism")
     val parallelism: Int?,
 )

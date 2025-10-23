@@ -8,6 +8,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserDecryptionJson(
-    @SerialName("MasterPasswordUnlock")
+    @SerialName("masterPasswordUnlock")
     val masterPasswordUnlock: MasterPasswordUnlockDataJson?,
 )
