@@ -9,10 +9,12 @@ import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -1001,6 +1003,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
             }
         }
 
@@ -1752,6 +1755,107 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
+                        securityState = null,
+                    ),
+                )
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock success should hash and store master password`() =
+        runTest {
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "masterPassword"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                password = masterPassword,
+                masterPasswordUnlock = MasterPasswordUnlockData(
+                    kdf = mockk<Kdf>(relaxed = true),
+                    masterKeyWrappedUserKey = "mockKey",
+                    salt = "mockSalt",
+                ),
+            )
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = initUserCryptoMethod,
+                        signingKey = null,
+                        securityState = null,
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns false.asSuccess()
+            assertEquals(
+                emptyList<VaultUnlockData>(),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+            fakeAuthDiskSource.storeUserAutoUnlockKey(
+                userId = USER_ID,
+                userAutoUnlockKey = null,
+            )
+
+            val result = vaultLockManager.unlockVault(
+                userId = USER_ID,
+                email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
+                initUserCryptoMethod = initUserCryptoMethod,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            assertEquals(
+                listOf(
+                    VaultUnlockData(
+                        userId = USER_ID,
+                        status = VaultUnlockData.Status.UNLOCKED,
+                    ),
+                ),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = USER_ID,
+                userAutoUnlockKey = null,
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID,
+                passwordHash = "hashedPassword",
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = initUserCryptoMethod,
                         signingKey = null,
                         securityState = null,
                     ),

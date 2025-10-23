@@ -219,22 +219,12 @@ class VaultLockManagerImpl(
                             initializeCryptoResult
                                 .toVaultUnlockResult()
                                 .also {
-                                    if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
-                                        // Save the master password hash.
-                                        authSdkSource
-                                            .hashPassword(
-                                                email = email,
-                                                password = initUserCryptoMethod.password,
-                                                kdf = kdf,
-                                                purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                                            )
-                                            .onSuccess { passwordHash ->
-                                                authDiskSource.storeMasterPasswordHash(
-                                                    userId = userId,
-                                                    passwordHash = passwordHash,
-                                                )
-                                            }
-                                    }
+                                    hashAndStoreMasterPassword(
+                                        initUserCryptoMethod,
+                                        email,
+                                        kdf,
+                                        userId,
+                                    )
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
                                         trustedDeviceManager
@@ -255,6 +245,45 @@ class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+    }
+
+    /**
+     * Hashes a password and stores it as the master password hash for a given user.
+     */
+    private suspend fun hashAndStoreMasterPassword(
+        initUserCryptoMethod: InitUserCryptoMethod,
+        email: String,
+        kdf: Kdf,
+        userId: String,
+    ) {
+        if (initUserCryptoMethod is InitUserCryptoMethod.Password ||
+            initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock
+        ) {
+            val password = when (initUserCryptoMethod) {
+                is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
+                is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
+                else -> ""
+            }
+
+            // Save the master password hash.
+            authSdkSource
+                .hashPassword(
+                    email = email,
+                    password = password,
+                    kdf = kdf,
+                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                )
+                .onSuccess { passwordHash ->
+                    authDiskSource.storeMasterPasswordHash(
+                        userId = userId,
+                        passwordHash = passwordHash,
+                    )
+                }
+                .onFailure { error ->
+                    // Log the error or handle it appropriately
+                    Timber.e(error, "Failed to hash and store master password")
+                }
+        }
     }
 
     override suspend fun waitUntilUnlocked(userId: String) {

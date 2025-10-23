@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CoroutineScope
@@ -346,22 +347,31 @@ class VaultRepositoryImpl(
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("User key"),
             )
+        val activeAccount = authDiskSource.userState?.activeAccount
+        val initUserCryptoMethod = activeAccount
+            ?.profile
+            ?.userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?.let { masterPasswordUnlock ->
+                InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = masterPassword,
+                    masterPasswordUnlock = masterPasswordUnlock.toSdkMasterPasswordUnlock(),
+                )
+            }
+            ?: InitUserCryptoMethod.Password(
+                password = masterPassword,
+                userKey = userKey,
+            )
         return this
             .unlockVaultForUser(
                 userId = userId,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
-                    password = masterPassword,
-                    userKey = userKey,
-                ),
+                initUserCryptoMethod = initUserCryptoMethod,
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
                     deriveTemporaryPinProtectedUserKeyIfNecessary(
                         userId = userId,
-                        initUserCryptoMethod = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
+                        initUserCryptoMethod = initUserCryptoMethod,
                     )
                 }
             }
