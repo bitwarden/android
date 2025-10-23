@@ -143,7 +143,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
-            action = "lock",
+            action = PolicyInformation.VaultTimeout.Action.LOCK,
         )
         mutableActivePolicyFlow.emit(
             listOf(
@@ -159,7 +159,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     vaultTimeoutPolicyMinutes = 10,
-                    vaultTimeoutPolicyAction = "lock",
+                    vaultTimeoutPolicyAction = PolicyInformation.VaultTimeout.Action.LOCK,
                 ),
                 awaitItem(),
             )

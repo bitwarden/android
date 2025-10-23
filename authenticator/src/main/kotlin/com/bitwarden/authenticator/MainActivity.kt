@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             LocalManagerProvider {
                 BitwardenTheme(
                     theme = state.theme,
+                    dynamicColor = state.isDynamicColorsEnabled,
                 ) {
                     RootNavScreen(
                         navController = navController,

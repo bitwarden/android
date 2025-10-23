@@ -164,7 +164,7 @@ class ReviewExportViewModel @Inject constructor(
     }
 
     private fun handleVaultDataLoading() {
-        showLoadingDialog()
+        showLoadingDialog(BitwardenString.loading_vault_data.asText())
     }
 
     private fun handleVaultDataLoaded(data: DataState.Loaded<DecryptCipherListResult>) {
@@ -172,7 +172,6 @@ class ReviewExportViewModel @Inject constructor(
     }
 
     private fun handleVaultDataPending(data: DataState.Pending<DecryptCipherListResult>) {
-        showLoadingDialog()
         updateItemTypeCounts(data = data, clearDialog = false)
     }
 

@@ -519,7 +519,7 @@ data class AccountSecurityState(
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
     val vaultTimeoutPolicyMinutes: Int?,
-    val vaultTimeoutPolicyAction: String?,
+    val vaultTimeoutPolicyAction: PolicyInformation.VaultTimeout.Action?,
     val shouldShowUnlockActionCard: Boolean,
     val removeUnlockWithPinPolicyEnabled: Boolean,
 ) : Parcelable {
