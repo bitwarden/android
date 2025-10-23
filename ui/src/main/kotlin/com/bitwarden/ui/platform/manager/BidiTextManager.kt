@@ -27,6 +27,64 @@ interface BidiTextManager {
      */
     fun unicodeWrap(text: String): String
 
+    /**
+     * Forces left-to-right (LTR) display direction for the given text by wrapping it with
+     * Unicode LTR embedding marks (U+202A...U+202C).
+     *
+     * Use this for content that should always display left-to-right regardless of system locale,
+     * such as URLs, code snippets, numeric codes, or technical identifiers.
+     *
+     * @param text The text to force as LTR.
+     * @return The text wrapped with LTR embedding marks.
+     */
+    fun forceLtr(text: String): String
+
+    /**
+     * Forces right-to-left (RTL) display direction for the given text by wrapping it with
+     * Unicode RTL embedding marks (U+202B...U+202C).
+     *
+     * Use this for content that should always display right-to-left, such as Arabic or Hebrew
+     * text in an otherwise LTR context.
+     *
+     * @param text The text to force as RTL.
+     * @return The text wrapped with RTL embedding marks.
+     */
+    fun forceRtl(text: String): String
+
+    /**
+     * Formats a verification code (such as TOTP) by grouping digits into chunks and ensuring
+     * left-to-right display direction.
+     *
+     * Example: "123456" with chunkSize=3 becomes "123 456" displayed as LTR.
+     *
+     * @param code The verification code to format.
+     * @param chunkSize The size of each chunk (default is 3).
+     * @return The formatted verification code with LTR directionality.
+     */
+    fun formatVerificationCode(code: String, chunkSize: Int = 3): String
+
+    /**
+     * Formats a phone number to ensure left-to-right display direction.
+     *
+     * Phone numbers should always display LTR regardless of system locale to maintain
+     * international formatting conventions.
+     *
+     * @param phone The phone number to format.
+     * @return The phone number with LTR directionality.
+     */
+    fun formatPhoneNumber(phone: String): String
+
+    /**
+     * Formats a credit/debit card number by grouping digits into 4-digit chunks and ensuring
+     * left-to-right display direction.
+     *
+     * Example: "1234567812345678" becomes "1234 5678 1234 5678" displayed as LTR.
+     *
+     * @param number The card number to format.
+     * @return The formatted card number with LTR directionality.
+     */
+    fun formatCardNumber(number: String): String
+
     @Suppress("UndocumentedPublicClass")
     @OmitFromCoverage
     companion object {
