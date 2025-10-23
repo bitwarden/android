@@ -242,11 +242,10 @@ jobs:
 
       - name: Increment version
         env:
-          BASE_VERSION_CODE: ${{ needs.version.outputs.base_version_number }}
           VERSION_CODE: ${{ needs.version.outputs.version_number }}
           VERSION_NAME: ${{ needs.version.outputs.version_name }}
         run: |
-          VERSION_CODE="${VERSION_CODE:-$((BASE_VERSION_CODE + GITHUB_RUN_NUMBER))}"
+          VERSION_CODE="${VERSION_CODE:-$GITHUB_RUN_NUMBER}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:$VERSION_NAME
