@@ -40,8 +40,11 @@ fun NavGraphBuilder.exportItemsGraph(
         startDestination = SelectAccountRoute,
     ) {
         selectAccountDestination(
-            onAccountSelected = {
-                navController.navigateToVerifyPassword(userId = it)
+            onAccountSelected = { userId, hasOtherAccounts ->
+                navController.navigateToVerifyPassword(
+                    userId = userId,
+                    hasOtherAccounts = hasOtherAccounts,
+                )
             },
         )
         verifyPasswordDestination(

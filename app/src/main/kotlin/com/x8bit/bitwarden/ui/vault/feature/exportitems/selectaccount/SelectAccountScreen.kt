@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
@@ -28,6 +29,7 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.content.BitwardenEmptyContent
@@ -51,7 +53,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 @Suppress("LongMethod")
 fun SelectAccountScreen(
-    onAccountSelected: (userId: String) -> Unit,
+    onAccountSelected: (userId: String, hasOtherAccounts: Boolean) -> Unit,
     viewModel: SelectAccountViewModel = hiltViewModel(),
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
@@ -74,8 +76,11 @@ fun SelectAccountScreen(
             }
 
             is SelectAccountEvent.NavigateToPasswordVerification -> {
-                onAccountSelected(event.userId)
+                onAccountSelected(event.userId, false)
             }
+            is SelectAccountEvent.NavigateToPasswordVerification -> {
+            onAccountSelected(event.userId, false)
+        }
 
             is SelectAccountEvent.ValidateImportRequest -> {
                 viewModel.trySendAction(
@@ -85,6 +90,16 @@ fun SelectAccountScreen(
                     ),
                 )
             }
+        }
+    }
+
+    LifecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(SelectAccountAction.Internal.LifecycleResumed)
+            }
+
+            else -> Unit
         }
     }
 

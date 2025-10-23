@@ -56,11 +56,7 @@ class VerifyPasswordViewModel @Inject constructor(
                 ?.firstOrNull { it.userId == args.userId }
                 ?: throw IllegalStateException("Account not found")
 
-            val singleAccount = authRepository
-                .userStateFlow
-                .value
-                ?.accounts
-                ?.size == 1
+            val singleAccount = !args.hasOtherAccounts
 
             val restrictedItemPolicyOrgIds = policyManager
                 .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)

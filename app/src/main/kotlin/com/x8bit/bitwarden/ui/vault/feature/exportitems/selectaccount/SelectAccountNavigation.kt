@@ -20,7 +20,7 @@ data object SelectAccountRoute
  * Add the [SelectAccountScreen] to the nav graph.
  */
 fun NavGraphBuilder.selectAccountDestination(
-    onAccountSelected: (id: String) -> Unit,
+    onAccountSelected: (id: String, hasOtherAccounts: Boolean) -> Unit,
 ) {
     composableWithRootPushTransitions<SelectAccountRoute> {
         SelectAccountScreen(

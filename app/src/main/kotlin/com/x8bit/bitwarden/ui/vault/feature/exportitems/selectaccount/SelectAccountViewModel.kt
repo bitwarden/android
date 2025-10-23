@@ -99,8 +99,9 @@ class SelectAccountViewModel @Inject constructor(
 
     private fun handleAccountClick(action: SelectAccountAction.AccountClick) {
         sendEvent(
-            SelectAccountEvent.NavigateToPasswordVerification(
-                action.userId,
+            event = SelectAccountEvent.NavigateToPasswordVerification(
+                userId = action.userId,
+                hasOtherAccounts = true,
             ),
         )
     }
@@ -109,6 +110,30 @@ class SelectAccountViewModel @Inject constructor(
         when (action) {
             is SelectAccountAction.Internal.SelectionDataReceive -> {
                 handleSelectionDataReceive(action)
+            }
+
+            is SelectAccountAction.Internal.LifecycleResumed -> {
+                when (val viewState = state.viewState) {
+                    is SelectAccountState.ViewState.Content -> {
+                        if (viewState.accountSelectionListItems.size != 1) {
+                            return
+                        }
+
+                        sendEvent(
+                            event = SelectAccountEvent.NavigateToPasswordVerification(
+                                userId = viewState.accountSelectionListItems.first().userId,
+                                hasOtherAccounts = false,
+                            ),
+                        )
+                    }
+
+                    is SelectAccountState.ViewState.Error,
+                    SelectAccountState.ViewState.Loading,
+                    SelectAccountState.ViewState.NoItems,
+                        -> {
+                        // Do nothing
+                    }
+                }
             }
         }
     }
@@ -123,15 +148,23 @@ class SelectAccountViewModel @Inject constructor(
             .personalOwnershipOrgs
             .filter { it.isEnabled }
             .map { it.organizationId }
+        val personalVaultExportRestrictedOrgIds = action
+            .disablePersonalVaultExportOrgs
+            .filter { it.isEnabled }
+            .map { it.organizationId }
 
         val accountSelectionListItems = action.userState
             ?.accounts
             .orEmpty()
             // We only want accounts that do not restrict personal vault ownership
+            // or vault export
             .filter { account ->
                 account
                     .organizations
-                    .none { org -> org.id in personalOwnershipRestrictedOrgIds }
+                    .none { org ->
+                        org.id in personalOwnershipRestrictedOrgIds ||
+                            org.id in personalVaultExportRestrictedOrgIds
+                    }
             }
             .map { account ->
                 AccountSelectionListItem(
@@ -165,11 +198,13 @@ class SelectAccountViewModel @Inject constructor(
             authRepository.userStateFlow,
             policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES),
             policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP),
-        ) { userState, itemRestrictedOrgs, personalOwnershipOrgs ->
+            policyManager.getActivePoliciesFlow(PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT),
+        ) { userState, itemRestrictedOrgs, personalOwnershipOrgs, disablePersonalVaultExportOrgs ->
             SelectAccountAction.Internal.SelectionDataReceive(
                 userState = userState,
                 itemRestrictedOrgs = itemRestrictedOrgs,
                 personalOwnershipOrgs = personalOwnershipOrgs,
+                disablePersonalVaultExportOrgs = disablePersonalVaultExportOrgs,
             )
         }
             .onEach(::handleAction)
@@ -256,7 +291,13 @@ sealed class SelectAccountAction {
             val userState: UserState?,
             val itemRestrictedOrgs: List<SyncResponseJson.Policy>,
             val personalOwnershipOrgs: List<SyncResponseJson.Policy>,
+            val disablePersonalVaultExportOrgs: List<SyncResponseJson.Policy>,
         ) : Internal()
+
+        /**
+         * The lifecycle of the SelectAccountScreen has entered a resumed state.
+         */
+        data object LifecycleResumed : Internal()
     }
 }
 
@@ -282,5 +323,6 @@ sealed class SelectAccountEvent {
      */
     data class NavigateToPasswordVerification(
         val userId: String,
+        val hasOtherAccounts: Boolean,
     ) : SelectAccountEvent()
 }

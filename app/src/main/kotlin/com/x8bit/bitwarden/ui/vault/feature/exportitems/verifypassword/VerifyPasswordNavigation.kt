@@ -22,6 +22,7 @@ import kotlinx.serialization.Serializable
 @OmitFromCoverage
 data class VerifyPasswordRoute(
     val userId: String,
+    val hasOtherAccounts: Boolean,
 ) : Parcelable {
 
     /**
@@ -38,6 +39,7 @@ data class VerifyPasswordRoute(
 @OmitFromCoverage
 data class VerifyPasswordArgs(
     val userId: String,
+    val hasOtherAccounts: Boolean,
 )
 
 /**
@@ -47,6 +49,7 @@ fun SavedStateHandle.toVerifyPasswordArgs(): VerifyPasswordArgs {
     val route = this.toRoute<VerifyPasswordRoute>()
     return VerifyPasswordArgs(
         userId = route.userId,
+        hasOtherAccounts = route.hasOtherAccounts,
     )
 }
 
@@ -70,10 +73,14 @@ fun NavGraphBuilder.verifyPasswordDestination(
  */
 fun NavController.navigateToVerifyPassword(
     userId: String,
+    hasOtherAccounts: Boolean,
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = VerifyPasswordRoute(userId = userId),
+        route = VerifyPasswordRoute(
+            userId = userId,
+            hasOtherAccounts = hasOtherAccounts,
+        ),
         navOptions = navOptions,
     )
 }

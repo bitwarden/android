@@ -68,7 +68,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
-import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -143,9 +142,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForProviderGetCredentials,
             -> VaultUnlockedGraphRoute
 
-        is RootNavState.CredentialExchangeExport,
-        is RootNavState.CredentialExchangeExportSkipAccountSelection,
-            -> ExportItemsGraphRoute
+        is RootNavState.CredentialExchangeExport -> ExportItemsGraphRoute
 
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
@@ -291,13 +288,6 @@ fun RootNavScreen(
 
             is RootNavState.CredentialExchangeExport -> {
                 navController.navigateToExportItemsGraph(rootNavOptions)
-            }
-
-            is RootNavState.CredentialExchangeExportSkipAccountSelection -> {
-                navController.navigateToVerifyPassword(
-                    userId = currentState.userId,
-                    navOptions = rootNavOptions,
-                )
             }
         }
     }
