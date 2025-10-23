@@ -68,7 +68,7 @@ jobs:
       version_number: ${{ steps.calc-version-number.outputs.version_number }}
     steps:
       - name: Log inputs to job summary
-        uses: bitwarden/ios/.github/actions/log-inputs@main
+        uses: bitwarden/android/.github/actions/log-inputs@main
         with:
           inputs: "${{ toJson(inputs) }}"
 

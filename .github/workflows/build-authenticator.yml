@@ -15,6 +15,9 @@ on:
         description: "Optional. Build number to use. Overrides default of GitHub run number."
         required: false
         type: number
+      patch_version:
+        description: "Order 999 - Overrides Patch version"
+        type: boolean
       distribute-to-firebase:
         description: "Optional. Distribute artifacts to Firebase."
         required: false
