@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .isScreenCaptureAllowedStateFlow
             .map { MainAction.Internal.ScreenCaptureUpdate(it) }
-            .onEach(::trySendAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
 
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(
-                isAllowed = action.isScreenCaptureEnabled,
+                screenCaptureUpdateAction = action,
             )
         }
     }
@@ -83,8 +83,14 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun handleScreenCaptureUpdate(isAllowed: Boolean) {
-        mutableStateFlow.update { it.copy(isScreenCaptureAllowed = isAllowed) }
+    private fun handleScreenCaptureUpdate(
+        screenCaptureUpdateAction: MainAction.Internal.ScreenCaptureUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isScreenCaptureAllowed = screenCaptureUpdateAction.isScreenCaptureEnabled,
+            )
+        }
     }
 
     private fun handleIntent(
