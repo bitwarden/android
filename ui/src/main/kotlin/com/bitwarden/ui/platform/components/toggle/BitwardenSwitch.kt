@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -345,11 +346,9 @@ private fun ColumnScope.SupportingContent(
             .fillMaxWidth()
             .padding(start = 16.dp),
     )
-    Column(
-        modifier = Modifier
-            .defaultMinSize(minHeight = 48.dp)
-            .padding(paddingValues = paddingValues),
-        verticalArrangement = Arrangement.Center,
+    BitwardenSupportingContent(
+        cardStyle = null,
+        insets = paddingValues,
         content = content,
     )
 }
