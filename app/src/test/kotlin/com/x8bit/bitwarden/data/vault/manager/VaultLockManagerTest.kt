@@ -1773,7 +1773,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "masterPassword"
+            val masterPassword = "drowssap"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(

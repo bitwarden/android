@@ -281,10 +281,6 @@ class VaultLockManagerImpl(
                         passwordHash = passwordHash,
                     )
                 }
-                .onFailure { error ->
-                    // Log the error or handle it appropriately
-                    Timber.e(error, "Failed to hash and store master password")
-                }
         }
     }
 
