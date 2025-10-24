@@ -26,6 +26,7 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
+        isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
     ),
 ) {
@@ -43,9 +44,10 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
         settingsRepository
             .isScreenCaptureAllowedStateFlow
-            .map { MainEvent.ScreenCaptureSettingChange(it) }
-            .onEach(::sendEvent)
+            .map { MainAction.Internal.ScreenCaptureUpdate(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
+
         viewModelScope.launch {
             configRepository.getServerConfig(forceRefresh = false)
         }
@@ -64,6 +66,10 @@ class MainViewModel @Inject constructor(
         when (action) {
             is MainAction.Internal.DynamicColorUpdate -> handleDynamicColorUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
+
+            is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(
+                screenCaptureUpdateAction = action,
+            )
         }
     }
 
@@ -94,6 +100,16 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun handleScreenCaptureUpdate(
+        screenCaptureUpdateAction: MainAction.Internal.ScreenCaptureUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isScreenCaptureAllowed = screenCaptureUpdateAction.isScreenCaptureEnabled,
+            )
+        }
+    }
+
     private fun handleIntent(
         intent: Intent,
         isFirstIntent: Boolean,
@@ -109,6 +125,7 @@ class MainViewModel @Inject constructor(
 data class MainState(
     val theme: AppTheme,
     val isDynamicColorsEnabled: Boolean,
+    val isScreenCaptureAllowed: Boolean,
 ) : Parcelable
 
 /**
@@ -147,6 +164,13 @@ sealed class MainAction {
         data class ThemeUpdate(
             val theme: AppTheme,
         ) : Internal()
+
+        /**
+         * Indicates that the screen capture state has changed.
+         */
+        data class ScreenCaptureUpdate(
+            val isScreenCaptureEnabled: Boolean,
+        ) : Internal()
     }
 }
 
@@ -159,11 +183,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Event indicating a change in the screen capture setting.
-     */
-    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 
     /**
      * Indicates that the app theme has been updated.

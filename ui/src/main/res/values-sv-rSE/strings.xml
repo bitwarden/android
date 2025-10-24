@@ -376,6 +376,7 @@ Skanningen sker automatiskt.</string>
     <string name="download">Ladda ner</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
+    <string name="device_verification">Enhetsverifiering</string>
     <string name="biometrics_failed">Biometri misslyckades</string>
     <string name="biometrics_decoding_failure">Logga in med ditt huvudlösenord eller PIN-kod och aktivera sedan biometriska inloggningar i Inställningar.</string>
     <string name="use_biometrics_to_unlock">Använd biometri för att låsa upp</string>
@@ -409,7 +410,7 @@ Skanningen sker automatiskt.</string>
     <string name="enable_sync_on_refresh">Aktivera synkronisering vid uppdatering</string>
     <string name="enable_sync_on_refresh_description">Synkronisera valv genom att dra ned.</string>
     <string name="log_in_sso">Single Sign-On för företag</string>
-    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
+    <string name="log_in_sso_summary">Logga in snabbt med din organisations enkla inloggningsportal. Ange din organisations identifierare för att börja.</string>
     <string name="org_identifier">Organisationens identifierare</string>
     <string name="login_sso_error">Det gick för närvarande inte att logga in med SSO</string>
     <string name="set_master_password">Ställ in huvudlösenord</string>
@@ -759,9 +760,9 @@ Vill du byta till detta konto?</string>
     <string name="autofill_setup">Konfigurera autofyll</string>
     <string name="turn_on_browser_autofill_integration">Slå på integration för autofyll i webbläsaren</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Du använder en webbläsare som kräver särskilda behörigheter för Bitwarden för att autofylla dina lösenord.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Du använder webbläsare som kräver särskilda behörigheter för Bitwarden för att autofylla dina lösenord.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Du använder en webbläsare som kräver särskilda behörigheter för Bitwarden för att autofylla dina lösenord. Aktivera din föredragna integration för autofyll nedan.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Du använder webbläsare som kräver särskilda behörigheter för Bitwarden för att autofylla dina lösenord. Aktivera autofyll för alla dina installerade webbläsare för att fortsätta.</string>
     <string name="use_autofill_to_log_into_your_accounts">Använd autofyll för att logga in på dina konton med ett tryck.</string>
     <string name="turn_on_later">Slå på senare</string>
     <string name="turn_on_autofill_later">Slå på autofyll senare?</string>
@@ -1094,7 +1095,7 @@ Vill du byta till detta konto?</string>
     <string name="later">Senare</string>
     <string name="encryption_settings_updated">Krypteringsinställningar uppdaterade</string>
     <string name="update_your_encryption_settings">Uppdatera dina krypteringsinställningar</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">De nya rekommenderade krypteringsinställningarna kommer att förbättra ditt kontos säkerhet. Ange ditt huvudlösenord för att uppdatera nu.</string>
     <string name="import_was_cancelled_in_the_selected_app">Import av inloggningsuppgifter avbröts i den valda appen. Inga objekt har importerats.</string>
     <string name="import_cancelled">Importen avbröts</string>
     <string name="no_items_imported">Inga objekt importerades</string>
@@ -1111,8 +1112,8 @@ Vill du byta till detta konto?</string>
         <item quantity="other">%1$d objekt har importerats till ditt valv.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Aktivera autofyll vid webbläsare för att fortsätta fylla i lösenord</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Din webbläsare har nyligen uppdaterats, som har inaktiverat Bitwardens autofyllning. För att fortsätta fylla i dina lösenord med Bitwarden, aktivera webbläsarens autofyllning i autofyllningsinställningar.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Dina webbläsare har nyligen uppdaterats, vilket har inaktiverat Bitwardens autofyllning. För att fortsätta fylla i dina lösenord med Bitwarden, aktivera webbläsarens autofyll för alla installerade webbläsare i autofyllningsinställningar.</string>
     <string name="not_now">Inte nu</string>
     <string name="import_from_bitwarden">Importera från Bitwarden</string>
     <string name="select_account">Välj konto</string>
@@ -1132,9 +1133,12 @@ Vill du byta till detta konto?</string>
     <string name="kdf_update_failed_active_account_not_found">Uppdatering av kdf misslyckades, aktivt konto hittades inte. Försök igen eller kontakta oss.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ett fel inträffade vid försök att uppdatera dina kdf-inställningar. Försök igen eller kontakta oss.</string>
     <string name="the_import_request_could_not_be_processed">Importbegäran kunde inte behandlas.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Ditt valv kan vara tomt eller så är import av vissa objekttyper inte tillåtet för ditt konto.</string>
     <string name="no_items_available_to_import">Inga objekt tillgängliga att importera</string>
     <string name="select_a_different_account">Välj ett annat konto</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifiera e-postadressen för ditt konto</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Ange den 6-siffriga koden som skickades till adressen nedan</string>
+    <string name="lock_app">Lås app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Använd enhetens låsningsmetod för att låsa upp appen</string>
+    <string name="loading_vault_data">Läser in valvdata…</string>
 </resources>

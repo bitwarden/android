@@ -317,7 +317,7 @@ class VerifyPasswordViewModel @Inject constructor(
     ) {
         when (action.result) {
             is VerifyOtpResult.Verified -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                mutableStateFlow.update { it.copy(input = "", dialog = null) }
                 sendEvent(
                     VerifyPasswordEvent.PasswordVerified(
                         state.accountSummaryListItem.userId,

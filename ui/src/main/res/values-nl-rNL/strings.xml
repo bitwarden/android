@@ -376,6 +376,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="download">Downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Biometrie mislukt</string>
     <string name="biometrics_decoding_failure">Log in met je hoofdwachtwoord of pincode en schakel daarna biometrische login opnieuw in in bij de instellingen.</string>
     <string name="use_biometrics_to_unlock">Biometrie gebruiken om te ontgrendelen</string>
@@ -1135,6 +1136,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Je kluis is mogelijk leeg of het importeren van sommige itemtypen is niet toegestaan voor je account.</string>
     <string name="no_items_available_to_import">Geen items beschikbaar om te importeren</string>
     <string name="select_a_different_account">Een ander account selecteren</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifieer het e-mailadres van je account</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Voer de 6-cijferige code in die via e-mail naar het onderstaande adres is verstuurd</string>
+    <string name="lock_app">App vergrendelen</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Gebruik de vergrendelingsmethode van je apparaat om de app te ontgrendelen</string>
+    <string name="loading_vault_data">Kluisdata inladen…</string>
 </resources>

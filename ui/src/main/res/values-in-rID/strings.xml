@@ -374,6 +374,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="download">Unduh</string>
     <string name="login_expired">Sesi masuk Anda telah berakhir.</string>
     <string name="biometrics_direction">Verifikasi Biometrik</string>
+    <string name="device_verification">Verifikasi perangkat</string>
     <string name="biometrics_failed">Biometrik Gagal</string>
     <string name="biometrics_decoding_failure">Masuk dengan Sandi Utama atau PIN, lalu aktifkan lagi login biometrik di Pengaturan.</string>
     <string name="use_biometrics_to_unlock">Gunakan Biometrik Untuk Membuka Kunci</string>
@@ -1129,6 +1130,9 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Brankas Anda mungkin kosong, atau mengimpor beberapa jenis item yang tidak diizinkan untuk akun Anda.</string>
     <string name="no_items_available_to_import">Tidak ada item yang tersedia untuk diimpor</string>
     <string name="select_a_different_account">Pilih akun berbeda</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifikasi alamat email akun Anda</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Masukkan kode 6 digit yang dikirim melalui email ke alamat di bawah ini</string>
+    <string name="lock_app">Kunci aplikasi</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Gunakan metode kunci perangkat Anda untuk membuka kunci aplikasi</string>
+    <string name="loading_vault_data">Memuat data brangkas…</string>
 </resources>

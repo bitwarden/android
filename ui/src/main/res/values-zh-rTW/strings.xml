@@ -3,7 +3,7 @@
     <string name="about">關於</string>
     <string name="add_folder">新增資料夾</string>
     <string name="add_item">新增項目</string>
-    <string name="an_error_has_occurred">發生錯誤。</string>
+    <string name="an_error_has_occurred">發生錯誤</string>
     <string name="apply">套用</string>
     <string name="back">返回</string>
     <string name="cancel">取消</string>
@@ -118,7 +118,7 @@
     <string name="new_item_created">已新增項目</string>
     <string name="no_cards">您的密碼庫中沒有支付卡</string>
     <string name="new_card">新增支付卡</string>
-    <string name="no_logins">密碼庫無網頁。</string>
+    <string name="no_logins">您的密碼庫中沒有登入資料。</string>
     <string name="no_identities">您的密碼庫中沒有身份識別。</string>
     <string name="new_identity">新增身份識別</string>
     <string name="no_notes">您的密碼庫中沒有筆記。</string>
@@ -374,6 +374,7 @@
     <string name="download">下載</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物辨識驗證</string>
+    <string name="device_verification">裝置驗證</string>
     <string name="biometrics_failed">生物辨識失敗</string>
     <string name="biometrics_decoding_failure">使用主密碼或 PIN 登入，然後在設定中重新啟用生物辨識登入。</string>
     <string name="use_biometrics_to_unlock">使用生物辨識解鎖</string>
@@ -1127,9 +1128,12 @@
     <string name="kdf_update_failed_active_account_not_found">KDF 更新失敗，找不到活躍帳戶。請再試一次或聯絡我們。</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">嘗試更新您的 KDF 設定時發生錯誤。請再試一次或聯絡我們。</string>
     <string name="the_import_request_could_not_be_processed">無法處理匯入請求。</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">你的密碼庫可能為空，或你的帳號不允許匯入某些項目類型。</string>
+    <string name="no_items_available_to_import">沒有可匯入的項目</string>
+    <string name="select_a_different_account">選擇另一個帳號</string>
+    <string name="verify_your_account_email_address">驗證你的帳號電子郵件地址</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">輸入寄送到以下地址的 6 位數驗證碼</string>
+    <string name="lock_app">鎖定應用程式</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">使用你的裝置鎖定方式來解鎖此應用程式</string>
+    <string name="loading_vault_data">正在載入密碼庫資料…</string>
 </resources>

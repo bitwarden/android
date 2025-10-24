@@ -376,6 +376,7 @@ A leitura será feita automaticamente.</string>
     <string name="download">Baixar</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
+    <string name="device_verification">Verificação do dispositivo</string>
     <string name="biometrics_failed">Falha na biometria</string>
     <string name="biometrics_decoding_failure">Entre com sua senha mestre ou PIN, e então reative o desbloqueio biométrico nas Configurações.</string>
     <string name="use_biometrics_to_unlock">Usar biometria para desbloquear</string>
@@ -1137,6 +1138,9 @@ quaisquer problema.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Seu cofre está vazio, ou não é permitido importar certos tipos de itens na sua conta.</string>
     <string name="no_items_available_to_import">Nenhum item disponível para importar</string>
     <string name="select_a_different_account">Selecione uma conta diferente</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifique o endereço de e-mail da sua conta</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Digite o código de 6 dígitos enviado ao endereço de e-mail abaixo</string>
+    <string name="lock_app">Bloquear aplicativo</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
+    <string name="loading_vault_data">Carregando dados do cofre…</string>
 </resources>

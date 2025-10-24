@@ -375,6 +375,7 @@
     <string name="download">Scarica</string>
     <string name="login_expired">Sessione scaduta</string>
     <string name="biometrics_direction">Autenticazione biometrica</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Autenticazione biometrica fallita</string>
     <string name="biometrics_decoding_failure">Effettua l\'accesso con la password principale o il codice PIN. Puoi riabilitare l\'autenticazione biometrica nelle impostazioni.</string>
     <string name="use_biometrics_to_unlock">Sblocca con dati biometrici</string>
@@ -1134,6 +1135,9 @@ Vuoi passare a questo account?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Il problema potrebbe essere la cassaforte vuota, o una restrizione del tuo account che consente l\'importazione solo di alcuni tipi di elemento.</string>
     <string name="no_items_available_to_import">Nessun elemento disponibile per l\'importazione</string>
     <string name="select_a_different_account">Scegli un altro account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifica l\'indirizzo email del tuo account</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Inserisci il codice a 6 cifre che hai ricevuto via email a</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>
