@@ -158,8 +158,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    vaultTimeoutPolicyMinutes = 10,
-                    vaultTimeoutPolicyAction = PolicyInformation.VaultTimeout.Action.LOCK,
+                    vaultTimeoutPolicy = VaultTimeoutPolicy(
+                        minutes = 10,
+                        action = PolicyInformation.VaultTimeout.Action.LOCK,
+                    ),
                 ),
                 awaitItem(),
             )
@@ -991,8 +993,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
-    vaultTimeoutPolicyMinutes = null,
-    vaultTimeoutPolicyAction = null,
+    vaultTimeoutPolicy = null,
     shouldShowEnableAuthenticatorSync = false,
     shouldShowUnlockActionCard = false,
     removeUnlockWithPinPolicyEnabled = false,
