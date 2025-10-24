@@ -380,6 +380,7 @@ Načtení proběhne automaticky.</string>
     <string name="download">Stáhnout</string>
     <string name="login_expired">Platnost přihlášení vypršela.</string>
     <string name="biometrics_direction">Použít biometrii k ověření</string>
+    <string name="device_verification">Ověřování zařízení</string>
     <string name="biometrics_failed">Biometrika selhala</string>
     <string name="biometrics_decoding_failure">Přihlaste se pomocí hlavního hesla nebo PINu a poté znovu zapněte biometrické přihlášení v Nastavení.</string>
     <string name="use_biometrics_to_unlock">Použít biometrii k odemknutí</string>
@@ -1148,6 +1149,9 @@ při opakování problémů.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Váš trezor může být prázdný, nebo importování některých typů položek není pro Váš účet povoleno.</string>
     <string name="no_items_available_to_import">Pro import nejsou k dispozici žádné položky</string>
     <string name="select_a_different_account">Vybrat jiný účet</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Ověřit e-mailovou adresu Vašeho účtu</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Zadejte 6místný kód, který byl zaslán e-mailem na níže uvedenou adresu</string>
+    <string name="lock_app">Uzamknout aplikaci</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
+    <string name="loading_vault_data">Načítání dat trezoru...</string>
 </resources>

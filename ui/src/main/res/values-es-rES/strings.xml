@@ -376,6 +376,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="download">Descargar</string>
     <string name="login_expired">Su sesión ha expirado.</string>
     <string name="biometrics_direction">Verificación biométrica</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">TOTP</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Utilizar biometría para desbloquear</string>
@@ -1138,4 +1139,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

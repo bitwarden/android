@@ -4,7 +4,7 @@
     <string name="add_folder">ফোল্ডার জুড়ুন</string>
     <string name="add_item">বস্তু জুড়ুন</string>
     <string name="an_error_has_occurred">একটি ত্রুটি উৎপন্ন হয়েছে।</string>
-    <string name="apply">Apply</string>
+    <string name="apply">প্রয়োগ করুন</string>
     <string name="back">পেছনে যান</string>
     <string name="cancel">বাতিল</string>
     <string name="copy">অনুলিপি</string>
@@ -376,6 +376,7 @@
     <string name="download">ডাউনলোড</string>
     <string name="login_expired">আপনার লগইন মাত্রকালটির মেয়াদ শেষ হয়ে গেছে।</string>
     <string name="biometrics_direction">Biometric verification</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">আপনার মাস্টার পাসওয়ার্ড বা পিন দিয়ে লগ ইন করুন তারপর সেটিংসে বায়োমেট্রিক লগইন পুনরায় সক্রিয় করুন।</string>
     <string name="use_biometrics_to_unlock">আনলক করতে বায়োমেট্রিক্স ব্যবহার করুন</string>
@@ -1008,7 +1009,7 @@ Do you want to switch to this account?</string>
     </plurals>
     <string name="item_saved">Item saved</string>
     <string name="information">Information</string>
-    <string name="otp_type">OTP type</string>
+    <string name="otp_type"></string>
     <string name="search_codes">Search codes</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Get verification codes for all your accounts that support 2-step verification.</string>
@@ -1049,7 +1050,7 @@ Do you want to switch to this account?</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
@@ -1137,4 +1138,7 @@ Do you want to switch to this account?</string>
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>
