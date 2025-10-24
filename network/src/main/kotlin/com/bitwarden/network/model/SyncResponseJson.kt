@@ -49,7 +49,7 @@ data class SyncResponseJson(
     @SerialName("sends")
     val sends: List<Send>?,
 
-    @SerialName("UserDecryption")
+    @SerialName("userDecryption")
     val userDecryption: UserDecryptionJson?,
 ) {
     /**

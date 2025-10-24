@@ -51,7 +51,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
-import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -113,6 +112,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockError
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -1886,15 +1886,27 @@ class AuthRepositoryImpl(
         val masterPassword = password ?: return null
         val privateKey = loginResponse.privateKeyOrNull() ?: return null
         val key = loginResponse.key ?: return null
+
+        val initUserCryptoMethod = loginResponse
+            .userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?.let { masterPasswordUnlock ->
+                InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = masterPassword,
+                    masterPasswordUnlock = masterPasswordUnlock.toSdkMasterPasswordUnlock(),
+                )
+            }
+            ?: InitUserCryptoMethod.Password(
+                password = masterPassword,
+                userKey = key,
+            )
+
         return unlockVault(
             accountProfile = profile,
             privateKey = privateKey,
             securityState = loginResponse.accountKeys?.securityState?.securityState,
             signingKey = loginResponse.accountKeys?.signatureKeyPair?.wrappedSigningKey,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = key,
-            ),
+            initUserCryptoMethod = initUserCryptoMethod,
         )
     }
 
@@ -2047,20 +2059,10 @@ class AuthRepositoryImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val userId = accountProfile.userId
-        val kdfParams = (initUserCryptoMethod as? InitUserCryptoMethod.Password)
-            ?.let {
-                accountProfile
-                    .userDecryptionOptions
-                    ?.masterPasswordUnlock
-                    ?.kdf
-                    ?.toKdf()
-            }
-            ?: accountProfile.toSdkParams()
-
         return vaultRepository.unlockVault(
             userId = userId,
             email = accountProfile.email,
-            kdf = kdfParams,
+            kdf = accountProfile.toSdkParams(),
             privateKey = privateKey,
             signingKey = signingKey,
             securityState = securityState,
