@@ -485,6 +485,7 @@ class AccountSecurityViewModel @Inject constructor(
                     VaultTimeoutPolicy(
                         minutes = policy.minutes,
                         action = policy.action,
+                        type = policy.type,
                     )
                 },
             )
@@ -548,37 +549,48 @@ data class AccountSecurityState(
      */
     val sessionTimeoutSupportText: Text?
         get() = vaultTimeoutPolicy?.let { policy ->
-            // Calculate the hours and minutes to show in the policy label.
-            val hours = policy.minutes?.floorDiv(MINUTES_PER_HOUR).takeUnless { it == 0 }
-            val minutes = policy.minutes?.mod(MINUTES_PER_HOUR).takeUnless { it == 0 }
-            if (hours != null && minutes != null) {
-                if (hours == 1 && minutes == 1) {
+            when (policy.type) {
+                PolicyInformation.VaultTimeout.Type.NEVER -> {
                     BitwardenString
-                        .vault_timeout_policy_in_effect_no_plural
-                        .asText(hours, minutes)
-                } else if (hours == 1) {
-                    BitwardenString
-                        .vault_timeout_policy_in_effect_minutes_plural
-                        .asText(hours, minutes)
-                } else if (minutes == 1) {
-                    BitwardenString
-                        .vault_timeout_policy_in_effect_hours_plural
-                        .asText(hours, minutes)
-                } else {
-                    BitwardenString
-                        .vault_timeout_policy_in_effect_both_plural
-                        .asText(hours, minutes)
+                        .your_organization_has_set_the_default_session_timeout_to_never
+                        .asText()
                 }
-            } else if (hours != null) {
-                BitwardenPlurals
-                    .vault_timeout_policy_in_effect_hours
-                    .asPluralsText(hours, hours)
-            } else if (minutes != null) {
-                BitwardenPlurals
-                    .vault_timeout_policy_in_effect_minutes
-                    .asPluralsText(minutes, minutes)
-            } else {
-                null
+
+                PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+                PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                    -> {
+                    BitwardenString
+                        .your_organization_has_set_the_default_session_timeout_to_on_app_restart
+                        .asText()
+                }
+
+                PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                    BitwardenString.this_setting_is_managed_by_your_organization.asText()
+                }
+
+                PolicyInformation.VaultTimeout.Type.CUSTOM,
+                null,
+                    -> {
+                    // Calculate the hours and minutes to show in the policy label.
+                    val hours = policy.minutes?.floorDiv(MINUTES_PER_HOUR).takeUnless { it == 0 }
+                    val minutes = policy.minutes?.mod(MINUTES_PER_HOUR).takeUnless { it == 0 }
+                    if (hours != null && minutes != null) {
+                        BitwardenString.vault_timeout_policy_in_effect_hours_minutes_format.asText(
+                            BitwardenPlurals.hours_format.asPluralsText(hours, hours),
+                            BitwardenPlurals.minutes_format.asPluralsText(minutes, minutes),
+                        )
+                    } else if (hours != null) {
+                        BitwardenString.vault_timeout_policy_in_effect_format.asText(
+                            BitwardenPlurals.hours_format.asPluralsText(hours, hours),
+                        )
+                    } else if (minutes != null) {
+                        BitwardenString.vault_timeout_policy_in_effect_format.asText(
+                            BitwardenPlurals.minutes_format.asPluralsText(minutes, minutes),
+                        )
+                    } else {
+                        null
+                    }
+                }
             }
         }
 
@@ -602,6 +614,7 @@ data class AccountSecurityState(
 data class VaultTimeoutPolicy(
     val minutes: Int?,
     val action: PolicyInformation.VaultTimeout.Action?,
+    val type: PolicyInformation.VaultTimeout.Type?,
 ) : Parcelable
 
 /**
