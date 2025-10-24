@@ -376,6 +376,7 @@
     <string name="download">Изтегляне</string>
     <string name="login_expired">Сесията ви изтече.</string>
     <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
+    <string name="device_verification">Потвърждаване на устройствата</string>
     <string name="biometrics_failed">Неуспешно удостоверяване чрез биометрични данни</string>
     <string name="biometrics_decoding_failure">Впишете се с главната си парола или ПИН, а след това включете вписването чрез биометрични данни в Настройките.</string>
     <string name="use_biometrics_to_unlock">Отключване с биометрични данни</string>
@@ -1137,6 +1138,9 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Трезорът Ви може би е празен, или внасянето на някои видове елементи може да не е позволено за акаунта Ви.</string>
     <string name="no_items_available_to_import">Няма елементи налични за внасяне</string>
     <string name="select_a_different_account">Изберете друг акаунт</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Потвърдете адреса на е-пощата си</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Въведете 6-цифрения код, който беше изпратен до адреса по-долу</string>
+    <string name="lock_app">Заключване на приложението</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Използвайте начина на заключване на устройството за отключване на приложението</string>
+    <string name="loading_vault_data">Зареждане на данните от трезора…</string>
 </resources>

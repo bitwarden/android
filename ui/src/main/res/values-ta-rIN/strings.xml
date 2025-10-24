@@ -376,6 +376,7 @@
     <string name="download">பதிவிறக்கு</string>
     <string name="login_expired">உம் உள்நுழைவு அமர்வு காலாவதியானது.</string>
     <string name="biometrics_direction">உயிரியளவுச் சரிபார்ப்பு</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">பயோமெட்ரிக்ஸ் தோல்வியடைந்தது</string>
     <string name="biometrics_decoding_failure">உங்கள் முதன்மை கடவுச்சொல் அல்லது PIN மூலம் உள்நுழைந்து, பின்னர் அமைப்புகளில் பயோமெட்ரிக் உள்நுழைவை மீண்டும் இயக்கவும்.</string>
     <string name="use_biometrics_to_unlock">உயிரியளவுகளால் பூட்டவிழ்</string>
@@ -1137,4 +1138,7 @@
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

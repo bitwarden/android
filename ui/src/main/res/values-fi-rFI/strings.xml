@@ -376,6 +376,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="download">Lataa</string>
     <string name="login_expired">Kirjautumisistuntosi on erääntynyt.</string>
     <string name="biometrics_direction">Biometrinen todennus</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Biometria epäonnistui</string>
     <string name="biometrics_decoding_failure">Kirjaudu pääsalasanalla tai PIN-koodilla ja palauta biometrinen kirjautuminen käyttöön asetuksista.</string>
     <string name="use_biometrics_to_unlock">Avaa biometrialla</string>
@@ -1137,4 +1138,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

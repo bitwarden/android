@@ -374,6 +374,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="download">Tải xuống</string>
     <string name="login_expired">Phiên đăng nhập của bạn đã hết hạn.</string>
     <string name="biometrics_direction">Xác minh sinh trắc học</string>
+    <string name="device_verification">Xác minh thiết bị</string>
     <string name="biometrics_failed">Xác thực sinh trắc học thất bại</string>
     <string name="biometrics_decoding_failure">Đăng nhập bằng Mật khẩu chính hoặc Mã PIN của bạn, sau đó bật lại tính năng đăng nhập bằng sinh trắc học trong Cài đặt.</string>
     <string name="use_biometrics_to_unlock">Dùng sinh trắc học để mở khóa</string>
@@ -1133,6 +1134,9 @@ các vấn đề.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Kho của bạn có thể trống, hoặc tài khoản của bạn không được phép nhập một số loại mục.</string>
     <string name="no_items_available_to_import">Không có mục nào để nhập</string>
     <string name="select_a_different_account">Chọn một tài khoản khác</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Xác minh địa chỉ email của tài khoản</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Nhập mã gồm 6 chữ số đã được gửi qua email đến địa chỉ bên dưới</string>
+    <string name="lock_app">Khóa ứng dụng</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>
