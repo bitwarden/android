@@ -144,6 +144,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
             action = PolicyInformation.VaultTimeout.Action.LOCK,
+            type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
         mutableActivePolicyFlow.emit(
             listOf(
@@ -161,6 +162,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                     vaultTimeoutPolicy = VaultTimeoutPolicy(
                         minutes = 10,
                         action = PolicyInformation.VaultTimeout.Action.LOCK,
+                        type = PolicyInformation.VaultTimeout.Type.CUSTOM,
                     ),
                 ),
                 awaitItem(),

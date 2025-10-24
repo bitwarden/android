@@ -640,10 +640,32 @@ class SettingsRepositoryImpl(
             ?.policyInformation as? PolicyInformation.VaultTimeout
             ?: return
 
-        // Adjust the user's timeout or method if necessary to meet the policy requirements.
-        vaultUnlockPolicy.minutes?.let { maxMinutes ->
-            if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
-                vaultTimeout = VaultTimeout.Custom(maxMinutes)
+        when (vaultUnlockPolicy.type) {
+            PolicyInformation.VaultTimeout.Type.NEVER -> {
+                vaultTimeout = VaultTimeout.Never
+            }
+
+            PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+            PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                -> {
+                vaultTimeout = VaultTimeout.OnAppRestart
+            }
+
+            PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                vaultTimeout = VaultTimeout.Immediately
+            }
+
+            PolicyInformation.VaultTimeout.Type.CUSTOM,
+            null,
+                -> {
+                // Null values are treated as CUSTOM for legacy servers that do no provide a type.
+                // Is there isn't a minutes value or if the current value is within range, we
+                // leave everything alone.
+                vaultUnlockPolicy.minutes?.let { maxMinutes ->
+                    if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
+                        vaultTimeout = VaultTimeout.Custom(maxMinutes)
+                    }
+                }
             }
         }
         vaultUnlockPolicy.action?.let {

@@ -60,6 +60,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
@@ -502,6 +503,7 @@ private fun SessionTimeoutRow(
                 onVaultTimeoutTypeSelect(selectedOption)
             }
         },
+        isEnabled = vaultTimeoutOptions.size > 1,
         textFieldTestTag = "SessionTimeoutStatusLabel",
         cardStyle = CardStyle.Top(),
         modifier = modifier,
@@ -728,10 +730,40 @@ private fun rememberSessionTimeoutOptions(
     VaultTimeout.Type
         .entries
         .filter { timeoutType ->
-            vaultTimeoutPolicy
-                ?.minutes
-                ?.let { minutes -> timeoutType.minutes <= minutes }
-                ?: true
+            when (vaultTimeoutPolicy?.type) {
+                PolicyInformation.VaultTimeout.Type.NEVER -> {
+                    // We allow everything here.
+                    true
+                }
+
+                PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+                PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                    -> {
+                    // We allow everything but never here.
+                    timeoutType != VaultTimeout.Type.NEVER
+                }
+
+                PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                    // Only allow immediately, everything else is blocked.
+                    timeoutType == VaultTimeout.Type.IMMEDIATELY
+                }
+
+                PolicyInformation.VaultTimeout.Type.CUSTOM -> {
+                    // Filter out all values above the specified amount. Custom set timeouts
+                    // that exceed the max value will be constrained in the VM.
+                    timeoutType.minutes <= (vaultTimeoutPolicy.minutes ?: Int.MAX_VALUE)
+                }
+
+                null -> {
+                    // If the type is null, there could still be a policy in place from a
+                    // legacy server that is not sending a type. So we still filter as though
+                    // it were a custom type in that scenario, otherwise we allow everything.
+                    vaultTimeoutPolicy
+                        ?.minutes
+                        ?.let { minutes -> timeoutType.minutes <= minutes }
+                        ?: true
+                }
+            }
         }
         .toImmutableList()
 }
