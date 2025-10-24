@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationRailItemColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A custom Bitwarden-themed bottom app bar.
@@ -54,7 +55,12 @@ fun ColumnScope.BitwardenNavigationRailItem(
                         id = if (isSelected) selectedIconRes else unselectedIconRes,
                     ),
                     contentDescription = stringResource(id = contentDescriptionRes),
-                    tint = Color.Unspecified,
+                    tint = if (isSelected) {
+                        // This is unspecified because selected icons are multi-tonal.
+                        Color.Unspecified
+                    } else {
+                        BitwardenTheme.colorScheme.icon.primary
+                    },
                 )
             }
         },

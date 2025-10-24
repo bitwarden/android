@@ -380,6 +380,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="download">Pobierz</string>
     <string name="login_expired">Twoja sesja wygasła.</string>
     <string name="biometrics_direction">Weryfikacja biometryczna</string>
+    <string name="device_verification">Weryfikacja urządzenia</string>
     <string name="biometrics_failed">Logowanie biometryczne nie powiodło się</string>
     <string name="biometrics_decoding_failure">Zaloguj się za pomocą hasła głównego lub kodu PIN, a następnie włącz ponownie logowanie biometryczne w ustawieniach.</string>
     <string name="use_biometrics_to_unlock">Odblokuj biometrią</string>
@@ -1056,7 +1057,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="learn_more_link"><annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="shared_codes_error">Nie można zsynchronizować kodów z aplikacji Bitwarden. Upewnij się, że obie aplikacje są aktualne. Nadal możesz uzyskać dostęp do obecnych kodów w aplikacji Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Synchronizuj z aplikacją Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Aby wyświetlić wszystkie kody weryfikacyjne, musisz zezwolić na synchronizację na wszystkich swoich kontach.</string>
+    <string name="sync_with_bitwarden_action_card_message">Włącz w ustawieniach synchronizację aplikacji Authenticator, aby wyświetlać kody weryfikacyjne.</string>
     <string name="take_me_to_app_settings">Przejdź do ustawień aplikacji</string>
     <string name="something_went_wrong">Coś poszło nie tak</string>
     <string name="please_try_again">Spróbuj ponownie</string>
@@ -1148,4 +1149,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="select_a_different_account">Wybierz inne konto</string>
     <string name="verify_your_account_email_address">Zweryfikuj adres e-mail konta</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Wpisz 6-cyfrowy kod wysłany na poniższy adres e-mail</string>
+    <string name="lock_app">Blokada aplikacji</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Użyj blokady urządzenia, aby odblokować aplikację</string>
+    <string name="loading_vault_data">Ładowanie danych sejfu…</string>
 </resources>

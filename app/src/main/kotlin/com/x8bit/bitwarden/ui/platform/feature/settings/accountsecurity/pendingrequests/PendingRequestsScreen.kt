@@ -337,7 +337,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -375,7 +375,7 @@ private fun PendingRequestsBottomSheetContent(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.img_2fa),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_2fa),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

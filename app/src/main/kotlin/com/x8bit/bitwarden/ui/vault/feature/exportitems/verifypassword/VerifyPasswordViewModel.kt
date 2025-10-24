@@ -56,6 +56,12 @@ class VerifyPasswordViewModel @Inject constructor(
                 ?.firstOrNull { it.userId == args.userId }
                 ?: throw IllegalStateException("Account not found")
 
+            val singleAccount = authRepository
+                .userStateFlow
+                .value
+                ?.accounts
+                ?.size == 1
+
             val restrictedItemPolicyOrgIds = policyManager
                 .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
                 .filter { it.isEnabled }
@@ -81,6 +87,7 @@ class VerifyPasswordViewModel @Inject constructor(
                         .any { it.id in restrictedItemPolicyOrgIds },
                 ),
                 showResendCodeButton = !account.hasMasterPassword,
+                hasOtherAccounts = !singleAccount,
             )
         },
 ) {
@@ -138,7 +145,11 @@ class VerifyPasswordViewModel @Inject constructor(
     }
 
     private fun handleNavigateBackClick() {
-        sendEvent(VerifyPasswordEvent.NavigateBack)
+        if (state.hasOtherAccounts) {
+            sendEvent(VerifyPasswordEvent.NavigateBack)
+        } else {
+            sendEvent(VerifyPasswordEvent.CancelExport)
+        }
     }
 
     private fun handleContinueClick() {
@@ -306,7 +317,7 @@ class VerifyPasswordViewModel @Inject constructor(
     ) {
         when (action.result) {
             is VerifyOtpResult.Verified -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                mutableStateFlow.update { it.copy(input = "", dialog = null) }
                 sendEvent(
                     VerifyPasswordEvent.PasswordVerified(
                         state.accountSummaryListItem.userId,
@@ -421,8 +432,10 @@ data class VerifyPasswordState(
     val accountSummaryListItem: AccountSelectionListItem,
     val title: Text,
     val subtext: Text?,
+    val hasOtherAccounts: Boolean,
     // We never want this saved since the input is sensitive data.
-    @IgnoredOnParcel val input: String = "",
+    @IgnoredOnParcel
+    val input: String = "",
     val dialog: DialogState? = null,
     val showResendCodeButton: Boolean = false,
 ) : Parcelable {
@@ -474,6 +487,11 @@ sealed class VerifyPasswordEvent {
      * @param userId The ID of the user whose password was verified.
      */
     data class PasswordVerified(val userId: String) : VerifyPasswordEvent()
+
+    /**
+     * Cancel the export request.
+     */
+    data object CancelExport : VerifyPasswordEvent()
 
     /**
      * Show a snackbar with the given data.

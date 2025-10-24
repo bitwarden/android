@@ -80,7 +80,7 @@ private fun SetupCompleteContent(
     ) {
         Spacer(Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_setup_complete),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_setup_complete),
             contentDescription = null,
             modifier = Modifier
                 .align(CenterHorizontally)

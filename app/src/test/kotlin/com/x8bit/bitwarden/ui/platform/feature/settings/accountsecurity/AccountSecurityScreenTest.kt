@@ -23,6 +23,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -589,11 +590,14 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     fun `session timeout policy warning should update according to state`() {
         mutableStateFlow.update {
             it.copy(
-                vaultTimeoutPolicyMinutes = 100,
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                ),
             )
         }
-        val timeOnlyText = "Your organization policies have set your maximum allowed " +
-            "vault timeout to 1 hour(s) and 40 minute(s)."
+        val timeOnlyText = "Your organization has set the maximum session timeout " +
+            "to 1 hour and 40 minutes."
         composeTestRule
             .onNodeWithText(timeOnlyText)
             .performScrollTo()
@@ -601,15 +605,14 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                vaultTimeoutPolicyMinutes = 100,
-                vaultTimeoutPolicyAction = "lock",
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = PolicyInformation.VaultTimeout.Action.LOCK,
+                ),
             )
         }
-        val bothText = "Your organization policies are affecting your vault timeout. " +
-            "Maximum allowed vault timeout is 1 hour(s) and 40 minute(s). Your vault " +
-            "timeout action is set to Lock."
         composeTestRule
-            .onNodeWithText(bothText)
+            .onNodeWithText(text = "This setting is managed by your organization.")
             .performScrollTo()
             .assertIsDisplayed()
     }
@@ -691,7 +694,10 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                vaultTimeoutPolicyMinutes = 100,
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                ),
             )
         }
 
@@ -999,7 +1005,10 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123),
-                vaultTimeoutPolicyMinutes = 100,
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                ),
             )
         }
         composeTestRule
@@ -1605,8 +1614,7 @@ private val DEFAULT_STATE = AccountSecurityState(
     shouldShowEnableAuthenticatorSync = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
-    vaultTimeoutPolicyMinutes = null,
-    vaultTimeoutPolicyAction = null,
+    vaultTimeoutPolicy = null,
     shouldShowUnlockActionCard = false,
     removeUnlockWithPinPolicyEnabled = false,
 )

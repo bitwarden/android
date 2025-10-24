@@ -279,7 +279,7 @@ fun VaultData.toViewState(
                         .asText()
                 },
             vectorRes = totpData
-                ?.let { BitwardenDrawable.img_folder_question },
+                ?.let { BitwardenDrawable.ill_folder_question },
         )
     }
 }

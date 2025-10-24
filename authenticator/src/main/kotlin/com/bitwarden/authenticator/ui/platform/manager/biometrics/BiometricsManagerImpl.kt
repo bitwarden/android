@@ -90,7 +90,7 @@ class BiometricsManagerImpl(
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(BitwardenString.bitwarden_authenticator))
-            .setDescription(activity.getString(BitwardenString.biometrics_direction))
+            .setDescription(activity.getString(BitwardenString.device_verification))
             .setAllowedAuthenticators(allowedAuthenticators)
             .build()
 

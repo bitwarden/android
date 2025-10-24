@@ -8,8 +8,10 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -37,6 +39,7 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val MINUTES_PER_HOUR = 60
 
 /**
  * View model for the account security screen.
@@ -75,8 +78,7 @@ class AccountSecurityViewModel @Inject constructor(
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
-            vaultTimeoutPolicyMinutes = null,
-            vaultTimeoutPolicyAction = null,
+            vaultTimeoutPolicy = null,
             shouldShowUnlockActionCard = false,
             removeUnlockWithPinPolicyEnabled = false,
         )
@@ -476,10 +478,15 @@ class AccountSecurityViewModel @Inject constructor(
         // The vault timeout policy can only be implemented in organizations that have
         // the single organization policy, meaning that if this is enabled, the user is
         // only in one organization and hence there is only one result in the list.
+        val vaultTimeoutPolicy = action.vaultTimeoutPolicies?.firstOrNull()
         mutableStateFlow.update {
             it.copy(
-                vaultTimeoutPolicyMinutes = action.vaultTimeoutPolicies?.firstOrNull()?.minutes,
-                vaultTimeoutPolicyAction = action.vaultTimeoutPolicies?.firstOrNull()?.action,
+                vaultTimeoutPolicy = vaultTimeoutPolicy?.let { policy ->
+                    VaultTimeoutPolicy(
+                        minutes = policy.minutes,
+                        action = policy.action,
+                    )
+                },
             )
         }
     }
@@ -518,8 +525,7 @@ data class AccountSecurityState(
     val userId: String,
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
-    val vaultTimeoutPolicyMinutes: Int?,
-    val vaultTimeoutPolicyAction: String?,
+    val vaultTimeoutPolicy: VaultTimeoutPolicy?,
     val shouldShowUnlockActionCard: Boolean,
     val removeUnlockWithPinPolicyEnabled: Boolean,
 ) : Parcelable {
@@ -530,7 +536,73 @@ data class AccountSecurityState(
         get() = isUnlockWithPasswordEnabled ||
             isUnlockWithPinEnabled ||
             isUnlockWithBiometricsEnabled
+
+    /**
+     * Indicates that the vault timeout action is enabled.
+     */
+    val isSessionTimeoutActionEnabled: Boolean
+        get() = hasUnlockMechanism && vaultTimeoutPolicy?.action == null
+
+    /**
+     * The text to display for the session timeout.
+     */
+    val sessionTimeoutSupportText: Text?
+        get() = vaultTimeoutPolicy?.let { policy ->
+            // Calculate the hours and minutes to show in the policy label.
+            val hours = policy.minutes?.floorDiv(MINUTES_PER_HOUR).takeUnless { it == 0 }
+            val minutes = policy.minutes?.mod(MINUTES_PER_HOUR).takeUnless { it == 0 }
+            if (hours != null && minutes != null) {
+                if (hours == 1 && minutes == 1) {
+                    BitwardenString
+                        .vault_timeout_policy_in_effect_no_plural
+                        .asText(hours, minutes)
+                } else if (hours == 1) {
+                    BitwardenString
+                        .vault_timeout_policy_in_effect_minutes_plural
+                        .asText(hours, minutes)
+                } else if (minutes == 1) {
+                    BitwardenString
+                        .vault_timeout_policy_in_effect_hours_plural
+                        .asText(hours, minutes)
+                } else {
+                    BitwardenString
+                        .vault_timeout_policy_in_effect_both_plural
+                        .asText(hours, minutes)
+                }
+            } else if (hours != null) {
+                BitwardenPlurals
+                    .vault_timeout_policy_in_effect_hours
+                    .asPluralsText(hours, hours)
+            } else if (minutes != null) {
+                BitwardenPlurals
+                    .vault_timeout_policy_in_effect_minutes
+                    .asPluralsText(minutes, minutes)
+            } else {
+                null
+            }
+        }
+
+    /**
+     * The text to display for the session timeout action.
+     */
+    val sessionTimeoutActionSupportingText: Text?
+        get() = if (vaultTimeoutPolicy?.action != null) {
+            BitwardenString.this_setting_is_managed_by_your_organization.asText()
+        } else if (!hasUnlockMechanism) {
+            BitwardenString.set_up_an_unlock_option_to_change_your_vault_timeout_action.asText()
+        } else {
+            null
+        }
 }
+
+/**
+ * Models the vault timeout policy.
+ */
+@Parcelize
+data class VaultTimeoutPolicy(
+    val minutes: Int?,
+    val action: PolicyInformation.VaultTimeout.Action?,
+) : Parcelable
 
 /**
  * Representation of the dialogs that can be displayed on account security screen.

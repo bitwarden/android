@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
@@ -16,6 +17,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -43,7 +45,7 @@ private const val KEY_STATE = "state"
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     clock: Clock,
-    private val authenticatorRepository: AuthenticatorRepository,
+    authenticatorRepository: AuthenticatorRepository,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
@@ -59,6 +61,7 @@ class SettingsViewModel @Inject constructor(
             defaultSaveOption = settingsRepository.defaultSaveOption,
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
             isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+            isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
         ),
 ) {
 
@@ -66,13 +69,17 @@ class SettingsViewModel @Inject constructor(
         authenticatorRepository
             .sharedCodesStateFlow
             .map { SettingsAction.Internal.SharedAccountsStateUpdated(it) }
-            .onEach(::handleAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
-
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { SettingsAction.Internal.DynamicColorsUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         settingsRepository
             .defaultSaveOptionFlow
             .map { SettingsAction.Internal.DefaultSaveOptionUpdated(it) }
-            .onEach(::handleAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -109,6 +116,8 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.Internal.DefaultSaveOptionUpdated -> {
                 handleDefaultSaveOptionUpdated(action)
             }
+
+            is SettingsAction.Internal.DynamicColorsUpdated -> handleDynamicColorsUpdated(action)
         }
     }
 
@@ -213,6 +222,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private fun handleDynamicColorsUpdated(action: SettingsAction.Internal.DynamicColorsUpdated) {
+        mutableStateFlow.update {
+            it.copy(appearance = it.appearance.copy(isDynamicColorsEnabled = action.isEnabled))
+        }
+    }
+
     private fun handleSyncWithBitwardenClick() {
         when (authenticatorBridgeManager.accountSyncStateFlow.value) {
             AccountSyncState.AppNotInstalled -> {
@@ -241,36 +256,46 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleAppearanceChange(action: SettingsAction.AppearanceChange) {
         when (action) {
+            is SettingsAction.AppearanceChange.DynamicColorChange -> {
+                handleDynamicColorChange(action)
+            }
+
             is SettingsAction.AppearanceChange.LanguageChange -> {
-                handleLanguageChange(action.language)
+                handleLanguageChange(action)
             }
 
             is SettingsAction.AppearanceChange.ThemeChange -> {
-                handleThemeChange(action.appTheme)
+                handleThemeChange(action)
             }
         }
     }
 
-    private fun handleLanguageChange(language: AppLanguage) {
+    private fun handleDynamicColorChange(
+        action: SettingsAction.AppearanceChange.DynamicColorChange,
+    ) {
+        settingsRepository.isDynamicColorsEnabled = action.isEnabled
+    }
+
+    private fun handleLanguageChange(action: SettingsAction.AppearanceChange.LanguageChange) {
         mutableStateFlow.update {
             it.copy(
-                appearance = it.appearance.copy(language = language),
+                appearance = it.appearance.copy(language = action.language),
             )
         }
-        settingsRepository.appLanguage = language
+        settingsRepository.appLanguage = action.language
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(
-            language.localeName,
+            action.language.localeName,
         )
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
-    private fun handleThemeChange(theme: AppTheme) {
+    private fun handleThemeChange(action: SettingsAction.AppearanceChange.ThemeChange) {
         mutableStateFlow.update {
             it.copy(
-                appearance = it.appearance.copy(theme = theme),
+                appearance = it.appearance.copy(theme = action.appTheme),
             )
         }
-        settingsRepository.appTheme = theme
+        settingsRepository.appTheme = action.appTheme
     }
 
     private fun handleHelpClick(action: SettingsAction.HelpClick) {
@@ -332,6 +357,7 @@ class SettingsViewModel @Inject constructor(
             accountSyncState: AccountSyncState,
             sharedAccountsState: SharedVerificationCodesState,
             isScreenCaptureAllowed: Boolean,
+            isDynamicColorsEnabled: Boolean,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
@@ -345,6 +371,8 @@ class SettingsViewModel @Inject constructor(
                 appearance = SettingsState.Appearance(
                     language = appLanguage,
                     theme = appTheme,
+                    isDynamicColorsSupported = isBuildVersionAtLeast(Build.VERSION_CODES.S),
+                    isDynamicColorsEnabled = isDynamicColorsEnabled,
                 ),
                 isUnlockWithBiometricsEnabled = unlockWithBiometricsEnabled,
                 isSubmitCrashLogsEnabled = isSubmitCrashLogsEnabled,
@@ -400,6 +428,8 @@ data class SettingsState(
     data class Appearance(
         val language: AppLanguage,
         val theme: AppTheme,
+        val isDynamicColorsSupported: Boolean,
+        val isDynamicColorsEnabled: Boolean,
     ) : Parcelable
 }
 
@@ -558,6 +588,13 @@ sealed class SettingsAction(
         data class ThemeChange(
             val appTheme: AppTheme,
         ) : AppearanceChange()
+
+        /**
+         * Indicates the user selected a new theme.
+         */
+        data class DynamicColorChange(
+            val isEnabled: Boolean,
+        ) : AppearanceChange()
     }
 
     /**
@@ -603,6 +640,13 @@ sealed class SettingsAction(
          */
         data class DefaultSaveOptionUpdated(
             val option: DefaultSaveOption,
+        ) : SettingsAction()
+
+        /**
+         * Indicates that the dynamic colors state on disk was updated.
+         */
+        data class DynamicColorsUpdated(
+            val isEnabled: Boolean,
         ) : SettingsAction()
     }
 }

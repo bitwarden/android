@@ -52,7 +52,7 @@ fun buildVaultItemAutofillRemoteViews(
                 getString(BitwardenString.go_to_my_vault)
             }
         },
-        iconRes = BitwardenDrawable.icon,
+        iconRes = BitwardenDrawable.logo_bitwarden_icon,
         shouldTintIcon = false,
         autofillContentDescription = null,
     )

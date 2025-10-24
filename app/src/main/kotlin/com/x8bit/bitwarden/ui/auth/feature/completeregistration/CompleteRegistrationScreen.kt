@@ -330,7 +330,7 @@ private fun CompleteRegistrationContentHeader(
 @Composable
 private fun OrderedHeaderContent() {
     Image(
-        painter = rememberVectorPainter(id = BitwardenDrawable.lock),
+        painter = rememberVectorPainter(id = BitwardenDrawable.ill_lock),
         contentDescription = null,
         modifier = Modifier.size(100.dp),
     )

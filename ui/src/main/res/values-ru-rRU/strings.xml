@@ -380,6 +380,7 @@
     <string name="download">Загрузить</string>
     <string name="login_expired">Истек срок действия вашего сеанса.</string>
     <string name="biometrics_direction">Биометрическая верификация.</string>
+    <string name="device_verification">Проверка устройства</string>
     <string name="biometrics_failed">Сбой биометрии</string>
     <string name="biometrics_decoding_failure">Войдите с помощью мастер-пароля или PIN-кода, а затем повторно включите биометрию в настройках.</string>
     <string name="use_biometrics_to_unlock">Использовать биометрию</string>
@@ -1147,6 +1148,9 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Возможно, ваше хранилище пусто, или импорт некоторых типов элементов запрещен для вашего аккаунта.</string>
     <string name="no_items_available_to_import">Нет элементов, доступных для импорта</string>
     <string name="select_a_different_account">Выберите другой аккаунт</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Подтвердите адрес email вашего аккаунта</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Введите 6-значный код, который был отправлен по email на указанный ниже адрес</string>
+    <string name="lock_app">Заблокировать приложение</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Используйте метод блокировки вашего устройства, чтобы разблокировать приложение</string>
+    <string name="loading_vault_data">Загрузка данных хранилища…</string>
 </resources>

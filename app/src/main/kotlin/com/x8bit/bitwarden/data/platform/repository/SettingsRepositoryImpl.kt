@@ -647,10 +647,9 @@ class SettingsRepositoryImpl(
             }
         }
         vaultUnlockPolicy.action?.let {
-            vaultTimeoutAction = if (it == "lock") {
-                VaultTimeoutAction.LOCK
-            } else {
-                VaultTimeoutAction.LOGOUT
+            vaultTimeoutAction = when (it) {
+                PolicyInformation.VaultTimeout.Action.LOCK -> VaultTimeoutAction.LOCK
+                PolicyInformation.VaultTimeout.Action.LOGOUT -> VaultTimeoutAction.LOGOUT
             }
         }
     }

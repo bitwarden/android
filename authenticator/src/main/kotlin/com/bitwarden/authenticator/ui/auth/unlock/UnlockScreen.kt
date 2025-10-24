@@ -112,12 +112,12 @@ fun UnlockScreen(
                     .width(220.dp)
                     .height(74.dp)
                     .fillMaxWidth(),
-                painter = rememberVectorPainter(id = BitwardenDrawable.ic_logo_horizontal),
+                painter = rememberVectorPainter(id = BitwardenDrawable.logo_authenticator),
                 contentDescription = stringResource(BitwardenString.bitwarden_authenticator),
             )
             Spacer(modifier = Modifier.height(32.dp))
             BitwardenFilledButton(
-                label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
+                label = stringResource(id = BitwardenString.unlock),
                 onClick = {
                     biometricsManager.promptBiometrics(
                         onSuccess = onBiometricsUnlock,

@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,21 +26,28 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
+        isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+        isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
     ),
 ) {
 
     init {
         settingsRepository
             .appThemeStateFlow
-            .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .map { MainAction.Internal.ThemeUpdate(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
-
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { MainAction.Internal.DynamicColorUpdate(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         settingsRepository
             .isScreenCaptureAllowedStateFlow
-            .onEach { isAllowed ->
-                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
-            }
+            .map { MainAction.Internal.ScreenCaptureUpdate(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
+
         viewModelScope.launch {
             configRepository.getServerConfig(forceRefresh = false)
         }
@@ -47,15 +55,30 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
-            is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: MainAction.Internal) {
+        when (action) {
+            is MainAction.Internal.DynamicColorUpdate -> handleDynamicColorUpdate(action)
+            is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
+
+            is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(
+                screenCaptureUpdateAction = action,
+            )
         }
     }
 
     private fun handleOpenDebugMenu() {
         sendEvent(MainEvent.NavigateToDebugMenu)
+    }
+
+    private fun handleDynamicColorUpdate(action: MainAction.Internal.DynamicColorUpdate) {
+        mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isEnabled) }
     }
 
     private fun handleThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -77,6 +100,16 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun handleScreenCaptureUpdate(
+        screenCaptureUpdateAction: MainAction.Internal.ScreenCaptureUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isScreenCaptureAllowed = screenCaptureUpdateAction.isScreenCaptureEnabled,
+            )
+        }
+    }
+
     private fun handleIntent(
         intent: Intent,
         isFirstIntent: Boolean,
@@ -91,6 +124,8 @@ class MainViewModel @Inject constructor(
 @Parcelize
 data class MainState(
     val theme: AppTheme,
+    val isDynamicColorsEnabled: Boolean,
+    val isScreenCaptureAllowed: Boolean,
 ) : Parcelable
 
 /**
@@ -116,12 +151,25 @@ sealed class MainAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
+        /**
+         * Indicates that dynamic colors have been enabled or disabled.
+         */
+        data class DynamicColorUpdate(
+            val isEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the app theme has changed.
          */
         data class ThemeUpdate(
             val theme: AppTheme,
+        ) : Internal()
+
+        /**
+         * Indicates that the screen capture state has changed.
+         */
+        data class ScreenCaptureUpdate(
+            val isScreenCaptureEnabled: Boolean,
         ) : Internal()
     }
 }
@@ -135,11 +183,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Event indicating a change in the screen capture setting.
-     */
-    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 
     /**
      * Indicates that the app theme has been updated.

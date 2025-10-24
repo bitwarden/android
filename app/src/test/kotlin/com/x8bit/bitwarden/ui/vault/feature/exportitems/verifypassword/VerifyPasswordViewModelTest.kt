@@ -104,6 +104,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                                 initials = DEFAULT_USER_STATE.activeAccount.initials,
                             ),
                             showResendCodeButton = true,
+                            hasOtherAccounts = true,
                         ),
                         it.stateFlow.value,
                     )
@@ -119,6 +120,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                         VerifyPasswordState(
                             title = BitwardenString.verify_your_master_password.asText(),
                             subtext = null,
+                            hasOtherAccounts = true,
                             accountSummaryListItem = AccountSelectionListItem(
                                 userId = DEFAULT_USER_ID,
                                 email = DEFAULT_USER_STATE.activeAccount.email,
@@ -150,6 +152,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                         VerifyPasswordState(
                             title = BitwardenString.verify_your_master_password.asText(),
                             subtext = null,
+                            hasOtherAccounts = true,
                             accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM
                                 .copy(isItemRestricted = true),
                         ),
@@ -233,21 +236,26 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `VerifyOtpResultReceive verified should send event`() = runTest {
-            createViewModel().also { viewModel ->
-                viewModel.trySendAction(
-                    VerifyPasswordAction.Internal.VerifyOtpResultReceive(
-                        VerifyOtpResult.Verified,
-                    ),
-                )
-
-                viewModel.eventFlow.test {
-                    assertEquals(
-                        VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
-                        awaitItem(),
+        fun `VerifyOtpResultReceive verified should send event and clear input`() = runTest {
+            createViewModel(state = DEFAULT_STATE.copy(input = "123"))
+                .also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.Internal.VerifyOtpResultReceive(
+                            VerifyOtpResult.Verified,
+                        ),
                     )
+
+                    viewModel.eventFlow.test {
+                        assertEquals(
+                            VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
+                            awaitItem(),
+                        )
+                    }
+
+                    viewModel.stateFlow.test {
+                        assertEquals(DEFAULT_STATE, awaitItem())
+                    }
                 }
-            }
         }
 
         @Test
@@ -284,6 +292,21 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                 }
             }
         }
+
+        @Test
+        fun `NavigateBackClick should send CancelExport event when hasOtherAccounts is false`() =
+            runTest {
+                val initialState = DEFAULT_STATE.copy(hasOtherAccounts = false)
+                createViewModel(state = initialState).also {
+                    it.trySendAction(VerifyPasswordAction.NavigateBackClick)
+                    it.eventFlow.test {
+                        assertEquals(
+                            VerifyPasswordEvent.CancelExport,
+                            awaitItem(),
+                        )
+                    }
+                }
+            }
 
         @Test
         fun `ContinueClick with empty input should show error dialog`() = runTest {
@@ -724,6 +747,36 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
         ),
+
+        UserState.Account(
+            userId = "activeUserId2",
+            name = "Active User Two",
+            email = "active+two@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = listOf(
+                Organization(
+                    id = DEFAULT_ORGANIZATION_ID,
+                    name = "Organization User Two",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.USER,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
+                ),
+            ),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
+        ),
     ),
 )
 private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
@@ -736,6 +789,7 @@ private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
 private val DEFAULT_STATE = VerifyPasswordState(
     title = BitwardenString.verify_your_master_password.asText(),
     subtext = null,
+    hasOtherAccounts = true,
     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     input = "",
     dialog = null,

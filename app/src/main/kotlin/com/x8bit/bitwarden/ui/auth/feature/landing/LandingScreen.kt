@@ -219,7 +219,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
+            painter = rememberVectorPainter(id = BitwardenDrawable.logo_bitwarden),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

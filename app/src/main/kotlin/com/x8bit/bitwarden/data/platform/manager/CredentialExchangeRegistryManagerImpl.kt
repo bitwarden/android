@@ -37,7 +37,7 @@ class CredentialExchangeRegistryManagerImpl(
                     CredentialTypes.CREDENTIAL_TYPE_TOTP,
                     CredentialTypes.CREDENTIAL_TYPE_WIFI,
                 ),
-                iconResId = BitwardenDrawable.icon,
+                iconResId = BitwardenDrawable.logo_bitwarden_icon,
             ),
         )
         .fold(

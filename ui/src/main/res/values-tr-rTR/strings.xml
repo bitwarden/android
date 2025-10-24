@@ -376,6 +376,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="download">İndir</string>
     <string name="login_expired">Oturumunuzun süresi doldu.</string>
     <string name="biometrics_direction">Biyometrik doğrulama</string>
+    <string name="device_verification">Cihaz doğrulama</string>
     <string name="biometrics_failed">Biyometri doğrulanamadı</string>
     <string name="biometrics_decoding_failure">Ana parolanız veya PIN\'inizle giriş yaptıktan sonra Ayarlar\'dan biyometriyle girişi yeniden etkinleştirin.</string>
     <string name="use_biometrics_to_unlock">Kilidi biyometri ile aç</string>
@@ -1134,6 +1135,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
     <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Hesabınızın e-posta adresini doğrulayın</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Aşağıdaki e-posta adresine gönderdiğimiz 6 basamaklı kodu girin</string>
+    <string name="lock_app">Uygulamayı kilitle</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Uygulamanın kilidini açmak için cihazınızın kilit yöntemini kullanın</string>
+    <string name="loading_vault_data">Kasa verileri yükleniyor…</string>
 </resources>

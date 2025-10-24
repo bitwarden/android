@@ -376,6 +376,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="download">Endir</string>
     <string name="login_expired">Seansın müddəti bitdi.</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
+    <string name="device_verification">Cihaz doğrulaması</string>
     <string name="biometrics_failed">Biometrik uğursuzdur</string>
     <string name="biometrics_decoding_failure">Ana parol və ya PIN ilə giriş edin, sonra Ayarlarda biometrik ilə girişi təkrar fəallaşdırın.</string>
     <string name="use_biometrics_to_unlock">Kilidi açmaq üçün biometrik istifadə et</string>
@@ -1136,6 +1137,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Ya seyfiniz boşdur, ya da hesabınız üçün bəzi element növlərinin daxilə köçürülməsinə icazə verilmir.</string>
     <string name="no_items_available_to_import">Daxilə köçürüləcək element yoxdur</string>
     <string name="select_a_different_account">Fərqli bir hesab seçin</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Hesabınızın e-poçt ünvanını doğrulayın</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Aşağıdakı ünvana e-poçtla göndərilən 6 rəqəmli kodu daxil edin</string>
+    <string name="lock_app">Tətbiqi kilidlə</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Tətbiqin kilidini açmaq üçün cihazın kilid üsulunu istifadə edin</string>
+    <string name="loading_vault_data">Seyf veriləri yüklənir…</string>
 </resources>

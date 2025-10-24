@@ -38,6 +38,16 @@ interface SettingsRepository {
     var defaultSaveOption: DefaultSaveOption
 
     /**
+     * The current setting for enabling dynamic colors.
+     */
+    var isDynamicColorsEnabled: Boolean
+
+    /**
+     * Tracks changes to the [isDynamicColorsEnabled] value.
+     */
+    val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+
+    /**
      * Flow that emits changes to [defaultSaveOption]
      */
     val defaultSaveOptionFlow: Flow<DefaultSaveOption>

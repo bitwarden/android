@@ -47,6 +47,22 @@ class SettingsRepositoryImpl(
     override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
         by settingsDiskSource::defaultSaveOptionFlow
 
+    override var isDynamicColorsEnabled: Boolean
+        get() = settingsDiskSource.isDynamicColorsEnabled ?: false
+        set(value) {
+            settingsDiskSource.isDynamicColorsEnabled = value
+        }
+
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isDynamicColorsEnabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isDynamicColorsEnabled,
+            )
+
     override val isUnlockWithBiometricsEnabled: Boolean
         get() = authDiskSource.getUserBiometricUnlockKey() != null
 
