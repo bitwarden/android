@@ -22,6 +22,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
+        every { isScreenCaptureAllowed } returns false
         every { isDynamicColorsEnabled } returns false
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
@@ -31,7 +32,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on AppThemeChanged should update state`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            eventFlow.skipItems(count = 2)
+            eventFlow.skipItems(count = 1)
             assertEquals(
                 DEFAULT_STATE,
                 stateFlow.awaitItem(),
@@ -79,10 +80,27 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             // Ignore the events that are fired off by flows in the ViewModel init
-            skipItems(2)
+            skipItems(1)
             viewModel.trySendAction(MainAction.OpenDebugMenu)
             assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
         }
+    }
+
+    @Test
+    fun `changes in the allowed screen capture value should update the state`() {
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(isScreenCaptureAllowed = false),
+            viewModel.stateFlow.value,
+        )
+
+        mutableScreenCaptureAllowedFlow.value = true
+
+        assertEquals(
+            DEFAULT_STATE.copy(isScreenCaptureAllowed = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     private fun createViewModel(): MainViewModel =
@@ -95,4 +113,5 @@ class MainViewModelTest : BaseViewModelTest() {
 private val DEFAULT_STATE = MainState(
     theme = AppTheme.DEFAULT,
     isDynamicColorsEnabled = false,
+    isScreenCaptureAllowed = false,
 )
