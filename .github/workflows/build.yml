@@ -48,7 +48,7 @@ jobs:
       # Start from 11000 to prevent collisions with mobile build version codes
       base_version_number: 11000
       version_name: ${{ inputs.version-name }}
-      version_number: ${{ inputs.version-number }}
+      version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
     secrets: inherit
 

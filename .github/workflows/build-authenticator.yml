@@ -46,7 +46,7 @@ jobs:
       app_codename: "bwa"
       base_version_number: 0
       version_name: ${{ inputs.version-name }}
-      version_number: ${{ inputs.version-number }}
+      version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
     secrets: inherit
 
