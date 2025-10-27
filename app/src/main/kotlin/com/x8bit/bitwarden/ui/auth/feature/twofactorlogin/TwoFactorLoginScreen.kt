@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,9 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -230,27 +226,23 @@ private fun TwoFactorLoginScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
-        if (state.authMethod != TwoFactorAuthMethod.YUBI_KEY) {
-            state.imageRes?.let {
-                Spacer(modifier = Modifier.height(12.dp))
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .size(124.dp),
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
+        state.imageRes?.let {
+            Spacer(modifier = Modifier.height(12.dp))
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = null,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .size(124.dp),
+            )
+            Spacer(modifier = Modifier.height(12.dp))
         }
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = if (state.isNewDeviceVerification) {
                 stringResource(BitwardenString.enter_verification_code_new_device)
             } else {
-                state.authMethod.description(
-                    state.displayEmail,
-                ).invoke()
+                state.authMethod.description(state.displayEmail).invoke()
             },
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
@@ -261,23 +253,6 @@ private fun TwoFactorLoginScreenContent(
         )
 
         Spacer(modifier = Modifier.height(12.dp))
-
-        if (state.authMethod == TwoFactorAuthMethod.YUBI_KEY) {
-            state.imageRes?.let {
-                Spacer(modifier = Modifier.height(12.dp))
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = null,
-                    alignment = Alignment.Center,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-        }
 
         if (state.shouldShowCodeInput) {
             BitwardenPasswordField(
