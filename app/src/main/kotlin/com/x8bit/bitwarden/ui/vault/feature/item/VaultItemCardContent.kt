@@ -52,7 +52,6 @@ fun VaultItemCardContent(
 ) {
     val bidiTextManager = LocalBidiTextManager.current
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
-    val bidiTextManager = LocalBidiTextManager.current
     val applyIconBackground = cardState.paymentCardBrandIconData == null
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
