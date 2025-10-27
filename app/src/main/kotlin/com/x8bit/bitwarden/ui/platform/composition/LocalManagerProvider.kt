@@ -22,7 +22,9 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.BidiTextManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -79,6 +81,7 @@ fun LocalManagerProvider(
         },
     credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
         credentialExchangeRequestValidator(activity = activity),
+    bidiTextManager: BidiTextManager = BidiTextManager.create(),
     authTabLaunchers: AuthTabLaunchers,
     content: @Composable () -> Unit,
 ) {
@@ -97,6 +100,7 @@ fun LocalManagerProvider(
         LocalCredentialExchangeImporter provides credentialExchangeImporter,
         LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
         LocalCredentialExchangeRequestValidator provides credentialExchangeRequestValidator,
+        LocalBidiTextManager provides bidiTextManager,
         LocalAuthTabLaunchers provides authTabLaunchers,
         content = content,
     )

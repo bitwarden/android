@@ -18,7 +18,9 @@ import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.BidiTextManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import java.time.Clock
 
@@ -34,6 +36,7 @@ fun LocalManagerProvider(
     intentManager: IntentManager = IntentManager.create(activity, clock, buildInfoManager),
     exitManager: ExitManager = ExitManagerImpl(activity),
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity),
+    bidiTextManager: BidiTextManager = BidiTextManager.create(),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -41,6 +44,7 @@ fun LocalManagerProvider(
         LocalIntentManager provides intentManager,
         LocalExitManager provides exitManager,
         LocalBiometricsManager provides biometricsManager,
+        LocalBidiTextManager provides bidiTextManager,
         content = content,
     )
 }
