@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -56,6 +57,7 @@ fun VaultItemLoginContent(
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -175,6 +177,7 @@ fun VaultItemLoginContent(
             ) { index, uriData ->
                 UriField(
                     uriData = uriData,
+                    bidiTextManager = bidiTextManager,
                     onCopyUriClick = vaultLoginItemTypeHandlers.onCopyUriClick,
                     onLaunchUriClick = vaultLoginItemTypeHandlers.onLaunchUriClick,
                     cardStyle = uris.toListItemCardStyle(index = index, dividerPadding = 0.dp),
@@ -502,6 +505,7 @@ private fun TotpField(
 @Composable
 private fun UriField(
     uriData: VaultItemState.ViewState.Content.ItemType.Login.UriData,
+    bidiTextManager: com.bitwarden.ui.platform.manager.bidi.BidiTextManager,
     onCopyUriClick: (String) -> Unit,
     onLaunchUriClick: (String) -> Unit,
     cardStyle: CardStyle,
@@ -509,7 +513,7 @@ private fun UriField(
 ) {
     BitwardenTextField(
         label = stringResource(id = BitwardenString.website_uri),
-        value = uriData.uri,
+        value = bidiTextManager.unicodeWrap(uriData.uri),
         onValueChange = { },
         readOnly = true,
         singleLine = false,
