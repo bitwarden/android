@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -47,6 +48,7 @@ fun VaultItemIdentityContent(
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -204,7 +206,7 @@ fun VaultItemIdentityContent(
             item(key = "email") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.email),
-                    value = email,
+                    value = bidiTextManager.unicodeWrap(email),
                     copyContentDescription = stringResource(id = BitwardenString.copy_email),
                     textFieldTestTag = "IdentityEmailEntry",
                     copyActionTestTag = "IdentityCopyEmailButton",
