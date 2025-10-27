@@ -21,6 +21,7 @@ import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -61,10 +62,11 @@ fun LazyListScope.vaultAddEditCardItems(
         )
     }
     item {
+        val bidiTextManager = LocalBidiTextManager.current
         var showNumber by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.number),
-            value = cardState.number,
+            value = bidiTextManager.formatCardNumber(cardState.number),
             onValueChange = cardHandlers.onNumberTextChange,
             showPassword = showNumber,
             showPasswordChange = {
