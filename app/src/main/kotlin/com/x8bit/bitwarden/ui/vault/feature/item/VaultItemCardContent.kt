@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -49,6 +50,7 @@ fun VaultItemCardContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
     val bidiTextManager = LocalBidiTextManager.current
     val applyIconBackground = cardState.paymentCardBrandIconData == null
@@ -74,7 +76,7 @@ fun VaultItemCardContent(
             item(key = "cardholderName") {
                 BitwardenTextField(
                     label = stringResource(id = BitwardenString.cardholder_name),
-                    value = cardholderName,
+                    value = bidiTextManager.unicodeWrap(cardholderName),
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
@@ -153,7 +155,7 @@ fun VaultItemCardContent(
             item(key = "expiration") {
                 BitwardenTextField(
                     label = stringResource(id = BitwardenString.expiration),
-                    value = expiration,
+                    value = bidiTextManager.forceLtr(expiration),
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
