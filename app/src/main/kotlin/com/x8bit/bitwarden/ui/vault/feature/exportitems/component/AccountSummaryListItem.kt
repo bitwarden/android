@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.R
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.hexToColor
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
@@ -51,6 +52,7 @@ fun AccountSummaryListItem(
     clickable: Boolean,
     onClick: (userId: String) -> Unit = {},
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
     Row(
         modifier = modifier
             .testTag("AccountSummaryListItem")
@@ -95,7 +97,7 @@ fun AccountSummaryListItem(
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = item.email,
+                text = bidiTextManager.unicodeWrap(item.email),
                 style = BitwardenTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
