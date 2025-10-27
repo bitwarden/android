@@ -17,7 +17,6 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -34,7 +33,6 @@ fun BitwardenPinDialog(
     onDismissRequest: () -> Unit,
 ) {
     var pin by remember { mutableStateOf("") }
-    val bidiTextManager = LocalBidiTextManager.current
     AlertDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
@@ -48,7 +46,7 @@ fun BitwardenPinDialog(
             BitwardenTextButton(
                 label = stringResource(id = BitwardenString.submit),
                 isEnabled = pin.isNotEmpty(),
-                onClick = { onConfirmClick(bidiTextManager.forceLtr(pin)) },
+                onClick = { onConfirmClick(pin) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
             )
         },

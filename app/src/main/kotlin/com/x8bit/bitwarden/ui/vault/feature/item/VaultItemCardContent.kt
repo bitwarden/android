@@ -153,7 +153,7 @@ fun VaultItemCardContent(
             item(key = "expiration") {
                 BitwardenTextField(
                     label = stringResource(id = BitwardenString.expiration),
-                    value = bidiTextManager.forceLtr(expiration),
+                    value = expiration,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,

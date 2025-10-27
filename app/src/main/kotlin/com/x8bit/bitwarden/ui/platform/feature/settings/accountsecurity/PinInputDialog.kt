@@ -36,7 +36,6 @@ import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -61,7 +60,6 @@ fun PinInputDialog(
     isPinCreation: Boolean = false,
 ) {
     var pin by remember { mutableStateOf(value = "") }
-    val bidiTextManager = LocalBidiTextManager.current
     val isDoneEnabled: () -> Boolean = { !isPinCreation || pin.length >= MINIMUM_PIN_LENGTH }
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -124,7 +122,6 @@ fun PinInputDialog(
                         onDone = {
                             pin
                                 .takeIf { isDoneEnabled() }
-                                ?.let { bidiTextManager.forceLtr(it) }
                                 ?.let(onSubmitClick)
                                 ?: defaultKeyboardAction(ImeAction.Done)
                         },
@@ -153,7 +150,7 @@ fun PinInputDialog(
                 BitwardenFilledButton(
                     label = stringResource(id = BitwardenString.submit),
                     isEnabled = isDoneEnabled(),
-                    onClick = { onSubmitClick(bidiTextManager.forceLtr(pin)) },
+                    onClick = { onSubmitClick(pin) },
                     modifier = Modifier.testTag(tag = "AcceptAlertButton"),
                 )
             }

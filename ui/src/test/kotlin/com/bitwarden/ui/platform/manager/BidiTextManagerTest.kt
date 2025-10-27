@@ -1,5 +1,6 @@
 package com.bitwarden.ui.platform.manager
 
+import android.text.BidiFormatter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test
  * full bidirectional text behavior should be tested via instrumentation tests on a real device
  * or emulator where BidiFormatter is available.
  */
-class BidiTextManagerImplTest {
+class BidiTextManagerTest {
     private val manager = BidiTextManagerImpl()
 
     // Test chunking logic for verification codes

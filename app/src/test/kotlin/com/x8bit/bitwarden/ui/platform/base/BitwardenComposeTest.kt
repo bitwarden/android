@@ -6,6 +6,7 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.BidiTextManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -48,6 +49,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         credentialExchangeImporter: CredentialExchangeImporter = mockk(),
         credentialExchangeCompletionManager: CredentialExchangeCompletionManager = mockk(),
         credentialExchangeRequestValidator: CredentialExchangeRequestValidator = mockk(),
+        bidiTextManager: BidiTextManager = mockk(),
         test: @Composable () -> Unit,
     ) {
         setTestContent {
@@ -67,6 +69,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
                 credentialExchangeImporter = credentialExchangeImporter,
                 credentialExchangeCompletionManager = credentialExchangeCompletionManager,
                 credentialExchangeRequestValidator = credentialExchangeRequestValidator,
+                bidiTextManager = bidiTextManager,
             ) {
                 BitwardenTheme(
                     theme = theme,

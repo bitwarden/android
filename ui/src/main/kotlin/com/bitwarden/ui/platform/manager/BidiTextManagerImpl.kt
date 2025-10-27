@@ -13,10 +13,6 @@ internal class BidiTextManagerImpl : BidiTextManager {
 
     private val bidiFormatter: BidiFormatter = BidiFormatter.getInstance()
 
-    companion object {
-        private const val CARD_NUMBER_CHUNK_SIZE = 4
-    }
-
     override fun unicodeWrap(text: String): String {
         return bidiFormatter.unicodeWrap(
             text,
@@ -50,9 +46,6 @@ internal class BidiTextManagerImpl : BidiTextManager {
 
     override fun formatCardNumber(number: String): String {
         if (number.isEmpty()) return ""
-
-        val chunks = number.chunked(CARD_NUMBER_CHUNK_SIZE)
-        val formatted = chunks.joinToString(" ")
-        return forceLtr(formatted)
+        return forceLtr(number)
     }
 }

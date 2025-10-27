@@ -22,6 +22,7 @@ import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.BidiTextManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.dsl.bidiTextManager
 import java.time.Clock
 
 /**
@@ -36,7 +37,7 @@ fun LocalManagerProvider(
     intentManager: IntentManager = IntentManager.create(activity, clock, buildInfoManager),
     exitManager: ExitManager = ExitManagerImpl(activity),
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity),
-    bidiTextManager: BidiTextManager = BidiTextManager.create(),
+    bidiTextManager: BidiTextManager = bidiTextManager(),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(

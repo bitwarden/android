@@ -1,7 +1,5 @@
 package com.bitwarden.ui.platform.manager
 
-import com.bitwarden.annotation.OmitFromCoverage
-
 /**
  * Manages bidirectional text handling, ensuring proper display of text containing both
  * left-to-right (LTR) and right-to-left (RTL) characters. This is crucial for internationalization
@@ -75,22 +73,10 @@ interface BidiTextManager {
     fun formatPhoneNumber(phone: String): String
 
     /**
-     * Formats a credit/debit card number by grouping digits into 4-digit chunks and ensuring
-     * left-to-right display direction.
-     *
-     * Example: "1234567812345678" becomes "1234 5678 1234 5678" displayed as LTR.
+     * Formats a credit/debit card number by ensuring left-to-right display direction.
      *
      * @param number The card number to format.
      * @return The formatted card number with LTR directionality.
      */
     fun formatCardNumber(number: String): String
-
-    @Suppress("UndocumentedPublicClass")
-    @OmitFromCoverage
-    companion object {
-        /**
-         * Creates a new [BidiTextManager] instance.
-         */
-        fun create(): BidiTextManager = BidiTextManagerImpl()
-    }
 }

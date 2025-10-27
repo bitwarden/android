@@ -29,6 +29,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.dsl.bidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -71,6 +72,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     private var onNavigateToPasswordHistoryId: String? = null
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
+    private val bidiTextManager = bidiTextManager()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -83,6 +85,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent(
             intentManager = intentManager,
+            bidiTextManager = bidiTextManager,
         ) {
             VaultItemScreen(
                 viewModel = viewModel,
