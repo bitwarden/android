@@ -501,6 +501,20 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     }
 
     /**
+     *  Asserts that the stored vault timeout matches the [expected] one.
+     */
+    fun assertVaultTimeoutInMinutes(userId: String, expected: Int?) {
+        assertEquals(expected, storedVaultTimeoutInMinutes[userId])
+    }
+
+    /**
+     *  Asserts that the stored vault timeout action matches the [expected] one.
+     */
+    fun assertVaultTimeoutAction(userId: String, expected: VaultTimeoutAction?) {
+        assertEquals(expected, storedVaultTimeoutActions[userId])
+    }
+
+    /**
      * Asserts that the stored browser autofill dialog reshow time matches the [expected] one.
      */
     fun assertBrowserAutofillDialogReshowTime(expected: Instant?) {
