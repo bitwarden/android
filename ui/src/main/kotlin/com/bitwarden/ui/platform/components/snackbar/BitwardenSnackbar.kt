@@ -90,7 +90,12 @@ fun BitwardenSnackbar(
                 Text(
                     text = bitwardenSnackbarData.message(),
                     color = BitwardenTheme.colorScheme.text.reversed,
-                    style = BitwardenTheme.typography.bodyMedium,
+                    style = if (bitwardenSnackbarData.messageHeader != null) {
+                        BitwardenTheme.typography.bodyMedium
+                    } else {
+                        // Upgrade the font when it is stand alone.
+                        BitwardenTheme.typography.titleSmall
+                    },
                 )
                 bitwardenSnackbarData.actionLabel?.let {
                     Spacer(Modifier.height(12.dp))
