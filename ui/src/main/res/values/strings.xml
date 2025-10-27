@@ -479,6 +479,7 @@ Scanning will happen automatically.</string>
     <string name="seven_days">7 days</string>
     <string name="thirty_days">30 days</string>
     <string name="custom">Custom</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">Due to an enterprise policy, you are only able to delete an existing Send.</string>
     <string name="about_send">About Send</string>
@@ -497,6 +498,7 @@ Scanning will happen automatically.</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">%1$d hour</item>
         <item quantity="other">%1$d hours</item>

@@ -99,6 +99,7 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showChevron: Boolean = true,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -161,11 +162,15 @@ fun BitwardenTextSelectionButton(
                 BitwardenRowOfActions(
                     modifier = Modifier.padding(paddingValues = actionsPadding),
                     actions = {
-                        Icon(
-                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
-                            contentDescription = null,
-                            modifier = Modifier.minimumInteractiveComponentSize(),
-                        )
+                        if (showChevron) {
+                            Icon(
+                                painter = rememberVectorPainter(
+                                    id = BitwardenDrawable.ic_chevron_down,
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.minimumInteractiveComponentSize(),
+                            )
+                        }
                         actions()
                     },
                 )
