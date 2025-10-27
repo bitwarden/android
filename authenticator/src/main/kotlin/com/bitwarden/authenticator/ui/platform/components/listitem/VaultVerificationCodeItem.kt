@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -98,6 +99,8 @@ fun VaultVerificationCodeItem(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
+
     Row(
         modifier = modifier
             .testTag(tag = "Item")
@@ -154,7 +157,7 @@ fun VaultVerificationCodeItem(
 
         Text(
             modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode.chunked(size = 3).joinToString(separator = " "),
+            text = bidiTextManager.formatVerificationCode(authCode, chunkSize = 3),
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )
