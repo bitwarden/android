@@ -140,7 +140,7 @@ fun VaultItemIdentityContent(
             item(key = "ssn") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.ssn),
-                    value = ssn,
+                    value = bidiTextManager.forceLtr(ssn),
                     copyContentDescription = stringResource(id = BitwardenString.copy_ssn),
                     textFieldTestTag = "IdentitySsnEntry",
                     copyActionTestTag = "IdentityCopySsnButton",
@@ -162,7 +162,7 @@ fun VaultItemIdentityContent(
             item(key = "passportNumber") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.passport_number),
-                    value = passportNumber,
+                    value = bidiTextManager.unicodeWrap(passportNumber),
                     copyContentDescription = stringResource(id = BitwardenString.copy_passport_number),
                     textFieldTestTag = "IdentityPassportNumberEntry",
                     copyActionTestTag = "IdentityCopyPassportNumberButton",
@@ -184,7 +184,7 @@ fun VaultItemIdentityContent(
             item(key = "licenseNumber") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.license_number),
-                    value = licenseNumber,
+                    value = bidiTextManager.unicodeWrap(licenseNumber),
                     copyContentDescription = stringResource(id = BitwardenString.copy_license_number),
                     textFieldTestTag = "IdentityLicenseNumberEntry",
                     copyActionTestTag = "IdentityCopyLicenseNumberButton",
@@ -228,7 +228,7 @@ fun VaultItemIdentityContent(
             item(key = "phone") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.phone),
-                    value = phone,
+                    value = bidiTextManager.formatPhoneNumber(phone),
                     copyContentDescription = stringResource(id = BitwardenString.copy_phone),
                     textFieldTestTag = "IdentityPhoneEntry",
                     copyActionTestTag = "IdentityCopyPhoneButton",
@@ -250,7 +250,7 @@ fun VaultItemIdentityContent(
             item(key = "address") {
                 IdentityCopyField(
                     label = stringResource(id = BitwardenString.address),
-                    value = address,
+                    value = bidiTextManager.unicodeWrap(address),
                     copyContentDescription = stringResource(id = BitwardenString.copy_address),
                     textFieldTestTag = "IdentityAddressEntry",
                     copyActionTestTag = "IdentityCopyAddressButton",

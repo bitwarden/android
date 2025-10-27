@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.composition.LocalBidiTextManager
+import com.bitwarden.ui.platform.manager.BidiTextManager
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -505,7 +506,7 @@ private fun TotpField(
 @Composable
 private fun UriField(
     uriData: VaultItemState.ViewState.Content.ItemType.Login.UriData,
-    bidiTextManager: com.bitwarden.ui.platform.manager.bidi.BidiTextManager,
+    bidiTextManager: BidiTextManager,
     onCopyUriClick: (String) -> Unit,
     onLaunchUriClick: (String) -> Unit,
     cardStyle: CardStyle,
