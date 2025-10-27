@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -49,6 +50,7 @@ fun VaultItemCardContent(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
+    val bidiTextManager = LocalBidiTextManager.current
     val applyIconBackground = cardState.paymentCardBrandIconData == null
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
@@ -94,7 +96,7 @@ fun VaultItemCardContent(
             item(key = "cardNumber") {
                 BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.number),
-                    value = numberData.number,
+                    value = bidiTextManager.formatCardNumber(numberData.number),
                     onValueChange = {},
                     showPassword = numberData.isVisible,
                     showPasswordChange = vaultCardItemTypeHandlers.onShowNumberClick,
@@ -174,7 +176,7 @@ fun VaultItemCardContent(
             item(key = "securityCode") {
                 BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.security_code),
-                    value = securityCodeData.code,
+                    value = bidiTextManager.forceLtr(securityCodeData.code),
                     onValueChange = {},
                     showPassword = securityCodeData.isVisible,
                     showPasswordChange = vaultCardItemTypeHandlers.onShowSecurityCodeClick,
