@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.composition.LocalBidiTextManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -445,12 +446,15 @@ private fun TotpField(
     onAuthenticatorHelpToolTipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
+
     if (enabled) {
         BitwardenTextField(
             label = stringResource(id = BitwardenString.authenticator_key),
-            value = totpCodeItemData.verificationCode
-                .chunked(AUTH_CODE_SPACING_INTERVAL)
-                .joinToString(" "),
+            value = bidiTextManager.formatVerificationCode(
+                totpCodeItemData.verificationCode,
+                chunkSize = AUTH_CODE_SPACING_INTERVAL,
+            ),
             onValueChange = { },
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             readOnly = true,
