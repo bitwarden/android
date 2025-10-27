@@ -1047,7 +1047,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         composeTestRule
             // Check for exact text to differentiate from the Custom label on the Vault Timeout
             // item above.
-            .onNode(hasTextExactly("Custom", "00:00"))
+            .onNode(hasTextExactly("Custom timeout", "0 minutes"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -1056,7 +1056,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -1064,7 +1064,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasTextExactly("Custom", "20:34"))
+            .onNode(hasTextExactly("Custom timeout", "20 hours, 34 minutes"))
             .assertIsDisplayed()
     }
 
@@ -1076,7 +1076,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -1102,7 +1102,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -1123,7 +1123,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -1158,7 +1158,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
