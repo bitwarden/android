@@ -392,10 +392,11 @@ private fun PasswordField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
+    val bidiTextManager = LocalBidiTextManager.current
     if (passwordData.canViewPassword) {
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.password),
-            value = passwordData.password,
+            value = bidiTextManager.unicodeWrap(passwordData.password),
             showPasswordChange = { onShowPasswordClick(it) },
             showPassword = passwordData.isVisible,
             onValueChange = { },
@@ -430,7 +431,7 @@ private fun PasswordField(
     } else {
         BitwardenHiddenPasswordField(
             label = stringResource(id = BitwardenString.password),
-            value = passwordData.password,
+            value = bidiTextManager.unicodeWrap(passwordData.password),
             passwordFieldTestTag = "LoginPasswordEntry",
             cardStyle = cardStyle,
             modifier = modifier,
