@@ -4782,6 +4782,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    isExportable = true,
                 ),
             ),
             hasPendingAccountAddition = false,

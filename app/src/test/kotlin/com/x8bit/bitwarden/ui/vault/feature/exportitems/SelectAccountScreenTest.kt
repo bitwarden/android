@@ -53,7 +53,7 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
             credentialExchangeRequestValidator = credentialExchangeRequestValidator,
         ) {
             SelectAccountScreen(
-                onAccountSelected = { onAccountSelectedCalled = true },
+                onAccountSelected = { _, _ -> onAccountSelectedCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -126,6 +126,7 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
             mockEventFlow.emit(
                 SelectAccountEvent.NavigateToPasswordVerification(
                     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
+                    hasOtherAccounts = true,
                 ),
             )
 

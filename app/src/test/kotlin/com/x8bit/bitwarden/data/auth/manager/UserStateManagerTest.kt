@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -48,12 +49,17 @@ class UserStateManagerTest {
         every { isActiveUserUnlockingFlow } returns mutableIsActiveUserUnlockingFlow
     }
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
+    private val policyManager: PolicyManager = mockk {
+        every { getUserPolicies(any(), any()) } returns emptyList()
+    }
 
     private val userStateManager: UserStateManager = UserStateManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         firstTimeActionManager = firstTimeActionManager,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
+        policyManager = policyManager,
+
     )
 
     @BeforeEach
@@ -87,6 +93,7 @@ class UserStateManagerTest {
                         vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                         isDeviceTrustedProvider = { false },
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -114,6 +121,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -132,6 +140,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -162,6 +171,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -181,6 +191,7 @@ class UserStateManagerTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            getUserPolicies = { _, _ -> emptyList() },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -193,6 +204,7 @@ class UserStateManagerTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            getUserPolicies = { _, _ -> emptyList() },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 

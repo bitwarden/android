@@ -389,6 +389,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -462,6 +463,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -502,6 +504,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -571,6 +574,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -617,6 +621,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -689,6 +694,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -735,6 +741,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -807,6 +814,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -853,6 +861,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -925,6 +934,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -975,6 +985,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1047,6 +1058,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1076,6 +1088,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1126,6 +1139,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1155,6 +1169,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1207,6 +1222,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1254,6 +1270,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1328,6 +1345,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1376,6 +1394,7 @@ class UserStateJsonExtensionsTest {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = false,
                         ),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1450,6 +1469,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(
                         showImportLoginsCard = false,
                     ),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
