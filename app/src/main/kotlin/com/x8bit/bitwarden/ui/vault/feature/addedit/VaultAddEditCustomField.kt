@@ -222,7 +222,7 @@ private fun CustomFieldTextField(
         label = label,
         value = value,
         onValueChange = onValueChanged,
-        singleLine = true,
+        singleLine = false,
         textFieldTestTag = "CustomFieldValue",
         actions = {
             BitwardenStandardIconButton(
