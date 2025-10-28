@@ -40,7 +40,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -56,6 +55,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
+import com.bitwarden.ui.platform.components.util.compoundVisualTransformation
+import com.bitwarden.ui.platform.components.util.forceLtrVisualTransformation
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -140,6 +141,21 @@ fun BitwardenPasswordField(
         TextToolbarType.NONE -> BitwardenEmptyTextToolbar
     }
     var lastTextValue by remember(value) { mutableStateOf(value = value) }
+
+    val visualTransformation = when {
+        !showPassword -> compoundVisualTransformation(
+            PasswordVisualTransformation(),
+            forceLtrVisualTransformation(),
+        )
+
+        readOnly -> compoundVisualTransformation(
+            nonLetterColorVisualTransformation(),
+            forceLtrVisualTransformation(),
+        )
+
+        else -> forceLtrVisualTransformation()
+    }
+
     CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
         Column(
             modifier = modifier
@@ -191,11 +207,7 @@ fun BitwardenPasswordField(
                         onValueChange(it.text)
                     }
                 },
-                visualTransformation = when {
-                    !showPassword -> PasswordVisualTransformation()
-                    readOnly -> nonLetterColorVisualTransformation()
-                    else -> VisualTransformation.None
-                },
+                visualTransformation = visualTransformation,
                 singleLine = singleLine,
                 readOnly = readOnly,
                 keyboardOptions = KeyboardOptions(

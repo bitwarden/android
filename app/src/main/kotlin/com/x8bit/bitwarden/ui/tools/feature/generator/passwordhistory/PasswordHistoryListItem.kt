@@ -22,6 +22,8 @@ import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.compoundVisualTransformation
+import com.bitwarden.ui.platform.components.util.forceLtrVisualTransformation
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -61,7 +63,10 @@ fun PasswordHistoryListItem(
             )
             Text(
                 text = formattedText.withVisualTransformation(
-                    visualTransformation = nonLetterColorVisualTransformation(),
+                    visualTransformation = compoundVisualTransformation(
+                        forceLtrVisualTransformation(),
+                        nonLetterColorVisualTransformation(),
+                    ),
                 ),
                 style = textStyle,
                 color = BitwardenTheme.colorScheme.text.primary,

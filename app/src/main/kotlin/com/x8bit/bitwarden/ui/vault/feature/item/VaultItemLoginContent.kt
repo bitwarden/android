@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.components.util.forceLtrVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -473,6 +474,7 @@ private fun TotpField(
             },
             textFieldTestTag = "LoginTotpEntry",
             cardStyle = CardStyle.Full,
+            visualTransformation = forceLtrVisualTransformation(),
             modifier = modifier,
         )
     } else {
@@ -528,6 +530,7 @@ private fun UriField(
         },
         textFieldTestTag = "LoginUriEntry",
         cardStyle = cardStyle,
+        visualTransformation = forceLtrVisualTransformation(),
         modifier = modifier,
     )
 }
