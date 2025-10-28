@@ -54,6 +54,16 @@ class PolicyManagerImpl(
             }
             ?: emptyList()
 
+    override fun getUserPolicies(
+        userId: String,
+        type: PolicyTypeJson,
+    ): List<SyncResponseJson.Policy> =
+        filterPolicies(
+            userId = userId,
+            type = type,
+            policies = authDiskSource.getPolicies(userId = userId),
+        ) ?: emptyList()
+
     /**
      * A helper method to filter policies.
      */

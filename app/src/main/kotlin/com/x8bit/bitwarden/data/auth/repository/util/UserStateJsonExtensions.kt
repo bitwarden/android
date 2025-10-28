@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
@@ -164,6 +165,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
+    getUserPolicies: (userId: String, policy: PolicyTypeJson) -> List<SyncResponseJson.Policy>?,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -203,6 +205,21 @@ fun UserStateJson.toUserState(
                     hasManageResetPasswordPermission.takeIf { trustedDevice != null }
                 val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
                     (tdeUserNeedsMasterPassword ?: (keyConnectorOptions == null))
+
+                val personalOwnershipRestrictedOrgIds = getUserPolicies(
+                    userId,
+                    PolicyTypeJson.PERSONAL_OWNERSHIP,
+                )
+                    .orEmpty()
+                    .map { it.organizationId }
+
+                val personalVaultExportRestrictedOrgIds = getUserPolicies(
+                    userId,
+                    PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                )
+                    .orEmpty()
+                    .map { it.organizationId }
+
                 UserState.Account(
                     userId = userId,
                     name = profile.name,
@@ -231,6 +248,10 @@ fun UserStateJson.toUserState(
                     // using the app prior to the release of the onboarding flow.
                     onboardingStatus = onboardingStatus ?: OnboardingStatus.COMPLETE,
                     firstTimeState = firstTimeState,
+                    isExportable = organizations.none {
+                        it.id in personalOwnershipRestrictedOrgIds ||
+                            it.id in personalVaultExportRestrictedOrgIds
+                    },
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

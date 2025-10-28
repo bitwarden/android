@@ -315,6 +315,13 @@ class VaultSyncManagerImpl(
                     }
                 }
 
+                // Treat absent network policies as known empty data to
+                // distinguish between unknown null data.
+                authDiskSource.storePolicies(
+                    userId = userId,
+                    policies = syncResponse.policies.orEmpty(),
+                )
+
                 // Update user information with additional information from sync response
                 authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
                     syncResponse = syncResponse,
@@ -323,12 +330,6 @@ class VaultSyncManagerImpl(
                 unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                 storeProfileData(syncResponse = syncResponse)
 
-                // Treat absent network policies as known empty data to
-                // distinguish between unknown null data.
-                authDiskSource.storePolicies(
-                    userId = userId,
-                    policies = syncResponse.policies.orEmpty(),
-                )
                 settingsDiskSource.storeLastSyncTime(
                     userId = userId,
                     lastSyncTime = clock.instant(),
