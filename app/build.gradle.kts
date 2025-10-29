@@ -302,14 +302,89 @@ tasks {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + 
-            // Explicitly setting the user Country and Language because tests assume en-US 
-            "-Duser.country=US" + 
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+            // Explicitly setting the user Country and Language because tests assume en-US
+            "-Duser.country=US" +
             "-Duser.language=en"
     }
 }
 
 afterEvaluate {
+    // Test sharding for parallel CI execution (Tier 2 optimization)
+    val testTask = tasks.named<Test>("testStandardDebugUnitTest").get()
+
+    tasks.register<Test>("testShard1Vault") {
+        description = "Run Shard 1: Vault UI tests (1,476 tests)"
+        group = "verification"
+        testClassesDirs = testTask.testClassesDirs
+        classpath = testTask.classpath
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        filter {
+            includeTestsMatching("com.x8bit.bitwarden.ui.vault.*")
+        }
+    }
+
+    tasks.register<Test>("testShard2Platform") {
+        description = "Run Shard 2: Platform, Tools, Credentials UI tests (1,270 tests)"
+        group = "verification"
+        testClassesDirs = testTask.testClassesDirs
+        classpath = testTask.classpath
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        filter {
+            includeTestsMatching("com.x8bit.bitwarden.ui.platform.*")
+            includeTestsMatching("com.x8bit.bitwarden.ui.tools.*")
+            includeTestsMatching("com.x8bit.bitwarden.ui.credentials.*")
+            includeTestsMatching("com.x8bit.bitwarden.ui.autofill.*")
+        }
+    }
+
+    tasks.register<Test>("testShard3Auth") {
+        description = "Run Shard 3: Auth & Autofill data layer tests (738 tests)"
+        group = "verification"
+        testClassesDirs = testTask.testClassesDirs
+        classpath = testTask.classpath
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        filter {
+            includeTestsMatching("com.x8bit.bitwarden.data.auth.*")
+            includeTestsMatching("com.x8bit.bitwarden.data.autofill.*")
+        }
+    }
+
+    tasks.register<Test>("testShard4Data") {
+        description = "Run Shard 4: Data layer + Integration tests (1,663 tests)"
+        group = "verification"
+        testClassesDirs = testTask.testClassesDirs
+        classpath = testTask.classpath
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        filter {
+            includeTestsMatching("com.x8bit.bitwarden.data.vault.*")
+            includeTestsMatching("com.x8bit.bitwarden.data.platform.*")
+            includeTestsMatching("com.x8bit.bitwarden.data.tools.*")
+            includeTestsMatching("com.x8bit.bitwarden.data.credentials.*")
+            includeTestsMatching("com.x8bit.bitwarden.data.util.*")
+            includeTestsMatching("com.x8bit.bitwarden.MainViewModelTest")
+            includeTestsMatching("com.x8bit.bitwarden.*CallbackViewModelTest")
+        }
+    }
+
+    tasks.register("testAllShards") {
+        description = "Run all test shards (for local verification)"
+        group = "verification"
+        dependsOn("testShard1Vault", "testShard2Platform", "testShard3Auth", "testShard4Data")
+    }
+
     // Disable Fdroid-specific tasks that we want to exclude
     val fdroidTasksToDisable = tasks.withType<GoogleServicesTask>() +
         tasks.withType<InjectMappingFileIdTask>() +
