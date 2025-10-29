@@ -64,8 +64,8 @@ fun PasswordHistoryListItem(
             Text(
                 text = formattedText.withVisualTransformation(
                     visualTransformation = compoundVisualTransformation(
-                        forceLtrVisualTransformation(),
                         nonLetterColorVisualTransformation(),
+                        forceLtrVisualTransformation(),
                     ),
                 ),
                 style = textStyle,
