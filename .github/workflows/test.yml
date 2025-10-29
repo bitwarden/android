@@ -107,17 +107,17 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
 
-      - name: Test library modules
+      - name: Test library modules and generate coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./gradlew :core:testDebug :data:testDebug :network:testDebug :ui:testDebug :authenticatorbridge:testDebug :cxf:testDebug
-
-      - name: Generate library coverage reports
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ./gradlew :core:koverXmlReportDebug :data:koverXmlReportDebug :network:koverXmlReportDebug :ui:koverXmlReportDebug :authenticatorbridge:koverXmlReportDebug :cxf:koverXmlReportDebug
+          ./gradlew \
+            :core:testDebug :core:koverXmlReportDebug \
+            :data:testDebug :data:koverXmlReportDebug \
+            :network:testDebug :network:koverXmlReportDebug \
+            :ui:testDebug :ui:koverXmlReportDebug \
+            :authenticatorbridge:testDebug :authenticatorbridge:koverXmlReportDebug \
+            :cxf:testDebug :cxf:koverXmlReportDebug
 
       - name: Upload library test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -185,15 +185,10 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
 
-      - name: Test app module
+      - name: Test app module and generate coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :app:testStandardDebug
-
-      - name: Generate app coverage report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :app:koverXmlReportStandardDebug
+        run: ./gradlew :app:testStandardDebug :app:koverXmlReportStandardDebug
 
       - name: Upload app test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -249,15 +244,10 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
 
-      - name: Test authenticator module
+      - name: Test authenticator module and generate coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :authenticator:testDebug
-
-      - name: Generate authenticator coverage report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :authenticator:koverXmlReportDebug
+        run: ./gradlew :authenticator:testDebug :authenticator:koverXmlReportDebug
 
       - name: Upload authenticator test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
