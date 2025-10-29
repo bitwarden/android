@@ -146,10 +146,13 @@ jobs:
             cxf/build/reports/kover/
 
   test-app:
-    name: Test App Module
+    name: Test App Module (Shard ${{ matrix.shard }})
     runs-on: ubuntu-24.04
     permissions:
       packages: read
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
 
     steps:
       - name: Check out repo
@@ -185,23 +188,23 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
 
-      - name: Test app module and generate coverage
+      - name: Test app module shard ${{ matrix.shard }} and generate coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :app:testStandardDebug :app:koverXmlReportStandardDebug
+        run: ./gradlew :app:testStandardDebugShard${{ matrix.shard }} :app:koverXmlReportStandardDebug
 
-      - name: Upload app test reports
+      - name: Upload app test reports (shard ${{ matrix.shard }})
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
-          name: test-reports-app
+          name: test-reports-app-shard-${{ matrix.shard }}
           path: app/build/reports/tests/
 
-      - name: Upload app coverage data
+      - name: Upload app coverage data (shard ${{ matrix.shard }})
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
-          name: coverage-app
+          name: coverage-app-shard-${{ matrix.shard }}
           path: app/build/reports/kover/
 
   test-authenticator:
