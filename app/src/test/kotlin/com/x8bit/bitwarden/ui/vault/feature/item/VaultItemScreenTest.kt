@@ -64,7 +64,6 @@ import org.junit.Test
 import java.time.Instant
 
 @Suppress("LargeClass")
-
 class VaultItemScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -1003,7 +1002,6 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Password")
             .assertTextEquals("Password", "${LRO}p@ssw0rd$PDF")
@@ -2801,7 +2799,6 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Number")
             .assertTextEquals("Number", "${LRO}number$PDF")
@@ -2952,7 +2949,6 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Security code")
             .assertTextEquals("Security code", "${LRO}123$PDF")

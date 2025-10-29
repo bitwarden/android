@@ -684,7 +684,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Show")
             .performClick()
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Password")
             .assertTextEquals("Password", "${LRO}p@ssw0rd$PDF")
@@ -1007,7 +1006,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertExists()
             .performClick()
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Authenticator key")
             .assertTextEquals("Authenticator key", "${LRO}TestCode$PDF")
@@ -1017,7 +1015,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             updateLoginType(currentState) { copy(totp = "NewTestCode") }
         }
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithTextAfterScroll("Authenticator key")
             .assertTextEquals("Authenticator key", "${LRO}NewTestCode$PDF")
@@ -1045,7 +1042,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertExists()
             .performClick()
 
-        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Authenticator key")
             .assertTextEquals("Authenticator key", "${LRO}TestCode$PDF")
