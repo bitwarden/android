@@ -6,6 +6,8 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -59,7 +61,6 @@ class UserStateManagerTest {
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
         policyManager = policyManager,
-
     )
 
     @BeforeEach
@@ -254,6 +255,54 @@ class UserStateManagerTest {
         userStateManager.hasPendingAccountDeletion = false
         assertFalse(userStateManager.hasPendingAccountDeletion)
     }
+
+    @Test
+    fun `userStateFlow should update isExportable when getUserPolicies returns policies`() =
+        runTest {
+            val policy = SyncResponseJson.Policy(
+                id = "policyId",
+                organizationId = "mockId-1",
+                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                data = null,
+                isEnabled = true,
+            )
+            every { policyManager.getUserPolicies(any(), any()) } returns listOf(policy)
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            fakeAuthDiskSource.apply {
+                storeOrganizations(
+                    userId = USER_ID_1,
+                    organizations = ORGANIZATIONS_1,
+                )
+            }
+            val userState = SINGLE_USER_STATE_1.toUserState(
+                vaultState = VAULT_UNLOCK_DATA,
+                userAccountTokens = emptyList(),
+                userOrganizationsList = listOf(
+                    UserOrganizations(
+                        userId = USER_ID_1,
+                        organizations = ORGANIZATIONS_1.toOrganizations(),
+                    ),
+                ),
+                userIsUsingKeyConnectorList = emptyList(),
+                hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
+                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                isDeviceTrustedProvider = { false },
+                onboardingStatus = null,
+                firstTimeState = FIRST_TIME_STATE,
+                getUserPolicies = { _, _ -> listOf(policy) },
+            )
+
+            // Assert
+            userStateManager.userStateFlow.test {
+                val actualItem = awaitItem()
+                assertEquals(userState, actualItem)
+
+                assertEquals(false, actualItem?.accounts[0]?.isExportable)
+            }
+        }
 }
 
 private const val EMAIL_1 = "test@bitwarden.com"
@@ -266,6 +315,7 @@ private val FIRST_TIME_STATE = FirstTimeState(
 )
 
 private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
+private val ORGANIZATIONS_1 = listOf(createMockOrganization(number = 1))
 private val USER_ORGANIZATIONS = listOf(
     UserOrganizations(
         userId = USER_ID_1,

@@ -317,6 +317,8 @@ class VaultSyncManagerImpl(
 
                 // Treat absent network policies as known empty data to
                 // distinguish between unknown null data.
+                // The user state update will trigger flows that depend on the latest policies.
+                // We must store the new policies first to prevent old data on UserState.
                 authDiskSource.storePolicies(
                     userId = userId,
                     policies = syncResponse.policies.orEmpty(),

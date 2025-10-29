@@ -165,7 +165,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
-    getUserPolicies: (userId: String, policy: PolicyTypeJson) -> List<SyncResponseJson.Policy>?,
+    getUserPolicies: (userId: String, policy: PolicyTypeJson) -> List<SyncResponseJson.Policy>,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
