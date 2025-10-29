@@ -17,12 +17,11 @@ env:
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
 jobs:
-  test:
-    name: Test
+  lint-and-static-analysis:
+    name: Lint & Static Analysis
     runs-on: ubuntu-24.04
     permissions:
       packages: read
-      pull-requests: write
 
     steps:
       - name: Check out repo
@@ -52,6 +51,240 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-
 
+      - name: Configure JDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ env._JAVA_VERSION }}
+
+      - name: Run detekt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew detekt
+
+      - name: Run lint checks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew lintStandardDebug lintDebug
+
+  test-libraries:
+    name: Test Library Modules
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: read
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Cache Gradle files
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ env._JAVA_VERSION }}
+
+      - name: Test library modules
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew :core:testDebug :data:testDebug :network:testDebug :ui:testDebug :authenticatorbridge:testDebug :cxf:testDebug
+
+      - name: Upload library test reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: test-reports-libraries
+          path: |
+            core/build/reports/tests/
+            data/build/reports/tests/
+            network/build/reports/tests/
+            ui/build/reports/tests/
+            authenticatorbridge/build/reports/tests/
+            cxf/build/reports/tests/
+
+      - name: Upload library coverage data
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: coverage-libraries
+          path: |
+            core/build/reports/kover/
+            data/build/reports/kover/
+            network/build/reports/kover/
+            ui/build/reports/kover/
+            authenticatorbridge/build/reports/kover/
+            cxf/build/reports/kover/
+
+  test-app:
+    name: Test App Module
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: read
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Cache Gradle files
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ env._JAVA_VERSION }}
+
+      - name: Test app module
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :app:testStandardDebug
+
+      - name: Upload app test reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: test-reports-app
+          path: app/build/reports/tests/
+
+      - name: Upload app coverage data
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: coverage-app
+          path: app/build/reports/kover/
+
+  test-authenticator:
+    name: Test Authenticator Module
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: read
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Cache Gradle files
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ env._JAVA_VERSION }}
+
+      - name: Test authenticator module
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :authenticator:testDebug
+
+      - name: Upload authenticator test reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: test-reports-authenticator
+          path: authenticator/build/reports/tests/
+
+      - name: Upload authenticator coverage data
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: coverage-authenticator
+          path: authenticator/build/reports/kover/
+
+  aggregate-coverage:
+    name: Aggregate Coverage & Upload
+    runs-on: ubuntu-24.04
+    needs: [test-libraries, test-app, test-authenticator]
+    if: always()
+    permissions:
+      packages: read
+      pull-requests: write
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Cache Gradle files
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
       - name: Configure Ruby
         uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
         with:
@@ -69,26 +302,25 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Build and test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
-        run: |
-          bundle exec fastlane check
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: coverage-*
+          merge-multiple: true
+          path: coverage-data/
 
-      - name: Upload test reports
+      - name: Generate merged coverage report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec fastlane koverXmlReportMergedCoverage
+
+      - name: Upload merged coverage report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
-          name: test-reports
-          path: |
-            build/reports/kover/reportMergedCoverage.xml
-            app/build/reports/tests/
-            authenticator/build/reports/tests/
-            authenticatorbridge/build/reports/tests/
-            core/build/reports/tests/
-            data/build/reports/tests/
-            network/build/reports/tests/
-            ui/build/reports/tests/
+          name: merged-coverage-report
+          path: build/reports/kover/reportMergedCoverage.xml
 
       - name: Upload to codecov.io
         id: upload-to-codecov
@@ -101,7 +333,7 @@ jobs:
           fail_ci_if_error: true
           disable_search: true
 
-      - name: Comment PR if tests failed
+      - name: Comment PR if coverage upload failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
         env:
           PR_NUMBER: ${{ github.event.number }}
@@ -109,9 +341,9 @@ jobs:
           RUN_ACTOR: ${{ github.triggering_actor }}
         run: |
           echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
-          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> "$GITHUB_STEP_SUMMARY"
+          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Aggregate Coverage & Upload\" job for more details." >> "$GITHUB_STEP_SUMMARY"
 
           if [ -n "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of ['$_GITHUB_ACTION_RUN_URL'] for more details.'
             gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
           fi
