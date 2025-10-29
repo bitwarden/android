@@ -100,7 +100,7 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("${LRO}${password.password}$PDF").assertIsDisplayed()
+        composeTestRule.onNodeWithText("$LRO${password.password}$PDF").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Copy").performClick()
 
         verify {
