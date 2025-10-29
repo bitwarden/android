@@ -113,6 +113,12 @@ jobs:
         run: |
           ./gradlew :core:testDebug :data:testDebug :network:testDebug :ui:testDebug :authenticatorbridge:testDebug :cxf:testDebug
 
+      - name: Generate library coverage reports
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew :core:koverXmlReportDebug :data:koverXmlReportDebug :network:koverXmlReportDebug :ui:koverXmlReportDebug :authenticatorbridge:koverXmlReportDebug :cxf:koverXmlReportDebug
+
       - name: Upload library test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
@@ -184,6 +190,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew :app:testStandardDebug
 
+      - name: Generate app coverage report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :app:koverXmlReportStandardDebug
+
       - name: Upload app test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
@@ -243,6 +254,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew :authenticator:testDebug
 
+      - name: Generate authenticator coverage report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :authenticator:koverXmlReportDebug
+
       - name: Upload authenticator test reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
@@ -285,42 +301,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-v2-
 
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          gem install bundler:2.2.27
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
       - name: Download all coverage artifacts
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           pattern: coverage-*
-          merge-multiple: true
-          path: coverage-data/
-
-      - name: Generate merged coverage report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane koverXmlReportMergedCoverage
-
-      - name: Upload merged coverage report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: always()
-        with:
-          name: merged-coverage-report
-          path: build/reports/kover/reportMergedCoverage.xml
+          path: coverage-reports/
 
       - name: Upload to codecov.io
         id: upload-to-codecov
@@ -329,9 +314,9 @@ jobs:
         continue-on-error: true
         with:
           os: linux
-          files: build/reports/kover/reportMergedCoverage.xml
+          directory: coverage-reports/
           fail_ci_if_error: true
-          disable_search: true
+          disable_search: false
 
       - name: Comment PR if coverage upload failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
