@@ -58,11 +58,13 @@ class PolicyManagerImpl(
         userId: String,
         type: PolicyTypeJson,
     ): List<SyncResponseJson.Policy> =
-        filterPolicies(
-            userId = userId,
-            type = type,
-            policies = authDiskSource.getPolicies(userId = userId),
-        ) ?: emptyList()
+        this
+            .filterPolicies(
+                userId = userId,
+                type = type,
+                policies = authDiskSource.getPolicies(userId = userId),
+            )
+            .orEmpty()
 
     /**
      * A helper method to filter policies.

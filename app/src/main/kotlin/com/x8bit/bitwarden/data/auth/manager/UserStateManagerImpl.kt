@@ -169,7 +169,7 @@ class UserStateManagerImpl(
     private fun existingPolicies(
         userId: String,
         policyType: PolicyTypeJson,
-    ): List<SyncResponseJson.Policy>? = policyManager.getUserPolicies(
+    ): List<SyncResponseJson.Policy> = policyManager.getUserPolicies(
         userId = userId,
         type = policyType,
     )
