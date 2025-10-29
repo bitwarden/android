@@ -10,6 +10,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.util.LRO
+import com.bitwarden.ui.platform.components.util.PDF
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
@@ -98,7 +100,8 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText(password.password).assertIsDisplayed()
+        @Suppress("StringTemplate")
+        composeTestRule.onNodeWithText("${LRO}${password.password}$PDF").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Copy").performClick()
 
         verify {
@@ -164,6 +167,7 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Password1").assertIsDisplayed()
+        @Suppress("StringTemplate")
+        composeTestRule.onNodeWithText("${LRO}Password1$PDF").assertIsDisplayed()
     }
 }

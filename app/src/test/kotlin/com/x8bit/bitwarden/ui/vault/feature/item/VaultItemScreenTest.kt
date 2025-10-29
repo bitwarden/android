@@ -28,6 +28,8 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.util.LRO
+import com.bitwarden.ui.platform.components.util.PDF
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -62,6 +64,7 @@ import org.junit.Test
 import java.time.Instant
 
 @Suppress("LargeClass")
+
 class VaultItemScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -1000,9 +1003,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
+        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Password")
-            .assertTextEquals("Password", "p@ssw0rd")
+            .assertTextEquals("Password", "${LRO}p@ssw0rd$PDF")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Check password for data breaches")
@@ -2797,9 +2801,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
+        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Number")
-            .assertTextEquals("Number", "number")
+            .assertTextEquals("Number", "${LRO}number$PDF")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Number")
@@ -2947,9 +2952,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
+        @Suppress("StringTemplate")
         composeTestRule
             .onNodeWithText("Security code")
-            .assertTextEquals("Security code", "123")
+            .assertTextEquals("Security code", "${LRO}123$PDF")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithContentDescription("Copy security code")

@@ -9,8 +9,8 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
 // Unicode characters for forcing LTR direction
-internal const val LRO = "\u202A"
-internal const val PDF = "\u202C"
+const val LRO = "\u202A"
+const val PDF = "\u202C"
 
 /**
  * A [VisualTransformation] that forces the output to have an LTR text direction.
