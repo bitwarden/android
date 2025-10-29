@@ -168,7 +168,8 @@ fun VaultData.toViewState(
                 VaultItemListingState.FolderDisplayItem(
                     id = requireNotNull(folderView.id),
                     name = folderView.name,
-                    count = allFilteredCipherViewList
+                    count = decryptCipherListResult
+                        .successes
                         .count {
                             it.deletedDate == null &&
                                 !it.id.isNullOrBlank() &&
