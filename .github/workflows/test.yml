@@ -151,8 +151,22 @@ jobs:
     permissions:
       packages: read
     strategy:
+      fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
+        include:
+          - shard: 1
+            shard-name: "Vault"
+            test-task: "testShard1Vault"
+          - shard: 2
+            shard-name: "Platform"
+            test-task: "testShard2Platform"
+          - shard: 3
+            shard-name: "Auth"
+            test-task: "testShard3Auth"
+          - shard: 4
+            shard-name: "Data"
+            test-task: "testShard4Data"
 
     steps:
       - name: Check out repo
@@ -188,10 +202,10 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
 
-      - name: Test app module shard ${{ matrix.shard }} and generate coverage
+      - name: Test app shard ${{ matrix.shard }} (${{ matrix.shard-name }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :app:testStandardDebugShard${{ matrix.shard }} :app:koverXmlReportStandardDebug
+        run: ./gradlew :app:${{ matrix.test-task }} :app:koverXmlReportStandardDebug
 
       - name: Upload app test reports (shard ${{ matrix.shard }})
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
