@@ -10,10 +10,43 @@ import androidx.compose.ui.text.input.VisualTransformation
 /**
  * A [VisualTransformation] that chains multiple other [VisualTransformation]s.
  *
- * This is useful for applying multiple transformations to a text field. The transformations
- * are applied in the order they are provided.
+ * This is useful for applying multiple transformations to a text field. The
+ * transformations are applied in the order they are provided, with each transformation's
+ * output becoming the input for the next transformation.
+ *
+ * ## Example Usage
+ *
+ * Combining password masking with LTR direction enforcement:
+ * ```kotlin
+ * val visualTransformation = compoundVisualTransformation(
+ *     PasswordVisualTransformation(),
+ *     forceLtrVisualTransformation()
+ * )
+ * TextField(
+ *     value = password,
+ *     visualTransformation = visualTransformation
+ * )
+ * ```
+ *
+ * Combining color transformation with LTR for readonly fields:
+ * ```kotlin
+ * val visualTransformation = compoundVisualTransformation(
+ *     nonLetterColorVisualTransformation(),
+ *     forceLtrVisualTransformation()
+ * )
+ * ```
+ *
+ * ## Important Notes
+ *
+ * - Offset mapping is correctly composed through all transformations
+ * - The order of transformations matters (first applied is first in the list)
+ * - Use [compoundVisualTransformation] function for proper `remember` optimization
+ *
+ * @param transformations The visual transformations to apply in order
+ * @see compoundVisualTransformation
+ * @see forceLtrVisualTransformation
  */
-private class CompoundVisualTransformation(
+internal class CompoundVisualTransformation(
     vararg val transformations: VisualTransformation,
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {

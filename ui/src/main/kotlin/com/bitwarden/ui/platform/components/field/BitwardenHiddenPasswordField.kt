@@ -16,8 +16,6 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.util.compoundVisualTransformation
-import com.bitwarden.ui.platform.components.util.forceLtrVisualTransformation
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -46,10 +44,7 @@ fun BitwardenHiddenPasswordField(
             label = label?.let { { Text(text = it) } },
             value = value,
             onValueChange = { },
-            visualTransformation = compoundVisualTransformation(
-                PasswordVisualTransformation(),
-                forceLtrVisualTransformation(),
-            ),
+            visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
             enabled = false,
             readOnly = true,

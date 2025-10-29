@@ -143,10 +143,7 @@ fun BitwardenPasswordField(
     var lastTextValue by remember(value) { mutableStateOf(value = value) }
 
     val visualTransformation = when {
-        !showPassword -> compoundVisualTransformation(
-            PasswordVisualTransformation(),
-            forceLtrVisualTransformation(),
-        )
+        !showPassword -> PasswordVisualTransformation()
 
         readOnly -> compoundVisualTransformation(
             nonLetterColorVisualTransformation(),
