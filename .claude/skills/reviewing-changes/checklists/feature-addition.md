@@ -1,8 +1,5 @@
 # Feature Addition Review Checklist
 
-**Review Depth**: Comprehensive (architecture, security, testing, code quality)
-**Risk Level**: HIGH
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).

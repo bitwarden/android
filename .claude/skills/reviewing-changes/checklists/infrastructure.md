@@ -1,8 +1,5 @@
 # Infrastructure Review Checklist
 
-**Review Depth**: Tooling-focused (CI/CD, build config, developer workflow)
-**Risk Level**: MEDIUM-HIGH (can break builds/deployments)
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).

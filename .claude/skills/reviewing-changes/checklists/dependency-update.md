@@ -1,8 +1,5 @@
 # Dependency Update Review Checklist
 
-**Review Depth**: Expedited (focused on compilation, security, breaking changes)
-**Risk Level**: LOW (unless security/crypto library or major version bump)
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).

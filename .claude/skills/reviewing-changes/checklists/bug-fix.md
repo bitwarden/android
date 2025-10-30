@@ -1,8 +1,5 @@
 # Bug Fix Review Checklist
 
-**Review Depth**: Focused (root cause analysis, regression prevention, side effects)
-**Risk Level**: MEDIUM
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).

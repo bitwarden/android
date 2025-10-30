@@ -1,8 +1,5 @@
 # UI Refinement Review Checklist
 
-**Review Depth**: Design-focused (Compose patterns, accessibility, design system compliance)
-**Risk Level**: MEDIUM
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).

@@ -1,8 +1,5 @@
 # Refactoring Review Checklist
 
-**Review Depth**: Pattern-focused (consistency, completeness, behavior preservation)
-**Risk Level**: MEDIUM-HIGH (depends on scope)
-
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
