@@ -232,11 +232,13 @@ class PolicyManagerTest {
             authDiskSource.getPolicies(USER_ID)
         } returns null
 
-        assertTrue(policyManager.getUserPolicies(
-            userId = USER_ID,
-            type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+        assertEquals(
+            emptyList<SyncResponseJson.Policy>(),
+            policyManager.getUserPolicies(
+                userId = USER_ID,
+                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+            ),
         )
-            .isEmpty())
     }
 
     @Test
@@ -255,20 +257,25 @@ class PolicyManagerTest {
                 type = OrganizationType.USER,
             ),
         )
-        every {
-            authDiskSource.getPolicies(USER_ID)
-        } returns listOf(
+
+        val listOfPolicies = listOf(
             createMockPolicy(
                 organizationId = "mockId-3",
                 isEnabled = true,
                 type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
             ),
         )
+        every {
+            authDiskSource.getPolicies(USER_ID)
+        } returns listOfPolicies
 
-        assertTrue(policyManager.getUserPolicies(
-            userId = USER_ID,
-            type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-        ).any())
+        assertEquals(
+            listOfPolicies,
+            policyManager.getUserPolicies(
+                userId = USER_ID,
+                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+            ),
+        )
     }
 }
 

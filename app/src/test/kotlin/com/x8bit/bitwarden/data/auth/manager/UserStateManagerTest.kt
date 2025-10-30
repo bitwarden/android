@@ -270,21 +270,10 @@ class UserStateManagerTest {
 
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
-            fakeAuthDiskSource.apply {
-                storeOrganizations(
-                    userId = USER_ID_1,
-                    organizations = ORGANIZATIONS_1,
-                )
-            }
             val userState = SINGLE_USER_STATE_1.toUserState(
                 vaultState = VAULT_UNLOCK_DATA,
                 userAccountTokens = emptyList(),
-                userOrganizationsList = listOf(
-                    UserOrganizations(
-                        userId = USER_ID_1,
-                        organizations = ORGANIZATIONS_1.toOrganizations(),
-                    ),
-                ),
+                userOrganizationsList = emptyList(),
                 userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
@@ -299,8 +288,6 @@ class UserStateManagerTest {
             userStateManager.userStateFlow.test {
                 val actualItem = awaitItem()
                 assertEquals(userState, actualItem)
-
-                assertEquals(false, actualItem?.accounts[0]?.isExportable)
             }
         }
 }
@@ -315,7 +302,6 @@ private val FIRST_TIME_STATE = FirstTimeState(
 )
 
 private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
-private val ORGANIZATIONS_1 = listOf(createMockOrganization(number = 1))
 private val USER_ORGANIZATIONS = listOf(
     UserOrganizations(
         userId = USER_ID_1,

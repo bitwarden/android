@@ -206,19 +206,15 @@ fun UserStateJson.toUserState(
                 val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
                     (tdeUserNeedsMasterPassword ?: (keyConnectorOptions == null))
 
-                val personalOwnershipRestrictedOrgIds = getUserPolicies(
+                val hasPersonalOwnershipRestrictedOrg = getUserPolicies(
                     userId,
                     PolicyTypeJson.PERSONAL_OWNERSHIP,
-                )
-                    .orEmpty()
-                    .map { it.organizationId }
+                ).isNotEmpty()
 
-                val personalVaultExportRestrictedOrgIds = getUserPolicies(
+                val hasPersonalVaultExportRestrictedOrg = getUserPolicies(
                     userId,
                     PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                )
-                    .orEmpty()
-                    .map { it.organizationId }
+                ).isNotEmpty()
 
                 UserState.Account(
                     userId = userId,
@@ -248,10 +244,8 @@ fun UserStateJson.toUserState(
                     // using the app prior to the release of the onboarding flow.
                     onboardingStatus = onboardingStatus ?: OnboardingStatus.COMPLETE,
                     firstTimeState = firstTimeState,
-                    isExportable = organizations.none {
-                        it.id in personalOwnershipRestrictedOrgIds ||
-                            it.id in personalVaultExportRestrictedOrgIds
-                    },
+                    isExportable = !hasPersonalOwnershipRestrictedOrg &&
+                        !hasPersonalVaultExportRestrictedOrg,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,
