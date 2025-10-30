@@ -1,5 +1,8 @@
 # Bug Fix Review Checklist
 
+**Review Depth**: Focused (root cause analysis, regression prevention, side effects)
+**Risk Level**: MEDIUM
+
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
@@ -11,6 +14,15 @@ After inline comments, provide one summary comment.
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Bug
+
+<thinking>
+Before evaluating the fix:
+1. What was the original bug/broken behavior?
+2. What is the expected correct behavior?
+3. What was the root cause?
+4. How was the bug discovered? (user report, test, production)
+5. What's the severity? (crash, data loss, UI glitch, minor annoyance)
+</thinking>
 
 **1. Understand root cause:**
 - What was the broken behavior?
@@ -27,6 +39,15 @@ After inline comments, provide one summary comment.
 - Are there edge cases not considered?
 
 ### Second Pass: Verify the Fix
+
+<thinking>
+Evaluate the fix systematically:
+1. Does this fix address the root cause or just symptoms?
+2. Are there edge cases not covered?
+3. Could this break other functionality?
+4. Is the fix localized or does it ripple through the codebase?
+5. How do we prevent this bug from returning?
+</thinking>
 
 **4. Code changes:**
 - Does the fix make sense?

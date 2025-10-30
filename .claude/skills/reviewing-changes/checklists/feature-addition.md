@@ -1,5 +1,8 @@
 # Feature Addition Review Checklist
 
+**Review Depth**: Comprehensive (architecture, security, testing, code quality)
+**Risk Level**: HIGH
+
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
@@ -11,6 +14,15 @@ After inline comments, provide one summary comment.
 ## Multi-Pass Strategy
 
 ### First Pass: High-Level Assessment
+
+<thinking>
+Before diving into details:
+1. What is this feature supposed to do?
+2. How does it fit into the existing architecture?
+3. What are the security implications?
+4. What's the scope? (files touched, modules affected)
+5. What are the highest-risk areas?
+</thinking>
 
 **1. Understand the feature:**
 - Read PR description - what problem does this solve?
@@ -28,6 +40,15 @@ After inline comments, provide one summary comment.
 - Are there obvious compilation or null safety issues?
 
 ### Second Pass: Architecture Deep-Dive
+
+<thinking>
+Verify architectural integrity:
+1. Does this follow MVVM + UDF pattern?
+2. Is Hilt DI used correctly?
+3. Is state management proper (StateFlow, immutability)?
+4. Are modules organized correctly?
+5. Is error handling robust (Result types)?
+</thinking>
 
 **4. MVVM + UDF Pattern Compliance:**
 - ViewModels properly structured?
@@ -49,6 +70,15 @@ After inline comments, provide one summary comment.
 - Errors propagated correctly through layers?
 
 ### Third Pass: Details and Quality
+
+<thinking>
+Check quality and completeness:
+1. Is code quality high? (null safety, documentation, naming)
+2. Are tests comprehensive? (unit + integration)
+3. Are there edge cases not covered?
+4. Is documentation clear?
+5. Are there any code smells or anti-patterns?
+</thinking>
 
 **8. Testing:**
 - Unit tests for ViewModels and repositories?

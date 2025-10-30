@@ -1,5 +1,8 @@
 # Dependency Update Review Checklist
 
+**Review Depth**: Expedited (focused on compilation, security, breaking changes)
+**Risk Level**: LOW (unless security/crypto library or major version bump)
+
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
@@ -10,7 +13,16 @@ After inline comments, provide one summary comment.
 
 ## Multi-Pass Strategy
 
-### First Pass
+### First Pass: Identify and Assess
+
+<thinking>
+Before diving into details:
+1. Which dependencies were updated?
+2. What are the version changes? (patch, minor, major)
+3. Are any security-sensitive libraries involved? (crypto, auth, networking)
+4. Any pre-release versions (alpha, beta, RC)?
+5. What's the blast radius if something breaks?
+</thinking>
 
 **1. Identify the change:**
 - Which library? Old version → New version?
@@ -22,7 +34,16 @@ After inline comments, provide one summary comment.
 - Any deprecated APIs we're currently using?
 - Check if this is a breaking change version
 
-### Second Pass
+### Second Pass: Deep Analysis
+
+<thinking>
+For each dependency update:
+1. What changes are in this release?
+2. Are there breaking changes?
+3. Are there security fixes?
+4. Do we use the affected APIs?
+5. How does this affect our codebase?
+</thinking>
 
 **3. Review release notes** (if available):
 - Breaking changes mentioned?

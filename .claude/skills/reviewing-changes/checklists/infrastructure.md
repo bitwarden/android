@@ -1,5 +1,8 @@
 # Infrastructure Review Checklist
 
+**Review Depth**: Tooling-focused (CI/CD, build config, developer workflow)
+**Risk Level**: MEDIUM-HIGH (can break builds/deployments)
+
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
@@ -11,6 +14,15 @@ After inline comments, provide one summary comment.
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Change
+
+<thinking>
+Assess infrastructure change:
+1. What problem does this solve?
+2. Does this affect production builds, CI/CD, or dev workflow?
+3. What's the risk if this breaks?
+4. Can this be tested before merge?
+5. What's the rollback plan?
+</thinking>
 
 **1. Identify the goal:**
 - What problem does this solve?
@@ -28,6 +40,15 @@ After inline comments, provide one summary comment.
 - Resource usage changes?
 
 ### Second Pass: Verify Implementation
+
+<thinking>
+Verify configuration and impact:
+1. Is the configuration syntax valid?
+2. Are secrets/credentials handled securely?
+3. What's the impact on build times and CI performance?
+4. How will this affect the team's workflow?
+5. Is there adequate testing/validation?
+</thinking>
 
 **4. Configuration correctness:**
 - Syntax valid?

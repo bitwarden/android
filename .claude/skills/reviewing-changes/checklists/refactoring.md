@@ -1,5 +1,8 @@
 # Refactoring Review Checklist
 
+**Review Depth**: Pattern-focused (consistency, completeness, behavior preservation)
+**Risk Level**: MEDIUM-HIGH (depends on scope)
+
 ## Inline Comment Requirement
 
 Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
@@ -11,6 +14,15 @@ After inline comments, provide one summary comment.
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Refactoring
+
+<thinking>
+Analyze the refactoring scope:
+1. What pattern is being improved?
+2. Why is this refactoring needed?
+3. Does this change behavior or just structure?
+4. What's the scope? (files affected, migration completeness)
+5. What are the risks if something breaks?
+</thinking>
 
 **1. Understand the goal:**
 - What pattern is being improved?
@@ -28,6 +40,15 @@ After inline comments, provide one summary comment.
 - Are tests updated to reflect changes?
 
 ### Second Pass: Verify Consistency
+
+<thinking>
+Verify refactoring quality:
+1. Is the new pattern applied consistently throughout?
+2. Are there missed instances of the old pattern?
+3. Do tests still pass with same behavior?
+4. Is the migration complete or partial?
+5. Does this introduce any new issues?
+</thinking>
 
 **4. Pattern consistency:**
 - Is the new pattern applied consistently throughout?

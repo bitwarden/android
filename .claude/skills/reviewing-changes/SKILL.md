@@ -7,7 +7,17 @@ description: Comprehensive code reviews for Bitwarden Android. Detects change ty
 
 ## Instructions
 
+**IMPORTANT**: Use structured thinking throughout your review process. Plan your analysis in `<thinking>` tags before providing final feedback. This improves accuracy by 40% according to research.
+
 ### Step 1: Detect Change Type
+
+<thinking>
+Analyze the changeset systematically:
+1. What files were modified? (code vs config vs docs)
+2. What is the PR/commit title indicating?
+3. Is there new functionality or just modifications?
+4. What's the risk level of these changes?
+</thinking>
 
 Analyze the changeset to determine the primary change type:
 
@@ -38,7 +48,20 @@ The checklist provides:
 - What to check and what to skip
 - Time estimates and risk assessment
 
-### Step 3: Consult Reference Materials As Needed
+### Step 3: Execute Review with Structured Thinking
+
+<thinking>
+Before diving into details:
+1. What are the highest-risk areas of this change?
+2. Which architectural patterns need verification?
+3. What security implications exist?
+4. How should I prioritize my findings?
+5. What tone is appropriate for this feedback?
+</thinking>
+
+Follow the checklist's multi-pass strategy, thinking through each pass systematically.
+
+### Step 4: Consult Reference Materials As Needed
 
 Load reference files only when needed for specific questions:
 
@@ -48,7 +71,16 @@ Load reference files only when needed for specific questions:
 - **Security questions** → `docs/ARCHITECTURE.md#security`
 - **Style questions** → `docs/STYLE_AND_BEST_PRACTICES.md`
 
-### Step 4: Document Findings
+### Step 5: Document Findings
+
+<thinking>
+Before writing each comment:
+1. Is this issue Critical, Important, Suggested, or just Acknowledgment?
+2. Should I ask a question or provide direction?
+3. What's the rationale I need to explain?
+4. What code example would make this actionable?
+5. Is there a documentation reference to include?
+</thinking>
 
 **CRITICAL**: Use inline comments on specific lines, NOT a single large review comment.
 
