@@ -301,6 +301,8 @@ jobs:
         run: |
           find coverage-reports -type f -name "*.tar" -exec tar -xf {} -C coverage-reports \;
           find coverage-reports -type f -name "*.zip" -exec unzip -o {} -d coverage-reports \;
+          find coverage-reports -name "*.xml" -type f -exec mv {} coverage-reports/ \;
+          find coverage-reports -type f \( -name "*.tar" -o -name "*.zip" \) -delete
           find coverage-reports -name "*.xml" -type f
 
       - name: Upload to codecov.io
