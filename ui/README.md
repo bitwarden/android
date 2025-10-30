@@ -9,8 +9,8 @@ An Android library containing common UI components, types, and utilities.
 
 ## Compatibility
 
-- **Minimum SDK**: 28
-- **Target SDK**: 35
+- **Minimum SDK**: 28 (Android 9)
+- **Target SDK**: 36 (Android 16)
 
 ## Theme
 
