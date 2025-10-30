@@ -1,5 +1,6 @@
 ---
 name: reviewing-changes
+version: 2.0.0
 description: Comprehensive code reviews for Bitwarden Android. Detects change type (dependency update, bug fix, feature, UI, refactoring, infrastructure) and applies appropriate review depth. Validates MVVM patterns, Hilt DI, security requirements, and test coverage per project standards. Use when reviewing pull requests, checking commits, analyzing code changes, or evaluating architectural compliance.
 ---
 
@@ -67,8 +68,11 @@ Load reference files only when needed for specific questions:
 
 - **Issue prioritization** → `reference/priority-framework.md` (Critical vs Suggested vs Optional)
 - **Phrasing feedback** → `reference/review-psychology.md` (questions vs commands, I-statements)
-- **Architecture questions** → `reference/android-patterns.md` (MVVM, Hilt DI, module org)
-- **Security questions** → `docs/ARCHITECTURE.md#security`
+- **Architecture questions** → `reference/architectural-patterns.md` (MVVM, Hilt DI, module org, error handling)
+- **Security questions (quick reference)** → `reference/security-patterns.md` (common patterns and anti-patterns)
+- **Security questions (comprehensive)** → `docs/ARCHITECTURE.md#security` (full zero-knowledge architecture)
+- **Testing questions** → `reference/testing-patterns.md` (unit tests, mocking, null safety)
+- **UI questions** → `reference/ui-patterns.md` (Compose patterns, theming)
 - **Style questions** → `docs/STYLE_AND_BEST_PRACTICES.md`
 
 ### Step 5: Document Findings
