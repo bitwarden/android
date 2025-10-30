@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.lifecycle.Lifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
@@ -47,6 +48,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.Defau
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
@@ -273,6 +275,19 @@ private fun SecuritySettings(
     onBiometricToggle: (Boolean) -> Unit,
     onScreenCaptureChange: (Boolean) -> Unit,
 ) {
+    var hasBiometrics by remember { mutableStateOf(biometricsManager.isBiometricsSupported) }
+
+    // Recheck biometrics support when app comes to foreground
+    LifecycleEventEffect { _, event ->
+        if (event == Lifecycle.Event.ON_RESUME) {
+            hasBiometrics = biometricsManager.isBiometricsSupported
+            if (!hasBiometrics) {
+                // if the biometrics was disable on device clear the app as well
+                onBiometricToggle(false)
+            }
+        }
+    }
+
     Spacer(modifier = Modifier.height(height = 12.dp))
     BitwardenListHeaderText(
         modifier = Modifier
@@ -282,7 +297,6 @@ private fun SecuritySettings(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
-    val hasBiometrics = biometricsManager.isBiometricsSupported
     if (hasBiometrics) {
         UnlockWithBiometricsRow(
             modifier = Modifier
@@ -449,7 +463,6 @@ private fun UnlockWithBiometricsRow(
     biometricsManager: BiometricsManager,
     modifier: Modifier = Modifier,
 ) {
-    if (!biometricsManager.isBiometricsSupported) return
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenSwitch(
         modifier = modifier,

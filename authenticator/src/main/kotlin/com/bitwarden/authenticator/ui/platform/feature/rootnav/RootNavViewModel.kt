@@ -60,6 +60,10 @@ class RootNavViewModel @Inject constructor(
             RootNavAction.Internal.AppUnlocked -> {
                 handleAppUnlocked()
             }
+
+            RootNavAction.Internal.ClearBiometricsKey -> {
+                handleClearBiometricsKey()
+            }
         }
     }
 
@@ -95,6 +99,13 @@ class RootNavViewModel @Inject constructor(
     }
 
     private fun handleAppUnlocked() {
+        mutableStateFlow.update {
+            it.copy(navState = RootNavState.NavState.Unlocked)
+        }
+    }
+
+    private fun handleClearBiometricsKey() {
+        settingsRepository.clearBiometricsKey()
         mutableStateFlow.update {
             it.copy(navState = RootNavState.NavState.Unlocked)
         }
@@ -172,6 +183,11 @@ sealed class RootNavAction {
          * Indicates the application has been unlocked.
          */
         data object AppUnlocked : Internal()
+
+        /**
+         * Indicates the device no longer has a valid biometric set up.
+         */
+        data object ClearBiometricsKey : Internal()
 
         /**
          * Indicates an update in the welcome guide being seen has been received.
