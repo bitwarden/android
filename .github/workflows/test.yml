@@ -297,6 +297,12 @@ jobs:
           pattern: coverage-*
           path: coverage-reports/
 
+      - name: Extract coverage reports from archives
+        run: |
+          find coverage-reports -type f -name "*.tar" -exec tar -xf {} -C coverage-reports \;
+          find coverage-reports -type f -name "*.zip" -exec unzip -o {} -d coverage-reports \;
+          find coverage-reports -name "*.xml" -type f
+
       - name: Upload to codecov.io
         id: upload-to-codecov
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
