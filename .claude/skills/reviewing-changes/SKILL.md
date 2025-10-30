@@ -35,18 +35,18 @@ If changeset spans multiple types, use the most complex type's checklist.
 
 Based on detected type, read the relevant checklist file:
 
-- **Dependency Update** → `checklists/dependency-update.md` (15-20 min expedited review)
-- **Bug Fix** → `checklists/bug-fix.md` (20-30 min focused review)
-- **Feature Addition** → `checklists/feature-addition.md` (45-60 min comprehensive review)
-- **UI Refinement** → `checklists/ui-refinement.md` (25-35 min design-focused review)
-- **Refactoring** → `checklists/refactoring.md` (30-40 min pattern-focused review)
-- **Infrastructure** → `checklists/infrastructure.md` (30-40 min tooling-focused review)
+- **Dependency Update** → `checklists/dependency-update.md` (expedited review)
+- **Bug Fix** → `checklists/bug-fix.md` (focused review)
+- **Feature Addition** → `checklists/feature-addition.md` (comprehensive review)
+- **UI Refinement** → `checklists/ui-refinement.md` (design-focused review)
+- **Refactoring** → `checklists/refactoring.md` (pattern-focused review)
+- **Infrastructure** → `checklists/infrastructure.md` (tooling-focused review)
 
 The checklist provides:
 - Multi-pass review strategy
 - Type-specific focus areas
 - What to check and what to skip
-- Time estimates and risk assessment
+- Structured thinking guidance
 
 ### Step 3: Execute Review with Structured Thinking
 
