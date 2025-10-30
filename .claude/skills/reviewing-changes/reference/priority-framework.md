@@ -2,13 +2,6 @@
 
 Use this framework to classify findings during code review. Clear prioritization helps authors triage and address issues effectively.
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-
----
-
 ## Critical (Blocker - Must Fix Before Merge)
 
 These issues **must** be addressed before the PR can be merged. They pose immediate risks to security, stability, or architecture integrity.

@@ -2,14 +2,6 @@
 
 Quick reference for Bitwarden Android security patterns during code reviews. For comprehensive details, read `docs/ARCHITECTURE.md#security`.
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-Use code examples from this reference in your inline comments.
-
----
-
 ## Encryption and Key Storage
 
 **✅ GOOD - Android Keystore**:

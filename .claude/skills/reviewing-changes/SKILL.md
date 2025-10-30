@@ -94,20 +94,27 @@ Before writing each comment:
 - Do NOT update existing comments - always create new comments
 - This ensures history is retained for other reviewers
 
-**Comment Format**:
+**Inline Comment Format** (Concise with Collapsible Details):
 ```
-**[Severity]**: [Issue description]
+**[Severity]**: [One-line issue description]
 
-[Code example or specific fix if applicable]
+<details>
+<summary>Details and fix</summary>
+
+[Code example or specific fix]
 
 [Rationale explaining why]
 
 Reference: [docs link if applicable]
+</details>
 ```
 
 **Example inline comment**:
 ```
 **CRITICAL**: Exposes mutable state
+
+<details>
+<summary>Details and fix</summary>
 
 Change `MutableStateFlow<State>` to `StateFlow<State>`:
 
@@ -119,13 +126,39 @@ val state: StateFlow<State> = _state.asStateFlow()
 Exposing MutableStateFlow allows external mutation, violating MVVM unidirectional data flow.
 
 Reference: docs/ARCHITECTURE.md#mvvm-pattern
+</details>
 ```
 
-**When to use inline vs summary**:
-- **Inline comment**: Specific code issue, recommendation, or question (use `file:line_number` format)
-- **Summary comment**: Overall assessment, high-level observations, approval/request changes decision
+**Summary Comment Format** (Minimal - Avoid Duplication):
+```
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-See `examples/review-outputs.md` for examples.
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue]
+
+See inline comments for all issue details.
+```
+
+**Output Format Notes**:
+
+**What to Include:**
+- **Inline comments**: Create separate comment for EACH specific issue with full details in `<details>` tag
+- **Summary comment**: Overall assessment (APPROVE/REQUEST CHANGES) + list of CRITICAL issues only
+- **Severity levels**: Use CRITICAL (blocking), IMPORTANT (should fix), SUGGESTED (nice to have), or ACKNOWLEDGED (good practice observed)
+
+**What to Exclude:**
+- **No duplication**: Never repeat inline comment details in the summary
+- **No Important/Suggested in summary**: Only CRITICAL blocking issues belong in summary
+- **No "Good Practices" section**: Acknowledge good practices in inline comments if relevant
+- **No "Action Items" section**: This duplicates inline comments - avoid entirely
+- **No verbose analysis**: Keep detailed analysis (compilation status, security review, rollback plans) in inline comments only
+
+**Visibility Guidelines:**
+- **Inline comments visible**: Severity + one-line description only
+- **Inline comments collapsed**: Code examples, rationale, references in `<details>` tag
+- **Summary visible**: Verdict + critical issues list only
+
+See `examples/review-outputs.md` for complete examples.
 
 ## Core Principles
 

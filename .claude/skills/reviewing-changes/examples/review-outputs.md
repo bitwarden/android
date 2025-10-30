@@ -669,3 +669,277 @@ Tests are missing for some scenarios.
 **app/login/LoginViewModel.kt:78** - Missing null safety check
 biometricPrompt result can be null. Add explicit check to prevent NPE.
 ```
+
+---
+
+## Concise Review Format (Recommended)
+
+### Key Principles
+
+1. **Minimal summary**: Only verdict + critical issues
+2. **Collapsible inline comments**: Severity + one-line description visible, details collapsed
+3. **No duplication**: Don't repeat inline issues in summary
+4. **No redundant sections**: No "Action Items" or "Good Practices" in summary
+
+### Example 1: Feature Review with Multiple Issues
+
+**Summary Comment:**
+```markdown
+**Overall Assessment:** REQUEST CHANGES
+
+**Critical Issues:**
+- Exposes mutable state (app/vault/VaultViewModel.kt:45)
+- Missing null safety check (app/vault/VaultRepository.kt:123)
+
+See inline comments for all issue details.
+```
+
+**Inline Comments:**
+
+```markdown
+**app/vault/VaultViewModel.kt:45** - CRITICAL: Exposes mutable state
+
+<details>
+<summary>Details and fix</summary>
+
+Change to private backing field pattern:
+
+\```kotlin
+private val _vaultState = MutableStateFlow<VaultState>(VaultState.Loading)
+val vaultState: StateFlow<VaultState> = _vaultState.asStateFlow()
+\```
+
+Exposing MutableStateFlow allows external mutation, violating MVVM unidirectional data flow.
+
+Reference: docs/ARCHITECTURE.md#mvvm-pattern
+</details>
+```
+
+```markdown
+**app/vault/VaultRepository.kt:123** - CRITICAL: Missing null safety check
+
+<details>
+<summary>Details and fix</summary>
+
+Add null check before accessing cipher:
+
+\```kotlin
+val cipher = getCipher(id) ?: return Result.failure(CipherNotFoundException())
+\```
+
+Without null safety, this will crash when cipher ID is invalid.
+</details>
+```
+
+```markdown
+**app/vault/VaultViewModel.kt:89** - IMPORTANT: Missing test coverage
+
+<details>
+<summary>Details</summary>
+
+Add test for error state handling:
+
+\```kotlin
+@Test
+fun `when load fails then shows error state`() = runTest {
+    coEvery { repository.getVaultItems() } returns Result.failure(Exception())
+    viewModel.loadVault()
+    assertEquals(VaultState.Error, viewModel.vaultState.value)
+}
+\```
+
+Error paths should be tested to prevent regressions.
+
+Reference: reference/testing-patterns.md
+</details>
+```
+
+**Why this works:**
+- Summary is 4 lines (vs 30+ lines with verbose format)
+- Severity + issue visible immediately
+- Full details available on expansion
+- Zero duplication between summary and inline comments
+- Token-efficient while preserving all information
+
+---
+
+### Example 2: Dependency Update (No Critical Issues)
+
+**Summary Comment:**
+```markdown
+**Overall Assessment:** APPROVE
+
+See inline comments for suggested improvements.
+```
+
+**Inline Comment:**
+
+```markdown
+**gradle/libs.versions.toml:45** - SUGGESTED: Beta version in production
+
+<details>
+<summary>Details</summary>
+
+Updated androidx.credentials from 1.5.0 to 1.6.0-beta03.
+
+Monitor for stability issues - beta releases may have unexpected behavior in production.
+
+Changelog: Adds support for additional credential types, internal bug fixes.
+</details>
+```
+
+**Why this works:**
+- Immediate approval visible (no critical issues)
+- Suggestion collapsed to reduce noise
+- All context preserved for interested reviewers
+
+---
+
+### Example 3: Bug Fix Review
+
+**Summary Comment:**
+```markdown
+**Overall Assessment:** APPROVE
+
+See inline comments for suggested improvements.
+```
+
+**Inline Comments:**
+
+```markdown
+**data/auth/BiometricRepository.kt:120** - SUGGESTED: Extract null handling
+
+<details>
+<summary>Details</summary>
+
+Root cause: BiometricPrompt result was nullable but code assumed non-null, causing crash on cancellation (PM-12345).
+
+Consider extracting pattern for reuse:
+
+\```kotlin
+private fun handleBiometricResult(result: BiometricPrompt.AuthenticationResult?): AuthResult {
+    return result?.let { AuthResult.Success(it) } ?: AuthResult.Cancelled
+}
+\```
+</details>
+```
+
+```markdown
+**app/auth/BiometricViewModel.kt:89** - SUGGESTED: Add regression test
+
+<details>
+<summary>Details</summary>
+
+\```kotlin
+@Test
+fun `when biometric cancelled then returns cancelled state`() = runTest {
+    coEvery { repository.authenticate() } returns Result.failure(CancelledException())
+    viewModel.onBiometricAuth()
+    assertEquals(AuthState.Cancelled, viewModel.state.value)
+}
+\```
+
+Prevents regression of the bug just fixed.
+</details>
+```
+
+**Why this works:**
+- Approval decision immediately visible
+- Root cause analysis preserved but collapsed
+- Suggestions don't overwhelm the fix
+- Test recommendations available but not blocking
+
+---
+
+### Comparison: Verbose vs Concise
+
+**Verbose Format (Old):**
+```markdown
+## Summary
+Adds vault item encryption feature
+
+Root cause: Feature implements client-side encryption for vault items
+
+## Critical Issues
+
+**app/vault/VaultViewModel.kt:45** - Exposes mutable state
+Change MutableStateFlow to StateFlow:
+\```kotlin
+private val _state = MutableStateFlow()
+val state = _state.asStateFlow()
+\```
+Prevents external mutation, enforces unidirectional data flow.
+Reference: docs/ARCHITECTURE.md
+
+**app/vault/VaultRepository.kt:123** - Missing null safety
+Add null check: cipher ?: return Result.failure()
+
+## Important Issues
+
+[3 more issues with full details]
+
+## Suggested Improvements
+
+[5 more issues with full details]
+
+## Good Practices
+- Clean MVVM separation
+- Proper Hilt DI usage
+- Comprehensive test coverage
+
+## Action Items
+1. Fix mutable state exposure (app/vault/VaultViewModel.kt:45)
+2. Add null safety (app/vault/VaultRepository.kt:123)
+3. [8 more action items duplicating the issues above]
+```
+
+**Token count:** ~800-1000 tokens
+**Issues:** Heavy duplication, verbose praise, action items redundant with inline comments
+
+**Concise Format (New):**
+```markdown
+**Overall Assessment:** REQUEST CHANGES
+
+**Critical Issues:**
+- Exposes mutable state (app/vault/VaultViewModel.kt:45)
+- Missing null safety (app/vault/VaultRepository.kt:123)
+
+See inline comments for all issue details.
+```
+
+Plus inline comments with `<details>` tags.
+
+**Token count:** ~200-300 tokens visible, ~600-800 total (expandable)
+**Benefits:**
+- 60-70% token reduction
+- Zero duplication
+- Faster scanning
+- All details preserved
+
+---
+
+### Implementation Notes
+
+**When to use which format:**
+
+**Use Concise Format for:**
+- All reviews going forward (new default)
+- High token efficiency needed
+- Multiple issues to report
+- When details would overwhelm
+
+**Visible Content (Not Collapsed):**
+- Severity level
+- One-line issue description
+- File:line reference
+
+**Collapsed Content (In `<details>`):**
+- Code examples (before/after)
+- Detailed rationale
+- References to documentation
+- Implementation suggestions
+
+**Never Include in Summary:**
+- Issue details (those are in inline comments)
+- Good Practices section (eliminates noise)
+- Action Items (duplicates inline comments)

@@ -1,13 +1,5 @@
 # Dependency Update Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: Identify and Assess
@@ -100,76 +92,75 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 ```markdown
-## Summary
-Updates [library] from [old version] to [new version]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-## Analysis
-- **Compilation**: [✓ No breaking changes | ⚠️ Deprecations found | ❌ Breaking changes detected]
-- **Security**: [✓ No concerns | ⚠️ Review release notes | 🔒 CVEs addressed]
-- **Testing**: [✓ No test changes needed | ⚠️ Update test utilities | ❌ Test APIs changed]
-- **Changelog**: [Brief summary of notable changes]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Findings
-
-List each finding with file:line reference and specific recommendation.
-
-## Recommendation
-
-**APPROVE** - Low-risk version bump with no concerns identified
-
-[or]
-
-**REQUEST CHANGES** - [specific concerns that must be addressed]:
-1. [Issue 1]
-2. [Issue 2]
+See inline comments for all issue details.
 ```
 
 ## Example Reviews
 
-### Example 1: Simple Patch Version
+### Example 1: Simple Patch Version (No Critical Issues)
 
 ```markdown
-## Summary
-Updates androidx.credentials from 1.5.0 to 1.6.0-beta03
+**Overall Assessment:** APPROVE
 
-## Analysis
-- **Compilation**: ✓ No breaking changes detected in changelog
-- **Security**: ✓ No CVEs addressed
-- **Testing**: ✓ No test API changes
-- **Changelog**: Adds support for additional credential types, internal bug fixes
-
-## Findings
-⚠️ **Beta version** - Monitor for stability issues in production environment
-
-## Recommendation
-**APPROVE** - Low-risk minor version bump. Beta status is noted but no blocking concerns.
+See inline comments for all issue details.
 ```
 
-### Example 2: Major Version with Breaking Changes
+**Inline comment example:**
+```
+**libs.versions.toml:45** - SUGGESTED: Beta version in production
+
+<details>
+<summary>Details</summary>
+
+androidx.credentials updated from 1.5.0 to 1.6.0-beta03
+
+Monitor for stability issues - beta releases may have unexpected behavior in production.
+
+Changelog: Adds support for additional credential types, internal bug fixes.
+</details>
+```
+
+### Example 2: Major Version with Breaking Changes (With Critical Issues)
 
 ```markdown
-## Summary
-Updates Retrofit from 2.9.0 to 3.0.0
+**Overall Assessment:** REQUEST CHANGES
 
-## Analysis
-- **Compilation**: ❌ Breaking changes in API
-- **Security**: ✓ No security issues
-- **Testing**: ⚠️ Test utilities may need updates
-- **Changelog**: Major rewrite, new Kotlin coroutines API, removed deprecated methods
+**Critical Issues:**
+- Breaking API changes in Retrofit 3.0.0 (network/api/BitwardenApiService.kt)
+- Breaking API changes in Retrofit 3.0.0 (network/api/VaultApiService.kt)
 
-## Findings
+See inline comments for migration details.
+```
 
-**network/api/BitwardenApiService.kt:multiple** - Uses deprecated `Call<T>` return type
-Migration required: Replace `Call<T>` with `suspend fun` returning `Response<T>`
+**Inline comment example:**
+```
+**network/api/BitwardenApiService.kt:15** - CRITICAL: Breaking API changes
+
+<details>
+<summary>Details and fix</summary>
+
+Retrofit 3.0.0 removes `Call<T>` return type. Migration required:
+
+\```kotlin
+// Before
+fun getUser(): Call<UserResponse>
+
+// After
+suspend fun getUser(): Response<UserResponse>
+\```
+
+Update all API service interfaces to use suspend functions, update call sites to use coroutines instead of enqueue/execute, and update tests accordingly.
+
+Consider creating a separate PR for this migration due to scope.
+
 Reference: https://github.com/square/retrofit/blob/master/CHANGELOG.md#version-300
-
-**network/api/VaultApiService.kt:multiple** - Same issue as above
-
-## Recommendation
-**REQUEST CHANGES** - Major version requires code migration:
-1. Update all API service interfaces to use suspend functions
-2. Update call sites to use coroutines instead of enqueue/execute
-3. Update tests to handle new suspend function APIs
-4. Consider creating a separate PR for this migration due to scope
+</details>
 ```

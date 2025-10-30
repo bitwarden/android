@@ -1,13 +1,5 @@
 # UI Refinement Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: Visual Changes
@@ -178,46 +170,15 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 ```markdown
-## Summary
-[Brief description of UI changes]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-## Critical Issues
-[Any blocking UI/accessibility issues]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Suggested Improvements
-
-**[file:line]** - Use existing BitwardenButton component
-This custom button duplicates functionality in `ui/components/BitwardenButton.kt:45`.
-Using the existing component maintains consistency across the app.
-
-**[file:line]** - Add contentDescription for accessibility
-```kotlin
-Icon(
-    painter = painterResource(R.drawable.ic_close),
-    contentDescription = "Close dialog",  // Screen readers need this
-    modifier = modifier
-)
-```
-
-**[file:line]** - Use theme color instead of hardcoded
-```kotlin
-// Current
-color = Color(0xFF0066FF)
-
-// Should be
-color = BitwardenTheme.colorScheme.primary
-```
-
-## Good Practices
-[List 2-3 if applicable]
-- Uses BitwardenTheme throughout
-- Preview composables included
-
-## Action Items
-1. Replace custom button with BitwardenButton
-2. Add contentDescription for icon
-3. Use theme color instead of hardcoded value
+See inline comments for all issue details.
 ```
 
 ## Example Review

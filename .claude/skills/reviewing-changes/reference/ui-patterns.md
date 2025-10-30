@@ -2,14 +2,6 @@
 
 Quick reference for Bitwarden Android Compose UI patterns during code reviews. For comprehensive details, read `docs/ARCHITECTURE.md` and `docs/STYLE_AND_BEST_PRACTICES.md`.
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-Use code examples from this reference in your inline comments.
-
----
-
 ## Component Reuse
 
 **✅ GOOD - Uses existing components**:

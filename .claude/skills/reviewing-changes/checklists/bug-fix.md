@@ -1,13 +1,5 @@
 # Bug Fix Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Bug
@@ -109,79 +101,64 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 ```markdown
-## Summary
-Fixes [bug description] by [solution approach]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-Root cause: [Brief explanation]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Critical Issues
-
-List blocking issues with file:line references and specific solutions.
-
-## Suggested Improvements
-
-**[file:line]** - Add regression test
-Can we add a test that verifies this specific bug doesn't reoccur?
-```kotlin
-@Test
-fun `test that verifies bug is fixed`() {
-    // Test the exact scenario that was broken
-}
-```
-
-**[file:line]** - Consider similar code paths
-The pattern in [other file:line] looks similar - does it have the same issue?
-
-## Good Practices
-- Targeted fix addresses root cause
-- Includes regression test
-
-## Action Items
-1. Add regression test for the fixed bug
-2. Check [related code] for similar issues
+See inline comments for all issue details.
 ```
 
 ## Example Review
 
 ```markdown
-## Summary
-Fixes crash when biometric prompt is cancelled (PM-12345)
+**Overall Assessment:** APPROVE
 
-Root cause: BiometricPrompt result was nullable but code assumed non-null
-
-## Critical Issues
-None
-
-## Suggested Improvements
-
-**data/auth/BiometricRepository.kt:120** - Consider extracting null handling
-```kotlin
-private fun handleBiometricResult(result: BiometricPrompt.AuthenticationResult?): AuthResult {
-    return result?.let { AuthResult.Success(it) }
-        ?: AuthResult.Cancelled
-}
+See inline comments for suggested improvements.
 ```
-This pattern could be reused if we add other biometric auth points.
 
-**app/auth/BiometricViewModel.kt:89** - Add test for cancellation scenario
-```kotlin
+**Inline comment examples:**
+
+```
+**data/auth/BiometricRepository.kt:120** - SUGGESTED: Extract null handling
+
+<details>
+<summary>Details</summary>
+
+Root cause analysis: BiometricPrompt result was nullable but code assumed non-null, causing crash on cancellation (PM-12345).
+
+Consider extracting null handling pattern:
+
+\```kotlin
+private fun handleBiometricResult(result: BiometricPrompt.AuthenticationResult?): AuthResult {
+    return result?.let { AuthResult.Success(it) } ?: AuthResult.Cancelled
+}
+\```
+
+This pattern could be reused if we add other biometric auth points.
+</details>
+```
+
+```
+**app/auth/BiometricViewModel.kt:89** - SUGGESTED: Add regression test
+
+<details>
+<summary>Details</summary>
+
+Add test for cancellation scenario to prevent regression:
+
+\```kotlin
 @Test
 fun `when biometric cancelled then returns cancelled state`() = runTest {
     coEvery { repository.authenticate() } returns Result.failure(CancelledException())
-
     viewModel.onBiometricAuth()
-
     assertEquals(AuthState.Cancelled, viewModel.state.value)
 }
-```
-This prevents regression of the bug you just fixed.
+\```
 
-## Good Practices
-- Added null safety check
-- Proper error state propagation
-
-## Action Items
-1. Consider adding test for cancellation scenario (prevents regression)
-2. Evaluate if null handling helper would benefit other auth flows
+This prevents regression of the bug just fixed.
+</details>
 ```

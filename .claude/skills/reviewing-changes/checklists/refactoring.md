@@ -1,13 +1,5 @@
 # Refactoring Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Refactoring
@@ -177,49 +169,15 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 ```markdown
-## Summary
-Refactors [what] to use [new pattern] for [reason]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-Scope: [X files changed, Y pattern instances updated]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Critical Issues
-
-List blocking issues with file:line references and specific solutions.
-
-## Suggested Improvements
-
-**[file:line]** - Old pattern still used here
-I see the old pattern still in use. Should this be updated to match the refactoring?
-```kotlin
-// Old pattern at this location
-OldClass().doSomething()
-
-// Should use new pattern
-newRepository.doSomething()
-```
-
-**[file:line]** - Add @Deprecated with migration guidance
-```kotlin
-@Deprecated(
-    message = "Use FeatureRepository interface instead",
-    replaceWith = ReplaceWith("featureRepository"),
-    level = DeprecationLevel.WARNING
-)
-class OldFeatureManager
-```
-This helps other developers understand the migration path.
-
-## Good Practices
-[List 2-3 if applicable]
-- Pattern applied consistently
-- Tests updated to match refactoring
-- Behavior preserved
-
-## Action Items
-1. Update remaining instances at [files]
-2. Add @Deprecated to old pattern
-3. Update ARCHITECTURE.md to document new pattern
+See inline comments for all issue details.
 ```
 
 ## Example Review

@@ -1,13 +1,5 @@
 # Infrastructure Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: Understand the Change
@@ -197,54 +189,15 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 ```markdown
-## Summary
-[Brief description of infrastructure changes]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-Impact: [Build time, CI workflows, developer experience]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Critical Issues
-[Security, breaking changes, or syntax errors]
-
-## Suggested Improvements
-
-**[file:line]** - Security concern
-```yaml
-# Current - hardcoded secret
-env:
-  API_KEY: "abc123def456"
-
-# Should use GitHub secret
-env:
-  API_KEY: ${{ secrets.API_KEY }}
-```
-
-**[file:line]** - Add timeout to prevent runaway builds
-```yaml
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30  # Prevent builds from hanging indefinitely
-```
-
-**[file:line]** - Document breaking change
-Can we add a note to CONTRIBUTING.md about this Gradle plugin change?
-Developers will need to update their local setup.
-
-## Good Practices
-[List 2-3 if applicable]
-- Uses version catalog for consistency
-- Proper secret management
-
-## Action Items
-1. Move hardcoded secret to GitHub secrets
-2. Add timeout to workflow
-3. Document breaking changes in CONTRIBUTING.md
-
-## Rollback Plan
-[How to revert if this breaks]
-- Revert commit [hash]
-- Redeploy previous workflow from .github/workflows/[file]@[commit]
+See inline comments for all issue details.
 ```
 
 ## Example Review

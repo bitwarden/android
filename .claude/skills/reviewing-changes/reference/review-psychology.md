@@ -2,14 +2,6 @@
 
 Effective code review feedback is clear, actionable, and constructive. This guide provides phrasing patterns for inline comments.
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-Use the phrasing patterns below in your inline comments.
-
----
-
 ## Core Directives
 
 - Ask questions for design decisions, be prescriptive for clear violations

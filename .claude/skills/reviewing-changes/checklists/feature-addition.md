@@ -1,13 +1,5 @@
 # Feature Addition Review Checklist
 
-## Inline Comment Requirement
-
-Create separate inline comment for EACH specific issue on the exact line (`file:line_number`).
-Do NOT create one large summary comment. Do NOT update existing comments.
-After inline comments, provide one summary comment.
-
----
-
 ## Multi-Pass Strategy
 
 ### First Pass: High-Level Assessment
@@ -361,22 +353,15 @@ Use `reference/review-psychology.md` for phrasing guidance.
 
 ## Output Format
 
+Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
+
 See `examples/review-outputs.md` for comprehensive feature review example.
 
-**Structure:**
 ```markdown
-## Summary
-[1-2 sentence description of the feature]
+**Overall Assessment:** APPROVE / REQUEST CHANGES
 
-## Critical Issues
-[List blocking issues with file:line references and specific solutions]
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue with file:line reference]
 
-## Suggested Improvements
-[List recommendations with rationale]
-
-## Good Practices
-[List 2-3 well-implemented patterns - brief, no elaboration]
-
-## Action Items
-[Numbered list of required changes]
+See inline comments for all issue details.
 ```
