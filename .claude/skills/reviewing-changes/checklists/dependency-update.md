@@ -79,7 +79,7 @@ For each dependency update:
 ## Red Flags (Escalate to Full Review)
 
 🚩 **Major version bump** (e.g., 1.x → 2.0) - Read `checklists/feature-addition.md`
-🚩 **Security/crypto library** - Read `reference/android-patterns.md` and `docs/ARCHITECTURE.md#security`
+🚩 **Security/crypto library** - Read `reference/architectural-patterns.md` and `docs/ARCHITECTURE.md#security`
 🚩 **Breaking changes in release notes** - Read relevant code sections carefully
 🚩 **Multiple dependency updates at once** - Check for interaction risks
 🚩 **Beta/Alpha versions** - Assess stability concerns and rollback plan

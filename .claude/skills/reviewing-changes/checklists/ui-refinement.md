@@ -116,11 +116,20 @@ fun FeatureScreen(
     // UI rendering only
 }
 
-// ❌ BAD - Stateful, no hoisting
+// ❌ BAD - Business state in composable
 @Composable
 fun FeatureScreen() {
-    var text by remember { mutableStateOf("") }  // State should be in ViewModel
+    var userData by remember { mutableStateOf<User?>(null) }  // Business state should be in ViewModel
+    var isLoading by remember { mutableStateOf(false) }  // App state should be in ViewModel
     // ...
+}
+
+// ✅ OK - UI-local state in composable
+@Composable
+fun LoginForm(onSubmit: (String, String) -> Unit) {
+    var username by remember { mutableStateOf("") }  // UI-local input state is fine
+    var password by remember { mutableStateOf("") }
+    // Hoist only as high as needed
 }
 ```
 
@@ -149,18 +158,25 @@ Spacer(modifier = Modifier.height(17.dp))  // Non-standard spacing
 ### Accessibility
 
 ```kotlin
-// ✅ GOOD - Accessible
+// ✅ GOOD - Interactive element with description
 Icon(
     painter = painterResource(R.drawable.ic_password),
     contentDescription = "Password visibility toggle",
     modifier = Modifier.clickable { onToggle() }
 )
 
-// ❌ BAD - Not accessible
+// ✅ GOOD - Decorative icon with explicit null
 Icon(
-    painter = painterResource(R.drawable.ic_password),
-    contentDescription = null,  // Screen readers can't announce this
-    modifier = Modifier.clickable { onToggle() }
+    painter = painterResource(R.drawable.ic_check),
+    contentDescription = null,  // Decorative icon next to descriptive text
+    tint = BitwardenTheme.colorScheme.success
+)
+
+// ❌ BAD - Interactive element missing description
+Icon(
+    painter = painterResource(R.drawable.ic_delete),
+    contentDescription = null,  // Interactive elements need descriptions
+    modifier = Modifier.clickable { onDelete() }
 )
 ```
 
@@ -205,12 +221,12 @@ Icon(
 )
 ```
 
-**app/auth/LoginScreen.kt:145** - Use theme spacing
+**app/auth/LoginScreen.kt:145** - Use design system spacing
 ```kotlin
 // Current
 Spacer(modifier = Modifier.height(17.dp))
 
-// Standard theme spacing
+// Design system uses 4.dp increments (4, 8, 12, 16, 24, 32, etc.)
 Spacer(modifier = Modifier.height(16.dp))
 ```
 

@@ -88,7 +88,7 @@ Check quality and completeness:
 
 ### MVVM Pattern Compliance
 
-Read `reference/android-patterns.md` for detailed patterns.
+Read `reference/architectural-patterns.md` for detailed patterns.
 
 **ViewModels must:**
 - Use `@HiltViewModel` annotation
@@ -246,7 +246,7 @@ secureStorage.store(encryptedData)
 
 ## Testing Review
 
-Reference: `reference/testing-standards.md` (if it exists, otherwise use these guidelines)
+Reference: `reference/testing-patterns.md`
 
 **Required Test Coverage:**
 
