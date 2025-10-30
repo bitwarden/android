@@ -1600,6 +1600,130 @@ class UserStateJsonExtensionsTest {
     }
 
     @Test
+    fun `toUserState isExportable should be true if policies is not enabled`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "activeAvatarColorHex",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
+                                keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.PIN,
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.NOT_STARTED,
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { hasPremium } returns null
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
+                            )
+                        },
+                        tokens = AccountTokensJson(
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = listOf(
+                        VaultUnlockData(
+                            userId = "activeUserId",
+                            status = VaultUnlockData.Status.UNLOCKED,
+                        ),
+                    ),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    shouldManageResetPassword = false,
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
+                                    keyConnectorUrl = null,
+                                    userIsClaimedByOrganization = false,
+                                ),
+                            ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = false,
+                        ),
+                    ),
+                    hasPendingAccountAddition = false,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                    isDeviceTrustedProvider = { false },
+                    onboardingStatus = OnboardingStatus.NOT_STARTED,
+                    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ ->
+                        listOf(
+                            SyncResponseJson.Policy(
+                                id = "policyId",
+                                organizationId = "organizationId",
+                                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                                data = null,
+                                isEnabled = false,
+                            ),
+                        )
+                    },
+                ),
+        )
+    }
+
+    @Test
     @Suppress("MaxLineLength")
     fun `toUpdatedUserStateJson should create UserDecryptionOptionsJson when null and syncResponse has masterPasswordUnlock`() {
         val originalProfile = AccountJson.Profile(
