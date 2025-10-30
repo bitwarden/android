@@ -209,12 +209,14 @@ fun UserStateJson.toUserState(
                 val hasPersonalOwnershipRestrictedOrg = getUserPolicies(
                     userId,
                     PolicyTypeJson.PERSONAL_OWNERSHIP,
-                ).any { it.isEnabled }
+                )
+                    .any { it.isEnabled }
 
                 val hasPersonalVaultExportRestrictedOrg = getUserPolicies(
                     userId,
                     PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                ).any { it.isEnabled }
+                )
+                    .any { it.isEnabled }
 
                 UserState.Account(
                     userId = userId,
