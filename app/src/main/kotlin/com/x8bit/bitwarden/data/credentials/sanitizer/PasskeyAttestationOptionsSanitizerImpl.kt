@@ -15,7 +15,7 @@ object PasskeyAttestationOptionsSanitizerImpl : PasskeyAttestationOptionsSanitiz
             options.user.id.endsWith("\n")
         ) {
             options.copy(
-                user = options.user.copy(id = options.user.id.trim()),
+                user = options.user.copy(id = options.user.id.trimEnd()),
             )
         } else {
             options
