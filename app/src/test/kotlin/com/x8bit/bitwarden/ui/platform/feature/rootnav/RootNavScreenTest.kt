@@ -466,6 +466,7 @@ class RootNavScreenTest : BitwardenComposeTest() {
                 mockNavHostController.navigate(
                     route = VerifyPasswordRoute(
                         userId = "activeUserId",
+                        hasOtherAccounts = false,
                     ),
                     navOptions = expectedNavOptions,
                 )

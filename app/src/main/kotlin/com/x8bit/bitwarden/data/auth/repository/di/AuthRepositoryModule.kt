@@ -102,11 +102,13 @@ object AuthRepositoryModule {
         authDiskSource: AuthDiskSource,
         firstTimeActionManager: FirstTimeActionManager,
         vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
         dispatcherManager: DispatcherManager,
     ): UserStateManager = UserStateManagerImpl(
         authDiskSource = authDiskSource,
         firstTimeActionManager = firstTimeActionManager,
         vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
         dispatcherManager = dispatcherManager,
     )
 }

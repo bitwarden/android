@@ -221,6 +221,62 @@ class PolicyManagerTest {
 
         assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES).any())
     }
+
+    @Test
+    fun `getUserPolicies returns empty list if policies is null`() {
+        every {
+            authDiskSource.userState
+        } returns null
+
+        every {
+            authDiskSource.getPolicies(USER_ID)
+        } returns null
+
+        assertEquals(
+            emptyList<SyncResponseJson.Policy>(),
+            policyManager.getUserPolicies(
+                userId = USER_ID,
+                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+            ),
+        )
+    }
+
+    @Test
+    fun `getUserPolicies returns active and applied Disabled personal vault export policies`() {
+        val userState: UserStateJson = mockk {
+            every { activeUserId } returns USER_ID
+        }
+        every { authDiskSource.userState } returns userState
+        every {
+            authDiskSource.getOrganizations(USER_ID)
+        } returns listOf(
+            createMockOrganization(
+                number = 3,
+                isEnabled = true,
+                shouldUsePolicies = true,
+                type = OrganizationType.USER,
+            ),
+        )
+
+        val listOfPolicies = listOf(
+            createMockPolicy(
+                organizationId = "mockId-3",
+                isEnabled = true,
+                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+            ),
+        )
+        every {
+            authDiskSource.getPolicies(USER_ID)
+        } returns listOfPolicies
+
+        assertEquals(
+            listOfPolicies,
+            policyManager.getUserPolicies(
+                userId = USER_ID,
+                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+            ),
+        )
+    }
 }
 
 private const val USER_ID = "userId"

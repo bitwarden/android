@@ -297,6 +297,7 @@ fun RootNavScreen(
                 navController.navigateToVerifyPassword(
                     userId = currentState.userId,
                     navOptions = rootNavOptions,
+                    hasOtherAccounts = false,
                 )
             }
         }

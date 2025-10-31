@@ -629,6 +629,7 @@ class CipherViewExtensionsTest {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         )
 }
 

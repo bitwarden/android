@@ -706,6 +706,7 @@ private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(
