@@ -122,16 +122,16 @@ fun onSubmit() {
         // The result of the async operation is captured
         val result = repository.submitData(password)
         // A single event is sent with the result, not updating state directly
-        send(InternalEvent.SubmissionComplete(result))
+        sendAction(FeatureAction.Internal.SubmissionComplete(result))
     }
 }
 
 // The ViewModel has a handler that processes the internal event
-private fun handleInternalEvent(event: InternalEvent) {
-    when (event) {
+private fun handleInternalAction(action: FeatureAction.Internal) {
+    when (action) {
         is InternalEvent.SubmissionComplete -> {
             // The event handler evaluates the result and updates state
-            event.result.fold(
+            action.result.fold(
                 onSuccess = { _state.value = State.Success },
                 onFailure = { _state.value = State.Error(it) }
             )

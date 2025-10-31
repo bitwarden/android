@@ -18,16 +18,16 @@ class FeatureViewModel @Inject constructor(
     // Public immutable state
     val state: StateFlow<FeatureState> = _state.asStateFlow()
 
-    // Actions as functions, state updated via internal event
+    // Actions as functions, state updated via internal action
     fun onActionClicked() {
         viewModelScope.launch {
             val result = repository.performAction()
-            send(InternalEvent.ActionComplete(result))
+            sendAction(FeatureAction.Internal.ActionComplete(result))
         }
     }
 
-    // The ViewModel has a handler that processes the internal event
-    private fun handleInternalEvent(event: InternalEvent) {
+    // The ViewModel has a handler that processes the internal action
+    private fun handleInternalAction(action: FeatureAction.Internal) {
         when (event) {
             is InternalEvent.SubmissionComplete -> {
                 // The event handler evaluates the result and updates state
@@ -236,10 +236,8 @@ suspend fun fetchData(): Result<Data> = runCatching {
 // ViewModel
 fun onFetch() {
     viewModelScope.launch {
-        repository.fetchData().fold(
-            onSuccess = { data -> _state.value = State.Success(data) },
-            onFailure = { error -> _state.value = State.Error(error) }
-        )
+        val result = repository.fetchData()
+        send(InternalAction.FetchComplete(result))
     }
 }
 ```
@@ -260,9 +258,9 @@ fun onFetch() {
     viewModelScope.launch {
         try {
             val data = repository.fetchData()
-            _state.value = State.Success(data)
+            sendAction(FeatureAction.Internal.FetchComplete(data))
         } catch (e: Exception) {
-            _state.value = State.Error(e)
+            sendAction(FeatureAction.Internal.FetchComplete(e))
         }
     }
 }
