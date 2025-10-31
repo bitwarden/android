@@ -9,9 +9,12 @@ import com.bitwarden.cxf.model.CredentialExchangeProtocolMessage
 import com.bitwarden.cxf.model.CredentialExchangeVersion
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.vault.Cipher
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
@@ -41,6 +44,11 @@ class CredentialExchangeImportManagerTest {
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val ciphersService: CiphersService = mockk(relaxed = true)
     private val vaultSyncManager: VaultSyncManager = mockk()
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(any())
+        } returns emptyList()
+    }
     private val json = mockk<Json> {
         every {
             decodeFromStringOrNull<CredentialExchangeProtocolMessage>(any())
@@ -51,12 +59,27 @@ class CredentialExchangeImportManagerTest {
         every {
             encodeToString(value = DEFAULT_ACCOUNT, serializer = any())
         } returns DEFAULT_ACCOUNT_JSON
+
+        every {
+            decodeFromStringOrNull<CredentialExchangeProtocolMessage>(
+                DEFAULT_ACCOUNT_CARD_STRIPPED_JSON,
+            )
+        } returns CARD_CXP_MESSAGE
+
+        every {
+            decodeFromStringOrNull<CredentialExchangeExportResponse>(CARD_PAYLOAD)
+        } returns CARD_CXF_EXPORT_RESPONSE
+
+        every {
+            encodeToString(value = DEFAULT_ACCOUNT_EMPTY, serializer = any())
+        } returns DEFAULT_ACCOUNT_CARD_STRIPPED_JSON
     }
 
     private val importManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        policyManager = policyManager,
         json = json,
     )
 
@@ -66,6 +89,9 @@ class CredentialExchangeImportManagerTest {
         every {
             DEFAULT_PAYLOAD.base64UrlDecodeOrNull()
         } returns DEFAULT_PAYLOAD
+        every {
+            CARD_PAYLOAD.base64UrlDecodeOrNull()
+        } returns CARD_PAYLOAD
     }
 
     @AfterEach
@@ -342,10 +368,46 @@ class CredentialExchangeImportManagerTest {
 
             assertTrue(result is ImportCxfPayloadResult.Error)
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when user has restrict item types policy, importCxf should not contain any card item`() =
+        runTest {
+            coEvery {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(
+                SyncResponseJson.Policy(
+                    id = "mockId-1",
+                    organizationId = "mockId-1",
+                    type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                    isEnabled = true,
+                    data = null,
+                ),
+            )
+
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_CARD_STRIPPED_JSON,
+                )
+            } returns emptyList<Cipher>().asSuccess()
+
+            val result =
+                importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_ACCOUNT_CARD_STRIPPED_JSON)
+
+            assertEquals(ImportCxfPayloadResult.NoItems, result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_CARD_STRIPPED_JSON)
+            }
+            coVerify(exactly = 0) {
+                ciphersService.importCiphers(any())
+            }
+        }
 }
 
 private const val DEFAULT_USER_ID = "mockId-1"
 private const val DEFAULT_PAYLOAD = "mockPayload-1"
+private const val CARD_PAYLOAD = "mockPayload-Card"
 private val DEFAULT_CIPHER: Cipher = createMockSdkCipher(number = 1)
 private val DEFAULT_CIPHER_LIST: List<Cipher> = listOf(DEFAULT_CIPHER)
 private val DEFAULT_CXP_VERSION = CredentialExchangeVersion(
@@ -371,6 +433,14 @@ private val DEFAULT_ACCOUNT: CredentialExchangeExportResponse.Account =
         collections = JsonArray(content = emptyList()),
         items = JsonArray(content = emptyList()),
     )
+private val DEFAULT_ACCOUNT_EMPTY: CredentialExchangeExportResponse.Account =
+    CredentialExchangeExportResponse.Account(
+        id = "mockId-2",
+        username = "mockUsername-2",
+        email = "mockEmail-2",
+        collections = JsonArray(content = emptyList()),
+        items = JsonArray(content = emptyList()),
+    )
 private val DEFAULT_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
     CredentialExchangeExportResponse(
         version = DEFAULT_CXF_VERSION,
@@ -379,6 +449,24 @@ private val DEFAULT_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
         timestamp = 0,
         accounts = listOf(DEFAULT_ACCOUNT),
     )
+
+private val CARD_CXP_MESSAGE: CredentialExchangeProtocolMessage =
+    CredentialExchangeProtocolMessage(
+        version = DEFAULT_CXP_VERSION,
+        exporterRpId = "mockRpId-1",
+        exporterDisplayName = "mockDisplayName-1",
+        payload = CARD_PAYLOAD,
+    )
+
+private val CARD_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
+    CredentialExchangeExportResponse(
+        version = DEFAULT_CXF_VERSION,
+        exporterRpId = "mockRpId-1",
+        exporterDisplayName = "mockDisplayName-1",
+        timestamp = 0,
+        accounts = listOf(DEFAULT_ACCOUNT_EMPTY),
+    )
+
 private val DEFAULT_ACCOUNT_JSON = """
     {
       "id": "$DEFAULT_USER_ID",
@@ -411,6 +499,73 @@ private val DEFAULT_ACCOUNT_JSON = """
                 "value": "mockPasswordValue-1"
               }
             }
+          ]
+        }
+      ]
+    }
+"""
+    .trimIndent()
+
+private val DEFAULT_ACCOUNT_CARD_JSON = """
+    {
+      "id": "$DEFAULT_USER_ID",
+      "username": "username-1",
+      "email": "mockEmail-1",
+      "fullName": "fullName-1",
+      "collections": [],
+      "items": [
+        {
+          "id": "mockId-1",
+          "creationAt": 1759783057,
+          "modifiedAt": 1759783057,
+          "title": "mockTitle-1",
+          "favorite": false,
+          "scope": {
+            "urls": [
+              "mockUrl-1"
+            ],
+            "androidApps": []
+          },
+          "credentials": [
+            {
+              "type": "credit-card",
+              "username": {
+                "fieldType": "mockUsernameFieldType-1",
+                "value": "mockUsernameValue-1"
+              },
+              "password": {
+                "fieldType": "mockPasswordFieldType-1",
+                "value": "mockPasswordValue-1"
+              }
+            }
+          ]
+        }
+      ]
+    }
+"""
+    .trimIndent()
+
+private val DEFAULT_ACCOUNT_CARD_STRIPPED_JSON = """
+    {
+      "id": "$DEFAULT_USER_ID",
+      "username": "username-1",
+      "email": "mockEmail-1",
+      "fullName": "fullName-1",
+      "collections": [],
+      "items": [
+        {
+          "id": "mockId-1",
+          "creationAt": 1759783057,
+          "modifiedAt": 1759783057,
+          "title": "mockTitle-1",
+          "favorite": false,
+          "scope": {
+            "urls": [
+              "mockUrl-1"
+            ],
+            "androidApps": []
+          },
+          "credentials": [
           ]
         }
       ]
