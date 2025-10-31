@@ -30,10 +30,8 @@ class FeatureViewModel @Inject constructor(
     private fun handleInternalAction(action: FeatureAction.Internal) {
         when (action) {
             is FeatureAction.Internal.ActionComplete -> {
-                // The event handler evaluates the result and updates state
+                // The action handler evaluates the result and updates state
                 action.result.fold(
-                // The event handler evaluates the result and updates state
-                event.result.fold(
                     onSuccess = { _state.value = State.Success },
                     onFailure = { _state.value = State.Error(it) }
                 )
@@ -239,7 +237,7 @@ suspend fun fetchData(): Result<Data> = runCatching {
 fun onFetch() {
     viewModelScope.launch {
         val result = repository.fetchData()
-        sendAction(InternalAction.FetchComplete(result))
+        sendAction(FeatureAction.Internal.FetchComplete(result))
     }
 }
 ```
