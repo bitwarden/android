@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick The callback when the row is clicked.
  * @param cardStyle The [CardStyle] to be applied to this row.
  * @param modifier The modifier for this composable.
+ * @param description The optional displayable description text.
  * @param leadingIcon An optional leading icon.
  * @param notificationCount The optional notification count to be displayed.
  */
@@ -41,6 +42,7 @@ fun BitwardenPushRow(
     onClick: () -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    description: String? = null,
     leadingIcon: IconData? = null,
     notificationCount: Int = 0,
 ) {
@@ -73,12 +75,22 @@ fun BitwardenPushRow(
                 )
                 Spacer(modifier = Modifier.width(width = 12.dp))
             }
-            Text(
-                text = text,
-                style = BitwardenTheme.typography.bodyLarge,
-                color = BitwardenTheme.colorScheme.text.primary,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Column {
+                Text(
+                    text = text,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                description?.let {
+                    Text(
+                        text = it,
+                        style = BitwardenTheme.typography.bodyMedium,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
         }
         TrailingContent(notificationCount = notificationCount)
     }
