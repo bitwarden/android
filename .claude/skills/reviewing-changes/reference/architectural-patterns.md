@@ -18,13 +18,24 @@ class FeatureViewModel @Inject constructor(
     // Public immutable state
     val state: StateFlow<FeatureState> = _state.asStateFlow()
 
-    // Actions as functions
+    // Actions as functions, state updated via internal event
     fun onActionClicked() {
         viewModelScope.launch {
-            repository.performAction().fold(
-                onSuccess = { data -> _state.value = FeatureState.Success(data) },
-                onFailure = { error -> _state.value = FeatureState.Error(error) }
-            )
+            val result = repository.performAction()
+            send(InternalEvent.ActionComplete(result))
+        }
+    }
+
+    // The ViewModel has a handler that processes the internal event
+    private fun handleInternalEvent(event: InternalEvent) {
+        when (event) {
+            is InternalEvent.SubmissionComplete -> {
+                // The event handler evaluates the result and updates state
+                event.result.fold(
+                    onSuccess = { _state.value = State.Success },
+                    onFailure = { _state.value = State.Error(it) }
+                )
+            }
         }
     }
 }
