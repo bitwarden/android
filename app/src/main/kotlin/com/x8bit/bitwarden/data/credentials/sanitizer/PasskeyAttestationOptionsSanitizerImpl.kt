@@ -11,7 +11,7 @@ object PasskeyAttestationOptionsSanitizerImpl : PasskeyAttestationOptionsSanitiz
         // to the user.id field when creating a passkey. This causes the operation to fail
         // downstream. As a workaround, we detect this specific scenario, trim the newline, and
         // re-serialize the JSON request.
-        return if (options.relyingParty.id.contains(ALIEXPRESS_RP_ID) &&
+        return if (options.relyingParty.id == ALIEXPRESS_RP_ID &&
             options.user.id.endsWith("\n")
         ) {
             options.copy(
