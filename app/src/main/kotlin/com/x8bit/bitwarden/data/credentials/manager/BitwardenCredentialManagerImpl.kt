@@ -33,7 +33,7 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.credentials.santizer.PasskeyAttestationOptionsSanitizer
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint

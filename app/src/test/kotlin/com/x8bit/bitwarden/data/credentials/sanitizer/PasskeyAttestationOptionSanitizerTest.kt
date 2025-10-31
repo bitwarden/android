@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.credentials.santizer
+package com.x8bit.bitwarden.data.credentials.sanitizer
 
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import org.junit.jupiter.api.Assertions.assertEquals
