@@ -53,6 +53,7 @@ import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -327,11 +328,11 @@ private fun AutoFillScreenContent(
                 .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextRow(
+        BitwardenPushRow(
             text = stringResource(id = BitwardenString.block_auto_fill),
-            description = BitwardenString
-                .auto_fill_will_not_be_offered_for_these_ur_is
-                .toAnnotatedString(),
+            description = stringResource(
+                id = BitwardenString.auto_fill_will_not_be_offered_for_these_ur_is,
+            ),
             onClick = autoFillHandlers.onBlockAutoFillClick,
             cardStyle = CardStyle.Full,
             modifier = Modifier
