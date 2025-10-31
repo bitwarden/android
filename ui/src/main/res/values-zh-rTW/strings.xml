@@ -452,7 +452,7 @@
     <string name="maximum_access_count">最大存取次數</string>
     <string name="maximum_access_count_info">如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。</string>
     <string name="maximum_access_count_reached">已達最大存取次數</string>
-    <string name="current_access_count">目前存取次數</string>
+    <string name="current_access_count">目前存取次數: %s</string>
     <string name="new_password">新密碼</string>
     <string name="password_info">選用。使用者需提供密碼才能存取此 Send。</string>
     <string name="remove_password">移除密碼</string>
@@ -477,6 +477,7 @@
     <string name="seven_days">7 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自訂</string>
+    <string name="custom_timeout">自訂逾時時間</string>
     <string name="add_this_authenticator_key_to_a_login">將此驗證器金鑰新增到現存的登入資訊，或者建立一個新登入資訊。</string>
     <string name="send_disabled_warning">由於企業原則限制，您只能刪除現有的 Send。</string>
     <string name="about_send">關於 Send</string>
@@ -495,9 +496,18 @@
     <string name="fido2_authenticate_web_authn">驗證 WebAuthn</string>
     <string name="fido2_return_to_app">返回應用程式</string>
     <string name="reset_password_auto_enroll_invite_warning">此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。</string>
-    <string name="vault_timeout_policy_in_effect">您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 %1$s 小時 %2$s 分鐘。</string>
-    <string name="vault_timeout_policy_with_action_in_effect">您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 %1$s 小時 %2$s 分鐘。您密碼庫的逾時動作被設定為 %3$s。</string>
-    <string name="vault_timeout_action_policy_in_effect">您的組織原則已將密碼庫逾時動作設定為 %1$s。</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s，%2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 小時</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 分鐘</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">您的組織已將最長工作階段逾時設為 %1$s 和 %2$s。</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">您的組織已將最長工作階段逾時設為 %1$s。</string>
+    <string name="this_setting_is_managed_by_your_organization">此設定由您的組織管理。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">您的組織已將最長工作階段逾時設為「永不」。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">您的組織已將最長工作階段逾時設為「應用程式重啟時」。</string>
     <string name="vault_timeout_to_large">您的密碼庫逾時時間超過組織設定的限制。</string>
     <string name="disable_personal_vault_export_policy_in_effect">一個或多個組織原則禁止您匯出個人密碼庫。</string>
     <string name="add_account">新增帳戶</string>

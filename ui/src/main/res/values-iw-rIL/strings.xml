@@ -483,6 +483,7 @@
     <string name="seven_days">7 ימים</string>
     <string name="thirty_days">30 ימים</string>
     <string name="custom">מותאם אישית</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">הוסף מפתח מאמת זה לכניסה קיימת, או צור כניסה חדשה.</string>
     <string name="send_disabled_warning">בשל מדיניות ארגונית, אתה יכול למחוק רק סֵנְד קיים.</string>
     <string name="about_send">אודות סֵנְד</string>
@@ -501,9 +502,24 @@
     <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
     <string name="fido2_return_to_app">חזור ליישום</string>
     <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
-    <string name="vault_timeout_policy_in_effect">פוליסות הארגון שלך הגדירו את פסק הזמן לכספת המרבי שלך ל־%1$s שעות ו־%2$s דקות.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">פוליסות הארגון שלך משפיעות על פסק הזמן לכספת שלך. פסק זמן מרבי המותר הוא %1$s שעות ו־%2$s דקות. פעולת פסק הזמן לכספת שלך מוגדרת ל%3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">פוליסות הארגון שלך הגדירו את פעולת פסק הזמן לכספת שלך ל%1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="two">%1$d hours</item>
+        <item quantity="many">%1$d hours</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="two">%1$d minutes</item>
+        <item quantity="many">%1$d minutes</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">פסק הזמן לכספת שלך חורג מהמגבלות שנקבעו על ידי הארגון שלך.</string>
     <string name="disable_personal_vault_export_policy_in_effect">מדיניות ארגון אחת או יותר מונעת ממך מלייצא את הכספת האישית שלך.</string>
     <string name="add_account">הוסף חשבון</string>

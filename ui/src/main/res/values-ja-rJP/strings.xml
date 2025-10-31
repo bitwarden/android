@@ -452,7 +452,7 @@
     <string name="maximum_access_count">最大アクセス数</string>
     <string name="maximum_access_count_info">設定されている場合、最大アクセス数に達するとユーザーはこの Send にアクセスできなくなります。</string>
     <string name="maximum_access_count_reached">最大アクセス数に達しました</string>
-    <string name="current_access_count">現在のアクセス数</string>
+    <string name="current_access_count">現在のアクセス数: %s</string>
     <string name="new_password">新しいパスワード</string>
     <string name="password_info">必要に応じて、ユーザーがこの Send にアクセスするためのパスワードを要求します。</string>
     <string name="remove_password">パスワードを削除</string>
@@ -477,6 +477,7 @@
     <string name="seven_days">7日</string>
     <string name="thirty_days">30日</string>
     <string name="custom">カスタム</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">この認証キーを既存のログインに追加するか、新しいログインを作成します。</string>
     <string name="send_disabled_warning">組織のポリシーにより、既存の Send のみを削除できます。</string>
     <string name="about_send">Send について</string>
@@ -495,9 +496,18 @@
     <string name="fido2_authenticate_web_authn">WebAuthn の認証</string>
     <string name="fido2_return_to_app">アプリに戻る</string>
     <string name="reset_password_auto_enroll_invite_warning">この組織には自動的にパスワードリセットに登録するポリシーがあります。登録すると、組織の管理者はマスターパスワードを変更できます。</string>
-    <string name="vault_timeout_policy_in_effect">組織のポリシーが保管庫のタイムアウトに影響を与えています。保管庫のタイムアウトは %1$s 時間 %2$s 分です。</string>
-    <string name="vault_timeout_policy_with_action_in_effect">組織のポリシーがデータ保管庫のタイムアウトに影響しています。保管庫のタイムアウトの最大許容値は、%1$s時間%2$s分です。保管庫タイムアウト時のアクションは、%3$sに設定されています。</string>
-    <string name="vault_timeout_action_policy_in_effect">組織のポリシーで保管庫のタイムアウトアクションが%1$sに設定されています。</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">保管庫のタイムアウトが組織によって設定された制限を超えています。</string>
     <string name="disable_personal_vault_export_policy_in_effect">1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</string>
     <string name="add_account">アカウントを追加</string>

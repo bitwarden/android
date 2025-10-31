@@ -366,7 +366,7 @@
     <string name="copy_notes">메모 복사</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">애플리케이션을 다시 시작했을 때 마스터 비밀번호로 잠금 해제가 필요하도록 하시겠습니까?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item">항목 추가 묻기</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
     <string name="on_restart">앱 재시작 시</string>
     <string name="capitalize">첫 글자를 대문자로</string>
@@ -477,6 +477,7 @@
     <string name="seven_days">7일</string>
     <string name="thirty_days">30일</string>
     <string name="custom">사용자 지정</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">엔터프라이즈 정책으로 인해 이미 생성된 Send를 삭제하는 것만 허용됩니다.</string>
     <string name="about_send">Send 정보</string>
@@ -495,9 +496,18 @@
     <string name="fido2_authenticate_web_authn">WebAuthn 인증</string>
     <string name="fido2_return_to_app">앱으로 돌아가기</string>
     <string name="reset_password_auto_enroll_invite_warning">이 조직에는 자동으로 비밀번호 재설정에 등록하는 기업 정책이 있습니다. 등록하면 조직 관리자가 마스터 암호를 변경할 수 있습니다.</string>
-    <string name="vault_timeout_policy_in_effect">조직 정책이 보관함 제한 시간에 영향을 미치고 있습니다. 최대 허용 보관함 제한 시간은 %1$s시간 %2$s분입니다</string>
-    <string name="vault_timeout_policy_with_action_in_effect">조직에서 보관함 타임아웃을 관리하고 있습니다. 허용된 최대 보관함 타임아웃은 %1$s시간 %2$s분입니다. 현재 보관함 타임아웃은 %3$s입니다.</string>
-    <string name="vault_timeout_action_policy_in_effect">조직에서 보관함 타임아웃 작업을 %1$s으로 설정했습니다.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">볼트 제한 시간이 조직에서 설정한 제한을 초과합니다.</string>
     <string name="disable_personal_vault_export_policy_in_effect">하나 이상의 조직 정책이 개인 보관함을 내보내는 것을 제한하고 있습니다.</string>
     <string name="add_account">계정 추가</string>
@@ -654,7 +664,7 @@
     <string name="account_fingerprint_phrase">계정 지문 구절</string>
     <string name="passkey_management_explanation_long">Bitwarden을 사용하여 새 패스키를 저장하고, 보관함에 저장된 패스키로 로그인하세요.</string>
     <string name="autofill_services_explanation_long">Allow Bitwarden to use your saved login information to sign in to other apps on your device.</string>
-    <string name="use_inline_autofill_explanation_long">Choose how your autofill suggestions will appear when you sign in to other apps on your device.</string>
+    <string name="use_inline_autofill_explanation_long">기기에서 다른 앱에 로그인할 때 자동 채우기 추천 항목이 표시되는 방식을 선택하세요.</string>
     <string name="additional_options">추가 옵션</string>
     <string name="continue_to_web_app">웹앱에서 계속하기</string>
     <string name="continue_to_x">%1$s 이동하기</string>
@@ -856,7 +866,7 @@
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
     <string name="copy_private_key">개인 키 복사</string>
     <string name="login_credentials">Login Credentials</string>
-    <string name="autofill_options">Autofill Options</string>
+    <string name="autofill_options">자동 완성 옵션</string>
     <string name="use_this_button_to_generate_a_new_unique_password">새로운 비밀번호를 생성하려면 탭하십시오.</string>
     <string name="coachmark_1_of_3">1 OF 3</string>
     <string name="coachmark_2_of_3">2 OF 3</string>
@@ -910,7 +920,7 @@
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Chrome 자동 완성 연동 사용</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">선택된 브라우저에서 지원되는 웹사이트에 대한 로그인 자동 채우기 기능을 개선합니다. 이 기능을 활성화하면, 서드파티 자동 채우기 기능을 켜기 위해 브라우저 설정으로 이동하게 됩니다.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
@@ -969,16 +979,16 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
-    <string name="about_privileged_applications">About privileged applications</string>
-    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
-    <string name="privileged_apps">Privileged apps</string>
+    <string name="trusted_by_you_learn_more">Bitwarden이 기본적으로는 신뢰하지 않지만, 사용자님이 직접 패스키 작업을 수행하도록 신뢰한 애플리케이션 또는 브라우저입니다.</string>
+    <string name="trusted_by_community_learn_more">Google Play 스토어에 등록되어 있지는 않지만, Bitwarden 커뮤니티 회원들이 사용 후 안전하다고 보고하여 패스키 작업을 수행하는 것이 신뢰되는 애플리케이션입니다.</string>
+    <string name="trusted_by_google_learn_more">Google에서 안전하다고 간주하며 Google Play 스토어에서 사용할 수 있는 애플리케이션입니다.</string>
+    <string name="trusted_by_you">사용자님이 신뢰하는 앱</string>
+    <string name="trusted_by_the_community">커뮤니티에서 신뢰하는 앱</string>
+    <string name="trusted_by_google">Google에서 신뢰하는 앱</string>
+    <string name="privileged_apps_description">사용자를 피싱 시도로부터 보호하기 위해, Bitwarden은 기본적으로 Google 또는 Bitwarden 커뮤니티에서 신뢰하는 애플리케이션이나 웹 브라우저를 통해서만 패스키 작업을 완료합니다.</string>
+    <string name="about_privileged_applications">권한이 있는 애플리케이션에 대하여</string>
+    <string name="learn_more_about_privileged_apps">권한이 있는 앱에 대해 더 알아보기</string>
+    <string name="privileged_apps">권한이 있는 앱</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
     <string name="all_trusted_apps">All trusted apps</string>
@@ -1115,8 +1125,8 @@
     <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
     <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
     <string name="verify_your_master_password">Verify your master password</string>
-    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
+    <string name="having_trouble_with_autofill">자동 완성에 문제가 있으신가요?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">여기에서 도움말 및 문제 해결 문서를 확인하세요</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>

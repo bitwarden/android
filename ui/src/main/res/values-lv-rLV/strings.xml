@@ -368,7 +368,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="theme">Izskats</string>
     <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Ievietot piezīmes starpliktuvē</string>
-    <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
+    <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
     <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
     <string name="ask_to_add_item">Vaicāt, lai pievienotu vienumu</string>
     <string name="ask_to_add_item_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
@@ -481,6 +481,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="seven_days">7 dienas</string>
     <string name="thirty_days">30 dienas</string>
     <string name="custom">Pielāgots</string>
+    <string name="custom_timeout">Pielāgota noildze</string>
     <string name="add_this_authenticator_key_to_a_login">Pievieno šo autentificēšanās atslēgu esošam pieteikšanās vienumam vai izveido jaunu!</string>
     <string name="send_disabled_warning">Uzņēmuma nosacījumu dēļ ir iespējams dzēst tikai esošu Send.</string>
     <string name="about_send">Par Send</string>
@@ -499,9 +500,22 @@ Nolasīšana notiks automātiski.</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
-    <string name="vault_timeout_policy_in_effect">Apvienības nosacījumi ietekmē glabātavas noildzi. Lielākā atļautā glabātavas noildze ir %1$s stunda(s) un %2$s minūte(s)</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Apvienības nosacījumi ietekmē glabātavas noildzi. Lielākā atļautā glabātavas noildze ir %1$s stunda(s) un %2$s minūte(s). Kā glabātavas noildzes darbība ir uzstādīta %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Apvienības nosacījumos kā glabātavas noildzes darbība ir uzstādīta %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="zero">%1$d stundām</item>
+        <item quantity="one">%1$d stundu</item>
+        <item quantity="other">%1$d stundām</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="zero">%1$d minūtēm</item>
+        <item quantity="one">%1$d minūti</item>
+        <item quantity="other">%1$d minūtēm</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Apvienība ir iestatījusi lielāko pieļaujamo sesijas noildzi uz %1$s un %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Apvienība ir iestatījusi lielāko pieļaujamo sesijas noildzi uz %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Šo iestatījumu pārvalda apvienība.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Apvienība ir iestatījusi lielāko pieļaujamo sesijas noildzi uz “nekad”.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Apvienība ir iestatījusi lielāko pieļaujamo sesijas noildzi līdz lietotnes atkārtotai palaišanai.</string>
     <string name="vault_timeout_to_large">Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</string>
     <string name="add_account">Pievienot kontu</string>
