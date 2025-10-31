@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcesso
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryImpl
+import com.x8bit.bitwarden.data.credentials.santizer.PasskeyAttestationOptionSanitizerImpl
+import com.x8bit.bitwarden.data.credentials.santizer.PasskeyAttestationOptionsSanitizer
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -75,15 +77,17 @@ object CredentialProviderModule {
         dispatcherManager: DispatcherManager,
         credentialEntryBuilder: CredentialEntryBuilder,
         cipherMatchingManager: CipherMatchingManager,
+        passkeyAttestationOptionsSanitizer: PasskeyAttestationOptionsSanitizer,
     ): BitwardenCredentialManager =
         BitwardenCredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            credentialEntryBuilder = credentialEntryBuilder,
             json = json,
             vaultRepository = vaultRepository,
-            dispatcherManager = dispatcherManager,
-            credentialEntryBuilder = credentialEntryBuilder,
             cipherMatchingManager = cipherMatchingManager,
+            passkeyAttestationOptionsSanitizer = passkeyAttestationOptionsSanitizer,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
@@ -139,4 +143,9 @@ object CredentialProviderModule {
         CredentialManagerPendingIntentManagerImpl(
             context = context,
         )
+
+    @Provides
+    @Singleton
+    fun providePasskeyAttestationOptionsSanitizer(): PasskeyAttestationOptionsSanitizer =
+        PasskeyAttestationOptionSanitizerImpl
 }
