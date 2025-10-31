@@ -123,8 +123,8 @@ fun ImportingScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = BitwardenString.import_vault),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ImportAction.CloseButtonClick)

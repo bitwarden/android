@@ -11,15 +11,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navOptions
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.navigateToTabOrRoot
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
@@ -86,7 +83,7 @@ fun VaultUnlockedNavBarScreen(
                 is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
                     -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                    navigateToTabOrRoot(target = event.tab) {
                         navigateToVaultGraph(navOptions = it)
                     }
                 }
@@ -94,7 +91,7 @@ fun VaultUnlockedNavBarScreen(
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
                 VaultUnlockedNavBarEvent.NavigateToSendScreen,
                     -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                    navigateToTabOrRoot(target = event.tab) {
                         navigateToSendGraph(navOptions = it)
                     }
                 }
@@ -102,7 +99,7 @@ fun VaultUnlockedNavBarScreen(
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
                     -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                    navigateToTabOrRoot(target = event.tab) {
                         navigateToGeneratorGraph(navOptions = it)
                     }
                 }
@@ -110,7 +107,7 @@ fun VaultUnlockedNavBarScreen(
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
                 VaultUnlockedNavBarEvent.NavigateToSettingsScreen,
                     -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                    navigateToTabOrRoot(target = event.tab) {
                         navigateToSettingsGraph(navOptions = it)
                     }
                 }
@@ -276,37 +273,6 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
             )
         }
-    }
-}
-
-/**
- * Helper function to determine how to navigate to a specified [VaultUnlockedNavBarTab].
- * If direct navigation is required, the [navigate] lambda will be invoked with the appropriate
- * [NavOptions].
- */
-@Suppress("MaxLineLength")
-private fun NavController.navigateToTabOrRoot(
-    tabToNavigateTo: VaultUnlockedNavBarTab,
-    navigate: (NavOptions) -> Unit,
-) {
-    if (tabToNavigateTo.startDestinationRoute.toObjectNavigationRoute() == currentDestination?.route) {
-        // We are at the start destination already, so nothing to do.
-        return
-    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute.toObjectNavigationRoute()) {
-        // We are not at the start destination but we are in the correct graph,
-        // so lets pop up to the start destination.
-        popBackStack(route = tabToNavigateTo.startDestinationRoute, inclusive = false)
-    } else {
-        // We are not in correct graph at all, so navigate there.
-        navigate(
-            navOptions {
-                popUpTo(id = graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            },
-        )
     }
 }
 

@@ -7,6 +7,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowLayoutInDisplayCutoutMode">default</item>
+        <item name="android:backgroundDimAmount">@dimen/dialogDimBackgroundAmount</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- Launch theme (for auto dark/light based on system) -->

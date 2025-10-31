@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.navbar
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,22 +10,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.navigateToItemListGraph
 import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraphRoute
 import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsRoute
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.navigateToExport
+import com.bitwarden.authenticator.ui.platform.feature.settings.importing.navigateToImporting
 import com.bitwarden.authenticator.ui.platform.feature.settings.navigateToSettingsGraph
+import com.bitwarden.authenticator.ui.platform.feature.settings.settingsGraph
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.navigateToTabOrRoot
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
@@ -52,20 +51,21 @@ fun AuthenticatorNavBarScreen(
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
-    onNavigateToExport: () -> Unit,
-    onNavigateToImport: () -> Unit,
     onNavigateToTutorial: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions = navController.authenticatorNavBarScreenNavOptions()
             when (event) {
                 AuthenticatorNavBarEvent.NavigateToSettings -> {
-                    navigateToSettingsGraph(navOptions)
+                    navigateToTabOrRoot(target = AuthenticatorNavBarTab.Settings) {
+                        navigateToSettingsGraph(navOptions = it)
+                    }
                 }
 
                 AuthenticatorNavBarEvent.NavigateToVerificationCodes -> {
-                    navigateToItemListGraph(navOptions)
+                    navigateToTabOrRoot(target = AuthenticatorNavBarTab.VerificationCodes) {
+                        navigateToItemListGraph(navOptions = it)
+                    }
                 }
             }
         }
@@ -93,13 +93,10 @@ fun AuthenticatorNavBarScreen(
         navigateToQrCodeScanner = onNavigateToQrCodeScanner,
         navigateToManualKeyEntry = onNavigateToManualKeyEntry,
         navigateToEditItem = onNavigateToEditItem,
-        navigateToExport = onNavigateToExport,
-        navigateToImport = onNavigateToImport,
-        navigateToTutorial = onNavigateToTutorial,
+        onNavigateToTutorial = onNavigateToTutorial,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AuthenticatorNavBarScaffold(
     navController: NavHostController,
@@ -110,9 +107,7 @@ private fun AuthenticatorNavBarScaffold(
     navigateToQrCodeScanner: () -> Unit,
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (itemId: String) -> Unit,
-    navigateToExport: () -> Unit,
-    navigateToImport: () -> Unit,
-    navigateToTutorial: () -> Unit,
+    onNavigateToTutorial: () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
@@ -144,15 +139,17 @@ private fun AuthenticatorNavBarScaffold(
             popExitTransition = RootTransitionProviders.Exit.fadeOut,
         ) {
             itemListingGraph(
-                navController = navController,
                 navigateBack = navigateBack,
                 navigateToSearch = navigateToSearch,
                 navigateToQrCodeScanner = navigateToQrCodeScanner,
                 navigateToManualKeyEntry = navigateToManualKeyEntry,
                 navigateToEditItem = navigateToEditItem,
-                navigateToExport = navigateToExport,
-                navigateToImport = navigateToImport,
-                navigateToTutorial = navigateToTutorial,
+            )
+            settingsGraph(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToTutorial = onNavigateToTutorial,
+                onNavigateToExport = { navController.navigateToExport() },
+                onNavigateToImport = { navController.navigateToImporting() },
             )
         }
     }
@@ -213,18 +210,6 @@ private sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
         override val notificationCount: Int get() = 0
     }
 }
-
-/**
- * Helper function to generate [NavOptions] for [AuthenticatorNavBarScreen].
- */
-private fun NavController.authenticatorNavBarScreenNavOptions(): NavOptions =
-    navOptions {
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
 
 /**
  * Determine if the current destination is the same as the given tab.

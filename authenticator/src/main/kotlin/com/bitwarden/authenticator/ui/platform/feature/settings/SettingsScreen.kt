@@ -57,6 +57,7 @@ import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -333,37 +334,21 @@ private fun ColumnScope.VaultSettings(
         label = stringResource(id = BitwardenString.data),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.import_vault),
         onClick = onImportClick,
+        cardStyle = CardStyle.Top(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Import"),
-        cardStyle = CardStyle.Top(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.export),
         onClick = onExportClick,
+        cardStyle = CardStyle.Middle(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Export"),
-        cardStyle = CardStyle.Middle(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
     BitwardenExternalLinkRow(
         text = stringResource(BitwardenString.backup),

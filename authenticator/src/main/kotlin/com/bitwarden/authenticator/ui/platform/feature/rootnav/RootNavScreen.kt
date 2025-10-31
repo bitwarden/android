@@ -19,7 +19,6 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
-import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
@@ -42,8 +41,7 @@ import java.util.concurrent.atomic.AtomicReference
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onSplashScreenRemoved: () -> Unit = {},
-    onExitApplication: () -> Unit,
+    onSplashScreenRemoved: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val previousStateReference = remember { AtomicReference(state) }
@@ -82,15 +80,7 @@ fun RootNavScreen(
                 viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
             },
         )
-        setupDebugMenuDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
-        )
-        authenticatorGraph(
-            navController = navController,
-            onNavigateBack = onExitApplication,
-        )
+        authenticatorGraph(navController = navController)
     }
 
     val targetRoute = when (state.navState) {

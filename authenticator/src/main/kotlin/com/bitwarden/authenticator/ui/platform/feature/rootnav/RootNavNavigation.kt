@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.rootnav
+package com.bitwarden.authenticator.ui.platform.feature.rootnav
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
