@@ -479,6 +479,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="seven_days">7 días</string>
     <string name="thirty_days">30 días</string>
     <string name="custom">Personalizado</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">Debido a una política empresarial, sólo puede eliminar un Send existente.</string>
     <string name="about_send">Acerca de Send</string>
@@ -497,9 +498,20 @@ El escaneo se realizará automáticamente.</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Volver a la App</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organización tiene una política empresarial que lo inscribirá automáticamente en el restablecimiento de contraseña. La inscripción permitirá a los administradores de la organización cambiar su contraseña maestra.</string>
-    <string name="vault_timeout_policy_in_effect">Las políticas de su organización están afectando el tiempo de espera de tu caja fuerte. El máximo permitido de tiempo de espera es %1$s hora(s) y %2$s minuto(s)</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Las políticas de tu organización están afectando el tiempo de espera de tu caja fuerte. El tiempo máximo permitido para la bóveda es de %1$s hora(s) y de %2$s minuto(s). Su acción de tiempo de espera de la bóveda se ha establecido en %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Las políticas de su organización han establecido la acción de tiempo de espera de su caja fuerte a %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</string>
     <string name="add_account">Añadir cuenta</string>

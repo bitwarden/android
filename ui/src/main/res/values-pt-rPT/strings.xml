@@ -479,6 +479,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="seven_days">7 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
+    <string name="custom_timeout">Tempo limite personalizado</string>
     <string name="add_this_authenticator_key_to_a_login">Adicione esta chave de autenticação a uma credencial existente ou crie uma nova credencial.</string>
     <string name="send_disabled_warning">Devido a uma política da empresa, só é possível eliminar um Send existente.</string>
     <string name="about_send">Sobre o Send</string>
@@ -497,9 +498,20 @@ A leitura será efetuada automaticamente.</string>
     <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
     <string name="fido2_return_to_app">Voltar à aplicação</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
-    <string name="vault_timeout_policy_in_effect">As políticas da sua organização definiram o tempo limite máximo permitido do cofre de %1$s hora(s) e %2$s minuto(s).</string>
-    <string name="vault_timeout_policy_with_action_in_effect">As políticas da sua organização estão a afetar o tempo limite do cofre. O tempo limite máximo permitido do cofre é de %1$s hora(s) e %2$s minuto(s). A sua ação de tempo limite do cofre está definida para %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">As políticas da sua organização definiram a ação de tempo limite do cofre para %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hora</item>
+        <item quantity="other">%1$d horas</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A sua organização definiu o tempo limite máximo da sessão para %1$s e %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A sua organização definiu o tempo limite máximo da sessão para %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Esta configuração é gerida pela sua organização.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">A sua organização definiu o tempo limite predefinido da sessão como nunca.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A sua organização definiu o tempo limite predefinido da sessão para ao reiniciar a app.</string>
     <string name="vault_timeout_to_large">O tempo limite do seu cofre excede as restrições definidas pela sua organização.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Uma ou mais políticas da organização impedem-no de exportar o seu cofre pessoal.</string>
     <string name="add_account">Adicionar conta</string>

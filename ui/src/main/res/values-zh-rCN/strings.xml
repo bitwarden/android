@@ -477,6 +477,7 @@
     <string name="seven_days">7 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自定义</string>
+    <string name="custom_timeout">自定义超时</string>
     <string name="add_this_authenticator_key_to_a_login">将此验证器密钥添加到现有登录，或创建一个新的登录。</string>
     <string name="send_disabled_warning">由于某个企业策略，您只能删除现有的 Send。</string>
     <string name="about_send">关于 Send</string>
@@ -495,9 +496,18 @@
     <string name="fido2_authenticate_web_authn">验证 WebAuthn</string>
     <string name="fido2_return_to_app">返回 App</string>
     <string name="reset_password_auto_enroll_invite_warning">此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</string>
-    <string name="vault_timeout_policy_in_effect">您的组织策略已将您最大允许的密码库超时时间设置为 %1$s 小时 %2$s 分钟。</string>
-    <string name="vault_timeout_policy_with_action_in_effect">您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 %1$s 小时 %2$s 分钟。您的密码库超时动作被设置为 %3$s。</string>
-    <string name="vault_timeout_action_policy_in_effect">您的组织策略已将您的密码库超时动作设置为 %1$s。</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s，%2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 小时</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 分钟</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">您的组织已将最大会话超时设置为 %1$s 小时 %2$s 分钟。</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">您的组织已将最大会话超时设置为 %1$s 。</string>
+    <string name="this_setting_is_managed_by_your_organization">此设置由您的组织管理。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">您的组织已将默认会话超时设置为「从不」。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">您的组织已将默认会话超时设置为「App 重启时」。</string>
     <string name="vault_timeout_to_large">您的密码库超时时间超出了组织设置的限制。</string>
     <string name="disable_personal_vault_export_policy_in_effect">一个或多个组织策略阻止您导出个人密码库。</string>
     <string name="add_account">添加账户</string>
@@ -1083,7 +1093,7 @@
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">更多关于匹配检测</annotation></string>
     <string name="keep_your_credential_secure">保持您的凭据安全</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">进一步了解在使用「%1$s」时如何保持凭据安全。</string>
-    <string name="are_you_sure_you_want_to_use">您确定要使用「%1$s」吗？</string>
+    <string name="are_you_sure_you_want_to_use">确定要使用「%1$s」吗？</string>
     <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 匹配检测控制 Bitwarden 如何识别自动填充建议。\n<annotation emphasis="bold">警告：</annotation>「正则表达方式」是一种高级选项，若使用不当，会增加暴露凭据的风险。</string>
     <string name="default_uri_match_detection_description_advanced_options">URI 匹配检测控制 Bitwarden 如何识别自动填充建议。\n<annotation emphasis="bold">警告：</annotation>「开始于」是一种高级选项，会增加暴露凭据的风险。</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">「开始于」是一种高级选项，会增加暴露凭据的风险。</string>
