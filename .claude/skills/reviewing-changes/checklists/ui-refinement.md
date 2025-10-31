@@ -143,7 +143,8 @@ Text(
     color = BitwardenTheme.colorScheme.primary
 )
 
-Spacer(modifier = Modifier.height(16.dp))  // Standard spacing
+// Design system uses 4.dp increments (4, 8, 12, 16, 24, 32, etc.)
+Spacer(modifier = Modifier.height(16.dp))
 
 // ❌ BAD - Hardcoded
 Text(
