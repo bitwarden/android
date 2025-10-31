@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 /**
  * Default implementation of [PasskeyAttestationOptionsSanitizer].
  */
-object PasskeyAttestationOptionSanitizerImpl : PasskeyAttestationOptionsSanitizer {
+object PasskeyAttestationOptionsSanitizerImpl : PasskeyAttestationOptionsSanitizer {
     override fun sanitize(options: PasskeyAttestationOptions): PasskeyAttestationOptions {
         // The AliExpress Android app (com.alibaba.aliexpresshd) incorrectly appends a newline
         // to the user.id field when creating a passkey. This causes the operation to fail

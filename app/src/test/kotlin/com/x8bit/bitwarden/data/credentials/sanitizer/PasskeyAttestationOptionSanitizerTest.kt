@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class PasskeyAttestationOptionSanitizerTest {
 
     private val sanitizer: PasskeyAttestationOptionsSanitizer =
-        PasskeyAttestationOptionSanitizerImpl
+        PasskeyAttestationOptionsSanitizerImpl
 
     @Test
     fun `Sanitization on matching RP ID and user ID with newline`() {

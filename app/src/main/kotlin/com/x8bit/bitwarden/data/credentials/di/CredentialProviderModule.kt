@@ -22,8 +22,8 @@ import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcesso
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryImpl
-import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionSanitizerImpl
 import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -147,5 +147,5 @@ object CredentialProviderModule {
     @Provides
     @Singleton
     fun providePasskeyAttestationOptionsSanitizer(): PasskeyAttestationOptionsSanitizer =
-        PasskeyAttestationOptionSanitizerImpl
+        PasskeyAttestationOptionsSanitizerImpl
 }
