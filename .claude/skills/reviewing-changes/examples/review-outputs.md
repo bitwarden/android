@@ -393,7 +393,7 @@ fun onPinEntered(pin: String) {
     if (invalid) {
         attemptCount++
         if (attemptCount >= MAX_ATTEMPTS) {
-            lockoutUntil = Clock.System.now() + 15.minutes
+            lockoutUntil = clock.millis() + 15.minutes
         }
     }
 }
