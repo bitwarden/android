@@ -365,7 +365,7 @@ class BitwardenCredentialManagerImpl(
 
         val requestJson =
             getPasskeyAttestationOptionsOrNull(createPublicKeyCredentialRequest.requestJson)
-                ?.also { passkeyAttestationOptionsSanitizer.sanitize(it) }
+                ?.apply { passkeyAttestationOptionsSanitizer.sanitize(this) }
                 ?.runCatching { json.encodeToString(this) }
                 ?.fold(
                     onSuccess = { it },
