@@ -116,13 +116,26 @@ fun onSubmit() {
     _state.value = State.Success
 }
 
-// ✅ GOOD - Business logic in Repository
+// ✅ GOOD - Business logic in Repository, state updated via internal event
 fun onSubmit() {
     viewModelScope.launch {
-        repository.submitData(password).fold(
-            onSuccess = { _state.value = State.Success },
-            onFailure = { _state.value = State.Error(it) }
-        )
+        // The result of the async operation is captured
+        val result = repository.submitData(password)
+        // A single event is sent with the result, not updating state directly
+        send(InternalEvent.SubmissionComplete(result))
+    }
+}
+
+// The ViewModel has a handler that processes the internal event
+private fun handleInternalEvent(event: InternalEvent) {
+    when (event) {
+        is InternalEvent.SubmissionComplete -> {
+            // The event handler evaluates the result and updates state
+            event.result.fold(
+                onSuccess = { _state.value = State.Success },
+                onFailure = { _state.value = State.Error(it) }
+            )
+        }
     }
 }
 ```
