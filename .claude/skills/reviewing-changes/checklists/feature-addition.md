@@ -129,7 +129,7 @@ fun onSubmit() {
 // The ViewModel has a handler that processes the internal event
 private fun handleInternalAction(action: FeatureAction.Internal) {
     when (action) {
-        is InternalEvent.SubmissionComplete -> {
+        is FeatureAction.Internal.SubmissionComplete -> {
             // The event handler evaluates the result and updates state
             action.result.fold(
                 onSuccess = { _state.value = State.Success },
