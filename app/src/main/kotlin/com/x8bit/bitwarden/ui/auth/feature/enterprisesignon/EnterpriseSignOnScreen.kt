@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -141,7 +140,6 @@ private fun EnterpriseSignOnScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(id = BitwardenString.log_in_sso_summary),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
