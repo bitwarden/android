@@ -10,14 +10,19 @@ import com.bitwarden.cxf.model.CredentialExchangeExportResponse
 import com.bitwarden.cxf.model.CredentialExchangeProtocolMessage
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 private val SUPPORTED_CXP_FORMAT_VERSIONS = mapOf(
     0 to setOf(0),
@@ -34,6 +39,7 @@ class CredentialExchangeImportManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val ciphersService: CiphersService,
     private val vaultSyncManager: VaultSyncManager,
+    private val policyManager: PolicyManager,
     private val json: Json,
 ) : CredentialExchangeImportManager {
 
@@ -83,7 +89,12 @@ class CredentialExchangeImportManagerImpl(
         }
 
         val accountsJson = try {
-            json.encodeToString(exportResponse.accounts.firstOrNull())
+            json.encodeToString(
+                value = filterRestrictedItems(
+                    accounts = exportResponse.accounts,
+                )
+                    .firstOrNull(),
+            )
         } catch (_: SerializationException) {
             return ImportCxfPayloadResult.Error(
                 ImportCredentialsInvalidJsonException("Unable to re-encode accounts."),
@@ -138,5 +149,33 @@ class CredentialExchangeImportManagerImpl(
                 onSuccess = { it },
                 onFailure = { ImportCxfPayloadResult.Error(error = it) },
             )
+    }
+
+    private fun filterRestrictedItems(
+        accounts: List<CredentialExchangeExportResponse.Account>,
+    ): List<CredentialExchangeExportResponse.Account> {
+        val shouldFilterCreditCards = policyManager
+            .getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .any { it.isEnabled }
+
+        if (!shouldFilterCreditCards) {
+            return accounts
+        }
+
+        return accounts.map { account ->
+            val filteredItems = account.items.filter { item ->
+                !isCardType(item)
+            }
+            account.copy(items = JsonArray(filteredItems))
+        }
+    }
+
+    private fun isCardType(item: Any): Boolean {
+        val jsonObject = item as? JsonObject ?: return false
+        val credentials = jsonObject.get("credentials") as? JsonArray ?: return false
+        val firstCredential = credentials.firstOrNull() as? JsonObject ?: return false
+        val type = firstCredential.get("type")?.jsonPrimitive?.content
+
+        return type == "credit-card"
     }
 }

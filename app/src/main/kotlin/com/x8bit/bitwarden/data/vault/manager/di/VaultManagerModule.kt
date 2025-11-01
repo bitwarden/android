@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -207,11 +208,13 @@ object VaultManagerModule {
         vaultSdkSource: VaultSdkSource,
         ciphersService: CiphersService,
         vaultSyncManager: VaultSyncManager,
+        policyManager: PolicyManager,
         json: Json,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        policyManager = policyManager,
         json = json,
     )
 }
