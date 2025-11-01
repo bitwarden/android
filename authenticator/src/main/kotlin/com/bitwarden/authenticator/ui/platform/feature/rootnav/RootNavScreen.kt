@@ -19,6 +19,7 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
@@ -26,6 +27,7 @@ import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
+import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
@@ -42,6 +44,7 @@ import java.util.concurrent.atomic.AtomicReference
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onSplashScreenRemoved: () -> Unit = {},
     onExitApplication: () -> Unit,
 ) {
@@ -135,7 +138,12 @@ fun RootNavScreen(
             }
 
             RootNavState.NavState.Locked -> {
-                navController.navigateToUnlock(rootNavOptions)
+                if (biometricsManager.isBiometricsSupported) {
+                    navController.navigateToUnlock(rootNavOptions)
+                } else {
+                    // device no longer has biometrics setup, clear biometrics key
+                    viewModel.trySendAction(RootNavAction.Internal.ClearBiometricsKey)
+                }
             }
 
             RootNavState.NavState.Unlocked -> {
