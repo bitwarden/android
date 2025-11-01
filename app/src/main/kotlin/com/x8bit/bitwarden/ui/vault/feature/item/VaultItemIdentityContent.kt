@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
@@ -27,6 +28,7 @@ import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.components.util.forceLtrVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -149,6 +151,7 @@ fun VaultItemIdentityContent(
                             index = identityState.propertyList.indexOf(element = ssn),
                             dividerPadding = 0.dp,
                         ),
+                    forceLtr = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -171,6 +174,7 @@ fun VaultItemIdentityContent(
                             index = identityState.propertyList.indexOf(element = passportNumber),
                             dividerPadding = 0.dp,
                         ),
+                    forceLtr = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -193,6 +197,7 @@ fun VaultItemIdentityContent(
                             index = identityState.propertyList.indexOf(element = licenseNumber),
                             dividerPadding = 0.dp,
                         ),
+                    forceLtr = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -215,6 +220,7 @@ fun VaultItemIdentityContent(
                             index = identityState.propertyList.indexOf(element = email),
                             dividerPadding = 0.dp,
                         ),
+                    forceLtr = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -237,6 +243,7 @@ fun VaultItemIdentityContent(
                             index = identityState.propertyList.indexOf(element = phone),
                             dividerPadding = 0.dp,
                         ),
+                    forceLtr = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -422,6 +429,7 @@ private fun IdentityCopyField(
     onCopyClick: () -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    forceLtr: Boolean = false,
 ) {
     BitwardenTextField(
         label = label,
@@ -439,6 +447,11 @@ private fun IdentityCopyField(
         },
         textFieldTestTag = textFieldTestTag,
         cardStyle = cardStyle,
+        visualTransformation = if (forceLtr) {
+            forceLtrVisualTransformation()
+        } else {
+            VisualTransformation.None
+        },
         modifier = modifier,
     )
 }
