@@ -3,7 +3,8 @@ package com.bitwarden.authenticator.ui.platform.feature.tutorial
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -22,7 +23,7 @@ data object SettingsTutorialRoute
  * Add the top level Tutorial screen to the nav graph.
  */
 fun NavGraphBuilder.tutorialDestination(onTutorialFinished: () -> Unit) {
-    composable<TutorialRoute> {
+    composableWithStayTransitions<TutorialRoute> {
         TutorialScreen(
             onTutorialFinished = onTutorialFinished,
         )
@@ -33,7 +34,7 @@ fun NavGraphBuilder.tutorialDestination(onTutorialFinished: () -> Unit) {
  * Add the Settings Tutorial screen to the nav graph.
  */
 fun NavGraphBuilder.tutorialSettingsDestination(onTutorialFinished: () -> Unit) {
-    composable<SettingsTutorialRoute> {
+    composableWithSlideTransitions<SettingsTutorialRoute> {
         TutorialScreen(
             onTutorialFinished = onTutorialFinished,
         )
