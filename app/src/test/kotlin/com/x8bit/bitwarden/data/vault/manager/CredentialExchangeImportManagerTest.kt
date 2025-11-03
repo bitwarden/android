@@ -32,6 +32,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -59,20 +62,6 @@ class CredentialExchangeImportManagerTest {
         every {
             encodeToString(value = DEFAULT_ACCOUNT, serializer = any())
         } returns DEFAULT_ACCOUNT_JSON
-
-        every {
-            decodeFromStringOrNull<CredentialExchangeProtocolMessage>(
-                DEFAULT_ACCOUNT_CARD_STRIPPED_JSON,
-            )
-        } returns CARD_CXP_MESSAGE
-
-        every {
-            decodeFromStringOrNull<CredentialExchangeExportResponse>(CARD_PAYLOAD)
-        } returns CARD_CXF_EXPORT_RESPONSE
-
-        every {
-            encodeToString(value = DEFAULT_ACCOUNT_EMPTY, serializer = any())
-        } returns DEFAULT_ACCOUNT_CARD_STRIPPED_JSON
     }
 
     private val importManager = CredentialExchangeImportManagerImpl(
@@ -89,9 +78,6 @@ class CredentialExchangeImportManagerTest {
         every {
             DEFAULT_PAYLOAD.base64UrlDecodeOrNull()
         } returns DEFAULT_PAYLOAD
-        every {
-            CARD_PAYLOAD.base64UrlDecodeOrNull()
-        } returns CARD_PAYLOAD
     }
 
     @AfterEach
@@ -373,6 +359,27 @@ class CredentialExchangeImportManagerTest {
     @Test
     fun `when user has restrict item types policy, importCxf should not contain any card item`() =
         runTest {
+            every {
+                json.decodeFromStringOrNull<CredentialExchangeProtocolMessage>(
+                    CARD_PAYLOAD,
+                )
+            } returns CARD_CXP_MESSAGE
+
+            every {
+                json.decodeFromStringOrNull<CredentialExchangeExportResponse>(CARD_PAYLOAD)
+            } returns CARD_CXF_EXPORT_RESPONSE
+
+            every {
+                json.encodeToString(
+                    serializer = any(),
+                    value = DEFAULT_ACCOUNT_EMPTY,
+                )
+            } returns DEFAULT_ACCOUNT_CARD_STRIPPED_JSON
+
+            every {
+                CARD_PAYLOAD.base64UrlDecodeOrNull()
+            } returns CARD_PAYLOAD
+
             coEvery {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
             } returns listOf(
@@ -392,8 +399,7 @@ class CredentialExchangeImportManagerTest {
                 )
             } returns emptyList<Cipher>().asSuccess()
 
-            val result =
-                importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_ACCOUNT_CARD_STRIPPED_JSON)
+            val result = importManager.importCxfPayload(DEFAULT_USER_ID, CARD_PAYLOAD)
 
             assertEquals(ImportCxfPayloadResult.NoItems, result)
             coVerify(exactly = 1) {
@@ -433,13 +439,27 @@ private val DEFAULT_ACCOUNT: CredentialExchangeExportResponse.Account =
         collections = JsonArray(content = emptyList()),
         items = JsonArray(content = emptyList()),
     )
-private val DEFAULT_ACCOUNT_EMPTY: CredentialExchangeExportResponse.Account =
+private val DEFAULT_ACCOUNT_WITH_CARD: CredentialExchangeExportResponse.Account =
     CredentialExchangeExportResponse.Account(
         id = "mockId-2",
         username = "mockUsername-2",
         email = "mockEmail-2",
         collections = JsonArray(content = emptyList()),
-        items = JsonArray(content = emptyList()),
+        items = JsonArray(
+            content = listOf(
+                buildJsonObject {
+                    put("id", JsonPrimitive("card-123"))
+                    put("name", JsonPrimitive("Test Credit Card"))
+                    put("credentials", buildJsonArray {
+                        add(buildJsonObject {
+                            put("type", JsonPrimitive("credit-card"))
+                            put("cardNumber", JsonPrimitive("4111111111111111"))
+                            put("cardholderName", JsonPrimitive("Test User"))
+                        })
+                    })
+                },
+            ),
+        ),
     )
 private val DEFAULT_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
     CredentialExchangeExportResponse(
@@ -464,7 +484,16 @@ private val CARD_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
         exporterRpId = "mockRpId-1",
         exporterDisplayName = "mockDisplayName-1",
         timestamp = 0,
-        accounts = listOf(DEFAULT_ACCOUNT_EMPTY),
+        accounts = listOf(DEFAULT_ACCOUNT_WITH_CARD),
+    )
+
+private val DEFAULT_ACCOUNT_EMPTY: CredentialExchangeExportResponse.Account =
+    CredentialExchangeExportResponse.Account(
+        id = "mockId-2",
+        username = "mockUsername-2",
+        email = "mockEmail-2",
+        collections = JsonArray(content = emptyList()),
+        items = JsonArray(content = emptyList()),
     )
 
 private val DEFAULT_ACCOUNT_JSON = """
