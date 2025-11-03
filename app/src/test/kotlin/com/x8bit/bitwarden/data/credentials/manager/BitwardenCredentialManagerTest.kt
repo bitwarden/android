@@ -435,6 +435,53 @@ class BitwardenCredentialManagerTest {
         }
 
     @Test
+    fun `registerFido2Credential should sanitize attestation options before registration`() =
+        runTest {
+            val originalOptions = createMockPasskeyAttestationOptions(number = 1)
+            val sanitizedOptions = originalOptions.copy(
+                user = originalOptions.user.copy(id = "sanitized-user-id"),
+            )
+
+            every { mockCallingAppInfo.signingInfo } returns mockSigningInfo
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every {
+                json.encodeToString<Fido2AttestationResponse>(any(), any())
+            } returns ""
+            every {
+                json.decodeFromStringOrNull<PasskeyAttestationOptions>(any())
+            } returns originalOptions
+            every {
+                mockPasskeyAttestationOptionsSanitizer.sanitize(originalOptions)
+            } returns sanitizedOptions
+            every {
+                json.encodeToString(sanitizedOptions)
+            } returns "sanitized-json"
+            every { mockCreatePublicKeyCredentialRequest.origin } returns DEFAULT_WEB_ORIGIN.v1
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                )
+            } returns mockRegistrationResponse.asSuccess()
+
+            bitwardenCredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                createPublicKeyCredentialRequest = mockCreatePublicKeyCredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+                callingAppInfo = mockCallingAppInfo,
+            )
+
+            verify { mockPasskeyAttestationOptionsSanitizer.sanitize(originalOptions) }
+            verify { json.encodeToString(sanitizedOptions) }
+            assertEquals(
+                """{"publicKey": sanitized-json}""",
+                requestCaptureSlot.captured.requestJson,
+            )
+        }
+
+    @Test
     fun `registerFido2Credential should return Error when origin is null`() = runTest {
         every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
         every {
