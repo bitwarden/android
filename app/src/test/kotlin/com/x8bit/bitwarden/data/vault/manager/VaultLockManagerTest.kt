@@ -1865,6 +1865,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                kdfManager.updateKdfToMinimumsIfNeeded(password = masterPassword)
             }
         }
 
