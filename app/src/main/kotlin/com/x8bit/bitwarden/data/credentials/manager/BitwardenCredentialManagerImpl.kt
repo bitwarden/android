@@ -368,7 +368,10 @@ class BitwardenCredentialManagerImpl(
                 ?.runCatching { json.encodeToString(this) }
                 ?.fold(
                     onSuccess = { it },
-                    onFailure = { null },
+                    onFailure = {
+                        Timber.e(it, "Failed to sanitize passkey attestation options.")
+                        null
+                    },
                 )
                 ?: return Fido2RegisterCredentialResult.Error.InternalError
 
