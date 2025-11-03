@@ -754,7 +754,13 @@ class VaultLockManagerImpl(
         val password = when (initUserCryptoMethod) {
             is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
             is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-            else -> return
+            is InitUserCryptoMethod.AuthRequest,
+            is InitUserCryptoMethod.DecryptedKey,
+            is InitUserCryptoMethod.DeviceKey,
+            is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.Pin,
+            is InitUserCryptoMethod.PinEnvelope,
+            -> return
         }
 
         kdfManager
