@@ -362,7 +362,6 @@ class BitwardenCredentialManagerImpl(
         clientData: ClientData,
         callingPackageName: String,
     ): Fido2RegisterCredentialResult {
-
         val requestJson =
             getPasskeyAttestationOptionsOrNull(createPublicKeyCredentialRequest.requestJson)
                 ?.let { passkeyAttestationOptionsSanitizer.sanitize(options = it) }
