@@ -309,6 +309,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
                     ),
                 ),
             )
@@ -397,6 +398,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
                     ),
                 ),
             )
@@ -3166,6 +3168,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
+            isExportable = true,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -3185,6 +3188,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
+            isExportable = true,
         ),
     ),
 )

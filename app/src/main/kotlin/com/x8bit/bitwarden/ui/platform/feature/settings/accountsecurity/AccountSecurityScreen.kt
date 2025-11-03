@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
@@ -43,9 +42,9 @@ import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.dropdown.BitwardenTimePickerButton
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -60,6 +59,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
@@ -72,10 +72,7 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalTime
 import javax.crypto.Cipher
-
-private const val MINUTES_PER_HOUR = 60
 
 /**
  * Displays the account security screen.
@@ -502,6 +499,7 @@ private fun SessionTimeoutRow(
                 onVaultTimeoutTypeSelect(selectedOption)
             }
         },
+        isEnabled = vaultTimeoutOptions.size > 1,
         textFieldTestTag = "SessionTimeoutStatusLabel",
         cardStyle = CardStyle.Top(),
         modifier = modifier,
@@ -530,48 +528,22 @@ private fun SessionCustomTimeoutRow(
     onCustomVaultTimeoutSelect: (VaultTimeout.Custom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowTimePickerDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowViolatesPoliciesDialog by remember { mutableStateOf(false) }
-    val vaultTimeoutInMinutes = customVaultTimeout.vaultTimeoutInMinutes
-    BitwardenTextRow(
-        text = stringResource(id = BitwardenString.custom),
-        onClick = { shouldShowTimePickerDialog = true },
+    BitwardenTimePickerButton(
+        label = stringResource(id = BitwardenString.custom_timeout),
+        totalMinutes = customVaultTimeout.vaultTimeoutInMinutes,
+        onTimeSelect = { minutes ->
+            if (vaultTimeoutPolicy?.minutes != null && minutes > vaultTimeoutPolicy.minutes) {
+                shouldShowViolatesPoliciesDialog = true
+            } else {
+                onCustomVaultTimeoutSelect(VaultTimeout.Custom(minutes))
+            }
+        },
+        is24Hour = true,
+        supportingContent = null,
         cardStyle = CardStyle.Middle(),
         modifier = modifier,
-    ) {
-        Text(
-            text = LocalTime
-                .ofSecondOfDay(vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong())
-                .toFormattedPattern(pattern = "HH:mm"),
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
-    }
-
-    if (shouldShowTimePickerDialog) {
-        BitwardenTimePickerDialog(
-            initialHour = vaultTimeoutInMinutes / MINUTES_PER_HOUR,
-            initialMinute = vaultTimeoutInMinutes.mod(MINUTES_PER_HOUR),
-            onTimeSelect = { hour, minute ->
-                shouldShowTimePickerDialog = false
-
-                val totalMinutes = (hour * MINUTES_PER_HOUR) + minute
-                if (vaultTimeoutPolicy?.minutes != null &&
-                    totalMinutes > vaultTimeoutPolicy.minutes
-                ) {
-                    shouldShowViolatesPoliciesDialog = true
-                } else {
-                    onCustomVaultTimeoutSelect(
-                        VaultTimeout.Custom(
-                            vaultTimeoutInMinutes = totalMinutes,
-                        ),
-                    )
-                }
-            },
-            onDismissRequest = { shouldShowTimePickerDialog = false },
-            is24Hour = true,
-        )
-    }
+    )
 
     if (shouldShowViolatesPoliciesDialog) {
         BitwardenBasicDialog(
@@ -580,11 +552,7 @@ private fun SessionCustomTimeoutRow(
             onDismissRequest = {
                 shouldShowViolatesPoliciesDialog = false
                 vaultTimeoutPolicy?.minutes?.let {
-                    onCustomVaultTimeoutSelect(
-                        VaultTimeout.Custom(
-                            vaultTimeoutInMinutes = it,
-                        ),
-                    )
+                    onCustomVaultTimeoutSelect(VaultTimeout.Custom(it))
                 }
             },
         )
@@ -728,10 +696,40 @@ private fun rememberSessionTimeoutOptions(
     VaultTimeout.Type
         .entries
         .filter { timeoutType ->
-            vaultTimeoutPolicy
-                ?.minutes
-                ?.let { minutes -> timeoutType.minutes <= minutes }
-                ?: true
+            when (vaultTimeoutPolicy?.type) {
+                PolicyInformation.VaultTimeout.Type.NEVER -> {
+                    // We allow everything here.
+                    true
+                }
+
+                PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+                PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                    -> {
+                    // We allow everything but never here.
+                    timeoutType != VaultTimeout.Type.NEVER
+                }
+
+                PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                    // Only allow immediately, everything else is blocked.
+                    timeoutType == VaultTimeout.Type.IMMEDIATELY
+                }
+
+                PolicyInformation.VaultTimeout.Type.CUSTOM -> {
+                    // Filter out all values above the specified amount. Custom set timeouts
+                    // that exceed the max value will be constrained in the VM.
+                    timeoutType.minutes <= (vaultTimeoutPolicy.minutes ?: Int.MAX_VALUE)
+                }
+
+                null -> {
+                    // If the type is null, there could still be a policy in place from a
+                    // legacy server that is not sending a type. So we still filter as though
+                    // it were a custom type in that scenario, otherwise we allow everything.
+                    vaultTimeoutPolicy
+                        ?.minutes
+                        ?.let { minutes -> timeoutType.minutes <= minutes }
+                        ?: true
+                }
+            }
         }
         .toImmutableList()
 }

@@ -119,6 +119,7 @@ class SyncResponseJsonExtensionsTest {
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
             action = PolicyInformation.VaultTimeout.Action.LOCK,
+            type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
         val policy = createMockPolicy(
             type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,

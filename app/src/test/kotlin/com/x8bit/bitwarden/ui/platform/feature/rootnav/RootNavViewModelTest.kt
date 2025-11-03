@@ -114,6 +114,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -151,6 +152,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -185,6 +187,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -229,6 +232,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -270,6 +274,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -311,6 +316,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -349,6 +355,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -402,6 +409,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -437,6 +445,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -477,6 +486,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -515,6 +525,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         firstTimeState = FirstTimeState(false),
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -558,6 +569,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -601,6 +613,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -651,6 +664,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -699,6 +713,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -744,6 +759,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -789,6 +805,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -924,6 +941,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -978,6 +996,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1040,6 +1059,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1082,6 +1102,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1119,6 +1140,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1154,6 +1176,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1192,6 +1215,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1230,6 +1254,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1268,6 +1293,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1306,6 +1332,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1344,6 +1371,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1382,6 +1410,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1420,6 +1449,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1504,6 +1534,7 @@ private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
             isUsingKeyConnector = false,
             firstTimeState = FirstTimeState(false),
             onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
         ),
     ),
 )
@@ -1529,6 +1560,7 @@ private val MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE = UserState(
             isUsingKeyConnector = false,
             firstTimeState = FirstTimeState(false),
             onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
         ),
 
         UserState.Account(
@@ -1549,6 +1581,7 @@ private val MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE = UserState(
             isUsingKeyConnector = false,
             firstTimeState = FirstTimeState(false),
             onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
         ),
     ),
 )

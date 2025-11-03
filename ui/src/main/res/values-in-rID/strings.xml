@@ -477,6 +477,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="seven_days">7 hari</string>
     <string name="thirty_days">30 hari</string>
     <string name="custom">Khusus</string>
+    <string name="custom_timeout">Batas waktu khusus</string>
     <string name="add_this_authenticator_key_to_a_login">Tambah kunci autentikator ini ke login yang sudah ada, atau buat login baru.</string>
     <string name="send_disabled_warning">Karena kebijakan perusahaan, Anda hanya dapat menghapus Send yang sudah ada.</string>
     <string name="about_send">Tentang Send</string>
@@ -495,9 +496,18 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="fido2_authenticate_web_authn">Otentikasi WebAuthn</string>
     <string name="fido2_return_to_app">Kembali ke apl</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisasi ini memiliki kebijakan enterprise yang akan otomatis mendaftarkan Anda ke reset sandi. Pendaftaran ini memungkinkan administrator organisasi mengubah sandi utama Anda.</string>
-    <string name="vault_timeout_policy_in_effect">Kebijakan organisasi Anda memengaruhi waktu tunggu brankas Anda. Batas maksimal Waktu Tunggu Brankas yang diizinkan adalah %1$s jam dan %2$s menit</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Kebijakan organisasi Anda memengaruhi batas waktu vault Anda. Batas waktu brankas maksimum yang diizinkan adalah %1$s jam dan %2$s menit. Tindakan batas waktu vault Anda diatur ke %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Kebijakan organisasi anda telah menetapkan tindakan batas waktu vault ke %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d jam</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d menit</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Organisasi Anda telah menetapkan batas waktu sesi maksimum ke %1$s dan %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Organisasi Anda telah menetapkan batas waktu sesi maksimum ke %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Pengaturan ini dikelola oleh organisasi Anda.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Organisasi Anda telah menetapkan batas waktu sesi standar menjadi tidak pernah.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Organisasi Anda telah menetapkan batas waktu sesi standar saat apl dimulai ulang.</string>
     <string name="vault_timeout_to_large">Batas waktu brankas anda melebihi batasan yang ditetapkan oleh organisasi Anda.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Satu atau lebih kebijakan organisasi mencegah Anda mengekspor brankas pribadi Anda.</string>
     <string name="add_account">Tambah akun</string>

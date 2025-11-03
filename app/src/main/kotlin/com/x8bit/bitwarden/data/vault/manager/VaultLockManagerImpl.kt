@@ -226,14 +226,15 @@ class VaultLockManagerImpl(
                                         userId = userId,
                                     )
                                     if (it is VaultUnlockResult.Success) {
+                                        Timber.d(
+                                            "[Auth] Vault unlocked, method:  %s",
+                                            initUserCryptoMethod.logTag,
+                                        )
                                         clearInvalidUnlockCount(userId = userId)
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
                                         updateKdfIfNeeded(initUserCryptoMethod)
-                                        migratePinProtectedUserKeyIfNeeded(
-                                            userId = userId,
-                                            initUserCryptoMethod = initUserCryptoMethod,
-                                        )
+                                        migratePinProtectedUserKeyIfNeeded(userId = userId)
                                         setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
@@ -315,18 +316,14 @@ class VaultLockManagerImpl(
      * Optionally marks the envelope as in-memory only if the PIN-protected user key is not present.
      *
      * @param userId The ID of the user for whom to migrate the PIN-protected user key.
-     * @param initUserCryptoMethod The method used to initialize the user's crypto.
      */
     private suspend fun migratePinProtectedUserKeyIfNeeded(
         userId: String,
-        initUserCryptoMethod: InitUserCryptoMethod,
     ) {
         val encryptedPin = authDiskSource.getEncryptedPin(userId) ?: return
         if (authDiskSource.getPinProtectedUserKeyEnvelope(userId) != null) return
 
         val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
-
-        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
 
         vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
             .onSuccess { enrollPinResponse ->

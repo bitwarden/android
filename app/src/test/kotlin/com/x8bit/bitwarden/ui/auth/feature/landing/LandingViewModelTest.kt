@@ -95,6 +95,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    isExportable = true,
                 ),
             ),
         )
@@ -247,6 +248,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -304,6 +306,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -365,6 +368,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -528,6 +532,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         )
 
         val userState = UserState(
@@ -564,6 +569,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         )
 
         val userState = UserState(

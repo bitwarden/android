@@ -546,14 +546,13 @@ class VaultRepositoryImpl(
         userId: String,
         initUserCryptoMethod: InitUserCryptoMethod,
     ) {
+        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
         val existingPinProtectedUserKeyEnvelope = authDiskSource
             .getPinProtectedUserKeyEnvelope(
                 userId = userId,
             )
         if (existingPinProtectedUserKeyEnvelope != null) return
-
-        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
 
         vaultSdkSource
             .enrollPinWithEncryptedPin(

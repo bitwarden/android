@@ -479,6 +479,7 @@
     <string name="seven_days">௭ நாட்கள்</string>
     <string name="thirty_days">௩௦ நாட்கள்</string>
     <string name="custom">தனிபயன்</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">இந்த அங்கீகரிப்பான் விசையை ஏற்கனவே உள்ள உள்நுழைவில் சேர்க்கவும் அல்லது புதிய உள்நுழைவை உருவாக்கவும்.</string>
     <string name="send_disabled_warning">முனைவக கொள்ளையால், உம்மால் இருக்கின்ற Sendஐ மட்டுமே அழிக்கவியலும்.</string>
     <string name="about_send">Send பற்றி</string>
@@ -497,9 +498,20 @@
     <string name="fido2_authenticate_web_authn">WebAuthn-ஐ அங்கீகரி</string>
     <string name="fido2_return_to_app">செயலிக்குத் திரும்பு</string>
     <string name="reset_password_auto_enroll_invite_warning">உம்மைத் தானாகக் கடவுச்சொல் அகரமாக்கலில் சேர்க்கும் முனைவகக் கொள்கை இந்நிறுவனத்திடமுள்ளது. சேர்க்கையானது உம் பிரதான கடவுச்சொல்லை நிறுவன நிர்வாகிகள் மாற்ற அனுமதிக்கும்.</string>
-    <string name="vault_timeout_policy_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு %1$s மணிநேரம் மற்றும் %2$s நிமிடம(கள்) ஆகும்.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு %1$s மணிநேரம் மற்றும் %2$s நிமிடம(கள்) ஆகும். உம் பெட்டக நேரமுடிவுச் செயல் %3$s என அமைக்கப்ப்பட்டுள்ளது.</string>
-    <string name="vault_timeout_action_policy_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவு செயலை %1$s என அமைத்துள்ளன.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</string>
     <string name="disable_personal_vault_export_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</string>
     <string name="add_account">கணக்கைச் சேர்</string>

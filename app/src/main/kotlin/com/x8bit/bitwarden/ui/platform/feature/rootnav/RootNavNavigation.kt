@@ -1,12 +1,17 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.bitwarden.annotation.OmitFromCoverage
+import kotlinx.serialization.Serializable
 
 /**
- * The route for the root navigation screen.
+ * The type-safe route for the root navigation screen.
  */
-const val ROOT_ROUTE: String = "root"
+@Serializable
+data object RootNavigationRoute
 
 /**
  * Add the root navigation screen to the nav graph.
@@ -14,7 +19,7 @@ const val ROOT_ROUTE: String = "root"
 fun NavGraphBuilder.rootNavDestination(
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composable(route = ROOT_ROUTE) {
+    composable<RootNavigationRoute> {
         RootNavScreen(onSplashScreenRemoved = onSplashScreenRemoved)
     }
 }

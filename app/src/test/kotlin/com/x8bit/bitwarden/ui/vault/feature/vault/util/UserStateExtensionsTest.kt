@@ -91,6 +91,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -120,6 +121,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -153,6 +155,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -186,6 +189,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             )
@@ -234,6 +238,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -280,6 +285,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -330,6 +336,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             )
@@ -358,6 +365,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -419,6 +427,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -481,6 +490,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

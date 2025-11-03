@@ -483,6 +483,7 @@
     <string name="seven_days">7 днів</string>
     <string name="thirty_days">30 днів</string>
     <string name="custom">Власний</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Додати цей ключ автентифікації до наявного запису або створити новий.</string>
     <string name="send_disabled_warning">У зв\'язку з політикою компанії, ви можете лише видалити наявне відправлення.</string>
     <string name="about_send">Про відправлення</string>
@@ -501,9 +502,24 @@
     <string name="fido2_authenticate_web_authn">Автентифікація WebAuthn</string>
     <string name="fido2_return_to_app">Повернутися до програми</string>
     <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
-    <string name="vault_timeout_policy_in_effect">Політикою вашої організації встановлено максимальний дозволений час очікування сховища %1$s годин, %2$s хвилин.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища %1$s годин, %2$s хвилин. Для часу очікування вашого сховища встановлена дія %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Політикою вашої організації встановлено дію для часу очікування сховища %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="few">%1$d hours</item>
+        <item quantity="many">%1$d hours</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="few">%1$d minutes</item>
+        <item quantity="many">%1$d minutes</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Час очікування сховища перевищує обмеження, встановлені вашою організацією.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище.</string>
     <string name="add_account">Додати обліковий запис</string>

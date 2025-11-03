@@ -479,6 +479,7 @@ Skanning skjer automatisk.</string>
     <string name="seven_days">7 dagar</string>
     <string name="thirty_days">30 dagar</string>
     <string name="custom">Custom</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">På grunn av verksemdsvilkår kan du berre sletta ein Send som alt finst.</string>
     <string name="about_send">Om Send</string>
@@ -497,9 +498,20 @@ Skanning skjer automatisk.</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
-    <string name="vault_timeout_policy_in_effect">Your organization policies have set your maximum allowed vault timeout to %1$s hour(s) and %2$s minute(s).</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is %1$s hour(s) and %2$s minute(s). Your vault timeout action is set to %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Your organization policies have set your vault timeout action to %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Avbrotet frå kvelvet ditt skrid over det avgrensingane fastsette av samskipnaden din.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Eitt eller fleire samskipnadsvilkår held deg frå å eksportera det personlege kvelvet ditt.</string>
     <string name="add_account">Legg til konto</string>

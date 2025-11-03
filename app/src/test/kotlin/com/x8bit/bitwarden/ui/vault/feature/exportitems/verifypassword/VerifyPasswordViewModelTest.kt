@@ -708,6 +708,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                 toVerifyPasswordArgs()
             } returns VerifyPasswordArgs(
                 userId = DEFAULT_USER_ID,
+                hasOtherAccounts = true,
             )
         },
     )
@@ -746,6 +747,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
 
         UserState.Account(
@@ -776,6 +778,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )

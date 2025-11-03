@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -587,12 +588,13 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `session timeout policy warning should update according to state`() {
+    fun `session timeout support text should update according to state`() {
         mutableStateFlow.update {
             it.copy(
                 vaultTimeoutPolicy = VaultTimeoutPolicy(
                     minutes = 100,
                     action = null,
+                    type = PolicyInformation.VaultTimeout.Type.CUSTOM,
                 ),
             )
         }
@@ -607,7 +609,8 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(
                 vaultTimeoutPolicy = VaultTimeoutPolicy(
                     minutes = 100,
-                    action = PolicyInformation.VaultTimeout.Action.LOCK,
+                    action = null,
+                    type = PolicyInformation.VaultTimeout.Type.IMMEDIATELY,
                 ),
             )
         }
@@ -615,6 +618,147 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "This setting is managed by your organization.")
             .performScrollTo()
             .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                    type = PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+                ),
+            )
+        }
+        val appRestartText = "Your organization has set the default session timeout " +
+            "to on app restart."
+        composeTestRule
+            .onNodeWithText(text = appRestartText)
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                    type = PolicyInformation.VaultTimeout.Type.NEVER,
+                ),
+            )
+        }
+        val neverText = "Your organization has set the default session timeout to never."
+        composeTestRule
+            .onNodeWithText(text = neverText)
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = null,
+                    type = PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = appRestartText)
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `session timeout action support text should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = false,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = false,
+                vaultTimeoutPolicy = null,
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Set up an unlock option to change your vault timeout action.")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = false,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = false,
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = PolicyInformation.VaultTimeout.Action.LOCK,
+                    type = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "This setting is managed by your organization.")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = true,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = false,
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = 100,
+                    action = PolicyInformation.VaultTimeout.Action.LOCK,
+                    type = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "This setting is managed by your organization.")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `session timeout should be enabled on or off according to state`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsEnabled()
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = null,
+                    action = null,
+                    type = PolicyInformation.VaultTimeout.Type.IMMEDIATELY,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+    }
+
+    @Test
+    fun `session timeout action should be enabled on or off according to state`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsEnabled()
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicy = VaultTimeoutPolicy(
+                    minutes = null,
+                    action = PolicyInformation.VaultTimeout.Action.LOCK,
+                    type = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
     }
 
     @Test
@@ -697,6 +841,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
                 vaultTimeoutPolicy = VaultTimeoutPolicy(
                     minutes = 100,
                     action = null,
+                    type = PolicyInformation.VaultTimeout.Type.CUSTOM,
                 ),
             )
         }
@@ -902,7 +1047,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         composeTestRule
             // Check for exact text to differentiate from the Custom label on the Vault Timeout
             // item above.
-            .onNode(hasTextExactly("Custom", "00:00"))
+            .onNode(hasTextExactly("Custom timeout", "0 minutes"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -911,7 +1056,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -919,7 +1064,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasTextExactly("Custom", "20:34"))
+            .onNode(hasTextExactly("Custom timeout", "20 hours, 34 minutes"))
             .assertIsDisplayed()
     }
 
@@ -931,7 +1076,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -957,7 +1102,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -978,7 +1123,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 
@@ -1008,11 +1153,12 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
                 vaultTimeoutPolicy = VaultTimeoutPolicy(
                     minutes = 100,
                     action = null,
+                    type = PolicyInformation.VaultTimeout.Type.CUSTOM,
                 ),
             )
         }
         composeTestRule
-            .onNode(hasTextExactly("Custom", "02:03"))
+            .onNode(hasTextExactly("Custom timeout", "2 hours, 3 minutes"))
             .performScrollTo()
             .performClick()
 

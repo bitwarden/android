@@ -479,6 +479,7 @@
     <string name="seven_days">7 ημέρες</string>
     <string name="thirty_days">30 ημέρες</string>
     <string name="custom">Προσαρμοσμένο</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Προσθέστε αυτό το κλειδί ταυτοποίησης σε μια υπάρχουσα σύνδεση ή δημιουργήστε μια νέα σύνδεση.</string>
     <string name="send_disabled_warning">Λόγω μιας επιχειρηματικής πολιτικής, είστε σε θέση να διαγράψετε μόνο ένα υπάρχον Send</string>
     <string name="about_send">Σχετικά με το Send</string>
@@ -497,9 +498,20 @@
     <string name="fido2_authenticate_web_authn">Ταυτοποίηση WebAutn</string>
     <string name="fido2_return_to_app">Επιστροφή στην εφαρμογή</string>
     <string name="reset_password_auto_enroll_invite_warning">Αυτός ο οργανισμός έχει μια επιχειρηματική πολιτική που θα σας εγγράψει αυτόματα στην επαναφορά κωδικού. Η εγγραφή θα επιτρέψει στους διαχειριστές του οργανισμού να αλλάξουν τον κύριο κωδικό πρόσβασης σας.</string>
-    <string name="vault_timeout_policy_in_effect">Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο vault σας. Το μέγιστο επιτρεπόμενο Χρονικό όριο Vault είναι %1$s ώρα(ες) και %2$s λεπτό(ά)</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο του vault σας. Το μέγιστο επιτρεπόμενο χρονικό όριο vault είναι %1$s ώρα(ες) και %2$s λεπτό(ά). Το χρονικό όριο του vault σας έχει οριστεί σε %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Οι πολιτικές του οργανισμού σας έχουν ορίσει την ενέργεια χρονικού ορίου vault σε %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Το χρονικό όριο του vault σας υπερβαίνει τους περιορισμούς που έχει ορίσει ο οργανισμός σας.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</string>
     <string name="add_account">Προσθήκη Λογαριασμού</string>

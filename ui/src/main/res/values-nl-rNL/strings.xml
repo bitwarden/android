@@ -479,6 +479,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="seven_days">7 dagen</string>
     <string name="thirty_days">30 dagen</string>
     <string name="custom">Aangepast</string>
+    <string name="custom_timeout">Aangepaste time-out</string>
     <string name="add_this_authenticator_key_to_a_login">Deze authenticatiecode aan een bestaande login toevoegen, of een nieuwe login aanmaken.</string>
     <string name="send_disabled_warning">Als gevolg van een ondernemingsbeleid kun je alleen een bestaande Send verwijderen.</string>
     <string name="about_send">Over Send</string>
@@ -497,9 +498,20 @@ Het scannen gebeurt automatisch.</string>
     <string name="fido2_authenticate_web_authn">Authenticeer WebAuthn</string>
     <string name="fido2_return_to_app">Terug naar de app</string>
     <string name="reset_password_auto_enroll_invite_warning">Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</string>
-    <string name="vault_timeout_policy_in_effect">Het beleid van je organisatie heeft invloed op de time-out van je kluis. De maximaal toegestane kluis time-out is %1$s uur en %2$s minuten</string>
-    <string name="vault_timeout_policy_with_action_in_effect">De beleidsinstellingen van je organisatie hebben invloed op de time-out van je kluis. De maximale toegestane kluis time-out is %1$s uur en %2$s minuten. Jouw time-out is ingesteld op %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">De beleidsinstellingen van je organisatie hebben je kluis time-out ingesteld op %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s: %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d uur</item>
+        <item quantity="other">%1$d uren</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuut</item>
+        <item quantity="other">%1$d minuten</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Je organisatie heeft de maximale sessie time-out ingesteld op %1$s en %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Je organisatie heeft de maximale sessie time-out ingesteld op %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Deze instelling wordt beheerd door je organisatie.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Je organisatie heeft de standaard sessie time-out op nooit ingesteld.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Je organisatie heeft de standaard sessie time-out op herstaten applicatie ingesteld.</string>
     <string name="vault_timeout_to_large">Je kluis time-out is hoger dan het maximum van jouw organisatie.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</string>
     <string name="add_account">Voeg account toe.</string>
