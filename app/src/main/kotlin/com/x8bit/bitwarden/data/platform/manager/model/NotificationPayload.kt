@@ -57,7 +57,7 @@ sealed class NotificationPayload {
         @JsonNames("Date", "date")
         val date: ZonedDateTime?,
 
-        @JsonNames("PushNotificationLogOutReason", "pushNotificationLogOutReason")
+        @JsonNames("Reason", "reason")
         val pushNotificationLogOutReason: PushNotificationLogOutReason?,
     ) : NotificationPayload()
 
