@@ -23,6 +23,9 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -80,6 +83,7 @@ fun LocalManagerProvider(
     credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
         credentialExchangeRequestValidator(activity = activity),
     authTabLaunchers: AuthTabLaunchers,
+    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -98,6 +102,7 @@ fun LocalManagerProvider(
         LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
         LocalCredentialExchangeRequestValidator provides credentialExchangeRequestValidator,
         LocalAuthTabLaunchers provides authTabLaunchers,
+        LocalQrCodeAnalyzer provides qrCodeAnalyzer,
         content = content,
     )
 }
