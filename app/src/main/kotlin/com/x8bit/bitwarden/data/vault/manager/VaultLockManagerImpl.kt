@@ -751,17 +751,27 @@ class VaultLockManagerImpl(
     }
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
-            kdfManager
-                .updateKdfToMinimumsIfNeeded(
-                    password = initUserCryptoMethod.password,
-                )
-                .also { result ->
-                    if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
-                    }
-                }
+        val password = when (initUserCryptoMethod) {
+            is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
+            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
+            is InitUserCryptoMethod.AuthRequest,
+            is InitUserCryptoMethod.DecryptedKey,
+            is InitUserCryptoMethod.DeviceKey,
+            is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.Pin,
+            is InitUserCryptoMethod.PinEnvelope,
+            -> return
         }
+
+        kdfManager
+            .updateKdfToMinimumsIfNeeded(
+                password = password,
+            )
+            .also { result ->
+                if (result is UpdateKdfMinimumsResult.Error) {
+                    Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                }
+            }
     }
 
     /**
