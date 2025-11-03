@@ -13,16 +13,17 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticator.ui.platform.manager.AuthenticatorBuildInfoManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManagerImpl
-import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
-import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import java.time.Clock
 
 /**
@@ -55,13 +56,6 @@ fun LocalManagerProvider(
  */
 val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
     error("CompositionLocal BiometricsManager not present")
-}
-
-/**
- * Provides access to the exit manager throughout the app.
- */
-val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
-    error("CompositionLocal ExitManager not present")
 }
 
 /**

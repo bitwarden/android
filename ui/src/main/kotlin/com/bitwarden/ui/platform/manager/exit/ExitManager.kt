@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.exit
+package com.bitwarden.ui.platform.manager.exit
 
 import androidx.compose.runtime.Immutable
 
