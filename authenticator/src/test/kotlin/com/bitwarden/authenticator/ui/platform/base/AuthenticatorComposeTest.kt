@@ -6,6 +6,7 @@ import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsMana
 import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.ui.platform.base.BaseComposeTest
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -28,6 +29,7 @@ abstract class AuthenticatorComposeTest : BaseComposeTest() {
         intentManager: IntentManager = mockk(),
         exitManager: ExitManager = mockk(),
         biometricsManager: BiometricsManager = mockk(),
+        qrCodeAnalyzer: QrCodeAnalyzer = mockk(),
         test: @Composable () -> Unit,
     ) {
         setTestContent {
@@ -37,6 +39,7 @@ abstract class AuthenticatorComposeTest : BaseComposeTest() {
                     intentManager = intentManager,
                     exitManager = exitManager,
                     biometricsManager = biometricsManager,
+                    qrCodeAnalyzer = qrCodeAnalyzer,
                     content = test,
                 )
             }

@@ -19,6 +19,9 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsMa
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.manager.IntentManager
 import java.time.Clock
 
@@ -34,6 +37,7 @@ fun LocalManagerProvider(
     intentManager: IntentManager = IntentManager.create(activity, clock, buildInfoManager),
     exitManager: ExitManager = ExitManagerImpl(activity),
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity),
+    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -41,6 +45,7 @@ fun LocalManagerProvider(
         LocalIntentManager provides intentManager,
         LocalExitManager provides exitManager,
         LocalBiometricsManager provides biometricsManager,
+        LocalQrCodeAnalyzer provides qrCodeAnalyzer,
         content = content,
     )
 }
