@@ -10,24 +10,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
+import com.bitwarden.authenticator.ui.platform.feature.debugmenu.debugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavScreen
+import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavigationRoute
+import com.bitwarden.authenticator.ui.platform.feature.rootnav.rootNavDestination
+import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.bitwarden.ui.platform.util.validate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -61,20 +63,28 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
+            val navController = rememberNavController()
+            SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            val navController = rememberNavController()
-            observeViewModelEvents(navController)
             LocalManagerProvider {
                 BitwardenTheme(
                     theme = state.theme,
                     dynamicColor = state.isDynamicColorsEnabled,
                 ) {
-                    RootNavScreen(
+                    NavHost(
                         navController = navController,
-                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        onExitApplication = { finishAffinity() },
-                    )
+                        startDestination = RootNavigationRoute,
+                    ) {
+                        // Both root navigation and debug menu exist at this top level.
+                        // The debug menu can appear on top of the rest of the app without
+                        // interacting with the state-based navigation used by RootNavScreen.
+                        rootNavDestination { shouldShowSplashScreen = false }
+                        debugMenuDestination(
+                            onNavigateBack = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                    }
                 }
             }
         }
@@ -92,18 +102,16 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.ReceiveNewIntent(intent = newIntent))
     }
 
-    private fun observeViewModelEvents(navController: NavHostController) {
-        mainViewModel
-            .eventFlow
-            .onEach { event ->
-                when (event) {
-                    MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
-                    is MainEvent.UpdateAppTheme -> {
-                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
-                    }
+    @Composable
+    private fun SetupEventsEffect(navController: NavHostController) {
+        EventsEffect(viewModel = mainViewModel) { event ->
+            when (event) {
+                MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                is MainEvent.UpdateAppTheme -> {
+                    AppCompatDelegate.setDefaultNightMode(event.osTheme)
                 }
             }
-            .launchIn(lifecycleScope)
+        }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean = debugLaunchManager
