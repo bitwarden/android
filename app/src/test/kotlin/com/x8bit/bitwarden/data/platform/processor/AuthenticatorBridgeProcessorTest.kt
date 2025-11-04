@@ -20,11 +20,11 @@ import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
-import com.x8bit.bitwarden.ui.vault.model.TotpData
-import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

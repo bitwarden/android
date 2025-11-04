@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.model
+package com.bitwarden.ui.platform.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
