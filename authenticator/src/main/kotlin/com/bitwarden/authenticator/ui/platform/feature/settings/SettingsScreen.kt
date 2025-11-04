@@ -43,6 +43,7 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
@@ -206,6 +207,9 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state.appearance,
+                onLanguageSelection = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it)) }
+                },
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
@@ -511,14 +515,32 @@ private fun ScreenCaptureRow(
 @Composable
 private fun ColumnScope.AppearanceSettings(
     state: SettingsState.Appearance,
+    onLanguageSelection: (language: AppLanguage) -> Unit,
     onThemeSelection: (theme: AppTheme) -> Unit,
     onDynamicColorChange: (isEnabled: Boolean) -> Unit,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier
             .standardHorizontalMargin()
             .padding(horizontal = 16.dp),
         label = stringResource(id = BitwardenString.appearance),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
+    BitwardenMultiSelectButton(
+        label = stringResource(id = BitwardenString.language),
+        options = AppLanguage.entries.map { it.text() }.toImmutableList(),
+        selectedOption = state.language.text(),
+        onOptionSelected = { language ->
+            onLanguageSelection(
+                AppLanguage.entries.first { language == it.text.toString(resources) },
+            )
+        },
+        cardStyle = CardStyle.Full,
+        modifier = Modifier
+            .testTag(tag = "LanguageChooser")
+            .standardHorizontalMargin()
+            .fillMaxWidth(),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
     ThemeSelectionRow(
