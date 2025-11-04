@@ -853,6 +853,8 @@ Prevents regression of the bug just fixed.
 
 ## Example 7: Clean Refactoring (No Issues Found)
 
+**Note**: This example was added to demonstrate proper handling of clean refactorings after PR #6117 received an overly verbose review. See the "Anti-Pattern" section below for the actual problematic output that motivated these changes.
+
 **Context**: Moving shared code to common module, complete migration, all patterns followed
 
 **Review Comment:**

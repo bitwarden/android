@@ -162,10 +162,8 @@ See `examples/review-outputs.md` for complete examples.
 
 ## Core Principles
 
-- **Minimal reviews for clean PRs**: 2-3 lines when no issues found
-- **Issues-focused feedback**: Only comment when there's something to improve or discuss
-- **Brief positive feedback**: Single bullet list, no elaboration (see priority-framework.md:145-166)
-- **No excessive praise**: Acknowledge good work concisely without elaborate compliments
+- **Minimal reviews for clean PRs**: 2-3 lines when no issues found (see Special Case below)
+- **Issues-focused feedback**: Only comment when there's something actionable; acknowledge good work briefly without elaboration (see priority-framework.md:145-166)
 - **Appropriate depth**: Match review rigor to change complexity and risk
 - **Specific references**: Always use `file:line_number` format for precise location
 - **Actionable feedback**: Say what to do and why, not just what's wrong
