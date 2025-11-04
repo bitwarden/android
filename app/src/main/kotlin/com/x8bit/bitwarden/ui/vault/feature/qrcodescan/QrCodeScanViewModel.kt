@@ -1,21 +1,14 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
-import android.net.Uri
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-private const val ALGORITHM = "algorithm"
-private const val DIGITS = "digits"
-private const val PERIOD = "period"
-private const val SECRET = "secret"
-private const val TOTP_CODE_PREFIX = "otpauth://totp"
-
 /**
- * Handles [QrCodeScanAction],
- * and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
+ * Handles [QrCodeScanAction] and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
  */
 @HiltViewModel
 class QrCodeScanViewModel @Inject constructor(
@@ -33,83 +26,25 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleCloseClick() {
-        sendEvent(
-            QrCodeScanEvent.NavigateBack,
-        )
+        sendEvent(QrCodeScanEvent.NavigateBack)
     }
 
     private fun handleManualEntryTextClick() {
-        sendEvent(
-            QrCodeScanEvent.NavigateToManualCodeEntry,
-        )
+        sendEvent(QrCodeScanEvent.NavigateToManualCodeEntry)
     }
 
     // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
-        var result: TotpCodeResult = TotpCodeResult.Success(action.qrCode)
-        val scannedCode = action.qrCode
-
-        if (scannedCode.isBlank() || !scannedCode.startsWith(TOTP_CODE_PREFIX)) {
-            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError())
-            sendEvent(QrCodeScanEvent.NavigateBack)
-            return
-        }
-
-        val scannedCodeUri = Uri.parse(scannedCode)
-        val secretValue = scannedCodeUri.getQueryParameter(SECRET)
-        if (secretValue == null || !secretValue.isBase32()) {
-            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError())
-            sendEvent(QrCodeScanEvent.NavigateBack)
-            return
-        }
-
-        val values = scannedCodeUri.queryParameterNames
-        if (!areParametersValid(scannedCode, values)) {
-            result = TotpCodeResult.CodeScanningError()
-        }
-
-        vaultRepository.emitTotpCodeResult(result)
+        val qrCode = action.qrCode
+        qrCode
+            .getTotpDataOrNull()
+            ?.let { vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(code = qrCode)) }
+            ?: run { vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError()) }
         sendEvent(QrCodeScanEvent.NavigateBack)
     }
 
     private fun handleCameraErrorReceive() {
-        sendEvent(
-            QrCodeScanEvent.NavigateToManualCodeEntry,
-        )
-    }
-
-    @Suppress("NestedBlockDepth", "MagicNumber")
-    private fun areParametersValid(scannedCode: String, parameters: Set<String>): Boolean {
-        parameters.forEach { parameter ->
-            Uri.parse(scannedCode).getQueryParameter(parameter)?.let { value ->
-                when (parameter) {
-                    DIGITS -> {
-                        val digit = value.toInt()
-                        if (digit > 10 || digit < 1) {
-                            return false
-                        }
-                    }
-
-                    PERIOD -> {
-                        val period = value.toInt()
-                        if (period < 1) {
-                            return false
-                        }
-                    }
-
-                    ALGORITHM -> {
-                        val lowercaseAlgo = value.lowercase()
-                        if (lowercaseAlgo != "sha1" &&
-                            lowercaseAlgo != "sha256" &&
-                            lowercaseAlgo != "sha512"
-                        ) {
-                            return false
-                        }
-                    }
-                }
-            }
-        }
-        return true
+        sendEvent(QrCodeScanEvent.NavigateToManualCodeEntry)
     }
 }
 
@@ -153,12 +88,4 @@ sealed class QrCodeScanAction {
      * The Camera is unable to be setup.
      */
     data object CameraSetupErrorReceive : QrCodeScanAction()
-}
-
-/**
- * Checks if a string is using base32 digits.
- */
-private fun String.isBase32(): Boolean {
-    val regex = ("^[A-Za-z2-7]+=*$").toRegex()
-    return regex.matches(this)
 }
