@@ -3,12 +3,12 @@ package com.bitwarden.authenticator.ui.platform.base
 import androidx.compose.runtime.Composable
 import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import io.mockk.mockk
 
