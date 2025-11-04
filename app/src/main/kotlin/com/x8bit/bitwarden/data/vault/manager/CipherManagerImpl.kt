@@ -91,7 +91,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -131,7 +134,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -301,7 +307,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is UpdateCipherResponseJson.Invalid -> {
-                        UpdateCipherResult.Error(errorMessage = response.message, error = null)
+                        UpdateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is UpdateCipherResponseJson.Success -> {
@@ -581,9 +590,7 @@ class CipherManagerImpl(
                         .flatMap { response ->
                             when (response) {
                                 is UpdateCipherResponseJson.Invalid -> {
-                                    IllegalStateException(
-                                        response.message,
-                                    )
+                                    IllegalStateException(response.firstValidationErrorMessage)
                                         .asFailure()
                                 }
 
