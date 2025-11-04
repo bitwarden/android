@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.util
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.ui.platform.base.util.isBase32
 import com.bitwarden.ui.platform.model.TotpData
 
@@ -11,6 +12,12 @@ private const val PARAM_NAME_DIGITS: String = "digits"
 private const val PARAM_NAME_ISSUER: String = "issuer"
 private const val PARAM_NAME_PERIOD: String = "period"
 private const val PARAM_NAME_SECRET: String = "secret"
+
+/**
+ * Checks if the given [String] contains valid data for a TOTP. The [TotpData] will be returned
+ * when the correct data is present or `null` if data is invalid or missing.
+ */
+fun String.getTotpDataOrNull(): TotpData? = this.toUri().getTotpDataOrNull()
 
 /**
  * Checks if the given [Uri] contains valid data for a TOTP. The [TotpData] will be returned when
