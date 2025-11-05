@@ -79,7 +79,11 @@ internal class PasswordManagerSignatureVerifierImpl(
             val certHash = sha256.digest(signature.toByteArray())
             val certHashHex = certHash.joinToString("") { "%02x".format(it) }
 
-            knownPasswordManagerCertificates.contains(certHashHex)
+            val isValid = knownPasswordManagerCertificates.contains(certHashHex)
+            if (!isValid) {
+                Timber.w("Signature verification failed: unknown certificate hash")
+            }
+            isValid
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.w(e, "Signature verification failed: package not found")
             false
