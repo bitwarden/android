@@ -2,8 +2,6 @@ package com.bitwarden.authenticatorbridge.util
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticatorbridge.R
 import java.security.MessageDigest
@@ -46,7 +44,6 @@ import java.security.NoSuchAlgorithmException
  * @param context Android context for accessing PackageManager and resources
  */
 @OmitFromCoverage
-@RequiresApi(Build.VERSION_CODES.P)
 internal class PasswordManagerSignatureVerifierImpl(
     private val context: Context,
 ) : PasswordManagerSignatureVerifier {
