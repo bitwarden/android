@@ -162,8 +162,38 @@ See `examples/review-outputs.md` for complete examples.
 
 ## Core Principles
 
+- **Minimal reviews for clean PRs**: 2-3 lines when no issues found (see Special Case below)
+- **Issues-focused feedback**: Only comment when there's something actionable; acknowledge good work briefly without elaboration (see priority-framework.md:145-166)
 - **Appropriate depth**: Match review rigor to change complexity and risk
 - **Specific references**: Always use `file:line_number` format for precise location
 - **Actionable feedback**: Say what to do and why, not just what's wrong
 - **Constructive tone**: Ask questions for design decisions, explain rationale, focus on code not people
 - **Efficient reviews**: Use multi-pass strategy, time-box reviews, skip what's not relevant
+
+## Special Case: Clean PRs with No Issues
+
+When you find NO critical, important, or suggested issues:
+
+**Minimal Approval Format:**
+```
+**Overall Assessment:** APPROVE
+
+[One sentence describing what the PR does well]
+```
+
+**Examples:**
+- "Clean refactoring following established patterns"
+- "Solid bug fix with comprehensive test coverage"
+- "Well-structured feature implementation meeting all standards"
+
+**NEVER do this for clean PRs:**
+- ❌ Multiple sections (Key Strengths, Changes, Code Quality, etc.)
+- ❌ Listing everything that was done correctly
+- ❌ Checkmarks for each file or pattern followed
+- ❌ Elaborate praise or detailed positive analysis
+
+**Why brevity matters:**
+- Respects developer time (quick approval = move forward faster)
+- Reduces noise in PR conversations
+- Saves tokens and processing time
+- Focuses attention on PRs that actually need discussion

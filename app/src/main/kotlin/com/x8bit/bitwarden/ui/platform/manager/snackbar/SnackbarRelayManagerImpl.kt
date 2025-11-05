@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.emitWhenSubscribedTo
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalForInheritanceCoroutinesApi

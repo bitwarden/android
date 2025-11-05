@@ -7,8 +7,8 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.SIGNAL_STRENGTH_UNSPECIFIED
 import android.net.NetworkRequest
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkSignalStrength
 import kotlinx.coroutines.CoroutineScope

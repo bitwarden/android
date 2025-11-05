@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.FolderService

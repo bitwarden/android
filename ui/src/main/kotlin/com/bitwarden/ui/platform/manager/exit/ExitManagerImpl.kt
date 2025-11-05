@@ -1,12 +1,10 @@
-package com.x8bit.bitwarden.ui.platform.manager.exit
+package com.bitwarden.ui.platform.manager.exit
 
 import android.app.Activity
-import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * The default implementation of the [ExitManager] for managing the various ways to exit the app.
  */
-@OmitFromCoverage
 class ExitManagerImpl(
     private val activity: Activity,
 ) : ExitManager {

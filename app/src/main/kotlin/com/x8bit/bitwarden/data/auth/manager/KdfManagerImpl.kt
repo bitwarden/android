@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import timber.log.Timber
-import kotlin.collections.get
 
 /**
  * Default implementation of [KdfManager].

@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.PowerManager
 import android.view.accessibility.AccessibilityManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager

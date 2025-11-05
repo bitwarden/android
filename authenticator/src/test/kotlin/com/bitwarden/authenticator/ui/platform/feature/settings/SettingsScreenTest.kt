@@ -6,6 +6,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -207,6 +208,40 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             .onAllNodesWithText("Allow screen capture")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language row click should send display language selector dialog`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Language")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language selected should emit LanguageChange event`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "English (United Kingdom)")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = SettingsAction.AppearanceChange.LanguageChange(
+                    language = AppLanguage.ENGLISH_BRITISH,
+                ),
+            )
+        }
     }
 
     @Test

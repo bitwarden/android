@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.manager
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull

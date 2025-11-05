@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.UpdateFolderResponseJson
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.vault.FolderView

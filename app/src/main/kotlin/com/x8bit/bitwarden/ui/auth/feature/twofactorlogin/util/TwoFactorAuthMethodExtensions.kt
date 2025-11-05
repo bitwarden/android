@@ -29,11 +29,12 @@ val TwoFactorAuthMethod.title: Text
 /**
  * Get the description for the given auth method.
  */
-fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
+fun TwoFactorAuthMethod.description(email: String): Text? = when (this) {
     TwoFactorAuthMethod.AUTHENTICATOR_APP -> BitwardenString.enter_verification_code_app.asText()
     TwoFactorAuthMethod.DUO -> {
         BitwardenString.follow_the_steps_from_duo_to_finish_logging_in.asText()
     }
+
     TwoFactorAuthMethod.DUO_ORGANIZATION -> {
         BitwardenString.duo_two_step_login_is_required_for_your_account
             .asText()
@@ -45,8 +46,12 @@ fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
     TwoFactorAuthMethod.WEB_AUTH -> {
         BitwardenString.continue_to_complete_web_authn_verification.asText()
     }
+
     TwoFactorAuthMethod.YUBI_KEY -> BitwardenString.yubi_key_instruction.asText()
-    else -> "".asText()
+    TwoFactorAuthMethod.U2F,
+    TwoFactorAuthMethod.REMEMBER,
+    TwoFactorAuthMethod.RECOVERY_CODE,
+        -> null
 }
 
 /**
@@ -122,7 +127,7 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
 @get:DrawableRes
 val TwoFactorAuthMethod.imageRes: Int?
     get() = when (this) {
-        TwoFactorAuthMethod.YUBI_KEY -> BitwardenDrawable.img_yubi_key
+        TwoFactorAuthMethod.YUBI_KEY -> BitwardenDrawable.ill_yubi_key
         TwoFactorAuthMethod.EMAIL -> BitwardenDrawable.ill_new_device_verification
         TwoFactorAuthMethod.AUTHENTICATOR_APP -> BitwardenDrawable.ill_authenticator
         else -> null

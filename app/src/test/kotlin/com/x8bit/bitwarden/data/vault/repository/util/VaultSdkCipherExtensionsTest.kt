@@ -16,8 +16,8 @@ import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
 import com.bitwarden.network.model.createMockUri
-import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FieldType
@@ -43,7 +43,6 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import kotlin.collections.emptyList
 
 /**
  * Default date time used for [ZonedDateTime] properties of mock objects.

@@ -1,8 +1,7 @@
-package com.x8bit.bitwarden.ui.vault.util
+package com.bitwarden.ui.platform.util
 
 import android.net.Uri
-import com.x8bit.bitwarden.ui.vault.model.TotpData
-import com.x8bit.bitwarden.ui.vault.model.TotpData.CryptoHashAlgorithm
+import com.bitwarden.ui.platform.model.TotpData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -42,6 +41,56 @@ class TotpUriUtilsTest {
     }
 
     @Test
+    fun `getTotpDataOrNull with invalid secret returns null`() {
+        val uri = mockk<Uri> {
+            every { scheme } returns "otpauth"
+            every { host } returns "totp"
+            every { getQueryParameter("secret") } returns "1234567890qwertyuiop"
+        }
+
+        assertNull(uri.getTotpDataOrNull())
+    }
+
+    @Test
+    fun `getTotpDataOrNull with invalid digits returns null`() {
+        val uri = mockk<Uri> {
+            every { scheme } returns "otpauth"
+            every { host } returns "totp"
+            every { getQueryParameter("secret") } returns "secret"
+            every { getQueryParameter("digits") } returns "11"
+        }
+
+        assertNull(uri.getTotpDataOrNull())
+    }
+
+    @Test
+    fun `getTotpDataOrNull with invalid period returns null`() {
+        val uri = mockk<Uri> {
+            every { scheme } returns "otpauth"
+            every { host } returns "totp"
+            every { getQueryParameter("secret") } returns "secret"
+            every { getQueryParameter("digits") } returns "5"
+            every { getQueryParameter("period") } returns "0"
+        }
+
+        assertNull(uri.getTotpDataOrNull())
+    }
+
+    @Test
+    fun `getTotpDataOrNull with invalid algorithm returns null`() {
+        val uri = mockk<Uri> {
+            every { scheme } returns "otpauth"
+            every { host } returns "totp"
+            every { getQueryParameter("secret") } returns "secret"
+            every { getQueryParameter("digits") } returns "5"
+            every { getQueryParameter("period") } returns "10"
+            every { getQueryParameter("algorithm") } returns "sha22"
+        }
+
+        assertNull(uri.getTotpDataOrNull())
+    }
+
+    @Test
     fun `getTotpDataOrNull with minimum required values returns TotpData with defaults`() {
         val secret = "secret"
         val uri = mockk<Uri> {
@@ -62,7 +111,7 @@ class TotpUriUtilsTest {
             secret = secret,
             digits = 6,
             period = 30,
-            algorithm = CryptoHashAlgorithm.SHA_1,
+            algorithm = TotpData.CryptoHashAlgorithm.SHA_1,
         )
 
         assertEquals(expectedResult, uri.getTotpDataOrNull())
@@ -93,7 +142,7 @@ class TotpUriUtilsTest {
             secret = secret,
             digits = digits,
             period = period,
-            algorithm = CryptoHashAlgorithm.SHA_256,
+            algorithm = TotpData.CryptoHashAlgorithm.SHA_256,
         )
 
         assertEquals(expectedResult, uri.getTotpDataOrNull())

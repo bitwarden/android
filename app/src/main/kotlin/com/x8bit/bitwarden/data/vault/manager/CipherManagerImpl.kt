@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import androidx.core.net.toUri
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
@@ -91,7 +91,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -131,7 +134,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -301,7 +307,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is UpdateCipherResponseJson.Invalid -> {
-                        UpdateCipherResult.Error(errorMessage = response.message, error = null)
+                        UpdateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is UpdateCipherResponseJson.Success -> {
@@ -581,9 +590,7 @@ class CipherManagerImpl(
                         .flatMap { response ->
                             when (response) {
                                 is UpdateCipherResponseJson.Invalid -> {
-                                    IllegalStateException(
-                                        response.message,
-                                    )
+                                    IllegalStateException(response.firstValidationErrorMessage)
                                         .asFailure()
                                 }
 

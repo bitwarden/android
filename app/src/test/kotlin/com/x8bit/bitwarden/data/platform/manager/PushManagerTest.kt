@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.PushTokenRequest
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -975,7 +975,7 @@ private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z",
-      "PushNotificationLogOutReason": "0"
+      "Reason": 0
     }""",
 )
 

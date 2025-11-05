@@ -851,6 +851,132 @@ Prevents regression of the bug just fixed.
 
 ---
 
+## Example 7: Clean Refactoring (No Issues Found)
+
+**Note**: This example was added to demonstrate proper handling of clean refactorings after PR #6117 received an overly verbose review. See the "Anti-Pattern" section below for the actual problematic output that motivated these changes.
+
+**Context**: Moving shared code to common module, complete migration, all patterns followed
+
+**Review Comment:**
+```markdown
+**Overall Assessment:** APPROVE
+
+Clean refactoring that moves ExitManager to :ui module, eliminating duplication between apps.
+```
+
+**Token count:** ~30 tokens
+**Review time:** < 1 minute
+
+**Why this works:**
+- Immediate approval visible
+- One sentence summary acknowledging the work
+- No unnecessary sections or elaborate praise
+- Author gets quick feedback and can proceed
+
+---
+
+### ❌ Anti-Pattern: Excessive Praise for Clean PRs
+
+**DO NOT do this for clean PRs:**
+
+```markdown
+### PR Review: PM-27756 - Create common ExitManager
+
+This PR successfully refactors `ExitManager` into shared code in the `:ui` module, eliminating duplication between the Password Manager and Authenticator apps. The changes follow established architectural patterns and improve code quality.
+
+---
+
+### Summary
+
+**Overall Assessment:** ✅ **Approved** - This is a well-executed refactoring that improves code organization and maintainability.
+
+**Key Strengths:**
+- Follows established module organization patterns (moving to `:ui` module alongside `IntentManager` and `QrCodeAnalyzer`)
+- Removes code duplication between apps (deleted 28 lines of duplicate code)
+- Improves test coverage by removing `@OmitFromCoverage` and adding comprehensive unit tests
+- Maintains consistent behavior across both applications
+- All imports and references updated correctly
+
+**Changes:**
+- ✅ Moved `ExitManager` interface from `app` → `ui` module
+- ✅ Moved `ExitManagerImpl` from `app` → `ui` module
+- ✅ Added `LocalExitManager` to common UI providers
+- ✅ Deleted duplicate authenticator implementations
+- ✅ Added unit test for `ExitManagerImpl`
+- ✅ Updated all imports across 10 files
+
+---
+
+### Code Quality & Architecture
+
+**Architectural Compliance:** ✅
+- Correctly places manager in `:ui` module per `docs/ARCHITECTURE.md` guidelines
+- Follows established pattern for UI-layer managers exposed via CompositionLocal
+- Maintains proper module dependencies and separation of concerns
+
+**Code Style:** ✅
+- Follows Kotlin coding conventions
+- Proper KDoc documentation on all public APIs
+- Consistent with existing code patterns
+
+**Testing:** ✅
+- Added comprehensive unit test covering `exitApplication()` behavior
+- Properly uses MockK for mocking Activity
+- Test verifies `finishAndRemoveTask()` is called
+
+---
+
+### Specific Findings
+
+**Test Coverage Note:**
+The Codecov report shows 50% patch coverage with 1 missing line. This is expected and acceptable...
+
+**Implementation Improvement:**
+The common implementation correctly uses `activity.finishAndRemoveTask()`...
+
+---
+
+### Recommendations
+
+No blocking issues found. The PR is ready to merge.
+```
+
+**Problems with above (actual PR #6117 review):**
+- 800+ tokens for a PR with no issues
+- Multiple redundant sections
+- Excessive checkmarks listing what was done
+- Detailed analysis of things that are correct
+- "Key Strengths" section unnecessary
+- "Specific Findings" section with non-issues
+
+**Impact:**
+- Wastes reviewer and author time
+- Adds noise to PR conversation
+- Makes it harder to identify PRs that actually need attention
+- Excessive praise can feel condescending or insincere
+- Burns tokens unnecessarily
+
+---
+
+### ✅ Correct Approach
+
+For the same PR:
+
+```markdown
+**Overall Assessment:** APPROVE
+
+Clean refactoring that moves ExitManager to :ui module, eliminating duplication between apps.
+```
+
+**Benefits:**
+- 30 tokens vs 800+ tokens (96% reduction)
+- Clear immediate approval
+- Acknowledges the work without excessive detail
+- Author can proceed without wading through unnecessary commentary
+- Saves time for everyone
+
+---
+
 ### Comparison: Verbose vs Concise
 
 **Verbose Format (Old):**
