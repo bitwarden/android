@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.IBinder
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -19,6 +18,7 @@ import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.provider.AuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.StubAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
+import com.bitwarden.authenticatorbridge.util.PasswordManagerSignatureVerifier
 import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.toFingerprint
@@ -37,6 +37,7 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
  * @param connectionType Specifies which build variant to connect to.
  * @param symmetricKeyStorageProvider Provides access to local storage of the symmetric encryption
  * key.
+ * @param passwordManagerSignatureVerifier Verifies the authenticity of the Password Manager app.
  * @param callbackProvider Provides a way to construct a service callback that can be mocked in
  * tests.
  * @param processLifecycleOwner Lifecycle owner that is used to listen for start/stop
@@ -45,6 +46,7 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
 internal class AuthenticatorBridgeManagerImpl(
     private val connectionType: AuthenticatorBridgeConnectionType,
     private val symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
+    private val passwordManagerSignatureVerifier: PasswordManagerSignatureVerifier,
     callbackProvider: AuthenticatorBridgeCallbackProvider =
         StubAuthenticatorBridgeCallbackProvider(),
     context: Context,
@@ -67,6 +69,7 @@ internal class AuthenticatorBridgeManagerImpl(
                 !isBuildVersionAtLeast(Build.VERSION_CODES.S) -> {
                     AccountSyncState.OsVersionNotSupported
                 }
+
                 !isBitwardenAppInstalled() -> AccountSyncState.AppNotInstalled
                 else -> AccountSyncState.Loading
             },
@@ -243,14 +246,12 @@ internal class AuthenticatorBridgeManagerImpl(
         }
     }
 
-    private fun isBitwardenAppInstalled(): Boolean =
-        // Check to see if correct Bitwarden app is installed:
-        try {
-            applicationContext.packageManager.getPackageInfo(connectionType.toPackageName(), 0)
-            true
-        } catch (e: NameNotFoundException) {
-            false
-        }
+    private fun isBitwardenAppInstalled(): Boolean {
+        // Verify the Password Manager app is installed and has a valid signature
+        return passwordManagerSignatureVerifier.isValidPasswordManagerApp(
+            connectionType.toPackageName(),
+        )
+    }
 }
 
 /**

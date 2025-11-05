@@ -3,7 +3,6 @@ package com.bitwarden.authenticatorbridge.manager
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
@@ -13,6 +12,7 @@ import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.authenticatorbridge.util.FakeLifecycleOwner
 import com.bitwarden.authenticatorbridge.util.FakeSymmetricKeyStorageProvider
+import com.bitwarden.authenticatorbridge.util.PasswordManagerSignatureVerifier
 import com.bitwarden.authenticatorbridge.util.TestAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
@@ -44,6 +44,9 @@ class AuthenticatorBridgeManagerTest {
         } returns mockk()
     }
     private val mockBridgeService: IAuthenticatorBridgeService = mockk()
+    private val mockPasswordManagerSignatureVerifier = mockk<PasswordManagerSignatureVerifier> {
+        every { isValidPasswordManagerApp(any()) } returns true
+    }
     private val fakeLifecycleOwner = FakeLifecycleOwner()
     private val fakeSymmetricKeyStorageProvider = FakeSymmetricKeyStorageProvider()
     private val testAuthenticatorBridgeCallbackProvider = TestAuthenticatorBridgeCallbackProvider()
@@ -65,6 +68,7 @@ class AuthenticatorBridgeManagerTest {
             context = context,
             connectionType = AuthenticatorBridgeConnectionType.DEV,
             symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+            passwordManagerSignatureVerifier = mockPasswordManagerSignatureVerifier,
             callbackProvider = testAuthenticatorBridgeCallbackProvider,
             processLifecycleOwner = fakeLifecycleOwner,
         )
@@ -86,12 +90,13 @@ class AuthenticatorBridgeManagerTest {
     @Test
     fun `initial AccountSyncState should be AppNotInstalled when Bitwarden app is not present`() {
         every {
-            context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
-        } throws NameNotFoundException()
+            mockPasswordManagerSignatureVerifier.isValidPasswordManagerApp(any())
+        } returns false
         val manager = AuthenticatorBridgeManagerImpl(
             context = context,
             connectionType = AuthenticatorBridgeConnectionType.DEV,
             symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+            passwordManagerSignatureVerifier = mockPasswordManagerSignatureVerifier,
             callbackProvider = testAuthenticatorBridgeCallbackProvider,
             processLifecycleOwner = fakeLifecycleOwner,
         )
@@ -578,6 +583,7 @@ class AuthenticatorBridgeManagerTest {
                 context = context,
                 connectionType = AuthenticatorBridgeConnectionType.DEV,
                 symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+                passwordManagerSignatureVerifier = mockPasswordManagerSignatureVerifier,
                 callbackProvider = testAuthenticatorBridgeCallbackProvider,
                 processLifecycleOwner = fakeLifecycleOwner,
             )

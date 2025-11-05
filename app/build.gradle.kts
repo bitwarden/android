@@ -303,9 +303,9 @@ tasks {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + 
-            // Explicitly setting the user Country and Language because tests assume en-US 
-            "-Duser.country=US" + 
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+            // Explicitly setting the user Country and Language because tests assume en-US
+            "-Duser.country=US" +
             "-Duser.language=en"
     }
 }
