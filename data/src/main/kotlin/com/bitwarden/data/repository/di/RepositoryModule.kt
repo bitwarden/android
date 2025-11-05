@@ -1,7 +1,7 @@
 package com.bitwarden.data.repository.di
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.ServerConfigRepositoryImpl
 import com.bitwarden.network.service.ConfigService

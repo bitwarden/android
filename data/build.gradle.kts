@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.timber)
 
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":core")))
+
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.jupiter)

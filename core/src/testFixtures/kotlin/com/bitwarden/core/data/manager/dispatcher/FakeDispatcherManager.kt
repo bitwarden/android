@@ -1,6 +1,5 @@
-package com.bitwarden.data.datasource.disk.base
+package com.bitwarden.core.data.manager.dispatcher
 
-import com.bitwarden.data.manager.DispatcherManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

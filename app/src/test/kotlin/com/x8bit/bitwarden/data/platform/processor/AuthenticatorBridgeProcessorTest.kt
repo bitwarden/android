@@ -17,9 +17,9 @@ import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl

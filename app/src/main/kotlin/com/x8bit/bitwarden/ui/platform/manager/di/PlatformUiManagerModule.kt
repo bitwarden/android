@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.manager.di
 
 import android.content.Context
 import com.bitwarden.core.data.manager.BuildInfoManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.ui.platform.manager.share.ShareManager
 import com.bitwarden.ui.platform.manager.share.ShareManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
