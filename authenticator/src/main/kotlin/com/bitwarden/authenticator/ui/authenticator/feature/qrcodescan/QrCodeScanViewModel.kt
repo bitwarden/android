@@ -1,9 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
-import android.net.Uri
 import android.os.Parcelable
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
+import androidx.core.net.toUri
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
@@ -12,15 +10,14 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.base.util.isBase32
+import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 /**
- * Handles [QrCodeScanAction],
- * and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
+ * Handles [QrCodeScanAction] and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
  */
 @HiltViewModel
 @Suppress("TooManyFunctions")
@@ -77,15 +74,11 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleCloseClick() {
-        sendEvent(
-            QrCodeScanEvent.NavigateBack,
-        )
+        sendEvent(QrCodeScanEvent.NavigateBack)
     }
 
     private fun handleManualEntryTextClick() {
-        sendEvent(
-            QrCodeScanEvent.NavigateToManualCodeEntry,
-        )
+        sendEvent(QrCodeScanEvent.NavigateToManualCodeEntry)
     }
 
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
@@ -103,96 +96,48 @@ class QrCodeScanViewModel @Inject constructor(
 
     // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleTotpUriReceive(scannedCode: String) {
-        val result = TotpCodeResult.TotpCodeScan(scannedCode)
-        val scannedCodeUri = Uri.parse(scannedCode)
-        val secretValue = scannedCodeUri
-            .getQueryParameter(TotpCodeManager.SECRET_PARAM)
-            .orEmpty()
-            .toUpperCase(Locale.current)
+        scannedCode
+            .getTotpDataOrNull()
+            ?.let {
+                val result = TotpCodeResult.TotpCodeScan(code = scannedCode)
+                if (authenticatorRepository.sharedCodesStateFlow.value.isSyncWithBitwardenEnabled) {
+                    when (settingsRepository.defaultSaveOption) {
+                        DefaultSaveOption.BITWARDEN_APP -> {
+                            saveCodeToBitwardenAndNavigateBack(result = result)
+                        }
 
-        if (secretValue.isEmpty() || !secretValue.isBase32()) {
-            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
-            sendEvent(QrCodeScanEvent.NavigateBack)
-            return
-        }
-
-        val values = scannedCodeUri.queryParameterNames
-        // If the parameters are not valid,
-        if (!areParametersValid(scannedCode, values)) {
-            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
-            sendEvent(QrCodeScanEvent.NavigateBack)
-            return
-        }
-        if (authenticatorRepository.sharedCodesStateFlow.value.isSyncWithBitwardenEnabled) {
-            when (settingsRepository.defaultSaveOption) {
-                DefaultSaveOption.BITWARDEN_APP -> saveCodeToBitwardenAndNavigateBack(result)
-                DefaultSaveOption.LOCAL -> saveCodeLocallyAndNavigateBack(result)
-
-                DefaultSaveOption.NONE -> {
-                    pendingSuccessfulScan = result
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialog = QrCodeScanState.DialogState.ChooseSaveLocation,
-                        )
+                        DefaultSaveOption.LOCAL -> saveCodeLocallyAndNavigateBack(result = result)
+                        DefaultSaveOption.NONE -> {
+                            pendingSuccessfulScan = result
+                            mutableStateFlow.update {
+                                it.copy(dialog = QrCodeScanState.DialogState.ChooseSaveLocation)
+                            }
+                        }
                     }
+                } else {
+                    // Syncing with Bitwarden not enabled, save code locally:
+                    saveCodeLocallyAndNavigateBack(result = result)
                 }
             }
-        } else {
-            // Syncing with Bitwarden not enabled, save code locally:
-            saveCodeLocallyAndNavigateBack(result)
-        }
+            ?: run {
+                authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
+                sendEvent(QrCodeScanEvent.NavigateBack)
+            }
     }
 
     private fun handleGoogleExportUriReceive(scannedCode: String) {
-        val uri = Uri.parse(scannedCode)
+        val uri = scannedCode.toUri()
         val encodedData = uri.getQueryParameter(TotpCodeManager.DATA_PARAM)
-        val result: TotpCodeResult = if (encodedData.isNullOrEmpty()) {
-            TotpCodeResult.CodeScanningError
+        if (encodedData.isNullOrEmpty()) {
+            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
         } else {
-            TotpCodeResult.GoogleExportScan(encodedData)
+            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.GoogleExportScan(encodedData))
         }
-        authenticatorRepository.emitTotpCodeResult(result)
         sendEvent(QrCodeScanEvent.NavigateBack)
     }
 
     private fun handleCameraErrorReceive() {
-        sendEvent(
-            QrCodeScanEvent.NavigateToManualCodeEntry,
-        )
-    }
-
-    @Suppress("NestedBlockDepth", "ReturnCount", "MagicNumber")
-    private fun areParametersValid(scannedCode: String, parameters: Set<String>): Boolean {
-        parameters.forEach { parameter ->
-            Uri.parse(scannedCode).getQueryParameter(parameter)?.let { value ->
-                when (parameter) {
-                    TotpCodeManager.DIGITS_PARAM -> {
-                        val digit = value.toInt()
-                        if (digit > 10 || digit < 1) {
-                            return false
-                        }
-                    }
-
-                    TotpCodeManager.PERIOD_PARAM -> {
-                        val period = value.toInt()
-                        if (period < 1) {
-                            return false
-                        }
-                    }
-
-                    TotpCodeManager.ALGORITHM_PARAM -> {
-                        val lowercaseAlgo = value.lowercase()
-                        if (lowercaseAlgo != "sha1" &&
-                            lowercaseAlgo != "sha256" &&
-                            lowercaseAlgo != "sha512"
-                        ) {
-                            return false
-                        }
-                    }
-                }
-            }
-        }
-        return true
+        sendEvent(QrCodeScanEvent.NavigateToManualCodeEntry)
     }
 
     private fun saveCodeToBitwardenAndNavigateBack(result: TotpCodeResult.TotpCodeScan) {

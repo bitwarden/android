@@ -1,110 +1,199 @@
 ---
 name: reviewing-changes
-description: Performs comprehensive code reviews for Bitwarden Android projects, verifying architecture compliance, style guidelines, compilation safety, test coverage, and security requirements. Use when reviewing pull requests, checking commits, analyzing code changes, verifying Bitwarden coding standards, evaluating MVVM patterns, checking Hilt DI usage, reviewing security implementations, or assessing test coverage. Automatically invoked by CI pipeline or manually for interactive code reviews.
+version: 2.0.0
+description: Comprehensive code reviews for Bitwarden Android. Detects change type (dependency update, bug fix, feature, UI, refactoring, infrastructure) and applies appropriate review depth. Validates MVVM patterns, Hilt DI, security requirements, and test coverage per project standards. Use when reviewing pull requests, checking commits, analyzing code changes, or evaluating architectural compliance.
 ---
 
 # Reviewing Changes
 
 ## Instructions
 
-Follow this process to review code changes for Bitwarden Android:
+**IMPORTANT**: Use structured thinking throughout your review process. Plan your analysis in `<thinking>` tags before providing final feedback. This improves accuracy by 40% according to research.
 
-### Step 1: Understand Context
+### Step 1: Detect Change Type
 
-Start with high-level assessment of the change's purpose and approach. Read PR/commit descriptions and understand what problem is being solved.
+<thinking>
+Analyze the changeset systematically:
+1. What files were modified? (code vs config vs docs)
+2. What is the PR/commit title indicating?
+3. Is there new functionality or just modifications?
+4. What's the risk level of these changes?
+</thinking>
 
-### Step 2: Verify Compliance
+Analyze the changeset to determine the primary change type:
 
-Systematically check each area against Bitwarden standards documented in `CLAUDE.md`:
+**Detection Rules:**
+- **Dependency Update**: Only gradle files changed (`libs.versions.toml`, `build.gradle.kts`) with version number modifications
+- **Bug Fix**: PR/commit title contains "fix", "bug", or issue ID; addresses existing broken behavior
+- **Feature Addition**: New files, new ViewModels, significant new functionality
+- **UI Refinement**: Only UI/Compose files changed, layout/styling focus
+- **Refactoring**: Code restructuring without behavior change, pattern improvements
+- **Infrastructure**: CI/CD files, Gradle config, build scripts, tooling changes
 
-1. **Architecture**: Follow patterns in `docs/ARCHITECTURE.md`
-   - MVVM + UDF (ViewModels with `StateFlow`, Compose UI)
-   - Hilt DI (interface injection, `@HiltViewModel`)
-   - Repository pattern and proper data flow
+If changeset spans multiple types, use the most complex type's checklist.
 
-2. **Style**: Adhere to `docs/STYLE_AND_BEST_PRACTICES.md`
-   - Naming conventions, code organization, formatting
-   - Kotlin idioms (immutability, null safety, coroutines)
+### Step 2: Load Appropriate Checklist
 
-3. **Compilation**: Analyze for potential build issues
-   - Import statements and dependencies
-   - Type safety and null safety
-   - API compatibility and deprecation warnings
-   - Resource references and manifest requirements
+Based on detected type, read the relevant checklist file:
 
-4. **Testing**: Verify appropriate test coverage
-   - Unit tests for business logic and utility functions
-   - Integration tests for complex workflows
-   - UI tests for user-facing features when applicable
-   - Test coverage for edge cases and error scenarios
+- **Dependency Update** → `checklists/dependency-update.md` (expedited review)
+- **Bug Fix** → `checklists/bug-fix.md` (focused review)
+- **Feature Addition** → `checklists/feature-addition.md` (comprehensive review)
+- **UI Refinement** → `checklists/ui-refinement.md` (design-focused review)
+- **Refactoring** → `checklists/refactoring.md` (pattern-focused review)
+- **Infrastructure** → `checklists/infrastructure.md` (tooling-focused review)
 
-5. **Security**: Given Bitwarden's security-focused nature
-   - Proper handling of sensitive data
-   - Secure storage practices (Android Keystore)
-   - Authentication and authorization patterns
-   - Data encryption and decryption flows
-   - Zero-knowledge architecture preservation
+The checklist provides:
+- Multi-pass review strategy
+- Type-specific focus areas
+- What to check and what to skip
+- Structured thinking guidance
 
-### Step 3: Document Findings
+### Step 3: Execute Review with Structured Thinking
 
-Identify specific violations with `file:line_number` references. Be precise about locations.
+<thinking>
+Before diving into details:
+1. What are the highest-risk areas of this change?
+2. Which architectural patterns need verification?
+3. What security implications exist?
+4. How should I prioritize my findings?
+5. What tone is appropriate for this feedback?
+</thinking>
 
-### Step 4: Provide Recommendations
+Follow the checklist's multi-pass strategy, thinking through each pass systematically.
 
-Give actionable recommendations for improvements. Explain why changes are needed and suggest specific solutions.
+### Step 4: Consult Reference Materials As Needed
 
-### Step 5: Flag Critical Issues
+Load reference files only when needed for specific questions:
 
-Highlight issues that must be addressed before merge. Distinguish between blockers and suggestions.
+- **Issue prioritization** → `reference/priority-framework.md` (Critical vs Suggested vs Optional)
+- **Phrasing feedback** → `reference/review-psychology.md` (questions vs commands, I-statements)
+- **Architecture questions** → `reference/architectural-patterns.md` (MVVM, Hilt DI, module org, error handling)
+- **Security questions (quick reference)** → `reference/security-patterns.md` (common patterns and anti-patterns)
+- **Security questions (comprehensive)** → `docs/ARCHITECTURE.md#security` (full zero-knowledge architecture)
+- **Testing questions** → `reference/testing-patterns.md` (unit tests, mocking, null safety)
+- **UI questions** → `reference/ui-patterns.md` (Compose patterns, theming)
+- **Style questions** → `docs/STYLE_AND_BEST_PRACTICES.md`
 
-### Step 6: Acknowledge Quality
+### Step 5: Document Findings
 
-Note well-implemented patterns (briefly, without elaboration). Keep positive feedback concise.
+<thinking>
+Before writing each comment:
+1. Is this issue Critical, Important, Suggested, or just Acknowledgment?
+2. Should I ask a question or provide direction?
+3. What's the rationale I need to explain?
+4. What code example would make this actionable?
+5. Is there a documentation reference to include?
+</thinking>
 
-## Review Anti-Patterns (DO NOT)
+**CRITICAL**: Use inline comments on specific lines, NOT a single large review comment.
 
-- Be nitpicky about linter-catchable style issues
-- Review without understanding context - ask for clarification first
-- Focus only on new code - check surrounding context for issues
-- Request changes outside the scope of this changeset
+**Inline Comment Rules**:
+- Create separate comment for EACH specific issue on the exact line
+- Do NOT create one large summary comment with all issues
+- Do NOT update existing comments - always create new comments
+- This ensures history is retained for other reviewers
 
-## Examples
+**Inline Comment Format** (Concise with Collapsible Details):
+```
+**[Severity]**: [One-line issue description]
 
-### Good Review Format
+<details>
+<summary>Details and fix</summary>
 
-```markdown
-## Summary
-This PR adds biometric authentication to the login flow, implementing MVVM pattern with proper state management.
+[Code example or specific fix]
 
-## Critical Issues
-- `app/login/LoginViewModel.kt:45` - Mutable state exposed; use `StateFlow` instead of `MutableStateFlow`
-- `data/auth/BiometricRepository.kt:120` - Missing null safety check on `biometricPrompt` result
+[Rationale explaining why]
 
-## Suggested Improvements
-- Consider extracting biometric prompt logic to separate use case class
-- Add integration tests for biometric failure scenarios
-- `app/login/LoginScreen.kt:89` - Consider using existing `BitwardenButton` component
-
-## Good Practices
-- Proper Hilt DI usage throughout
-- Comprehensive unit test coverage
-- Clear separation of concerns
-
-## Action Items
-1. Fix mutable state exposure in `LoginViewModel`
-2. Add null safety check in `BiometricRepository`
-3. Consider adding integration tests for error flows
+Reference: [docs link if applicable]
+</details>
 ```
 
-### What to Focus On
+**Example inline comment**:
+```
+**CRITICAL**: Exposes mutable state
 
-**DO focus on:**
-- Architecture violations (incorrect patterns)
-- Security issues (data handling, encryption)
-- Missing tests for critical paths
-- Compilation risks (type safety, null safety)
+<details>
+<summary>Details and fix</summary>
 
-**DON'T focus on:**
-- Minor formatting (handled by linters)
-- Personal preferences without architectural basis
-- Issues outside the changeset scope
+Change `MutableStateFlow<State>` to `StateFlow<State>`:
+
+\```kotlin
+private val _state = MutableStateFlow<State>()
+val state: StateFlow<State> = _state.asStateFlow()
+\```
+
+Exposing MutableStateFlow allows external mutation, violating MVVM unidirectional data flow.
+
+Reference: docs/ARCHITECTURE.md#mvvm-pattern
+</details>
+```
+
+**Summary Comment Format** (Minimal - Avoid Duplication):
+```
+**Overall Assessment:** APPROVE / REQUEST CHANGES
+
+**Critical Issues** (if any):
+- [One-line summary of each critical blocking issue]
+
+See inline comments for all issue details.
+```
+
+**Output Format Notes**:
+
+**What to Include:**
+- **Inline comments**: Create separate comment for EACH specific issue with full details in `<details>` tag
+- **Summary comment**: Overall assessment (APPROVE/REQUEST CHANGES) + list of CRITICAL issues only
+- **Severity levels**: Use CRITICAL (blocking), IMPORTANT (should fix), SUGGESTED (nice to have), or ACKNOWLEDGED (good practice observed)
+
+**What to Exclude:**
+- **No duplication**: Never repeat inline comment details in the summary
+- **No Important/Suggested in summary**: Only CRITICAL blocking issues belong in summary
+- **No "Good Practices" section**: Acknowledge good practices in inline comments if relevant
+- **No "Action Items" section**: This duplicates inline comments - avoid entirely
+- **No verbose analysis**: Keep detailed analysis (compilation status, security review, rollback plans) in inline comments only
+
+**Visibility Guidelines:**
+- **Inline comments visible**: Severity + one-line description only
+- **Inline comments collapsed**: Code examples, rationale, references in `<details>` tag
+- **Summary visible**: Verdict + critical issues list only
+
+See `examples/review-outputs.md` for complete examples.
+
+## Core Principles
+
+- **Minimal reviews for clean PRs**: 2-3 lines when no issues found (see Special Case below)
+- **Issues-focused feedback**: Only comment when there's something actionable; acknowledge good work briefly without elaboration (see priority-framework.md:145-166)
+- **Appropriate depth**: Match review rigor to change complexity and risk
+- **Specific references**: Always use `file:line_number` format for precise location
+- **Actionable feedback**: Say what to do and why, not just what's wrong
+- **Constructive tone**: Ask questions for design decisions, explain rationale, focus on code not people
+- **Efficient reviews**: Use multi-pass strategy, time-box reviews, skip what's not relevant
+
+## Special Case: Clean PRs with No Issues
+
+When you find NO critical, important, or suggested issues:
+
+**Minimal Approval Format:**
+```
+**Overall Assessment:** APPROVE
+
+[One sentence describing what the PR does well]
+```
+
+**Examples:**
+- "Clean refactoring following established patterns"
+- "Solid bug fix with comprehensive test coverage"
+- "Well-structured feature implementation meeting all standards"
+
+**NEVER do this for clean PRs:**
+- ❌ Multiple sections (Key Strengths, Changes, Code Quality, etc.)
+- ❌ Listing everything that was done correctly
+- ❌ Checkmarks for each file or pattern followed
+- ❌ Elaborate praise or detailed positive analysis
+
+**Why brevity matters:**
+- Respects developer time (quick approval = move forward faster)
+- Reduces noise in PR conversations
+- Saves tokens and processing time
+- Focuses attention on PRs that actually need discussion

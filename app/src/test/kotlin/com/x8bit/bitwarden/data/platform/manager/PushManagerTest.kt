@@ -975,7 +975,7 @@ private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z",
-      "PushNotificationLogOutReason": "0"
+      "Reason": 0
     }""",
 )
 

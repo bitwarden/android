@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.bitwarden.ui.platform.model.TotpData
 import io.mockk.mockk
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals

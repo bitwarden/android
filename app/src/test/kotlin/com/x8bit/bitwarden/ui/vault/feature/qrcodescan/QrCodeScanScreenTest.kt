@@ -31,11 +31,12 @@ class QrCodeScanScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            qrCodeAnalyzer = qrCodeAnalyzer,
+        ) {
             QrCodeScanScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                qrCodeAnalyzer = qrCodeAnalyzer,
                 onNavigateToManualCodeEntryScreen = {
                     onNavigateToManualCodeEntryScreenCalled = true
                 },
