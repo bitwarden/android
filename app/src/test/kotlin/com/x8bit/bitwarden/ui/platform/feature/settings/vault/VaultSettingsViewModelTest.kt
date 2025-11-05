@@ -5,12 +5,12 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -40,7 +40,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
             getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
         } returns mutableSnackbarSharedFlow

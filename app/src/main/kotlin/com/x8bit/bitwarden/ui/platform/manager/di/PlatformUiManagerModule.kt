@@ -5,11 +5,12 @@ import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.ui.platform.manager.share.ShareManager
 import com.bitwarden.ui.platform.manager.share.ShareManagerImpl
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +38,7 @@ object PlatformUiManagerModule {
     @Singleton
     fun provideSnackbarRelayManager(
         dispatcherManager: DispatcherManager,
-    ): SnackbarRelayManager = SnackbarRelayManagerImpl(
+    ): SnackbarRelayManager<SnackbarRelay> = SnackbarRelayManagerImpl(
         dispatcherManager = dispatcherManager,
     )
 

@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -16,8 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,7 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class StartRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    snackbarRelayManager: SnackbarRelayManager,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
