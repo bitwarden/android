@@ -63,7 +63,12 @@ internal class PasswordManagerSignatureVerifierImpl(
                 PackageManager.GET_SIGNING_CERTIFICATES,
             )
 
-            val signingInfo = packageInfo.signingInfo ?: return false
+            val signingInfo = packageInfo.signingInfo ?: run {
+                Timber.w(
+                    "Signature verification failed: signingInfo is null for package $packageName",
+                )
+                return false
+            }
 
             // Reject multiple signers to prevent signature rotation attacks.
             // Bitwarden uses stable, long-lived signing certificates and never performs rotation.
@@ -72,14 +77,25 @@ internal class PasswordManagerSignatureVerifierImpl(
             // - Compromised/tampered APK
             // - Non-genuine Bitwarden application
             // See: https://source.android.com/docs/security/features/apksigning/v3
-            if (signingInfo.hasMultipleSigners()) return false
+            if (signingInfo.hasMultipleSigners()) {
+                Timber.w(
+                    "Signature verification failed: multiple signers detected for $packageName",
+                )
+                return false
+            }
 
             val signature = signingInfo.apkContentsSigners.first()
             val sha256 = MessageDigest.getInstance("SHA-256")
             val certHash = sha256.digest(signature.toByteArray())
             val certHashHex = certHash.joinToString("") { "%02x".format(it) }
 
-            val isValid = knownPasswordManagerCertificates.contains(certHashHex)
+            // Use constant-time comparison to prevent timing attacks
+            val isValid = knownPasswordManagerCertificates.any { knownCert ->
+                MessageDigest.isEqual(
+                    knownCert.toByteArray(),
+                    certHashHex.toByteArray(),
+                )
+            }
             if (!isValid) {
                 Timber.w("Signature verification failed: unknown certificate hash")
             }
