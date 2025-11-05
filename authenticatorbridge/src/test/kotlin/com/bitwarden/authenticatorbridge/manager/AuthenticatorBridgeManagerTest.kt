@@ -132,10 +132,12 @@ class AuthenticatorBridgeManagerTest {
 
     @Test
     fun `onStart when Bitwarden app is not present should set state to AppNotInstalled`() {
-        val mockIntent: Intent = mockk()
+        // Mock verifier to return false (app not valid/installed)
         every {
-            context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
-        } throws NameNotFoundException()
+            mockPasswordManagerSignatureVerifier.isValidPasswordManagerApp(any())
+        } returns false
+
+        val mockIntent: Intent = mockk()
         every {
             anyConstructed<Intent>().setComponent(any())
         } returns mockIntent

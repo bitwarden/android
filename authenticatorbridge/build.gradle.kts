@@ -40,6 +40,11 @@ android {
         buildConfig = true
         aidl = true
     }
+    testOptions {
+        // Required for Robolectric
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+    }
     // Add version name to the output .aar file:
     libraryVariants.all {
         val variant = this
@@ -72,6 +77,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockk.mockk)
+    testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
 }
 
