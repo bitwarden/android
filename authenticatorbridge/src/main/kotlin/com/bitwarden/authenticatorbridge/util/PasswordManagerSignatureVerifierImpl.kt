@@ -97,20 +97,31 @@ internal class PasswordManagerSignatureVerifierImpl(
                 )
             }
             if (!isValid) {
-                Timber.w("Signature verification failed: unknown certificate hash")
+                Timber.w(
+                    "Signature verification failed for $packageName: unknown certificate hash",
+                )
             }
             isValid
         } catch (e: PackageManager.NameNotFoundException) {
-            Timber.w(e, "Signature verification failed: package not found")
+            Timber.w(e, "Signature verification failed for $packageName: package not found")
             false
         } catch (e: SecurityException) {
-            Timber.e(e, "Signature verification failed: security exception")
+            Timber.e(
+                e,
+                "Signature verification failed for $packageName: security exception",
+            )
             false
         } catch (e: NoSuchAlgorithmException) {
-            Timber.e(e, "Signature verification failed: SHA-256 unavailable")
+            Timber.e(
+                e,
+                "Signature verification failed for $packageName: SHA-256 unavailable",
+            )
             false
         } catch (e: NoSuchElementException) {
-            Timber.e(e, "Signature verification failed: no signing certificates")
+            Timber.e(
+                e,
+                "Signature verification failed for  $packageName: no signing certificates",
+            )
             false
         }
     }
