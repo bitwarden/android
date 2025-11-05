@@ -120,7 +120,7 @@ internal class PasswordManagerSignatureVerifierImpl(
         } catch (e: NoSuchElementException) {
             Timber.e(
                 e,
-                "Signature verification failed for  $packageName: no signing certificates",
+                "Signature verification failed for $packageName: no signing certificates",
             )
             false
         }
