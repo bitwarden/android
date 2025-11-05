@@ -249,7 +249,7 @@ internal class AuthenticatorBridgeManagerImpl(
     private fun isBitwardenAppInstalled(): Boolean {
         // Verify the Password Manager app is installed and has a valid signature
         return passwordManagerSignatureVerifier.isValidPasswordManagerApp(
-            connectionType.toPackageName(),
+            packageName = connectionType.toPackageName(),
         )
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticatorbridge.R
+import timber.log.Timber
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -79,17 +80,17 @@ internal class PasswordManagerSignatureVerifierImpl(
             val certHashHex = certHash.joinToString("") { "%02x".format(it) }
 
             knownPasswordManagerCertificates.contains(certHashHex)
-        } catch (_: PackageManager.NameNotFoundException) {
-            // Package not installed
+        } catch (e: PackageManager.NameNotFoundException) {
+            Timber.w(e, "Signature verification failed: package not found")
             false
-        } catch (_: SecurityException) {
-            // Permission denied or security policy violation
+        } catch (e: SecurityException) {
+            Timber.e(e, "Signature verification failed: security exception")
             false
-        } catch (_: NoSuchAlgorithmException) {
-            // SHA-256 algorithm not available (should never happen on modern Android)
+        } catch (e: NoSuchAlgorithmException) {
+            Timber.e(e, "Signature verification failed: SHA-256 unavailable")
             false
-        } catch (_: NoSuchElementException) {
-            // No signing certificates found
+        } catch (e: NoSuchElementException) {
+            Timber.e(e, "Signature verification failed: no signing certificates")
             false
         }
     }

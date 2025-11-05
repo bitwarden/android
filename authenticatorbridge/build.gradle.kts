@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.timber)
 
     // Test environment dependencies:
     testImplementation(platform(libs.junit.bom))
