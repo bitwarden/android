@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError

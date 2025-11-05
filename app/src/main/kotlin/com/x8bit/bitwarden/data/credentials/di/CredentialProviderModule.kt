@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.credentials.di
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.credentials.repository
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.datasource.disk.entity.PrivilegedAppEntity
 import com.x8bit.bitwarden.data.credentials.model.PrivilegedAppAllowListJson

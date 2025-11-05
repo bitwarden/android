@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson

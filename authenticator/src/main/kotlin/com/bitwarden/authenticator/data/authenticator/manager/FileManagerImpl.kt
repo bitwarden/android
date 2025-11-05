@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.data.authenticator.manager
 
 import android.content.Context
 import android.net.Uri
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
