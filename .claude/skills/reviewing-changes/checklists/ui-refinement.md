@@ -230,14 +230,4 @@ Spacer(modifier = Modifier.height(17.dp))
 // Design system uses 4.dp increments (4, 8, 12, 16, 24, 32, etc.)
 Spacer(modifier = Modifier.height(16.dp))
 ```
-
-## Good Practices
-- Proper state hoisting to ViewModel
-- Preview composables included
-- Responsive layout with ScrollableColumn
-
-## Action Items
-1. Evaluate using BitwardenTextField for consistency
-2. Add contentDescription for visibility icon
-3. Use standard 16.dp spacing
 ```
