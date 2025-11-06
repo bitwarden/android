@@ -11,10 +11,10 @@ import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
@@ -120,18 +120,13 @@ class ImportItemsViewModel @Inject constructor(
     }
 
     private fun handleImportFromAnotherAppClick() {
-        // Check if RESTRICT_ITEM_TYPES policy is active
-        val shouldFilterCards = policyManager
-            .getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .any { it.isEnabled }
-
         val credentialTypes = buildList {
             add(CredentialTypes.CREDENTIAL_TYPE_BASIC_AUTH)
             add(CredentialTypes.CREDENTIAL_TYPE_PUBLIC_KEY)
             add(CredentialTypes.CREDENTIAL_TYPE_ADDRESS)
             add(CredentialTypes.CREDENTIAL_TYPE_API_KEY)
             // Only include credit card type if policy doesn't restrict it
-            if (!shouldFilterCards) {
+            if (!policyManager.hasRestrictItemTypes()) {
                 add(CredentialTypes.CREDENTIAL_TYPE_CREDIT_CARD)
             }
             add(CredentialTypes.CREDENTIAL_TYPE_CUSTOM_FIELDS)

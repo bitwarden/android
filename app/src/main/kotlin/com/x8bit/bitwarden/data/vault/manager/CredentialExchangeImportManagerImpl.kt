@@ -10,11 +10,11 @@ import com.bitwarden.cxf.model.CredentialExchangeExportResponse
 import com.bitwarden.cxf.model.CredentialExchangeProtocolMessage
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
@@ -102,11 +102,7 @@ class CredentialExchangeImportManagerImpl(
             )
             .flatMap { cipherList ->
                 // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active
-                val shouldFilterCards = policyManager
-                    .getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-                    .any { it.isEnabled }
-
-                val filteredCipherList = if (shouldFilterCards) {
+                val filteredCipherList = if (policyManager.hasRestrictItemTypes()) {
                     cipherList.filter { cipher -> cipher.type != CipherType.CARD }
                 } else {
                     cipherList
