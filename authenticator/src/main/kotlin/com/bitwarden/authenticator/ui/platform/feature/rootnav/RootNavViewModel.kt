@@ -61,8 +61,8 @@ class RootNavViewModel @Inject constructor(
                 handleAppUnlocked()
             }
 
-            RootNavAction.Internal.ClearBiometricsKey -> {
-                handleClearBiometricsKey()
+            is RootNavAction.Internal.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action.isBiometricsSupported)
             }
         }
     }
@@ -104,10 +104,9 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    private fun handleClearBiometricsKey() {
-        settingsRepository.clearBiometricsKey()
-        mutableStateFlow.update {
-            it.copy(navState = RootNavState.NavState.Unlocked)
+    private fun handleBiometricSupportChanged(isBiometricsSupported: Boolean) {
+        if (!isBiometricsSupported) {
+            settingsRepository.clearBiometricsKey()
         }
     }
 }
@@ -185,9 +184,9 @@ sealed class RootNavAction {
         data object AppUnlocked : Internal()
 
         /**
-         * Indicates the device no longer has a valid biometric set up.
+         * Indicates an update on device biometrics support.
          */
-        data object ClearBiometricsKey : Internal()
+        data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : Internal()
 
         /**
          * Indicates an update in the welcome guide being seen has been received.

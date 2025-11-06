@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -28,6 +29,7 @@ import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
@@ -65,6 +67,13 @@ fun RootNavScreen(
             }
             .launchIn(this)
     }
+
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = {
+            viewModel.trySendAction(RootNavAction.Internal.BiometricSupportChanged(it))
+        },
+    )
 
     NavHost(
         navController = navController,
@@ -138,12 +147,7 @@ fun RootNavScreen(
             }
 
             RootNavState.NavState.Locked -> {
-                if (biometricsManager.isBiometricsSupported) {
-                    navController.navigateToUnlock(rootNavOptions)
-                } else {
-                    // device no longer has biometrics setup, clear biometrics key
-                    viewModel.trySendAction(RootNavAction.Internal.ClearBiometricsKey)
-                }
+                navController.navigateToUnlock(rootNavOptions)
             }
 
             RootNavState.NavState.Unlocked -> {
@@ -195,3 +199,18 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition()
             else -> RootTransitionProviders.Exit.fadeOut
         }
     }
+
+@Composable
+private fun BiometricChanges(
+    biometricsManager: BiometricsManager,
+    onBiometricSupportChange: (isSupported: Boolean) -> Unit,
+) {
+    LifecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                onBiometricSupportChange(biometricsManager.isBiometricsSupported)
+            }
+            else -> Unit
+        }
+    }
+}
