@@ -12,6 +12,7 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -43,8 +44,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
@@ -121,7 +121,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow

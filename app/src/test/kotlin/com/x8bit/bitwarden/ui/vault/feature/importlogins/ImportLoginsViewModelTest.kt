@@ -5,14 +5,14 @@ import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -60,7 +60,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         unmockkStatic(Uri::parse)
     }
 
-    private val snackbarRelayManager: SnackbarRelayManagerImpl = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         coEvery { sendSnackbarData(any(), any()) } just runs
     }
 

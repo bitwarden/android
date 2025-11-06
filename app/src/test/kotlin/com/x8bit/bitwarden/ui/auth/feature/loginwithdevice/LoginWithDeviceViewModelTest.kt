@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -13,8 +14,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,7 +41,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             createAuthRequestWithUpdates(email = EMAIL, authRequestType = any())
         } returns mutableCreateAuthRequestWithUpdatesFlow
     }
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 

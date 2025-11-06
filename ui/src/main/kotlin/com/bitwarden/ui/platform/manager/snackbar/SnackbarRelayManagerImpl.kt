@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.snackbar
+package com.bitwarden.ui.platform.manager.snackbar
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.emitWhenSubscribedTo
@@ -18,13 +18,13 @@ import java.util.UUID
 /**
  * The default implementation of the [SnackbarRelayManager] interface.
  */
-class SnackbarRelayManagerImpl(
+class SnackbarRelayManagerImpl<T : Any>(
     dispatcherManager: DispatcherManager,
-) : SnackbarRelayManager {
+) : SnackbarRelayManager<T> {
     private val unconfinedScope = CoroutineScope(context = dispatcherManager.unconfined)
-    private val snackbarSharedFlow = SnackbarLastSubscriberMutableSharedFlow()
+    private val snackbarSharedFlow = SnackbarLastSubscriberMutableSharedFlow<T>()
 
-    override fun sendSnackbarData(data: BitwardenSnackbarData, relay: SnackbarRelay) {
+    override fun sendSnackbarData(data: BitwardenSnackbarData, relay: T) {
         unconfinedScope.launch {
             snackbarSharedFlow.emitWhenSubscribedTo(
                 value = SnackbarDataAndRelay(
@@ -35,10 +35,7 @@ class SnackbarRelayManagerImpl(
         }
     }
 
-    override fun getSnackbarDataFlow(
-        relay: SnackbarRelay,
-        vararg relays: SnackbarRelay,
-    ): Flow<BitwardenSnackbarData> =
+    override fun getSnackbarDataFlow(relay: T, vararg relays: T): Flow<BitwardenSnackbarData> =
         merge(
             snackbarSharedFlow.generateFlowFor(relay = relay),
             *relays.map { snackbarSharedFlow.generateFlowFor(relay = it) }.toTypedArray(),
@@ -47,10 +44,10 @@ class SnackbarRelayManagerImpl(
 }
 
 /**
- * A wrapper for the [BitwardenSnackbarData] payload and [SnackbarRelay] associated with it.
+ * A wrapper for the [BitwardenSnackbarData] payload and relay [T] associated with it.
  */
-private data class SnackbarDataAndRelay(
-    val relay: SnackbarRelay,
+private data class SnackbarDataAndRelay<T : Any>(
+    val relay: T,
     val data: BitwardenSnackbarData,
 )
 
@@ -59,14 +56,14 @@ private data class SnackbarDataAndRelay(
  * data.
  */
 @OptIn(ExperimentalForInheritanceCoroutinesApi::class)
-private class SnackbarLastSubscriberMutableSharedFlow(
-    private val source: MutableSharedFlow<SnackbarDataAndRelay> = MutableSharedFlow(),
-) : MutableSharedFlow<SnackbarDataAndRelay> by source {
-    private val mutableRelayUuidMap: MutableMap<SnackbarRelay, MutableList<UUID>> = mutableMapOf()
+private class SnackbarLastSubscriberMutableSharedFlow<T : Any>(
+    private val source: MutableSharedFlow<SnackbarDataAndRelay<T>> = MutableSharedFlow(),
+) : MutableSharedFlow<SnackbarDataAndRelay<T>> by source {
+    private val mutableRelayUuidMap: MutableMap<T, MutableList<UUID>> = mutableMapOf()
 
     fun generateFlowFor(
-        relay: SnackbarRelay,
-    ): Flow<SnackbarDataAndRelay> {
+        relay: T,
+    ): Flow<SnackbarDataAndRelay<T>> {
         lateinit var uuid: UUID
         return source
             .onSubscription {
@@ -78,6 +75,6 @@ private class SnackbarLastSubscriberMutableSharedFlow(
     }
 
     private fun getUuidStack(
-        relay: SnackbarRelay,
+        relay: T,
     ): MutableList<UUID> = mutableRelayUuidMap.getOrPut(key = relay) { mutableListOf() }
 }
