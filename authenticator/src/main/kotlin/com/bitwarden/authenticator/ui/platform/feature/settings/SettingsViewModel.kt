@@ -81,6 +81,11 @@ class SettingsViewModel @Inject constructor(
             .map { SettingsAction.Internal.DefaultSaveOptionUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        settingsRepository
+            .isUnlockWithBiometricsEnabledFlow
+            .map { SettingsAction.Internal.UnlockWithBiometricsUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: SettingsAction) {
@@ -118,6 +123,20 @@ class SettingsViewModel @Inject constructor(
             }
 
             is SettingsAction.Internal.DynamicColorsUpdated -> handleDynamicColorsUpdated(action)
+
+            is SettingsAction.Internal.UnlockWithBiometricsUpdated -> {
+                handleUnlockWithBiometricsUpdated(action)
+            }
+        }
+    }
+
+    private fun handleUnlockWithBiometricsUpdated(
+        action: SettingsAction.Internal.UnlockWithBiometricsUpdated,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action.isEnabled,
+            )
         }
     }
 
@@ -646,6 +665,13 @@ sealed class SettingsAction(
          * Indicates that the dynamic colors state on disk was updated.
          */
         data class DynamicColorsUpdated(
+            val isEnabled: Boolean,
+        ) : SettingsAction()
+
+        /**
+         * Indicates that the biometric state on disk was updated.
+         */
+        data class UnlockWithBiometricsUpdated(
             val isEnabled: Boolean,
         ) : SettingsAction()
     }
