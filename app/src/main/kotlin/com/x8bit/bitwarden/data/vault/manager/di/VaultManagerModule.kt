@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -182,6 +183,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         userLogoutManager: UserLogoutManager,
+        userStateManager: UserStateManager,
         vaultLockManager: VaultLockManager,
         clock: Clock,
         databaseSchemeManager: DatabaseSchemeManager,
@@ -194,6 +196,7 @@ object VaultManagerModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         userLogoutManager = userLogoutManager,
+        userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
