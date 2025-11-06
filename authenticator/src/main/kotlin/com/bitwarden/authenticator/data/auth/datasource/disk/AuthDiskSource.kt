@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.auth.datasource.disk
 
 import com.bitwarden.network.provider.AppIdProvider
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Primary access point for disk information.
@@ -27,6 +28,11 @@ interface AuthDiskSource : AppIdProvider {
      * Gets the biometrics key.
      */
     fun getUserBiometricUnlockKey(): String?
+
+    /**
+     * Tracks the biometrics key.
+     */
+    fun getUserBiometricUnlockKeyFlow(): Flow<String?>
 
     /**
      * Stores the biometrics key.

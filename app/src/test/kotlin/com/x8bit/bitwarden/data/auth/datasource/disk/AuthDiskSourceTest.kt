@@ -712,6 +712,25 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getUserBiometricUnlockKeyFlow should react to changes in getUserBiometricUnlockKey`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            val biometricsKey = "1234"
+            authDiskSource.getUserBiometicUnlockKeyFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(authDiskSource.getUserBiometricUnlockKey(userId = mockUserId))
+                assertNull(awaitItem())
+
+                // Updating the disk source updates shared preferences
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = mockUserId,
+                    biometricsKey = biometricsKey,
+                )
+                assertEquals(biometricsKey, awaitItem())
+            }
+        }
+
+    @Test
     fun `storeUserBiometricInitVector for non-null values should update SharedPreferences`() {
         val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
         val mockUserId = "mockUserId"

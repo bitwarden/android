@@ -1,12 +1,16 @@
 package com.bitwarden.authenticator.data.auth.datasource.disk.util
 
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onSubscription
 import java.util.UUID
 
 class FakeAuthDiskSource : AuthDiskSource {
 
     private var lastActiveTimeMillis: Long? = null
     private var userBiometricUnlockKey: String? = null
+    private val userBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>()
 
     override val uniqueAppId: String
         get() = UUID.randomUUID().toString()
@@ -19,7 +23,14 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun getUserBiometricUnlockKey(): String? = userBiometricUnlockKey
 
+    override fun getUserBiometricUnlockKeyFlow(): Flow<String?> =
+        userBiometricUnlockKeyFlow
+            .onSubscription {
+                emit(getUserBiometricUnlockKey())
+            }
+
     override fun storeUserBiometricUnlockKey(biometricsKey: String?) {
+        userBiometricUnlockKeyFlow.tryEmit(biometricsKey)
         this@FakeAuthDiskSource.userBiometricUnlockKey = biometricsKey
     }
 
