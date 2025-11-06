@@ -58,6 +58,11 @@ interface SettingsRepository {
     val isUnlockWithBiometricsEnabled: Boolean
 
     /**
+     * Tracks whether or not biometric unlocking is enabled for the current user.
+     */
+    val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
+
+    /**
      * Tracks changes to the expiration alert threshold.
      */
     val authenticatorAlertThresholdSecondsFlow: StateFlow<Int>

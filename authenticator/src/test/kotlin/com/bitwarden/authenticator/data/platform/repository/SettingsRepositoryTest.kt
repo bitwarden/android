@@ -165,4 +165,19 @@ class SettingsRepositoryTest {
         settingsRepository.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3")
         verify { settingsDiskSource.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3") }
     }
+
+    @Test
+    fun `isUnlockWithBiometricsEnabledFlow should react to changes in AuthDiskSource`() = runTest {
+        settingsRepository.isUnlockWithBiometricsEnabledFlow.test {
+            assertFalse(awaitItem())
+            authDiskSource.storeUserBiometricUnlockKey(
+                biometricsKey = "biometricsKey",
+            )
+            assertTrue(awaitItem())
+            authDiskSource.storeUserBiometricUnlockKey(
+                biometricsKey = null,
+            )
+            assertFalse(awaitItem())
+        }
+    }
 }
