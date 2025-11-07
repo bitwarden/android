@@ -5073,6 +5073,12 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             passwordHash = newPasswordHash,
         )
+        verify {
+            userLogoutManager.logout(
+                userId = ACCOUNT_1.profile.userId,
+                reason = LogoutReason.PasswordReset,
+            )
+        }
     }
 
     @Test

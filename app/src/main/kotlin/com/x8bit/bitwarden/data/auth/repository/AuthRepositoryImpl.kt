@@ -1023,12 +1023,6 @@ class AuthRepositoryImpl(
             }
             .fold(
                 onSuccess = {
-                    // Clear the password reset reason, since it's no longer relevant.
-                    storeUserResetPasswordReason(
-                        userId = activeAccount.profile.userId,
-                        reason = null,
-                    )
-
                     // Update the saved master password hash.
                     authSdkSource
                         .hashPassword(
@@ -1043,6 +1037,10 @@ class AuthRepositoryImpl(
                                 passwordHash = passwordHash,
                             )
                         }
+
+                    // Log out the user after successful password reset.
+                    // This clears all user state including forcePasswordResetReason.
+                    logout(reason = LogoutReason.PasswordReset)
 
                     // Return the success.
                     ResetPasswordResult.Success
