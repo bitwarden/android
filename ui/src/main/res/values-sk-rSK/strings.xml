@@ -181,7 +181,7 @@
     <string name="send_verification_code_again">Znovu zaslať overovací kód e-mailom</string>
     <string name="verification_email_not_sent">Nepodarilo sa odoslať overovací e-mail. Skúste znova.</string>
     <string name="verification_email_sent">Overovací e-mail bol odoslaný.</string>
-    <string name="yubi_key_instruction">Ak chcete pokračovať, podržte YubiKey NEO na zadnej strane zariadenia alebo vložte YubiKey do portu USB zariadenia, a potom sa dotknite jeho tlačidla.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey NEO bezpečnostný kľúč</string>
     <string name="add_new_attachment">Pridať novú prílohu</string>
     <string name="attachments">Prílohy</string>

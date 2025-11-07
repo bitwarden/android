@@ -17,7 +17,7 @@
     <string name="edit_folder">Edit Folder</string>
     <string name="email">Email</string>
     <string name="email_address">Alamat Email</string>
-    <string name="enter_pin">Masukkan kode PIN Anda.</string>
+    <string name="enter_pin">Masukkan kode PIN Anda</string>
     <string name="favorites">Favorit</string>
     <string name="folder">Folder</string>
     <string name="folder_created">Folder baru telah dibuat.</string>
@@ -426,7 +426,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="privacy_policy">Kebijakan pribadi</string>
     <string name="passkey_management">Pengelolaan kunci sandi</string>
     <string name="autofill_services">Layanan isi otomatis</string>
-    <string name="display_autofill_suggestions">Tampilkan saran isi otomatis</string>
+    <string name="display_autofill_suggestions">Tampilan saran isi otomatis</string>
     <string name="autofill_suggestions_inline">Sebaris (muncul di papan ketik)</string>
     <string name="autofill_suggestions_popup">Popup (muncul di kolom input)</string>
     <string name="accessibility">Gunakan aksesibilitas</string>

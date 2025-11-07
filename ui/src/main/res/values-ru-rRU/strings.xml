@@ -181,7 +181,7 @@
     <string name="send_verification_code_again">Отправить код повторно</string>
     <string name="verification_email_not_sent">Не удалось отправить письмо подтверждения. Повторить.</string>
     <string name="verification_email_sent">Отправлено письмо подтверждения.</string>
-    <string name="yubi_key_instruction">Для продолжения приложите ваш YubiKey NEO к задней панели устройства или вставьте в USB-порт и нажмите его кнопку.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Ключ безопасности YubiKey</string>
     <string name="add_new_attachment">Добавить новое вложение</string>
     <string name="attachments">Вложения</string>
