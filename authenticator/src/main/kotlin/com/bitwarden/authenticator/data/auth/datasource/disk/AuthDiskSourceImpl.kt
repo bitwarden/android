@@ -23,8 +23,7 @@ class AuthDiskSourceImpl(
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
-    private val mutableUserBiometricUnlockKeyFlow =
-        bufferedMutableSharedFlow<String?>()
+    private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>(replay = 1)
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()

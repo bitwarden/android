@@ -10,7 +10,7 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private var lastActiveTimeMillis: Long? = null
     private var userBiometricUnlockKey: String? = null
-    private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>()
+    private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>(replay = 1)
 
     override val uniqueAppId: String
         get() = UUID.randomUUID().toString()
