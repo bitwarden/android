@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
-import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
@@ -11,7 +10,6 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
 /**
@@ -46,14 +44,6 @@ interface BitwardenCredentialManager {
         createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
-
-    /**
-     * Register a new Password credential to a users vault.
-     */
-    suspend fun registerPasswordCredential(
-        createPasswordRequest: CreatePasswordRequest,
-        selectedCipherView: CipherView,
-    ): PasswordRegisterResult
 
     /**
      * Authenticate a FIDO credential against a cipher in the users vault.

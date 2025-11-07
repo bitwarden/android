@@ -230,7 +230,11 @@ fun VaultAddEditScreen(
         onCredentialErrorDismiss = remember(viewModel) {
             { errorMessage ->
                 viewModel.trySendAction(
-                    VaultAddEditAction.Common.CredentialErrorDialogDismissed(message = errorMessage),
+                    VaultAddEditAction
+                        .Common
+                        .CredentialErrorDialogDismissed(
+                            message = errorMessage,
+                        ),
                 )
             }
         },
@@ -238,13 +242,6 @@ fun VaultAddEditScreen(
             {
                 viewModel.trySendAction(
                     action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
-                )
-            }
-        },
-        onConfirmOverwriteExistingPassword = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick,
                 )
             }
         },
@@ -472,7 +469,6 @@ private fun VaultAddEditItemDialogs(
     onAutofillDismissRequest: () -> Unit,
     onCredentialErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
-    onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
     onSubmitPinFido2Verification: (pin: String) -> Unit,
@@ -512,19 +508,14 @@ private fun VaultAddEditItemDialogs(
         }
 
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
+            @Suppress("MaxLineLength")
             BitwardenOverwriteCredentialConfirmationDialog(
                 title = stringResource(id = BitwardenString.overwrite_passkey),
-                message = stringResource(id = BitwardenString.this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey),
+                message = stringResource(
+                    id = BitwardenString
+                        .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
+                ),
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
-                onDismissRequest = onDismissRequest,
-            )
-        }
-
-        is VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt -> {
-            BitwardenOverwriteCredentialConfirmationDialog(
-                title = stringResource(id = BitwardenString.overwrite_password),
-                message = stringResource(id = BitwardenString.this_item_already_contains_a_password_are_you_sure_you_want_to_overwrite_the_current_password),
-                onConfirmClick = onConfirmOverwriteExistingPassword,
                 onDismissRequest = onDismissRequest,
             )
         }

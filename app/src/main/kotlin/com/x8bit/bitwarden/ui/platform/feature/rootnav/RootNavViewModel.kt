@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -144,11 +145,31 @@ class RootNavViewModel @Inject constructor(
                     }
 
                     is SpecialCircumstance.ProviderCreateCredential -> {
-                        RootNavState.VaultUnlockedForFido2Save(
-                            activeUserId = userState.activeUserId,
-                            createCredentialRequest =
-                                specialCircumstance.createCredentialRequest,
-                        )
+                        specialCircumstance
+                            .createCredentialRequest
+                            .createPublicKeyCredentialRequest
+                            ?.let {
+                                RootNavState.VaultUnlockedForFido2Save(
+                                    activeUserId = userState.activeUserId,
+                                    createCredentialRequest =
+                                        specialCircumstance.createCredentialRequest,
+                                )
+                            }
+                            ?: specialCircumstance
+                                .createCredentialRequest
+                                .createPasswordCredentialRequest
+                                ?.let {
+                                    RootNavState.VaultUnlockedForCreatePasswordRequest(
+                                        username = it.id,
+                                        password = it.password,
+                                        uri = specialCircumstance
+                                            .createCredentialRequest
+                                            .callingAppInfo
+                                            .packageName
+                                            .toAndroidAppUriString(),
+                                    )
+                                }
+                            ?: throw IllegalStateException("Should not have entered here.")
                     }
 
                     is SpecialCircumstance.Fido2Assertion -> {
@@ -334,6 +355,21 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForFido2Save(
         val activeUserId: String,
         val createCredentialRequest: CreateCredentialRequest,
+    ) : RootNavState()
+
+    /**
+     * App should show an add item screen for a user to complete the saving of data collected by
+     * the credential manager framework.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param uri The URI to associate this credential with.
+     */
+    @Parcelize
+    data class VaultUnlockedForCreatePasswordRequest(
+        val username: String,
+        val password: String,
+        val uri: String,
     ) : RootNavState()
 
     /**

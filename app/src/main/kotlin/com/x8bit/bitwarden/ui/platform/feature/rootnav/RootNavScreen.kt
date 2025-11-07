@@ -71,6 +71,7 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGra
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import java.util.concurrent.atomic.AtomicReference
 
@@ -141,6 +142,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForPasswordGet,
         is RootNavState.VaultUnlockedForProviderGetCredentials,
+        is RootNavState.VaultUnlockedForCreatePasswordRequest,
             -> VaultUnlockedGraphRoute
 
         is RootNavState.CredentialExchangeExport,
@@ -240,6 +242,17 @@ fun RootNavScreen(
                     args = VaultAddEditArgs(
                         vaultAddEditType = VaultAddEditType.AddItem,
                         vaultItemCipherType = currentState.autofillSaveItem.toVaultItemCipherType(),
+                    ),
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            is RootNavState.VaultUnlockedForCreatePasswordRequest -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultAddEdit(
+                    args = VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = VaultItemCipherType.LOGIN,
                     ),
                     navOptions = rootNavOptions,
                 )

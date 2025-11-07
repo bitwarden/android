@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
+import androidx.credentials.CreatePasswordResponse
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
@@ -63,7 +64,7 @@ class CredentialProviderCompletionManagerTest {
         fun `completeCredentialRegistration should perform no operations`() {
             val mockRegistrationResult = mockk<RegisterCredentialResult>()
             credentialProviderCompletionManager.completeCredentialRegistration(
-                mockRegistrationResult
+                mockRegistrationResult,
             )
             verify {
                 mockRegistrationResult wasNot Called
@@ -134,7 +135,7 @@ class CredentialProviderCompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeCredentialRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
+        fun `completeCredentialRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is SuccessFido2`() {
             credentialProviderCompletionManager
                 .completeCredentialRegistration(
                     RegisterCredentialResult.SuccessFido2(
@@ -144,6 +145,20 @@ class CredentialProviderCompletionManagerTest {
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialResponse(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeCredentialRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is SuccessPassword`() {
+            credentialProviderCompletionManager
+                .completeCredentialRegistration(RegisterCredentialResult.SuccessPassword)
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setCreateCredentialResponse(
+                    any(),
+                    any<CreatePasswordResponse>(),
+                )
             }
         }
 

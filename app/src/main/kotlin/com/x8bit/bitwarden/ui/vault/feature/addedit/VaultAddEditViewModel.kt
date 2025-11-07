@@ -1,10 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
-import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
-import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
@@ -30,11 +28,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -99,7 +95,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
-import java.time.Instant
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -335,10 +330,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleConfirmOverwriteExistingPasskeyClick()
             }
 
-            is VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick -> {
-                handleConfirmOverwriteExistingPasswordClick()
-            }
-
             VaultAddEditAction.Common.UserVerificationSuccess -> {
                 handleUserVerificationSuccess()
             }
@@ -408,31 +399,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
-        if (content.common.name.isBlank()) {
-            showGenericErrorDialog(
-                message = BitwardenString.validation_field_required
-                    .asText(BitwardenString.name.asText()),
-            )
-            return@onContent
-        } else if (
-            content.common.selectedOwnerId != null &&
-            content.common.selectedOwner?.collections?.all { !it.isSelected } == true
-        ) {
-            showGenericErrorDialog(
-                message = BitwardenString.select_one_collection.asText(),
-            )
-            return@onContent
-        } else if (
-            !networkConnectionManager.isNetworkConnected
-        ) {
-            showDialog(
-                dialogState = VaultAddEditState.DialogState.Generic(
-                    title = BitwardenString.internet_connection_required_title.asText(),
-                    message = BitwardenString.internet_connection_required_message.asText(),
-                ),
-            )
-            return@onContent
-        }
+        if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
             it.copy(
@@ -442,15 +409,17 @@ class VaultAddEditViewModel @Inject constructor(
             )
         }
 
-        state.createCredentialRequest
-            ?.let { request ->
-                //store a deleted date to mark that this data has not been saved yet
-                handleProviderCreateCredentialRequest(
-                    request.providerRequest,
-                    content.toCipherView().copy(deletedDate = Instant.now()),
-                )
-                return@onContent
-            }
+        state.createCredentialRequest?.run {
+            createPublicKeyCredentialRequest
+                ?.let { createPublicKeyCredentialRequest ->
+                    handleCreatePublicKeyCredentialRequest(
+                        request = createPublicKeyCredentialRequest,
+                        callingAppInfo = this.callingAppInfo,
+                        cipherView = content.toCipherView(),
+                    )
+                    return@onContent
+                }
+        }
 
         viewModelScope.launch {
             when (val vaultAddEditType = state.vaultAddEditType) {
@@ -475,31 +444,33 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleProviderCreateCredentialRequest(
-        request: ProviderCreateCredentialRequest,
-        cipherView: CipherView,
-    ) {
-        when (val callingRequest = request.callingRequest) {
-            is CreatePublicKeyCredentialRequest ->
-                handleCreatePublicKeyCredentialRequest(
-                    request.callingAppInfo,
-                    callingRequest,
-                    cipherView,
-                )
-
-            is CreatePasswordRequest ->
-                handleCreatePasswordCredentialRequest(
-                    callingRequest,
-                    cipherView,
-                )
-
-            else ->
-                showCredentialErrorDialog(
-                    BitwardenString
-                        .credential_operation_failed_because_the_request_is_invalid
-                        .asText(),
-                )
+    private fun hasValidationErrors(content: VaultAddEditState.ViewState.Content): Boolean {
+        if (content.common.name.isBlank()) {
+            showGenericErrorDialog(
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.name.asText()),
+            )
+            return true
+        } else if (
+            content.common.selectedOwnerId != null &&
+            content.common.selectedOwner?.collections?.all { !it.isSelected } == true
+        ) {
+            showGenericErrorDialog(
+                message = BitwardenString.select_one_collection.asText(),
+            )
+            return true
+        } else if (
+            !networkConnectionManager.isNetworkConnected
+        ) {
+            showDialog(
+                dialogState = VaultAddEditState.DialogState.Generic(
+                    title = BitwardenString.internet_connection_required_title.asText(),
+                    message = BitwardenString.internet_connection_required_message.asText(),
+                ),
+            )
+            return true
         }
+        return false
     }
 
     private fun handleCreatePublicKeyCredentialRequest(
@@ -537,25 +508,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleCreatePasswordCredentialRequest(
-        request: CreatePasswordRequest,
-        cipherView: CipherView,
-    ) {
-        if (cipherView.isActiveWithPasswordCredentials) {
-            mutableStateFlow.update {
-                it.copy(dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt)
-            }
-            return
-        }
-
-        if (bitwardenCredentialManager.isUserVerified) {
-            registerPasswordCredentialToCipher(request, cipherView)
-            return
-        }
-
-        registerPasswordCredentialToCipher(request, cipherView)
-    }
-
     private fun registerFido2CredentialToCipher(
         callingAppInfo: CallingAppInfo,
         request: CreatePublicKeyCredentialRequest,
@@ -579,30 +531,6 @@ class VaultAddEditViewModel @Inject constructor(
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
-            )
-        }
-    }
-
-    private fun registerPasswordCredentialToCipher(
-        request: CreatePasswordRequest,
-        cipherView: CipherView,
-    ) {
-        viewModelScope.launch {
-            authRepository.activeUserId
-                ?: run {
-                    showCredentialErrorDialog(
-                        BitwardenString.password_operation_failed_because_user_could_not_be_verified
-                            .asText(),
-                    )
-                    return@launch
-                }
-            val result: PasswordRegisterResult =
-                bitwardenCredentialManager.registerPasswordCredential(
-                    createPasswordRequest = request,
-                    selectedCipherView = cipherView,
-                )
-            sendAction(
-                VaultAddEditAction.Internal.PasswordRegisterResultReceive(result),
             )
         }
     }
@@ -675,34 +603,20 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleConfirmOverwriteExistingPasskeyClick() {
         state
             .createCredentialRequest
-            ?.providerRequest
             ?.let { request ->
-                onContent { content ->
-                    handleProviderCreateCredentialRequest(
-                        request,
-                        content.toCipherView(),
-                    )
-                }
+                request.createPublicKeyCredentialRequest
+                    ?.let { createPublicKeyCredentialRequest ->
+                        onContent { content ->
+                            handleCreatePublicKeyCredentialRequest(
+                                request = createPublicKeyCredentialRequest,
+                                callingAppInfo = request.callingAppInfo,
+                                cipherView = content.toCipherView(),
+                            )
+                        }
+                    }
             }
             ?: showCredentialErrorDialog(
                 BitwardenString.passkey_operation_failed_because_the_request_is_invalid.asText(),
-            )
-    }
-
-    private fun handleConfirmOverwriteExistingPasswordClick() {
-        state
-            .createCredentialRequest
-            ?.providerRequest
-            ?.let { request ->
-                onContent { content ->
-                    handleProviderCreateCredentialRequest(
-                        request,
-                        content.toCipherView(),
-                    )
-                }
-            }
-            ?: showCredentialErrorDialog(
-                BitwardenString.password_operation_failed_because_the_request_is_invalid.asText(),
             )
     }
 
@@ -720,14 +634,17 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun getRequestAndRegisterFido2Credential() =
         state.createCredentialRequest
-            ?.providerRequest
             ?.let { request ->
-                onContent { content ->
-                    handleProviderCreateCredentialRequest(
-                        request = request,
-                        cipherView = content.toCipherView(),
-                    )
-                }
+                request.createPublicKeyCredentialRequest
+                    ?.let { createPublicKeyCredentialRequest ->
+                        onContent { content ->
+                            handleCreatePublicKeyCredentialRequest(
+                                request = createPublicKeyCredentialRequest,
+                                callingAppInfo = request.callingAppInfo,
+                                cipherView = content.toCipherView(),
+                            )
+                        }
+                    }
             }
             ?: showCredentialErrorDialog(
                 BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
@@ -1646,10 +1563,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleFido2RegisterCredentialResultReceive(action)
             }
 
-            is VaultAddEditAction.Internal.PasswordRegisterResultReceive -> {
-                handlePasswordRegisterCredentialResultReceive(action)
-            }
-
             is VaultAddEditAction.Internal.ValidateFido2PasswordResultReceive -> {
                 handleValidateFido2PasswordResultReceive(action)
             }
@@ -1740,7 +1653,13 @@ class VaultAddEditViewModel @Inject constructor(
                 if (state.shouldClearSpecialCircumstance) {
                     specialCircumstanceManager.specialCircumstance = null
                 }
-                if (state.shouldExitOnSave) {
+                if (state.createCredentialRequest?.createPasswordCredentialRequest != null) {
+                    sendEvent(
+                        VaultAddEditEvent.CompleteCredentialRegistration(
+                            RegisterCredentialResult.SuccessPassword,
+                        ),
+                    )
+                } else if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
                     snackbarRelayManager.sendSnackbarData(
@@ -2067,33 +1986,6 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(
                     VaultAddEditEvent.CompleteCredentialRegistration(
                         RegisterCredentialResult.SuccessFido2(action.result.responseJson),
-                    ),
-                )
-            }
-        }
-    }
-
-    private fun handlePasswordRegisterCredentialResultReceive(
-        action: VaultAddEditAction.Internal.PasswordRegisterResultReceive,
-    ) {
-        clearDialogState()
-        when (action.result) {
-            is PasswordRegisterResult.Error -> {
-                toastManager.show(BitwardenString.an_error_has_occurred)
-                sendEvent(
-                    VaultAddEditEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.Error(
-                            action.result.messageResourceId.asText(),
-                        ),
-                    ),
-                )
-            }
-
-            is PasswordRegisterResult.Success -> {
-                toastManager.show(BitwardenString.item_updated)
-                sendEvent(
-                    VaultAddEditEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.SuccessPassword,
                     ),
                 )
             }
@@ -2876,12 +2768,6 @@ data class VaultAddEditState(
         data object OverwritePasskeyConfirmationPrompt : DialogState()
 
         /**
-         * Displays the overwrite password confirmation prompt to the user.
-         */
-        @Parcelize
-        data object OverwritePasswordConfirmationPrompt : DialogState()
-
-        /**
          * Displays a dialog to prompt the user for their master password as part of the FIDO 2
          * user verification flow.
          */
@@ -3091,11 +2977,6 @@ sealed class VaultAddEditAction {
          * The user has confirmed overwriting the existing passkey.
          */
         data object ConfirmOverwriteExistingPasskeyClick : Common()
-
-        /**
-         * The user has confirmed overwriting the existing password.
-         */
-        data object ConfirmOverwriteExistingPasswordClick : Common()
 
         /**
          * Fired when the name text input is changed.
@@ -3665,13 +3546,6 @@ sealed class VaultAddEditAction {
          */
         data class Fido2RegisterCredentialResultReceive(
             val result: Fido2RegisterCredentialResult,
-        ) : Internal()
-
-        /**
-         * Indicates that the Password registration result has been received.
-         */
-        data class PasswordRegisterResultReceive(
-            val result: PasswordRegisterResult,
         ) : Internal()
 
         /**

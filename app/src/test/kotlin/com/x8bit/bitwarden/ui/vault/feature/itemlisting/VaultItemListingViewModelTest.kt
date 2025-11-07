@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.net.Uri
 import androidx.core.os.bundleOf
-import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPasswordOption
 import androidx.credentials.GetPublicKeyCredentialOption
@@ -61,7 +60,6 @@ import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
@@ -961,106 +959,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createPublicKeyCredentialRequest = any(),
                     selectedCipherView = cipherView,
                     callingAppInfo = any(),
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ItemClick for vault item during Password registration should show overwrite password confirmation when selected cipher has existing password`() {
-        runTest {
-            setupMockUri()
-            val cipherListView = createMockCipherListView(number = 1)
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-                )
-            mutableVaultDataStateFlow.value = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = listOf(cipherListView),
-                    ),
-                    folderViewList = listOf(),
-                    collectionViewList = listOf(),
-                    sendViewList = listOf(),
-                ),
-            )
-            coEvery {
-                bitwardenCredentialManager.registerPasswordCredential(
-                    any(),
-                    any(),
-                )
-            } returns PasswordRegisterResult.Success
-
-            setupPasswordCreateRequest()
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(
-                VaultItemListingsAction.ItemClick(
-                    id = cipherListView.id.orEmpty(),
-                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherType.LOGIN,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                VaultItemListingState.DialogState.OverwritePasswordConfirmationPrompt(
-                    cipherViewId = cipherListView.id!!,
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ItemClick for vault item during Password registration should perform registration`() =
-        runTest {
-            setupMockUri()
-            val cipherListView = createMockCipherListView(number = 1)
-            val cipherView = createMockCipherView(number = 1, password = null)
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-                )
-            mutableVaultDataStateFlow.value = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = listOf(cipherListView),
-                    ),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
-            )
-
-            coEvery {
-                bitwardenCredentialManager.registerPasswordCredential(
-                    createPasswordRequest = any(),
-                    selectedCipherView = any(),
-                )
-            } returns PasswordRegisterResult.Success
-            coEvery {
-                vaultRepository.getCipher("mockId-1")
-            } returns GetCipherResult.Success(cipherView)
-
-            setupPasswordCreateRequest()
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(
-                VaultItemListingsAction.ItemClick(
-                    id = cipherListView.id.orEmpty(),
-                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherType.LOGIN,
-                    ),
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                bitwardenCredentialManager.registerPasswordCredential(
-                    createPasswordRequest = any(),
-                    selectedCipherView = cipherView,
                 )
             }
         }
@@ -5191,48 +5089,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmOverwriteExistingPasswordClick should display CredentialManagerOperationFail when getSelectedCipher returns null`() =
-        runTest {
-            setupMockUri()
-            val cipherListView = createMockCipherListView(number = 1)
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-                )
-            mutableVaultDataStateFlow.value = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = listOf(cipherListView),
-                    ),
-                    folderViewList = listOf(),
-                    collectionViewList = listOf(),
-                    sendViewList = listOf(),
-                ),
-            )
-            coEvery {
-                vaultRepository.getCipher("invalidId")
-            } returns GetCipherResult.CipherNotFound
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(
-                VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick(
-                    cipherViewId = "invalidId",
-                ),
-            )
-
-            assertEquals(
-                VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    BitwardenString.an_error_has_occurred.asText(),
-                    BitwardenString
-                        .credential_operation_failed_because_the_selected_item_does_not_exist
-                        .asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `DismissCredentialManagerErrorDialogClick should clear dialog state then complete GetPassword Request with error when password request is not null`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
@@ -5971,21 +5827,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             mockk<ProviderCreateCredentialRequest> {
                 every { callingAppInfo } returns mockCallingAppInfo
                 every { callingRequest } returns mockCreatePublicKeyCredentialRequest
-            },
-    ) {
-        every {
-            ProviderCreateCredentialRequest.fromBundle(any())
-        } returns mockProviderCreateCredentialRequest
-    }
-
-    private fun setupPasswordCreateRequest(
-        mockCallingAppInfo: CallingAppInfo = this.mockCallingAppInfo,
-        mockCreatePasswordRequest: CreatePasswordRequest =
-            mockk<CreatePasswordRequest>(relaxed = true),
-        mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
-                every { callingAppInfo } returns mockCallingAppInfo
-                every { callingRequest } returns mockCreatePasswordRequest
             },
     ) {
         every {
