@@ -314,6 +314,7 @@ class AccountsServiceTest : BaseServiceTest() {
         assertTrue(result.isFailure)
     }
 
+    @Test
     fun `resendNewDeviceOtp with 400 response is Error`() = runTest {
         val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
         server.enqueue(response)
@@ -343,27 +344,27 @@ private const val INVALID_JSON = """
 """
 
 private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
-        authenticationData = MasterPasswordAuthenticationDataJson(
-            kdf = KdfJson(
-                kdfType = KdfTypeJson.PBKDF2_SHA256,
-                iterations = 7,
-                memory = 1,
-                parallelism = 2,
-            ),
-            masterPasswordAuthenticationHash = "mockMasterPasswordHash",
-            salt = "mockSalt",
+    authenticationData = MasterPasswordAuthenticationDataJson(
+        kdf = KdfJson(
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            iterations = 7,
+            memory = 1,
+            parallelism = 2,
         ),
-        key = "mockKey",
-        masterPasswordHash = "mockMasterPasswordHash",
-        newMasterPasswordHash = "mockNewMasterPasswordHash",
-        unlockData = MasterPasswordUnlockDataJson(
-            kdf = KdfJson(
-                kdfType = KdfTypeJson.PBKDF2_SHA256,
-                iterations = 7,
-                memory = 1,
-                parallelism = 2,
-            ),
-            masterKeyWrappedUserKey = "mockMasterPasswordKey",
-            salt = "mockSalt",
+        masterPasswordAuthenticationHash = "mockMasterPasswordHash",
+        salt = "mockSalt",
+    ),
+    key = "mockKey",
+    masterPasswordHash = "mockMasterPasswordHash",
+    newMasterPasswordHash = "mockNewMasterPasswordHash",
+    unlockData = MasterPasswordUnlockDataJson(
+        kdf = KdfJson(
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            iterations = 7,
+            memory = 1,
+            parallelism = 2,
         ),
-    )
+        masterKeyWrappedUserKey = "mockMasterPasswordKey",
+        salt = "mockSalt",
+    ),
+)
