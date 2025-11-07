@@ -44,8 +44,12 @@ class AuthDiskSourceImpl(
     override fun getUserBiometricUnlockKey(): String? =
         getEncryptedString(key = BIOMETRICS_UNLOCK_KEY)
 
-    override fun getUserBiometricUnlockKeyFlow(): Flow<String?> = mutableUserBiometricUnlockKeyFlow
-        .onSubscription { emit(getUserBiometricUnlockKey()) }
+    override val userBiometricUnlockKeyFlow: Flow<String?>
+        get() =
+            mutableUserBiometricUnlockKeyFlow
+                .onSubscription {
+                    emit(getUserBiometricUnlockKey())
+                }
 
     override fun storeUserBiometricUnlockKey(
         biometricsKey: String?,

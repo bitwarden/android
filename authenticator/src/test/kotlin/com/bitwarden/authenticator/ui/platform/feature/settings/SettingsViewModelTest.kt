@@ -51,6 +51,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
+    private val mutableIsUnlockWithBiometricsEnabledFlow = MutableStateFlow(true)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -64,6 +65,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
 

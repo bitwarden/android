@@ -9,6 +9,11 @@ import kotlinx.coroutines.flow.Flow
 interface AuthDiskSource : AppIdProvider {
 
     /**
+     * Tracks the biometrics key.
+     */
+    val userBiometricUnlockKeyFlow: Flow<String?>
+
+    /**
      * Retrieves the "last active time".
      *
      * This time is intended to be derived from a call to
@@ -28,11 +33,6 @@ interface AuthDiskSource : AppIdProvider {
      * Gets the biometrics key.
      */
     fun getUserBiometricUnlockKey(): String?
-
-    /**
-     * Tracks the biometrics key.
-     */
-    fun getUserBiometricUnlockKeyFlow(): Flow<String?>
 
     /**
      * Stores the biometrics key.

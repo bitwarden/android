@@ -68,9 +68,9 @@ class SettingsRepositoryImpl(
 
     override val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
         get() =
-                authDiskSource
-                    .getUserBiometricUnlockKeyFlow()
-                    .map { it != null }
+            authDiskSource
+                .userBiometricUnlockKeyFlow
+                .map { it != null }
 
     override val appThemeStateFlow: StateFlow<AppTheme>
         get() = settingsDiskSource

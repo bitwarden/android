@@ -46,7 +46,7 @@ class RootNavViewModel @Inject constructor(
             }
 
             is RootNavAction.Internal.HasSeenWelcomeTutorialChange -> {
-                handleHasSeenWelcomeTutorialChange(action.hasSeenWelcomeGuide)
+                handleHasSeenWelcomeTutorialChange(action)
             }
 
             RootNavAction.Internal.TutorialFinished -> {
@@ -61,8 +61,8 @@ class RootNavViewModel @Inject constructor(
                 handleAppUnlocked()
             }
 
-            is RootNavAction.Internal.BiometricSupportChanged -> {
-                handleBiometricSupportChanged(action.isBiometricsSupported)
+            is RootNavAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
             }
         }
     }
@@ -71,11 +71,14 @@ class RootNavViewModel @Inject constructor(
         authRepository.updateLastActiveTime()
     }
 
-    private fun handleHasSeenWelcomeTutorialChange(hasSeenWelcomeGuide: Boolean) {
-        settingsRepository.hasSeenWelcomeTutorial = hasSeenWelcomeGuide
-        if (hasSeenWelcomeGuide) {
+    private fun handleHasSeenWelcomeTutorialChange(
+        action: RootNavAction.Internal.HasSeenWelcomeTutorialChange,
+    ) {
+        settingsRepository.hasSeenWelcomeTutorial = action.hasSeenWelcomeGuide
+        if (action.hasSeenWelcomeGuide) {
             if (settingsRepository.isUnlockWithBiometricsEnabled &&
-                biometricsEncryptionManager.isBiometricIntegrityValid()) {
+                biometricsEncryptionManager.isBiometricIntegrityValid()
+            ) {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Locked) }
             } else {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Unlocked) }
@@ -104,8 +107,10 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    private fun handleBiometricSupportChanged(isBiometricsSupported: Boolean) {
-        if (!isBiometricsSupported) {
+    private fun handleBiometricSupportChanged(
+        action: RootNavAction.BiometricSupportChanged,
+    ) {
+        if (!action.isBiometricsSupported) {
             settingsRepository.clearBiometricsKey()
         }
     }
@@ -164,6 +169,11 @@ sealed class RootNavAction {
     data object BackStackUpdate : RootNavAction()
 
     /**
+     * Indicates an update on device biometrics support.
+     */
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : Internal()
+
+    /**
      * Models actions the [RootNavViewModel] itself may send.
      */
     sealed class Internal : RootNavAction() {
@@ -182,11 +192,6 @@ sealed class RootNavAction {
          * Indicates the application has been unlocked.
          */
         data object AppUnlocked : Internal()
-
-        /**
-         * Indicates an update on device biometrics support.
-         */
-        data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : Internal()
 
         /**
          * Indicates an update in the welcome guide being seen has been received.
