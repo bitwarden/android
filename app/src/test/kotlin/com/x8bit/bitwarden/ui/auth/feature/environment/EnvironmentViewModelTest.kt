@@ -8,6 +8,7 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -17,8 +18,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -38,7 +38,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         every { getMutualTlsKeyAliases() } returns emptyList()
     }
     private val mockFileManager = mockk<FileManager>()
-    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 

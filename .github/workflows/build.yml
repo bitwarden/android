@@ -15,6 +15,9 @@ on:
         description: "Optional. Build number to use. Overrides default of GitHub run number."
         required: false
         type: number
+      patch_version:
+        description: "Order 999 - Overrides Patch version"
+        type: boolean
       distribute-to-firebase:
         description: "Optional. Distribute artifacts to Firebase."
         required: false
@@ -37,6 +40,18 @@ permissions:
   id-token: write
 
 jobs:
+  version:
+    name: Calculate Version Name and Number
+    uses: bitwarden/android/.github/workflows/_version.yml@main
+    with:
+      app_codename: "bwpm"
+      # Start from 11000 to prevent collisions with mobile build version codes
+      base_version_number: 11000
+      version_name: ${{ inputs.version-name }}
+      version_number: ${{ inputs.version-code }}
+      patch_version: ${{ inputs.patch_version && '999' || '' }}
+    secrets: inherit
+
   build:
     name: Build
     runs-on: ubuntu-24.04
@@ -115,6 +130,7 @@ jobs:
   publish_playstore:
     name: Publish Play Store artifacts
     needs:
+      - version
       - build
     runs-on: ubuntu-24.04
     strategy:
@@ -230,10 +246,10 @@ jobs:
 
       - name: Increment version
         env:
-          VERSION_CODE: ${{ inputs.version-code }}
-          VERSION_NAME: ${{ inputs.version-name }}
+          VERSION_CODE: ${{ needs.version.outputs.version_number }}
+          VERSION_NAME: ${{ needs.version.outputs.version_name }}
         run: |
-          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
+          VERSION_CODE="${VERSION_CODE:-$GITHUB_RUN_NUMBER}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:$VERSION_NAME
@@ -436,6 +452,7 @@ jobs:
   publish_fdroid:
     name: Publish F-Droid artifacts
     needs:
+      - version
       - build
     runs-on: ubuntu-24.04
     steps:
@@ -530,13 +547,12 @@ jobs:
           "$GITHUB_RUN_ID" \
           "$GITHUB_RUN_ATTEMPT"
 
-      # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
         env:
-          VERSION_CODE: ${{ inputs.version-code }}
-          VERSION_NAME: ${{ inputs.version-name }}
+          VERSION_CODE: ${{ needs.version.outputs.version_number }}
+          VERSION_NAME: ${{ needs.version.outputs.version_name }}
         run: |
-          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
+          VERSION_CODE="${VERSION_CODE:-$GITHUB_RUN_NUMBER}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:$VERSION_NAME

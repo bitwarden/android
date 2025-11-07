@@ -376,6 +376,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="download">Transferir</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
+    <string name="device_verification">Verificação do dispositivo</string>
     <string name="biometrics_failed">Falha na biometria</string>
     <string name="biometrics_decoding_failure">Inicie sessão com a sua palavra-passe mestra ou PIN e volte a ativar o início de sessão biométrico nas Definições.</string>
     <string name="use_biometrics_to_unlock">Utilizar a biometria para desbloquear</string>
@@ -478,6 +479,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="seven_days">7 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
+    <string name="custom_timeout">Tempo limite personalizado</string>
     <string name="add_this_authenticator_key_to_a_login">Adicione esta chave de autenticação a uma credencial existente ou crie uma nova credencial.</string>
     <string name="send_disabled_warning">Devido a uma política da empresa, só é possível eliminar um Send existente.</string>
     <string name="about_send">Sobre o Send</string>
@@ -496,9 +498,20 @@ A leitura será efetuada automaticamente.</string>
     <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
     <string name="fido2_return_to_app">Voltar à aplicação</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
-    <string name="vault_timeout_policy_in_effect">As políticas da sua organização definiram o tempo limite máximo permitido do cofre de %1$s hora(s) e %2$s minuto(s).</string>
-    <string name="vault_timeout_policy_with_action_in_effect">As políticas da sua organização estão a afetar o tempo limite do cofre. O tempo limite máximo permitido do cofre é de %1$s hora(s) e %2$s minuto(s). A sua ação de tempo limite do cofre está definida para %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">As políticas da sua organização definiram a ação de tempo limite do cofre para %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hora</item>
+        <item quantity="other">%1$d horas</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A sua organização definiu o tempo limite máximo da sessão para %1$s e %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A sua organização definiu o tempo limite máximo da sessão para %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Esta configuração é gerida pela sua organização.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">A sua organização definiu o tempo limite predefinido da sessão como nunca.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A sua organização definiu o tempo limite predefinido da sessão para ao reiniciar a app.</string>
     <string name="vault_timeout_to_large">O tempo limite do seu cofre excede as restrições definidas pela sua organização.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Uma ou mais políticas da organização impedem-no de exportar o seu cofre pessoal.</string>
     <string name="add_account">Adicionar conta</string>
@@ -1049,7 +1062,7 @@ Pretende mudar para esta conta?</string>
     <string name="learn_more_link"><annotation link="learnMore">Saber mais</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar códigos da app Bitwarden. Certifique-se de que ambas as aplicações estão atualizadas. Ainda pode aceder aos seus códigos existentes na app Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com a app Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Para ver todos os seus códigos de verificação, terá de permitir a sincronização em todas as suas contas.</string>
+    <string name="sync_with_bitwarden_action_card_message">Permita a sincronização da app Authenticator nas definições para visualizar todos os seus códigos de verificação aqui.</string>
     <string name="take_me_to_app_settings">Ir às definições da app</string>
     <string name="something_went_wrong">Alguma coisa correu mal</string>
     <string name="please_try_again">Por favor, tente novamente</string>
@@ -1135,6 +1148,9 @@ Pretende mudar para esta conta?</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">O seu cofre pode estar vazio ou a importação de alguns tipos de itens pode não ser permitida para a sua conta.</string>
     <string name="no_items_available_to_import">Não há itens disponíveis para importar</string>
     <string name="select_a_different_account">Selecione uma conta diferente</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Verifique o endereço de e-mail da sua conta</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Introduza o código de 6 dígitos que foi enviado por e-mail para o endereço abaixo</string>
+    <string name="lock_app">Bloquear app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Utilize o método de bloqueio do seu dispositivo para desbloquear a app</string>
+    <string name="loading_vault_data">A carregar os dados do cofre…</string>
 </resources>

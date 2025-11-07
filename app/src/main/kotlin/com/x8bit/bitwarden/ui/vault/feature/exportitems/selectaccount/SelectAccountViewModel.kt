@@ -99,8 +99,9 @@ class SelectAccountViewModel @Inject constructor(
 
     private fun handleAccountClick(action: SelectAccountAction.AccountClick) {
         sendEvent(
-            SelectAccountEvent.NavigateToPasswordVerification(
-                action.userId,
+            event = SelectAccountEvent.NavigateToPasswordVerification(
+                userId = action.userId,
+                hasOtherAccounts = true,
             ),
         )
     }
@@ -119,19 +120,14 @@ class SelectAccountViewModel @Inject constructor(
         val itemRestrictedOrgIds = action.itemRestrictedOrgs
             .filter { it.isEnabled }
             .map { it.organizationId }
-        val personalOwnershipRestrictedOrgIds = action
-            .personalOwnershipOrgs
-            .filter { it.isEnabled }
-            .map { it.organizationId }
 
         val accountSelectionListItems = action.userState
             ?.accounts
             .orEmpty()
             // We only want accounts that do not restrict personal vault ownership
+            // or vault export
             .filter { account ->
-                account
-                    .organizations
-                    .none { org -> org.id in personalOwnershipRestrictedOrgIds }
+                account.isExportable
             }
             .map { account ->
                 AccountSelectionListItem(
@@ -164,12 +160,10 @@ class SelectAccountViewModel @Inject constructor(
         combine(
             authRepository.userStateFlow,
             policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES),
-            policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP),
-        ) { userState, itemRestrictedOrgs, personalOwnershipOrgs ->
+        ) { userState, itemRestrictedOrgs ->
             SelectAccountAction.Internal.SelectionDataReceive(
                 userState = userState,
                 itemRestrictedOrgs = itemRestrictedOrgs,
-                personalOwnershipOrgs = personalOwnershipOrgs,
             )
         }
             .onEach(::handleAction)
@@ -255,7 +249,6 @@ sealed class SelectAccountAction {
         data class SelectionDataReceive(
             val userState: UserState?,
             val itemRestrictedOrgs: List<SyncResponseJson.Policy>,
-            val personalOwnershipOrgs: List<SyncResponseJson.Policy>,
         ) : Internal()
     }
 }
@@ -282,5 +275,6 @@ sealed class SelectAccountEvent {
      */
     data class NavigateToPasswordVerification(
         val userId: String,
+        val hasOtherAccounts: Boolean,
     ) : SelectAccountEvent()
 }

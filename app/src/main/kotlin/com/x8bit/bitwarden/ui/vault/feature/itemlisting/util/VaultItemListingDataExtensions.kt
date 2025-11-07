@@ -9,6 +9,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -36,7 +37,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.applyRestrictItemTypesPolicy
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
 import java.time.Clock
 import java.time.format.FormatStyle
@@ -168,7 +168,8 @@ fun VaultData.toViewState(
                 VaultItemListingState.FolderDisplayItem(
                     id = requireNotNull(folderView.id),
                     name = folderView.name,
-                    count = allFilteredCipherViewList
+                    count = decryptCipherListResult
+                        .successes
                         .count {
                             it.deletedDate == null &&
                                 !it.id.isNullOrBlank() &&

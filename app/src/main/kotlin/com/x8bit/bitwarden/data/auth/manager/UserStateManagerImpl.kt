@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -19,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userKeyConnectorStateList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -39,6 +42,7 @@ class UserStateManagerImpl(
     private val authDiskSource: AuthDiskSource,
     firstTimeActionManager: FirstTimeActionManager,
     vaultLockManager: VaultLockManager,
+    private val policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
 ) : UserStateManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -110,6 +114,7 @@ class UserStateManagerImpl(
             vaultUnlockTypeProvider = ::getVaultUnlockType,
             isDeviceTrustedProvider = ::isDeviceTrusted,
             firstTimeState = firstTimeState,
+            getUserPolicies = ::existingPolicies,
         )
     }
         .filterNot {
@@ -133,6 +138,7 @@ class UserStateManagerImpl(
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
                     firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState,
+                    getUserPolicies = ::existingPolicies,
                 ),
         )
 
@@ -159,4 +165,12 @@ class UserStateManagerImpl(
         .getPinProtectedUserKeyEnvelope(userId = userId)
         ?.let { VaultUnlockType.PIN }
         ?: VaultUnlockType.MASTER_PASSWORD
+
+    private fun existingPolicies(
+        userId: String,
+        policyType: PolicyTypeJson,
+    ): List<SyncResponseJson.Policy> = policyManager.getUserPolicies(
+        userId = userId,
+        type = policyType,
+    )
 }

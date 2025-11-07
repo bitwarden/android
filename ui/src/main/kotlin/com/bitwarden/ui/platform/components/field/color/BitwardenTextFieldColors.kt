@@ -11,10 +11,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun bitwardenTextFieldButtonColors(): TextFieldColors = bitwardenTextFieldColors(
-    unfocusedBorderColor = Color.Transparent,
-    focusedBorderColor = Color.Transparent,
     disabledTextColor = BitwardenTheme.colorScheme.text.primary,
-    disabledBorderColor = Color.Transparent,
     disabledLeadingIconColor = BitwardenTheme.colorScheme.icon.primary,
     disabledTrailingIconColor = BitwardenTheme.colorScheme.icon.primary,
     disabledLabelColor = BitwardenTheme.colorScheme.text.secondary,
@@ -27,18 +24,12 @@ fun bitwardenTextFieldButtonColors(): TextFieldColors = bitwardenTextFieldColors
  */
 @Composable
 fun bitwardenTextFieldColors(
-    focusedBorderColor: Color = Color.Transparent,
-    unfocusedBorderColor: Color = Color.Transparent,
-    disabledTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-    disabledBorderColor: Color = Color.Transparent,
-    disabledLeadingIconColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-    disabledTrailingIconColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-    disabledLabelColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
+    disabledTextColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    disabledLeadingIconColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    disabledTrailingIconColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    disabledLabelColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
     disabledPlaceholderColor: Color = BitwardenTheme.colorScheme.text.secondary,
-    disabledSupportingTextColor: Color = BitwardenTheme
-        .colorScheme
-        .outlineButton
-        .foregroundDisabled,
+    disabledSupportingTextColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
 ): TextFieldColors = TextFieldColors(
     focusedTextColor = BitwardenTheme.colorScheme.text.primary,
     unfocusedTextColor = BitwardenTheme.colorScheme.text.primary,
@@ -54,9 +45,9 @@ fun bitwardenTextFieldColors(
         handleColor = BitwardenTheme.colorScheme.stroke.border,
         backgroundColor = BitwardenTheme.colorScheme.stroke.border.copy(alpha = 0.4f),
     ),
-    focusedIndicatorColor = focusedBorderColor,
-    unfocusedIndicatorColor = unfocusedBorderColor,
-    disabledIndicatorColor = disabledBorderColor,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    disabledIndicatorColor = Color.Transparent,
     errorIndicatorColor = BitwardenTheme.colorScheme.status.error,
     focusedLeadingIconColor = BitwardenTheme.colorScheme.icon.primary,
     unfocusedLeadingIconColor = BitwardenTheme.colorScheme.icon.primary,

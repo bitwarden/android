@@ -40,8 +40,8 @@ import com.bitwarden.ui.platform.components.camera.CameraPreview
 import com.bitwarden.ui.platform.components.camera.QrCodeSquare
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
-import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -57,7 +57,7 @@ import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 fun QrCodeScanScreen(
     onNavigateBack: () -> Unit,
     viewModel: QrCodeScanViewModel = hiltViewModel(),
-    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
+    qrCodeAnalyzer: QrCodeAnalyzer = LocalQrCodeAnalyzer.current,
     onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {

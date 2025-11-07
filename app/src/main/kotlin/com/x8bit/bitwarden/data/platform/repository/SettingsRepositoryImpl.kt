@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -640,17 +640,38 @@ class SettingsRepositoryImpl(
             ?.policyInformation as? PolicyInformation.VaultTimeout
             ?: return
 
-        // Adjust the user's timeout or method if necessary to meet the policy requirements.
-        vaultUnlockPolicy.minutes?.let { maxMinutes ->
-            if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
-                vaultTimeout = VaultTimeout.Custom(maxMinutes)
+        when (vaultUnlockPolicy.type) {
+            PolicyInformation.VaultTimeout.Type.NEVER -> {
+                vaultTimeout = VaultTimeout.Never
+            }
+
+            PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+            PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                -> {
+                vaultTimeout = VaultTimeout.OnAppRestart
+            }
+
+            PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                vaultTimeout = VaultTimeout.Immediately
+            }
+
+            PolicyInformation.VaultTimeout.Type.CUSTOM,
+            null,
+                -> {
+                // Null values are treated as CUSTOM for legacy servers that do no provide a type.
+                // Is there isn't a minutes value or if the current value is within range, we
+                // leave everything alone.
+                vaultUnlockPolicy.minutes?.let { maxMinutes ->
+                    if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
+                        vaultTimeout = VaultTimeout.Custom(maxMinutes)
+                    }
+                }
             }
         }
         vaultUnlockPolicy.action?.let {
-            vaultTimeoutAction = if (it == "lock") {
-                VaultTimeoutAction.LOCK
-            } else {
-                VaultTimeoutAction.LOGOUT
+            vaultTimeoutAction = when (it) {
+                PolicyInformation.VaultTimeout.Action.LOCK -> VaultTimeoutAction.LOCK
+                PolicyInformation.VaultTimeout.Action.LOGOUT -> VaultTimeoutAction.LOGOUT
             }
         }
     }

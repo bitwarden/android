@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
@@ -14,6 +14,7 @@ import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -78,6 +79,7 @@ class VaultSyncManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val userLogoutManager: UserLogoutManager,
+    private val userStateManager: UserStateManager,
     private val vaultLockManager: VaultLockManager,
     private val clock: Clock,
     databaseSchemeManager: DatabaseSchemeManager,
@@ -301,41 +303,46 @@ class VaultSyncManagerImpl(
 
         return syncService.sync().fold(
             onSuccess = { syncResponse ->
-                val localSecurityStamp = authDiskSource.userState?.activeAccount?.profile?.stamp
-                val serverSecurityStamp = syncResponse.profile.securityStamp
-                // Log the user out if the stamps do not match
-                localSecurityStamp?.let {
-                    if (serverSecurityStamp != localSecurityStamp) {
-                        // Ensure UserLogoutManager is available
-                        userLogoutManager.softLogout(
-                            userId = userId,
-                            reason = LogoutReason.SecurityStamp,
-                        )
-                        return SyncVaultDataResult.Error(SecurityStampMismatchException())
+                userStateManager.userStateTransaction {
+                    val localSecurityStamp = authDiskSource.userState?.activeAccount?.profile?.stamp
+                    val serverSecurityStamp = syncResponse.profile.securityStamp
+                    // Log the user out if the stamps do not match
+                    localSecurityStamp?.let {
+                        if (serverSecurityStamp != localSecurityStamp) {
+                            // Ensure UserLogoutManager is available
+                            userLogoutManager.softLogout(
+                                userId = userId,
+                                reason = LogoutReason.SecurityStamp,
+                            )
+                            return@userStateTransaction SyncVaultDataResult.Error(
+                                SecurityStampMismatchException(),
+                            )
+                        }
                     }
+
+                    // Update user information with additional information from sync response
+                    authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
+                        syncResponse = syncResponse,
+                    )
+
+                    unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
+                    storeProfileData(syncResponse = syncResponse)
+
+                    // Treat absent network policies as known empty data to
+                    // distinguish between unknown null data.
+                    authDiskSource.storePolicies(
+                        userId = userId,
+                        policies = syncResponse.policies.orEmpty(),
+                    )
+
+                    settingsDiskSource.storeLastSyncTime(
+                        userId = userId,
+                        lastSyncTime = clock.instant(),
+                    )
+                    vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+                    val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
+                    SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
-
-                // Update user information with additional information from sync response
-                authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
-                    syncResponse = syncResponse,
-                )
-
-                unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
-                storeProfileData(syncResponse = syncResponse)
-
-                // Treat absent network policies as known empty data to
-                // distinguish between unknown null data.
-                authDiskSource.storePolicies(
-                    userId = userId,
-                    policies = syncResponse.policies.orEmpty(),
-                )
-                settingsDiskSource.storeLastSyncTime(
-                    userId = userId,
-                    lastSyncTime = clock.instant(),
-                )
-                vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
-                SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
             },
             onFailure = {
                 updateVaultStateFlowsToError(throwable = it)

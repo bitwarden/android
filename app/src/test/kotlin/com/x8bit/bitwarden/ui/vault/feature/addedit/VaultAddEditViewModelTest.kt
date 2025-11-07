@@ -9,10 +9,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
@@ -20,6 +20,8 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -78,8 +80,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -87,7 +88,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -210,7 +210,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
@@ -4782,6 +4782,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    isExportable = true,
                 ),
             ),
             hasPendingAccountAddition = false,

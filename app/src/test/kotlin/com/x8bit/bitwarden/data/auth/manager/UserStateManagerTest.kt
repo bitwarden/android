@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import app.cash.turbine.test
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -16,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -48,12 +51,16 @@ class UserStateManagerTest {
         every { isActiveUserUnlockingFlow } returns mutableIsActiveUserUnlockingFlow
     }
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
+    private val policyManager: PolicyManager = mockk {
+        every { getUserPolicies(any(), any()) } returns emptyList()
+    }
 
     private val userStateManager: UserStateManager = UserStateManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         firstTimeActionManager = firstTimeActionManager,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
+        policyManager = policyManager,
     )
 
     @BeforeEach
@@ -87,6 +94,7 @@ class UserStateManagerTest {
                         vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                         isDeviceTrustedProvider = { false },
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -114,6 +122,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -132,6 +141,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -162,6 +172,7 @@ class UserStateManagerTest {
                         isDeviceTrustedProvider = { false },
                         onboardingStatus = null,
                         firstTimeState = FIRST_TIME_STATE,
+                        getUserPolicies = { _, _ -> emptyList() },
                     ),
                     awaitItem(),
                 )
@@ -181,6 +192,7 @@ class UserStateManagerTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            getUserPolicies = { _, _ -> emptyList() },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -193,6 +205,7 @@ class UserStateManagerTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            getUserPolicies = { _, _ -> emptyList() },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
@@ -242,6 +255,41 @@ class UserStateManagerTest {
         userStateManager.hasPendingAccountDeletion = false
         assertFalse(userStateManager.hasPendingAccountDeletion)
     }
+
+    @Test
+    fun `userStateFlow should update isExportable when getUserPolicies returns policies`() =
+        runTest {
+            val policy = SyncResponseJson.Policy(
+                id = "policyId",
+                organizationId = "mockId-1",
+                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                data = null,
+                isEnabled = true,
+            )
+            every { policyManager.getUserPolicies(any(), any()) } returns listOf(policy)
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val userState = SINGLE_USER_STATE_1.toUserState(
+                vaultState = VAULT_UNLOCK_DATA,
+                userAccountTokens = emptyList(),
+                userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
+                hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
+                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                isDeviceTrustedProvider = { false },
+                onboardingStatus = null,
+                firstTimeState = FIRST_TIME_STATE,
+                getUserPolicies = { _, _ -> listOf(policy) },
+            )
+
+            // Assert
+            userStateManager.userStateFlow.test {
+                val actualItem = awaitItem()
+                assertEquals(userState, actualItem)
+            }
+        }
 }
 
 private const val EMAIL_1 = "test@bitwarden.com"

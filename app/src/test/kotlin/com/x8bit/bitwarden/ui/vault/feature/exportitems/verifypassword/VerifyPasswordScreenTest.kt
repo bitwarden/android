@@ -281,6 +281,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )
@@ -297,4 +298,5 @@ private val DEFAULT_STATE = VerifyPasswordState(
     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     input = "",
     dialog = null,
+    hasOtherAccounts = true,
 )

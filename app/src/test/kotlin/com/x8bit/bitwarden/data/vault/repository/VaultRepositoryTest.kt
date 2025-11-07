@@ -5,15 +5,17 @@ import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.CipherTypeJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
@@ -28,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
@@ -53,6 +56,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -744,6 +748,132 @@ class VaultRepositoryTest {
                 vaultSdkSource.enrollPinWithEncryptedPin(
                     userId = userId,
                     encryptedPin = encryptedPin,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPassword with masterPasswordUnlock data should use MasterPasswordUnlock method`() =
+        runTest {
+            val userId = "mockId-1"
+            val masterPassword = "mockPassword-1"
+            val masterPasswordUnlockData = MOCK_MASTER_PASSWORD_UNLOCK_DATA
+                .toSdkMasterPasswordUnlock()
+            val userState = MOCK_USER_STATE.copy(
+                accounts = mapOf(
+                    "mockId-1" to MOCK_ACCOUNT.copy(
+                        profile = MOCK_PROFILE.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
+            fakeAuthDiskSource.storeUserKey(
+                userId = userId,
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.userState = userState
+            fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
+
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = masterPassword,
+                        masterPasswordUnlock = masterPasswordUnlockData,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+
+            val result = vaultRepository.unlockVaultWithMasterPassword(
+                masterPassword = masterPassword,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = masterPassword,
+                        masterPasswordUnlock = masterPasswordUnlockData,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPassword without masterPasswordUnlock data should use Password method`() =
+        runTest {
+            val userId = "mockId-1"
+            val masterPassword = "mockPassword-1"
+            val userKey = "mockUserKey-1"
+            val userState = MOCK_USER_STATE.copy(
+                accounts = mapOf(
+                    "mockId-1" to MOCK_ACCOUNT.copy(
+                        profile = MOCK_PROFILE.copy(
+                            userDecryptionOptions = null,
+                        ),
+                    ),
+                ),
+            )
+            fakeAuthDiskSource.userState = userState
+            fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
+            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
+
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+
+            val result = vaultRepository.unlockVaultWithMasterPassword(
+                masterPassword = masterPassword,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
+                    organizationKeys = null,
                 )
             }
         }
@@ -1614,4 +1744,10 @@ private val MOCK_USER_STATE = UserStateJson(
     accounts = mapOf(
         "mockId-1" to MOCK_ACCOUNT,
     ),
+)
+
+private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockDataJson(
+    salt = "mockSalt",
+    kdf = MOCK_ACCOUNT.profile.toSdkParams().toKdfRequestModel(),
+    masterKeyWrappedUserKey = "masterKeyWrappedUserKeyMock",
 )

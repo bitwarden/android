@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.di
 
 import android.content.Context
 import android.view.autofill.AutofillManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl

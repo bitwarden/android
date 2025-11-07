@@ -7,7 +7,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.sdk.Authenticat
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -114,6 +115,36 @@ class SettingsRepositoryTest {
                 assertEquals(it, awaitItem())
             }
             awaitComplete()
+        }
+    }
+
+    @Test
+    fun `isDynamicColorsEnabled should pull from and update SettingsDiskSource`() {
+        // Reading from repository should read from disk source:
+        every { settingsDiskSource.isDynamicColorsEnabled } returns null
+        assertFalse(settingsRepository.isDynamicColorsEnabled)
+        verify { settingsDiskSource.isDynamicColorsEnabled }
+
+        // Writing to repository should write to disk source:
+        every { settingsDiskSource.isDynamicColorsEnabled = true } just runs
+        settingsRepository.isDynamicColorsEnabled = true
+        verify { settingsDiskSource.isDynamicColorsEnabled = true }
+    }
+
+    @Test
+    fun `isDynamicColorsEnabledFlow should match SettingsDiskSource`() = runTest {
+        // Reading from repository should read from disk source:
+        val mutableDynamicColorsFlow = bufferedMutableSharedFlow<Boolean?>()
+        every { settingsDiskSource.isDynamicColorsEnabledFlow } returns mutableDynamicColorsFlow
+        every { settingsDiskSource.isDynamicColorsEnabled } returns null
+
+        settingsRepository.isDynamicColorsEnabledFlow.test {
+            assertFalse(awaitItem())
+            mutableDynamicColorsFlow.emit(true)
+            assertTrue(awaitItem())
+            mutableDynamicColorsFlow.emit(false)
+            assertFalse(awaitItem())
+            expectNoEvents()
         }
     }
 

@@ -376,6 +376,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="download">Herunterladen</string>
     <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
+    <string name="device_verification">Geräteverifizierung</string>
     <string name="biometrics_failed">Biometrie fehlgeschlagen</string>
     <string name="biometrics_decoding_failure">Melde dich mit deinem Master-Passwort oder PIN an und aktiviere dann die biometrische Anmeldung in den Einstellungen erneut.</string>
     <string name="use_biometrics_to_unlock">Biometrie zum Entsperren verwenden</string>
@@ -478,6 +479,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="seven_days">7 Tage</string>
     <string name="thirty_days">30 Tage</string>
     <string name="custom">Benutzerdefiniert</string>
+    <string name="custom_timeout">Benutzerdefinierter Timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Füge diesen Authenticator-Schlüssel zu bestehenden Zugangsdaten hinzu oder erstelle neue Zugangsdaten.</string>
     <string name="send_disabled_warning">Aufgrund einer Unternehmensrichtlinie kannst du nur ein bestehendes Send löschen.</string>
     <string name="about_send">Über Send</string>
@@ -496,9 +498,20 @@ Das Scannen erfolgt automatisch.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn authentifizieren</string>
     <string name="fido2_return_to_app">Zurück zur App</string>
     <string name="reset_password_auto_enroll_invite_warning">Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</string>
-    <string name="vault_timeout_policy_in_effect">Deine Unternehmensrichtlinien haben das maximal zulässige Tresor-Timeout auf %1$s Stunde(n) und %2$s Minute(n) festgelegt.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Deine Organisationsrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt %1$s Stunde(n) und %2$s Minute(n). Deine Tresor-Timeout-Aktion ist auf %3$s gesetzt.</string>
-    <string name="vault_timeout_action_policy_in_effect">Deine Organisationsrichtlinien haben deine Tresor-Timeout-Aktion auf %1$s gesetzt.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d Stunde</item>
+        <item quantity="other">%1$d Stunden</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d Minute</item>
+        <item quantity="other">%1$d Minuten</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Deine Organisation hat das maximale Sitzungs-Timeout auf %1$s und %2$s gesetzt.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Deine Organisation hat das maximale Sitzungs-Timeout auf %1$s gesetzt.</string>
+    <string name="this_setting_is_managed_by_your_organization">Diese Einstellung wird von deiner Organisation verwaltet.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Deine Organisation hat das Standard Sitzungs-Timeout auf \"Nie\" gesetzt.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Deine Organisation hat das Standard Sitzungs-Timeout auf \"Beim Neustart der App\" gesetzt.</string>
     <string name="vault_timeout_to_large">Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst.</string>
     <string name="add_account">Konto hinzufügen</string>
@@ -1131,9 +1144,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="kdf_update_failed_active_account_not_found">KDF-Aktualisierung fehlgeschlagen, aktives Konto nicht gefunden. Bitte versuche es erneut oder kontaktiere uns.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Beim Versuch, deine KDF-Einstellungen zu aktualisieren, ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere uns.</string>
     <string name="the_import_request_could_not_be_processed">Die Importanfrage konnte nicht verarbeitet werden.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Dein Tresor ist möglicherweise leer oder das Importieren einiger Eintrags-Typen ist für dein Konto nicht erlaubt.</string>
+    <string name="no_items_available_to_import">Keine Einträge zum Importieren verfügbar</string>
+    <string name="select_a_different_account">Wähle ein anderes Konto</string>
+    <string name="verify_your_account_email_address">Verifiziere die E-Mail-Adresse deines Kontos</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Gib den 6-stelligen Code ein, der an die unten angegebene E-Mail-Adresse gesendet wurde</string>
+    <string name="lock_app">App sperren</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Nutze die Sperrmethode deines Geräts, um die App zu entsperren</string>
+    <string name="loading_vault_data">Tresor-Daten werden geladen…</string>
 </resources>

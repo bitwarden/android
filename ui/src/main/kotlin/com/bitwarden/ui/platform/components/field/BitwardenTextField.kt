@@ -1,7 +1,6 @@
 package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,8 +18,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -69,6 +68,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -375,7 +375,7 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
-                        .menuAnchor(type = MenuAnchorType.PrimaryEditable)
+                        .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryEditable)
                         .fillMaxWidth()
                         .onFocusChanged { focusState ->
                             focused = focusState.isFocused
@@ -389,11 +389,9 @@ fun BitwardenTextField(
                                 .fillMaxWidth()
                                 .padding(start = 16.dp),
                         )
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .defaultMinSize(minHeight = 48.dp)
-                                .padding(paddingValues = supportingContentPadding),
+                        BitwardenSupportingContent(
+                            cardStyle = null,
+                            insets = supportingContentPadding,
                             content = content,
                         )
                     }

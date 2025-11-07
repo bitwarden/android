@@ -378,6 +378,7 @@ Scanarea se va face automat.</string>
     <string name="download">Descărcare</string>
     <string name="login_expired">Sesiunea de autentificare a expirat.</string>
     <string name="biometrics_direction">Verificare biometrică</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Utilizați datele biometrice pentru a debloca</string>
@@ -480,6 +481,7 @@ Scanarea se va face automat.</string>
     <string name="seven_days">7 zile</string>
     <string name="thirty_days">30 de zile</string>
     <string name="custom">Personalizat</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Adaugă această cheie de autentificare la o autentificare existentă, sau creează o nouă autentificare.</string>
     <string name="send_disabled_warning">Datorită unei politici de întreprindere, puteți șterge numai un Send existent.</string>
     <string name="about_send">Despre Send</string>
@@ -498,9 +500,22 @@ Scanarea se va face automat.</string>
     <string name="fido2_authenticate_web_authn">Autentificare WebAuthn</string>
     <string name="fido2_return_to_app">Revenire la aplicație</string>
     <string name="reset_password_auto_enroll_invite_warning">Această organizație are o politică de întreprindere care vă va înregistra automat la resetarea parolei. Înregistrarea va permite administratorilor organizației să vă modifice parola principală.</string>
-    <string name="vault_timeout_policy_in_effect">Politicile de organizație afectează timpul de expirare a seifului. Timpul maxim de expirare a seifului este de %1$s oră(e) și %2$s minut(e)</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Politicile organizației dumneavoastră afectează expirarea de seif. Timpul maxim permis de expirare a seifului este %1$s ore şi %2$s minut(e). Acţiunea de timeout a seifului este setată la %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Politicile organizației dvs. au setat acțiunea de expirare seif la %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="few">%1$d hours</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="few">%1$d minutes</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Una sau mai multe politici de organizație vă împiedică să vă exportați seiful individual.</string>
     <string name="add_account">Adăugare cont</string>
@@ -1053,7 +1068,7 @@ Doriți să comutați la acest cont?</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
@@ -1143,4 +1158,7 @@ Doriți să comutați la acest cont?</string>
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

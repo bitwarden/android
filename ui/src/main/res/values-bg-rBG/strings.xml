@@ -376,6 +376,7 @@
     <string name="download">Изтегляне</string>
     <string name="login_expired">Сесията ви изтече.</string>
     <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
+    <string name="device_verification">Потвърждаване на устройствата</string>
     <string name="biometrics_failed">Неуспешно удостоверяване чрез биометрични данни</string>
     <string name="biometrics_decoding_failure">Впишете се с главната си парола или ПИН, а след това включете вписването чрез биометрични данни в Настройките.</string>
     <string name="use_biometrics_to_unlock">Отключване с биометрични данни</string>
@@ -478,6 +479,7 @@
     <string name="seven_days">7 дни</string>
     <string name="thirty_days">30 дни</string>
     <string name="custom">По избор</string>
+    <string name="custom_timeout">Персонализирано време за достъп</string>
     <string name="add_this_authenticator_key_to_a_login">Добавете този удостоверителен ключ към съществуващ елемент за вписване, или създайте нов такъв.</string>
     <string name="send_disabled_warning">Поради политика на организация, може само да изтривате съществуващи изпращания.</string>
     <string name="about_send">Относно изпращането</string>
@@ -496,9 +498,20 @@
     <string name="fido2_authenticate_web_authn">Идентификация WebAuthn</string>
     <string name="fido2_return_to_app">Назад към приложението</string>
     <string name="reset_password_auto_enroll_invite_warning">Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</string>
-    <string name="vault_timeout_policy_in_effect">Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е %1$s час(а) и %2$s минути</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е %1$s час(а) и %2$s минута/и. Зададеното действие при изтичане на това време е %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Настройките на организацията Ви задават следното действие при изтичане на времето за достъп до трезора: %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d час</item>
+        <item quantity="other">%1$d часа</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d минута</item>
+        <item quantity="other">%1$d минути</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Организацията Ви е настроила максималното разрешено време за достъп на %1$s и %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Организацията Ви е настроила максималното разрешено време за достъп на %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Тази настройка се управлява от организацията Ви.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Организацията Ви е настроила стандартното разрешено време за достъп да бъде безкрайно.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Организацията Ви е настроила стандартното разрешено време за достъп да бъде до рестартиране на приложението.</string>
     <string name="vault_timeout_to_large">Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</string>
     <string name="add_account">Добавяне на регистрация</string>
@@ -1137,6 +1150,9 @@
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Трезорът Ви може би е празен, или внасянето на някои видове елементи може да не е позволено за акаунта Ви.</string>
     <string name="no_items_available_to_import">Няма елементи налични за внасяне</string>
     <string name="select_a_different_account">Изберете друг акаунт</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Потвърдете адреса на е-пощата си</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Въведете 6-цифрения код, който беше изпратен до адреса по-долу</string>
+    <string name="lock_app">Заключване на приложението</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Използвайте начина на заключване на устройството за отключване на приложението</string>
+    <string name="loading_vault_data">Зареждане на данните от трезора…</string>
 </resources>

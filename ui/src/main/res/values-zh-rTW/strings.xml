@@ -3,7 +3,7 @@
     <string name="about">關於</string>
     <string name="add_folder">新增資料夾</string>
     <string name="add_item">新增項目</string>
-    <string name="an_error_has_occurred">發生錯誤。</string>
+    <string name="an_error_has_occurred">發生錯誤</string>
     <string name="apply">套用</string>
     <string name="back">返回</string>
     <string name="cancel">取消</string>
@@ -118,7 +118,7 @@
     <string name="new_item_created">已新增項目</string>
     <string name="no_cards">您的密碼庫中沒有支付卡</string>
     <string name="new_card">新增支付卡</string>
-    <string name="no_logins">密碼庫無網頁。</string>
+    <string name="no_logins">您的密碼庫中沒有登入資料。</string>
     <string name="no_identities">您的密碼庫中沒有身份識別。</string>
     <string name="new_identity">新增身份識別</string>
     <string name="no_notes">您的密碼庫中沒有筆記。</string>
@@ -374,6 +374,7 @@
     <string name="download">下載</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物辨識驗證</string>
+    <string name="device_verification">裝置驗證</string>
     <string name="biometrics_failed">生物辨識失敗</string>
     <string name="biometrics_decoding_failure">使用主密碼或 PIN 登入，然後在設定中重新啟用生物辨識登入。</string>
     <string name="use_biometrics_to_unlock">使用生物辨識解鎖</string>
@@ -451,7 +452,7 @@
     <string name="maximum_access_count">最大存取次數</string>
     <string name="maximum_access_count_info">如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。</string>
     <string name="maximum_access_count_reached">已達最大存取次數</string>
-    <string name="current_access_count">目前存取次數</string>
+    <string name="current_access_count">目前存取次數: %s</string>
     <string name="new_password">新密碼</string>
     <string name="password_info">選用。使用者需提供密碼才能存取此 Send。</string>
     <string name="remove_password">移除密碼</string>
@@ -476,6 +477,7 @@
     <string name="seven_days">7 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自訂</string>
+    <string name="custom_timeout">自訂逾時時間</string>
     <string name="add_this_authenticator_key_to_a_login">將此驗證器金鑰新增到現存的登入資訊，或者建立一個新登入資訊。</string>
     <string name="send_disabled_warning">由於企業原則限制，您只能刪除現有的 Send。</string>
     <string name="about_send">關於 Send</string>
@@ -494,9 +496,18 @@
     <string name="fido2_authenticate_web_authn">驗證 WebAuthn</string>
     <string name="fido2_return_to_app">返回應用程式</string>
     <string name="reset_password_auto_enroll_invite_warning">此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。</string>
-    <string name="vault_timeout_policy_in_effect">您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 %1$s 小時 %2$s 分鐘。</string>
-    <string name="vault_timeout_policy_with_action_in_effect">您的組織原則正在影響您的密碼庫逾時時間。密碼庫逾時時間最多可以設定到 %1$s 小時 %2$s 分鐘。您密碼庫的逾時動作被設定為 %3$s。</string>
-    <string name="vault_timeout_action_policy_in_effect">您的組織原則已將密碼庫逾時動作設定為 %1$s。</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s，%2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 小時</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d 分鐘</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">您的組織已將最長工作階段逾時設為 %1$s 和 %2$s。</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">您的組織已將最長工作階段逾時設為 %1$s。</string>
+    <string name="this_setting_is_managed_by_your_organization">此設定由您的組織管理。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">您的組織已將最長工作階段逾時設為「永不」。</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">您的組織已將最長工作階段逾時設為「應用程式重啟時」。</string>
     <string name="vault_timeout_to_large">您的密碼庫逾時時間超過組織設定的限制。</string>
     <string name="disable_personal_vault_export_policy_in_effect">一個或多個組織原則禁止您匯出個人密碼庫。</string>
     <string name="add_account">新增帳戶</string>
@@ -1127,9 +1138,12 @@
     <string name="kdf_update_failed_active_account_not_found">KDF 更新失敗，找不到活躍帳戶。請再試一次或聯絡我們。</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">嘗試更新您的 KDF 設定時發生錯誤。請再試一次或聯絡我們。</string>
     <string name="the_import_request_could_not_be_processed">無法處理匯入請求。</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">你的密碼庫可能為空，或你的帳號不允許匯入某些項目類型。</string>
+    <string name="no_items_available_to_import">沒有可匯入的項目</string>
+    <string name="select_a_different_account">選擇另一個帳號</string>
+    <string name="verify_your_account_email_address">驗證你的帳號電子郵件地址</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">輸入寄送到以下地址的 6 位數驗證碼</string>
+    <string name="lock_app">鎖定應用程式</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">使用你的裝置鎖定方式來解鎖此應用程式</string>
+    <string name="loading_vault_data">正在載入密碼庫資料…</string>
 </resources>

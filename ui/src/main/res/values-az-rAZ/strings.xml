@@ -376,6 +376,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="download">Endir</string>
     <string name="login_expired">Seansın müddəti bitdi.</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
+    <string name="device_verification">Cihaz doğrulaması</string>
     <string name="biometrics_failed">Biometrik uğursuzdur</string>
     <string name="biometrics_decoding_failure">Ana parol və ya PIN ilə giriş edin, sonra Ayarlarda biometrik ilə girişi təkrar fəallaşdırın.</string>
     <string name="use_biometrics_to_unlock">Kilidi açmaq üçün biometrik istifadə et</string>
@@ -478,6 +479,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="seven_days">7 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="custom">Özəl</string>
+    <string name="custom_timeout">Özəl bitmə vaxtı</string>
     <string name="add_this_authenticator_key_to_a_login">Bu kimlik doğrulayıcı açarını mövcud bir girişə əlavə edin və ya yeni bir giriş yaradın.</string>
     <string name="send_disabled_warning">Müəssisə siyasətinə görə, yalnız mövcud \"Send\"i silə bilərsiniz.</string>
     <string name="about_send">\"Send\" haqqında</string>
@@ -496,9 +498,20 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn kimlik doğrulama</string>
     <string name="fido2_return_to_app">Tətbiqə qayıt</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu təşkilat, sizi \"parol sıfırlama\"da avtomatik olaraq qeydiyyata alan müəssisə siyasətinə sahibdir. Qeydiyyat, təşkilat administratorlarına ana parolunuzu dəyişdirmə icazəsi verəcək.</string>
-    <string name="vault_timeout_policy_in_effect">Təşkilatınızın siyasətləri, icazə verilən maksimum seyf bitmə vaxtını %1$s saat %2$s dəqiqə olaraq ayarladı.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Təşkilatınızın siyasətləri, seyfinizin bitmə vaxtına təsir edir. İcazə verilən maksimum seyf bitmə vaxtı %1$s saat %2$s dəqiqədir. Seyf vaxt bitmə əməliyyatı %3$s olaraq ayarlandı.</string>
-    <string name="vault_timeout_action_policy_in_effect">Təşkilatınızın siyasətləri, seyfinizin vaxt bitmə əməliyyatını %1$s olaraq ayarladı.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d saat</item>
+        <item quantity="other">%1$d saat</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d dəqiqə</item>
+        <item quantity="other">%1$d dəqiqə</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Təşkilatınız, seansın maksimum bitmə vaxtını %1$s %2$s olaraq təyin etdi.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Təşkilatınız, seansın maksimum bitmə vaxtını %1$s olaraq təyin etdi.</string>
+    <string name="this_setting_is_managed_by_your_organization">Bu ayar, təşkilatınız tərəfindən idarə olunur.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Təşkilatınız, seansın ilkin bitmə vaxtını heç vaxt olaraq təyin etdi.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Təşkilatınız, seansın ilkin bitmə vaxtını tətbiq başladılanda olaraq təyin etdi.</string>
     <string name="vault_timeout_to_large">Seyfin bitmə vaxtı, təşkilatınız tərəfindən ayarlanan məhdudiyyətləri aşır.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Bir və ya daha çox təşkilat siyasəti, fərdi seyfinizi xaricə köçürməyinizi əngəlləyir.</string>
     <string name="add_account">Hesab əlavə et</string>
@@ -1136,6 +1149,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Ya seyfiniz boşdur, ya da hesabınız üçün bəzi element növlərinin daxilə köçürülməsinə icazə verilmir.</string>
     <string name="no_items_available_to_import">Daxilə köçürüləcək element yoxdur</string>
     <string name="select_a_different_account">Fərqli bir hesab seçin</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Hesabınızın e-poçt ünvanını doğrulayın</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Aşağıdakı ünvana e-poçtla göndərilən 6 rəqəmli kodu daxil edin</string>
+    <string name="lock_app">Tətbiqi kilidlə</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Tətbiqin kilidini açmaq üçün cihazın kilid üsulunu istifadə edin</string>
+    <string name="loading_vault_data">Seyf veriləri yüklənir…</string>
 </resources>

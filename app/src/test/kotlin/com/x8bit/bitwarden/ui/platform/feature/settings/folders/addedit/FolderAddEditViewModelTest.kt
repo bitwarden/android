@@ -6,6 +6,7 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -15,8 +16,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -43,7 +43,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultFolderStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableFoldersStateFlow
     }
-    private val relayManager: SnackbarRelayManager = mockk {
+    private val relayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 

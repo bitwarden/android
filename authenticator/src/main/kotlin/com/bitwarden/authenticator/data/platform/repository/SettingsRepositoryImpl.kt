@@ -8,7 +8,7 @@ import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionMan
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -46,6 +46,22 @@ class SettingsRepositoryImpl(
 
     override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
         by settingsDiskSource::defaultSaveOptionFlow
+
+    override var isDynamicColorsEnabled: Boolean
+        get() = settingsDiskSource.isDynamicColorsEnabled ?: false
+        set(value) {
+            settingsDiskSource.isDynamicColorsEnabled = value
+        }
+
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isDynamicColorsEnabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isDynamicColorsEnabled,
+            )
 
     override val isUnlockWithBiometricsEnabled: Boolean
         get() = authDiskSource.getUserBiometricUnlockKey() != null

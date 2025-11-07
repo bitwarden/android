@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -49,6 +48,7 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
@@ -284,33 +284,40 @@ fun VaultUnlockScreen(
                             { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
                         },
                     ),
-                    supportingText = state.vaultUnlockType.unlockScreenMessage(),
                     passwordFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
-                    cardStyle = CardStyle.Top(hasDivider = false),
+                    cardStyle = CardStyle.Top(),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
-            Text(
-                text = stringResource(
-                    id = BitwardenString.logged_in_as_on,
-                    state.email,
-                    state.environmentUrl,
-                ),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
+            BitwardenSupportingContent(
+                cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
                 modifier = Modifier
-                    .testTag("UserAndEnvironmentDataLabel")
                     .standardHorizontalMargin()
-                    .cardStyle(
-                        cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
-                        paddingStart = 16.dp,
-                        paddingEnd = 16.dp,
-                        paddingTop = 0.dp,
-                    )
                     .fillMaxWidth(),
-            )
+            ) {
+                if (!state.hideInput) {
+                    Text(
+                        text = state.vaultUnlockType.unlockScreenMessage(),
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                }
+                Text(
+                    text = stringResource(
+                        id = BitwardenString.logged_in_as_on,
+                        formatArgs = arrayOf(state.email, state.environmentUrl),
+                    ),
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    modifier = Modifier
+                        .testTag(tag = "UserAndEnvironmentDataLabel")
+                        .fillMaxWidth(),
+                )
+            }
             Spacer(modifier = Modifier.height(24.dp))
             if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                 BitwardenOutlinedButton(

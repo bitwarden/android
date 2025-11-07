@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">Resend code</string>
     <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
     <string name="verification_email_sent">Verification email sent</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
-    <string name="yubi_key_title">YubiKey security key</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_title">Yubico security key</string>
     <string name="add_new_attachment">Add new attachment</string>
     <string name="attachments">Attachments</string>
     <string name="unable_to_download_file">Unable to download file.</string>
@@ -479,6 +479,7 @@ Scanning will happen automatically.</string>
     <string name="seven_days">7 days</string>
     <string name="thirty_days">30 days</string>
     <string name="custom">Custom</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">Due to an enterprise policy, you are only able to delete an existing Send.</string>
     <string name="about_send">About Send</string>
@@ -497,9 +498,20 @@ Scanning will happen automatically.</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
-    <string name="vault_timeout_policy_in_effect">Your organization policies have set your maximum allowed vault timeout to %1$s hour(s) and %2$s minute(s).</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is %1$s hour(s) and %2$s minute(s). Your vault timeout action is set to %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Your organization policies have set your vault timeout action to %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Your vault timeout exceeds the restrictions set by your organization.</string>
     <string name="disable_personal_vault_export_policy_in_effect">One or more organization policies prevents your from exporting your individual vault.</string>
     <string name="add_account">Add account</string>
@@ -1140,4 +1152,5 @@ Do you want to switch to this account?</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

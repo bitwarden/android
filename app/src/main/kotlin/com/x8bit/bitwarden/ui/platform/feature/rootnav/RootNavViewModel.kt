@@ -59,7 +59,7 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod", "MaxLineLength", "LongMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
@@ -89,7 +89,14 @@ class RootNavViewModel @Inject constructor(
             }
 
             specialCircumstance is SpecialCircumstance.CredentialExchangeExport -> {
-                RootNavState.CredentialExchangeExport
+                val exportableAccounts = userState.accounts.filter { it.isExportable }
+                if (exportableAccounts.size == 1) {
+                    RootNavState.CredentialExchangeExportSkipAccountSelection(
+                        userId = exportableAccounts.first().userId,
+                    )
+                } else {
+                    RootNavState.CredentialExchangeExport
+                }
             }
 
             userState.activeAccount.isVaultUnlocked &&
@@ -424,6 +431,14 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object CredentialExchangeExport : RootNavState()
+
+    /**
+     * App should begin the export items flow, skipping the account selection screen.
+     */
+    @Parcelize
+    data class CredentialExchangeExportSkipAccountSelection(
+        val userId: String,
+    ) : RootNavState()
 }
 
 /**

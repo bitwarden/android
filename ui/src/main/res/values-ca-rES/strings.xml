@@ -148,7 +148,7 @@
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Sincronització completa.</string>
-    <string name="two_step_login">Inici de sessió en dues passes</string>
+    <string name="two_step_login">Inici de sessió en dos passos</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Desbloqueja amb codi PIN</string>
     <string name="verification_code">Codi de verificació</string>
@@ -376,6 +376,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="download">Baixa</string>
     <string name="login_expired">La vostra sessió ha caducat.</string>
     <string name="biometrics_direction">Desbloqueja amb biometria</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Desbloqueja amb biometria</string>
@@ -478,6 +479,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="seven_days">7 dies</string>
     <string name="thirty_days">30 dies</string>
     <string name="custom">Personalitzat</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
     <string name="send_disabled_warning">A causa d\'una política empresarial, només podeu suprimir un Send existent.</string>
     <string name="about_send">Quant a Send</string>
@@ -496,9 +498,20 @@ L\'escaneig es farà automàticament.</string>
     <string name="fido2_authenticate_web_authn">Autentica WebAuthn</string>
     <string name="fido2_return_to_app">Torna a l\'aplicació</string>
     <string name="reset_password_auto_enroll_invite_warning">Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</string>
-    <string name="vault_timeout_policy_in_effect">Les polítiques de l\'organització afecten el temps d\'espera de la caixa forta. El temps d\'espera màxim permès de la caixa forta és de %1$s hores i %2$s minuts</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Les polítiques de l\'organització afecten el temps d\'espera de la vostra caixa forta. El temps d\'espera màxim permès és de %1$s hores i %2$s minuts. L\'acció de temps d\'espera de la caixa forta està definida en %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Les polítiques de l\'organització han establert l\'acció de temps d\'espera de la caixa forta a %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">El temps d\'espera de la caixa forta supera les restriccions establertes per la vostra organització.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Una o més polítiques d\'organització us impedeixen exportar la vostra caixa forta.</string>
     <string name="add_account">Afig compte</string>
@@ -1049,7 +1062,7 @@ Voleu canviar a aquest compte?</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Alguna cosa no ha anat bé</string>
     <string name="please_try_again">Torna-ho a provar</string>
@@ -1137,4 +1150,7 @@ Voleu canviar a aquest compte?</string>
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

@@ -294,7 +294,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `VaultDataReceive Pending should show loading dialog and update item type counts`() =
+        fun `VaultDataReceive Pending should update item type counts`() =
             runTest {
                 val viewModel = createViewModel()
                 viewModel.trySendAction(
@@ -313,9 +313,6 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                         itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
                             passwordCount = 1,
                         ),
-                    ),
-                    dialog = ReviewExportState.DialogState.Loading(
-                        BitwardenString.loading.asText(),
                     ),
                 )
 
@@ -462,6 +459,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )

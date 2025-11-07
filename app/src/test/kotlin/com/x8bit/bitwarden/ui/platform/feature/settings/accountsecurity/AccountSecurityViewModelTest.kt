@@ -143,7 +143,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
-            action = "lock",
+            action = PolicyInformation.VaultTimeout.Action.LOCK,
+            type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
         mutableActivePolicyFlow.emit(
             listOf(
@@ -158,8 +159,11 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    vaultTimeoutPolicyMinutes = 10,
-                    vaultTimeoutPolicyAction = "lock",
+                    vaultTimeoutPolicy = VaultTimeoutPolicy(
+                        minutes = 10,
+                        action = PolicyInformation.VaultTimeout.Action.LOCK,
+                        type = PolicyInformation.VaultTimeout.Type.CUSTOM,
+                    ),
                 ),
                 awaitItem(),
             )
@@ -977,6 +981,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )
@@ -991,8 +996,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
-    vaultTimeoutPolicyMinutes = null,
-    vaultTimeoutPolicyAction = null,
+    vaultTimeoutPolicy = null,
     shouldShowEnableAuthenticatorSync = false,
     shouldShowUnlockActionCard = false,
     removeUnlockWithPinPolicyEnabled = false,

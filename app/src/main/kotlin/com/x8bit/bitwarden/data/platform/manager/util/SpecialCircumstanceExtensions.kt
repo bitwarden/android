@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -8,7 +9,6 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 
 /**
  * Returns [AutofillSaveItem] when contained in the given [SpecialCircumstance].

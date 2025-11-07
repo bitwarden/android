@@ -14,6 +14,8 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -59,8 +61,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -76,7 +77,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.messageResourceId
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -117,7 +117,7 @@ private const val KEY_STATE = "state"
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     generatorRepository: GeneratorRepository,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
@@ -2320,8 +2320,8 @@ data class VaultAddEditState(
 
     val shouldShowMoveToOrganization: Boolean
         get() = !isAddItemMode &&
-                !isCipherInCollection &&
-                hasOrganizations
+            !isCipherInCollection &&
+            hasOrganizations
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.

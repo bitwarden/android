@@ -542,13 +542,8 @@ class ItemListingViewModel @Inject constructor(
             it.copy(
                 viewState = when (it.viewState) {
                     ItemListingState.ViewState.Loading -> it.viewState
-                    is ItemListingState.ViewState.Content -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
-
-                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(actionCard = null)
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(actionCard = null)
                 },
             )
         }
@@ -564,13 +559,8 @@ class ItemListingViewModel @Inject constructor(
             it.copy(
                 viewState = when (it.viewState) {
                     ItemListingState.ViewState.Loading -> it.viewState
-                    is ItemListingState.ViewState.Content -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
-
-                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(actionCard = null)
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(actionCard = null)
                 },
             )
         }
@@ -602,20 +592,20 @@ class ItemListingViewModel @Inject constructor(
     /**
      * Converts a [SharedVerificationCodesState] into an action card for display.
      */
-    private fun SharedVerificationCodesState.toActionCard(): ItemListingState.ActionCardState =
+    private fun SharedVerificationCodesState.toActionCard(): ItemListingState.ActionCardState? =
         when (this) {
             SharedVerificationCodesState.AppNotInstalled ->
                 if (!settingsRepository.hasUserDismissedDownloadBitwardenCard) {
                     ItemListingState.ActionCardState.DownloadBitwardenApp
                 } else {
-                    ItemListingState.ActionCardState.None
+                    null
                 }
 
             SharedVerificationCodesState.SyncNotEnabled ->
                 if (!settingsRepository.hasUserDismissedSyncWithBitwardenCard) {
                     ItemListingState.ActionCardState.SyncWithBitwarden
                 } else {
-                    ItemListingState.ActionCardState.None
+                    null
                 }
 
             SharedVerificationCodesState.Error,
@@ -623,7 +613,7 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             is SharedVerificationCodesState.Success,
-                -> ItemListingState.ActionCardState.None
+                -> null
         }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
@@ -733,7 +723,7 @@ data class ItemListingState(
          */
         @Parcelize
         data class NoItems(
-            val actionCard: ActionCardState,
+            val actionCard: ActionCardState?,
         ) : ViewState()
 
         /**
@@ -741,7 +731,7 @@ data class ItemListingState(
          */
         @Parcelize
         data class Content(
-            val actionCard: ActionCardState,
+            val actionCard: ActionCardState?,
             val favoriteItems: ImmutableList<VerificationCodeDisplayItem>,
             val itemList: ImmutableList<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
@@ -752,13 +742,10 @@ data class ItemListingState(
              */
             val shouldShowLocalHeader
                 get() =
-                    // Only show header if there are shared items
-                    !sharedItems.isEmpty() &&
-                        // And also local items
-                        itemList.isNotEmpty() &&
-                        // But there are no favorite items
-                        // (If there are favorite items, the favorites header will take care of us)
-                        favoriteItems.isEmpty()
+                    // Only show if local codes are present
+                    itemList.isNotEmpty() &&
+                        // and if there are shared items or favorites
+                        (!sharedItems.isEmpty() || favoriteItems.isNotEmpty())
         }
     }
 
@@ -766,12 +753,6 @@ data class ItemListingState(
      * Display an action card on the item [ItemListingScreen].
      */
     sealed class ActionCardState : Parcelable {
-        /**
-         * Display no action card.
-         */
-        @Parcelize
-        data object None : ActionCardState()
-
         /**
          * Display the "Download the Bitwarden app" card.
          */

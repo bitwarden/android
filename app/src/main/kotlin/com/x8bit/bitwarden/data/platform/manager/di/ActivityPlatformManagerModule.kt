@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager

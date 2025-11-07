@@ -12,6 +12,7 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -57,8 +58,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
@@ -100,7 +100,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     )
 
     private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         // We return an empty flow here to avoid confusion in the tests.
         // Everything should be tested via the mutableSnackbarDataFlow.
         every { getSnackbarDataFlow(SnackbarRelay.LOGIN_SUCCESS) } returns emptyFlow()
@@ -309,6 +309,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
                     ),
                 ),
             )
@@ -397,6 +398,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
                     ),
                 ),
             )
@@ -3166,6 +3168,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
+            isExportable = true,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -3185,6 +3188,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
+            isExportable = true,
         ),
     ),
 )

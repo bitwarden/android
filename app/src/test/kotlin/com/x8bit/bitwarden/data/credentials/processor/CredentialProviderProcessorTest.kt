@@ -21,10 +21,10 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CredentialEntry
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -526,6 +526,7 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
             ),
         )
     }

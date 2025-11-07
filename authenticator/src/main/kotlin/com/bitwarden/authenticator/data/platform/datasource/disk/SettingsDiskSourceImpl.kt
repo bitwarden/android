@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.onSubscription
 private const val APP_THEME_KEY = "theme"
 private const val APP_LANGUAGE_KEY = "appLocale"
 private const val DEFAULT_SAVE_OPTION_KEY = "defaultSaveOption"
+private const val DYNAMIC_COLORS_KEY = "dynamicColors"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "alertThresholdSeconds"
@@ -47,6 +48,8 @@ class SettingsDiskSourceImpl(
 
     private val mutableDefaultSaveOptionFlow =
         bufferedMutableSharedFlow<DefaultSaveOption>()
+
+    private val mutableDynamicColorsFlow = bufferedMutableSharedFlow<Boolean?>()
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -97,6 +100,16 @@ class SettingsDiskSourceImpl(
     override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
         get() = mutableDefaultSaveOptionFlow
             .onSubscription { emit(defaultSaveOption) }
+
+    override var isDynamicColorsEnabled: Boolean?
+        get() = getBoolean(key = DYNAMIC_COLORS_KEY)
+        set(newValue) {
+            putBoolean(key = DYNAMIC_COLORS_KEY, value = newValue)
+            mutableDynamicColorsFlow.tryEmit(newValue)
+        }
+
+    override val isDynamicColorsEnabledFlow: Flow<Boolean?>
+        get() = mutableDynamicColorsFlow.onSubscription { emit(isDynamicColorsEnabled) }
 
     override var systemBiometricIntegritySource: String?
         get() = getString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY)

@@ -377,6 +377,7 @@
     <string name="download">Preuzmi</string>
     <string name="login_expired">Sesija je istekla.</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
+    <string name="device_verification">Provjera uređaja</string>
     <string name="biometrics_failed">Biometrija neuspješna</string>
     <string name="biometrics_decoding_failure">Prijavi se svojom Glavnom lozinkom ili PIN-om i isključi, pa ponovno uključi biometrijsku prijavu u Postavkama.</string>
     <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
@@ -479,6 +480,7 @@
     <string name="seven_days">7 dana</string>
     <string name="thirty_days">30 dana</string>
     <string name="custom">Prilagođeno</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Dodaj ovaj ključ autentifikatora postojećoj prijavi, ili stvori novu prijavu.</string>
     <string name="send_disabled_warning">Pravila tvrtke omogućuju brisanje samo postojećeg Senda</string>
     <string name="about_send">O Sendu</string>
@@ -497,9 +499,22 @@
     <string name="fido2_authenticate_web_authn">Autentifikacija WebAuthn</string>
     <string name="fido2_return_to_app">Povratak u aplikaciju</string>
     <string name="reset_password_auto_enroll_invite_warning">Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</string>
-    <string name="vault_timeout_policy_in_effect">Pravilo tvoje organizacije utječe na istek trezora. Najveće dozvoljeno vrijeme isteka je %1$s:%2$s h.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Pravila tvoje organizacije utječu na vremenski istek trezora. Maksimalno dopušteno vrijeme isteka je %1$s:%2$s h. Vaša radnja nakon isteka trezora je %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Pravilo tvoje organizacije podesilo je radnju nakon isteka trezora na: %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="few">%1$d hours</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="few">%1$d minutes</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Vrijeme isteka premašuje ograničenje koje je postavila tvoja organizacija.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora.</string>
     <string name="add_account">Dodaj račun</string>
@@ -1138,9 +1153,12 @@ bilo kakav problem.</string>
     <string name="kdf_update_failed_active_account_not_found">Ažuriranje KDF-a nije uspjelo, aktivni račun nije pronađen. Pokušaj ponovno ili nas kontaktiraj.</string>
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Došlo je do pogreške prilikom pokušaja ažuriranja tvojih KDF postavki. Pokušaj ponovno ili nas kontaktiraj.</string>
     <string name="the_import_request_could_not_be_processed">Zahtjev za uvoz nije mogao biti obrađen.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Tvoj trezor je možda prazan ili uvoz nekih vrsta stavki nije dopušten za tvoj račun.</string>
+    <string name="no_items_available_to_import">Nema dostupnih stavki za uvoz</string>
+    <string name="select_a_different_account">Odaberi drugi račun</string>
+    <string name="verify_your_account_email_address">Potvrdi adresu e-pošte svojeg računa</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Unesi 6-znamenkasti kôd poslan e-poštom na donju adresu</string>
+    <string name="lock_app">Zaključaj aplikaciju</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
+    <string name="loading_vault_data">Učitavanje podataka trezora…</string>
 </resources>

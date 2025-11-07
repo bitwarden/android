@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository.di
 
 import android.view.autofill.AutofillManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager

@@ -374,6 +374,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="download">Tải xuống</string>
     <string name="login_expired">Phiên đăng nhập của bạn đã hết hạn.</string>
     <string name="biometrics_direction">Xác minh sinh trắc học</string>
+    <string name="device_verification">Xác minh thiết bị</string>
     <string name="biometrics_failed">Xác thực sinh trắc học thất bại</string>
     <string name="biometrics_decoding_failure">Đăng nhập bằng Mật khẩu chính hoặc Mã PIN của bạn, sau đó bật lại tính năng đăng nhập bằng sinh trắc học trong Cài đặt.</string>
     <string name="use_biometrics_to_unlock">Dùng sinh trắc học để mở khóa</string>
@@ -476,6 +477,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="seven_days">7 ngày</string>
     <string name="thirty_days">30 ngày</string>
     <string name="custom">Tùy chỉnh</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Thêm khóa xác thực này vào thông tin đăng nhập hiện có hoặc tạo thông tin đăng nhập mới.</string>
     <string name="send_disabled_warning">Do chính sách doanh nghiệp, bạn chỉ có thể xóa những Send hiện có.</string>
     <string name="about_send">Về Send</string>
@@ -494,9 +496,18 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
-    <string name="vault_timeout_policy_in_effect">Tổ chức của bạn đã đặt thời gian mở kho tối đa là %1$s giờ và %2$s phút.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Chính sách tổ chức của bạn đang ảnh hưởng đến thời gian mở kho. Thời gian mở kho tối đa là %1$s giờ và %2$s phút. Kho sẽ %3$s sau khi đóng kho.</string>
-    <string name="vault_timeout_action_policy_in_effect">Tổ chức bạn đã thiết lập hành động sau khi đóng kho là %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Cài đặt này do tổ chức của bạn quản lý.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Thời gian mở kho vượt quá giới hạn do tổ chức của bạn đặt ra.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Các chính sách của tổ chức ngăn cản bạn xuất kho lưu trữ cá nhân của mình.</string>
     <string name="add_account">Thêm tài khoản</string>
@@ -1133,6 +1144,9 @@ các vấn đề.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Kho của bạn có thể trống, hoặc tài khoản của bạn không được phép nhập một số loại mục.</string>
     <string name="no_items_available_to_import">Không có mục nào để nhập</string>
     <string name="select_a_different_account">Chọn một tài khoản khác</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="verify_your_account_email_address">Xác minh địa chỉ email của tài khoản</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Nhập mã gồm 6 chữ số đã được gửi qua email đến địa chỉ bên dưới</string>
+    <string name="lock_app">Khóa ứng dụng</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
+    <string name="loading_vault_data">Đang tải dữ liệu kho…</string>
 </resources>

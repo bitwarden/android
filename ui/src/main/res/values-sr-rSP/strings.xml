@@ -378,6 +378,7 @@
     <string name="download">Преузми</string>
     <string name="login_expired">Ваша сесија је истекла.</string>
     <string name="biometrics_direction">Биометријска провера</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">Биометрија није успела</string>
     <string name="biometrics_decoding_failure">Пријавите се са својом главном лозинком или ПИН-ом, а затим поново омогућите биометријску пријаву у подешавањима.</string>
     <string name="use_biometrics_to_unlock">Користи биометријско откључавање</string>
@@ -480,6 +481,7 @@
     <string name="seven_days">7 дана</string>
     <string name="thirty_days">30 дана</string>
     <string name="custom">Друго</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Додајте овај кључ за аутентификацију постојећој пријави или направите нову пријаву.</string>
     <string name="send_disabled_warning">Због полисе компаније, можеш само да бришеш постојећа слања.</string>
     <string name="about_send">О слању</string>
@@ -498,9 +500,22 @@
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
-    <string name="vault_timeout_policy_in_effect">Полиса ваше организације утиче на време истека сефа. Максимално дозвољено време истека је %1$s сат(и) и %2$s minut(а)</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Смернице ваше организације утичу на временско ограничење сефа. Максимално дозвољено ограничење сефа је %1$s сат(и) и %2$s минут(а). Ваша радња временског ограничења сефа је подешена на %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Смернице ваше организације су поставиле вашу радњу временског ограничења сефа на %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="few">%1$d hours</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="few">%1$d minutes</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</string>
     <string name="add_account">Додај налог</string>
@@ -1145,4 +1160,7 @@
     <string name="select_a_different_account">Select a different account</string>
     <string name="verify_your_account_email_address">Verify your account email address</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
 </resources>

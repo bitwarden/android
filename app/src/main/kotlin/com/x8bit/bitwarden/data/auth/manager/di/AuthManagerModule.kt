@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.DevicesService
@@ -27,8 +27,8 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource

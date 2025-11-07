@@ -1,7 +1,6 @@
 package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -56,6 +55,7 @@ import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextTool
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -240,11 +240,9 @@ fun BitwardenPasswordField(
                             .fillMaxWidth()
                             .padding(start = 16.dp),
                     )
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .defaultMinSize(minHeight = 48.dp)
-                            .padding(paddingValues = supportingContentPadding),
+                    BitwardenSupportingContent(
+                        cardStyle = null,
+                        insets = supportingContentPadding,
                         content = content,
                     )
                 }

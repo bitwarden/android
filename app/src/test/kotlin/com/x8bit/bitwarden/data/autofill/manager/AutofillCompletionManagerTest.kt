@@ -5,7 +5,7 @@ import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.Intent
 import android.service.autofill.Dataset
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo

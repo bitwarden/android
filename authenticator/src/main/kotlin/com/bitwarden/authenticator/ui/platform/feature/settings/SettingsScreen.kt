@@ -43,6 +43,7 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
@@ -57,6 +58,7 @@ import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -204,10 +206,20 @@ fun SettingsScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
-                state = state,
+                state = state.appearance,
+                onLanguageSelection = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it)) }
+                },
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
+                    }
+                },
+                onDynamicColorChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            SettingsAction.AppearanceChange.DynamicColorChange(it),
+                        )
                     }
                 },
             )
@@ -326,37 +338,21 @@ private fun ColumnScope.VaultSettings(
         label = stringResource(id = BitwardenString.data),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.import_vault),
         onClick = onImportClick,
+        cardStyle = CardStyle.Top(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Import"),
-        cardStyle = CardStyle.Top(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.export),
         onClick = onExportClick,
+        cardStyle = CardStyle.Middle(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Export"),
-        cardStyle = CardStyle.Middle(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
     BitwardenExternalLinkRow(
         text = stringResource(BitwardenString.backup),
@@ -518,8 +514,11 @@ private fun ScreenCaptureRow(
 
 @Composable
 private fun ColumnScope.AppearanceSettings(
-    state: SettingsState,
+    state: SettingsState.Appearance,
+    onLanguageSelection: (language: AppLanguage) -> Unit,
     onThemeSelection: (theme: AppTheme) -> Unit,
+    onDynamicColorChange: (isEnabled: Boolean) -> Unit,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier
@@ -528,20 +527,50 @@ private fun ColumnScope.AppearanceSettings(
         label = stringResource(id = BitwardenString.appearance),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
+    BitwardenMultiSelectButton(
+        label = stringResource(id = BitwardenString.language),
+        options = AppLanguage.entries.map { it.text() }.toImmutableList(),
+        selectedOption = state.language.text(),
+        onOptionSelected = { language ->
+            onLanguageSelection(
+                AppLanguage.entries.first { language == it.text.toString(resources) },
+            )
+        },
+        cardStyle = CardStyle.Full,
+        modifier = Modifier
+            .testTag(tag = "LanguageChooser")
+            .standardHorizontalMargin()
+            .fillMaxWidth(),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
     ThemeSelectionRow(
-        currentSelection = state.appearance.theme,
+        currentSelection = state.theme,
         onThemeSelection = onThemeSelection,
+        cardStyle = if (state.isDynamicColorsSupported) CardStyle.Top() else CardStyle.Full,
         modifier = Modifier
             .testTag("ThemeChooser")
             .standardHorizontalMargin()
             .fillMaxWidth(),
     )
+    if (state.isDynamicColorsSupported) {
+        BitwardenSwitch(
+            label = stringResource(id = BitwardenString.use_dynamic_colors),
+            isChecked = state.isDynamicColorsEnabled,
+            onCheckedChange = onDynamicColorChange,
+            cardStyle = CardStyle.Bottom,
+            modifier = Modifier
+                .testTag(tag = "DynamicColorsSwitch")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
 private fun ThemeSelectionRow(
     currentSelection: AppTheme,
     onThemeSelection: (AppTheme) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     resources: Resources = LocalResources.current,
 ) {
@@ -555,7 +584,7 @@ private fun ThemeSelectionRow(
                 .first { it.displayLabel(resources) == selectedOptionLabel }
             onThemeSelection(selectedOption)
         },
-        cardStyle = CardStyle.Full,
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 }
