@@ -54,7 +54,7 @@
     <string name="password">Adgangskode</string>
     <string name="save">Gem</string>
     <string name="move">Flyt</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Gemmer…</string>
     <string name="settings">Indstillinger</string>
     <string name="show">Vis</string>
     <string name="item_deleted">Emne slettet</string>
@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Send bekræftelseskodemail igen</string>
     <string name="verification_email_not_sent">Kunne ikke sende bekræftelsesmail. Forsøg igen.</string>
     <string name="verification_email_sent">Bekræftelsesmail sendt</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey-sikkerhedsnøgle</string>
     <string name="add_new_attachment">Tilføj ny vedhæftning</string>
     <string name="attachments">Vedhæftninger</string>
@@ -479,6 +479,7 @@ Skanning vil ske automatisk.</string>
     <string name="seven_days">7 dage</string>
     <string name="thirty_days">30 dage</string>
     <string name="custom">Tilpasset</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">Føj denne godkendelsesnøgle til et eksisterende login, eller opret et nyt login.</string>
     <string name="send_disabled_warning">Grundet en virksomhedspolitik kan kun en eksisterende Send slettes.</string>
     <string name="about_send">Om Send</string>
@@ -497,9 +498,20 @@ Skanning vil ske automatisk.</string>
     <string name="fido2_authenticate_web_authn">Godkend WebAuthn</string>
     <string name="fido2_return_to_app">Retur til appen</string>
     <string name="reset_password_auto_enroll_invite_warning">Denne organisation har en virksomhedspolitik, hvor man automatisk tilmeldes nulstilling af adgangskode, hvilket giver organisationsadministratorer mulighed for at skifte ens hovedadgangskode.</string>
-    <string name="vault_timeout_policy_in_effect">Organisationspolitikkerne har sat den maksimalt tilladte boks-timeout til %1$s time(r) og %2$s minut(ter).</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er %1$s time(r) og %2$s minut(ter). Boks-timeout er pt. sat til %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Organisationspolitikker har sat boks-timeouthandlingen til %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Timeout for boksen overskrider de af organisationen angivne restriktioner.</string>
     <string name="disable_personal_vault_export_policy_in_effect">En eller flere organisationspolitikker forhindrer eksport af den personlige boks.</string>
     <string name="add_account">Tilføj konto</string>
@@ -882,7 +894,7 @@ Skift til denne konto?</string>
     <string name="coachmark_4_of_6">4 OF 6</string>
     <string name="coachmark_5_of_6">5 OF 6</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Brug disse indstillinger til at justere din adgangskode til at opfylde dit websteds krav.</string>
     <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Verify your identity</string>
     <string name="error_loading_certificate">Error loading certificate</string>
@@ -935,7 +947,7 @@ Skift til denne konto?</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
     <string name="flight_recorder_twenty_four_hours">24 hours</string>
     <string name="flight_recorder_one_week">1 week</string>
-    <string name="delete_all">Delete all</string>
+    <string name="delete_all">Slet alt</string>
     <string name="share_all">Share all</string>
     <string name="unable_to_share">Unable to share</string>
     <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>

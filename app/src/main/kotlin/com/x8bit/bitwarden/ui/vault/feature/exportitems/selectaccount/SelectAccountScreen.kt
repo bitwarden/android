@@ -51,7 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 @Suppress("LongMethod")
 fun SelectAccountScreen(
-    onAccountSelected: (userId: String) -> Unit,
+    onAccountSelected: (userId: String, hasOtherAccounts: Boolean) -> Unit,
     viewModel: SelectAccountViewModel = hiltViewModel(),
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
@@ -74,7 +74,7 @@ fun SelectAccountScreen(
             }
 
             is SelectAccountEvent.NavigateToPasswordVerification -> {
-                onAccountSelected(event.userId)
+                onAccountSelected(event.userId, event.hasOtherAccounts)
             }
 
             is SelectAccountEvent.ValidateImportRequest -> {

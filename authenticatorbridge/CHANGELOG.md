@@ -7,6 +7,13 @@ v1.1.0 (pending)
 
 ### Bug Fixes
 
+v1.0.2
+--------
+
+### Bug Fixes
+
+- Added cryptographic certificate signature verification to prevent malicious applications from spoofing Password Manager package names and intercepting TOTP secrets (VULN-314).
+
 v1.0.1
 --------
 

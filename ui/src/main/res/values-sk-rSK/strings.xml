@@ -181,7 +181,7 @@
     <string name="send_verification_code_again">Znovu zaslať overovací kód e-mailom</string>
     <string name="verification_email_not_sent">Nepodarilo sa odoslať overovací e-mail. Skúste znova.</string>
     <string name="verification_email_sent">Overovací e-mail bol odoslaný.</string>
-    <string name="yubi_key_instruction">Ak chcete pokračovať, podržte YubiKey NEO na zadnej strane zariadenia alebo vložte YubiKey do portu USB zariadenia, a potom sa dotknite jeho tlačidla.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey NEO bezpečnostný kľúč</string>
     <string name="add_new_attachment">Pridať novú prílohu</string>
     <string name="attachments">Prílohy</string>
@@ -399,7 +399,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_generator_policy_in_effect">Jedno alebo viac nastavení organizácie ovplyvňujú vaše nastavenia generátora</string>
     <string name="unable_to_save_attachment">Nastal problem pri ukladaní prílohy. Ak problém pretrváva, môžete je uložiť z Webového trezora.</string>
     <string name="save_attachment_success">Príloha úspešne uložená</string>
-    <string name="autofill_tile_accessibility_required">Zapnite \"Služba uľahčenia prístupu automatického vypĺňania\" v nastaveniach Bitwardenu, aby ste mohli používať dlaždicu na automatické vypĺňanie.</string>
+    <string name="autofill_tile_accessibility_required">Zapnite \"Služba prístupnosti automatického vypĺňania\" v nastaveniach Bitwardenu, aby ste mohli používať dlaždicu na automatické vypĺňanie.</string>
     <string name="autofill_tile_uri_not_found">Nenájdené žiadne políčka na heslo</string>
     <string name="soft_deleting">Presúva sa do koša…</string>
     <string name="item_soft_deleted">Položka bola poslaná do koša.</string>
@@ -483,6 +483,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="seven_days">7 dní</string>
     <string name="thirty_days">30 dní</string>
     <string name="custom">Vlastné</string>
+    <string name="custom_timeout">Vlastný časový limit</string>
     <string name="add_this_authenticator_key_to_a_login">Pridajte tento overovací kľúč k existujúcemu prihláseniu, alebo vytvorte nové prihlásenie.</string>
     <string name="send_disabled_warning">Z dôvodu podnikovej politiky môžete odstrániť iba existujúci Send.</string>
     <string name="about_send">O Sende</string>
@@ -501,9 +502,24 @@ Skenovanie prebehne automaticky.</string>
     <string name="fido2_authenticate_web_authn">Overiť cez WebAuthn</string>
     <string name="fido2_return_to_app">Vrátiť sa do aplikácie</string>
     <string name="reset_password_auto_enroll_invite_warning">Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</string>
-    <string name="vault_timeout_policy_in_effect">Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je %1$s h a %2$s m</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je %1$s h a %2$s m. Nastavenie akcie pri vypršaní časového limitu je %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Zásady vašej organizácie nastavili akciu pri vypršaní časového limitu trezora na %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hodina</item>
+        <item quantity="few">%1$d hodiny</item>
+        <item quantity="many">%1$d hodín</item>
+        <item quantity="other">%1$d hodín</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minúta</item>
+        <item quantity="few">%1$d minúty</item>
+        <item quantity="many">%1$d minút</item>
+        <item quantity="other">%1$d minút</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Vaša organizácia nastavila maximálny časový limit relácie na %1$s a %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Vaša organizácia nastavila maximálny časový limit relácie na %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Toto nastavenie spravuje vaša organizácia.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Vaša organizácia nastavila predvolený časový limit relácie na [%1$s].</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Vaša organizácia nastavila predvolený časový limit relácie na reštart aplikácie.</string>
     <string name="vault_timeout_to_large">Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</string>
     <string name="add_account">Pridať účet</string>
@@ -583,7 +599,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="catch_all_email_description">Použiť doručenú poštu typu catch-all nastavenú na doméne.</string>
     <string name="forwarded_email_description">Vytvoriť e-mailový alias pomocou externej služby presmerovania.</string>
     <string name="accessibility_service_disclosure">Vyhlásenie o prístupnosti</string>
-    <string name="accessibility_disclosure_text">Služba Bitwarden využíva službu sprístupnenia na vyhľadávanie prihlasovacích polí v aplikáciách a webových lokalitách a potom po nájdení zhody pre aplikáciu alebo lokalitu vytvorí príslušné identifikátory polí na zadanie používateľského mena a hesla. Neukladáme žiadne informácie, ktoré nám služba poskytuje, ani sa nepokúšame kontrolovať žiadne prvky na obrazovke okrem textového zadávania prihlasovacích údajov.</string>
+    <string name="accessibility_disclosure_text">Bitwarden používa službu dostupnosti na vyhľadávanie prihlasovacích polí v aplikáciách a na webových stránkach a potom vytvára príslušné ID polí na zadanie používateľského mena a hesla, keď sa nájde zhoda s aplikáciou alebo webom. Neuchovávame žiadne informácie, ktoré nám poskytuje služba, ani sa nepokúšame ovládať žiadne prvky na obrazovke okrem zadávania textu prihlasovacích údajov.</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
     <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>

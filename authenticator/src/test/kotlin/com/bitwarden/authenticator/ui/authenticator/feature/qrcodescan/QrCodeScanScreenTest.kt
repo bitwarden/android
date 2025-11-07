@@ -37,10 +37,11 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            qrCodeAnalyzer = qrCodeAnalyzer,
+        ) {
             QrCodeScanScreen(
                 viewModel = viewModel,
-                qrCodeAnalyzer = qrCodeAnalyzer,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToManualCodeEntryScreen = {
                     onNavigateToManualCodeEntryScreenCalled = true

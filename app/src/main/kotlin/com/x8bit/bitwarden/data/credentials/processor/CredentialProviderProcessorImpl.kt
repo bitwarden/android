@@ -25,8 +25,8 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState

@@ -14,8 +14,8 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

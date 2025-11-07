@@ -21,7 +21,6 @@ import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.Authen
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
-import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
@@ -48,7 +47,6 @@ fun RootNavScreen(
     navController: NavHostController = rememberNavController(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onSplashScreenRemoved: () -> Unit = {},
-    onExitApplication: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val previousStateReference = remember { AtomicReference(state) }
@@ -94,15 +92,7 @@ fun RootNavScreen(
                 viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
             },
         )
-        setupDebugMenuDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
-        )
-        authenticatorGraph(
-            navController = navController,
-            onNavigateBack = onExitApplication,
-        )
+        authenticatorGraph(navController = navController)
     }
 
     val targetRoute = when (state.navState) {

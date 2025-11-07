@@ -36,7 +36,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
@@ -119,11 +119,11 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = ROOT_ROUTE,
+                        startDestination = RootNavigationRoute,
                     ) {
-                        // Nothing else should end up at this top level, we just want the ability
-                        // to have the debug menu appear on top of the rest of the app without
-                        // interacting with the state-based navigation used by the RootNavScreen.
+                        // Both root navigation and debug menu exist at this top level.
+                        // The debug menu can appear on top of the rest of the app without
+                        // interacting with the state-based navigation used by RootNavScreen.
                         rootNavDestination { shouldShowSplashScreen = false }
                         debugMenuDestination(
                             onNavigateBack = { navController.popBackStack() },

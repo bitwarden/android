@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.UpdateSendResponseJson

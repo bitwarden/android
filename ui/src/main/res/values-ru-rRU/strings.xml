@@ -101,9 +101,9 @@
     <string name="one_minute">1 минута</string>
     <string name="four_hours">4 часа</string>
     <string name="immediately">Немедленно</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="vault_timeout_log_out_confirmation_title">Установить тайм-аут сессии для “Выход”?</string>
+    <string name="vault_timeout_log_out_confirmation_message">По истечении тайм-аута ваша сессия будет завершена. Для повторной авторизации и получения доступа к хранилищу, вам потребуется подключение к интернету. Ваши настройки и PIN-код, сохраненные на этом устройстве, не изменятся.</string>
+    <string name="logging_in">Вход…</string>
     <string name="login_to_bitwarden">Войти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
     <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
@@ -138,7 +138,7 @@
     <string name="other">Прочее</string>
     <string name="password_generator">Генератор паролей</string>
     <string name="password_hint">Подсказка к паролю</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">Мы отправили вам письмо с подсказкой к мастер-паролю.</string>
     <string name="password_override_alert">Вы хотите перезаписать текущий пароль?</string>
     <string name="retype_master_password">Введите мастер-пароль повторно</string>
     <string name="retype_new_master_password_required">Повторите новый мастер-пароль (обязательно)</string>
@@ -147,8 +147,8 @@
     <string name="select">Выбрать</string>
     <string name="item_details">Информация об элементе</string>
     <string name="item_updated">Элемент сохранен</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Отправка…</string>
+    <string name="syncing">Синхронизация…</string>
     <string name="syncing_complete">Синхронизация выполнена</string>
     <string name="two_step_login">Двухэтапная аутентификация</string>
     <string name="unlock_with_biometrics">Разблокировать с помощью биометрии</string>
@@ -166,7 +166,7 @@
     <string name="no_items_for_vault">В вашем хранилище нет элементов, совпадающих с \"%1$s\"</string>
     <string name="search_for_a_login_or_add_a_new_login">Поиск или добавление нового логина</string>
     <string name="disabled">Отключено</string>
-    <string name="bitwarden_autofill_service_alert2">Самый простой способ добавить новые логины в ваше хранилище – это служба автозаполнения Bitwarden. Дополнительные сведения об использовании службы автозаполнения Bitwarden в разделе \'Настройки\'.</string>
+    <string name="bitwarden_autofill_service_alert2">Самый простой способ добавить новые логины в ваше хранилище – это служба автозаполнения Bitwarden. Дополнительные сведения об использовании службы автозаполнения Bitwarden в разделе “Настройки”.</string>
     <string name="autofill_title">Автозаполнение</string>
     <string name="autofill_or_view">Выполнить автозаполнение или просмотреть этот элемент?</string>
     <string name="search">Поиск</string>
@@ -174,19 +174,19 @@
     <string name="authenticator_app_title">Приложение-аутентификатор</string>
     <string name="enter_verification_code_app">Введите 6-значный код подтверждения из вашего приложения-аутентификатора.</string>
     <string name="enter_verification_code_email">Введите 6-значный код подтверждения, который был отправлен на %1$s.</string>
-    <string name="enter_verification_code_new_device">Мы не распознали это устройство. Введите код, отправленный на ваш email, чтобы подтвердить вашу личность.</string>
+    <string name="enter_verification_code_new_device">Мы не распознали это устройство. Введите код, отправленный на ваш email, чтобы подтвердить вашу личную информацию.</string>
     <string name="recovery_code_title">Код восстановления</string>
     <string name="remember">Запомнить</string>
     <string name="remember_email">Запомнить email</string>
     <string name="send_verification_code_again">Отправить код повторно</string>
     <string name="verification_email_not_sent">Не удалось отправить письмо подтверждения. Повторить.</string>
     <string name="verification_email_sent">Отправлено письмо подтверждения.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Ключ безопасности YubiKey</string>
     <string name="add_new_attachment">Добавить новое вложение</string>
     <string name="attachments">Вложения</string>
     <string name="unable_to_download_file">Не удается загрузить файл.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Загрузка…</string>
     <string name="attachment_large_warning">Размер этого вложения - %1$s. Вы действительно хотите загрузить его на устройство?</string>
     <string name="authenticator_key">Ключ аутентификатора</string>
     <string name="verification_code_totp">Код подтверждения (TOTP)</string>
@@ -291,7 +291,7 @@
     <string name="new_uri">Новый URI</string>
     <string name="add_website">Добавить сайт</string>
     <string name="base_domain">Основной домен</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">По умолчанию (%1$s)</string>
     <string name="exact">Точно</string>
     <string name="host">Хост</string>
     <string name="reg_ex">Регулярное выражение</string>
@@ -346,7 +346,7 @@
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Нет папок для отображения.</string>
     <string name="fingerprint_phrase">Фраза отпечатка</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">Фраза отпечатка вашего аккаунта</string>
     <string name="export_vault">Экспорт хранилища</string>
     <string name="lock_now">Заблокировать</string>
     <string name="pin">PIN-код</string>
@@ -366,9 +366,9 @@
     <string name="clear_clipboard">Очистить буфер обмена</string>
     <string name="clear_clipboard_description">Автоматически удалять скопированные значения из буфера обмена.</string>
     <string name="default_uri_match_detection">Обнаружение совпадения URI по умолчанию</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">Обнаружение соответствия URI определяет, как Bitwarden идентифицирует предложения по автозаполнению.</string>
     <string name="theme">Тема</string>
-    <string name="theme_description">Change the application’s color theme</string>
+    <string name="theme_description">Изменение цветовой темы приложения</string>
     <string name="copy_notes">Скопировать заметку</string>
     <string name="require_master_password_on_app_restart">Требовать мастер-пароль при перезапуске приложения?</string>
     <string name="pin_require_master_password_restart">Хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</string>
@@ -393,18 +393,18 @@
     <string name="export_vault_file_pw_protect_info">Экспорт этого файла будет защищен паролем, и для расшифровки потребуется пароль файла.</string>
     <string name="export_vault_confirmation_title">Подтвердить экспорт хранилища</string>
     <string name="warning">Предупреждение</string>
-    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
+    <string name="export_vault_failure">Возникла проблема с экспортом хранилища.  Если проблема не исчезнет, экспортируйте данные из веб-хранилища.</string>
     <string name="export_vault_success">Хранилище успешно экспортировано</string>
     <string name="clone">Клонировать</string>
     <string name="password_generator_policy_in_effect">На настройки генератора влияют одна или несколько политик организации</string>
     <string name="unable_to_save_attachment">Возникла проблема с сохранением этого вложения. Если проблема не исчезнет, вы можете сохранить его из веб-хранилища.</string>
     <string name="save_attachment_success">Вложение успешно сохранено</string>
-    <string name="autofill_tile_accessibility_required">Пожалуйста, включите службу специальных возможностей автозаполнения в настройках Bitwarden для использования панели автозаполнения.</string>
+    <string name="autofill_tile_accessibility_required">Пожалуйста, включите ”Службу специальных возможностей” автозаполнения в настройках Bitwarden для использования панели автозаполнения.</string>
     <string name="autofill_tile_uri_not_found">Полей ввода пароля не обнаружено</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Отправка в корзину…</string>
     <string name="item_soft_deleted">Элемент отправлен в корзину.</string>
     <string name="restore">Восстановить</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Восстановление…</string>
     <string name="item_restored">Элемент восстановлен</string>
     <string name="trash">Корзина</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Вы действительно хотите удалить окончательно? Это нельзя отменить.</string>
@@ -414,7 +414,7 @@
     <string name="enable_sync_on_refresh">Включить синхронизацию жестом</string>
     <string name="enable_sync_on_refresh_description">Синхронизация хранилища жестом смахивания вниз.</string>
     <string name="log_in_sso">Единая корпоративная авторизация</string>
-    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
+    <string name="log_in_sso_summary">Авторизуйтесь при помощи единого корпоративного портала. Чтобы начать, введите идентификатор вашей организации.</string>
     <string name="org_identifier">Идентификатор организации</string>
     <string name="login_sso_error">В настоящее время невозможно авторизоваться посредством SSO</string>
     <string name="set_master_password">Задать мастер-пароль</string>
@@ -483,6 +483,7 @@
     <string name="seven_days">7 дней</string>
     <string name="thirty_days">30 дней</string>
     <string name="custom">Пользовательский</string>
+    <string name="custom_timeout">Пользовательский тайм-аут</string>
     <string name="add_this_authenticator_key_to_a_login">Добавьте этот ключ аутентификатора к существующему логину или создайте новый.</string>
     <string name="send_disabled_warning">В соответствии с корпоративной политикой вы можете удалить только существующую Send.</string>
     <string name="about_send">О Send</string>
@@ -501,9 +502,24 @@
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
     <string name="reset_password_auto_enroll_invite_warning">В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль.</string>
-    <string name="vault_timeout_policy_in_effect">В соответствии с политиками вашей организации максимально допустимый тайм-аут хранилища составляет %1$s час. и %2$s мин.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Политики вашей организации влияют на тайм-аут хранилища. Максимально допустимый тайм-аут хранилища составляет %1$s час. и %2$s мин. Для вашего хранилища задан тайм-аут %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Политики вашей организации установили тайм-аут хранилища на %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d час</item>
+        <item quantity="few">%1$d часа</item>
+        <item quantity="many">%1$d часов</item>
+        <item quantity="other">%1$d часа</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d минута</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минуты</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Ваша организация установила максимальный тайм-аут сеанса %1$s и %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Ваша организация установила максимальный тайм-аут сеанса равным %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Эта настройка управляется вашей организацией.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Ваша организация не установила тайм-аут сеанса по умолчанию.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Ваша организация установила тайм-аут сеанса по умолчанию при перезапуске приложения.</string>
     <string name="vault_timeout_to_large">Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</string>
     <string name="add_account">Добавить аккаунт</string>
@@ -579,8 +595,8 @@
     <string name="api_access_token">Токен доступа к API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Вы хотите перезаписать текущее имя пользователя?</string>
     <string name="generate_username">Создать имя пользователя</string>
-    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
-    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
+    <string name="plus_addressed_email_description">Используйте возможности субадресации вашей электронной почты</string>
+    <string name="catch_all_email_description">Использовать общий email домена.</string>
     <string name="forwarded_email_description">Создать псевдоним электронной почты для внешней службы пересылки.</string>
     <string name="accessibility_service_disclosure">Раскрытие информации о службе специальных возможностей</string>
     <string name="accessibility_disclosure_text">Bitwarden использует службу специальных возможностей для поиска полей авторизации в приложениях и на сайтах, после чего определяет подходящие идентификаторы полей для заполнения логина и пароля если совпадение найдено. Мы не храним никакую информацию, предоставленную нам службой, и не предпринимаем никаких попыток контролировать какие-либо элементы на экране, кроме заполнения учетных данных в текстовом виде.</string>
@@ -918,7 +934,7 @@
     <string name="self_host_server_url">URL собственного сервера</string>
     <string name="use_brave_autofill_integration">Использовать интеграцию автозаполнения в Brave</string>
     <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Улучшает заполнение логина на поддерживаемых сайтах в выбранных браузерах. После включения вы будете направлены в настройки браузера, чтобы включить автозаполнение сторонних сайтов.</string>
     <string name="show_more">Больше</string>
     <string name="no_folder">Без папки</string>
@@ -962,7 +978,7 @@
     <string name="log_deleted">Лог удален</string>
     <string name="app_settings">Настройки приложения</string>
     <string name="replace_existing_certificate">Заменить существующий сертификат?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Сертификат с названием “%s” уже существует. Вы хотите заменить его?\nЗамена сертификата может повлиять на подключение к окружениям, использующим его в данный момент.</string>
     <string name="replace_certificate">Заменить сертификат</string>
     <string name="unable_to_read_certificate">Не удается прочитать сертификат.</string>
     <string name="cannot_delete_your_account">Невозможно удалить ваш аккаунт</string>
@@ -975,12 +991,12 @@
     <string name="use_dynamic_colors">Использовать динамические цвета</string>
     <string name="use_dynamic_colors_question">Использовать динамические цвета?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Эта цветовая схема автоматически применяет системные цвета к Bitwarden в зависимости от ваших текущих обоев. Эти цвета могут не соответствовать всем рекомендациям по доступности.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операция с passkey не удалась, поскольку браузер (%1$s) не определен. Выберите “Доверять”, чтобы добавить %1$s в список локально доверенных приложений.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операция с Passkey не удалась, поскольку браузер недоверенный.</string>
     <string name="trust">Доверять</string>
     <string name="trusted_by_you_learn_more">Это приложения или браузеры, которым Bitwarden по умолчанию не доверяет, но которым вы доверяете выполнение операций с passkey.</string>
     <string name="trusted_by_community_learn_more">Эти приложения не включены в Google Play Store, но Bitwarden доверяет выполнять операции с passkey после того, как участники сообщества воспользуются ими и сообщат, что они безопасны.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_google_learn_more">Эти приложения Google считает безопасными, и они доступны в Google Play Store.</string>
     <string name="trusted_by_you">Доверяете вы</string>
     <string name="trusted_by_the_community">Доверяет сообщество</string>
     <string name="trusted_by_google">Доверяет Google</string>
@@ -1058,7 +1074,7 @@
     <string name="learn_more_link"><annotation link="learnMore">Узнать больше</annotation></string>
     <string name="shared_codes_error">Не удается синхронизировать коды из приложения Bitwarden. Убедитесь, что оба приложения обновлены до последней версии. Вы по-прежнему можете получить доступ к своим существующим кодам в приложении Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Синхронизация с приложением Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Чтобы просмотреть все свои коды подтверждения, вам необходимо разрешить синхронизацию всех своих аккаунтов.</string>
+    <string name="sync_with_bitwarden_action_card_message">Разрешите синхронизацию приложения Authenticator в настройках для просмотра кодов подтверждения здесь.</string>
     <string name="take_me_to_app_settings">Перейти в настройки приложения</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="please_try_again">Попробуйте еще раз</string>
@@ -1087,10 +1103,10 @@
     <string name="copy_error_report">Скопировать отчет об ошибке</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не удалось расшифровать этот элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden не удалось расшифровать %1$d элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
-        <item quantity="few">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
-        <item quantity="many">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
-        <item quantity="other">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="one">Bitwarden не смог расшифровать %1$d элемент хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="few">Bitwarden не смог расшифровать %1$d элемента хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="many">Bitwarden не смог расшифровать %1$d элементов хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="other">Bitwarden не смог расшифровать %1$d элемента хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберите карту для %s</string>
     <string name="advanced_options">Расширенные настройки</string>
@@ -1098,8 +1114,8 @@
     <string name="keep_your_credential_secure">Храните свои учетные данные в безопасности</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Узнайте больше о том, как обеспечить безопасность учетных данных при использовании “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Вы уверены, что хотите использовать “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Обнаружение совпадений URI контролирует, как Bitwarden определяет предложения для автозаполнения.\n<annotation emphasis="bold">Предупреждение:</annotation> “Регулярное выражение” — это расширенная опция, которая при неправильном использовании повышает риск компрометации учетных данных.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Обнаружение совпадений URI контролирует, как Bitwarden определяет предложения для автозаполнения.\n<annotation emphasis="bold">Предупреждение:</annotation> “Начинается с” — это расширенная опция, которая повышает риск компрометации учетных данных.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Начинается с” - это расширенный вариант с повышенным риском раскрытия учетных данных.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Регулярное выражение” - это расширенный вариант с повышенным риском раскрытия учетных данных при неправильном использовании.</string>
     <string name="later">Позже</string>
@@ -1111,7 +1127,7 @@
     <string name="no_items_imported">Элементы не импортированы</string>
     <string name="no_items_received_from_the_selected_app">Из выбранного приложения не было получено ни одного элемента.</string>
     <string name="vault_sync_failed">Сбой синхронизации хранилища</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваши элементы успешно импортированы, но не удалось синхронизировать их с хранилищем. Импортированные элементы не будут отображаться в вашем хранилище до тех пор, пока не будет выполнена синхронизация.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваши элементы были успешно импортированы, но они не будут отображаться в хранилище до тех пор, пока не будет выполнена синхронизация.</string>
     <string name="there_was_a_problem_importing_your_items">Возникла проблема с импортом ваших элементов. Пожалуйста, попробуйте снова. Если проблема повторится, обратитесь в службу поддержки.</string>
     <string name="saving_items">Сохранение элементов…</string>
     <string name="unable_to_import_your_items">Не удается импортировать ваши элементы</string>

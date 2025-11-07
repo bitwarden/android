@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Kodu yeniden gönder</string>
     <string name="verification_email_not_sent">Doğrulama e-postası gönderilemedi. Yeniden deneyin.</string>
     <string name="verification_email_sent">Doğrulama e-postası gönderildi</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey güvenlik anahtarı</string>
     <string name="add_new_attachment">Yeni dosya ekle</string>
     <string name="attachments">Dosyalar</string>
@@ -479,6 +479,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="seven_days">7 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="custom">Özel</string>
+    <string name="custom_timeout">Özel zaman aşımı</string>
     <string name="add_this_authenticator_key_to_a_login">Bu kimlik doğrulama anahtarını mevcut bir hesaba ekleyin veya yeni bir hesap oluşturun.</string>
     <string name="send_disabled_warning">Bir kuruluş ilkesi nedeniyle yalnızca mevcut Send\'leri silebilirsiniz.</string>
     <string name="about_send">Send hakkında</string>
@@ -497,9 +498,20 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</string>
-    <string name="vault_timeout_policy_in_effect">Kuruluş ilkeleriniz izin verilen maksimum kasa zaman aşımını %1$s saat %2$s dakika olarak belirlemiş.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı %1$s saat %2$s dakikadır. Kasa zaman aşımı eyleminiz %3$s olarak ayarlanmış.</string>
-    <string name="vault_timeout_action_policy_in_effect">Kuruluş ilkeleriniz kasa zaman aşımı eyleminizi %1$s olarak ayarlamış.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d saat</item>
+        <item quantity="other">%1$d saat</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d dakika</item>
+        <item quantity="other">%1$d dakika</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</string>
     <string name="add_account">Hesap ekle</string>

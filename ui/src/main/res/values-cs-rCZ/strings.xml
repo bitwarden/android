@@ -181,8 +181,8 @@
     <string name="send_verification_code_again">Znovu odeslat kód</string>
     <string name="verification_email_not_sent">Nelze odeslat ověřovací e-mail. Zkuste to znovu.</string>
     <string name="verification_email_sent">Ověřovací e-mail byl odeslán.</string>
-    <string name="yubi_key_instruction">Pro pokračování podržte YubiKey NEO blízko zadní strany Vašeho zařízení nebo vložte YubiKey do USB portu a stiskněte tlačítko na klíči.</string>
-    <string name="yubi_key_title">Bezpečnostní klíč YubiKey</string>
+    <string name="yubi_key_instruction">Pro pokračování podržte bezpečnostní klíč Yubico blízko zadní strany Vašeho zařízení nebo jej vložte do portu zařízení a stiskněte jeho tlačítko.</string>
+    <string name="yubi_key_title">Bezpečnostní klíč Yubico</string>
     <string name="add_new_attachment">Přidat novou přílohu</string>
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
@@ -483,6 +483,7 @@ Načtení proběhne automaticky.</string>
     <string name="seven_days">7 dnů</string>
     <string name="thirty_days">30 dnů</string>
     <string name="custom">Vlastní</string>
+    <string name="custom_timeout">Vlastní časový limit</string>
     <string name="add_this_authenticator_key_to_a_login">Přidejte tento ověřovací klíč k existujícímu přihlášení nebo vytvořte nové přihlášení.</string>
     <string name="send_disabled_warning">Z důvodu podnikových zásad můžete smazat pouze existující Send.</string>
     <string name="about_send">O Send</string>
@@ -501,9 +502,24 @@ Načtení proběhne automaticky.</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
-    <string name="vault_timeout_policy_in_effect">Zásady Vaší organizace ovlivňují časový limit trezoru. Maximální povolený časový limit trezoru je %1$s hodin a %2$s minut.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Zásady Vaší organizace mají vliv na časový limit trezoru. Maximální povolený časový limit trezoru je %1$s hodin a %2$s minut. Akce po časovém limitu trezoru je nastavena na %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Zásady Vaší organizace nastavily akce po časovém limitu trezoru na %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hodina</item>
+        <item quantity="few">%1$d hodiny</item>
+        <item quantity="many">%1$d hodin</item>
+        <item quantity="other">%1$d hodin</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuta</item>
+        <item quantity="few">%1$d minuty</item>
+        <item quantity="many">%1$d minut</item>
+        <item quantity="other">%1$d minut</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Vaše organizace nastavila maximální časový limit relace na %1$s a %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Vaše organizace nastavila maximální časový limit relace na %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Tato nastavení je spravováno Vaší organizací.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Vaše organizace nastavila výchozí časový limit relace na Nikdy.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Vaše organizace nastavila výchozí časový limit relace na Restart aplikace.</string>
     <string name="vault_timeout_to_large">Časový limit Vašeho trezoru překračuje omezení stanovená Vaší organizací.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedna nebo více zásad organizace Vám brání v exportu Vašeho osobního trezoru.</string>
     <string name="add_account">Přidat účet</string>

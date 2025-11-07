@@ -127,7 +127,6 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             verify(Ordering.ORDERED) {
                 authRepository.userStateFlow
                 policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
-                policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
             }
         }
 
@@ -146,7 +145,6 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             SelectAccountAction.Internal.SelectionDataReceive(
                 userState = DEFAULT_USER_STATE,
                 itemRestrictedOrgs = emptyList(),
-                personalOwnershipOrgs = emptyList(),
             ),
         )
 
@@ -166,6 +164,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val organizationId = "mockOrganizationId-1"
         val accountInOrg = DEFAULT_ACCOUNT.copy(
+            isExportable = false,
             organizations = listOf(
                 Organization(
                     id = organizationId,
@@ -183,13 +182,6 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             SelectAccountAction.Internal.SelectionDataReceive(
                 userState = DEFAULT_USER_STATE.copy(accounts = listOf(accountInOrg)),
                 itemRestrictedOrgs = emptyList(),
-                personalOwnershipOrgs = listOf(
-                    createMockPolicy(
-                        number = 1,
-                        id = organizationId,
-                        isEnabled = true,
-                    ),
-                ),
             ),
         )
         assertEquals(
@@ -237,7 +229,6 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                             isEnabled = true,
                         ),
                     ),
-                    personalOwnershipOrgs = emptyList(),
                 ),
             )
             assertEquals(
@@ -277,6 +268,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     SelectAccountEvent.NavigateToPasswordVerification(
                         userId = DEFAULT_ACCOUNT.userId,
+                        hasOtherAccounts = true,
                     ),
                     awaitItem(),
                 )
@@ -308,6 +300,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

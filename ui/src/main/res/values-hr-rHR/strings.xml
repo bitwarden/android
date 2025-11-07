@@ -480,6 +480,7 @@
     <string name="seven_days">7 dana</string>
     <string name="thirty_days">30 dana</string>
     <string name="custom">Prilagođeno</string>
+    <string name="custom_timeout">Osobni istek</string>
     <string name="add_this_authenticator_key_to_a_login">Dodaj ovaj ključ autentifikatora postojećoj prijavi, ili stvori novu prijavu.</string>
     <string name="send_disabled_warning">Pravila tvrtke omogućuju brisanje samo postojećeg Senda</string>
     <string name="about_send">O Sendu</string>
@@ -498,9 +499,22 @@
     <string name="fido2_authenticate_web_authn">Autentifikacija WebAuthn</string>
     <string name="fido2_return_to_app">Povratak u aplikaciju</string>
     <string name="reset_password_auto_enroll_invite_warning">Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</string>
-    <string name="vault_timeout_policy_in_effect">Pravilo tvoje organizacije utječe na istek trezora. Najveće dozvoljeno vrijeme isteka je %1$s:%2$s h.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Pravila tvoje organizacije utječu na vremenski istek trezora. Maksimalno dopušteno vrijeme isteka je %1$s:%2$s h. Vaša radnja nakon isteka trezora je %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Pravilo tvoje organizacije podesilo je radnju nakon isteka trezora na: %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d sat</item>
+        <item quantity="few">%1$d sata</item>
+        <item quantity="other">%1$d sati</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuta</item>
+        <item quantity="few">%1$d minute</item>
+        <item quantity="other">%1$d minuta</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s i %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ovom postavkom upravlja tvoje organizacija.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Tvoja organizacaija je postavila zadani istek sesije na nikada.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Tvoja organizacaija je postavila zadani istek sesije na ponovno pokretanje aplikacije.</string>
     <string name="vault_timeout_to_large">Vrijeme isteka premašuje ograničenje koje je postavila tvoja organizacija.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora.</string>
     <string name="add_account">Dodaj račun</string>

@@ -483,6 +483,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="seven_days">7 dni</string>
     <string name="thirty_days">30 dni</string>
     <string name="custom">Niestandardowa</string>
+    <string name="custom_timeout">Niestandardowy czas</string>
     <string name="add_this_authenticator_key_to_a_login">Dodaj klucz uwierzytelniający do obecnych danych logowania lub utwórz nowe.</string>
     <string name="send_disabled_warning">Ze względu na zasadę przedsiębiorstwa, tylko Ty możesz usunąć obecną wysyłkę.</string>
     <string name="about_send">O wysyłkach</string>
@@ -501,9 +502,24 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
-    <string name="vault_timeout_policy_in_effect">Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min. Twój czas blokowania sejfu to %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Zasady organizacji wymuszają sposób blokowania sejfu na %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d godzina</item>
+        <item quantity="few">%1$d godziny</item>
+        <item quantity="many">%1$d godzin</item>
+        <item quantity="other">%1$d godziny</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minuta</item>
+        <item quantity="few">%1$d minuty</item>
+        <item quantity="many">%1$d minut</item>
+        <item quantity="other">%1$d minuty</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Twoja organizacja ustawiła blokadę aplikacji. Maksymalny czas to %1$s i %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Twoja organizacja ustawiła blokadę aplikacji. Maksymalny czas to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ustawienie jest zarządzane przez Twoją organizację.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Twoja organizacja wyłączyła domyślną blokadę aplikacji.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Twoja organizacja ustawiła domyślną blokadę aplikacji po jej uruchomieniu.</string>
     <string name="vault_timeout_to_large">Czas blokowania sejfu przekracza limit określony przez organizację.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu.</string>
     <string name="add_account">Dodaj konto</string>

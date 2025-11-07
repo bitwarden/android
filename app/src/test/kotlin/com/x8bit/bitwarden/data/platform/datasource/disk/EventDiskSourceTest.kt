@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao

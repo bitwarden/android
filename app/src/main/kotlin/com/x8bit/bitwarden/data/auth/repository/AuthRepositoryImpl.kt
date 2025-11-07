@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -9,7 +10,6 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.DeleteAccountResponseJson
@@ -1023,12 +1023,6 @@ class AuthRepositoryImpl(
             }
             .fold(
                 onSuccess = {
-                    // Clear the password reset reason, since it's no longer relevant.
-                    storeUserResetPasswordReason(
-                        userId = activeAccount.profile.userId,
-                        reason = null,
-                    )
-
                     // Update the saved master password hash.
                     authSdkSource
                         .hashPassword(
@@ -1043,6 +1037,10 @@ class AuthRepositoryImpl(
                                 passwordHash = passwordHash,
                             )
                         }
+
+                    // Log out the user after successful password reset.
+                    // This clears all user state including forcePasswordResetReason.
+                    logout(reason = LogoutReason.PasswordReset)
 
                     // Return the success.
                     ResetPasswordResult.Success

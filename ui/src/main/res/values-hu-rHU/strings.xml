@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Send megerősítő kód újraküldése emailben</string>
     <string name="verification_email_not_sent">Nem sikerült elküldeni a megerősítő emailt. Próbáljuk újra.</string>
     <string name="verification_email_sent">Az ellenőrző kódot tartalmazó email elküldésre került.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey biztonsági kulcs</string>
     <string name="add_new_attachment">Melléklet hozzáadása</string>
     <string name="attachments">Mellékletek</string>
@@ -478,6 +478,7 @@
     <string name="seven_days">7 nap</string>
     <string name="thirty_days">30 nap</string>
     <string name="custom">Egyedi</string>
+    <string name="custom_timeout">Egyedi időkifutás</string>
     <string name="add_this_authenticator_key_to_a_login">Adja hozzá ezt a hitelesítő kulcsot egy létező belépéshez, vagy hozzon létre új belépést.</string>
     <string name="send_disabled_warning">A vállalati házirend miatt csak egy meglévő Send elem törölhető.</string>
     <string name="about_send">A Sendről</string>
@@ -496,9 +497,20 @@
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
-    <string name="vault_timeout_policy_in_effect">A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb %1$s óra és %2$s perc lehet.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb %1$s óra és %2$s perc lehet. A széf időkifutási művelete %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">A szervezeti házirendek által jelenleg beállított időkifutási művelet %1$s.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d óra</item>
+        <item quantity="other">%1$d óra</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d perc</item>
+        <item quantity="other">%1$d perc</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A szervezet a maximális munkamenet időkifutást %1$s és %2$s értékre állította.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A szervezet a maximális munkamenet időkifutást %1$s értékre állította.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ezt a beállítást a szervezet lezeli.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">A szervezet a maximális munkamenet időkifutást soha értékre állította.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A szervezet a maximális munkamenet időkifutást alkalmazás újraindítás értékre állította.</string>
     <string name="vault_timeout_to_large">A széf időkorlátja túllépi a szervezet által beállított korlátozást.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</string>
     <string name="add_account">Fiók hozzáadása</string>

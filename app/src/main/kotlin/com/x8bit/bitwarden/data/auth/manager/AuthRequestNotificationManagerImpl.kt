@@ -8,8 +8,8 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.util.toPendingIntentMutabilityFlag
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
