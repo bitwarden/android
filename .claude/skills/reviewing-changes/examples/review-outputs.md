@@ -32,7 +32,7 @@ Reference: [docs link if applicable]
 
 ### Summary Comment Format
 
-**Minimal format** (simple PRs):
+**Required format for ALL PRs:**
 ```
 **Overall Assessment:** APPROVE / REQUEST CHANGES
 
@@ -42,7 +42,7 @@ Reference: [docs link if applicable]
 See inline comments for details.
 ```
 
-**Complex PRs** (10+ files, multiple domains, high-severity issues): Add ONE brief context paragraph after verdict.
+All PRs use the same minimal format - no exceptions for size or complexity. Summary must be 5-10 lines maximum.
 
 ---
 
