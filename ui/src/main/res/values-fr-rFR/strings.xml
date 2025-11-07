@@ -101,8 +101,8 @@
     <string name="one_minute">1 minute</string>
     <string name="four_hours">4 heures</string>
     <string name="immediately">Immédiatement</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Définir le délai d\'expiration de la session sur « Se déconnecter » ?</string>
+    <string name="vault_timeout_log_out_confirmation_message">À la fin de la période d\'expiration de la session, vous serez déconnecté. Vous devrez être connecté à Internet pour vous connecter et accéder à nouveau à votre coffre-fort. Vos paramètres et votre NIP enregistrés sur cet appareil ne changeront pas.</string>
     <string name="logging_in">Connexion en cours…</string>
     <string name="login_to_bitwarden">Se connecter à Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmation du mot de passe est erronée.</string>
@@ -111,7 +111,7 @@
     <string name="master_password_hint_description">Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l\'oubliez.</string>
     <plurals name="master_password_length_val_message_x">
         <item quantity="one">Le mot de passe principal doit comporter au moins %d caractères.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="other">Le mot de passe principal doit comporter au moins %d caractères.</item>
     </plurals>
     <string name="min_numbers">Chiffres minimum</string>
     <string name="min_special">Caractères spéciaux minimum</string>
@@ -149,7 +149,7 @@
     <string name="syncing">Synchronisation…</string>
     <string name="syncing_complete">Synchronisation achevée</string>
     <string name="two_step_login">Authentification à deux facteurs</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Déverrouiller par biométrie</string>
     <string name="unlock_with_pin">Déverrouiller avec un code PIN</string>
     <string name="verification_code">Code de vérification</string>
     <string name="view_login">Voir les identifiants</string>
@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Envoyer à nouveau le courriel de code de vérification</string>
     <string name="verification_email_not_sent">Impossible d\'envoyer le courriel de vérification. Essayez à nouveau.</string>
     <string name="verification_email_sent">Courriel de vérification envoyé</string>
-    <string name="yubi_key_instruction">Pour continuer, maintenez votre YubiKey NEO à l\'arrière de l\'appareil ou insérez votre Yubikey dans le port USB de l\'appareil puis appuyez sur son bouton.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Clé de sécurité YubiKey NEO</string>
     <string name="add_new_attachment">Ajouter une nouvelle pièce jointe</string>
     <string name="attachments">Pièces jointes</string>
@@ -289,7 +289,7 @@ La numérisation se fera automatiquement.</string>
     <string name="new_uri">Nouveau URI</string>
     <string name="add_website">Ajouter un site internet</string>
     <string name="base_domain">Domaine de base</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Par défaut (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Hôte</string>
     <string name="reg_ex">Expression régulière</string>
@@ -312,8 +312,8 @@ La numérisation se fera automatiquement.</string>
     <string name="contact_info">Coordonnées</string>
     <string name="check_password_for_data_breaches">Chercher si ce mot de passe a été retrouvé dans des fuites de données</string>
     <plurals name="password_exposed">
-        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">Ce mot de passe a été exposé %d fois dans des fuites de données. Vous devriez le changer.</item>
+        <item quantity="other">Ce mot de passe a été exposé %d fois dans des fuites de données. Vous devriez le changer.</item>
     </plurals>
     <string name="password_safe">Ce mot de passe n\'a été trouvé dans aucune fuite de données connue. Il semble sécurisé.</string>
     <string name="identity_name">Identité</string>
@@ -362,13 +362,13 @@ La numérisation se fera automatiquement.</string>
     <string name="clear_clipboard">Effacer le presse-papiers</string>
     <string name="clear_clipboard_description">Effacez automatiquement les valeurs copiées de votre presse-papiers.</string>
     <string name="default_uri_match_detection">Détection de correspondance URI par défaut</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">La détection de correspondance d\'URL gère comment Bitwarden identifie les suggestions de saisie automatique.</string>
     <string name="theme">Thème</string>
-    <string name="theme_description">Change the application’s color theme</string>
+    <string name="theme_description">Changer la couleur du thème de l\'application</string>
     <string name="copy_notes">Copier la note</string>
     <string name="require_master_password_on_app_restart">Exiger le mot de passe principal au redémarrage de l\'application ?</string>
     <string name="pin_require_master_password_restart">Voulez-vous exiger le déverrouillage avec votre mot de passe principal lorsque l\'application est redémarrée ?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item">Demander à ajouter un article</string>
     <string name="ask_to_add_item_description">Demander d\'ajouter un élément si aucun n\'est trouvé dans votre coffre.</string>
     <string name="on_restart">Au redémarrage de l\'application</string>
     <string name="capitalize">Mettre une majuscule</string>
@@ -376,7 +376,7 @@ La numérisation se fera automatiquement.</string>
     <string name="download">Télécharger</string>
     <string name="login_expired">Votre session a expiré.</string>
     <string name="biometrics_direction">Vérification biométrique</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Vérification de l\'appareil</string>
     <string name="biometrics_failed">Échec de la biométrie</string>
     <string name="biometrics_decoding_failure">Connectez-vous avec votre mot de passe principal ou votre code PIN, puis réactivez la connexion biométrique dans Paramètres.</string>
     <string name="use_biometrics_to_unlock">Utiliser la biométrie pour déverrouiller</string>
@@ -479,7 +479,7 @@ La numérisation se fera automatiquement.</string>
     <string name="seven_days">7 jours</string>
     <string name="thirty_days">30 jours</string>
     <string name="custom">Personnalisé</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Délai d\'expiration personnalisé</string>
     <string name="add_this_authenticator_key_to_a_login">Ajoutez cette clé d\'authentification à un identifiant existant, ou créez un nouvel identifiant.</string>
     <string name="send_disabled_warning">En raison d\'une politique d\'entreprise, vous ne pouvez que supprimer un Send existant.</string>
     <string name="about_send">À propos de Send</string>
@@ -500,18 +500,18 @@ La numérisation se fera automatiquement.</string>
     <string name="reset_password_auto_enroll_invite_warning">Cette organisation dispose d\'une politique d\'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L\'inscription permettra aux administrateurs de l\'organisation de changer votre mot de passe principal.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d heure</item>
+        <item quantity="other">%1$d heures</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">%1$d minute</item>
         <item quantity="other">%1$d minutes</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Votre organisation a fixé le délai d\'expiration maximum de session à %1$s et %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Votre organisation a fixé le délai d\'expiration maximum de session à %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ce paramètre est géré par votre organisation.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Votre organisation a défini le délai d\'expiration de session par défaut à jamais.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Votre organisation a défini le délai d\'expiration de session par défaut au redémarrage de l\'application.</string>
     <string name="vault_timeout_to_large">Le délai d\'expiration de votre coffre dépasse les restrictions définies par votre organisation.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Une ou plusieurs politiques de sécurité de l\'organisation vous empêchent d\'exporter votre coffre individuel.</string>
     <string name="add_account">Ajouter un compte</string>
@@ -759,7 +759,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="choose_your_master_password">Choisissez votre mot de passe principal</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choisissez un mot de passe unique et robuste pour garder vos informations en sécurité.</string>
     <plurals name="minimum_characters">
-        <item quantity="one">%d character</item>
+        <item quantity="one">%d caractères</item>
         <item quantity="other">%d characters</item>
     </plurals>
     <string name="expired_link">Lien expiré</string>
@@ -960,9 +960,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="key_connector_domain">Domaine du Key Connector :</string>
     <string name="key_connector_organization">Organisation :</string>
     <string name="password_no_longer_required_confirm_domain">Un mot de passe principal n’est plus requis pour les membres de l’organisation suivante. Veuillez confirmer le domaine ci-dessous auprès de l\'administrateur de votre organisation.</string>
-    <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
-    <string name="flight_recorder_banner_title">Flight recorder on</string>
-    <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
+    <string name="please_confirm_domain_with_admin">Veuillez confirmer le domaine ci-dessous auprès de l\'administrateur de votre organisation.\n\nDomaine du Key Connector :\n%1$s</string>
+    <string name="flight_recorder_banner_title">Enregistreur Flight activé</string>
+    <string name="flight_recorder_banner_message">L’enregistreur Flight sera actif jusqu’au %1$s à %2$s. Retournez dans les paramètres pour le désactiver dès maintenant.</string>
     <string name="go_to_settings">Aller aux paramètres</string>
     <string name="all_logs_deleted">Tous les journaux ont été supprimés</string>
     <string name="log_deleted">Journal supprimé</string>
@@ -1087,9 +1087,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="local_items_are_collapsed_click_to_expand">Les éléments locaux sont réduits, cliquez pour développer.</string>
     <string name="items_expanded_click_to_collapse">Les éléments sont développés, cliquez pour réduire.</string>
     <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="error_cannot_decrypt">[erreur : impossible de déchiffrer]</string>
+    <string name="copy_error_report">Copier le rapport d’erreur</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden n’a pas pu déchiffrer cet élément du coffre-fort. Copiez et partagez ce rapport d’erreur avec le service client afin d’éviter toute perte de données supplémentaire.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
         <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
@@ -1126,31 +1126,31 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
     <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
-    <string name="not_now">Not now</string>
-    <string name="import_from_bitwarden">Import from Bitwarden</string>
-    <string name="select_account">Select account</string>
-    <string name="no_accounts_available">No accounts available</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
-    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
-    <string name="verify_your_master_password">Verify your master password</string>
-    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
+    <string name="not_now">Pas maintenant</string>
+    <string name="import_from_bitwarden">Importer depuis Bitwarden</string>
+    <string name="select_account">Sélectionner un compte</string>
+    <string name="no_accounts_available">Aucun compte disponible</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">Vous n\'avez aucun compte depuis lequel vous pouvez importer. La politique de sécurité de votre organisation peut restreindre l\'importation d\'éléments de Bitwarden vers une autre application.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Importation restreinte, impossible d\'importer des cartes de ce compte.</string>
+    <string name="verify_your_master_password">Vérifier votre mot de passe principal</string>
+    <string name="having_trouble_with_autofill">Vous avez des problèmes avec la saisie automatique ?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Accéder à l\'aide et à la documentation de dépannage ici</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importer des mots de passe, des clé d\'accès et d\'autres types d\'éléments depuis votre coffre Bitwarden.</string>
-    <string name="items_to_import">Items to import</string>
-    <string name="exporting_items">Exporting items…</string>
+    <string name="items_to_import">Éléments à importer</string>
+    <string name="exporting_items">Exportation des éléments…</string>
     <string name="export_failed">L\'exportation a échoué</string>
     <string name="passwords">Mots de passe</string>
     <string name="passkeys">Clés d\'accès</string>
-    <string name="why_is_this_step_required">Why is this step required?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
-    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
+    <string name="why_is_this_step_required">Pourquoi cette étape est-elle nécessaire?</string>
+    <string name="kdf_update_failed_active_account_not_found">La mise à jour de kdf a échoué, compte actif introuvable. Veuillez réessayer ou nous contacter.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Une erreur est survenue lors de la mise à jour de vos paramètres kdf. Veuillez réessayer ou nous contacter.</string>
+    <string name="the_import_request_could_not_be_processed">La demande d\'importation n\'a pas pu être traitée.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Votre coffre peut être vide, ou l\'importation de certains types d\'objets n\'est pas autorisée pour votre compte.</string>
+    <string name="no_items_available_to_import">Aucun élément disponible à importer</string>
+    <string name="select_a_different_account">Sélectionnez un autre compte</string>
+    <string name="verify_your_account_email_address">Vérifiez l\'adresse courriel de votre compte</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Entrez le code à 6 chiffres qui a été envoyé à l\'adresse courriel ci-dessous</string>
+    <string name="lock_app">Verrouiller l\'application</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Utilisez la méthode de verrouillage de votre appareil pour déverrouiller l\'application</string>
+    <string name="loading_vault_data">Chargement des données du coffre…</string>
 </resources>

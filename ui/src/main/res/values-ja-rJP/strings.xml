@@ -178,7 +178,7 @@
     <string name="send_verification_code_again">確認コードをメールで再送</string>
     <string name="verification_email_not_sent">確認メールを送信できませんでした。やり直してください。</string>
     <string name="verification_email_sent">確認メールを送信しました。</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey セキュリティキー</string>
     <string name="add_new_attachment">添付ファイルを追加</string>
     <string name="attachments">添付ファイル</string>
