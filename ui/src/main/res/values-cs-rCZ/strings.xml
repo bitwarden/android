@@ -181,8 +181,8 @@
     <string name="send_verification_code_again">Znovu odeslat kód</string>
     <string name="verification_email_not_sent">Nelze odeslat ověřovací e-mail. Zkuste to znovu.</string>
     <string name="verification_email_sent">Ověřovací e-mail byl odeslán.</string>
-    <string name="yubi_key_instruction">Pro pokračování podržte YubiKey NEO blízko zadní strany Vašeho zařízení nebo vložte YubiKey do USB portu a stiskněte tlačítko na klíči.</string>
-    <string name="yubi_key_title">Bezpečnostní klíč YubiKey</string>
+    <string name="yubi_key_instruction">Pro pokračování podržte bezpečnostní klíč Yubico blízko zadní strany Vašeho zařízení nebo jej vložte do portu zařízení a stiskněte jeho tlačítko.</string>
+    <string name="yubi_key_title">Bezpečnostní klíč Yubico</string>
     <string name="add_new_attachment">Přidat novou přílohu</string>
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>

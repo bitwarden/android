@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Invia un nuovo codice di verifica</string>
     <string name="verification_email_not_sent">Invio dell\'email di verifica non riuscito</string>
     <string name="verification_email_sent">Email di verifica inviata</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Chiave di sicurezza YubiKey</string>
     <string name="add_new_attachment">Aggiungi un allegato</string>
     <string name="attachments">File allegati</string>

@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">Ipadala ulit ang email na naglalaman ng code pamberipika</string>
     <string name="verification_email_not_sent">Hindi maipadala ang email pamberipika. Pakisubukan ulit.</string>
     <string name="verification_email_sent">Ipinadala ang email pamberipika</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
-    <string name="yubi_key_title">YubiKey security key</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_title">Yubico security key</string>
     <string name="add_new_attachment">Magdagdag ng bagong attachment</string>
     <string name="attachments">Mga Attachment</string>
     <string name="unable_to_download_file">Hindi ma-download ang file.</string>

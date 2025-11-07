@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Send E-posten med verifiseringskoden på nytt</string>
     <string name="verification_email_not_sent">Kunne ikke sende verifiserings-E-posten. Prøv igjen.</string>
     <string name="verification_email_sent">Verifiserings-E-posten er sendt.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey-sikkerhetsnøkkel</string>
     <string name="add_new_attachment">Legg til et nytt vedlegg</string>
     <string name="attachments">Vedlegg</string>
