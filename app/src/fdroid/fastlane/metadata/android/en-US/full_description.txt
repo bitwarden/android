@@ -10,7 +10,7 @@ USE PASSKEYS WHEREVER YOU LOG IN
 Create, store, and sync passkeys across the Bitwarden mobile app and browser extensions for a secure, passwordless experience no matter what device you're on.
 
 EVERYONE SHOULD HAVE THE TOOLS TO STAY SAFE ONLINE
-Utilize Bitwarden for free with no ads and or selling data. Bitwarden believes everyone should have the ability to stay safe online. Premium plans offer access to advanced features.
+Utilize Bitwarden for free with no ads or selling data. Bitwarden believes everyone should have the ability to stay safe online. Premium plans offer access to advanced features.
 
 EMPOWER YOUR TEAMS WITH BITWARDEN
 Plans for Teams and Enterprise come with professional business features. Some examples include SSO integration, self-hosting, directory integration and SCIM provisioning, global policies, API access, event logs, and more.
