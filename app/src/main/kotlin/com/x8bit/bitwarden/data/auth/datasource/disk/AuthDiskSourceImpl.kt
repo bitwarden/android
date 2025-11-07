@@ -330,7 +330,7 @@ class AuthDiskSourceImpl(
         getMutableBiometricUnlockKeyFlow(userId).tryEmit(biometricsKey)
     }
 
-    override fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?> =
+    override fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?> =
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId = userId)) }
 
