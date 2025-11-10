@@ -352,7 +352,6 @@ class CredentialExchangeImportManagerTest {
             assertTrue(result is ImportCxfPayloadResult.Error)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when user has restrict item types policy, card ciphers should be filtered out`() =
         runTest {
@@ -402,7 +401,6 @@ class CredentialExchangeImportManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when user has no restrict item types policy, card ciphers should not be filtered`() =
         runTest {
@@ -444,7 +442,6 @@ class CredentialExchangeImportManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when user has restrict policy disabled, card ciphers should not be filtered`() =
         runTest {
@@ -494,7 +491,6 @@ class CredentialExchangeImportManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when user has restrict policy and all ciphers are cards, should return NoItems`() =
         runTest {
