@@ -37,7 +37,6 @@ env:
 permissions:
   contents: read
   packages: read
-  id-token: write
 
 jobs:
   version:
@@ -133,6 +132,8 @@ jobs:
       - version
       - build
     runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
