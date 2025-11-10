@@ -41,6 +41,7 @@ class AutofillParserTests {
         every { this@mockk.autofillId } returns cardAutofillId
         every { this@mockk.childCount } returns 0
         every { this@mockk.idPackage } returns ID_PACKAGE
+        every { this@mockk.idEntry } returns null
     }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
@@ -49,6 +50,7 @@ class AutofillParserTests {
         every { this@mockk.autofillId } returns loginAutofillId
         every { this@mockk.childCount } returns 0
         every { this@mockk.idPackage } returns ID_PACKAGE
+        every { this@mockk.idEntry } returns null
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
@@ -170,6 +172,153 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should return Fillable without website in AutofillView from url bar but compatibility mode is off`() {
+        // Setup
+        val packageName = "com.microsoft.emmx"
+        every {
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+        } returns packageName
+        every { settingsRepository.isAutofillWebDomainCompatMode } returns false
+        every { assistStructure.windowNodeCount } returns 2
+        // Override the idPackage to be Edge's package name.
+        every { loginViewNode.idPackage } returns packageName
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        val urlBarNode: AssistStructure.ViewNode = mockk {
+            every { autofillHints } returns emptyArray()
+            every { autofillId } returns null
+            every { childCount } returns 0
+            every { idEntry } returns "url_bar"
+            every { idPackage } returns packageName
+            every { webDomain } returns "m.facebook.com"
+            every { webScheme } returns null
+        }
+        val urlBarWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns urlBarNode
+        }
+        every { assistStructure.getWindowNodeAt(1) } returns urlBarWindowNode
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(loginAutofillView),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = packageName,
+            partition = autofillPartition,
+            uri = "androidapp://$packageName",
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<AutofillView>().buildUriOrNull(packageName)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should return Fillable with website in AutofillView from url bar but compatibility mode is on`() {
+        // Setup
+        val website = "https://m.facebook.com"
+        val packageName = "com.microsoft.emmx"
+        every {
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+        } returns packageName
+        every { settingsRepository.isAutofillWebDomainCompatMode } returns true
+        every { assistStructure.windowNodeCount } returns 2
+        // Override the idPackage to be Edge's package name.
+        every { loginViewNode.idPackage } returns packageName
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        val urlBarNode: AssistStructure.ViewNode = mockk {
+            every { autofillHints } returns emptyArray()
+            every { autofillId } returns null
+            every { childCount } returns 0
+            every { idEntry } returns "url_bar"
+            every { idPackage } returns packageName
+            every { webDomain } returns "m.facebook.com"
+            every { webScheme } returns null
+        }
+        val urlBarWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns urlBarNode
+        }
+        every { assistStructure.getWindowNodeAt(1) } returns urlBarWindowNode
+        val loginAutofillView: AutofillView.Login.Username = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(
+                loginAutofillView.copy(data = loginAutofillView.data.copy(website = website)),
+            ),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = packageName,
+            partition = autofillPartition,
+            uri = website,
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<AutofillView>().buildUriOrNull(packageName)
+        }
     }
 
     @Test

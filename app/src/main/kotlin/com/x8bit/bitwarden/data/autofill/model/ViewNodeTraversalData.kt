@@ -7,10 +7,12 @@ import android.view.autofill.AutofillId
  *
  * @param autofillViews The list of views we care about for autofilling.
  * @param idPackage The package id for this view, if there is one.
+ * @param urlBarWebsites The website associated with the URL bar view.
  * @param ignoreAutofillIds The list of [AutofillId]s that should be ignored in the fill response.
  */
 data class ViewNodeTraversalData(
     val autofillViews: List<AutofillView>,
     val idPackage: String?,
+    val urlBarWebsites: List<String>,
     val ignoreAutofillIds: List<AutofillId>,
 )
