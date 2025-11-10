@@ -1258,6 +1258,23 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `isAutofillWebDomainCompatMode should update SharedPreferences`() {
+        val autofillWebDomainCompatKey = "bwPreferencesStorage:autofillWebDomainCompatibility"
+        settingsDiskSource.isAutofillWebDomainCompatMode = true
+        assertTrue(fakeSharedPreferences.getBoolean(autofillWebDomainCompatKey, false))
+    }
+
+    @Test
+    fun `isAutofillWebDomainCompatMode should pull value from shared preferences`() {
+        val autofillWebDomainCompatKey = "bwPreferencesStorage:autofillWebDomainCompatibility"
+        fakeSharedPreferences.edit {
+            putBoolean(autofillWebDomainCompatKey, true)
+        }
+
+        assertTrue(settingsDiskSource.isAutofillWebDomainCompatMode!!)
+    }
+
+    @Test
     fun `storeShowUnlockSettingBadge should update SharedPreferences`() {
         val mockUserId = "mockUserId"
         val showUnlockSettingBadgeKey =
