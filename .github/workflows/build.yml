@@ -49,7 +49,6 @@ jobs:
       version_name: ${{ inputs.version-name }}
       version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
-    secrets: inherit
 
   build:
     name: Build
