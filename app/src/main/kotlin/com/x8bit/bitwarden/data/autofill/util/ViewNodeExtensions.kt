@@ -51,35 +51,28 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  */
 fun AssistStructure.ViewNode.toAutofillView(
     parentWebsite: String?,
-): AutofillView? =
-    this
-        .autofillId
-        // We only care about nodes with a valid `AutofillId`.
-        ?.let { nonNullAutofillId ->
-            if (supportedAutofillHint != null || this.isInputField) {
-                val autofillOptions = this
-                    .autofillOptions
-                    .orEmpty()
-                    .map { it.toString() }
-
-                val autofillViewData = AutofillView.Data(
-                    autofillId = nonNullAutofillId,
-                    autofillOptions = autofillOptions,
-                    autofillType = this.autofillType,
-                    isFocused = this.isFocused,
-                    textValue = this.autofillValue?.extractTextValue(),
-                    hasPasswordTerms = this.hasPasswordTerms(),
-                    website = this.website ?: parentWebsite,
-                )
-                buildAutofillView(
-                    autofillOptions = autofillOptions,
-                    autofillViewData = autofillViewData,
-                    autofillHint = supportedAutofillHint,
-                )
-            } else {
-                null
-            }
-        }
+): AutofillView? {
+    val nonNullAutofillId = this.autofillId ?: return null
+    if (this.supportedAutofillHint == null && !this.isInputField) return null
+    val autofillOptions = this
+        .autofillOptions
+        .orEmpty()
+        .map { it.toString() }
+    val autofillViewData = AutofillView.Data(
+        autofillId = nonNullAutofillId,
+        autofillOptions = autofillOptions,
+        autofillType = this.autofillType,
+        isFocused = this.isFocused,
+        textValue = this.autofillValue?.extractTextValue(),
+        hasPasswordTerms = this.hasPasswordTerms(),
+        website = this.website ?: parentWebsite,
+    )
+    return buildAutofillView(
+        autofillOptions = autofillOptions,
+        autofillViewData = autofillViewData,
+        autofillHint = this.supportedAutofillHint,
+    )
+}
 
 /**
  * The first supported autofill hint for this view node, or null if none are found.

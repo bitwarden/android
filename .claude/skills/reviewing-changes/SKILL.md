@@ -117,6 +117,68 @@ Load reference files only when needed for specific questions:
 
 ### Step 6: Document Findings
 
+## 🛑 STOP: Determine Output Format FIRST
+
+<thinking>
+Before writing ANY output, answer this critical question:
+1. Did I find ANY issues (Critical, Important, Suggested, or Questions)?
+2. If NO issues found → This is a CLEAN PR → Use 2-3 line minimal format and STOP
+3. If issues found → Use verdict + critical issues list + inline comments format
+4. NEVER create praise sections or elaborate on correct implementations
+</thinking>
+
+**Decision Tree:**
+
+```
+Do you have ANY issues to report (Critical/Important/Suggested/Questions)?
+│
+├─ NO → CLEAN PR
+│   └─ Use 2-3 line format:
+│       "**Overall Assessment:** APPROVE
+│        [One sentence describing what PR does well]"
+│   └─ STOP. Do not proceed to detailed format guidance.
+│
+└─ YES → PR WITH ISSUES
+    └─ Use minimal summary + inline comments:
+        "**Overall Assessment:** APPROVE / REQUEST CHANGES
+         **Critical Issues:**
+         - [issue with file:line]
+         See inline comments for details."
+```
+
+## Special Case: Clean PRs with No Issues
+
+When you find NO critical, important, or suggested issues:
+
+**Minimal Approval Format (REQUIRED):**
+```
+**Overall Assessment:** APPROVE
+
+[One sentence describing what the PR does well]
+```
+
+**Examples:**
+- "Clean refactoring following established patterns"
+- "Solid bug fix with comprehensive test coverage"
+- "Well-structured feature implementation meeting all standards"
+
+**NEVER do this for clean PRs:**
+- ❌ Multiple sections (Key Strengths, Changes, Code Quality, etc.)
+- ❌ Listing everything that was done correctly
+- ❌ Checkmarks for each file or pattern followed
+- ❌ Elaborate praise or detailed positive analysis
+- ❌ Tables, statistics, or detailed breakdowns
+
+**Why brevity matters:**
+- Respects developer time (quick approval = move forward faster)
+- Reduces noise in PR conversations
+- Saves tokens and processing time
+- Focuses attention on PRs that actually need discussion
+
+**If you're tempted to write more than 3 lines for a clean PR, STOP. You're doing it wrong.**
+
+---
+
 <thinking>
 Before writing each comment:
 1. Is this issue Critical, Important, Suggested, or just Acknowledgment?
@@ -184,9 +246,10 @@ Reference: docs/ARCHITECTURE.md#mvvm-pattern
 </details>
 ```
 
-**Summary Comment Format** (Scales with PR Complexity):
+**Summary Comment Format (REQUIRED - No Exceptions):**
 
-**Minimal format** (for simple PRs: 1-5 files, straightforward changes):
+When you have issues to report, use this format ONLY:
+
 ```
 **Overall Assessment:** APPROVE / REQUEST CHANGES
 
@@ -196,12 +259,15 @@ Reference: docs/ARCHITECTURE.md#mvvm-pattern
 See inline comments for all details.
 ```
 
-**Complex PR format** (add brief context when PR has):
-- **10+ files changed**, or
-- **Multiple distinct issue domains** (security + architecture + testing), or
-- **High-severity blocking issues** needing stakeholder context
+**Maximum Length**: 5-10 lines total, regardless of PR size or complexity.
 
-Add ONE paragraph of context after verdict, before critical issues list. Keep total summary under 10 lines.
+**No exceptions for**:
+- ❌ Large PRs (10+ files)
+- ❌ Multiple issue domains
+- ❌ High-severity issues
+- ❌ Complex changes
+
+All details belong in inline comments with `<details>` tags, NOT in the summary.
 
 **Output Format Rules**:
 
@@ -233,7 +299,7 @@ Add ONE paragraph of context after verdict, before critical issues list. Keep to
 **DO:**
 - Put verdict + critical issue list ONLY in summary
 - Put ALL details (explanations, code, rationale) in inline comments with `<details>` collapse
-- Scale summary length based on PR complexity, not your analysis thoroughness
+- Keep summary to 5-10 lines maximum, regardless of PR size or your analysis depth
 - Focus comments exclusively on actionable issues
 
 **Visibility Guidelines:**
@@ -245,38 +311,10 @@ See `examples/review-outputs.md` for complete examples.
 
 ## Core Principles
 
-- **Minimal reviews for clean PRs**: 2-3 lines when no issues found (see Special Case below)
+- **Minimal reviews for clean PRs**: 2-3 lines when no issues found (see Step 6 format guidance)
 - **Issues-focused feedback**: Only comment when there's something actionable; acknowledge good work briefly without elaboration (see priority-framework.md:145-166)
 - **Appropriate depth**: Match review rigor to change complexity and risk
 - **Specific references**: Always use `file:line_number` format for precise location
 - **Actionable feedback**: Say what to do and why, not just what's wrong
 - **Constructive tone**: Ask questions for design decisions, explain rationale, focus on code not people
 - **Efficient reviews**: Use multi-pass strategy, time-box reviews, skip what's not relevant
-
-## Special Case: Clean PRs with No Issues
-
-When you find NO critical, important, or suggested issues:
-
-**Minimal Approval Format:**
-```
-**Overall Assessment:** APPROVE
-
-[One sentence describing what the PR does well]
-```
-
-**Examples:**
-- "Clean refactoring following established patterns"
-- "Solid bug fix with comprehensive test coverage"
-- "Well-structured feature implementation meeting all standards"
-
-**NEVER do this for clean PRs:**
-- ❌ Multiple sections (Key Strengths, Changes, Code Quality, etc.)
-- ❌ Listing everything that was done correctly
-- ❌ Checkmarks for each file or pattern followed
-- ❌ Elaborate praise or detailed positive analysis
-
-**Why brevity matters:**
-- Respects developer time (quick approval = move forward faster)
-- Reduces noise in PR conversations
-- Saves tokens and processing time
-- Focuses attention on PRs that actually need discussion

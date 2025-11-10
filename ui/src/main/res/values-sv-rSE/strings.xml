@@ -507,11 +507,11 @@ Skanningen sker automatiskt.</string>
         <item quantity="one">%1$d minut</item>
         <item quantity="other">%1$d minuter</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Din organisation har ställt in maximal tidsgräns för sessionen till %1$s och %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Din organisation har ställt in maximal tidsgräns för sessionen till %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Den här inställningen hanteras av din organisation.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Din organisation har ställt in standardtidsgräns för sessionen till aldrig.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Din organisation har ställt in standardtidsgräns för sessionen till vid omstart av appen.</string>
     <string name="vault_timeout_to_large">Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</string>
     <string name="disable_personal_vault_export_policy_in_effect">En eller flera organisationsprinciper hindrar dig från att exportera ditt personliga valv.</string>
     <string name="add_account">Lägg till konto</string>

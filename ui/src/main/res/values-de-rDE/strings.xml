@@ -180,7 +180,7 @@
     <string name="verification_email_not_sent">Bestätigungsmail konnte nicht gesendet werden. Erneut versuchen.</string>
     <string name="verification_email_sent">Verifizierung-E-Mail versendet</string>
     <string name="yubi_key_instruction">Um fortzufahren, halte deinen YubiKey NEO an die Rückseite des Geräts oder stecke deinen YubiKey in den USB-Steckplatz deines Geräts und tippe dann auf seinen Button.</string>
-    <string name="yubi_key_title">YubiKey Sicherheitsschlüssel</string>
+    <string name="yubi_key_title">Yubico Sicherheitsschlüssel</string>
     <string name="add_new_attachment">Neuen Anhang hinzufügen</string>
     <string name="attachments">Anhänge</string>
     <string name="unable_to_download_file">Datei kann nicht heruntergeladen werden.</string>

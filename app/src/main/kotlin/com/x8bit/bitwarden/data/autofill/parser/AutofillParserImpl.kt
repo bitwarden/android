@@ -254,7 +254,9 @@ private fun AssistStructure.ViewNode.traverse(
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
-    var idPackage: String? = this.idPackage
+    // OS sometimes defaults node.idPackage to "android", which is not a valid
+    // package name so it is ignored to prevent auto-filling unknown applications.
+    var storedIdPackage: String? = this.idPackage?.takeUnless { it.isBlank() || it == "android" }
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
@@ -272,12 +274,8 @@ private fun AssistStructure.ViewNode.traverse(
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
 
                 // Get the first non-null idPackage.
-                if (idPackage.isNullOrBlank() &&
-                    // OS sometimes defaults node.idPackage to "android", which is not a valid
-                    // package name so it is ignored to prevent auto-filling unknown applications.
-                    viewNodeTraversalData.idPackage?.equals("android") == false
-                ) {
-                    idPackage = viewNodeTraversalData.idPackage
+                if (storedIdPackage == null) {
+                    storedIdPackage = viewNodeTraversalData.idPackage
                 }
             }
     }
@@ -286,7 +284,7 @@ private fun AssistStructure.ViewNode.traverse(
     // descendant's.
     return ViewNodeTraversalData(
         autofillViews = mutableAutofillViewList,
-        idPackage = idPackage,
+        idPackage = storedIdPackage,
         ignoreAutofillIds = mutableIgnoreAutofillIdList,
     )
 }
