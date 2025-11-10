@@ -17,7 +17,7 @@ CURRENT_REF="$2"
 NEW_REF="$3"
 
 CHANGELOG=$(gh api "repos/$REPO/compare/$CURRENT_REF...$NEW_REF" \
-    --jq '.commits[] | "- \(.commit.message | split("\n")[0])"' | head -20)
+    --jq '.commits[] | "- \(.commit.message | split("\n")[0])"')
 
 if [ -z "$CHANGELOG" ]; then
     echo "No changes found between $CURRENT_REF and $NEW_REF"
