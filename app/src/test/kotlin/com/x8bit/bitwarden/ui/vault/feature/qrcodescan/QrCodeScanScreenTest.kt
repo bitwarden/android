@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
 import androidx.camera.core.ImageProxy
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.qrcodescan.util.FakeQrCodeAnalyzer
@@ -85,6 +86,7 @@ class QrCodeScanScreenTest : BitwardenComposeTest() {
     fun `clicking on manual text should send ManualEntryTextClick in landscape mode`() = runTest {
         composeTestRule
             .onNodeWithText(text = "Cannot scan QR code? Enter key manually")
+            .assertIsDisplayed()
             .performCustomAccessibilityAction(label = "Enter key manually")
 
         verify {
