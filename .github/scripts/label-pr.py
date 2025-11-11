@@ -6,6 +6,17 @@ import subprocess
 
 CATCH_ALL_LABEL = "t:misc"
 
+LABEL_TITLE_PATTERNS = {
+    "t:new-feature": ["feat:", "feat("],
+    "t:bug": ["fix:", "fix("],
+    "t:tech-debt": ["refactor:", "refactor(", "chore:", "chore(", "revert:", "revert(", "debt:", "debt(", "test:", "test(", "perf:", "perf("],
+    "t:docs": ["docs:", "docs("],
+    "t:ci": ["ci:", "ci(", "build:", "build(", "chore(ci):"],
+    "t:deps": ["deps:", "deps("],
+    "t:misc": ["misc:", "misc("],
+    "t:breaking-change": ["breaking:", "breaking(", "breaking-change:", "breaking-change(", "breaking change:", "breaking change(", "breaking-change:", "breaking-change("],
+}
+
 LABEL_PATH_PATTERNS = {
     "app:shared": [
         "annotation/",
@@ -55,7 +66,23 @@ def gh_get_changed_files(pr_number: str) -> list[str]:
         return list(filter(None, changed_files))
     except subprocess.CalledProcessError as e:
         print(f"Error getting changed files: {e}")
-        sys.exit(1)
+        return None
+
+def gh_get_pr_title(pr_number: str) -> str:
+    """Get the title of a pull request."""
+    try:
+        result = subprocess.run(
+            ["gh", "pr", "view", pr_number, "--json", "title", "--jq", ".title"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        title = result.stdout.strip()
+        print(f"📋 PR Title: {title}")
+        return title
+    except subprocess.CalledProcessError as e:
+        print(f"Error getting PR title: {e}")
+        return None
 
 def gh_add_labels(pr_number: str, labels: list[str]) -> None:
     """Add labels to a pull request (doesn't remove existing labels)."""
@@ -91,8 +118,26 @@ def label_filepaths(changed_files: list[str]) -> list[str]:
         labels_to_apply.add("app:authenticator")
         labels_to_apply.remove("app:shared")
 
-    if not any(label.startswith("t:") for label in labels_to_apply):
-        labels_to_apply.add(CATCH_ALL_LABEL)
+    if not labels_to_apply:
+        print("::warning::No matching file paths found, no labels applied.")
+
+    return list(labels_to_apply)
+
+def label_title(pr_title: str) -> list[str]:
+    """Check PR title against patterns and return labels to apply."""
+    labels_to_apply = set()
+
+    title_lower = pr_title.lower()
+
+    for label, patterns in LABEL_TITLE_PATTERNS.items():
+        for pattern in patterns:
+            if pattern.lower() in title_lower:
+                print(f"📝 Title matches pattern '{pattern}' for label '{label}'")
+                labels_to_apply.add(label)
+                break
+
+    if not labels_to_apply:
+        print("::warning::No matching title patterns found, no labels applied.")
 
     return list(labels_to_apply)
 
@@ -104,27 +149,31 @@ def main():
 
     pr_number = sys.argv[1]
 
-    print(f"🔍 Checking files changed in PR #{pr_number}...")
+    print(f"🔍 Checking PR #{pr_number}...")
+
+    pr_title = gh_get_pr_title(pr_number)
+    print()
 
     changed_files = gh_get_changed_files(pr_number)
-
-    if not changed_files:
-        print("ℹ️  No files changed in this PR")
-        sys.exit(0)
-
     print("👀 Changed files:")
     for file in changed_files:
         print(file)
     print()
 
     filepath_labels = label_filepaths(changed_files)
+    title_labels = label_title(pr_title)
 
-    if filepath_labels:
-        labels_str = ', '.join(filepath_labels)
-        print(f"🏷️  Adding labels: {labels_str}")
-        gh_replace_labels(pr_number, filepath_labels)
+    all_labels = set(filepath_labels + title_labels)
+
+    if not any(label.startswith("t:") for label in all_labels):
+        all_labels.add(CATCH_ALL_LABEL)
+
+    if all_labels:
+        labels_str = ', '.join(sorted(all_labels))
+        print(f"🏷️  Applying labels: {labels_str}")
+        gh_replace_labels(pr_number, list(all_labels))
     else:
-        print("ℹ️  No matching paths found, no labels applied.")
+        print("ℹ️  No matching patterns found, no labels applied.")
 
     print("✅ Done")
 
