@@ -147,7 +147,7 @@ class ManualCodeEntryViewModel @Inject constructor(
                     id = UUID.randomUUID().toString(),
                     key = sanitizedCode,
                     issuer = state.issuer,
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     type = if (isSteamCode) {
                         AuthenticatorItemType.STEAM
