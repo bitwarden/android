@@ -1,0 +1,137 @@
+package com.x8bit.bitwarden.testharness.ui.platform.feature.createpassword
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.x8bit.bitwarden.testharness.R
+
+private const val RESULT_AREA_HEIGHT_DP = 300
+
+/**
+ * Create Password test screen.
+ */
+@Suppress("LongMethod")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreatePasswordScreen(
+    onNavigateBack: () -> Unit,
+    viewModel: CreatePasswordViewModel = hiltViewModel(),
+) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    EventsEffect(viewModel = viewModel) { event ->
+        when (event) {
+            CreatePasswordEvent.NavigateBack -> onNavigateBack()
+        }
+    }
+
+    BitwardenScaffold(
+        topBar = {
+            BitwardenTopAppBar(
+                title = stringResource(id = R.string.create_password_title),
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                navigationIcon = NavigationIcon(
+                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
+                    navigationIconContentDescription = "Back",
+                    onNavigationIconClick = remember(viewModel) {
+                        { viewModel.trySendAction(CreatePasswordAction.BackClick) }
+                    },
+                ),
+            )
+        },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .imePadding()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BitwardenTextField(
+                label = stringResource(R.string.username),
+                value = state.username,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(CreatePasswordAction.UsernameChanged(it)) }
+                },
+                cardStyle = null,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            BitwardenTextField(
+                label = stringResource(R.string.password),
+                value = state.password,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(CreatePasswordAction.PasswordChanged(it)) }
+                },
+                cardStyle = null,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                BitwardenFilledButton(
+                    label = stringResource(R.string.execute),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(CreatePasswordAction.ExecuteClick) }
+                    },
+                    isEnabled = !state.isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                BitwardenTextButton(
+                    label = stringResource(R.string.clear),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(CreatePasswordAction.ClearResultClick) }
+                    },
+                    isEnabled = !state.isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            BitwardenTextField(
+                label = stringResource(R.string.result),
+                value = state.resultText,
+                onValueChange = { },
+                cardStyle = null,
+                readOnly = true,
+                singleLine = false,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(RESULT_AREA_HEIGHT_DP.dp),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
