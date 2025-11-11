@@ -143,7 +143,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ValidatePasswordResult.Success(isValid = true)
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-        } returns listOf(createMockPolicy())
+        } returns listOf(createMockPolicy(isEnabled = true))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))

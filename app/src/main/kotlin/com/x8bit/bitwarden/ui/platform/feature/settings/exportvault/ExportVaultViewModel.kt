@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
@@ -464,10 +465,7 @@ class ExportVaultViewModel @Inject constructor(
     }
 
     private fun getRestrictedItemTypes(): List<CipherType> {
-        val hasActiveRestrictItemTypesPolicy = policyManager
-            .getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .isNotEmpty()
-        return if (!hasActiveRestrictItemTypesPolicy) {
+        return if (!policyManager.hasRestrictItemTypes()) {
             emptyList()
         } else {
             listOf(CipherType.CARD)

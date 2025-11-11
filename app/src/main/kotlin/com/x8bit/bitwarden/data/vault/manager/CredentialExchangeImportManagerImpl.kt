@@ -12,6 +12,9 @@ import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
+import com.bitwarden.vault.CipherType
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
@@ -34,6 +37,7 @@ class CredentialExchangeImportManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val ciphersService: CiphersService,
     private val vaultSyncManager: VaultSyncManager,
+    private val policyManager: PolicyManager,
     private val json: Json,
 ) : CredentialExchangeImportManager {
 
@@ -83,7 +87,9 @@ class CredentialExchangeImportManagerImpl(
         }
 
         val accountsJson = try {
-            json.encodeToString(exportResponse.accounts.firstOrNull())
+            json.encodeToString(
+                value = exportResponse.accounts.firstOrNull(),
+            )
         } catch (_: SerializationException) {
             return ImportCxfPayloadResult.Error(
                 ImportCredentialsInvalidJsonException("Unable to re-encode accounts."),
@@ -95,7 +101,14 @@ class CredentialExchangeImportManagerImpl(
                 payload = accountsJson,
             )
             .flatMap { cipherList ->
-                if (cipherList.isEmpty()) {
+                // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active
+                val filteredCipherList = if (policyManager.hasRestrictItemTypes()) {
+                    cipherList.filter { cipher -> cipher.type != CipherType.CARD }
+                } else {
+                    cipherList
+                }
+
+                if (filteredCipherList.isEmpty()) {
                     // If no ciphers were returned, we can skip the remaining steps and return the
                     // appropriate result.
                     return ImportCxfPayloadResult.NoItems
@@ -103,7 +116,7 @@ class CredentialExchangeImportManagerImpl(
                 ciphersService
                     .importCiphers(
                         request = ImportCiphersJsonRequest(
-                            ciphers = cipherList.map {
+                            ciphers = filteredCipherList.map {
                                 it.toEncryptedNetworkCipher(
                                     encryptedFor = userId,
                                 )
@@ -120,7 +133,7 @@ class CredentialExchangeImportManagerImpl(
 
                             ImportCiphersResponseJson.Success -> {
                                 ImportCxfPayloadResult
-                                    .Success(itemCount = cipherList.size)
+                                    .Success(itemCount = filteredCipherList.size)
                                     .asSuccess()
                             }
                         }

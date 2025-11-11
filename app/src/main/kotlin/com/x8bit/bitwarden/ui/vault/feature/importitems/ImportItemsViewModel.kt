@@ -13,6 +13,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
@@ -32,6 +34,7 @@ private const val KEY_STATE = "state"
 class ImportItemsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<ImportItemsState, ImportItemsEvent, ImportItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: ImportItemsState(),
 ) {
@@ -117,24 +120,29 @@ class ImportItemsViewModel @Inject constructor(
     }
 
     private fun handleImportFromAnotherAppClick() {
+        val credentialTypes = buildList {
+            add(CredentialTypes.CREDENTIAL_TYPE_BASIC_AUTH)
+            add(CredentialTypes.CREDENTIAL_TYPE_PUBLIC_KEY)
+            add(CredentialTypes.CREDENTIAL_TYPE_ADDRESS)
+            add(CredentialTypes.CREDENTIAL_TYPE_API_KEY)
+            // Only include credit card type if policy doesn't restrict it
+            if (!policyManager.hasRestrictItemTypes()) {
+                add(CredentialTypes.CREDENTIAL_TYPE_CREDIT_CARD)
+            }
+            add(CredentialTypes.CREDENTIAL_TYPE_CUSTOM_FIELDS)
+            add(CredentialTypes.CREDENTIAL_TYPE_DRIVERS_LICENSE)
+            add(CredentialTypes.CREDENTIAL_TYPE_IDENTITY_DOCUMENT)
+            add(CredentialTypes.CREDENTIAL_TYPE_NOTE)
+            add(CredentialTypes.CREDENTIAL_TYPE_PASSPORT)
+            add(CredentialTypes.CREDENTIAL_TYPE_PERSON_NAME)
+            add(CredentialTypes.CREDENTIAL_TYPE_SSH_KEY)
+            add(CredentialTypes.CREDENTIAL_TYPE_TOTP)
+            add(CredentialTypes.CREDENTIAL_TYPE_WIFI)
+        }
+
         sendEvent(
             ImportItemsEvent.ShowRegisteredImportSources(
-                credentialTypes = listOf(
-                    CredentialTypes.CREDENTIAL_TYPE_BASIC_AUTH,
-                    CredentialTypes.CREDENTIAL_TYPE_PUBLIC_KEY,
-                    CredentialTypes.CREDENTIAL_TYPE_ADDRESS,
-                    CredentialTypes.CREDENTIAL_TYPE_API_KEY,
-                    CredentialTypes.CREDENTIAL_TYPE_CREDIT_CARD,
-                    CredentialTypes.CREDENTIAL_TYPE_CUSTOM_FIELDS,
-                    CredentialTypes.CREDENTIAL_TYPE_DRIVERS_LICENSE,
-                    CredentialTypes.CREDENTIAL_TYPE_IDENTITY_DOCUMENT,
-                    CredentialTypes.CREDENTIAL_TYPE_NOTE,
-                    CredentialTypes.CREDENTIAL_TYPE_PASSPORT,
-                    CredentialTypes.CREDENTIAL_TYPE_PERSON_NAME,
-                    CredentialTypes.CREDENTIAL_TYPE_SSH_KEY,
-                    CredentialTypes.CREDENTIAL_TYPE_TOTP,
-                    CredentialTypes.CREDENTIAL_TYPE_WIFI,
-                ),
+                credentialTypes = credentialTypes,
             ),
         )
     }
