@@ -132,7 +132,8 @@ def label_title(pr_title: str, title_patterns: dict) -> list[str]:
 
     return list(labels_to_apply)
 
-def main():
+def parse_args():
+    """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Label pull requests based on changed file paths and PR title patterns."
     )
@@ -164,9 +165,10 @@ def main():
         default=DEFAULT_CONFIG_PATH,
         help=f"Path to JSON config file (default: {DEFAULT_CONFIG_PATH})"
     )
+    return parser.parse_args()
 
-    args = parser.parse_args()
-
+def main():
+    args = parse_args()
     config = load_config_json(args.config)
 
     CATCH_ALL_LABEL = config.get("catch_all_label")
@@ -189,6 +191,9 @@ def main():
     if not LABEL_PATH_PATTERNS:
         print("❌ Missing 'path_patterns' in config file")
         sys.exit(1)
+    CATCH_ALL_LABEL = config["catch_all_label"]
+    LABEL_TITLE_PATTERNS = config["title_patterns"]
+    LABEL_PATH_PATTERNS = config["path_patterns"]
 
     pr_number = args.pr_number
     mode = "add" if args.add else "replace"
