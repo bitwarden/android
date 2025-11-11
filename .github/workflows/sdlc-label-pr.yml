@@ -33,10 +33,32 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Determine label mode for Pull Request
+        id: label-mode
+        env:
+          _PR_USER: ${{ github.event.pull_request.user.login }}
+          _IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
+        run: |
+          if [ "$_IS_FORK" = "true" ]; then
+            echo "label_mode=--add" >> "$GITHUB_OUTPUT"
+            echo "🔀 Fork PR detected"
+            exit 0
+          fi
+
+          if [ "$_PR_USER" = "renovate[bot]" ]; then
+            echo "label_mode=--add" >> "$GITHUB_OUTPUT"
+            echo "🤖 Renovate PR detected"
+            exit 0
+          fi
+
+          echo "label_mode=--replace" >> "$GITHUB_OUTPUT"
+
       - name: Label PR based on changed files
         env:
           GH_TOKEN: ${{ github.token }}
-          _PR_NUMBER: ${{ github.event.pull_request.number }}
+          _PR_NUMBER: ${{ inputs.pr-number || github.event.pull_request.number }}
+          _LABEL_MODE: ${{ inputs.mode && format('--{0}', inputs.mode) || steps.label-mode.outputs.label_mode }}
+          _DRY_RUN: ${{ inputs.dry-run == true && '--dry-run' || '' }}
         run: |
-          python3 .github/scripts/label-pr.py "$_PR_NUMBER"
+          python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_LABEL_MODE" "$_DRY_RUN"
 
