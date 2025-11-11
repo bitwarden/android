@@ -36,9 +36,18 @@ jobs:
       - name: Determine label mode for Pull Request
         id: label-mode
         env:
+          GH_TOKEN: ${{ github.token }}
+          _PR_NUMBER: ${{ inputs.pr-number }}
           _PR_USER: ${{ github.event.pull_request.user.login }}
           _IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
         run: |
+          # Support workflow_dispatch testing by retrieving PR data
+          if [ -z "$_PR_USER" ]; then
+            PR_DATA=$(gh pr view "$_PR_NUMBER" --json author,isCrossRepository)
+            _PR_USER=$(echo "$PR_DATA" | jq -r '.author.login')
+            _IS_FORK=$(echo "$PR_DATA" | jq -r '.isCrossRepository')
+          fi
+
           if [ "$_IS_FORK" = "true" ]; then
             echo "label_mode=--add" >> "$GITHUB_OUTPUT"
             echo "🔀 Fork PR detected"
