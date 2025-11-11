@@ -76,7 +76,7 @@ def gh_get_changed_files(pr_number: str) -> list[str]:
         return list(filter(None, changed_files))
     except subprocess.CalledProcessError as e:
         print(f"Error getting changed files: {e}")
-        return None
+        return []
 
 def gh_get_pr_title(pr_number: str) -> str:
     """Get the title of a pull request."""
@@ -90,7 +90,7 @@ def gh_get_pr_title(pr_number: str) -> str:
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"Error getting PR title: {e}")
-        return None
+        return ""
 
 def gh_add_labels(pr_number: str, labels: list[str]) -> None:
     """Add labels to a pull request (doesn't remove existing labels)."""
@@ -112,6 +112,9 @@ def gh_replace_labels(pr_number: str, labels: list[str]) -> None:
 
 def label_filepaths(changed_files: list[str], path_patterns: dict) -> list[str]:
     """Check changed files against path patterns and return labels to apply."""
+    if not changed_files:
+        return []
+
     labels_to_apply = set()  # Use set to avoid duplicates
 
     for label, patterns in path_patterns.items():
@@ -133,6 +136,9 @@ def label_filepaths(changed_files: list[str], path_patterns: dict) -> list[str]:
 
 def label_title(pr_title: str, title_patterns: dict) -> list[str]:
     """Check PR title against patterns and return labels to apply."""
+    if not pr_title:
+        return []
+
     labels_to_apply = set()
     title_lower = pr_title.lower()
     for label, patterns in title_patterns.items():
