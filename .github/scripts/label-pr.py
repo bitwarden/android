@@ -211,7 +211,7 @@ def main():
 
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
-        if args.re:
+        if mode is "replace":
             print(f"🏷️  Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
