@@ -1,8 +1,23 @@
 name: SDLC / Label PR by Files
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: "Pull Request Number"
+        required: true
+        type: number
+      mode:
+        description: "Labeling Mode"
+        type: choice
+        options:
+          - add
+          - replace
+        default: add
+      dry-run:
+        description: "Dry Run - Don't apply labels"
+        type: boolean
+        default: false
 
 jobs:
   label-pr:
