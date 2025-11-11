@@ -21,6 +21,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -30,7 +31,6 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.utils.startApplicationDetailsSettingsActivity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -106,10 +106,10 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on NavigateToApplicationDataSettings should launch the correct intent`() {
-        mockkStatic(IntentManager::startApplicationDetailsSettingsActivity) {
-            every { intentManager.startApplicationDetailsSettingsActivity() } just runs
+        mockkStatic(IntentManager::startAppSettingsActivity) {
+            every { intentManager.startAppSettingsActivity() } returns true
             mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
-            verify { intentManager.startApplicationDetailsSettingsActivity() }
+            verify(exactly = 1) { intentManager.startAppSettingsActivity() }
         }
     }
 
