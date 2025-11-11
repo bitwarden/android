@@ -1,0 +1,27 @@
+name: SDLC / Label PR by Files
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  label-pr:
+    name: Label PR by Changed Files
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Label PR based on changed files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          _PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python3 .github/scripts/label-pr.py "$_PR_NUMBER"
+
