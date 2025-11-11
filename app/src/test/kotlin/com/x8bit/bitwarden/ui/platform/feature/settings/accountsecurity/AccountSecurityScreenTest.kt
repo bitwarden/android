@@ -11,7 +11,6 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -1170,7 +1169,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Your vault timeout exceeds the restrictions set by your organization.")
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText(text = "Okay")
