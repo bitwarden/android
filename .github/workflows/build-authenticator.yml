@@ -285,7 +285,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.bitwarden.authenticator.aab
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
@@ -293,7 +293,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.bitwarden.authenticator.apk
           path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
@@ -313,7 +313,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt
@@ -321,7 +321,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: authenticator-android-aab-sha256.txt
           path: ./authenticator-android-aab-sha256.txt
