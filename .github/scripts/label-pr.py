@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""
+Label pull requests based on changed file paths and PR title patterns (conventional commit format).
+
+Usage:
+    python label-pr.py <pr-number>
+
+Example:
+    python label-pr.py 1234
+"""
 
 import json
 import sys
@@ -124,9 +133,7 @@ def label_filepaths(changed_files: list[str]) -> list[str]:
 def label_title(pr_title: str) -> list[str]:
     """Check PR title against patterns and return labels to apply."""
     labels_to_apply = set()
-
     title_lower = pr_title.lower()
-
     for label, patterns in LABEL_TITLE_PATTERNS.items():
         for pattern in patterns:
             # Check for pattern with : or ( suffix (conventional commit format)
@@ -154,14 +161,10 @@ def main():
     print(f"📋 PR Title: {pr_title}\n")
 
     changed_files = gh_get_changed_files(pr_number)
-    print("👀 Changed files:")
-    for file in changed_files:
-        print(file)
-    print()
+    print("👀 Changed files:" + "\n".join(changed_files) + "\n")
 
     filepath_labels = label_filepaths(changed_files)
     title_labels = label_title(pr_title)
-
     all_labels = set(filepath_labels + title_labels)
 
     if not any(label.startswith("t:") for label in all_labels):
