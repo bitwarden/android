@@ -213,14 +213,14 @@ def main():
 
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
-        if mode == "replace":
-            print(f"🏷️  Replacing labels with: {labels_str}")
-            if not args.dry_run:
-                gh_replace_labels(pr_number, list(all_labels))
-        else:
+        if mode == "add":
             print(f"🏷️  Adding labels: {labels_str}")
             if not args.dry_run:
                 gh_add_labels(pr_number, list(all_labels))
+        else:
+            print(f"🏷️  Replacing labels with: {labels_str}")
+            if not args.dry_run:
+                gh_replace_labels(pr_number, list(all_labels))
     else:
         print("ℹ️  No matching patterns found, no labels applied.")
 
