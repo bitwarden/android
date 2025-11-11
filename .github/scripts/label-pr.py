@@ -3,76 +3,49 @@
 Label pull requests based on changed file paths and PR title patterns (conventional commit format).
 
 Usage:
-    python label-pr.py <pr-number> [-a|--add|-r|--replace] [-d|--dry-run]
+    python label-pr.py <pr-number> [-a|--add|-r|--replace] [-d|--dry-run] [-c|--config CONFIG]
 
 Arguments:
     pr-number: The pull request number
     -a, --add: Add labels without removing existing ones (default)
     -r, --replace: Replace all existing labels
-    -d, --dry-run: Skips applying labels
+    -d, --dry-run: Run without actually applying labels
+    -c, --config: Path to JSON config file (default: .github/label-pr.json)
 
 Examples:
     python label-pr.py 1234
     python label-pr.py 1234 -a
     python label-pr.py 1234 --replace
     python label-pr.py 1234 -r -d
+    python label-pr.py 1234 --config custom-config.json
 """
 
 import argparse
 import json
-import sys
+import os
 import subprocess
+import sys
 
 DEFAULT_MODE = "add"
-CATCH_ALL_LABEL = "t:misc"
+DEFAULT_CONFIG_PATH = ".github/label-pr.json"
 
-# patterns match with : and ( suffix - conventional commits format
-LABEL_TITLE_PATTERNS = {
-    "t:new-feature": ["feat", "feature"],
-    "t:bug": ["fix", "bug", "bugfix"],
-    "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
-    "t:docs": ["docs"],
-    "t:ci": ["ci", "build", "chore(ci)"],
-    "t:deps": ["deps"],
-    "t:breaking-change": ["breaking", "breaking-change"],
-    "t:misc": ["misc"],
-}
+def load_config_json(config_file: str) -> dict:
+    """Load configuration from JSON file."""
+    if not os.path.exists(config_file):
+        print(f"❌ Config file not found: {config_file}")
+        sys.exit(1)
 
-LABEL_PATH_PATTERNS = {
-    "app:shared": [ # special case - replaced with both app: labels
-        "annotation/",
-        "core/",
-        "data/",
-        "network/",
-        "ui/",
-        "authenticatorbridge/",
-        "gradle/"
-    ],
-    "app:password-manager": [
-        "app/",
-        "cxf/",
-    ],
-    "app:authenticator": [
-        "authenticator/",
-    ],
-    "t:ci": [
-        ".github/",
-        "scripts/",
-        "fastlane/",
-        ".gradle/",
-        ".claude/",
-        "detekt-config.yml",
-    ],
-    "t:docs": [
-        "docs/",
-    ],
-    "t:deps": [
-        "gradle/",
-    ],
-    CATCH_ALL_LABEL: [
-        "keystore/",
-    ]
-}
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+            print(f"✅ Loaded config from: {config_file}")
+            return config
+    except json.JSONDecodeError as e:
+        print(f"❌ Error parsing JSON config: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ Error loading config: {e}")
+        sys.exit(1)
 
 def gh_get_changed_files(pr_number: str) -> list[str]:
     """Get list of changed files in a pull request."""
@@ -121,11 +94,11 @@ def gh_replace_labels(pr_number: str, labels: list[str]) -> None:
         check=True
     )
 
-def label_filepaths(changed_files: list[str]) -> list[str]:
+def label_filepaths(changed_files: list[str], path_patterns: dict) -> list[str]:
     """Check changed files against path patterns and return labels to apply."""
     labels_to_apply = set()  # Use set to avoid duplicates
 
-    for label, patterns in LABEL_PATH_PATTERNS.items():
+    for label, patterns in path_patterns.items():
         for file in changed_files:
             if any(file.startswith(pattern) for pattern in patterns):
                 print(f"👀 File '{file}' matches pattern for label '{label}'")
@@ -142,11 +115,11 @@ def label_filepaths(changed_files: list[str]) -> list[str]:
 
     return list(labels_to_apply)
 
-def label_title(pr_title: str) -> list[str]:
+def label_title(pr_title: str, title_patterns: dict) -> list[str]:
     """Check PR title against patterns and return labels to apply."""
     labels_to_apply = set()
     title_lower = pr_title.lower()
-    for label, patterns in LABEL_TITLE_PATTERNS.items():
+    for label, patterns in title_patterns.items():
         for pattern in patterns:
             # Check for pattern with : or ( suffix (conventional commits format)
             if f"{pattern}:" in title_lower or f"{pattern}(" in title_lower:
@@ -186,7 +159,36 @@ def main():
         help="Run without actually applying labels"
     )
 
+    parser.add_argument(
+        "-c", "--config",
+        default=DEFAULT_CONFIG_PATH,
+        help=f"Path to JSON config file (default: {DEFAULT_CONFIG_PATH})"
+    )
+
     args = parser.parse_args()
+
+    config = load_config_json(args.config)
+
+    CATCH_ALL_LABEL = config.get("catch_all_label")
+    LABEL_TITLE_PATTERNS = config.get("title_patterns")
+    LABEL_PATH_PATTERNS = config.get("path_patterns")
+
+    print(f"🔍 Loaded config from: {args.config}")
+    print(f"🔍 Catch all label: {CATCH_ALL_LABEL}")
+    print(f"🔍 Title patterns: {LABEL_TITLE_PATTERNS}")
+    print(f"🔍 Path patterns: {LABEL_PATH_PATTERNS}")
+    exit(0)
+
+    # Validate required fields
+    if not CATCH_ALL_LABEL:
+        print("❌ Missing 'catch_all_label' in config file")
+        sys.exit(1)
+    if not LABEL_TITLE_PATTERNS:
+        print("❌ Missing 'title_patterns' in config file")
+        sys.exit(1)
+    if not LABEL_PATH_PATTERNS:
+        print("❌ Missing 'path_patterns' in config file")
+        sys.exit(1)
 
     pr_number = args.pr_number
     mode = "add" if args.add else "replace"
@@ -202,8 +204,8 @@ def main():
     changed_files = gh_get_changed_files(pr_number)
     print("👀 Changed files:" + "\n".join(changed_files) + "\n")
 
-    filepath_labels = label_filepaths(changed_files)
-    title_labels = label_title(pr_title)
+    filepath_labels = label_filepaths(changed_files, LABEL_PATH_PATTERNS)
+    title_labels = label_title(pr_title, LABEL_TITLE_PATTERNS)
     all_labels = set(filepath_labels + title_labels)
 
     if not any(label.startswith("t:") for label in all_labels):
@@ -211,7 +213,7 @@ def main():
 
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
-        if mode is "replace":
+        if mode == "replace":
             print(f"🏷️  Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
