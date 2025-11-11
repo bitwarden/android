@@ -77,12 +77,11 @@ def label_filepaths(changed_files: list[str]) -> list[str]:
     """Check changed files against path patterns and return labels to apply."""
     labels_to_apply = set()  # Use set to avoid duplicates
 
-    for label, patterns in LABEL_PATH_PATTERNS.items():
-        for file in changed_files:
+    for file in changed_files:
+        for label, patterns in LABEL_PATH_PATTERNS.items():
             if any(file.startswith(pattern) for pattern in patterns):
                 print(f"👀 File '{file}' matches pattern for label '{label}'")
                 labels_to_apply.add(label)
-                break
 
     if "app:shared" in labels_to_apply:
         labels_to_apply.add("app:password-manager")
