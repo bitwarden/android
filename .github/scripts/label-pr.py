@@ -191,7 +191,7 @@ def main():
     LABEL_PATH_PATTERNS = config["path_patterns"]
 
     pr_number = args.pr_number
-    mode = "add" if args.add else "replace"
+    mode = "replace" if args.replace else "add"
 
     if args.dry_run:
         print("🔍 DRY RUN MODE - Labels will not be applied")
