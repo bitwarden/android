@@ -7,14 +7,14 @@ import subprocess
 CATCH_ALL_LABEL = "t:misc"
 
 LABEL_TITLE_PATTERNS = {
-    "t:new-feature": ["feat:", "feat("],
-    "t:bug": ["fix:", "fix("],
-    "t:tech-debt": ["refactor:", "refactor(", "chore:", "chore(", "revert:", "revert(", "debt:", "debt(", "test:", "test(", "perf:", "perf("],
-    "t:docs": ["docs:", "docs("],
-    "t:ci": ["ci:", "ci(", "build:", "build(", "chore(ci):"],
-    "t:deps": ["deps:", "deps("],
-    "t:misc": ["misc:", "misc("],
-    "t:breaking-change": ["breaking:", "breaking(", "breaking-change:", "breaking-change(", "breaking change:", "breaking change(", "breaking-change:", "breaking-change("],
+    "t:new-feature": ["feat", "feature"],
+    "t:bug": ["fix", "bug", "bugfix"],
+    "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
+    "t:docs": ["docs"],
+    "t:ci": ["ci", "build", "chore(ci)"],
+    "t:deps": ["deps"],
+    "t:breaking-change": ["breaking", "breaking-change"],
+    "t:misc": ["misc"],
 }
 
 LABEL_PATH_PATTERNS = {
@@ -45,7 +45,7 @@ LABEL_PATH_PATTERNS = {
     "t:docs": [
         "docs/",
     ],
-    "t:deps": [ #TODO test this
+    "t:deps": [
         "gradle/",
     ],
     CATCH_ALL_LABEL: [
@@ -77,9 +77,7 @@ def gh_get_pr_title(pr_number: str) -> str:
             text=True,
             check=True
         )
-        title = result.stdout.strip()
-        print(f"📋 PR Title: {title}")
-        return title
+        return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"Error getting PR title: {e}")
         return None
@@ -131,7 +129,8 @@ def label_title(pr_title: str) -> list[str]:
 
     for label, patterns in LABEL_TITLE_PATTERNS.items():
         for pattern in patterns:
-            if pattern.lower() in title_lower:
+            # Check for pattern with : or ( suffix (conventional commit format)
+            if f"{pattern}:" in title_lower or f"{pattern}(" in title_lower:
                 print(f"📝 Title matches pattern '{pattern}' for label '{label}'")
                 labels_to_apply.add(label)
                 break
@@ -152,7 +151,7 @@ def main():
     print(f"🔍 Checking PR #{pr_number}...")
 
     pr_title = gh_get_pr_title(pr_number)
-    print()
+    print(f"📋 PR Title: {pr_title}\n")
 
     changed_files = gh_get_changed_files(pr_number)
     print("👀 Changed files:")
