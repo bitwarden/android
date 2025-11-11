@@ -4,6 +4,8 @@ import json
 import sys
 import subprocess
 
+CATCH_ALL_LABEL = "t:misc"
+
 LABEL_PATH_PATTERNS = {
     "app:shared": [
         "annotation/",
@@ -35,7 +37,7 @@ LABEL_PATH_PATTERNS = {
     "t:deps": [ #TODO test this
         "gradle/",
     ],
-    "t:misc": [ # catch-all label case for changes that aren't captured by other labels
+    CATCH_ALL_LABEL: [
         "keystore/",
     ]
 }
@@ -87,6 +89,9 @@ def label_filepaths(changed_files: list[str]) -> list[str]:
         labels_to_apply.add("app:password-manager")
         labels_to_apply.add("app:authenticator")
         labels_to_apply.remove("app:shared")
+
+    if not any(label.startswith("t:") for label in labels_to_apply):
+        labels_to_apply.add(CATCH_ALL_LABEL)
 
     return list(labels_to_apply)
 
