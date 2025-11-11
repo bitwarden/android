@@ -1,8 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 
 import android.Manifest
-import android.content.Intent
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
@@ -49,6 +46,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -82,10 +80,7 @@ fun ManualCodeEntryScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ManualCodeEntryEvent.NavigateToAppSettings -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = "package:${context.packageName}".toUri()
-
-                intentManager.startActivity(intent = intent)
+                intentManager.startAppSettingsActivity()
             }
 
             is ManualCodeEntryEvent.ShowToast -> {

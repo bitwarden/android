@@ -47,7 +47,6 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDr
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
-import com.bitwarden.authenticator.ui.platform.util.startAuthenticatorAppSettings
 import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -72,6 +71,7 @@ import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnac
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -118,7 +118,7 @@ fun ItemListingScreen(
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
             is ItemListingEvent.NavigateToAppSettings -> {
-                intentManager.startAuthenticatorAppSettings()
+                intentManager.startAppSettingsActivity()
             }
 
             ItemListingEvent.NavigateToBitwardenListing -> {
