@@ -3,16 +3,27 @@
 Label pull requests based on changed file paths and PR title patterns (conventional commit format).
 
 Usage:
-    python label-pr.py <pr-number>
+    python label-pr.py <pr-number> [-a|--add|-r|--replace] [-d|--dry-run]
 
-Example:
+Arguments:
+    pr-number: The pull request number
+    -a, --add: Add labels without removing existing ones (default)
+    -r, --replace: Replace all existing labels
+    -d, --dry-run: Run without actually applying labels
+
+Examples:
     python label-pr.py 1234
+    python label-pr.py 1234 -a
+    python label-pr.py 1234 --replace
+    python label-pr.py 1234 -r -d
 """
 
+import argparse
 import json
 import sys
 import subprocess
 
+DEFAULT_MODE = "add"
 CATCH_ALL_LABEL = "t:misc"
 
 LABEL_TITLE_PATTERNS = {
@@ -148,14 +159,42 @@ def label_title(pr_title: str) -> list[str]:
     return list(labels_to_apply)
 
 def main():
-    if len(sys.argv) < 2:
-        print("Error: PR_NUMBER is required")
-        print(f"Usage: {sys.argv[0]} <pr-number>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Label pull requests based on changed file paths and PR title patterns."
+    )
+    parser.add_argument(
+        "pr_number",
+        help="The pull request number"
+    )
 
-    pr_number = sys.argv[1]
+    mode_group = parser.add_mutually_exclusive_group()
+    mode_group.add_argument(
+        "-a", "--add",
+        action="store_true",
+        help="Add labels without removing existing ones (default)"
+    )
+    mode_group.add_argument(
+        "-r", "--replace",
+        action="store_true",
+        help="Replace all existing labels"
+    )
+
+    parser.add_argument(
+        "-d", "--dry-run",
+        action="store_true",
+        help="Run without actually applying labels"
+    )
+
+    args = parser.parse_args()
+
+    pr_number = args.pr_number
+    mode = "add" if args.add else "replace"
+
+    if args.dry_run:
+        print("🔍 DRY RUN MODE - Labels will not be applied")
 
     print(f"🔍 Checking PR #{pr_number}...")
+    print(f"📌 Labeling mode: {mode}")
 
     pr_title = gh_get_pr_title(pr_number)
     print(f"📋 PR Title: {pr_title}\n")
@@ -172,13 +211,18 @@ def main():
 
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
-        print(f"🏷️  Applying labels: {labels_str}")
-        gh_replace_labels(pr_number, list(all_labels))
+        if args.re:
+            print(f"🏷️  Replacing labels with: {labels_str}")
+            if not args.dry_run:
+                gh_replace_labels(pr_number, list(all_labels))
+        else:
+            print(f"🏷️  Adding labels: {labels_str}")
+            if not args.dry_run:
+                gh_add_labels(pr_number, list(all_labels))
     else:
         print("ℹ️  No matching patterns found, no labels applied.")
 
     print("✅ Done")
-
 
 if __name__ == "__main__":
     main()
