@@ -9,7 +9,7 @@ Arguments:
     pr-number: The pull request number
     -a, --add: Add labels without removing existing ones (default)
     -r, --replace: Replace all existing labels
-    -d, --dry-run: Run without actually applying labels
+    -d, --dry-run: Skips applying labels
 
 Examples:
     python label-pr.py 1234
@@ -26,6 +26,7 @@ import subprocess
 DEFAULT_MODE = "add"
 CATCH_ALL_LABEL = "t:misc"
 
+# patterns match with : and ( suffix - conventional commits format
 LABEL_TITLE_PATTERNS = {
     "t:new-feature": ["feat", "feature"],
     "t:bug": ["fix", "bug", "bugfix"],
@@ -38,7 +39,7 @@ LABEL_TITLE_PATTERNS = {
 }
 
 LABEL_PATH_PATTERNS = {
-    "app:shared": [
+    "app:shared": [ # special case - replaced with both app: labels
         "annotation/",
         "core/",
         "data/",
@@ -147,7 +148,7 @@ def label_title(pr_title: str) -> list[str]:
     title_lower = pr_title.lower()
     for label, patterns in LABEL_TITLE_PATTERNS.items():
         for pattern in patterns:
-            # Check for pattern with : or ( suffix (conventional commit format)
+            # Check for pattern with : or ( suffix (conventional commits format)
             if f"{pattern}:" in title_lower or f"{pattern}(" in title_lower:
                 print(f"📝 Title matches pattern '{pattern}' for label '{label}'")
                 labels_to_apply.add(label)
@@ -192,9 +193,8 @@ def main():
 
     if args.dry_run:
         print("🔍 DRY RUN MODE - Labels will not be applied")
-
-    print(f"🔍 Checking PR #{pr_number}...")
     print(f"📌 Labeling mode: {mode}")
+    print(f"🔍 Checking PR #{pr_number}...")
 
     pr_title = gh_get_pr_title(pr_number)
     print(f"📋 PR Title: {pr_title}\n")
