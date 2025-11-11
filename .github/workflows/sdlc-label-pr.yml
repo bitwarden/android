@@ -48,6 +48,7 @@ jobs:
             _IS_FORK=$(echo "$PR_DATA" | jq -r '.isCrossRepository')
           fi
 
+          # Handle PRs with labels set by other automations by adding instead of replacing
           if [ "$_IS_FORK" = "true" ]; then
             echo "label_mode=--add" >> "$GITHUB_OUTPUT"
             echo "🔀 Fork PR detected"
