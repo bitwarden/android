@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -49,7 +48,7 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        mockkStatic(IntentManager::startSystemAutofillSettingsActivity)
+        mockkStatic(IntentManager::startBrowserAutofillSettingsActivity)
         setContent(
             intentManager = intentManager,
         ) {
@@ -62,7 +61,7 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
 
     @After
     fun tearDown() {
-        unmockkStatic(IntentManager::startSystemAutofillSettingsActivity)
+        unmockkStatic(IntentManager::startBrowserAutofillSettingsActivity)
     }
 
     @Test

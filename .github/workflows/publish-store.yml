@@ -68,17 +68,9 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
-        env:
-          INPUTS: ${{ toJson(inputs) }}
-        run: |
-          {
-            echo "<details><summary>Job Inputs</summary>"
-            echo ""
-            echo '```json'
-            echo "$INPUTS"
-            echo '```'
-            echo "</details>"
-          }  >> "$GITHUB_STEP_SUMMARY"
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
 
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0

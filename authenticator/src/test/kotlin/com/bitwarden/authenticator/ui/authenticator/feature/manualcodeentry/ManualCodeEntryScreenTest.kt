@@ -12,11 +12,13 @@ import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,9 +74,10 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
 
     @Test
     fun `on NavigateToAppSettings should call intentManager`() {
-        mutableEventFlow.tryEmit(ManualCodeEntryEvent.NavigateToAppSettings)
-        verify(exactly = 1) {
-            intentManager.startActivity(intent = any())
+        mockkStatic(IntentManager::startAppSettingsActivity) {
+            every { intentManager.startAppSettingsActivity() } returns true
+            mutableEventFlow.tryEmit(ManualCodeEntryEvent.NavigateToAppSettings)
+            verify(exactly = 1) { intentManager.startAppSettingsActivity() }
         }
     }
 

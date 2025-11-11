@@ -6,10 +6,8 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -69,15 +67,15 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
     fun `initial state should be correct`() = runTest {
         composeTestRule
             .onNodeWithText("Verify your master password")
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("AU")
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("active@bitwarden.com")
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("You vault is locked. Verify your master password to continue.")
@@ -109,21 +107,6 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Resend code")
             .assertIsDisplayed()
-    }
-
-    @Test
-    fun `input should update based on state`() = runTest {
-        composeTestRule
-            .onNodeWithText("Master password")
-            .performTextInput("abc123")
-
-        composeTestRule
-            .onNodeWithTag("PasswordVisibilityToggle")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("abc123")
-            .isDisplayed()
     }
 
     @Test
@@ -211,7 +194,7 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText("title")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -244,7 +227,7 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText("message")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 }
 

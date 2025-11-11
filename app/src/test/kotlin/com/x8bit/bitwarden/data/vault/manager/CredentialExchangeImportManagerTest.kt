@@ -9,9 +9,12 @@ import com.bitwarden.cxf.model.CredentialExchangeProtocolMessage
 import com.bitwarden.cxf.model.CredentialExchangeVersion
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.vault.Cipher
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
@@ -41,6 +44,11 @@ class CredentialExchangeImportManagerTest {
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val ciphersService: CiphersService = mockk(relaxed = true)
     private val vaultSyncManager: VaultSyncManager = mockk()
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(any())
+        } returns emptyList()
+    }
     private val json = mockk<Json> {
         every {
             decodeFromStringOrNull<CredentialExchangeProtocolMessage>(any())
@@ -57,6 +65,7 @@ class CredentialExchangeImportManagerTest {
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        policyManager = policyManager,
         json = json,
     )
 
@@ -342,6 +351,187 @@ class CredentialExchangeImportManagerTest {
 
             assertTrue(result is ImportCxfPayloadResult.Error)
         }
+
+    @Test
+    fun `when user has restrict item types policy, card ciphers should be filtered out`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(
+                SyncResponseJson.Policy(
+                    id = "mockId-1",
+                    organizationId = "mockId-1",
+                    type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                    isEnabled = true,
+                    data = null,
+                ),
+            )
+
+            val loginCipher = createMockSdkCipher(number = 1)
+            val cardCipher = createMockSdkCipher(number = 2).copy(
+                type = com.bitwarden.vault.CipherType.CARD,
+            )
+            val mixedCipherList = listOf(loginCipher, cardCipher)
+
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_JSON,
+                )
+            } returns mixedCipherList.asSuccess()
+
+            val capturedRequest = slot<ImportCiphersJsonRequest>()
+            coEvery {
+                ciphersService.importCiphers(capture(capturedRequest))
+            } returns ImportCiphersResponseJson.Success.asSuccess()
+
+            coEvery {
+                vaultSyncManager.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+            val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+            assertEquals(ImportCxfPayloadResult.Success(itemCount = 1), result)
+            // Verify only the login cipher was imported, card was filtered out
+            assertEquals(1, capturedRequest.captured.ciphers.size)
+            coVerify(exactly = 1) {
+                vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                ciphersService.importCiphers(any())
+                vaultSyncManager.syncForResult(forced = true)
+            }
+        }
+
+    @Test
+    fun `when user has no restrict item types policy, card ciphers should not be filtered`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns emptyList()
+
+            val loginCipher = createMockSdkCipher(number = 1)
+            val cardCipher = createMockSdkCipher(number = 2).copy(
+                type = com.bitwarden.vault.CipherType.CARD,
+            )
+            val mixedCipherList = listOf(loginCipher, cardCipher)
+
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_JSON,
+                )
+            } returns mixedCipherList.asSuccess()
+
+            val capturedRequest = slot<ImportCiphersJsonRequest>()
+            coEvery {
+                ciphersService.importCiphers(capture(capturedRequest))
+            } returns ImportCiphersResponseJson.Success.asSuccess()
+
+            coEvery {
+                vaultSyncManager.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+            val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+            assertEquals(ImportCxfPayloadResult.Success(itemCount = 2), result)
+            // Verify both ciphers were imported
+            assertEquals(2, capturedRequest.captured.ciphers.size)
+            coVerify(exactly = 1) {
+                vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                ciphersService.importCiphers(any())
+                vaultSyncManager.syncForResult(forced = true)
+            }
+        }
+
+    @Test
+    fun `when user has restrict policy disabled, card ciphers should not be filtered`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(
+                SyncResponseJson.Policy(
+                    id = "mockId-1",
+                    organizationId = "mockId-1",
+                    type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                    isEnabled = false,
+                    data = null,
+                ),
+            )
+
+            val loginCipher = createMockSdkCipher(number = 1)
+            val cardCipher = createMockSdkCipher(number = 2).copy(
+                type = com.bitwarden.vault.CipherType.CARD,
+            )
+            val mixedCipherList = listOf(loginCipher, cardCipher)
+
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_JSON,
+                )
+            } returns mixedCipherList.asSuccess()
+
+            val capturedRequest = slot<ImportCiphersJsonRequest>()
+            coEvery {
+                ciphersService.importCiphers(capture(capturedRequest))
+            } returns ImportCiphersResponseJson.Success.asSuccess()
+
+            coEvery {
+                vaultSyncManager.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+            val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+            assertEquals(ImportCxfPayloadResult.Success(itemCount = 2), result)
+            // Verify both ciphers were imported when policy is disabled
+            assertEquals(2, capturedRequest.captured.ciphers.size)
+            coVerify(exactly = 1) {
+                vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                ciphersService.importCiphers(any())
+                vaultSyncManager.syncForResult(forced = true)
+            }
+        }
+
+    @Test
+    fun `when user has restrict policy and all ciphers are cards, should return NoItems`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(
+                SyncResponseJson.Policy(
+                    id = "mockId-1",
+                    organizationId = "mockId-1",
+                    type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                    isEnabled = true,
+                    data = null,
+                ),
+            )
+
+            val cardCipher1 = createMockSdkCipher(number = 1).copy(
+                type = com.bitwarden.vault.CipherType.CARD,
+            )
+            val cardCipher2 = createMockSdkCipher(number = 2).copy(
+                type = com.bitwarden.vault.CipherType.CARD,
+            )
+            val allCardsList = listOf(cardCipher1, cardCipher2)
+
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_JSON,
+                )
+            } returns allCardsList.asSuccess()
+
+            val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+            assertEquals(ImportCxfPayloadResult.NoItems, result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+            }
+            // Verify importCiphers was never called since all items were filtered
+            coVerify(exactly = 0) {
+                ciphersService.importCiphers(any())
+            }
+        }
 }
 
 private const val DEFAULT_USER_ID = "mockId-1"
@@ -379,6 +569,7 @@ private val DEFAULT_CXF_EXPORT_RESPONSE: CredentialExchangeExportResponse =
         timestamp = 0,
         accounts = listOf(DEFAULT_ACCOUNT),
     )
+
 private val DEFAULT_ACCOUNT_JSON = """
     {
       "id": "$DEFAULT_USER_ID",

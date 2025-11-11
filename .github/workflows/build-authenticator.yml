@@ -36,7 +36,6 @@ env:
 permissions:
   contents: read
   packages: read
-  id-token: write
 
 jobs:
   version:
@@ -48,7 +47,6 @@ jobs:
       version_name: ${{ inputs.version-name }}
       version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
-    secrets: inherit
 
   build:
     name: Build Authenticator
@@ -56,17 +54,9 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
-        env:
-          INPUTS: ${{ toJson(inputs) }}
-        run: |
-          {
-            echo "<details><summary>Job Inputs</summary>"
-            echo ""
-            echo '```json'
-            echo "$INPUTS"
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
 
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -124,6 +114,8 @@ jobs:
       - version
       - build
     runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
     strategy:
       fail-fast: false
       matrix:

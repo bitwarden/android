@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -88,7 +87,7 @@ class ReviewExportScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText("title")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -126,7 +125,7 @@ class ReviewExportScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText("message")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
