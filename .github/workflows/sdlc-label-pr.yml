@@ -24,7 +24,7 @@ jobs:
     name: Label PR by Changed Files
     runs-on: ubuntu-24.04
     permissions:
-      pull-requests: write # required to change labels
+      pull-requests: write # required to update labels
       contents: read
 
     steps:

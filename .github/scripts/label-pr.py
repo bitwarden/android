@@ -39,12 +39,28 @@ def load_config_json(config_file: str) -> dict:
         with open(config_file, 'r') as f:
             config = json.load(f)
             print(f"✅ Loaded config from: {config_file}")
+
+            valid_config = True
+            if not config.get("catch_all_label"):
+                print("❌ Missing 'catch_all_label' in config file")
+                valid_config = False
+            if not config.get("title_patterns"):
+                print("❌ Missing 'title_patterns' in config file")
+                valid_config = False
+            if not config.get("path_patterns"):
+                print("❌ Missing 'path_patterns' in config file")
+                valid_config = False
+
+            if not valid_config:
+                print("::error::Invalid label-pr.json config file, exiting...")
+                sys.exit(1)
+
             return config
     except json.JSONDecodeError as e:
-        print(f"❌ Error parsing JSON config: {e}")
+        print(f"❌ JSON deserialization error in label-pr.json config: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"❌ Error loading config: {e}")
+        print(f"❌ Unexpected error loading label-pr.json config: {e}")
         sys.exit(1)
 
 def gh_get_changed_files(pr_number: str) -> list[str]:
@@ -170,27 +186,6 @@ def parse_args():
 def main():
     args = parse_args()
     config = load_config_json(args.config)
-
-    CATCH_ALL_LABEL = config.get("catch_all_label")
-    LABEL_TITLE_PATTERNS = config.get("title_patterns")
-    LABEL_PATH_PATTERNS = config.get("path_patterns")
-
-    print(f"🔍 Loaded config from: {args.config}")
-    print(f"🔍 Catch all label: {CATCH_ALL_LABEL}")
-    print(f"🔍 Title patterns: {LABEL_TITLE_PATTERNS}")
-    print(f"🔍 Path patterns: {LABEL_PATH_PATTERNS}")
-    exit(0)
-
-    # Validate required fields
-    if not CATCH_ALL_LABEL:
-        print("❌ Missing 'catch_all_label' in config file")
-        sys.exit(1)
-    if not LABEL_TITLE_PATTERNS:
-        print("❌ Missing 'title_patterns' in config file")
-        sys.exit(1)
-    if not LABEL_PATH_PATTERNS:
-        print("❌ Missing 'path_patterns' in config file")
-        sys.exit(1)
     CATCH_ALL_LABEL = config["catch_all_label"]
     LABEL_TITLE_PATTERNS = config["title_patterns"]
     LABEL_PATH_PATTERNS = config["path_patterns"]
