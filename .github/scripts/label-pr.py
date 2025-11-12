@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Requires Python 3.9+
 """
 Label pull requests based on changed file paths and PR title patterns (conventional commit format).
 
