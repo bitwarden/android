@@ -2,6 +2,7 @@
   "catch_all_label": "t:misc",
   "title_patterns": {
     "t:new-feature": ["feat", "feature"],
+    "t:enhancement": ["enhancement", "enh", "impr"],
     "t:bug": ["fix", "bug", "bugfix"],
     "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
     "t:docs": ["docs"],
