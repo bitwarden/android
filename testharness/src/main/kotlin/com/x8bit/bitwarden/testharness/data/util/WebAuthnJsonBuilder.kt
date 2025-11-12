@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.testharness.data.util
 
+import com.bitwarden.annotation.OmitFromCoverage
 import java.security.SecureRandom
 import java.util.Base64
 
@@ -11,12 +12,17 @@ private const val CHALLENGE_SEED_SIZE = 32
  * Generates minimal valid JSON for passkey registration and authentication flows
  * following the WebAuthn specification.
  */
+@OmitFromCoverage
 object WebAuthnJsonBuilder {
 
     /**
      * Build a minimal valid WebAuthn registration request JSON.
      *
      * This follows the WebAuthn specification for PublicKeyCredentialCreationOptions.
+     *
+     * **WARNING: TEST HARNESS ONLY** - This implementation uses simplified challenge
+     * generation suitable for testing. Production implementations should use a secure
+     * backend service to generate and validate challenges.
      *
      * @param username The username for the passkey.
      * @param rpId The Relying Party ID.
@@ -71,6 +77,10 @@ object WebAuthnJsonBuilder {
      * Build a minimal valid WebAuthn authentication request JSON.
      *
      * This follows the WebAuthn specification for PublicKeyCredentialRequestOptions.
+     *
+     * **WARNING: TEST HARNESS ONLY** - This implementation uses simplified challenge
+     * generation suitable for testing. Production implementations should use a secure
+     * backend service to generate and validate challenges.
      *
      * @param rpId The Relying Party ID.
      * @return JSON string for passkey authentication request.
