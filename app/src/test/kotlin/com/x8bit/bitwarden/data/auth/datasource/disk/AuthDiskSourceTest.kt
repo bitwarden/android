@@ -716,7 +716,7 @@ class AuthDiskSourceTest {
         runTest {
             val mockUserId = "mockUserId"
             val biometricsKey = "1234"
-            authDiskSource.getUserBiometicUnlockKeyFlow(userId = mockUserId).test {
+            authDiskSource.getUserBiometricUnlockKeyFlow(userId = mockUserId).test {
                 // The initial values of the Flow and the property are in sync
                 assertNull(authDiskSource.getUserBiometricUnlockKey(userId = mockUserId))
                 assertNull(awaitItem())
@@ -792,11 +792,11 @@ class AuthDiskSourceTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometicUnlockKeyFlow`() =
+    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometricUnlockKeyFlow`() =
         runTest {
             val topSecretKey = "topsecret"
             val mockUserId = "mockUserId"
-            authDiskSource.getUserBiometicUnlockKeyFlow(mockUserId).test {
+            authDiskSource.getUserBiometricUnlockKeyFlow(mockUserId).test {
                 assertNull(awaitItem())
                 authDiskSource.storeUserBiometricUnlockKey(
                     userId = mockUserId,
