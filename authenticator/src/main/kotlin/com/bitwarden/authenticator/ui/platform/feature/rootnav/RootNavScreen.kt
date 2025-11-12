@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -20,6 +19,7 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
@@ -28,7 +28,6 @@ import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
@@ -189,19 +188,3 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition()
             else -> RootTransitionProviders.Exit.fadeOut
         }
     }
-
-@Composable
-private fun BiometricChanges(
-    biometricsManager: BiometricsManager,
-    onBiometricSupportChange: (isSupported: Boolean) -> Unit,
-) {
-    LifecycleEventEffect { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-                onBiometricSupportChange(biometricsManager.isBiometricsSupported)
-            }
-
-            else -> Unit
-        }
-    }
-}

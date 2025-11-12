@@ -41,15 +41,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
@@ -92,14 +91,6 @@ fun SettingsScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    var hasBiometrics by remember { mutableStateOf(biometricsManager.isBiometricsSupported) }
-
-    // Recheck biometrics support when app comes to foreground
-    LifecycleEventEffect { _, event ->
-        if (event == Lifecycle.Event.ON_RESUME) {
-            hasBiometrics = biometricsManager.isBiometricsSupported
-        }
-    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -143,6 +134,15 @@ fun SettingsScreen(
             }
         }
     }
+
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = {
+            viewModel.trySendAction(
+                SettingsAction.BiometricSupportChanged(biometricsManager.isBiometricsSupported),
+            )
+        },
+    )
 
     BitwardenScaffold(
         modifier = Modifier
