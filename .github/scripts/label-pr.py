@@ -187,7 +187,8 @@ def parse_args():
         default=DEFAULT_CONFIG_PATH,
         help=f"Path to JSON config file (default: {DEFAULT_CONFIG_PATH})"
     )
-    return parser.parse_args()
+    args, unknown = parser.parse_known_args() # required to handle --dry-run passed as an empty string ("") by the workflow
+    return args
 
 def main():
     args = parse_args()
