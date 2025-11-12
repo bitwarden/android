@@ -714,6 +714,19 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isAutofillWebDomainCompatMode should pull from and update SettingsDiskSource`() {
+        assertFalse(settingsRepository.isAutofillWebDomainCompatMode)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.isAutofillWebDomainCompatMode = true
+        assertTrue(settingsRepository.isAutofillWebDomainCompatMode)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isAutofillWebDomainCompatMode = false
+        assertFalse(fakeSettingsDiskSource.isAutofillWebDomainCompatMode!!)
+    }
+
+    @Test
     fun `blockedAutofillUris should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertEquals(
