@@ -90,7 +90,10 @@ class AutofillParserImpl(
         Timber.d("Parsing AssistStructure -- ${fillRequest?.id}")
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
-        val urlBarWebsite = traversalDataList.flatMap { it.urlBarWebsites }.distinct().firstOrNull()
+        val urlBarWebsite = traversalDataList
+            .flatMap { it.urlBarWebsites }
+            .firstOrNull()
+            ?.takeIf { settingsRepository.isAutofillWebDomainCompatMode }
 
         // Take only the autofill views from the node that currently has focus.
         // Then remove all the fields that cannot be filled with data.

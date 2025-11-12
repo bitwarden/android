@@ -29,6 +29,8 @@ class AutoFillHandlers(
     val onBlockAutoFillClick: () -> Unit,
     val onLearnMoreClick: () -> Unit,
     val onHelpCardClick: () -> Unit,
+    val onWebDomainCompatModeToggled: (isEnabled: Boolean) -> Unit,
+    val onWebDomainModeCompatLearnMoreClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -84,6 +86,12 @@ class AutoFillHandlers(
             onBlockAutoFillClick = { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) },
             onLearnMoreClick = { viewModel.trySendAction(AutoFillAction.LearnMoreClick) },
             onHelpCardClick = { viewModel.trySendAction(AutoFillAction.HelpCardClick) },
+            onWebDomainCompatModeToggled = {
+                viewModel.trySendAction(AutoFillAction.WebDomainModeCompatToggle(it))
+            },
+            onWebDomainModeCompatLearnMoreClick = {
+                viewModel.trySendAction(AutoFillAction.WebDomainModeCompatLearnMoreClick)
+            },
         )
     }
 }

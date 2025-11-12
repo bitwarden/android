@@ -67,6 +67,8 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
         every { disableAutofill() } just runs
+        every { isAutofillWebDomainCompatMode = any() } just runs
+        every { isAutofillWebDomainCompatMode } returns false
     }
 
     @BeforeEach
@@ -512,6 +514,43 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when WebDomainModeLearnMoreClick action is handled NavigateToCompatibilityModeLearnMore event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.WebDomainModeCompatLearnMoreClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToCompatibilityModeLearnMore,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `when WebDomainModeToggle action is handled settings repo and state is updated`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AutoFillAction.WebDomainModeCompatToggle(isEnabled = true))
+        assertEquals(
+            DEFAULT_STATE.copy(isWebDomainCompatModeEnabled = true),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            settingsRepository.isAutofillWebDomainCompatMode = true
+        }
+
+        viewModel.trySendAction(AutoFillAction.WebDomainModeCompatToggle(isEnabled = false))
+        assertEquals(
+            DEFAULT_STATE.copy(isWebDomainCompatModeEnabled = false),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            settingsRepository.isAutofillWebDomainCompatMode = false
+        }
+    }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -536,6 +575,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
+    isWebDomainCompatModeEnabled = false,
 )
 
 private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(

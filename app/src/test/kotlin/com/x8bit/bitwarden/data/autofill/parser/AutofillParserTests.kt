@@ -69,6 +69,7 @@ class AutofillParserTests {
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
         every { blockedAutofillUris } returns emptyList()
+        every { isAutofillWebDomainCompatMode } returns false
     }
 
     private var mockIsInlineAutofillEnabled = true
