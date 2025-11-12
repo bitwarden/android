@@ -124,9 +124,7 @@ fun GetPasskeyScreen(
                 cardStyle = null,
                 readOnly = true,
                 singleLine = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

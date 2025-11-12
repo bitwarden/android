@@ -156,8 +156,7 @@ private fun CreatePasskeyScreenContent(
                 cardStyle = null,
                 readOnly = true,
                 singleLine = false,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

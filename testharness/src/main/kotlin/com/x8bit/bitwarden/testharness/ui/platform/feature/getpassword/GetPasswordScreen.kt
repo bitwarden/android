@@ -33,8 +33,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.testharness.R
 
-private const val RESULT_AREA_HEIGHT_DP = 300
-
 /**
  * Get Password test screen.
  */
@@ -114,9 +112,7 @@ fun GetPasswordScreen(
                 cardStyle = null,
                 readOnly = true,
                 singleLine = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(RESULT_AREA_HEIGHT_DP.dp),
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
