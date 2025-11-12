@@ -16,10 +16,9 @@ import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import com.x8bit.bitwarden.testharness.data.model.CredentialTestResult
+import com.x8bit.bitwarden.testharness.data.util.WebAuthnJsonBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
-
-private const val CHALLENGE_SEED_SIZE = 32
 
 /**
  * Default implementation of [CredentialTestManager].
@@ -112,7 +111,7 @@ class CredentialTestManagerImpl @Inject constructor(
     ): CredentialTestResult {
         return try {
             // Build minimal passkey creation request JSON
-            val requestJson = buildPasskeyCreationJson(username, rpId)
+            val requestJson = WebAuthnJsonBuilder.buildPasskeyCreationJson(username, rpId)
 
             // Conditionally include origin parameter for privileged app simulation
             val request = if (origin.isNullOrBlank()) {
@@ -155,63 +154,13 @@ class CredentialTestManagerImpl @Inject constructor(
         }
     }
 
-    /**
-     * Build a minimal valid WebAuthn registration request JSON.
-     *
-     * This follows the WebAuthn specification for PublicKeyCredentialCreationOptions.
-     */
-    private fun buildPasskeyCreationJson(username: String, rpId: String): String {
-        // Generate random challenge (base64url encoded)
-        val challenge = java.util.Base64.getUrlEncoder()
-            .withoutPadding()
-            .encodeToString(java.security.SecureRandom().generateSeed(CHALLENGE_SEED_SIZE))
-
-        // Generate random user ID (base64url encoded)
-        val userId = java.util.Base64.getUrlEncoder()
-            .withoutPadding()
-            .encodeToString(username.toByteArray())
-
-        return """
-        {
-          "challenge": "$challenge",
-          "rp": {
-            "name": "Test Harness",
-            "id": "$rpId"
-          },
-          "user": {
-            "id": "$userId",
-            "name": "$username",
-            "displayName": "$username"
-          },
-          "pubKeyCredParams": [
-            {
-              "type": "public-key",
-              "alg": -7
-            },
-            {
-              "type": "public-key",
-              "alg": -257
-            }
-          ],
-          "timeout": 60000,
-          "attestation": "none",
-          "authenticatorSelection": {
-            "authenticatorAttachment": "platform",
-            "residentKey": "required",
-            "requireResidentKey": true,
-            "userVerification": "required"
-          }
-        }
-        """.trimIndent()
-    }
-
     override suspend fun getPasskey(
         rpId: String,
         origin: String?,
     ): CredentialTestResult {
         return try {
             // Build minimal passkey authentication request JSON
-            val requestJson = buildPasskeyAuthenticationJson(rpId)
+            val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
 
             val option = GetPublicKeyCredentialOption(
                 requestJson = requestJson,
@@ -258,7 +207,7 @@ class CredentialTestManagerImpl @Inject constructor(
     ): CredentialTestResult {
         return try {
             // Build passkey authentication request JSON
-            val requestJson = buildPasskeyAuthenticationJson(rpId)
+            val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
 
             // Create request with both password and passkey options
             // Conditionally include origin parameter for privileged app simulation
@@ -317,25 +266,5 @@ class CredentialTestManagerImpl @Inject constructor(
                 exception = e,
             )
         }
-    }
-
-    /**
-     * Build a minimal valid WebAuthn authentication request JSON.
-     *
-     * This follows the WebAuthn specification for PublicKeyCredentialRequestOptions.
-     */
-    private fun buildPasskeyAuthenticationJson(rpId: String): String {
-        // Generate random challenge (base64url encoded)
-        val challenge = java.util.Base64.getUrlEncoder()
-            .withoutPadding()
-            .encodeToString(java.security.SecureRandom().generateSeed(CHALLENGE_SEED_SIZE))
-
-        return """
-        {
-          "challenge": "$challenge",
-          "rpId": "$rpId",
-          "userVerification": "preferred"
-        }
-        """.trimIndent()
     }
 }
