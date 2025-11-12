@@ -163,7 +163,6 @@ fun SettingsScreen(
             SecuritySettings(
                 state = state,
                 biometricsManager = biometricsManager,
-                hasBiometrics = hasBiometrics,
                 onBiometricToggle = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -286,7 +285,6 @@ fun SettingsScreen(
 private fun SecuritySettings(
     state: SettingsState,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
-    hasBiometrics: Boolean,
     onBiometricToggle: (Boolean) -> Unit,
     onScreenCaptureChange: (Boolean) -> Unit,
 ) {
@@ -299,7 +297,7 @@ private fun SecuritySettings(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
-    if (hasBiometrics) {
+    if (state.hasBiometricsSupport) {
         UnlockWithBiometricsRow(
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
@@ -313,7 +311,7 @@ private fun SecuritySettings(
 
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        cardStyle = if (hasBiometrics) {
+        cardStyle = if (state.hasBiometricsSupport) {
             CardStyle.Bottom
         } else {
             CardStyle.Full

@@ -254,6 +254,23 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(true))
         }
     }
+
+    @Test
+    fun `Unlock with biometrics row should be hidden when hasBiometricsSupport is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                hasBiometricsSupport = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertDoesNotExist()
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -276,4 +293,5 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    hasBiometricsSupport = true,
 )

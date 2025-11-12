@@ -127,6 +127,16 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.Internal.UnlockWithBiometricsUpdated -> {
                 handleUnlockWithBiometricsUpdated(action)
             }
+
+            is SettingsAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
+            }
+        }
+    }
+
+    private fun handleBiometricSupportChanged(action: SettingsAction.BiometricSupportChanged) {
+        mutableStateFlow.update {
+            it.copy(hasBiometricsSupport = action.isBiometricsSupported)
         }
     }
 
@@ -404,6 +414,7 @@ class SettingsViewModel @Inject constructor(
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
+                hasBiometricsSupport = unlockWithBiometricsEnabled,
             )
         }
     }
@@ -417,6 +428,7 @@ data class SettingsState(
     val appearance: Appearance,
     val defaultSaveOption: DefaultSaveOption,
     val isUnlockWithBiometricsEnabled: Boolean,
+    val hasBiometricsSupport: Boolean,
     val isSubmitCrashLogsEnabled: Boolean,
     val showSyncWithBitwarden: Boolean,
     val showDefaultSaveOptionRow: Boolean,
@@ -522,6 +534,11 @@ sealed class SettingsAction(
             val message: Text,
         ) : Dialog()
     }
+
+    /**
+     * Indicates an update on device biometrics support.
+     */
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : SettingsAction()
 
     /**
      * Models actions for the Security section of settings.

@@ -265,6 +265,23 @@ class SettingsViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `on BiometricSupportChanged should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.BiometricSupportChanged(isBiometricsSupported = false),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    hasBiometricsSupport = false,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ) = SettingsViewModel(
@@ -303,4 +320,5 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    hasBiometricsSupport = true,
 )
