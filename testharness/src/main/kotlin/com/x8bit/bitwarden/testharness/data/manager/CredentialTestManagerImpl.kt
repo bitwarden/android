@@ -59,7 +59,7 @@ class CredentialTestManagerImpl @Inject constructor(
                     )
                 }
             }
-        } catch (e: CreateCredentialCancellationException) {
+        } catch (_: CreateCredentialCancellationException) {
             CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
             CredentialTestResult.Error(
@@ -94,7 +94,7 @@ class CredentialTestManagerImpl @Inject constructor(
                     )
                 }
             }
-        } catch (e: GetCredentialCancellationException) {
+        } catch (_: GetCredentialCancellationException) {
             CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
             CredentialTestResult.Error(
@@ -144,7 +144,7 @@ class CredentialTestManagerImpl @Inject constructor(
                     )
                 }
             }
-        } catch (e: CreateCredentialCancellationException) {
+        } catch (_: CreateCredentialCancellationException) {
             CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
             CredentialTestResult.Error(
@@ -191,7 +191,7 @@ class CredentialTestManagerImpl @Inject constructor(
                     )
                 }
             }
-        } catch (e: GetCredentialCancellationException) {
+        } catch (_: GetCredentialCancellationException) {
             CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
             CredentialTestResult.Error(
@@ -258,7 +258,7 @@ class CredentialTestManagerImpl @Inject constructor(
                     )
                 }
             }
-        } catch (e: GetCredentialCancellationException) {
+        } catch (_: GetCredentialCancellationException) {
             CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
             CredentialTestResult.Error(
