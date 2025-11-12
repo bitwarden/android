@@ -75,7 +75,7 @@ def gh_get_changed_files(pr_number: str) -> list[str]:
         changed_files = result.stdout.strip().split("\n")
         return list(filter(None, changed_files))
     except subprocess.CalledProcessError as e:
-        print(f"Error getting changed files: {e}")
+        print(f"::error::Error getting changed files: {e}")
         return []
 
 def gh_get_pr_title(pr_number: str) -> str:
@@ -89,7 +89,7 @@ def gh_get_pr_title(pr_number: str) -> str:
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"Error getting PR title: {e}")
+        print(f"::error::Error getting PR title: {e}")
         return ""
 
 def gh_add_labels(pr_number: str, labels: list[str]) -> None:
