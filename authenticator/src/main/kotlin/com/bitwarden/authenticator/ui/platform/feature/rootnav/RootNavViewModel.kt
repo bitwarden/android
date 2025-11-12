@@ -171,7 +171,7 @@ sealed class RootNavAction {
     /**
      * Indicates an update on device biometrics support.
      */
-    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : Internal()
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : RootNavAction()
 
     /**
      * Models actions the [RootNavViewModel] itself may send.
