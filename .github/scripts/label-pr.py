@@ -208,7 +208,7 @@ def main():
     print(f"📋 PR Title: {pr_title}\n")
 
     changed_files = gh_get_changed_files(pr_number)
-    print("👀 Changed files:" + "\n".join(changed_files) + "\n")
+    print("👀 Changed files:\n" + "\n".join(changed_files) + "\n")
 
     filepath_labels = label_filepaths(changed_files, LABEL_PATH_PATTERNS)
     title_labels = label_title(pr_title, LABEL_TITLE_PATTERNS)
