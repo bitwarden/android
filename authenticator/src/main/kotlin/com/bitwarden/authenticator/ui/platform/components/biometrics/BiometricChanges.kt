@@ -6,7 +6,15 @@ import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsMana
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 
 /**
- * Tracks changes in biometric support.
+ * Tracks changes in biometric support and notifies when the app resumes.
+ *
+ * This composable monitors lifecycle events and checks biometric support status
+ * whenever the app returns to the foreground (ON_RESUME), useful for detecting
+ * when biometric settings change while the app is backgrounded.
+ *
+ * @param biometricsManager Manager to check current biometric support status.
+ * @param onBiometricSupportChange Callback invoked with the current biometric
+ * support status when the app resumes.
  */
 @Composable
 fun BiometricChanges(
