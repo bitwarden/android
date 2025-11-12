@@ -1,6 +1,9 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.testharness.ui.platform.feature.landing
 
 import androidx.navigation.NavGraphBuilder
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import kotlinx.serialization.Serializable
 

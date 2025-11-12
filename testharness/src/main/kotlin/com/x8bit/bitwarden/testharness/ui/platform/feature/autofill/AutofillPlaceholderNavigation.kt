@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.testharness.ui.platform.feature.autofill
 
 import androidx.navigation.NavController
@@ -5,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.serialization.Serializable
 
 /**
@@ -27,7 +30,6 @@ data object AutofillPlaceholderRoute
  */
 fun NavGraphBuilder.autofillGraph(
     onNavigateBack: () -> Unit,
-    navController: NavController,
 ) {
     navigation<AutofillGraphRoute>(
         startDestination = AutofillPlaceholderRoute,

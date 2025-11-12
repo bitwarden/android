@@ -48,7 +48,6 @@ fun RootNavScreen(
 
         autofillGraph(
             onNavigateBack = { navController.popBackStack() },
-            navController = navController,
         )
 
         credentialManagerGraph(

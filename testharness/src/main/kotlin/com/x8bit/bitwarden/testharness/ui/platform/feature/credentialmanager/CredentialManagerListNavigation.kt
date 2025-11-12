@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.testharness.ui.platform.feature.credentialmanager
 
 import androidx.navigation.NavController
@@ -5,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpasskey.createPasskeyDestination
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpasskey.navigateToCreatePasskey
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpassword.createPasswordDestination
