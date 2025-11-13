@@ -112,6 +112,11 @@ class RootNavViewModel @Inject constructor(
     ) {
         if (!action.isBiometricsSupported) {
             settingsRepository.clearBiometricsKey()
+
+            // If currently locked, navigate to unlocked since biometrics are no longer available
+            if (mutableStateFlow.value.navState is RootNavState.NavState.Locked) {
+                mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Unlocked) }
+            }
         }
     }
 }

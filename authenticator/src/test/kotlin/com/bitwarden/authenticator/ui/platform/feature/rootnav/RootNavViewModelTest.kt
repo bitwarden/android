@@ -269,6 +269,69 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `on BiometricSupportChanged with false when Locked should navigate to Unlocked`() = runTest {
+        every { settingsRepository.hasSeenWelcomeTutorial } returns true
+        every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
+        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns true
+        mutableHasSeenWelcomeTutorialFlow.value = true
+        val viewModel = createViewModel()
+
+        // Verify initial state is Locked
+        assertEquals(
+            RootNavState(
+                hasSeenWelcomeGuide = true,
+                navState = RootNavState.NavState.Locked,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        // Send BiometricSupportChanged with false
+        viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
+
+        // Should navigate to Unlocked and clear biometric key
+        assertEquals(
+            RootNavState(
+                hasSeenWelcomeGuide = true,
+                navState = RootNavState.NavState.Unlocked,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on BiometricSupportChanged with false when not Locked should not change navigation state`() =
+        runTest {
+            every { settingsRepository.hasSeenWelcomeTutorial } returns true
+            mutableHasSeenWelcomeTutorialFlow.value = true
+            val viewModel = createViewModel()
+
+            // Verify initial state is Unlocked (biometrics not enabled)
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Unlocked,
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            // Send BiometricSupportChanged with false
+            viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
+
+            // Should remain Unlocked and clear biometric key
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Unlocked,
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `hasSeenWelcomeTutorialFlow updates should trigger HasSeenWelcomeTutorialChange action`() =
         runTest {
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns false
