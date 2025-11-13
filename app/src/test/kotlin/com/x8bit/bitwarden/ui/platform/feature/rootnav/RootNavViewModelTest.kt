@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
+import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.provider.ProviderCreateCredentialRequest
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
@@ -28,7 +30,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
@@ -64,6 +68,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(::parseJwtTokenDataOrNull)
+        unmockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
     @Test
@@ -682,11 +687,18 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
+        mockkObject(ProviderCreateCredentialRequest.Companion)
+
         val createCredentialRequest = CreateCredentialRequest(
             userId = "activeUserId",
             isUserPreVerified = false,
             requestData = bundleOf(),
         )
+
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
+            every { callingRequest } returns mockk<CreatePublicKeyCredentialRequest>()
+        }
+
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
         mutableUserStateFlow.tryEmit(
