@@ -137,10 +137,10 @@ fun SettingsScreen(
 
     BiometricChanges(
         biometricsManager = biometricsManager,
-        onBiometricSupportChange = { isSupported ->
-            viewModel.trySendAction(
-                SettingsAction.BiometricSupportChanged(isSupported),
-            )
+        onBiometricSupportChange = remember(viewModel) {
+            {
+                viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
+            }
         },
     )
 
