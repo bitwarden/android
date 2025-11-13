@@ -414,7 +414,7 @@ class SettingsViewModel @Inject constructor(
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
-                hasBiometricsSupport = unlockWithBiometricsEnabled,
+                hasBiometricsSupport = true,
             )
         }
     }
