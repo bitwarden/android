@@ -13,6 +13,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
@@ -75,7 +77,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
-            assert(!onSplashScreenRemovedCalled)
+            assertFalse(onSplashScreenRemovedCalled)
         }
     }
 
@@ -92,7 +94,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
-            assert(onSplashScreenRemovedCalled)
+            assertTrue(onSplashScreenRemovedCalled)
         }
     }
 
@@ -109,7 +111,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
-            assert(onSplashScreenRemovedCalled)
+            assertTrue(onSplashScreenRemovedCalled)
         }
     }
 
@@ -126,7 +128,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
-            assert(onSplashScreenRemovedCalled)
+            assertTrue(onSplashScreenRemovedCalled)
         }
     }
 
@@ -137,7 +139,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            assert(!onSplashScreenRemovedCalled)
+            assertFalse(onSplashScreenRemovedCalled)
         }
 
         mutableStateFlow.update {
@@ -145,7 +147,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            assert(onSplashScreenRemovedCalled)
+            assertTrue(onSplashScreenRemovedCalled)
         }
     }
 
@@ -156,7 +158,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            assert(!onSplashScreenRemovedCalled)
+            assertFalse(onSplashScreenRemovedCalled)
         }
     }
 
