@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">സ്ഥിരീകരണ കോഡ് ഇമെയിൽ വഴി വീണ്ടും  അയയ്ക്കുക</string>
     <string name="verification_email_not_sent">സ്ഥിരീകരണ ഇമെയിൽ അയയ്ക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.</string>
     <string name="verification_email_sent">സ്ഥിരീകരണ ഇമെയിൽ അയച്ചു</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey സുരക്ഷാ കീ</string>
     <string name="add_new_attachment">പുതിയ അറ്റാച്ചുമെന്റ് ചേർക്കുക</string>
     <string name="attachments">അറ്റാച്ചുമെന്റുകൾ</string>
@@ -1153,4 +1153,7 @@ Do you want to switch to this account?</string>
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

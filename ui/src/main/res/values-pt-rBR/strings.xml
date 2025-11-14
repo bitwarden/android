@@ -22,33 +22,33 @@
     <string name="folder">Pasta</string>
     <string name="folder_created">Nova pasta criada.</string>
     <string name="folder_deleted">Pasta excluída.</string>
-    <string name="folder_none">Nenhuma Pasta</string>
+    <string name="folder_none">Sem pasta</string>
     <string name="folders">Pastas</string>
     <string name="folder_updated">Pasta salva</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Conecte-se à internet antes de continuar.</string>
     <string name="internet_connection_required_title">É necessária uma conexão à internet</string>
-    <string name="invalid_master_password">Senha mestre inválida. Tente novamente.</string>
+    <string name="invalid_master_password">Senha principal inválida. Tente novamente.</string>
     <string name="invalid_pin">PIN inválido. Tente novamente.</string>
     <string name="launch">Abrir</string>
     <string name="log_in_verb">Entrar</string>
     <string name="log_in_noun">Credencial</string>
-    <string name="log_out">Encerrar sessão</string>
+    <string name="log_out">Sair</string>
     <string name="logout_confirmation">Tem certeza que deseja sair?</string>
     <string name="remove_account">Remover conta</string>
     <string name="remove_account_confirmation">Tem certeza que deseja remover essa conta?</string>
     <string name="account_already_added">Conta já adicionada</string>
     <string name="switch_to_already_added_account_confirmation">Você gostaria de mudar para ela agora?</string>
-    <string name="master_password">Senha mestra</string>
-    <string name="master_password_required">Senha mestre (obrigatório)</string>
-    <string name="new_master_password_required">Nova senha mestre (obrigatória)</string>
+    <string name="master_password">Senha principal</string>
+    <string name="master_password_required">Senha principal (obrigatório)</string>
+    <string name="new_master_password_required">Nova senha principal (obrigatória)</string>
     <string name="more">Mais</string>
     <string name="my_vault">Meu cofre</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome do item (obrigatório)</string>
     <string name="send_name_required">Nome do Send (obrigatório)</string>
     <string name="no">Não</string>
-    <string name="notes">Notas</string>
+    <string name="notes">Anotações</string>
     <string name="private_notes">Anotações privadas</string>
     <string name="okay">Ok</string>
     <string name="password">Senha</string>
@@ -66,16 +66,16 @@
     <string name="validation_field_required">O campo %1$s é necessário.</string>
     <string name="you_must_attach_a_file_to_save_this_send">Você deve anexar um arquivo para salvar esse Send.</string>
     <string name="value_has_been_copied">%1$s foi copiado(a).</string>
-    <string name="verify_master_password">Verificar a senha mestra</string>
+    <string name="verify_master_password">Verificar a senha principal</string>
     <string name="verify_pin">Verificar PIN</string>
-    <string name="view">Visualizar</string>
+    <string name="view">Ver</string>
     <string name="yes">Sim</string>
     <string name="account">Conta</string>
     <string name="account_created_success">Sua conta nova foi criada!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Defina o Bitwarden como seu provedor de chaves de acesso nas configurações de seu dispositivo.</string>
     <string name="avoid_ambiguous_characters">Evitar caracteres ambíguos</string>
     <string name="bitwarden_autofill_service">Serviço de Preenchimento Automático do Bitwarden</string>
-    <string name="change_master_password">Alterar senha mestra</string>
+    <string name="change_master_password">Alterar senha principal</string>
     <string name="close">Fechar</string>
     <string name="continue_text">Continuar</string>
     <string name="create_account">Criar conta</string>
@@ -86,12 +86,12 @@
     <string name="edit_identity">Editar identidade</string>
     <string name="edit_note">Editar anotação</string>
     <string name="edit_ssh_key">Editar chave SSH</string>
-    <string name="enter_email_for_hint">Digite o endereço de e-mail da sua conta para receber a dica da sua senha mestra.</string>
+    <string name="enter_email_for_hint">Digite o endereço de e-mail da sua conta para receber a dica da sua senha principal.</string>
     <string name="favorite">Favoritar</string>
     <string name="unfavorite">Desfavoritar</string>
     <string name="fingerprint">Impressão digital</string>
     <string name="generate_password">Gerar senha</string>
-    <string name="get_password_hint">Receba a dica da sua senha mestra</string>
+    <string name="get_password_hint">Receba a dica da sua senha principal</string>
     <string name="import_items">Importar itens</string>
     <string name="last_sync">Última sincronização:</string>
     <string name="length">Comprimento</string>
@@ -106,12 +106,12 @@
     <string name="logging_in">Entrando…</string>
     <string name="login_to_bitwarden">Entre no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
-    <string name="master_password_description">A senha mestre é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestre. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
-    <string name="master_password_hint">Dica de senha mestra (opcional)</string>
-    <string name="master_password_hint_description">Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</string>
+    <string name="master_password_description">A senha principal é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha principal. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
+    <string name="master_password_hint">Dica de senha principal (opcional)</string>
+    <string name="master_password_hint_description">Uma dica de senha principal pode ajudá-lo(a) a lembrá-la caso você a esqueça.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">A senha mestra deve ter pelo menos %d caractere.</item>
-        <item quantity="other">A senha mestra deve ter pelo menos %d caracteres.</item>
+        <item quantity="one">A senha principal deve ter pelo menos %d caractere.</item>
+        <item quantity="other">A senha principal deve ter pelo menos %d caracteres.</item>
     </plurals>
     <string name="min_numbers">Mínimo de números</string>
     <string name="min_special">Mínimo de caracteres especiais</string>
@@ -136,11 +136,11 @@
     <string name="other">Outros</string>
     <string name="password_generator">Gerador de senha</string>
     <string name="password_hint">Dica da senha</string>
-    <string name="password_hint_alert">Enviamos um e-mail com a dica da sua senha mestra.</string>
+    <string name="password_hint_alert">Enviamos um e-mail com a dica da sua senha principal.</string>
     <string name="password_override_alert">Tem certeza que deseja substituir a senha atual?</string>
-    <string name="retype_master_password">Digite novamente a senha mestra</string>
-    <string name="retype_new_master_password_required">Digite novamente a senha mestre nova (obrigatório)</string>
-    <string name="retype_master_password_required">Digite novamente a senha mestra (obrigatório)</string>
+    <string name="retype_master_password">Digite novamente a senha principal</string>
+    <string name="retype_new_master_password_required">Digite novamente a senha principal nova (obrigatório)</string>
+    <string name="retype_master_password_required">Digite novamente a senha principal (obrigatório)</string>
     <string name="search_vault">Pesquisar cofre</string>
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
@@ -350,7 +350,7 @@ A leitura será feita automaticamente.</string>
     <string name="thirty_minutes">30 minutos</string>
     <string name="set_pin_description">Seu PIN deve ter pelo menos 4 caracteres. As configurações do PIN serão redefinidas se você sair manualmente do aplicativo do Bitwarden.</string>
     <string name="logged_in_as_on">Conectado como %1$s em %2$s.</string>
-    <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua senha mestra para continuar.</string>
+    <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua senha principal para continuar.</string>
     <string name="vault_locked_pin">O seu cofre está bloqueado. Verifique o seu PIN para continuar.</string>
     <string name="dark">Escuro</string>
     <string name="light">Claro</string>
@@ -366,8 +366,8 @@ A leitura será feita automaticamente.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Alterar o tema de cores do aplicativo</string>
     <string name="copy_notes">Copiar anotação</string>
-    <string name="require_master_password_on_app_restart">Exigir senha mestra ao reiniciar o aplicativo?</string>
-    <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha mestra quando o aplicativo for reiniciado?</string>
+    <string name="require_master_password_on_app_restart">Exigir senha principal ao reiniciar o aplicativo?</string>
+    <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha principal quando o aplicativo for reiniciado?</string>
     <string name="ask_to_add_item">Pedir para adicionar item</string>
     <string name="ask_to_add_item_description">Pedir para adicionar um item se ele não for encontrado no seu cofre.</string>
     <string name="on_restart">Ao reiniciar o aplicativo</string>
@@ -378,10 +378,10 @@ A leitura será feita automaticamente.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
     <string name="device_verification">Verificação do dispositivo</string>
     <string name="biometrics_failed">Falha na biometria</string>
-    <string name="biometrics_decoding_failure">Entre com sua senha mestre ou PIN, e então reative o desbloqueio biométrico nas Configurações.</string>
+    <string name="biometrics_decoding_failure">Entre com sua senha principal ou PIN, e então reative o desbloqueio biométrico nas Configurações.</string>
     <string name="use_biometrics_to_unlock">Usar biometria para desbloquear</string>
     <string name="file_format">Formato do arquivo</string>
-    <string name="export_vault_master_password_description">Digite sua senha mestra para exportar os dados do seu cofre.</string>
+    <string name="export_vault_master_password_description">Digite sua senha principal para exportar os dados do seu cofre.</string>
     <string name="send_verification_code_to_email">Enviar um código de verificação para o seu e-mail</string>
     <string name="code_sent">Código enviado!</string>
     <string name="confirm_your_identity">Confirme a sua identidade para continuar.</string>
@@ -406,15 +406,15 @@ A leitura será feita automaticamente.</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Tem certeza que quer apagar para sempre? Isso não pode ser desfeito.</string>
     <string name="do_you_really_want_to_restore_cipher">Tem certeza que quer restaurar este item?</string>
     <string name="do_you_really_want_to_soft_delete_cipher">Tem certeza que quer enviar para a lixeira?</string>
-    <string name="account_biometric_invalidated">O desbloqueio biométrico desta conta está desativado, pendente da verificação da senha mestre.</string>
+    <string name="account_biometric_invalidated">O desbloqueio biométrico desta conta está desativado, pendente da verificação da senha principal.</string>
     <string name="enable_sync_on_refresh">Permitir sincronização ao recarregar</string>
     <string name="enable_sync_on_refresh_description">Sincronizando o cofre com o gesto de deslizar para baixo.</string>
     <string name="log_in_sso">Autenticação única empresarial</string>
     <string name="log_in_sso_summary">Entre rapidamente usando o portal de autenticação única da sua organização. Informe o identificador da sua organização para começar.</string>
     <string name="org_identifier">Identificador da organização</string>
     <string name="login_sso_error">Atualmente incapaz de acessar com SSO</string>
-    <string name="set_master_password">Definir senha mestra</string>
-    <string name="master_password_policy_in_effect">Uma ou mais políticas da organização exigem que a sua senha mestra cumpra aos seguintes requisitos:</string>
+    <string name="set_master_password">Definir senha principal</string>
+    <string name="master_password_policy_in_effect">Uma ou mais políticas da organização exigem que a sua senha principal cumpra aos seguintes requisitos:</string>
     <string name="policy_in_effect_min_complexity">Pontuação mínima de complexidade de %1$s</string>
     <string name="policy_in_effect_min_length">Tamanho mínimo de %1$s</string>
     <string name="policy_in_effect_uppercase">Contém um ou mais caracteres em maiúsculo</string>
@@ -486,19 +486,19 @@ A leitura será feita automaticamente.</string>
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
     <string name="send_file_premium_required">Contas gratuitas são restritas para compartilhar apenas de texto. É necessário um plano Premium para usar arquivos com o Send.</string>
-    <string name="password_prompt">Resolicitar senha mestre</string>
-    <string name="password_confirmation">Confirmação de senha mestra</string>
-    <string name="password_confirmation_desc">Esta ação é protegida, para continuar digite a sua senha mestra novamente para verificar a sua identidade.</string>
-    <string name="update_master_password">Atualizar senha mestra</string>
-    <string name="update_master_password_warning">A sua senha mestra foi alterada recentemente por um administrador na sua organização. Para acessar o cofre, você precisa atualizar sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você entre novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
+    <string name="password_prompt">Resolicitar senha principal</string>
+    <string name="password_confirmation">Confirmação de senha principal</string>
+    <string name="password_confirmation_desc">Esta ação é protegida, para continuar digite a sua senha principal novamente para verificar a sua identidade.</string>
+    <string name="update_master_password">Atualizar senha principal</string>
+    <string name="update_master_password_warning">A sua senha principal foi alterada recentemente por um administrador na sua organização. Para acessar o cofre, você precisa atualizar sua senha principal agora. O processo desconectará você da sessão atual, exigindo que você entre novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
     <string name="updating_password">Atualizando senha</string>
-    <string name="remove_master_password">Remover senha mestra</string>
+    <string name="remove_master_password">Remover senha principal</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair de %1$s?</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Voltar ao aplicativo</string>
-    <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na redefinição de senha. A inscrição permitirá que os administradores da organização alterem sua senha mestra.</string>
-    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na redefinição de senha. A inscrição permitirá que os administradores da organização alterem sua senha principal.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s e %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">%1$d hora</item>
         <item quantity="other">%1$d horas</item>
@@ -507,11 +507,11 @@ A leitura será feita automaticamente.</string>
         <item quantity="one">%1$d minuto</item>
         <item quantity="other">%1$d minutos</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A sua organização configurou o tempo de limite máximo da sessão para %1$s e %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A sua organização configurou o tempo de limite máximo da sessão para %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Esta configuração é gerenciada pela sua organização.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">A sua organização configurou o tempo de limite máximo da sessão para nunca.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A sua organização configurou o tempo de limite máximo da sessão para quando o app for reaberto.</string>
     <string name="vault_timeout_to_large">O tempo limite do seu cofre excede as restrições definidas por sua organização.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Uma ou mais políticas da organização impedem que você exporte seu cofre individual.</string>
     <string name="add_account">Adicionar conta</string>
@@ -599,10 +599,10 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</string>
 %1$s
 Você deseja mudar para esta conta?</string>
     <string name="new_to_bitwarden">Novo no Bitwarden?</string>
-    <string name="get_master_passwordword_hint">Receber dica da senha mestra</string>
+    <string name="get_master_passwordword_hint">Receber dica da senha principal</string>
     <string name="logging_in_as_x_on_y">Conectando-se como %1$s em %2$s</string>
     <string name="not_you">Não é você?</string>
-    <string name="log_in_with_master_password">Entrar com a senha mestra</string>
+    <string name="log_in_with_master_password">Entrar com a senha principal</string>
     <string name="log_in_initiated">Autenticação iniciada</string>
     <string name="a_notification_has_been_sent_to_your_device">Uma notificação foi enviada para seu dispositivo.</string>
     <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Certifique-se de que o seu cofre esteja desbloqueado e a frase biométrica corresponda ao outro dispositivo.</string>
@@ -616,30 +616,30 @@ Você deseja mudar para esta conta?</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">O idioma foi alterado para %1$s. Reinicie o aplicativo para ver a mudança</string>
     <string name="default_system">Padrão (Sistema)</string>
-    <string name="weak_master_password">Senha mestra fraca</string>
+    <string name="weak_master_password">Senha principal fraca</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Senha fraca identificada. Use uma senha forte para proteger a sua conta. Você tem certeza que deseja usar uma senha fraca?</string>
     <string name="weak">Fraca</string>
     <string name="good">Boa</string>
     <string name="strong">Forte</string>
     <string name="check_known_data_breaches_for_this_password">Conferir vazamento de dados conhecidos por esta senha</string>
-    <string name="exposed_master_password">Senha mestra comprometida</string>
+    <string name="exposed_master_password">Senha principal comprometida</string>
     <string name="password_found_in_a_data_breach_alert_description">A senha foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Tem certeza de que deseja usar uma senha comprometida?</string>
-    <string name="weak_and_exposed_master_password">Senha mestra fraca e comprometida</string>
+    <string name="weak_and_exposed_master_password">Senha principal fraca e comprometida</string>
     <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Uma senha fraca foi identificada e foi encontrada em um vazamento de dados. Use uma senha única e forte para proteger sua conta. Quer mesmo usar essa senha?</string>
     <string name="there_are_no_items_that_match_the_search">Não há itens que correspondam à pesquisa</string>
     <string name="self_hosted">Auto-hospedado</string>
     <string name="region">Região</string>
-    <string name="update_weak_master_password_warning">A sua senha mestra não atende a uma ou mais das políticas da sua organização. Para acessar o cofre, você deve atualizar a sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você entre novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
-    <string name="current_master_password_required">Senha mestra atual (obrigatória)</string>
+    <string name="update_weak_master_password_warning">A sua senha principal não atende a uma ou mais das políticas da sua organização. Para acessar o cofre, você deve atualizar a sua senha principal agora. O processo desconectará você da sessão atual, exigindo que você entre novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
+    <string name="current_master_password_required">Senha principal atual (obrigatória)</string>
     <string name="approve_with_my_other_device">Aprovar com meu outro dispositivo</string>
     <string name="request_admin_approval">Solicitar aprovação do administrador</string>
-    <string name="approve_with_master_password">Aprovar com senha mestra</string>
+    <string name="approve_with_master_password">Aprovar com senha principal</string>
     <string name="turn_off_using_public_device">Desativar usando um dispositivo público</string>
     <string name="remember_this_device">Lembrar deste dispositivo</string>
     <string name="passkey">Chave de acesso</string>
     <string name="passkey_will_not_be_copied">A chave de acesso não será copiada</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">A chave de acesso não será copiada para o item clonado. Deseja continuar clonando este item?</string>
-    <string name="master_password_re_prompt_help">Ajuda com a resolicitação da senha mestre</string>
+    <string name="master_password_re_prompt_help">Ajuda com a resolicitação da senha principal</string>
     <string name="admin_approval_requested">Aprovação do administrador necessária</string>
     <string name="your_request_has_been_sent_to_your_admin">Sua solicitação foi enviada para seu administrador.</string>
     <string name="you_will_be_notified_once_approved">Você será notificado assim que for aprovado.</string>
@@ -676,13 +676,13 @@ Você deseja mudar para esta conta?</string>
     <string name="continue_to_privacy_policy">Continuar para a política de privacidade?</string>
     <string name="continue_to_device_settings">Continuar para as Configurações do dispositivo?</string>
     <string name="two_step_login_description_long">Torne sua conta mais segura configurando a autenticação em duas etapas no aplicativo web do Bitwarden.</string>
-    <string name="change_master_password_description_long">Você pode alterar a sua senha mestra no aplicativo web do Bitwarden.</string>
+    <string name="change_master_password_description_long">Você pode alterar a sua senha principal no aplicativo web do Bitwarden.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Saiba mais sobre como usar o Bitwarden no centro de ajuda.</string>
     <string name="privacy_policy_description_long">Confira a nossa política de privacidade em bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais recursos da sua conta do Bitwarden no aplicativo web.</string>
     <string name="learn_about_organizations_description_long">O Bitwarden permite compartilhar os seus itens do cofre com outros ao utilizar uma organização. Saiba mais no site do bitwarden.com.</string>
     <string name="created_x">Criado %1$s</string>
-    <string name="your_organization_requires_you_to_set_a_master_password">Sua organização requer que você defina uma senha mestra.</string>
+    <string name="your_organization_requires_you_to_set_a_master_password">Sua organização requer que você defina uma senha principal.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure um método de desbloqueio para alterar o tempo limite do cofre.</string>
     <string name="save_passkey_as_new_login">Salvar chave de acesso como uma nova credencial</string>
     <string name="overwrite_passkey">Sobrescrever chave de acesso?</string>
@@ -744,7 +744,7 @@ Você deseja mudar para esta conta?</string>
     <string name="write_your_password_down">Anote a sua senha</string>
     <string name="keep_it_secret_keep_it_safe">Tenha cuidado ao manter sua senha escrita em algum lugar secreto e seguro.</string>
     <string name="prevent_account_lockout">Impeça o bloqueio da conta</string>
-    <string name="generate_master_password">Gerar senha mestra</string>
+    <string name="generate_master_password">Gerar senha principal</string>
     <string name="generate_button_label">Gerar</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Anote esta senha e mantenha-a em algum lugar seguro.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Saiba mais sobre outras formas de evitar o bloqueio da conta</string>
@@ -754,9 +754,9 @@ Você deseja mudar para esta conta?</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Selecione o link no e-mail para confirmar o seu endereço de e-mail e continuar a criar a sua conta.</string>
     <string name="change_email_address">Alterar endereço de e-mail</string>
     <string name="next">Avançar</string>
-    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não consegue redefinir uma senha mestra perdida ou esquecida.</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não consegue recuperar uma senha mestra perdida ou esquecida.</string>
-    <string name="choose_your_master_password">Escolha sua senha mestra</string>
+    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não consegue redefinir uma senha principal perdida ou esquecida.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não consegue recuperar uma senha principal perdida ou esquecida.</string>
+    <string name="choose_your_master_password">Escolha sua senha principal</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
     <plurals name="minimum_characters">
         <item quantity="one">%d caractere</item>
@@ -783,8 +783,8 @@ Você deseja mudar para esta conta?</string>
     <string name="what_bitwarden_has_to_offer">Agora você pode explorar tudo o que o Bitwarden tem para oferecer e começar a gerenciar suas senhas com segurança.</string>
     <string name="youre_all_set">Você está pronto!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao se conectar com o serviço Duo. Use um método de verificação de duas etapas diferente ou contate o Duo para assistência.</string>
-    <string name="master_password_hint_not_specified">Dica da senha mestra</string>
-    <string name="new_master_password_hint">Nova dica da senha mestra</string>
+    <string name="master_password_hint_not_specified">Dica da senha principal</string>
+    <string name="new_master_password_hint">Nova dica da senha principal</string>
     <string name="get_started">Introdução</string>
     <string name="save_and_protect_your_data">Salve e proteja seus dados</string>
     <string name="the_vault_protects_more_than_just_passwords">O cofre protege mais do que apenas senhas. Armazene credenciais, documentos, cartões e anotações com segurança aqui.</string>
@@ -961,7 +961,7 @@ quaisquer problema.</string>
     <string name="confirm_key_connector_domain">Confirmar domínio do Conector de Chave</string>
     <string name="key_connector_domain">Domínio do Conector de Chave:</string>
     <string name="key_connector_organization">Organização:</string>
-    <string name="password_no_longer_required_confirm_domain">A senha mestra não é mais necessária para os membros da seguinte organização. Confirme o domínio abaixo com o administrador da sua organização.</string>
+    <string name="password_no_longer_required_confirm_domain">A senha principal não é mais necessária para os membros da seguinte organização. Confirme o domínio abaixo com o administrador da sua organização.</string>
     <string name="please_confirm_domain_with_admin">Confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Conector de Chave:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s às %2$s. Volte às configurações para desativá-lo agora.</string>
@@ -1109,7 +1109,7 @@ quaisquer problema.</string>
     <string name="later">Depois</string>
     <string name="encryption_settings_updated">Configuração de criptografia atualizada</string>
     <string name="update_your_encryption_settings">Atualize suas configurações de criptografia</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">As novas configurações de criptografia recomendadas irão melhorar a segurança da sua conta. Digite sua senha mestra para atualizar agora.</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">As novas configurações de criptografia recomendadas irão melhorar a segurança da sua conta. Digite sua senha principal para atualizar agora.</string>
     <string name="import_was_cancelled_in_the_selected_app">Importação de credenciais foi cancelada no aplicativo selecionado. Nenhum item foi importado.</string>
     <string name="import_cancelled">Importação cancelada</string>
     <string name="no_items_imported">Nenhum item importado</string>
@@ -1134,7 +1134,7 @@ quaisquer problema.</string>
     <string name="no_accounts_available">Nenhuma conta disponível</string>
     <string name="you_dont_have_any_accounts_you_can_import_from">Você não tem nenhuma conta da qual possa importar. A política de segurança da sua organização pode restringir a importação de itens do Bitwarden para outro aplicativo.</string>
     <string name="import_restricted_unable_to_import_credit_cards">Importação restrita, não é possível importar cartões desta conta.</string>
-    <string name="verify_your_master_password">Verifique sua senha mestra</string>
+    <string name="verify_your_master_password">Verifique sua senha principal</string>
     <string name="having_trouble_with_autofill">Tendo problemas com o preenchimento automático?</string>
     <string name="access_help_and_troubleshooting_documentation_here">Acesse ajuda e documentação de solução de problemas aqui</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importar senhas, chaves de acesso e outros tipos de itens do seu cofre do Bitwarden.</string>
@@ -1155,4 +1155,7 @@ quaisquer problema.</string>
     <string name="lock_app">Bloquear aplicativo</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
     <string name="loading_vault_data">Carregando dados do cofre…</string>
+    <string name="compatibility_mode_warning">O modo de compatibilidade só deve ser ativado se o preenchimento automático não funcionar no seu navegador. Esta configuração reduz a segurança e pode permitir que sites maliciosos capture suas senhas. Apenas ative se você aceitar este risco.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Usar modo de compatibilidade para preenchimento automático do navegador</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Usa um método de preenchimento automático menos seguro compatível com mais navegadores.\n<annotation link="learnMore">Saiba mais sobre o modo de compatibilidade</annotation></string>
 </resources>

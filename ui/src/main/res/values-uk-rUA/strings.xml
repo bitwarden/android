@@ -197,7 +197,7 @@
     <string name="copy_totp">Копіювати TOTP</string>
     <string name="copy_totp_automatically_description">Якщо запис має ключ автентифікації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</string>
     <string name="copy_totp_automatically">Автоматично копіювати коди TOTP</string>
-    <string name="premium_required">Для використання цієї функції необхідна передплата преміум.</string>
+    <string name="premium_required">Для використання цієї функції необхідна передплата Premium.</string>
     <string name="attachment_deleted">Вкладення видалено</string>
     <string name="choose_file">Обрати файл</string>
     <string name="file">Файл</string>
@@ -380,7 +380,7 @@
     <string name="download">Завантажити</string>
     <string name="login_expired">Тривалість вашого сеансу завершилась.</string>
     <string name="biometrics_direction">Біометрична перевірка</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Перевірка пристрою</string>
     <string name="biometrics_failed">Збій біометрії</string>
     <string name="biometrics_decoding_failure">Увійдіть за допомогою головного пароля або PIN-коду, а потім активуйте вхід з біометрією в налаштуваннях.</string>
     <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
@@ -483,13 +483,13 @@
     <string name="seven_days">7 днів</string>
     <string name="thirty_days">30 днів</string>
     <string name="custom">Власний</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Власний час очікування</string>
     <string name="add_this_authenticator_key_to_a_login">Додати цей ключ автентифікації до наявного запису або створити новий.</string>
     <string name="send_disabled_warning">У зв\'язку з політикою компанії, ви можете лише видалити наявне відправлення.</string>
     <string name="about_send">Про відправлення</string>
     <string name="hide_email">Приховувати мою адресу електронної пошти від отримувачів</string>
     <string name="send_options_policy_in_effect">На параметри відправлень впливають одна чи декілька політик організації.</string>
-    <string name="send_file_premium_required">З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата преміум.</string>
+    <string name="send_file_premium_required">З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата Premium.</string>
     <string name="password_prompt">Повторний запит головного пароля</string>
     <string name="password_confirmation">Підтвердження головного пароля</string>
     <string name="password_confirmation_desc">Ця дія захищена. Щоб продовжити, повторно введіть головний пароль.</string>
@@ -504,16 +504,16 @@
     <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="many">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d година</item>
+        <item quantity="few">%1$d години</item>
+        <item quantity="many">%1$d годин</item>
+        <item quantity="other">%1$d годин</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="few">%1$d minutes</item>
-        <item quantity="many">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d хвилина</item>
+        <item quantity="few">%1$d хвилини</item>
+        <item quantity="many">%1$d хвилин</item>
+        <item quantity="other">%1$d хвилин</item>
     </plurals>
     <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
@@ -550,7 +550,7 @@
     <string name="all">Усі</string>
     <string name="totp">TOTP</string>
     <string name="verification_codes">Коди підтвердження</string>
-    <string name="premium_subscription_required">Необхідна передплата преміум</string>
+    <string name="premium_subscription_required">Необхідна передплата Premium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Не вдається додати ключ автентифікації? <annotation link="scanQrCode">Скануйте QR-код</annotation></string>
     <string name="scan_qr_code"><annotation link="scanQrCode">Сканувати QR-код</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Не можете сканувати QR-код? <annotation link="enterKeyManually">Введіть ключ вручну</annotation></string>
@@ -781,10 +781,10 @@
     <string name="turn_on_autofill">Увімкніть автозаповнення</string>
     <string name="autofill_setup">Налаштування автозаповнення</string>
     <string name="turn_on_browser_autofill_integration">Увімкнути інтеграцію автозаповнення у браузері</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Ви використовуєте браузер, який потребує спеціальних дозволів для автозаповнення паролів Bitwarden.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Ви використовуєте браузери, які потребують спеціальних дозволів для автозаповнення паролів Bitwarden.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Ви використовуєте браузер, який потребує спеціальних дозволів для автозаповнення паролів Bitwarden. Активуйте бажану інтеграцію автозаповнення нижче.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Ви використовуєте браузери, які потребують спеціальних дозволів для автозаповнення паролів Bitwarden. Активуйте бажані інтеграції автозаповнення нижче.</string>
     <string name="use_autofill_to_log_into_your_accounts">Використовуйте автозаповнення для входу в облікові записи одним дотиком.</string>
     <string name="turn_on_later">Увімкнути пізніше</string>
     <string name="turn_on_autofill_later">Увімкнути автозаповнення пізніше?</string>
@@ -1120,7 +1120,7 @@
     <string name="default_uri_match_detection_description_advanced_options">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.\n<annotation emphasis="bold">Обережно!</annotation> \"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">Регулярний вираз – це функція для досвідчених користувачів, неправильне використання якої може призвести до розкриття облікових даних.</string>
-    <string name="later">Later</string>
+    <string name="later">Пізніше</string>
     <string name="encryption_settings_updated">Encryption settings updated</string>
     <string name="update_your_encryption_settings">Update your encryption settings</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
@@ -1144,7 +1144,7 @@
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
     <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
-    <string name="not_now">Not now</string>
+    <string name="not_now">Не зараз</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
     <string name="no_accounts_available">No accounts available</string>
@@ -1171,4 +1171,7 @@
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">E-mail met verificatiecode opnieuw versturen</string>
     <string name="verification_email_not_sent">Kon de verificatie-e-mail niet versturen. Probeer het opnieuw.</string>
     <string name="verification_email_sent">E-mail met verificatiecode verzonden.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey beveiligingssleutel</string>
     <string name="add_new_attachment">Nieuwe bijlage toevoegen</string>
     <string name="attachments">Bijlagen</string>
@@ -1153,4 +1153,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="lock_app">App vergrendelen</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gebruik de vergrendelingsmethode van je apparaat om de app te ontgrendelen</string>
     <string name="loading_vault_data">Kluisdata inladen…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

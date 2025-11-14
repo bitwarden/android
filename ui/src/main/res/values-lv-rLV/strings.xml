@@ -180,7 +180,7 @@
     <string name="send_verification_code_again">Atkārtoti nosūtīt kodu</string>
     <string name="verification_email_not_sent">Nevarēja nosūtīt apliecinājuma e-pasta ziņojumu. Jāmēģina vēlreiz.</string>
     <string name="verification_email_sent">Apliecināšanas e-pasta ziņojums ir nosūtīts</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey drošības atslēga</string>
     <string name="add_new_attachment">Pievienot jaunu pielikumu</string>
     <string name="attachments">Pielikumi</string>
@@ -1161,4 +1161,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="lock_app">Aizslēgt lietotni</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Jāizmanto ierīces slēgšanas veids, lai atslēgtu lietotni</string>
     <string name="loading_vault_data">Ielādē glabātavas datus…</string>
+    <string name="compatibility_mode_warning">Saderības režīmu vajadzētu iespējot tikai tad, ja pārlūkā nedarbojas automātiskā aizpilde. Šis iestatījums samazina drošību un varētu ļaut ļaunprātīgām vietnēm pārtvert paroles. Iespējo to tikai tad, ja pieņem šo iespējamo bīstamību!</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Izmantot saderības režīmu automātiskai aizpildei pārlūkā</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Izmanto mazāk drošu auotmātiskās aizpildes veidu, kas ir saderīgs ar vairāk pārlūkiem.\n<annotation link="learnMore">Uzzināt vairāk par saderības režīmu</annotation></string>
 </resources>

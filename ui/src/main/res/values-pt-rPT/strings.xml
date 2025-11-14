@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">Reenviar código</string>
     <string name="verification_email_not_sent">Não foi possível enviar o e-mail de verificação. Tente novamente.</string>
     <string name="verification_email_sent">E-mail de verificação enviado</string>
-    <string name="yubi_key_instruction">Para continuar, segure a sua YubiKey NEO contra a parte de trás do dispositivo ou introduza a sua YubiKey na porta USB do seu dispositivo, depois toque no seu botão.</string>
-    <string name="yubi_key_title">Chave de segurança YubiKey</string>
+    <string name="yubi_key_instruction">Para continuar, segure a sua chave de segurança Yubico contra a parte de trás do dispositivo ou introduza-a na porta USB do seu dispositivo, depois toque no seu botão.</string>
+    <string name="yubi_key_title">Chave de segurança Yubico</string>
     <string name="add_new_attachment">Adicionar novo anexo</string>
     <string name="attachments">Anexos</string>
     <string name="unable_to_download_file">Não foi possível transferir o ficheiro.</string>
@@ -1153,4 +1153,7 @@ Pretende mudar para esta conta?</string>
     <string name="lock_app">Bloquear app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilize o método de bloqueio do seu dispositivo para desbloquear a app</string>
     <string name="loading_vault_data">A carregar os dados do cofre…</string>
+    <string name="compatibility_mode_warning">O modo de compatibilidade só deve ser ativado se o preenchimento automático não funcionar no seu navegador. Esta configuração reduz a segurança e pode permitir que sites maliciosos capturem as suas palavras-passe. Ative-a apenas se aceitar este risco.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Utilize o modo de compatibilidade para o preenchimento automático do navegador</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Utiliza um método de preenchimento automático menos seguro, mas compatível com mais navegadores.\n<annotation link="learnMore">Saiba mais sobre o modo de compatibilidade</annotation></string>
 </resources>

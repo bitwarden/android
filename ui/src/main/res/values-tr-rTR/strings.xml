@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Kodu yeniden gönder</string>
     <string name="verification_email_not_sent">Doğrulama e-postası gönderilemedi. Yeniden deneyin.</string>
     <string name="verification_email_sent">Doğrulama e-postası gönderildi</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">Devam etmek için Yubico güvenlik anahtarınızı cihazın arkasına yaklaştırın veya cihazın USB girişine takın, ardından düğmesine dokunun.</string>
     <string name="yubi_key_title">YubiKey güvenlik anahtarı</string>
     <string name="add_new_attachment">Yeni dosya ekle</string>
     <string name="attachments">Dosyalar</string>
@@ -1146,10 +1146,13 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="the_import_request_could_not_be_processed">İçe aktarma isteği işleme alınamadı.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
     <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
+    <string name="select_a_different_account">Başka bir hesap seçin</string>
     <string name="verify_your_account_email_address">Hesabınızın e-posta adresini doğrulayın</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Aşağıdaki e-posta adresine gönderdiğimiz 6 basamaklı kodu girin</string>
     <string name="lock_app">Uygulamayı kilitle</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Uygulamanın kilidini açmak için cihazınızın kilit yöntemini kullanın</string>
     <string name="loading_vault_data">Kasa verileri yükleniyor…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Tarayıcıda otomatik doldurma için uyumluluk modunu kullan</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Daha fazla tarayıcıyla uyumlu ama daha güvensiz bir yöntem kullanır.\n<annotation link="learnMore">Uyumluluk modu hakkında bilgi alın</annotation></string>
 </resources>

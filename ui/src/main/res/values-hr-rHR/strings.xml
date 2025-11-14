@@ -480,7 +480,7 @@
     <string name="seven_days">7 dana</string>
     <string name="thirty_days">30 dana</string>
     <string name="custom">Prilagođeno</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Osobni istek</string>
     <string name="add_this_authenticator_key_to_a_login">Dodaj ovaj ključ autentifikatora postojećoj prijavi, ili stvori novu prijavu.</string>
     <string name="send_disabled_warning">Pravila tvrtke omogućuju brisanje samo postojećeg Senda</string>
     <string name="about_send">O Sendu</string>
@@ -501,20 +501,20 @@
     <string name="reset_password_auto_enroll_invite_warning">Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d sat</item>
+        <item quantity="few">%1$d sata</item>
+        <item quantity="other">%1$d sati</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="few">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d minuta</item>
+        <item quantity="few">%1$d minute</item>
+        <item quantity="other">%1$d minuta</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s i %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ovom postavkom upravlja tvoje organizacija.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Tvoja organizacaija je postavila zadani istek sesije na nikada.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Tvoja organizacaija je postavila zadani istek sesije na ponovno pokretanje aplikacije.</string>
     <string name="vault_timeout_to_large">Vrijeme isteka premašuje ograničenje koje je postavila tvoja organizacija.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora.</string>
     <string name="add_account">Dodaj račun</string>
@@ -1142,7 +1142,7 @@ bilo kakav problem.</string>
     <string name="import_restricted_unable_to_import_credit_cards">Uvoz je ograničen, nije moguće uvesti platne kartice s ovog računa.</string>
     <string name="verify_your_master_password">Potvrdi glavnu lozinku</string>
     <string name="having_trouble_with_autofill">Imaš problema s auto-ispunom?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Pristupite pomoći i dokumentaciji za rješavanje problema ovdje</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Ovdje možeš pristupiti pomoći i dokumentaciji za rješavanje problema</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Uvezi lozinke, pristupne ključeve i druge vrste stavki iz svog Bitwarden trezora.</string>
     <string name="items_to_import">Stavke za uvoz</string>
     <string name="exporting_items">Izvoz stavaka…</string>
@@ -1161,4 +1161,7 @@ bilo kakav problem.</string>
     <string name="lock_app">Zaključaj aplikaciju</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
     <string name="loading_vault_data">Učitavanje podataka trezora…</string>
+    <string name="compatibility_mode_warning">Način kompatibilnosti treba omogućiti samo ako automatsko popunjavanje ne radi u tvojem pregledniku. Ova postavka smanjuje sigurnost i mogla bi omogućiti zlonamjernim stranicama da snime tvoje lozinke. Omogući samo ako prihvaćaš taj rizik.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Koristi način kompatibilnosti za auto-ispunu preglednika</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Koristi manje sigurnu metodu auto-ispune kompatibilnu s više preglednika.\n<annotation link="learnMore">Saznaj više o načinu kompatibilnosti</annotation></string>
 </resources>

@@ -178,8 +178,8 @@
     <string name="send_verification_code_again">重新发送代码</string>
     <string name="verification_email_not_sent">无法发送验证电子邮件。请重试。</string>
     <string name="verification_email_sent">验证邮件已发送</string>
-    <string name="yubi_key_instruction">要继续，请将您的 YubiKey NEO 靠在设备背面或者将 YubiKey 插入设备的 USB 端口，然后触摸其按钮。</string>
-    <string name="yubi_key_title">YubiKey 安全密钥</string>
+    <string name="yubi_key_instruction">要继续，请将您的 Yubico 安全密钥靠在设备背面或者将其插入设备的 USB 端口，然后触摸其按钮。</string>
+    <string name="yubi_key_title">Yubico 安全密钥</string>
     <string name="add_new_attachment">添加新附件</string>
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">无法下载文件。</string>
@@ -288,7 +288,7 @@
     <string name="new_uri">新增 URI</string>
     <string name="add_website">添加网站</string>
     <string name="base_domain">基础域名</string>
-    <string name="default_text">默认 (%1$s)</string>
+    <string name="default_text">默认（%1$s）</string>
     <string name="exact">精确</string>
     <string name="host">主机</string>
     <string name="reg_ex">正则表达式</string>
@@ -1084,7 +1084,7 @@
     <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
     <string name="error_cannot_decrypt">[错误：无法解密]</string>
     <string name="copy_error_report">复制错误报告</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免额外的数据丢失。</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="other">Bitwarden 无法解密 %1$d 个密码库项目。复制此错误报告并将其分享给客户成功团队，以避免额外的数据丢失。</item>
     </plurals>
@@ -1146,4 +1146,7 @@
     <string name="lock_app">锁定 App</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用您设备的锁定方式解锁此 App</string>
     <string name="loading_vault_data">正在加载密码库数据…</string>
+    <string name="compatibility_mode_warning">兼容性模式仅应在浏览器自动填充功能无法正常工作时启用。此设置会降低安全性，并可能允许恶意网站窃取您的密码。仅当您接受此风险时才启用它。</string>
+    <string name="use_compatibility_mode_for_browser_autofill">为浏览器自动填充功能使用兼容性模式</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">使用安全性较低的自动填充方式以兼容更多浏览器。\n<annotation link="learnMore">了解更多有关兼容性模式的信息</annotation></string>
 </resources>

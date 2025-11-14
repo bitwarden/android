@@ -180,7 +180,7 @@
     <string name="send_verification_code_again">Ponovo pošaljite e-poruku sa verifikacionim kodom</string>
     <string name="verification_email_not_sent">Slanje e-pošte za verifikaciju nije uspelo. Pokušajte ponovo.</string>
     <string name="verification_email_sent">Poslata je e-pošta za verifikaciju.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey bezbedonosni ključ</string>
     <string name="add_new_attachment">Dodajte novi prilog</string>
     <string name="attachments">Prilozi</string>
@@ -1160,4 +1160,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

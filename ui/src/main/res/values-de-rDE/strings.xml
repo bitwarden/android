@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">E-Mail mit Bestätigungscode erneut versenden</string>
     <string name="verification_email_not_sent">Bestätigungsmail konnte nicht gesendet werden. Erneut versuchen.</string>
     <string name="verification_email_sent">Verifizierung-E-Mail versendet</string>
-    <string name="yubi_key_instruction">Um fortzufahren, halte deinen YubiKey NEO an die Rückseite des Geräts oder stecke deinen YubiKey in den USB-Steckplatz deines Geräts und tippe dann auf seinen Button.</string>
-    <string name="yubi_key_title">YubiKey Sicherheitsschlüssel</string>
+    <string name="yubi_key_instruction">Um fortzufahren, halte deinen Yubico-Sicherheitsschlüssel an die Rückseite des Geräts oder stecke ihn in den USB-Steckplatz deines Geräts und tippe dann auf seinen Button.</string>
+    <string name="yubi_key_title">Yubico-Sicherheitsschlüssel</string>
     <string name="add_new_attachment">Neuen Anhang hinzufügen</string>
     <string name="attachments">Anhänge</string>
     <string name="unable_to_download_file">Datei kann nicht heruntergeladen werden.</string>
@@ -1152,4 +1152,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="lock_app">App sperren</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Nutze die Sperrmethode deines Geräts, um die App zu entsperren</string>
     <string name="loading_vault_data">Tresor-Daten werden geladen…</string>
+    <string name="compatibility_mode_warning">Der Kompatibilitätsmodus sollte nur aktiviert werden, wenn Auto-Ausfüllen in deinem Browser nicht funktioniert. Diese Einstellung verringert die Sicherheit und könnte es bösartigen Websites erlauben, deine Passwörter zu erfassen. Aktiviere sie nur, wenn du dieses Risiko akzeptierst.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Kompatibilitätsmodus für Browser-Auto-Ausfüllen verwenden</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Verwende eine weniger sicher Auto-Ausfüllen-Methode, die mit weiteren Browsern kompatibel ist.\n<annotation link="learnMore">Erfahre mehr über den Kompatibilitätsmodus</annotation></string>
 </resources>
