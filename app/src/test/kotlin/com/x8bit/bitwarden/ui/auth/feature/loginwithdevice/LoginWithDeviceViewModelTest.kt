@@ -103,7 +103,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DismissDialog should clear the dialog state`() {
+    fun `DismissDialog should clear the dialog state and emit NavigateBack`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             dialogState = LoginWithDeviceState.DialogState.Error(
                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -111,8 +111,19 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel(initialState)
-        viewModel.trySendAction(LoginWithDeviceAction.DismissDialog)
-        assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LoginWithDeviceAction.DismissDialog)
+            assertEquals(
+                LoginWithDeviceEvent.NavigateBack,
+                awaitItem(),
+            )
+        }
+
+        assertEquals(
+            initialState.copy(dialogState = null),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test

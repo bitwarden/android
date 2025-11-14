@@ -71,6 +71,7 @@ class LoginWithDeviceViewModel @Inject constructor(
 
     private fun handleErrorDialogDismissed() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(LoginWithDeviceEvent.NavigateBack)
     }
 
     private fun handleResendNotificationClicked() {
