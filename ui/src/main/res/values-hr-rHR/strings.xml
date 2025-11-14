@@ -1142,7 +1142,7 @@ bilo kakav problem.</string>
     <string name="import_restricted_unable_to_import_credit_cards">Uvoz je ograničen, nije moguće uvesti platne kartice s ovog računa.</string>
     <string name="verify_your_master_password">Potvrdi glavnu lozinku</string>
     <string name="having_trouble_with_autofill">Imaš problema s auto-ispunom?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Pristupite pomoći i dokumentaciji za rješavanje problema ovdje</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Ovdje možeš pristupiti pomoći i dokumentaciji za rješavanje problema</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Uvezi lozinke, pristupne ključeve i druge vrste stavki iz svog Bitwarden trezora.</string>
     <string name="items_to_import">Stavke za uvoz</string>
     <string name="exporting_items">Izvoz stavaka…</string>
@@ -1161,4 +1161,7 @@ bilo kakav problem.</string>
     <string name="lock_app">Zaključaj aplikaciju</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
     <string name="loading_vault_data">Učitavanje podataka trezora…</string>
+    <string name="compatibility_mode_warning">Način kompatibilnosti treba omogućiti samo ako automatsko popunjavanje ne radi u tvojem pregledniku. Ova postavka smanjuje sigurnost i mogla bi omogućiti zlonamjernim stranicama da snime tvoje lozinke. Omogući samo ako prihvaćaš taj rizik.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Koristi način kompatibilnosti za auto-ispunu preglednika</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Koristi manje sigurnu metodu auto-ispune kompatibilnu s više preglednika.\n<annotation link="learnMore">Saznaj više o načinu kompatibilnosti</annotation></string>
 </resources>

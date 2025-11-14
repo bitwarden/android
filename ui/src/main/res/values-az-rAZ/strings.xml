@@ -986,8 +986,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Keçid açarı əməliyyatı uğursuz oldu, çünki brauzer güvənli deyil.</string>
     <string name="trust">Güvən</string>
     <string name="trusted_by_you_learn_more">Bunlar, Bitwarden-in ilkin olaraq güvənmədiyi tətbiqlər və ya brauzerlərdir, ancaq keçid açarı əməliyyatlarını icra etməsi üçün SİZ güvənirsiniz.</string>
-    <string name="trusted_by_community_learn_more">Bunlar, Google Play Store-a daxil edilməyən tətbiqlərdir, ancaq icma üzvləri istifadə etdikdən və bunları etibarlı olaraq bildirdikdən sonra Bitwarden, keçid açarı əməliyyatlarını icra etməsi üçün güvənir.</string>
-    <string name="trusted_by_google_learn_more">Bunlar Google-un etibarlı hesab etdiyi və Google Play Store-da mövcud olan tətbiqlərdir.</string>
+    <string name="trusted_by_community_learn_more">Bunlar, Google Play Store-a daxil edilməyən tətbiqlərdir, ancaq icma üzvləri istifadə etdikdən və bunları əmniyyətli olaraq bildirdikdən sonra Bitwarden, keçid açarı əməliyyatlarını icra etməsi üçün güvənir.</string>
+    <string name="trusted_by_google_learn_more">Bunlar Google-un əmniyyətli hesab etdiyi və Google Play Store-da mövcud olan tətbiqlərdir.</string>
     <string name="trusted_by_you">Siz güvənirsiniz</string>
     <string name="trusted_by_the_community">İcma güvənir</string>
     <string name="trusted_by_google">Google güvənir</string>
@@ -1154,4 +1154,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="lock_app">Tətbiqi kilidlə</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Tətbiqin kilidini açmaq üçün cihazın kilid üsulunu istifadə edin</string>
     <string name="loading_vault_data">Seyf veriləri yüklənir…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>
