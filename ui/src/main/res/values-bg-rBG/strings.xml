@@ -1155,4 +1155,7 @@
     <string name="lock_app">Заключване на приложението</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Използвайте начина на заключване на устройството за отключване на приложението</string>
     <string name="loading_vault_data">Зареждане на данните от трезора…</string>
+    <string name="compatibility_mode_warning">Режимът на съвместимост трябва да е включен само, ако автоматичното попълване не работи във Вашия браузър. Тази настройка намалява нивото на сигурност и може да позволи на злонамерените уеб сайтове да прихванат паролите Ви. Включете я само, ако приемате този риск.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Използване на режима на съвместимост за авт. попълване в браузъра</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Използва по-несигурен начин за автоматично попълване, което е съвместимо с повече браузъри.\n<annotation link="learnMore">Научете повече относно режима на съвместимост</annotation></string>
 </resources>

@@ -1146,4 +1146,7 @@
     <string name="lock_app">锁定 App</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用您设备的锁定方式解锁此 App</string>
     <string name="loading_vault_data">正在加载密码库数据…</string>
+    <string name="compatibility_mode_warning">兼容性模式仅应在浏览器自动填充功能无法正常工作时启用。此设置会降低安全性，并可能允许恶意网站窃取您的密码。仅当您接受此风险时才启用该功能。</string>
+    <string name="use_compatibility_mode_for_browser_autofill">为浏览器自动填充使用兼容性模式</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">使用安全性较低的自动填充方式以兼容更多浏览器。\n<annotation link="learnMore">了解更多有关兼容性模式的信息</annotation></string>
 </resources>

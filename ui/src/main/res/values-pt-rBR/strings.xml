@@ -1155,4 +1155,7 @@ quaisquer problema.</string>
     <string name="lock_app">Bloquear aplicativo</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
     <string name="loading_vault_data">Carregando dados do cofre…</string>
+    <string name="compatibility_mode_warning">O modo de compatibilidade só deve ser ativado se o preenchimento automático não funcionar no seu navegador. Esta configuração reduz a segurança e pode permitir que sites maliciosos capture suas senhas. Apenas ative se você aceitar este risco.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Usar modo de compatibilidade para preenchimento automático do navegador</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Usa um método de preenchimento automático menos seguro compatível com mais navegadores.\n<annotation link="learnMore">Saiba mais sobre o modo de compatibilidade</annotation></string>
 </resources>
