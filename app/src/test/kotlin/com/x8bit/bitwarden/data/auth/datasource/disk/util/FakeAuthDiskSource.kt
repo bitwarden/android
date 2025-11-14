@@ -84,8 +84,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPrivateKeys.remove(userId)
         storedTwoFactorTokens.clear()
         storedUserAutoUnlockKeys.remove(userId)
-        storedPinProtectedUserKeys.remove(userId)
-        storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
@@ -98,7 +96,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
-        mutablePinProtectedUserKeyEnvelopesFlowMap.remove(userId)
     }
 
     private fun getMutablePinProtectedUserKeyEnvelopeFlow(

@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -40,7 +41,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -79,6 +79,7 @@ class VaultRepositoryImpl(
     private val totpCodeManager: TotpCodeManager,
     private val vaultSyncManager: VaultSyncManager,
     private val credentialExchangeImportManager: CredentialExchangeImportManager,
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
@@ -328,11 +329,8 @@ class VaultRepositoryImpl(
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                    pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                         userId = userId,
-                        initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                            decryptedUserKey = decryptedUserKey,
-                        ),
                     )
                 }
             }
@@ -369,9 +367,8 @@ class VaultRepositoryImpl(
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(
+                    pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                         userId = userId,
-                        initUserCryptoMethod = initUserCryptoMethod,
                     )
                 }
             }
@@ -528,54 +525,6 @@ class VaultRepositoryImpl(
                 account = account,
                 ciphers = ciphers,
             )
-    }
-
-    /**
-     * Checks if the given [userId] has an associated encrypted PIN key but not a pin-protected user
-     * key. This indicates a scenario in which a user has requested PIN unlocking but requires
-     * master-password unlocking on app restart. This function may then be called after such an
-     * unlock to derive a pin-protected user key and store it in memory for use for any subsequent
-     * unlocks during this current app session.
-     *
-     * If the user's vault has not yet been unlocked, this call will do nothing.
-     *
-     * @param userId The ID of the user to check.
-     * @param initUserCryptoMethod The method used to initialize the user's crypto.
-     */
-    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(
-        userId: String,
-        initUserCryptoMethod: InitUserCryptoMethod,
-    ) {
-        Timber.d("[Auth] Vault unlocked, method: ${initUserCryptoMethod.logTag}")
-        val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
-        val existingPinProtectedUserKeyEnvelope = authDiskSource
-            .getPinProtectedUserKeyEnvelope(
-                userId = userId,
-            )
-        if (existingPinProtectedUserKeyEnvelope != null) return
-
-        vaultSdkSource
-            .enrollPinWithEncryptedPin(
-                userId = userId,
-                encryptedPin = encryptedPin,
-            )
-            .onSuccess { enrollPinResponse ->
-                authDiskSource.storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
-                )
-                authDiskSource.storePinProtectedUserKeyEnvelope(
-                    userId = userId,
-                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
-                    inMemoryOnly = true,
-                )
-                authDiskSource.storePinProtectedUserKey(
-                    userId = userId,
-                    pinProtectedUserKey = null,
-                    inMemoryOnly = true,
-                )
-                Timber.d("[Auth] Set PIN-protected user key in memory")
-            }
     }
 
     private suspend fun unlockVaultForUser(
