@@ -18,6 +18,7 @@ import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.testharness.R
 
@@ -43,7 +44,7 @@ fun AutofillPlaceholderScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = "Back",
+                    navigationIconContentDescription = stringResource(BitwardenString.back),
                     onNavigationIconClick = {
                         viewModel.trySendAction(AutofillPlaceholderAction.BackClick)
                     },
