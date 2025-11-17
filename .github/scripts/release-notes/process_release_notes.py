@@ -78,7 +78,7 @@ def process_file(input_file: str, app_label: str) -> Tuple[List[str], List[str],
     with open(input_file, 'r') as f:
         for line in f:
             line = line.strip()
-            should_process = line and not line.endswith(':')
+            should_process = line and not line.startswith('#')
 
             if should_process:
                 tickets = extract_jira_tickets(line)
