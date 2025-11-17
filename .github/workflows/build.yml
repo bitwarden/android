@@ -111,7 +111,7 @@ jobs:
         run: bundle exec fastlane assembleDebugApks
 
       - name: Upload test reports on failure
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         if: failure()
         with:
           name: test-reports
@@ -299,7 +299,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.aab
           path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab
@@ -307,7 +307,7 @@ jobs:
 
       - name: Upload beta Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta.aab
           path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab
@@ -315,7 +315,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.apk
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
@@ -323,7 +323,7 @@ jobs:
 
       - name: Upload beta .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta.apk
           path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk
@@ -332,7 +332,7 @@ jobs:
       # When building variants other than 'prod'
       - name: Upload debug .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden.dev.apk
@@ -370,7 +370,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.apk-sha256.txt
           path: ./com.x8bit.bitwarden.apk-sha256.txt
@@ -378,7 +378,7 @@ jobs:
 
       - name: Upload .apk SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta.apk-sha256.txt
@@ -386,7 +386,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.aab-sha256.txt
           path: ./com.x8bit.bitwarden.aab-sha256.txt
@@ -394,7 +394,7 @@ jobs:
 
       - name: Upload .aab SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta.aab-sha256.txt
           path: ./com.x8bit.bitwarden.beta.aab-sha256.txt
@@ -402,7 +402,7 @@ jobs:
 
       - name: Upload .apk SHA file for debug
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
@@ -447,6 +447,8 @@ jobs:
       - version
       - build
     runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
     steps:
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -577,7 +579,7 @@ jobs:
           keyPassword:$FDROID_BETA_KEY_PASSWORD
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk
@@ -589,14 +591,14 @@ jobs:
           > ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid SHA file
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload F-Droid Beta .apk artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk
           path: app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden.beta-fdroid.apk
@@ -608,7 +610,7 @@ jobs:
           > ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid Beta SHA file
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt

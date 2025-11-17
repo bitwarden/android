@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Envoyer à nouveau le courriel de code de vérification</string>
     <string name="verification_email_not_sent">Impossible d\'envoyer le courriel de vérification. Essayez à nouveau.</string>
     <string name="verification_email_sent">Courriel de vérification envoyé</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">Pour continuer, maintenez votre clé de sécurité Yubico à l\'arrière de l\'appareil ou insérez-la dans le port USB de votre appareil, puis appuyez sur son bouton.</string>
     <string name="yubi_key_title">Clé de sécurité YubiKey NEO</string>
     <string name="add_new_attachment">Ajouter une nouvelle pièce jointe</string>
     <string name="attachments">Pièces jointes</string>
@@ -759,8 +759,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="choose_your_master_password">Choisissez votre mot de passe principal</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choisissez un mot de passe unique et robuste pour garder vos informations en sécurité.</string>
     <plurals name="minimum_characters">
-        <item quantity="one">%d caractères</item>
-        <item quantity="other">%d characters</item>
+        <item quantity="one">%d caractère</item>
+        <item quantity="other">%d caractères</item>
     </plurals>
     <string name="expired_link">Lien expiré</string>
     <string name="please_restart_registration_or_try_logging_in">Veuillez recommencer l\'inscription ou essayer de vous connecter. Vous avez peut-être déjà un compte.</string>
@@ -769,16 +769,16 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="allow_bitwarden_authenticator_syncing">Autoriser la synchronisation de l\'authentificateur</string>
     <string name="there_was_an_issue_validating_the_registration_token">Un problème est survenu lors de la validation du jeton d\'enregistrement.</string>
     <string name="turn_on_autofill">Activer le remplissage automatique</string>
-    <string name="autofill_setup">Autofill setup</string>
-    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="autofill_setup">Réglage de la saisie automatique</string>
+    <string name="turn_on_browser_autofill_integration">Activer l\'intégration de la saisie automatique du navigateur</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Vous utilisez un navigateur qui nécessite des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Vous utilisez des navigateurs qui nécessitent des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Vous utilisez un navigateur qui nécessite des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe. Activez votre intégration de saisie automatique préférée ci-dessous.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Vous utilisez des navigateurs qui nécessitent des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe. Activez la saisie automatique sur tous vos navigateurs installés.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utilisez le remplissage automatique pour vous connecter à vos comptes en un seul clic.</string>
     <string name="turn_on_later">Activer plus tard</string>
     <string name="turn_on_autofill_later">Activer le remplissage automatique plus tard ?</string>
-    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
+    <string name="turn_on_browser_autofill_integration_later">Activer l\'intégration de la saisie automatique du navigateur plus tard ?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Vous pouvez revenir compléter cette étape à tout moment dans les paramètres.</string>
     <string name="what_bitwarden_has_to_offer">Vous pouvez maintenant explorer tout ce que Bitwarden a à offrir et commencer à gérer vos mots de passe en toute sécurité.</string>
     <string name="youre_all_set">Vous êtes prêt !</string>
@@ -924,7 +924,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="self_host_server_url">URL du serveur autohébergé</string>
     <string name="use_brave_autofill_integration">Utilisez l\'intégration de remplissage automatique Brave</string>
     <string name="use_chrome_autofill_integration">Utiliser l\'intégration de la saisie automatique de Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_chrome_beta_autofill_integration">Utiliser l\'intégration de saisie automatique de Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Améliore le remplissage des connexions pour les sites Web pris en charge sur les navigateurs sélectionnés. Une fois activé, vous serez dirigé vers les paramètres du navigateur pour activer le remplissage automatique par un tiers.</string>
     <string name="show_more">Afficher plus</string>
     <string name="no_folder">Aucun dossier</string>
@@ -968,7 +968,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="log_deleted">Journal supprimé</string>
     <string name="app_settings">Paramètres de l\'application</string>
     <string name="replace_existing_certificate">Remplacer le certificat existant ?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Un certificat avec l\'alias \"%s\" existe déjà. Voulez-vous le remplacer ?\nRemplacer le certificat peut avoir un impact sur votre connexion à tous les environnements qui l\'utilisent actuellement.</string>
     <string name="replace_certificate">Remplacer le certificat</string>
     <string name="unable_to_read_certificate">Impossible de lire le certificat.</string>
     <string name="cannot_delete_your_account">Impossible de supprimer votre compte</string>
@@ -986,7 +986,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="trust">Faire confiance</string>
     <string name="trusted_by_you_learn_more">Il s\'agit d\'applications ou de navigateurs auxquels Bitwarden ne fait pas confiance par défaut, mais auxquels vous faites confiance pour effectuer des opérations sur les clés d\'accès.</string>
     <string name="trusted_by_community_learn_more">Il s\'agit d\'applications qui ne sont pas disponibles sur le Google Play Store, mais auxquelles Bitwarden fait confiance pour effectuer des opérations sur les clés d\'accès après que les membres de la communauté les ont utilisées et signalées comme sûres.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_google_learn_more">Ce sont des applications que Google considère comme fiables et qui sont disponibles dans le Play Store de Google.</string>
     <string name="trusted_by_you">Reconnu par vous</string>
     <string name="trusted_by_the_community">Reconnu par la communauté</string>
     <string name="trusted_by_google">Reconnu par Google</string>
@@ -1016,8 +1016,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="collapse_advanced_options">Réduire les options avancées</string>
     <string name="number_of_digits">Nombre de chiffres</string>
     <plurals name="refresh_period_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d secondes</item>
     </plurals>
     <string name="item_saved">Élément enregistré</string>
     <string name="information">Informations</string>
@@ -1089,43 +1089,43 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
     <string name="error_cannot_decrypt">[erreur : impossible de déchiffrer]</string>
     <string name="copy_error_report">Copier le rapport d’erreur</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden n’a pas pu déchiffrer cet élément du coffre-fort. Copiez et partagez ce rapport d’erreur avec le service client afin d’éviter toute perte de données supplémentaire.</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden n’a pas pu déchiffrer cet élément du coffre-fort. Copiez et partagez ce rapport d’erreur avec succès client afin d’éviter toute perte de données supplémentaire.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden n\'a pu déchiffrer l\'élément du coffre %1$d. Copiez et partagez ce rapport d\'erreur avec succès client pour éviter une perte de données supplémentaire.</item>
+        <item quantity="other">Bitwarden n\'a pu déchiffrer les éléments du coffre %1$d. Copiez et partagez ce rapport d\'erreur avec succès client pour éviter une perte de données supplémentaire.</item>
     </plurals>
-    <string name="select_a_card_for_x">Select a card for %s</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="select_a_card_for_x">Sélectionnez une carte pour %s</string>
+    <string name="advanced_options">Options avancées</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">En savoir plus sur la détection de correspondance</annotation></string>
+    <string name="keep_your_credential_secure">Gardez vos identifiants sécurisés</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">En savoir plus sur la façon de sécuriser les identifiants en utilisant « %1$s».</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="are_you_sure_you_want_to_use">Êtes-vous sûr de vouloir utiliser “%1$s”?</string>
     <string name="default_uri_match_detection_description_advanced_options_incorrectly"></string>
     <string name="default_uri_match_detection_description_advanced_options"></string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="later">Later</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
-    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
-    <string name="import_cancelled">Import cancelled</string>
-    <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
-    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="saving_items">Saving items…</string>
-    <string name="unable_to_import_your_items">Unable to import your items</string>
-    <string name="import_from_computer">Import from computer</string>
-    <string name="import_from_another_app">Import from another app</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">« Commence par » est une option avancée avec un risque accru d\'exposer les identifiants.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">« Expression régulière » est une option avancée avec un risque accru d\'exposer les identifiants.</string>
+    <string name="later">Plus tard</string>
+    <string name="encryption_settings_updated">Paramètres de chiffrement mis à jour</string>
+    <string name="update_your_encryption_settings">Mettre à jour vos paramètres de chiffrement</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Les nouveaux paramètres de chiffrement recommandés amélioreront la sécurité de votre compte. Entrez votre mot de passe principal pour faire la mise à jour maintenant.</string>
+    <string name="import_was_cancelled_in_the_selected_app">L\'importation des identifiants a été annulée dans l\'application sélectionnée. Aucun élément n\'a été importé.</string>
+    <string name="import_cancelled">Importation annulée</string>
+    <string name="no_items_imported">Aucun élément importé</string>
+    <string name="no_items_received_from_the_selected_app">Aucun élément reçu de l\'application sélectionnée.</string>
+    <string name="vault_sync_failed">La synchronisation du coffre a échoué</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vos éléments ont été importés avec succès, mais ils ne seront pas visibles dans votre coffre tant que la synchronisation n\'aura pas été effectuée.</string>
+    <string name="there_was_a_problem_importing_your_items">Un problème est survenu lors de l\'importation de vos éléments. Veuillez réessayer. Si le problème persiste, contactez le support.</string>
+    <string name="saving_items">Enregistrement des éléments…</string>
+    <string name="unable_to_import_your_items">Impossible d\'importer vos éléments</string>
+    <string name="import_from_computer">Importer depuis l\'ordinateur</string>
+    <string name="import_from_another_app">Importer depuis une autre application</string>
     <plurals name="x_items_have_been_imported_to_your_vault">
-        <item quantity="one">%1$d item has been imported to your vault.</item>
-        <item quantity="other">%1$d items have been imported to your vault.</item>
+        <item quantity="one">%1$d élément a été importé dans votre coffre.</item>
+        <item quantity="other">%1$d éléments ont été importés dans votre coffre.</item>
     </plurals>
-    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Activer la saisie automatique du navigateur pour continuer à saisir les mots de passe</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Votre navigateur a récemment été mis à jour, ce qui a désactivé la saisie automatique de Bitwarden. Pour continuer à saisir vos mots de passe avec Bitwarden, activez la saisie automatique du navigateur dans les paramètres de saisie automatique.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Vos navigateurs ont récemment été mis à jour, ce qui a désactivé la saisie automatique de Bitwarden. Pour continuer à saisir vos mots de passe avec Bitwarden, activez la saisie automatique du navigateur pour tous les navigateurs installés dans les paramètres de saisie automatique.</string>
     <string name="not_now">Pas maintenant</string>
     <string name="import_from_bitwarden">Importer depuis Bitwarden</string>
     <string name="select_account">Sélectionner un compte</string>
@@ -1153,4 +1153,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="lock_app">Verrouiller l\'application</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilisez la méthode de verrouillage de votre appareil pour déverrouiller l\'application</string>
     <string name="loading_vault_data">Chargement des données du coffre…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

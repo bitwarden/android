@@ -50,6 +50,7 @@ private const val RESUME_SCREEN = "resumeScreen"
 private const val FLIGHT_RECORDER_KEY = "flightRecorderData"
 private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
 private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
+private const val AUTOFILL_WEB_DOMAIN_COMPATIBILITY = "autofillWebDomainCompatibility"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -232,6 +233,12 @@ class SettingsDiskSourceImpl(
         get() = getLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME)?.let { Instant.ofEpochMilli(it) }
         set(value) {
             putLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME, value = value?.toEpochMilli())
+        }
+
+    override var isAutofillWebDomainCompatMode: Boolean?
+        get() = getBoolean(key = AUTOFILL_WEB_DOMAIN_COMPATIBILITY)
+        set(value) {
+            putBoolean(key = AUTOFILL_WEB_DOMAIN_COMPATIBILITY, value = value)
         }
 
     override fun clearData(userId: String) {
