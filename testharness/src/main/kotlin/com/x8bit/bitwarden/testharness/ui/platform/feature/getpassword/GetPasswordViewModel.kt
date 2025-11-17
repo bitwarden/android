@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.Clock
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -27,6 +27,7 @@ private const val RESULT_SEPARATOR_LENGTH = 40
 @HiltViewModel
 class GetPasswordViewModel @Inject constructor(
     private val credentialTestManager: CredentialTestManager,
+    private val clock: Clock,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<GetPasswordState, GetPasswordEvent, GetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE] ?: GetPasswordState(),
@@ -120,8 +121,11 @@ class GetPasswordViewModel @Inject constructor(
     }
 
     private fun timestamp(): String {
-        val format = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        return "[${format.format(Date())}]"
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        return clock.instant()
+            .atZone(ZoneId.systemDefault())
+            .format(formatter)
+            .let { "[$it]" }
     }
 }
 
