@@ -12,6 +12,20 @@ def extract_pr_numbers(line: str) -> List[str]:
     # Match PR numbers from GitHub format (#123)
     return re.findall(r'#(\d+)', line)
 
+def extract_pr_url(line: str) -> List[str]:
+    """Match PR URL from GitHub format https://github.com/foo/bar/pull/123"""
+    return re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', line)
+
+def fetch_labels(github_pr_url: str) -> List[str]:
+    """Fetch labels from a GitHub PR using the GitHub CLI."""
+    result = subprocess.run(
+        ['gh', 'pr', 'view', github_pr_url, '--json', 'labels', '--jq', '.labels[].name'],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    return [label.strip() for label in result.stdout.strip().split('\n') if label.strip()]
+
 def process_line(line: str) -> str:
     """Process a single line from release notes by removing Jira tickets, conventional commit prefixes and other common patterns.
 

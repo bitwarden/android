@@ -51,6 +51,28 @@ class TestProcessReleaseNotes(unittest.TestCase):
                 result = process_line(input_text)
                 self.assertEqual(result, expected)
 
+    def test_extract_pr_url(self):
+        test_cases = [
+            ("* Update SDK to 1.0.0-3436-2a00b727 by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042", ["https://github.com/bitwarden/android/pull/6042"]),
+            ("* Bump JUnit from 6.0.0 to 6.0.1 by SaintPatrick in https://github.com/bitwarden/android/pull/6149", ["https://github.com/bitwarden/android/pull/6149"]),
+            ("* [PM-26986] Hide select other account button if user has no other account by @aj-rosado in https://github.com/bitwarden/android/pull/6041", ["https://github.com/bitwarden/android/pull/6041"]),
+        ]
+        for input_text, expected in test_cases:
+            with self.subTest(input_text=input_text):
+                result = extract_pr_url(input_text)
+                self.assertEqual(result, expected)
+
+    def test_fetch_labels(self):
+        test_cases = [
+            ("https://github.com/bitwarden/android/pull/6042", ["automated-pr", "t:ci"]),
+            ("https://github.com/bitwarden/android/pull/6149", ["app:authenticator","app:password-manager","t:deps"]),
+            ("https://github.com/bitwarden/android/pull/6041", []),
+        ]
+        for pr_url, expected in test_cases:
+            with self.subTest(pr_url=pr_url):
+                result = fetch_labels(pr_url)
+                self.assertEqual(sorted(result), sorted(expected))
+
     def test_process_file(self):
         content = """
 ### Features:
