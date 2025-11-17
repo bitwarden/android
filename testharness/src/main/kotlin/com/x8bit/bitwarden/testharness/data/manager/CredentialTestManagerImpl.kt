@@ -48,22 +48,20 @@ class CredentialTestManagerImpl @Inject constructor(
         } catch (_: CreateCredentialCancellationException) {
             return CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
-            return CredentialTestResult.Error(
-                message = "Failed to create password: ${e.message}",
-                exception = e,
-            )
+            return CredentialTestResult.Error(exception = e)
         }
 
         return when (result) {
             is CreatePasswordResponse -> {
                 CredentialTestResult.Success(
-                    message = "Password created successfully",
                     data = "Username: $username\nOrigin: ${origin ?: "null"}",
                 )
             }
             else -> {
                 CredentialTestResult.Error(
-                    message = "Unexpected response type: ${result::class.simpleName}",
+                    exception = IllegalStateException(
+                        "Unexpected response type: ${result::class.simpleName}",
+                    ),
                 )
             }
         }
@@ -82,22 +80,20 @@ class CredentialTestManagerImpl @Inject constructor(
         } catch (_: GetCredentialCancellationException) {
             return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            return CredentialTestResult.Error(
-                message = "Failed to get password: ${e.message}",
-                exception = e,
-            )
+            return CredentialTestResult.Error(exception = e)
         }
 
         return when (val credential = result.credential) {
             is PasswordCredential -> {
                 CredentialTestResult.Success(
-                    message = "Password retrieved successfully",
                     data = "Username: ${credential.id}\nPassword: ${credential.password}",
                 )
             }
             else -> {
                 CredentialTestResult.Error(
-                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                    exception = IllegalStateException(
+                        "Unexpected credential type: ${credential::class.simpleName}",
+                    ),
                 )
             }
         }
@@ -131,23 +127,21 @@ class CredentialTestManagerImpl @Inject constructor(
         } catch (_: CreateCredentialCancellationException) {
             return CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
-            return CredentialTestResult.Error(
-                message = "Failed to create passkey: ${e.message}",
-                exception = e,
-            )
+            return CredentialTestResult.Error(exception = e)
         }
 
         return when (result) {
             is CreatePublicKeyCredentialResponse -> {
                 CredentialTestResult.Success(
-                    message = "Passkey created successfully",
                     data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
                         result.registrationResponseJson,
                 )
             }
             else -> {
                 CredentialTestResult.Error(
-                    message = "Unexpected response type: ${result::class.simpleName}",
+                    exception = IllegalStateException(
+                        "Unexpected response type: ${result::class.simpleName}",
+                    ),
                 )
             }
         }
@@ -177,23 +171,21 @@ class CredentialTestManagerImpl @Inject constructor(
         } catch (_: GetCredentialCancellationException) {
             return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            return CredentialTestResult.Error(
-                message = "Failed to authenticate passkey: ${e.message}",
-                exception = e,
-            )
+            return CredentialTestResult.Error(exception = e)
         }
 
         return when (val credential = result.credential) {
             is PublicKeyCredential -> {
                 CredentialTestResult.Success(
-                    message = "Passkey authenticated successfully",
                     data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
                         credential.authenticationResponseJson,
                 )
             }
             else -> {
                 CredentialTestResult.Error(
-                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                    exception = IllegalStateException(
+                        "Unexpected credential type: ${credential::class.simpleName}",
+                    ),
                 )
             }
         }
@@ -233,16 +225,12 @@ class CredentialTestManagerImpl @Inject constructor(
         } catch (_: GetCredentialCancellationException) {
             return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            return CredentialTestResult.Error(
-                message = "Failed to get credential: ${e.message}",
-                exception = e,
-            )
+            return CredentialTestResult.Error(exception = e)
         }
 
         return when (val credential = result.credential) {
             is PasswordCredential -> {
                 CredentialTestResult.Success(
-                    message = "Password retrieved successfully",
                     data = "Type: PASSWORD\n" +
                         "Username: ${credential.id}\n" +
                         "Password: ${credential.password}\n" +
@@ -251,7 +239,6 @@ class CredentialTestManagerImpl @Inject constructor(
             }
             is PublicKeyCredential -> {
                 CredentialTestResult.Success(
-                    message = "Passkey authenticated successfully",
                     data = "Type: PASSKEY\n" +
                         "Origin: ${origin ?: "null"}\n" +
                         "Response JSON:\n${credential.authenticationResponseJson}",
@@ -259,7 +246,9 @@ class CredentialTestManagerImpl @Inject constructor(
             }
             else -> {
                 CredentialTestResult.Error(
-                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                    exception = IllegalStateException(
+                        "Unexpected credential type: ${credential::class.simpleName}",
+                    ),
                 )
             }
         }

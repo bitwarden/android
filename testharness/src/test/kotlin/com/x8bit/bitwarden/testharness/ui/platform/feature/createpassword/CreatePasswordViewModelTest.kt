@@ -130,7 +130,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = "Password created",
             data = "test-credential-data",
         )
 
@@ -162,7 +161,7 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 password = testPassword,
                 origin = null,
             )
-        } returns CredentialTestResult.Success("Success")
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel(
             initialState = CreatePasswordState(
@@ -188,7 +187,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
     fun `Success result updates state with success message`() = runTest {
         val testUsername = "test@example.com"
         val testPassword = "SecurePassword123!"
-        val successMessage = "Password credential created successfully"
         val testData = "credential-id: 12345"
 
         coEvery {
@@ -198,7 +196,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = testData,
         )
 
@@ -214,7 +211,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("SUCCESS"))
-        assertTrue(resultState.resultText.contains(successMessage))
         assertTrue(resultState.resultText.contains(testData))
     }
 
@@ -222,7 +218,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
     fun `Error result updates state with error message`() = runTest {
         val testUsername = "test@example.com"
         val testPassword = "SecurePassword123!"
-        val errorMessage = "Failed to create credential"
         val exception = Exception("Network timeout")
 
         coEvery {
@@ -232,7 +227,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = exception,
         )
 
@@ -248,7 +242,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
         assertTrue(resultState.resultText.contains("Network timeout"))
     }
 
@@ -294,7 +287,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
     fun `Error result without exception does not crash`() = runTest {
         val testUsername = "test@example.com"
         val testPassword = "SecurePassword123!"
-        val errorMessage = "Unknown error occurred"
 
         coEvery {
             mockCredentialTestManager.createPassword(
@@ -303,7 +295,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = null,
         )
 
@@ -319,14 +310,12 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
     }
 
     @Test
     fun `Success result without data does not crash`() = runTest {
         val testUsername = "test@example.com"
         val testPassword = "SecurePassword123!"
-        val successMessage = "Password credential created"
 
         coEvery {
             mockCredentialTestManager.createPassword(
@@ -335,7 +324,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = null,
         )
 
@@ -351,7 +339,6 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("SUCCESS"))
-        assertTrue(resultState.resultText.contains(successMessage))
     }
 
     @Test
@@ -433,9 +420,7 @@ class CreatePasswordViewModelTest : BaseViewModelTest() {
                 password = testPassword,
                 origin = null,
             )
-        } returns CredentialTestResult.Success(
-            message = "Success",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel(
             initialState = CreatePasswordState(

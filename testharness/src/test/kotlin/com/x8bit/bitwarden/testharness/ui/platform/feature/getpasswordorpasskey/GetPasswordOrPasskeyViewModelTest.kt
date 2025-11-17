@@ -88,7 +88,6 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = "Credential retrieved",
             data = "test-credential-data",
         )
 
@@ -114,9 +113,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = "https://app.example.com",
             )
-        } returns CredentialTestResult.Success(
-            message = "Credential retrieved",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
         viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged("example.com"))
@@ -141,9 +138,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = null,
             )
-        } returns CredentialTestResult.Success(
-            message = "Credential retrieved",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
         viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged("example.com"))
@@ -167,7 +162,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
         } coAnswers {
             kotlinx.coroutines.delay(100)
-            CredentialTestResult.Success("Success")
+            CredentialTestResult.Success()
         }
 
         val viewModel = createViewModel()
@@ -196,7 +191,6 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = testData,
         )
 
@@ -214,12 +208,10 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Error result updates state with error message`() = runTest {
-        val errorMessage = "Authentication failed"
         val exception = Exception("Network error")
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = exception,
         )
 
@@ -231,7 +223,6 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
         assertTrue(resultState.resultText.contains("Network error"))
     }
 
@@ -268,7 +259,6 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = null,
         )
 
@@ -289,7 +279,6 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = null,
         )
 
@@ -308,9 +297,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
     fun `state is persisted to SavedStateHandle`() = runTest {
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
-        } returns CredentialTestResult.Success(
-            message = "Test",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
         viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged("example.com"))
@@ -356,7 +343,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
     fun `successful execution after validation error works correctly`() = runTest {
         coEvery {
             mockCredentialTestManager.getPasswordOrPasskey(any(), any())
-        } returns CredentialTestResult.Success("Credential retrieved")
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
@@ -384,7 +371,7 @@ class GetPasswordOrPasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = null,
             )
-        } returns CredentialTestResult.Success("Success")
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
         viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged("example.com"))

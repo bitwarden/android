@@ -119,7 +119,7 @@ class GetPasskeyViewModel @Inject constructor(
         val resultMessage = when (val result = action.result) {
             is CredentialTestResult.Success -> {
                 buildString {
-                    append("${timestamp()} ✅ SUCCESS: ${result.message}\n")
+                    append("${timestamp()} ✅ SUCCESS: Passkey authenticated successfully\n")
                     if (result.data != null) {
                         append("\n📋 Response Data:\n${result.data}\n")
                     }
@@ -127,7 +127,11 @@ class GetPasskeyViewModel @Inject constructor(
             }
             is CredentialTestResult.Error -> {
                 buildString {
-                    append("${timestamp()} ❌ ERROR: ${result.message}\n")
+                    val errorMessage = result.exception?.message ?: "Unknown error"
+                    append(
+                        "${timestamp()} ❌ ERROR: Failed to authenticate passkey: " +
+                            "$errorMessage\n",
+                    )
                     if (result.exception != null) {
                         append("\n🔍 Exception:\n${result.exception}\n")
                         append("\nStack trace:\n")

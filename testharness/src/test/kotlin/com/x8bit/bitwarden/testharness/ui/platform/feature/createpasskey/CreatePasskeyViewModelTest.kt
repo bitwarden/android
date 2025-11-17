@@ -138,7 +138,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = "Passkey created",
             data = "test-passkey-data",
         )
 
@@ -171,7 +170,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
                 origin = "https://example.com",
             )
         } returns CredentialTestResult.Success(
-            message = "Passkey created",
             data = "test-passkey-data",
         )
 
@@ -204,9 +202,7 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = null,
             )
-        } returns CredentialTestResult.Success(
-            message = "Passkey created",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
@@ -235,7 +231,7 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
             mockCredentialTestManager.createPasskey(any(), any(), any())
         } coAnswers {
             kotlinx.coroutines.delay(100)
-            CredentialTestResult.Success("Success")
+            CredentialTestResult.Success()
         }
 
         val viewModel = createViewModel()
@@ -268,7 +264,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = testData,
         )
 
@@ -288,12 +283,10 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Error result updates state with error message`() = runTest {
-        val errorMessage = "Passkey creation failed"
         val exception = Exception("Invalid relying party")
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = exception,
         )
 
@@ -307,7 +300,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
         assertTrue(resultState.resultText.contains("Invalid relying party"))
     }
 
@@ -363,7 +355,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = null,
         )
 
@@ -386,7 +377,6 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = null,
         )
 
@@ -407,9 +397,7 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
     fun `state is persisted to SavedStateHandle`() = runTest {
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
-        } returns CredentialTestResult.Success(
-            message = "Test",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
@@ -458,7 +446,9 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
     fun `multiple operations append to result text`() = runTest {
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
-        } returns CredentialTestResult.Success("First operation")
+        } returns CredentialTestResult.Success(
+            data = "First operation",
+        )
 
         val viewModel = createViewModel()
 
@@ -472,7 +462,9 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
 
         coEvery {
             mockCredentialTestManager.createPasskey(any(), any(), any())
-        } returns CredentialTestResult.Success("Second operation")
+        } returns CredentialTestResult.Success(
+            data = "Second operation",
+        )
 
         // Second operation
         viewModel.trySendAction(CreatePasskeyAction.ExecuteClick)

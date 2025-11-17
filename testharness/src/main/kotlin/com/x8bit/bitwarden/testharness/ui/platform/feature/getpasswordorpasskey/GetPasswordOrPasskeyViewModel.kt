@@ -122,7 +122,15 @@ class GetPasswordOrPasskeyViewModel @Inject constructor(
         val resultMessage = when (val result = action.result) {
             is CredentialTestResult.Success -> {
                 buildString {
-                    append("${timestamp()} ✅ SUCCESS: ${result.message}\n")
+                    // Determine credential type from data to construct appropriate message
+                    val successMessage = when {
+                        result.data?.startsWith("Type: PASSWORD") == true ->
+                            "Password retrieved successfully"
+                        result.data?.startsWith("Type: PASSKEY") == true ->
+                            "Passkey authenticated successfully"
+                        else -> "Credential retrieved successfully"
+                    }
+                    append("${timestamp()} ✅ SUCCESS: $successMessage\n")
                     if (result.data != null) {
                         append("\n📋 Response Data:\n${result.data}\n")
                     }
@@ -130,7 +138,8 @@ class GetPasswordOrPasskeyViewModel @Inject constructor(
             }
             is CredentialTestResult.Error -> {
                 buildString {
-                    append("${timestamp()} ❌ ERROR: ${result.message}\n")
+                    val errorMessage = result.exception?.message ?: "Unknown error"
+                    append("${timestamp()} ❌ ERROR: Failed to get credential: $errorMessage\n")
                     if (result.exception != null) {
                         append("\n🔍 Exception:\n${result.exception}\n")
                         append("\nStack trace:\n")

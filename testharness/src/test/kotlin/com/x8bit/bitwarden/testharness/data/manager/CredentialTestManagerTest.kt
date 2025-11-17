@@ -63,7 +63,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Password created successfully", result.message)
                     assertTrue(result.data?.contains("user@example.com") == true)
                     assertTrue(result.data?.contains("Origin: null") == true)
                 }
@@ -89,7 +88,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Password created successfully", result.message)
                     assertTrue(result.data?.contains("https://example.com") == true)
                 }
                 else -> fail("Expected Success but got $result")
@@ -126,7 +124,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Failed to create password"))
                     assertEquals(exception, result.exception)
                 }
                 else -> fail("Expected Error but got $result")
@@ -147,7 +144,10 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Unexpected response type"))
+                    assertTrue(result.exception is IllegalStateException)
+                    assertTrue(
+                        result.exception?.message?.contains("Unexpected response type") == true,
+                    )
                 }
                 else -> fail("Expected Error but got $result")
             }
@@ -177,7 +177,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Password retrieved successfully", result.message)
                     assertTrue(result.data?.contains("user@example.com") == true)
                     assertTrue(result.data?.contains("SecurePass123!") == true)
                 }
@@ -215,7 +214,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Failed to get password"))
                     assertEquals(exception, result.exception)
                 }
                 else -> fail("Expected Error but got $result")
@@ -239,7 +237,10 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Unexpected credential type"))
+                    assertTrue(result.exception is IllegalStateException)
+                    assertTrue(
+                        result.exception?.message?.contains("Unexpected credential type") == true,
+                    )
                 }
                 else -> fail("Expected Error but got $result")
             }
@@ -285,7 +286,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Passkey created successfully", result.message)
                     assertTrue(result.data?.contains("example.com") == true)
                     assertTrue(result.data?.contains("Origin: null") == true)
                     assertTrue(result.data?.contains("test-credential-id") == true)
@@ -350,7 +350,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Failed to create passkey"))
                     assertEquals(exception, result.exception)
                 }
                 else -> fail("Expected Error but got $result")
@@ -371,7 +370,10 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Unexpected response type"))
+                    assertTrue(result.exception is IllegalStateException)
+                    assertTrue(
+                        result.exception?.message?.contains("Unexpected response type") == true,
+                    )
                 }
                 else -> fail("Expected Error but got $result")
             }
@@ -400,7 +402,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Passkey authenticated successfully", result.message)
                     assertTrue(result.data?.contains("example.com") == true)
                     assertTrue(result.data?.contains("Origin: null") == true)
                     assertTrue(result.data?.contains("auth-response") == true)
@@ -467,7 +468,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Failed to authenticate passkey"))
                     assertEquals(exception, result.exception)
                 }
                 else -> fail("Expected Error but got $result")
@@ -491,7 +491,10 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Unexpected credential type"))
+                    assertTrue(result.exception is IllegalStateException)
+                    assertTrue(
+                        result.exception?.message?.contains("Unexpected credential type") == true,
+                    )
                 }
                 else -> fail("Expected Error but got $result")
             }
@@ -521,7 +524,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Password retrieved successfully", result.message)
                     assertTrue(result.data?.contains("Type: PASSWORD") == true)
                     assertTrue(result.data?.contains("user@example.com") == true)
                     assertTrue(result.data?.contains("SecurePass123!") == true)
@@ -579,7 +581,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Success -> {
-                    assertEquals("Passkey authenticated successfully", result.message)
                     assertTrue(result.data?.contains("Type: PASSKEY") == true)
                     assertTrue(result.data?.contains("Origin: null") == true)
                     assertTrue(result.data?.contains("passkey-auth") == true)
@@ -646,7 +647,6 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Failed to get credential"))
                     assertEquals(exception, result.exception)
                 }
                 else -> fail("Expected Error but got $result")
@@ -670,7 +670,10 @@ class CredentialTestManagerTest {
 
             when (result) {
                 is CredentialTestResult.Error -> {
-                    assertTrue(result.message.contains("Unexpected credential type"))
+                    assertTrue(result.exception is IllegalStateException)
+                    assertTrue(
+                        result.exception?.message?.contains("Unexpected credential type") == true,
+                    )
                 }
                 else -> fail("Expected Error but got $result")
             }

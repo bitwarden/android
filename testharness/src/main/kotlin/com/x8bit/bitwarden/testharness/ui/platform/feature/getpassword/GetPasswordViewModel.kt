@@ -86,7 +86,7 @@ class GetPasswordViewModel @Inject constructor(
         val resultMessage = when (val result = action.result) {
             is CredentialTestResult.Success -> {
                 buildString {
-                    append("${timestamp()} ✅ SUCCESS: ${result.message}\n")
+                    append("${timestamp()} ✅ SUCCESS: Password retrieved successfully\n")
                     if (result.data != null) {
                         append("\n📋 Response Data:\n${result.data}\n")
                     }
@@ -94,7 +94,8 @@ class GetPasswordViewModel @Inject constructor(
             }
             is CredentialTestResult.Error -> {
                 buildString {
-                    append("${timestamp()} ❌ ERROR: ${result.message}\n")
+                    val errorMessage = result.exception?.message ?: "Unknown error"
+                    append("${timestamp()} ❌ ERROR: Failed to get password: $errorMessage\n")
                     if (result.exception != null) {
                         append("\n🔍 Exception:\n${result.exception}\n")
                         append("\nStack trace:\n")

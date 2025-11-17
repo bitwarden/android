@@ -77,7 +77,6 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
                 origin = null,
             )
         } returns CredentialTestResult.Success(
-            message = "Passkey authenticated",
             data = "test-passkey-data",
         )
 
@@ -101,9 +100,7 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = "https://example.com",
             )
-        } returns CredentialTestResult.Success(
-            message = "Passkey authenticated",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
@@ -126,9 +123,7 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
                 rpId = "example.com",
                 origin = null,
             )
-        } returns CredentialTestResult.Success(
-            message = "Passkey authenticated",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
@@ -150,7 +145,7 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
             mockCredentialTestManager.getPasskey(any(), any())
         } coAnswers {
             kotlinx.coroutines.delay(100)
-            CredentialTestResult.Success("Success")
+            CredentialTestResult.Success()
         }
 
         val viewModel = createViewModel()
@@ -180,7 +175,6 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasskey(any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = testData,
         )
 
@@ -198,12 +192,10 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Error result updates state with error message`() = runTest {
-        val errorMessage = "Authentication failed"
         val exception = Exception("Invalid passkey")
         coEvery {
             mockCredentialTestManager.getPasskey(any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = exception,
         )
 
@@ -215,7 +207,6 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
         assertTrue(resultState.resultText.contains("Invalid passkey"))
     }
 
@@ -252,7 +243,6 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasskey(any(), any())
         } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = null,
         )
 
@@ -273,7 +263,6 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
         coEvery {
             mockCredentialTestManager.getPasskey(any(), any())
         } returns CredentialTestResult.Success(
-            message = successMessage,
             data = null,
         )
 
@@ -292,9 +281,7 @@ class GetPasskeyViewModelTest : BaseViewModelTest() {
     fun `state is persisted to SavedStateHandle`() = runTest {
         coEvery {
             mockCredentialTestManager.getPasskey(any(), any())
-        } returns CredentialTestResult.Success(
-            message = "Test",
-        )
+        } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 

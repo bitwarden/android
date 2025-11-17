@@ -38,7 +38,6 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
     @Test
     fun `ExecuteClick action triggers password retrieval`() = runTest {
         coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Success(
-            message = "Password retrieved",
             data = "test-password-data",
         )
 
@@ -53,7 +52,7 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
     fun `ExecuteClick action sets loading state to true`() = runTest {
         coEvery { mockCredentialTestManager.getPassword() } coAnswers {
             kotlinx.coroutines.delay(100)
-            CredentialTestResult.Success("Success")
+            CredentialTestResult.Success()
         }
 
         val viewModel = createViewModel()
@@ -77,7 +76,6 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
         val successMessage = "Password retrieved successfully"
         val testData = "username: test@example.com"
         coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Success(
-            message = successMessage,
             data = testData,
         )
 
@@ -94,10 +92,8 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Error result updates state with error message`() = runTest {
-        val errorMessage = "Authentication failed"
         val exception = Exception("Network error")
         coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = exception,
         )
 
@@ -108,7 +104,6 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
         val resultState = viewModel.stateFlow.value
         assertFalse(resultState.isLoading)
         assertTrue(resultState.resultText.contains("ERROR"))
-        assertTrue(resultState.resultText.contains(errorMessage))
         assertTrue(resultState.resultText.contains("Network error"))
     }
 
@@ -140,7 +135,6 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
     fun `Error result without exception does not crash`() = runTest {
         val errorMessage = "Unknown error"
         coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Error(
-            message = errorMessage,
             exception = null,
         )
 
@@ -158,7 +152,6 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
     fun `Success result without data does not crash`() = runTest {
         val successMessage = "Password retrieved"
         coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Success(
-            message = successMessage,
             data = null,
         )
 
@@ -174,9 +167,7 @@ class GetPasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `state is persisted to SavedStateHandle`() = runTest {
-        coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Success(
-            message = "Test",
-        )
+        coEvery { mockCredentialTestManager.getPassword() } returns CredentialTestResult.Success()
 
         val viewModel = createViewModel()
 
