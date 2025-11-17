@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.testharness.ui.platform.feature.createpasskey
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -107,9 +106,7 @@ private fun CreatePasskeyScreenContent(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .imePadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-
-            ) {
+        ) {
             Spacer(modifier = Modifier.height(8.dp))
 
             BitwardenTextField(
@@ -120,6 +117,8 @@ private fun CreatePasskeyScreenContent(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             BitwardenTextField(
                 label = stringResource(R.string.relying_party_id),
                 value = rpId,
@@ -128,6 +127,8 @@ private fun CreatePasskeyScreenContent(
                 cardStyle = null,
                 modifier = Modifier.fillMaxWidth(),
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenTextField(
                 label = stringResource(R.string.origin_optional),
@@ -138,24 +139,25 @@ private fun CreatePasskeyScreenContent(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                BitwardenFilledButton(
-                    label = stringResource(R.string.execute),
-                    onClick = onExecuteClick,
-                    isEnabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                BitwardenTextButton(
-                    label = stringResource(R.string.clear),
-                    onClick = onClearResultClick,
-                    isEnabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+            BitwardenFilledButton(
+                label = stringResource(R.string.execute),
+                onClick = onExecuteClick,
+                isEnabled = !isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BitwardenTextButton(
+                label = stringResource(R.string.clear),
+                onClick = onClearResultClick,
+                isEnabled = !isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenTextField(
                 label = stringResource(R.string.result),

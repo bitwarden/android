@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.testharness.ui.platform.feature.getpasskey
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -76,7 +75,6 @@ fun GetPasskeyScreen(
                 .padding(horizontal = 16.dp)
                 .imePadding()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -91,6 +89,8 @@ fun GetPasskeyScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             BitwardenTextField(
                 label = stringResource(R.string.origin_optional),
                 value = state.origin,
@@ -102,28 +102,29 @@ fun GetPasskeyScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                BitwardenFilledButton(
-                    label = stringResource(R.string.execute),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(GetPasskeyAction.ExecuteClick) }
-                    },
-                    isEnabled = !state.isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                BitwardenTextButton(
-                    label = stringResource(R.string.clear),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(GetPasskeyAction.ClearResultClick) }
-                    },
-                    isEnabled = !state.isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+            BitwardenFilledButton(
+                label = stringResource(R.string.execute),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(GetPasskeyAction.ExecuteClick) }
+                },
+                isEnabled = !state.isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BitwardenTextButton(
+                label = stringResource(R.string.clear),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(GetPasskeyAction.ClearResultClick) }
+                },
+                isEnabled = !state.isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenTextField(
                 label = stringResource(R.string.result),
