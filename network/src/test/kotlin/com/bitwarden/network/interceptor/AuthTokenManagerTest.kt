@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import retrofit2.HttpException
 import java.io.IOException
 import java.time.Clock
 import java.time.Instant
@@ -197,7 +198,7 @@ class AuthTokenManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `intercept should throw an exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
+        fun `intercept should throw an io exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
             val errorMessage = "Fail!"
             authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
                 override fun refreshAccessTokenSynchronously(
@@ -216,7 +217,31 @@ class AuthTokenManagerTest {
                     chain = FakeInterceptorChain(request = request),
                 )
             }
-            assertEquals(errorMessage, throwable?.message)
+            assertEquals(errorMessage, throwable.message)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `intercept should throw a http exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
+            val error = mockk<HttpException>()
+            authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
+                override fun refreshAccessTokenSynchronously(
+                    userId: String,
+                ): Result<String> = error.asFailure()
+            }
+            val authTokenData = AuthTokenData(
+                userId = USER_ID,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = FIXED_CLOCK.instant().epochSecond - 3600L,
+            )
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull() } returns authTokenData
+
+            val throwable = assertThrows(IOException::class.java) {
+                authTokenManager.intercept(
+                    chain = FakeInterceptorChain(request = request),
+                )
+            }
+            assertEquals(throwable.cause, error)
         }
 
         @Suppress("MaxLineLength")
