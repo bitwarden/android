@@ -34,73 +34,72 @@ class CredentialTestManagerImpl @Inject constructor(
         password: String,
         origin: String?,
     ): CredentialTestResult {
-        return try {
-            val request = CreatePasswordRequest(
-                id = username,
-                password = password,
-                origin = origin,
-            )
+        val request = CreatePasswordRequest(
+            id = username,
+            password = password,
+            origin = origin,
+        )
 
-            val result = credentialManager.createCredential(
+        val result = try {
+            credentialManager.createCredential(
                 context = application,
                 request = request,
             )
-
-            when (result) {
-                is CreatePasswordResponse -> {
-                    CredentialTestResult.Success(
-                        message = "Password created successfully",
-                        data = "Username: $username\nOrigin: ${origin ?: "null"}",
-                    )
-                }
-                else -> {
-                    CredentialTestResult.Error(
-                        message = "Unexpected response type: ${result::class.simpleName}",
-                    )
-                }
-            }
         } catch (_: CreateCredentialCancellationException) {
-            CredentialTestResult.Cancelled
+            return CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
-            CredentialTestResult.Error(
+            return CredentialTestResult.Error(
                 message = "Failed to create password: ${e.message}",
                 exception = e,
             )
         }
+
+        return when (result) {
+            is CreatePasswordResponse -> {
+                CredentialTestResult.Success(
+                    message = "Password created successfully",
+                    data = "Username: $username\nOrigin: ${origin ?: "null"}",
+                )
+            }
+            else -> {
+                CredentialTestResult.Error(
+                    message = "Unexpected response type: ${result::class.simpleName}",
+                )
+            }
+        }
     }
 
     override suspend fun getPassword(): CredentialTestResult {
-        return try {
-            val request = GetCredentialRequest(
-                credentialOptions = listOf(GetPasswordOption()),
-            )
+        val request = GetCredentialRequest(
+            credentialOptions = listOf(GetPasswordOption()),
+        )
 
-            val result = credentialManager.getCredential(
+        val result = try {
+            credentialManager.getCredential(
                 context = application,
                 request = request,
             )
-
-            val credential = result.credential
-            when (credential) {
-                is PasswordCredential -> {
-                    CredentialTestResult.Success(
-                        message = "Password retrieved successfully",
-                        data = "Username: ${credential.id}\nPassword: ${credential.password}",
-                    )
-                }
-                else -> {
-                    CredentialTestResult.Error(
-                        message = "Unexpected credential type: ${credential::class.simpleName}",
-                    )
-                }
-            }
         } catch (_: GetCredentialCancellationException) {
-            CredentialTestResult.Cancelled
+            return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            CredentialTestResult.Error(
+            return CredentialTestResult.Error(
                 message = "Failed to get password: ${e.message}",
                 exception = e,
             )
+        }
+
+        return when (val credential = result.credential) {
+            is PasswordCredential -> {
+                CredentialTestResult.Success(
+                    message = "Password retrieved successfully",
+                    data = "Username: ${credential.id}\nPassword: ${credential.password}",
+                )
+            }
+            else -> {
+                CredentialTestResult.Error(
+                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                )
+            }
         }
     }
 
@@ -109,48 +108,48 @@ class CredentialTestManagerImpl @Inject constructor(
         rpId: String,
         origin: String?,
     ): CredentialTestResult {
-        return try {
-            // Build minimal passkey creation request JSON
-            val requestJson = WebAuthnJsonBuilder.buildPasskeyCreationJson(username, rpId)
+        // Build minimal passkey creation request JSON
+        val requestJson = WebAuthnJsonBuilder.buildPasskeyCreationJson(username, rpId)
 
-            // Conditionally include origin parameter for privileged app simulation
-            val request = if (origin.isNullOrBlank()) {
-                CreatePublicKeyCredentialRequest(
-                    requestJson = requestJson,
-                )
-            } else {
-                CreatePublicKeyCredentialRequest(
-                    requestJson = requestJson,
-                    origin = origin,
-                )
-            }
+        // Conditionally include origin parameter for privileged app simulation
+        val request = if (origin.isNullOrBlank()) {
+            CreatePublicKeyCredentialRequest(
+                requestJson = requestJson,
+            )
+        } else {
+            CreatePublicKeyCredentialRequest(
+                requestJson = requestJson,
+                origin = origin,
+            )
+        }
 
-            val result = credentialManager.createCredential(
+        val result = try {
+            credentialManager.createCredential(
                 context = application,
                 request = request,
             )
-
-            when (result) {
-                is CreatePublicKeyCredentialResponse -> {
-                    CredentialTestResult.Success(
-                        message = "Passkey created successfully",
-                        data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
-                            result.registrationResponseJson,
-                    )
-                }
-                else -> {
-                    CredentialTestResult.Error(
-                        message = "Unexpected response type: ${result::class.simpleName}",
-                    )
-                }
-            }
         } catch (_: CreateCredentialCancellationException) {
-            CredentialTestResult.Cancelled
+            return CredentialTestResult.Cancelled
         } catch (e: CreateCredentialException) {
-            CredentialTestResult.Error(
+            return CredentialTestResult.Error(
                 message = "Failed to create passkey: ${e.message}",
                 exception = e,
             )
+        }
+
+        return when (result) {
+            is CreatePublicKeyCredentialResponse -> {
+                CredentialTestResult.Success(
+                    message = "Passkey created successfully",
+                    data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
+                        result.registrationResponseJson,
+                )
+            }
+            else -> {
+                CredentialTestResult.Error(
+                    message = "Unexpected response type: ${result::class.simpleName}",
+                )
+            }
         }
     }
 
@@ -158,46 +157,45 @@ class CredentialTestManagerImpl @Inject constructor(
         rpId: String,
         origin: String?,
     ): CredentialTestResult {
-        return try {
-            // Build minimal passkey authentication request JSON
-            val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
+        // Build minimal passkey authentication request JSON
+        val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
 
-            val option = GetPublicKeyCredentialOption(
-                requestJson = requestJson,
-            )
+        val option = GetPublicKeyCredentialOption(
+            requestJson = requestJson,
+        )
 
-            val request = GetCredentialRequest(
-                credentialOptions = listOf(option),
-                origin = origin,
-            )
+        val request = GetCredentialRequest(
+            credentialOptions = listOf(option),
+            origin = origin,
+        )
 
-            val result = credentialManager.getCredential(
+        val result = try {
+            credentialManager.getCredential(
                 context = application,
                 request = request,
             )
-
-            val credential = result.credential
-            when (credential) {
-                is PublicKeyCredential -> {
-                    CredentialTestResult.Success(
-                        message = "Passkey authenticated successfully",
-                        data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
-                            credential.authenticationResponseJson,
-                    )
-                }
-                else -> {
-                    CredentialTestResult.Error(
-                        message = "Unexpected credential type: ${credential::class.simpleName}",
-                    )
-                }
-            }
         } catch (_: GetCredentialCancellationException) {
-            CredentialTestResult.Cancelled
+            return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            CredentialTestResult.Error(
+            return CredentialTestResult.Error(
                 message = "Failed to authenticate passkey: ${e.message}",
                 exception = e,
             )
+        }
+
+        return when (val credential = result.credential) {
+            is PublicKeyCredential -> {
+                CredentialTestResult.Success(
+                    message = "Passkey authenticated successfully",
+                    data = "RP ID: $rpId\nOrigin: ${origin ?: "null"}\n\n" +
+                        credential.authenticationResponseJson,
+                )
+            }
+            else -> {
+                CredentialTestResult.Error(
+                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                )
+            }
         }
     }
 
@@ -205,66 +203,65 @@ class CredentialTestManagerImpl @Inject constructor(
         rpId: String,
         origin: String?,
     ): CredentialTestResult {
-        return try {
-            // Build passkey authentication request JSON
-            val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
+        // Build passkey authentication request JSON
+        val requestJson = WebAuthnJsonBuilder.buildPasskeyAuthenticationJson(rpId)
 
-            // Create request with both password and passkey options
-            // Conditionally include origin parameter for privileged app simulation
-            val request = if (origin.isNullOrBlank()) {
-                GetCredentialRequest(
-                    credentialOptions = listOf(
-                        GetPasswordOption(),
-                        GetPublicKeyCredentialOption(requestJson = requestJson),
-                    ),
-                )
-            } else {
-                GetCredentialRequest(
-                    credentialOptions = listOf(
-                        GetPasswordOption(),
-                        GetPublicKeyCredentialOption(requestJson = requestJson),
-                    ),
-                    origin = origin,
-                )
-            }
+        // Create request with both password and passkey options
+        // Conditionally include origin parameter for privileged app simulation
+        val request = if (origin.isNullOrBlank()) {
+            GetCredentialRequest(
+                credentialOptions = listOf(
+                    GetPasswordOption(),
+                    GetPublicKeyCredentialOption(requestJson = requestJson),
+                ),
+            )
+        } else {
+            GetCredentialRequest(
+                credentialOptions = listOf(
+                    GetPasswordOption(),
+                    GetPublicKeyCredentialOption(requestJson = requestJson),
+                ),
+                origin = origin,
+            )
+        }
 
-            val result = credentialManager.getCredential(
+        val result = try {
+            credentialManager.getCredential(
                 context = application,
                 request = request,
             )
-
-            val credential = result.credential
-            when (credential) {
-                is PasswordCredential -> {
-                    CredentialTestResult.Success(
-                        message = "Password retrieved successfully",
-                        data = "Type: PASSWORD\n" +
-                            "Username: ${credential.id}\n" +
-                            "Password: ${credential.password}\n" +
-                            "Origin: ${origin ?: "null"}",
-                    )
-                }
-                is PublicKeyCredential -> {
-                    CredentialTestResult.Success(
-                        message = "Passkey authenticated successfully",
-                        data = "Type: PASSKEY\n" +
-                            "Origin: ${origin ?: "null"}\n" +
-                            "Response JSON:\n${credential.authenticationResponseJson}",
-                    )
-                }
-                else -> {
-                    CredentialTestResult.Error(
-                        message = "Unexpected credential type: ${credential::class.simpleName}",
-                    )
-                }
-            }
         } catch (_: GetCredentialCancellationException) {
-            CredentialTestResult.Cancelled
+            return CredentialTestResult.Cancelled
         } catch (e: GetCredentialException) {
-            CredentialTestResult.Error(
+            return CredentialTestResult.Error(
                 message = "Failed to get credential: ${e.message}",
                 exception = e,
             )
+        }
+
+        return when (val credential = result.credential) {
+            is PasswordCredential -> {
+                CredentialTestResult.Success(
+                    message = "Password retrieved successfully",
+                    data = "Type: PASSWORD\n" +
+                        "Username: ${credential.id}\n" +
+                        "Password: ${credential.password}\n" +
+                        "Origin: ${origin ?: "null"}",
+                )
+            }
+            is PublicKeyCredential -> {
+                CredentialTestResult.Success(
+                    message = "Passkey authenticated successfully",
+                    data = "Type: PASSKEY\n" +
+                        "Origin: ${origin ?: "null"}\n" +
+                        "Response JSON:\n${credential.authenticationResponseJson}",
+                )
+            }
+            else -> {
+                CredentialTestResult.Error(
+                    message = "Unexpected credential type: ${credential::class.simpleName}",
+                )
+            }
         }
     }
 }
