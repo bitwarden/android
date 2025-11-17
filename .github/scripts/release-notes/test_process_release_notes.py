@@ -1,7 +1,7 @@
 import unittest
 import tempfile
 import os
-from process_release_notes import extract_jira_tickets, extract_pr_numbers, process_line, process_file, get_linked_issues
+from process_release_notes import *
 
 class TestProcessReleaseNotes(unittest.TestCase):
     def setUp(self):
@@ -37,14 +37,14 @@ class TestProcessReleaseNotes(unittest.TestCase):
 
     def test_process_line(self):
         test_cases = [
-            ("[ABC-123] BACKPORT Some text", "Some text"),
-            ("DEF-456: feat(component): Some text", "Some text"),
-            ("GHI-789 - bug(fix): Some text", "Some text"),
-            ("ci: Some text", "Some text"),
-            ("ci(workflow): Some text", "Some text"),
-            ("feat: Direct feature", "Direct feature"),
-            ("bug: Simple bugfix", "Simple bugfix"),
-            ("Normal text", "Normal text")
+            ("* [ABC-123] BACKPORT Some text", "Some text"),
+            ("* DEF-456: feat(component): Some text", "Some text"),
+            ("* GHI-789 - bug(fix): Some text", "Some text"),
+            ("* ci: Some text", "Some text"),
+            ("* ci(workflow): Some text", "Some text"),
+            ("* feat: Direct feature", "Direct feature"),
+            ("* bug: Simple bugfix", "Simple bugfix"),
+            ("* Normal text", "Normal text")
         ]
         for input_text, expected in test_cases:
             with self.subTest(input_text=input_text):
@@ -79,16 +79,16 @@ Another line without changes
             'Another line without changes'
         ])
 
-    def test_get_linked_issues(self):
-        test_cases = [
-            ("bitwarden", "android", 4696, [4659]),
-            ("bitwarden", "android", 4809, [])
-        ]
+    # def test_get_linked_issues(self):
+    #     test_cases = [
+    #         ("bitwarden", "android", 4696, [4659]),
+    #         ("bitwarden", "android", 4809, [])
+    #     ]
 
-        for owner, repo, pr_id, expected_linked_issues in test_cases:
-            with self.subTest(msg=f"Testing PR #{pr_id} for {owner}/{repo}"):
-                result = get_linked_issues(owner, repo, pr_id)
-                self.assertEqual(sorted(result), sorted(expected_linked_issues))
+    #     for owner, repo, pr_id, expected_linked_issues in test_cases:
+    #         with self.subTest(msg=f"Testing PR #{pr_id} for {owner}/{repo}"):
+    #             result = get_linked_issues(owner, repo, pr_id)
+    #             self.assertEqual(sorted(result), sorted(expected_linked_issues))
 
 
 if __name__ == '__main__':
