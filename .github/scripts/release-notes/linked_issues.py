@@ -1,6 +1,7 @@
 import sys
 import subprocess
-from typing import List
+from typing import List, Dict, DefaultDict
+from collections import defaultdict
 
 def create_linked_issue_comment(repo_owner: str, repo_name: str, release_name: str, release_link: str, pr_numbers: List[int]) -> str:
     if len(pr_numbers) == 0:
@@ -10,14 +11,19 @@ def create_linked_issue_comment(repo_owner: str, repo_name: str, release_name: s
 
     return f":shipit: Pull Request(s) linked to this issue released in [{release_name}]({release_link}):\n\n"+ "\n".join(pr_links)
 
-def comment_linked_issues_in_pr(owner: str, repo: str, pr_number: int) -> None:
-    """Use GitHub CLI to comment all issues linked to a PR.
-    """
+def comment_linked_issues_in_prs(owner: str, repo: str, pr_numbers: List[int], release_name: str, release_link: str, dry_run: bool = False) -> None:
+    issue_pr_map: DefaultDict[int, List[int]] = defaultdict(list)
 
+    for pr_number in pr_numbers:
+        linked_issues = get_linked_issues(owner, repo, pr_number)
+        for issue_number in linked_issues:
+            issue_pr_map[issue_number].append(pr_number)
 
-    linked_issues = get_linked_issues(owner, repo, pr_number)
-    for issue_number in linked_issues:
-        comment_github_issue(owner, repo, issue_number, comment)
+    for issue_number, linked_prs in issue_pr_map.items():
+        comment = create_linked_issue_comment(owner, repo, release_name, release_link, linked_prs)
+        print(f"Commenting on issue {issue_number}:\n{comment}\n")
+        if not dry_run and comment:
+            comment_github_issue(owner, repo, issue_number, comment)
 
 def comment_github_issue(owner: str, repo: str, issue_number: int, comment: str) -> None:
     """Use GitHub CLI to comment on an issue.

@@ -1,7 +1,17 @@
 import unittest
-from linked_issues import get_linked_issues, create_linked_issue_comment
+from linked_issues import get_linked_issues, create_linked_issue_comment, comment_linked_issues_in_prs
 
 class TestLinkedIssues(unittest.TestCase):
+
+    def test_comment_linked_issues_in_prs(self):
+        test_cases = [
+            ("bitwarden", "android", [4696, 4809, 4811, 4804], "v2025.3.0", "https://github.com/bitwarden/android/releases/tag/v2025.1.0"),
+        ]
+
+        for owner, repo, pr_numbers, release_name, release_link in test_cases:
+            with self.subTest(msg=f"Commenting on issues in PRs {pr_numbers} for release {release_name}"):
+                comment_linked_issues_in_prs(owner, repo, pr_numbers, release_name, release_link, True)
+
     def test_create_linked_issue_comment(self):
         test_cases = [
             ("bitwarden", "android", "v2025.1.0", "https://github.com/bitwarden/android/releases/tag/v2025.1.0", [4696]),
