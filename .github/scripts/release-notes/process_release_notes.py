@@ -28,9 +28,9 @@ def process_line(line: str) -> str:
     original = line
 
     # Remove Jira ticket patterns:
-    # line = re.sub(r'\[[A-Z]+-\d+\]', '', line) # [ABC-123] -> ""
-    # line = re.sub(r'[A-Z]+-\d+:\s', '', line) # ABC-123: -> ""
-    # line = re.sub(r'[A-Z]+-\d+\s-\s', '', line) # ABC-123 - -> ""
+    line = re.sub(r'\[[A-Z]+-\d+\]', '', line) # [ABC-123] -> ""
+    line = re.sub(r'[A-Z]+-\d+:\s', '', line) # ABC-123: -> ""
+    line = re.sub(r'[A-Z]+-\d+\s-\s', '', line) # ABC-123 - -> ""
 
     # Remove keywords and their variations
     patterns = [
