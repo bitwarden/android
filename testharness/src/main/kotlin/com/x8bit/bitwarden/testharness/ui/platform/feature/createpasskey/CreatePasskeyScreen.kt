@@ -13,9 +13,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +52,8 @@ fun CreatePasskeyScreen(
         }
     }
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
     CreatePasskeyScreenContent(
         onBackClick = { viewModel.trySendAction(CreatePasskeyAction.BackClick) },
         username = state.username,
@@ -61,6 +66,7 @@ fun CreatePasskeyScreen(
         isLoading = state.isLoading,
         onClearResultClick = { viewModel.trySendAction(CreatePasskeyAction.ClearResultClick) },
         resultText = state.resultText,
+        scrollBehavior = scrollBehavior,
     )
 }
 
@@ -79,12 +85,14 @@ private fun CreatePasskeyScreenContent(
     isLoading: Boolean,
     onClearResultClick: () -> Unit,
     resultText: String,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     BitwardenScaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.create_passkey_title),
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = "Back",
@@ -166,6 +174,7 @@ private fun CreatePasskeyScreenContent(
 }
 
 @Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreatePasskeyScreenPreview() {
     CreatePasskeyScreenContent(
@@ -180,5 +189,6 @@ private fun CreatePasskeyScreenPreview() {
         isLoading = false,
         onClearResultClick = {},
         resultText = "This is the result of the operation.",
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
     )
 }
