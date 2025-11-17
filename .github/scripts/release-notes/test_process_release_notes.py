@@ -37,14 +37,15 @@ class TestProcessReleaseNotes(unittest.TestCase):
 
     def test_process_line(self):
         test_cases = [
-            ("* [ABC-123] BACKPORT Some text", "Some text"),
-            ("* DEF-456: feat(component): Some text", "Some text"),
-            ("* GHI-789 - bug(fix): Some text", "Some text"),
-            ("* ci: Some text", "Some text"),
-            ("* ci(workflow): Some text", "Some text"),
-            ("* feat: Direct feature", "Direct feature"),
-            ("* bug: Simple bugfix", "Simple bugfix"),
-            ("* Normal text", "Normal text")
+            ("* [ABC-123] BACKPORT Some text", "* Some text"),
+            ("* DEF-456: feat(component): Some text", "* Some text"),
+            ("* GHI-789 - bug(fix): Some text", "* Some text"),
+            ("* ci: Some text", "* Some text"),
+            ("* ci(workflow): Some text", "* Some text"),
+            ("* feat: Direct feature", "* Direct feature"),
+            ("* bug: Simple bugfix", "* Simple bugfix"),
+            ("* Normal text", "* Normal text"),
+            ("* 🍒 Cherry picked PR", "* Cherry picked PR"),
         ]
         for input_text, expected in test_cases:
             with self.subTest(input_text=input_text):

@@ -48,24 +48,30 @@ def process_line(line: str) -> str:
 
     # Remove keywords and their variations
     patterns = [
-        r'BACKPORT',              # BACKPORT -> ""
-        r'[deps]:',               # [deps]: -> ""
-        r'feat(?:\([^)]*\))?:',   # feat: or feat(ui): -> ""
-        r'bug(?:\([^)]*\))?:',    # bug: or bug(core): -> ""
-        r'ci(?:\([^)]*\))?:'      # ci: or ci(workflow): -> ""
+        r'🍒',                      # 🍒 -> ""
+        r'BACKPORT',                # BACKPORT -> ""
+        r'[deps]:',                 # [deps]: -> ""
+        r'feat(?:\([^)]*\))?:',     # feat: or feat(ui): -> ""
+        r'bug(?:\([^)]*\))?:',      # bug: or bug(core): -> ""
+        r'ci(?:\([^)]*\))?:'        # ci: or ci(workflow): -> ""
     ]
     for pattern in patterns:
         line = re.sub(pattern, '', line)
 
+    # Replace multiple consecutive spaces with a single space
+    line = re.sub(r'\s+', ' ', line)
+
     cleaned = line.strip()
-    if cleaned != original.strip():
-        print(f"Processed: {original.strip()} -> {cleaned}")
+    original_stripped = original.strip()
+    if cleaned != original_stripped:
+        print(f"Processed: {original_stripped} -> {cleaned}")
     return cleaned
 
-def process_file(input_file: str) -> Tuple[List[str], List[str], List[str]]:
+def process_file(input_file: str, app_label: str) -> Tuple[List[str], List[str], List[str]]:
     jira_tickets: List[str] = []
     pr_numbers: List[str] = []
     processed_lines: List[str] = []
+    #community_highlights: List[str] = []
 
     print("Processing file: ", input_file)
 
