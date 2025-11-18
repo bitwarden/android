@@ -25,7 +25,8 @@ fun CreateCredentialRequest.toDefaultAddTypeContent(
 
     val rpName = attestationOptions
         ?.relyingParty
-        ?.name ?: callingAppInfo.packageName
+        ?.name
+        ?: callingAppInfo.packageName
 
     val username = attestationOptions
         ?.user
