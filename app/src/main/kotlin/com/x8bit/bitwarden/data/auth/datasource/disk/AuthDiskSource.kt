@@ -211,7 +211,7 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Gets the flow for the biometrics key for the given [userId].
      */
-    fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?>
+    fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?>
 
     /**
      * Retrieves a pin-protected user key for the given [userId].

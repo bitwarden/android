@@ -19,12 +19,15 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
+import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
@@ -41,7 +44,8 @@ import java.util.concurrent.atomic.AtomicReference
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onSplashScreenRemoved: () -> Unit,
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
+    onSplashScreenRemoved: () -> Unit = {},
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val previousStateReference = remember { AtomicReference(state) }
@@ -60,6 +64,15 @@ fun RootNavScreen(
             }
             .launchIn(this)
     }
+
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = remember(viewModel) {
+            {
+                viewModel.trySendAction(RootNavAction.BiometricSupportChanged(it))
+            }
+        },
+    )
 
     NavHost(
         navController = navController,

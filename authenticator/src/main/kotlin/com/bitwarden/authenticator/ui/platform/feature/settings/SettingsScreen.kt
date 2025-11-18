@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -133,6 +134,15 @@ fun SettingsScreen(
             }
         }
     }
+
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = remember(viewModel) {
+            {
+                viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
+            }
+        },
+    )
 
     BitwardenScaffold(
         modifier = Modifier
@@ -287,8 +297,7 @@ private fun SecuritySettings(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
-    val hasBiometrics = biometricsManager.isBiometricsSupported
-    if (hasBiometrics) {
+    if (state.hasBiometricsSupport) {
         UnlockWithBiometricsRow(
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
@@ -302,7 +311,7 @@ private fun SecuritySettings(
 
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        cardStyle = if (hasBiometrics) {
+        cardStyle = if (state.hasBiometricsSupport) {
             CardStyle.Bottom
         } else {
             CardStyle.Full

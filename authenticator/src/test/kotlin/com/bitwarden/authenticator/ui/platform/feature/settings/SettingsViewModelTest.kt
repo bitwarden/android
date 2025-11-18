@@ -51,6 +51,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
+    private val mutableIsUnlockWithBiometricsEnabledFlow = MutableStateFlow(true)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -64,6 +65,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
 
@@ -263,6 +265,23 @@ class SettingsViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `on BiometricSupportChanged should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.BiometricSupportChanged(isBiometricsSupported = false),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    hasBiometricsSupport = false,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ) = SettingsViewModel(
@@ -301,4 +320,5 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    hasBiometricsSupport = true,
 )
