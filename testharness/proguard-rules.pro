@@ -14,10 +14,10 @@
 -keepclasseswithmembers class kotlinx.serialization.json.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
--keep,includedescriptorclasses class com.x8bit.bitwarden.testharness.**$$serializer { *; }
--keepclassmembers class com.x8bit.bitwarden.testharness.** {
+-keep,includedescriptorclasses class com.bitwarden.testharness.**$$serializer { *; }
+-keepclassmembers class com.bitwarden.testharness.** {
     *** Companion;
 }
--keepclasseswithmembers class com.x8bit.bitwarden.testharness.** {
+-keepclasseswithmembers class com.bitwarden.testharness.** {
     kotlinx.serialization.KSerializer serializer(...);
 }

@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "com.x8bit.bitwarden.testharness"
+    namespace = "com.bitwarden.testharness"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.x8bit.bitwarden.testharness"
+        applicationId = "com.bitwarden.testharness"
         // API 28 - CredentialManager with Play Services support
         minSdk = libs.versions.minSdkBwa.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
