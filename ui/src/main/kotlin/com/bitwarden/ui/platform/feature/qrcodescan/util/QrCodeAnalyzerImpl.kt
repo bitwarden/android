@@ -19,17 +19,15 @@ import java.nio.ByteBuffer
 class QrCodeAnalyzerImpl : QrCodeAnalyzer {
 
     /**
-     * This will ensure the result is only sent once as multiple images with a valid
-     * QR code can be sent for analysis.
+     * This will ensure that only 1 QR code is analyzed at a time.
      */
-    private var qrCodeRead = false
+    private var isQrCodeInAnalysis: Boolean = false
 
     override lateinit var onQrCodeScanned: (String) -> Unit
 
     override fun analyze(image: ImageProxy) {
-        if (qrCodeRead) {
-            return
-        }
+        if (isQrCodeInAnalysis) return
+        isQrCodeInAnalysis = true
 
         val source = PlanarYUVLuminanceSource(
             image.planes[0].buffer.toByteArray(),
@@ -51,12 +49,12 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
                 ),
             )
 
-            qrCodeRead = true
             onQrCodeScanned(result.text)
         } catch (_: NotFoundException) {
             return
         } finally {
             image.close()
+            isQrCodeInAnalysis = false
         }
     }
 }

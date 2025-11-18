@@ -67,6 +67,7 @@ androidx-autofill = { group = "androidx.autofill", name = "autofill", version.re
 androidx-biometrics = { group = "androidx.biometric", name = "biometric", version.ref = "androidxBiometrics" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCamera" }
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "androidxCamera" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamera" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "androidxCamera" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
