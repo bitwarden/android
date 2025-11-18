@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -278,14 +279,16 @@ fun BitwardenTextField(
         val isDropDownExpanded = filteredAutoCompleteList.isNotEmpty() && hasFocused
         ExposedDropdownMenuBox(
             expanded = isDropDownExpanded,
-            onExpandedChange = { hasFocused = false },
+            onExpandedChange = {
+                hasFocused = !hasFocused
+                focusRequester.requestFocus()
+            },
             modifier = modifier.defaultMinSize(minHeight = 60.dp),
         ) {
             Column(
                 modifier = Modifier
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
-                    .focusRequester(focusRequester)
                     .cardStyle(
                         cardStyle = cardStyle,
                         paddingTop = 6.dp,
@@ -377,8 +380,14 @@ fun BitwardenTextField(
                         .nullableTestTag(tag = textFieldTestTag)
                         .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryEditable)
                         .fillMaxWidth()
+                        .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             focused = focusState.isFocused
+                            if (focused) {
+                                textFieldValueState = textFieldValueState.copy(
+                                    selection = TextRange(textFieldValueState.text.length),
+                                )
+                            }
                         },
                 )
                 supportingContent

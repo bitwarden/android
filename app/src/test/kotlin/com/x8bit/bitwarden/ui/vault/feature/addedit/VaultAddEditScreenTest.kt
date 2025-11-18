@@ -1266,7 +1266,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem(id = "TestId", uri = "TestURI", match = null, checksum = null),
+                    UriItem(id = "TestId", uri = "URITest", match = null, checksum = null),
                 ),
             )
         }
