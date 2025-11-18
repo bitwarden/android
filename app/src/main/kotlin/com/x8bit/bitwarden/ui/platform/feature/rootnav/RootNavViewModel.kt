@@ -145,31 +145,31 @@ class RootNavViewModel @Inject constructor(
                     }
 
                     is SpecialCircumstance.ProviderCreateCredential -> {
-                        specialCircumstance
-                            .createCredentialRequest
-                            .createPublicKeyCredentialRequest
-                            ?.let {
+                        val request = specialCircumstance.createCredentialRequest
+                        val publicKeyRequest = request.createPublicKeyCredentialRequest
+                        val passwordRequest = request.createPasswordCredentialRequest
+
+                        when {
+                            publicKeyRequest != null -> {
                                 RootNavState.VaultUnlockedForFido2Save(
                                     activeUserId = userState.activeUserId,
-                                    createCredentialRequest =
-                                        specialCircumstance.createCredentialRequest,
+                                    createCredentialRequest = request,
                                 )
                             }
-                            ?: specialCircumstance
-                                .createCredentialRequest
-                                .createPasswordCredentialRequest
-                                ?.let {
-                                    RootNavState.VaultUnlockedForCreatePasswordRequest(
-                                        username = it.id,
-                                        password = it.password,
-                                        uri = specialCircumstance
-                                            .createCredentialRequest
-                                            .callingAppInfo
-                                            .packageName
-                                            .toAndroidAppUriString(),
-                                    )
-                                }
-                            ?: throw IllegalStateException("Should not have entered here.")
+
+                            passwordRequest != null -> {
+                                RootNavState.VaultUnlockedForCreatePasswordRequest(
+                                    username = passwordRequest.id,
+                                    password = passwordRequest.password,
+                                    uri = request
+                                        .callingAppInfo
+                                        .packageName
+                                        .toAndroidAppUriString(),
+                                )
+                            }
+
+                            else -> throw IllegalStateException("Should not have entered here.")
+                        }
                     }
 
                     is SpecialCircumstance.Fido2Assertion -> {
