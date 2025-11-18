@@ -267,9 +267,15 @@ class AuthDiskSourceTest {
             userId = userId,
             biometricsKey = "1234-9876-0192",
         )
+        val pinProtectedUserKey = "pinProtectedUserKey"
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
-            pinProtectedUserKey = "pinProtectedUserKey",
+            pinProtectedUserKey = pinProtectedUserKey,
+        )
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        authDiskSource.storePinProtectedUserKeyEnvelope(
+            userId = userId,
+            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
         )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
@@ -304,7 +310,8 @@ class AuthDiskSourceTest {
                 refreshToken = "refreshToken",
             ),
         )
-        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
+        val encryptedPin = "encryptedPin"
+        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
         authDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = userId,
@@ -326,12 +333,16 @@ class AuthDiskSourceTest {
             OnboardingStatus.AUTOFILL_SETUP,
             authDiskSource.getOnboardingStatus(userId = userId),
         )
+        assertEquals(encryptedPin, authDiskSource.getEncryptedPin(userId = userId))
+        assertEquals(pinProtectedUserKey, authDiskSource.getPinProtectedUserKey(userId = userId))
+        assertEquals(
+            pinProtectedUserKeyEnvelope,
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId),
+        )
 
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
-        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
-        assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
@@ -341,7 +352,6 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
         assertNull(authDiskSource.getAccountTokens(userId = userId))
-        assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
         assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
         assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))

@@ -77,16 +77,10 @@ class UserLogoutManagerImpl(
         if (isExpired) {
             showToast(message = BitwardenString.login_expired)
         }
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = null,
-        )
 
         // Save any data that will still need to be retained after otherwise clearing all dat
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        val pinProtectedUserKeyEnvelope = authDiskSource
-            .getPinProtectedUserKeyEnvelope(userId = userId)
 
         switchUserIfAvailable(
             currentUserId = userId,
@@ -108,10 +102,6 @@ class UserLogoutManagerImpl(
                 vaultTimeoutAction = vaultTimeoutAction,
             )
         }
-        authDiskSource.storePinProtectedUserKeyEnvelope(
-            userId = userId,
-            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-        )
     }
 
     private fun clearData(userId: String) {

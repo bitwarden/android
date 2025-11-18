@@ -115,6 +115,9 @@ class VaultLockManagerTest {
             updateKdfToMinimumsIfNeeded(password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager = mockk {
+        coEvery { migratePinProtectedUserKeyIfNeeded(userId = any()) } just runs
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
@@ -129,6 +132,7 @@ class VaultLockManagerTest {
         trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = fakeDispatcherManager,
         kdfManager = kdfManager,
+        pinProtectedUserKeyManager = pinProtectedUserKeyManager,
     )
 
     @Test
@@ -1679,12 +1683,6 @@ class VaultLockManagerTest {
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(
-                    userId = USER_ID,
-                    encryptedPin = userKeyEncryptedPin,
-                )
-            } returns enrollResponse.asSuccess()
-            coEvery {
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
             } returns false.asSuccess()
             assertEquals(
@@ -1692,18 +1690,6 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
             mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
-            fakeAuthDiskSource.storeUserAutoUnlockKey(
-                userId = USER_ID,
-                userAutoUnlockKey = null,
-            )
-            fakeAuthDiskSource.storeEncryptedPin(
-                userId = USER_ID,
-                encryptedPin = userKeyEncryptedPin,
-            )
-            fakeAuthDiskSource.storePinProtectedUserKey(
-                userId = USER_ID,
-                pinProtectedUserKey = userKeyEncryptedPin,
-            )
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
@@ -1730,19 +1716,6 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
 
-            fakeAuthDiskSource.assertUserAutoUnlockKey(
-                userId = USER_ID,
-                userAutoUnlockKey = null,
-            )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID,
-                passwordHash = "hashedPassword",
-            )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
-                userId = USER_ID,
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = false,
-            )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
@@ -1764,6 +1737,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = USER_ID)
             }
         }
 
