@@ -170,9 +170,11 @@ class VaultItemListingViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
-            dialogState = providerCreateCredentialRequest?.let {
-                VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText())
-            },
+            dialogState = providerCreateCredentialRequest
+                ?.createPublicKeyCredentialRequest
+                ?.let {
+                    VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText())
+                },
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
