@@ -14,7 +14,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 @Suppress("MaxLineLength")
 @Composable
 fun BitwardenOverwriteCredentialConfirmationDialog(
-    title: String?,
+    title: String,
     message: String,
     onConfirmClick: () -> Unit,
     onDismissRequest: () -> Unit,
