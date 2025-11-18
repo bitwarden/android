@@ -54,17 +54,13 @@ fun CreatePasskeyScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     CreatePasskeyScreenContent(
+        state = state,
         onBackClick = { viewModel.trySendAction(CreatePasskeyAction.BackClick) },
-        username = state.username,
         onUsernameChange = { viewModel.trySendAction(CreatePasskeyAction.UsernameChanged(it)) },
-        rpId = state.rpId,
         onRpIdChange = { viewModel.trySendAction(CreatePasskeyAction.RpIdChanged(it)) },
-        origin = state.origin,
         onOriginChange = { viewModel.trySendAction(CreatePasskeyAction.OriginChanged(it)) },
         onExecuteClick = { viewModel.trySendAction(CreatePasskeyAction.ExecuteClick) },
-        isLoading = state.isLoading,
         onClearResultClick = { viewModel.trySendAction(CreatePasskeyAction.ClearResultClick) },
-        resultText = state.resultText,
         scrollBehavior = scrollBehavior,
     )
 }
@@ -73,17 +69,13 @@ fun CreatePasskeyScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreatePasskeyScreenContent(
+    state: CreatePasskeyState,
     onBackClick: () -> Unit,
-    username: String,
     onUsernameChange: (String) -> Unit,
-    rpId: String,
     onRpIdChange: (String) -> Unit,
-    origin: String,
     onOriginChange: (String) -> Unit,
     onExecuteClick: () -> Unit,
-    isLoading: Boolean,
     onClearResultClick: () -> Unit,
-    resultText: String,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     BitwardenScaffold(
@@ -111,7 +103,7 @@ private fun CreatePasskeyScreenContent(
 
             BitwardenTextField(
                 label = stringResource(R.string.username),
-                value = username,
+                value = state.username,
                 onValueChange = onUsernameChange,
                 cardStyle = null,
                 modifier = Modifier.fillMaxWidth(),
@@ -121,7 +113,7 @@ private fun CreatePasskeyScreenContent(
 
             BitwardenTextField(
                 label = stringResource(R.string.relying_party_id),
-                value = rpId,
+                value = state.rpId,
                 onValueChange = onRpIdChange,
                 placeholder = stringResource(R.string.rp_id_hint),
                 cardStyle = null,
@@ -132,7 +124,7 @@ private fun CreatePasskeyScreenContent(
 
             BitwardenTextField(
                 label = stringResource(R.string.origin_optional),
-                value = origin,
+                value = state.origin,
                 onValueChange = onOriginChange,
                 placeholder = stringResource(R.string.origin_hint),
                 cardStyle = null,
@@ -144,7 +136,7 @@ private fun CreatePasskeyScreenContent(
             BitwardenFilledButton(
                 label = stringResource(R.string.execute),
                 onClick = onExecuteClick,
-                isEnabled = !isLoading,
+                isEnabled = !state.isLoading,
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -153,7 +145,7 @@ private fun CreatePasskeyScreenContent(
             BitwardenTextButton(
                 label = stringResource(R.string.clear),
                 onClick = onClearResultClick,
-                isEnabled = !isLoading,
+                isEnabled = !state.isLoading,
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -161,7 +153,7 @@ private fun CreatePasskeyScreenContent(
 
             BitwardenTextField(
                 label = stringResource(R.string.result),
-                value = resultText,
+                value = state.resultText,
                 onValueChange = { },
                 cardStyle = null,
                 readOnly = true,
@@ -180,17 +172,19 @@ private fun CreatePasskeyScreenContent(
 @Composable
 private fun CreatePasskeyScreenPreview() {
     CreatePasskeyScreenContent(
+        state = CreatePasskeyState(
+            username = "user@bitwarden.com",
+            rpId = "passkeys.example.com",
+            origin = "https://passkeys.example.com",
+            isLoading = false,
+            resultText = "This is the result of the operation.",
+        ),
         onBackClick = {},
-        username = "user@bitwarden.com",
         onUsernameChange = {},
-        rpId = "passkeys.example.com",
         onRpIdChange = {},
-        origin = "https://passkeys.example.com",
         onOriginChange = {},
         onExecuteClick = {},
-        isLoading = false,
         onClearResultClick = {},
-        resultText = "This is the result of the operation.",
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
     )
 }

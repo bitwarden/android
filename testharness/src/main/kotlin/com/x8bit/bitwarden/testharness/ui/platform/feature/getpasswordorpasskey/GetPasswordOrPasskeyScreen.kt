@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -77,7 +77,6 @@ fun GetPasswordOrPasskeyScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
                 .imePadding()
                 .verticalScroll(state = rememberScrollState()),
         ) {
@@ -91,7 +90,9 @@ fun GetPasswordOrPasskeyScreen(
                 },
                 placeholder = stringResource(R.string.rp_id_hint),
                 cardStyle = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -104,7 +105,9 @@ fun GetPasswordOrPasskeyScreen(
                 },
                 placeholder = stringResource(R.string.origin_hint),
                 cardStyle = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -115,7 +118,9 @@ fun GetPasswordOrPasskeyScreen(
                     { viewModel.trySendAction(GetPasswordOrPasskeyAction.ExecuteClick) }
                 },
                 isEnabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -126,7 +131,9 @@ fun GetPasswordOrPasskeyScreen(
                     { viewModel.trySendAction(GetPasswordOrPasskeyAction.ClearResultClick) }
                 },
                 isEnabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -138,7 +145,9 @@ fun GetPasswordOrPasskeyScreen(
                 cardStyle = null,
                 readOnly = true,
                 singleLine = false,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

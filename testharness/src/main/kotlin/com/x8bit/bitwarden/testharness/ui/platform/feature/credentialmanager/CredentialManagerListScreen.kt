@@ -82,8 +82,7 @@ fun CredentialManagerListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(vertical = 16.dp),
+                .verticalScroll(rememberScrollState()),
         ) {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.credential_manager_flows),
