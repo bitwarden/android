@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class CreatePasskeyViewModelTest : BaseViewModelTest() {
 
@@ -23,6 +26,7 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         return CreatePasskeyViewModel(
             credentialTestManager = mockCredentialTestManager,
             savedStateHandle = savedStateHandle,
+            clock = CLOCK,
         )
     }
 
@@ -489,3 +493,8 @@ class CreatePasskeyViewModelTest : BaseViewModelTest() {
         }
     }
 }
+
+private val CLOCK = Clock.fixed(
+    Instant.parse("2024-10-12T12:00:00Z"),
+    ZoneOffset.UTC,
+)
