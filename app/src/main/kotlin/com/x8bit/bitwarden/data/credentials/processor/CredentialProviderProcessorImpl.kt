@@ -160,7 +160,7 @@ class CredentialProviderProcessorImpl(
 
     private fun List<UserState.Account>.toCreatePasskeyEntry(
         activeUserId: String,
-    ) = map { it.toCreatePasskeyEntry(isActive = activeUserId == it.userId) }
+    ): List<CreateEntry> = map { it.toCreatePasskeyEntry(isActive = activeUserId == it.userId) }
 
     private fun UserState.Account.toCreatePasskeyEntry(
         isActive: Boolean,
