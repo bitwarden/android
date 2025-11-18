@@ -56,7 +56,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -665,7 +665,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteCredentialRegistration(
-                result = RegisterCredentialResult.Error(action.message),
+                result = CreateCredentialResult.Error(action.message),
             ),
         )
     }
@@ -675,7 +675,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteCredentialRegistration(
-                result = RegisterCredentialResult.Cancelled,
+                result = CreateCredentialResult.Cancelled,
             ),
         )
     }
@@ -1656,7 +1656,7 @@ class VaultAddEditViewModel @Inject constructor(
                 if (state.createCredentialRequest?.createPasswordCredentialRequest != null) {
                     sendEvent(
                         VaultAddEditEvent.CompleteCredentialRegistration(
-                            RegisterCredentialResult.SuccessPassword,
+                            CreateCredentialResult.Success.PasswordCreated,
                         ),
                     )
                 } else if (state.shouldExitOnSave) {
@@ -1973,7 +1973,7 @@ class VaultAddEditViewModel @Inject constructor(
                 toastManager.show(BitwardenString.an_error_has_occurred)
                 sendEvent(
                     VaultAddEditEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.Error(
+                        CreateCredentialResult.Error(
                             action.result.messageResourceId.asText(),
                         ),
                     ),
@@ -1985,7 +1985,9 @@ class VaultAddEditViewModel @Inject constructor(
                 toastManager.show(BitwardenString.item_updated)
                 sendEvent(
                     VaultAddEditEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.SuccessFido2(action.result.responseJson),
+                        CreateCredentialResult.Success.Fido2CredentialRegistered(
+                            responseJson = action.result.responseJson,
+                        ),
                     ),
                 )
             }
@@ -2895,7 +2897,7 @@ sealed class VaultAddEditEvent {
      * @property result the result of FIDO 2 credential registration.
      */
     data class CompleteCredentialRegistration(
-        val result: RegisterCredentialResult,
+        val result: CreateCredentialResult,
     ) : BackgroundEvent, VaultAddEditEvent()
 
     /**

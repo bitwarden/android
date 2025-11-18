@@ -98,9 +98,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
@@ -3235,7 +3235,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.Error(
+                        CreateCredentialResult.Error(
                             BitwardenString.passkey_registration_failed_due_to_an_internal_error.asText(),
                         ),
                     ),
@@ -3265,7 +3265,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.SuccessFido2(
+                        CreateCredentialResult.Success.Fido2CredentialRegistered(
                             responseJson = "mockResponse",
                         ),
                     ),
@@ -3296,7 +3296,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        result = RegisterCredentialResult.Error(
+                        result = CreateCredentialResult.Error(
                             "".asText(),
                         ),
                     ),
@@ -4163,7 +4163,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        result = RegisterCredentialResult.Cancelled,
+                        result = CreateCredentialResult.Cancelled,
                     ),
                     awaitItem(),
                 )

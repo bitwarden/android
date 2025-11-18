@@ -16,9 +16,9 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 
 /**
  * Primary implementation of [CredentialProviderCompletionManager] when the build version is
@@ -29,11 +29,11 @@ class CredentialProviderCompletionManagerImpl(
     private val activity: Activity,
 ) : CredentialProviderCompletionManager {
 
-    override fun completeCredentialRegistration(result: RegisterCredentialResult) {
+    override fun completeCredentialRegistration(result: CreateCredentialResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is RegisterCredentialResult.Error -> {
+                is CreateCredentialResult.Error -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
@@ -43,7 +43,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterCredentialResult.SuccessFido2 -> {
+                is CreateCredentialResult.Success.Fido2CredentialRegistered -> {
                     PendingIntentHandler
                         .setCreateCredentialResponse(
                             intent = intent,
@@ -53,7 +53,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterCredentialResult.SuccessPassword -> {
+                is CreateCredentialResult.Success.PasswordCreated -> {
                     PendingIntentHandler
                         .setCreateCredentialResponse(
                             intent = intent,
@@ -61,7 +61,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterCredentialResult.Cancelled -> {
+                is CreateCredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,

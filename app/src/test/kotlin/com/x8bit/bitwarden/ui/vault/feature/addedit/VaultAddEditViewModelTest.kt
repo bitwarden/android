@@ -76,7 +76,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -1085,7 +1085,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.SuccessFido2(
+                        CreateCredentialResult.Success.Fido2CredentialRegistered(
                             responseJson = "mockResponse",
                         ),
                     ),
@@ -2246,7 +2246,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertNull(viewModel.stateFlow.value.dialog)
                 assertEquals(
                     VaultAddEditEvent.CompleteCredentialRegistration(
-                        result = RegisterCredentialResult.Error(
+                        result = CreateCredentialResult.Error(
                             BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                                 .asText(),
                         ),
@@ -4007,7 +4007,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     assertEquals(
                         VaultAddEditEvent.CompleteCredentialRegistration(
-                            result = RegisterCredentialResult.Cancelled,
+                            result = CreateCredentialResult.Cancelled,
                         ),
                         awaitItem(),
                     )
@@ -4478,7 +4478,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     assertEquals(
                         VaultAddEditEvent.CompleteCredentialRegistration(
-                            RegisterCredentialResult.Error(
+                            CreateCredentialResult.Error(
                                 BitwardenString.passkey_registration_failed_due_to_an_internal_error
                                     .asText(),
                             ),
@@ -4523,7 +4523,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     assertEquals(
                         VaultAddEditEvent.CompleteCredentialRegistration(
-                            RegisterCredentialResult.SuccessFido2(
+                            CreateCredentialResult.Success.Fido2CredentialRegistered(
                                 responseJson = "mockResponse",
                             ),
                         ),

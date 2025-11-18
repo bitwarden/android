@@ -78,9 +78,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -429,7 +429,7 @@ class VaultItemListingViewModel @Inject constructor(
             ?.let {
                 sendEvent(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        result = RegisterCredentialResult.Cancelled,
+                        result = CreateCredentialResult.Cancelled,
                     ),
                 )
             }
@@ -1347,7 +1347,7 @@ class VaultItemListingViewModel @Inject constructor(
             state.createCredentialRequest != null -> {
                 sendEvent(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        result = RegisterCredentialResult.Error(action.message),
+                        result = CreateCredentialResult.Error(action.message),
                     ),
                 )
             }
@@ -2104,7 +2104,9 @@ class VaultItemListingViewModel @Inject constructor(
                 toastManager.show(messageId = BitwardenString.item_updated)
                 sendEvent(
                     VaultItemListingEvent.CompleteCredentialRegistration(
-                        RegisterCredentialResult.SuccessFido2(action.result.responseJson),
+                        CreateCredentialResult.Success.Fido2CredentialRegistered(
+                            responseJson = action.result.responseJson,
+                        ),
                     ),
                 )
             }
@@ -2119,7 +2121,7 @@ class VaultItemListingViewModel @Inject constructor(
         toastManager.show(messageId = BitwardenString.an_error_has_occurred)
         sendEvent(
             VaultItemListingEvent.CompleteCredentialRegistration(
-                RegisterCredentialResult.Error(
+                CreateCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -3286,7 +3288,7 @@ sealed class VaultItemListingEvent {
      * @property result The result of the credential registration.
      */
     data class CompleteCredentialRegistration(
-        val result: RegisterCredentialResult,
+        val result: CreateCredentialResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**

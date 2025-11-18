@@ -50,9 +50,9 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -1968,7 +1968,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `CompleteCredentialRegistration event should call CredentialProviderCompletionManager with result`() {
-        val result = RegisterCredentialResult.SuccessFido2("mockResponse")
+        val result = CreateCredentialResult.Success.Fido2CredentialRegistered("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteCredentialRegistration(result))
         verify {
             credentialProviderCompletionManager.completeCredentialRegistration(result)

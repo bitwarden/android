@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.credentials.manager
 
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 
 /**
  * A manager for completing the credential creation process.
@@ -13,7 +13,7 @@ interface CredentialProviderCompletionManager {
     /**
      * Completes the credential registration process with the provided [result].
      */
-    fun completeCredentialRegistration(result: RegisterCredentialResult)
+    fun completeCredentialRegistration(result: CreateCredentialResult)
 
     /**
      * Complete the FIDO 2 credential assertion process with the provided [result].

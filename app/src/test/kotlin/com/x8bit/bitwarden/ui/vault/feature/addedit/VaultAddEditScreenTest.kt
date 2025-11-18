@@ -57,7 +57,7 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -234,7 +234,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on CompleteCredentialCreate event should invoke CredentialProviderCompletionManager`() {
-        val result = RegisterCredentialResult.SuccessFido2(
+        val result = CreateCredentialResult.Success.Fido2CredentialRegistered(
             responseJson = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteCredentialRegistration(result = result))
