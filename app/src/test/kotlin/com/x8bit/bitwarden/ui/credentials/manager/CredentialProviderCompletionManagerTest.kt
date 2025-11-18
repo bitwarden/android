@@ -156,8 +156,8 @@ class CredentialProviderCompletionManagerTest {
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialResponse(
-                    any(),
-                    any<CreatePasswordResponse>(),
+                    intent = any(),
+                    response = any<CreatePasswordResponse>(),
                 )
             }
         }

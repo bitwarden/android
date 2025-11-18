@@ -1093,8 +1093,8 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         when (providerRequest.callingRequest) {
             is CreatePublicKeyCredentialRequest -> registerFido2CredentialToCipher(
-                cipherView,
-                providerRequest,
+                cipherView = cipherView,
+                providerRequest = providerRequest,
             )
 
             else ->
