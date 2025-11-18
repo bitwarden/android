@@ -74,6 +74,24 @@ class TestProcessReleaseNotes(unittest.TestCase):
                 result = fetch_labels(pr_url)
                 self.assertEqual(sorted(result), sorted(expected))
 
+    def test_should_skip_pr(self):
+        test_cases = [
+            # (release_app_label, pr_labels, expected_skip)
+            # skip - there's at least one label that starts with "app:" but release_app_label isn't found.
+            ("app:password-manager", ["app:authenticator", "bug"], True),
+            ("app:authenticator", ["app:password-manager", "t:deps"], True),
+
+            # don't skip - app label is found or there are no app labels.
+            ("app:password-manager", ["app:password-manager", "app:authenticator", "t:bug"], False),
+            ("app:password-manager", ["app:password-manager", "t:tech-debt"], False),
+            ("app:password-manager", ["automated-pr", "t:ci"], False),
+            ("app:password-manager", [], False),
+        ]
+        for release_app_label, pr_labels, expected_skip in test_cases:
+            with self.subTest(app_label=release_app_label, pr_labels=pr_labels):
+                result = should_skip_pr(release_app_label, pr_labels)
+                self.assertEqual(result, expected_skip)
+
     def test_process_file(self):
         content = """
 ### Features:

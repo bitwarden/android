@@ -26,6 +26,22 @@ def fetch_labels(github_pr_url: str) -> List[str]:
     )
     return [label.strip() for label in result.stdout.strip().split('\n') if label.strip()]
 
+def should_skip_pr(release_app_label: str, pr_labels: List[str]) -> bool:
+    """Check if the PR should be skipped based on app labels.
+
+    Skip if there's at least one label that starts with "app:" but release_app_label isn't found.
+
+    Args:
+        release_app_label: The app label to look for (e.g., "app:password-manager")
+        pr_labels: List of labels from the PR
+
+    Returns:
+        True if the PR should be skipped, False otherwise
+    """
+    pr_app_labels = [label for label in pr_labels if label.startswith('app:')]
+    # Skip if there are app labels but release_app_label is not among them
+    return len(pr_app_labels) > 0 and release_app_label not in pr_app_labels
+
 def process_line(line: str) -> str:
     """Process a single line from release notes by removing Jira tickets, conventional commit prefixes and other common patterns.
 
@@ -67,7 +83,7 @@ def process_line(line: str) -> str:
         print(f"Processed: {original_stripped} -> {cleaned}")
     return cleaned
 
-def process_file(input_file: str, app_label: str) -> Tuple[List[str], List[str], List[str]]:
+def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], List[str], List[str]]:
     jira_tickets: List[str] = []
     pr_numbers: List[str] = []
     processed_lines: List[str] = []
@@ -81,6 +97,11 @@ def process_file(input_file: str, app_label: str) -> Tuple[List[str], List[str],
             should_process = line and not line.startswith('#')
 
             if should_process:
+                pr_url = extract_pr_url(line)
+                pr_labels = fetch_labels(pr_url)
+                if should_skip_pr(release_app_label, pr_labels):
+                    continue # skip the PR if it is not labeled with the app label
+
                 tickets = extract_jira_tickets(line)
                 jira_tickets.extend(tickets)
 
