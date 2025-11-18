@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.InitUserCryptoMethod
+import timber.log.Timber
 
 /**
  * Returns the label for the given [InitUserCryptoMethod].
@@ -12,8 +13,13 @@ val InitUserCryptoMethod.logTag: String
         is InitUserCryptoMethod.DecryptedKey -> "Decrypted Key (Never Lock/Biometrics)"
         is InitUserCryptoMethod.DeviceKey -> "Device Key"
         is InitUserCryptoMethod.KeyConnector -> "Key Connector"
-        is InitUserCryptoMethod.Password -> "Password"
         is InitUserCryptoMethod.Pin -> "Pin"
         is InitUserCryptoMethod.PinEnvelope -> "Pin Envelope"
         is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
+        else -> {
+            // PM-27290: InitUserCryptoMethod.Password will be removed from the SDK in a future
+            // release. This else branch can be cleaned up afterwards.
+            Timber.e("Unsupported InitUserCryptoMethod: $this")
+            throw IllegalArgumentException("Unsupported InitUserCryptoMethod: $this")
+        }
     }

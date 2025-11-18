@@ -257,22 +257,12 @@ class VaultLockManagerImpl(
         kdf: Kdf,
         userId: String,
     ) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.Password ||
-            initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock
-        ) {
-            val password = when (initUserCryptoMethod) {
-                is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
-                is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-                else -> throw IllegalStateException(
-                    "Invalid initUserCryptoMethod ${initUserCryptoMethod.logTag}.",
-                )
-            }
-
+        if (initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock) {
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
                     email = email,
-                    password = password,
+                    password = initUserCryptoMethod.password,
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
@@ -751,21 +741,11 @@ class VaultLockManagerImpl(
     }
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
-        val password = when (initUserCryptoMethod) {
-            is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
-            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-            is InitUserCryptoMethod.AuthRequest,
-            is InitUserCryptoMethod.DecryptedKey,
-            is InitUserCryptoMethod.DeviceKey,
-            is InitUserCryptoMethod.KeyConnector,
-            is InitUserCryptoMethod.Pin,
-            is InitUserCryptoMethod.PinEnvelope,
-            -> return
-        }
+        if (initUserCryptoMethod !is InitUserCryptoMethod.MasterPasswordUnlock) return
 
         kdfManager
             .updateKdfToMinimumsIfNeeded(
-                password = password,
+                password = initUserCryptoMethod.password,
             )
             .also { result ->
                 if (result is UpdateKdfMinimumsResult.Error) {
