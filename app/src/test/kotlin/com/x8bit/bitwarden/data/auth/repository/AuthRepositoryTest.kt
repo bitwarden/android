@@ -28,6 +28,7 @@ import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
@@ -415,9 +416,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -490,9 +491,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -643,7 +644,7 @@ class AuthRepositoryTest {
     @Test
     fun `delete account fails if deleteAccount fails`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
@@ -675,7 +676,7 @@ class AuthRepositoryTest {
     @Test
     fun `delete account fails if deleteAccount fails with message`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -709,7 +710,7 @@ class AuthRepositoryTest {
     @Test
     fun `deleteAccountWithMasterPassword succeeds`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -1818,9 +1819,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1874,9 +1875,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1927,9 +1928,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1990,9 +1991,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2132,9 +2133,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2198,9 +2199,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2326,9 +2327,9 @@ class AuthRepositoryTest {
                 securityState = successResponse.accountKeys
                     ?.securityState
                     ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -2428,9 +2429,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2497,9 +2498,9 @@ class AuthRepositoryTest {
                 securityState = successResponse.accountKeys
                     ?.securityState
                     ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -2550,9 +2551,9 @@ class AuthRepositoryTest {
                 securityState = successResponse.accountKeys
                     ?.securityState
                     ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -6824,9 +6825,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -6897,9 +6898,9 @@ class AuthRepositoryTest {
                     securityState = successResponse.accountKeys
                         ?.securityState
                         ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -7111,10 +7112,24 @@ class AuthRepositoryTest {
             shouldResetMasterPassword = true,
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
-            userDecryptionOptions = null,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                    kdf = KdfJson(
+                        kdfType = KdfTypeJson.ARGON2_ID,
+                        iterations = 600000,
+                        memory = 16,
+                        parallelism = 4,
+                    ),
+                    masterKeyWrappedUserKey = "key",
+                    salt = "mockSalt",
+                ),
+            ),
             keyConnectorUrl = null,
         )
-        private val PROFILE_1 = AccountJson.Profile(
+        private val BASE_PROFILE_1 = AccountJson.Profile(
             userId = USER_ID_1,
             email = EMAIL,
             isEmailVerified = true,
@@ -7131,6 +7146,19 @@ class AuthRepositoryTest {
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+
+        private val PROFILE_1 = BASE_PROFILE_1.copy(
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                    kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+                    masterKeyWrappedUserKey = "key",
+                    salt = "mockSalt",
+                ),
+            ),
         )
         private val ACCOUNT_1 = AccountJson(
             profile = PROFILE_1,
@@ -7176,33 +7204,21 @@ class AuthRepositoryTest {
                             hasMasterPassword = true,
                             keyConnectorUserDecryptionOptions = null,
                             trustedDeviceUserDecryptionOptions = null,
-                            masterPasswordUnlock = null,
+                            masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                                kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+                                masterKeyWrappedUserKey = "key",
+                                salt = "mockSalt",
+                            ),
                         ),
                     ),
                 ),
             ),
         )
 
-        private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockDataJson(
+        private val MOCK_MASTER_PASSWORD_UNLOCK = MasterPasswordUnlockData(
+            kdf = ACCOUNT_1.profile.toSdkParams(),
+            masterKeyWrappedUserKey = "key",
             salt = "mockSalt",
-            kdf = ACCOUNT_2.profile.toSdkParams().toKdfRequestModel(),
-            masterKeyWrappedUserKey = "masterKeyWrappedUserKeyMock",
-        )
-
-        private val SINGLE_USER_STATE_1_WITH_DECRYPTION_OPTIONS = UserStateJson(
-            activeUserId = USER_ID_1,
-            accounts = mapOf(
-                USER_ID_1 to ACCOUNT_1.copy(
-                    profile = ACCOUNT_1.profile.copy(
-                        userDecryptionOptions = UserDecryptionOptionsJson(
-                            hasMasterPassword = true,
-                            keyConnectorUserDecryptionOptions = null,
-                            trustedDeviceUserDecryptionOptions = null,
-                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
-                        ),
-                    ),
-                ),
-            ),
         )
 
         private val SINGLE_USER_STATE_2 = UserStateJson(
