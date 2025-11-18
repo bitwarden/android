@@ -18,6 +18,24 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
 }
 
 /**
+ * Returns a list of all signing certificate hashes formatted as hex strings from the signing
+ * certificate history. This includes the current signing certificate and any previous ones
+ * (due to key rotation).
+ */
+@OptIn(ExperimentalStdlibApi::class)
+fun CallingAppInfo.getAllSignatureFingerprintsAsHexStrings(): List<String> {
+    if (signingInfo.hasMultipleSigners()) return emptyList()
+
+    val md = MessageDigest.getInstance(SHA_ALGORITHM)
+    return signingInfo.signingCertificateHistory.map { signature ->
+        val hash = md.digest(signature.toByteArray())
+        hash.joinToString(":") { b ->
+            b.toHexString(HexFormat.UpperCase)
+        }
+    }
+}
+
+/**
  * Returns true if this [CallingAppInfo] is present in the privileged app [allowList]. Otherwise,
  * returns false.
  */
