@@ -444,13 +444,13 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun hasValidationErrors(content: VaultAddEditState.ViewState.Content): Boolean {
+    private fun hasValidationErrors(content: VaultAddEditState.ViewState.Content): Boolean =
         if (content.common.name.isBlank()) {
             showGenericErrorDialog(
                 message = BitwardenString.validation_field_required
                     .asText(BitwardenString.name.asText()),
             )
-            return true
+            true
         } else if (
             content.common.selectedOwnerId != null &&
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
@@ -458,7 +458,7 @@ class VaultAddEditViewModel @Inject constructor(
             showGenericErrorDialog(
                 message = BitwardenString.select_one_collection.asText(),
             )
-            return true
+            true
         } else if (
             !networkConnectionManager.isNetworkConnected
         ) {
@@ -468,10 +468,10 @@ class VaultAddEditViewModel @Inject constructor(
                     message = BitwardenString.internet_connection_required_message.asText(),
                 ),
             )
-            return true
+            true
+        } else {
+            false
         }
-        return false
-    }
 
     private fun handleCreatePublicKeyCredentialRequest(
         callingAppInfo: CallingAppInfo,
