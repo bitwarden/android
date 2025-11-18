@@ -51,12 +51,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.valueOf(
-            libs.versions.jvmTarget.get().replace(".", "_").let { "VERSION_$it" },
-        )
-        targetCompatibility = JavaVersion.valueOf(
-            libs.versions.jvmTarget.get().replace(".", "_").let { "VERSION_$it" },
-        )
+        sourceCompatibility(libs.versions.jvmTarget.get())
+        targetCompatibility(libs.versions.jvmTarget.get())
     }
 
     kotlin {
