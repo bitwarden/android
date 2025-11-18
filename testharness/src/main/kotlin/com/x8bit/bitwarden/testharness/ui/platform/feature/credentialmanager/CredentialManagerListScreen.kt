@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -47,18 +48,23 @@ fun CredentialManagerListScreen(
             CredentialManagerListEvent.NavigateToGetPassword -> {
                 onNavigateToGetPassword()
             }
+
             CredentialManagerListEvent.NavigateToCreatePassword -> {
                 onNavigateToCreatePassword()
             }
+
             CredentialManagerListEvent.NavigateToGetPasskey -> {
                 onNavigateToGetPasskey()
             }
+
             CredentialManagerListEvent.NavigateToCreatePasskey -> {
                 onNavigateToCreatePasskey()
             }
+
             CredentialManagerListEvent.NavigateToGetPasswordOrPasskey -> {
                 onNavigateToGetPasswordOrPasskey()
             }
+
             CredentialManagerListEvent.NavigateBack -> {
                 onNavigateBack()
             }
@@ -149,6 +155,9 @@ fun CredentialManagerListScreen(
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier.standardHorizontalMargin(),
             )
+
+            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.navigationBarsPadding())
         }
     }
 }

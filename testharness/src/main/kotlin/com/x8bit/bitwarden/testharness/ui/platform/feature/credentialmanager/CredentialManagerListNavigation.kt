@@ -2,12 +2,13 @@
 
 package com.x8bit.bitwarden.testharness.ui.platform.feature.credentialmanager
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpasskey.createPasskeyDestination
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpasskey.navigateToCreatePasskey
 import com.x8bit.bitwarden.testharness.ui.platform.feature.createpassword.createPasswordDestination
@@ -44,8 +45,8 @@ fun NavGraphBuilder.credentialManagerGraph(
     navigation<CredentialManagerGraphRoute>(
         startDestination = CredentialManagerListRoute,
     ) {
-        composable<CredentialManagerListRoute> {
-            CredentialManagerListScreen(
+        composableWithRootPushTransitions<CredentialManagerListRoute> {
+            credentialManagerListDestination(
                 onNavigateBack = onNavigateBack,
                 onNavigateToGetPassword = {
                     navController.navigateToGetPassword()
@@ -85,6 +86,25 @@ fun NavGraphBuilder.credentialManagerGraph(
             onNavigateBack = { navController.popBackStack() },
         )
     }
+}
+
+@Composable
+private fun credentialManagerListDestination(
+    onNavigateBack: () -> Unit,
+    onNavigateToGetPassword: () -> Unit,
+    onNavigateToCreatePassword: () -> Unit,
+    onNavigateToGetPasskey: () -> Unit,
+    onNavigateToCreatePasskey: () -> Unit,
+    onNavigateToGetPasswordOrPasskey: () -> Unit,
+) {
+    CredentialManagerListScreen(
+        onNavigateBack = onNavigateBack,
+        onNavigateToGetPassword = { onNavigateToGetPassword() },
+        onNavigateToCreatePassword = { onNavigateToCreatePassword() },
+        onNavigateToGetPasskey = { onNavigateToGetPasskey() },
+        onNavigateToCreatePasskey = { onNavigateToCreatePasskey() },
+        onNavigateToGetPasswordOrPasskey = { onNavigateToGetPasswordOrPasskey() },
+    )
 }
 
 /**
