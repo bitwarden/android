@@ -79,7 +79,7 @@ class VaultLockManagerTest {
         coEvery {
             hashPassword(
                 email = MOCK_PROFILE.email,
-                password = "password",
+                password = "mockValue",
                 kdf = MOCK_PROFILE.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
@@ -908,7 +908,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
@@ -1011,7 +1011,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val userAutoUnlockKey = "userAutoUnlockKey"
@@ -1126,7 +1126,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val error = Throwable("Fail")
@@ -1205,7 +1205,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
@@ -1296,7 +1296,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val error = Throwable("Fail")
@@ -1374,7 +1374,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
@@ -1464,7 +1464,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
@@ -1637,7 +1637,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val userKeyEncryptedPin = "encryptedPin"
@@ -1764,7 +1764,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "password"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
@@ -1879,7 +1879,7 @@ class VaultLockManagerTest {
         val kdf = MOCK_PROFILE.toSdkParams()
         val email = MOCK_PROFILE.email
         val userKey = "12345"
-        val masterPassword = "password"
+        val masterPassword = "mockValue"
         val privateKey = "54321"
         val organizationKeys = null
         coEvery {
@@ -1928,7 +1928,7 @@ class VaultLockManagerTest {
     private suspend fun verifyUnlockedVault(userId: String) {
         val kdf = MOCK_PROFILE.toSdkParams()
         val email = MOCK_PROFILE.email
-        val masterPassword = "password"
+        val masterPassword = "mockValue"
         val privateKey = "54321"
         val organizationKeys = null
         val userAutoUnlockKey = "userAutoUnlockKey"
