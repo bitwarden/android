@@ -23,10 +23,13 @@ import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDi
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -56,6 +59,7 @@ class ItemListingViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val encodingManager: BitwardenEncodingManager,
     private val settingsRepository: SettingsRepository,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
         alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
@@ -89,6 +93,12 @@ class ItemListingViewModel @Inject constructor(
             .firstTimeAccountSyncFlow
             .map { ItemListingAction.Internal.FirstTimeUserSyncReceive }
             .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ITEM_SAVED, SnackbarRelay.ITEM_ADDED)
+            .map(ItemListingEvent::ShowSnackbar)
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
     }
 
@@ -277,11 +287,7 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(dialog = null)
                 }
-                sendEvent(
-                    ItemListingEvent.ShowToast(
-                        message = BitwardenString.item_deleted.asText(),
-                    ),
-                )
+                sendEvent(ItemListingEvent.ShowSnackbar(BitwardenString.item_deleted.asText()))
             }
         }
     }
@@ -305,7 +311,7 @@ class ItemListingViewModel @Inject constructor(
 
             CreateItemResult.Success -> {
                 sendEvent(
-                    event = ItemListingEvent.ShowToast(
+                    event = ItemListingEvent.ShowSnackbar(
                         message = BitwardenString.verification_code_added.asText(),
                     ),
                 )
@@ -848,18 +854,11 @@ sealed class ItemListingEvent {
     data object NavigateToBitwardenSettings : ItemListingEvent()
 
     /**
-     * Show a Toast with [message].
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : ItemListingEvent()
-
-    /**
      * Show a Snackbar with the given [data].
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : ItemListingEvent() {
+    ) : ItemListingEvent(), BackgroundEvent {
         constructor(
             message: Text,
             messageHeader: Text? = null,

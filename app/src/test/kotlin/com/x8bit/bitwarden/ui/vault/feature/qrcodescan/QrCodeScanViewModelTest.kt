@@ -62,7 +62,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ManualEntryTextClick should emit ShowToast`() = runTest {
+    fun `ManualEntryTextClick should emit NavigateToManualCodeEntry`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {

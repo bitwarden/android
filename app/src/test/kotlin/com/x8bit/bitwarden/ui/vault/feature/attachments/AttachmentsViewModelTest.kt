@@ -403,7 +403,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `ChooseFileClick should emit ShowChooserSheet`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.ChooseFileClick)

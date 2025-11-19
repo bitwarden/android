@@ -598,7 +598,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `ConfirmDeleteClick with DeleteCipherResult Success should emit ShowToast and NavigateBack`() =
+    fun `ConfirmDeleteClick with DeleteCipherResult Success should emit send snackbar event and NavigateBack`() =
         runTest {
             val cipherListView = createMockCipherListView(number = 1)
             val cipherView = createMockCipherView(number = 1)
@@ -1326,7 +1326,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `in add mode, createCipherInOrganization success should ShowToast and NavigateBack`() =
+    @Suppress("MaxLineLength")
+    fun `in add mode, createCipherInOrganization success should send snackbar event and NavigateBack`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
@@ -1656,39 +1657,41 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `in edit mode, updateCipher success should ShowToast and NavigateBack`() = runTest {
-        val cipherView = createMockCipherListView(1)
-        val stateWithName = createVaultAddItemState(
-            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
-            commonContentViewState = createCommonContentViewState(
-                name = "mockName-1",
-            ),
-        )
-
-        mutableVaultDataFlow.value = DataState.Loaded(createVaultData(cipherListView = cipherView))
-
-        val viewModel = createAddVaultItemViewModel(
-            createSavedStateHandleWithState(
-                state = stateWithName,
-                vaultAddEditType = VaultAddEditType.AddItem,
-                vaultItemCipherType = VaultItemCipherType.LOGIN,
-            ),
-        )
-
-        coEvery {
-            vaultRepository.updateCipher(any(), any())
-        } returns UpdateCipherResult.Success
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-            assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
-        }
-        verify(exactly = 1) {
-            snackbarRelayManager.sendSnackbarData(
-                data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
-                relay = SnackbarRelay.CIPHER_UPDATED,
+    fun `in edit mode, updateCipher success should send snackbar event and NavigateBack`() =
+        runTest {
+            val cipherView = createMockCipherListView(1)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
             )
+
+            mutableVaultDataFlow.value =
+                DataState.Loaded(createVaultData(cipherListView = cipherView))
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.updateCipher(any(), any())
+            } returns UpdateCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                    relay = SnackbarRelay.CIPHER_UPDATED,
+                )
+            }
         }
-    }
 
     @Test
     fun `in add mode, SaveClick with no network connection error should show error dialog`() =

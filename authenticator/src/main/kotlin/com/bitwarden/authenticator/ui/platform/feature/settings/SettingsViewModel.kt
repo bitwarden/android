@@ -15,11 +15,15 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -46,6 +50,7 @@ class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     clock: Clock,
     authenticatorRepository: AuthenticatorRepository,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
@@ -85,6 +90,11 @@ class SettingsViewModel @Inject constructor(
             .isUnlockWithBiometricsEnabledFlow
             .map { SettingsAction.Internal.UnlockWithBiometricsUpdated(it) }
             .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.IMPORT_SUCCESS)
+            .map(SettingsEvent::ShowSnackbar)
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
     }
 
@@ -513,6 +523,27 @@ sealed class SettingsEvent {
      * Navigate to the Bitwarden Play Store listing.
      */
     data object NavigateToBitwardenPlayStoreListing : SettingsEvent()
+
+    /**
+     * Navigate to the Bitwarden Play Store listing.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : SettingsEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**

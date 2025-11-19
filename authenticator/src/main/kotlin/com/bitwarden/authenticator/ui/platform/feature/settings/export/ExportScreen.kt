@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.export
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -40,6 +38,9 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -58,7 +59,6 @@ fun ExportScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val exportLocationReceive: (Uri) -> Unit = remember {
         {
             viewModel.trySendAction(ExportAction.ExportLocationReceive(it))
@@ -69,12 +69,12 @@ fun ExportScreen(
             exportLocationReceive.invoke(it.uri)
         }
     }
-
+    val snackbarState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             ExportEvent.NavigateBack -> onNavigateBack()
-            is ExportEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
+            is ExportEvent.ShowSnackBar -> {
+                snackbarState.showSnackbar(BitwardenSnackbarData(message = event.message))
             }
 
             is ExportEvent.NavigateToSelectExportDestination -> {
@@ -148,6 +148,7 @@ fun ExportScreen(
                 },
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(snackbarState) },
     ) {
         ExportScreenContent(
             modifier = Modifier.fillMaxSize(),

@@ -785,7 +785,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FileChose should emit ShowToast`() = runTest {
+    fun `FileChose should update the state accordingly`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 selectedType = AddEditSendState.ViewState.Content.SendType.File(
@@ -824,7 +824,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `ChooseFileClick should emit ShowChooserSheet`() = runTest {
         val arePermissionsGranted = true
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

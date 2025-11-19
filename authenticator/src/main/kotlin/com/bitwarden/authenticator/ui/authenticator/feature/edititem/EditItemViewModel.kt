@@ -13,10 +13,13 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isBase32
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -39,6 +42,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class EditItemViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditItemState, EditItemEvent, EditItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: EditItemState(
@@ -233,7 +237,10 @@ class EditItemViewModel @Inject constructor(
             }
 
             CreateItemResult.Success -> {
-                sendEvent(EditItemEvent.ShowToast(BitwardenString.item_saved.asText()))
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = BitwardenString.item_saved.asText()),
+                    relay = SnackbarRelay.ITEM_SAVED,
+                )
                 sendEvent(EditItemEvent.NavigateBack)
             }
         }
@@ -446,11 +453,6 @@ sealed class EditItemEvent {
      * Navigates back.
      */
     data object NavigateBack : EditItemEvent()
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : EditItemEvent()
 }
 
 /**
