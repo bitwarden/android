@@ -129,7 +129,7 @@ class ExportViewModel @Inject constructor(
 
             is ExportDataResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(ExportEvent.ShowToast(BitwardenString.export_success.asText()))
+                sendEvent(ExportEvent.ShowSnackBar(BitwardenString.export_success.asText()))
             }
         }
     }
@@ -175,9 +175,9 @@ sealed class ExportEvent {
     data object NavigateBack : ExportEvent()
 
     /**
-     * Display a toast with the provided [message].
+     * Display a Snackbar with the provided [message].
      */
-    data class ShowToast(val message: Text) : ExportEvent()
+    data class ShowSnackBar(val message: Text) : ExportEvent()
 
     /**
      * Navigate to the select export destination screen.
