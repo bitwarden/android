@@ -6,7 +6,7 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
+import com.x8bit.bitwarden.data.platform.util.getAllSignatureFingerprintsAsHexStrings
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import timber.log.Timber
 
@@ -38,27 +38,43 @@ class OriginManagerImpl(
         relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult {
-        return digitalAssetLinkService
-            .checkDigitalAssetLinksRelations(
-                sourceWebSite = relyingPartyId.prefixHttpsIfNecessary(),
-                targetPackageName = callingAppInfo.packageName,
-                targetCertificateFingerprint = callingAppInfo
-                    .getSignatureFingerprintAsHexString()
-                    .orEmpty(),
-                relations = listOf(DELEGATE_PERMISSION_HANDLE_ALL_URLS),
-            )
-            .fold(
-                onSuccess = {
-                    if (it.linked) {
-                        ValidateOriginResult.Success(null)
-                    } else {
-                        ValidateOriginResult.Error.PasskeyNotSupportedForApp
-                    }
-                },
-                onFailure = {
-                    ValidateOriginResult.Error.AssetLinkNotFound
-                },
-            )
+        val fingerprints = callingAppInfo.getAllSignatureFingerprintsAsHexStrings()
+
+        if (fingerprints.isEmpty()) {
+            return ValidateOriginResult.Error.PasskeyNotSupportedForApp
+        }
+
+        var assetLinkFound = false
+
+        // Check each fingerprint in the signing certificate history
+        return fingerprints
+            .firstNotNullOfOrNull { fingerprint ->
+                digitalAssetLinkService
+                    .checkDigitalAssetLinksRelations(
+                        sourceWebSite = relyingPartyId.prefixHttpsIfNecessary(),
+                        targetPackageName = callingAppInfo.packageName,
+                        targetCertificateFingerprint = fingerprint,
+                        relations = listOf(DELEGATE_PERMISSION_HANDLE_ALL_URLS),
+                    )
+                    .fold(
+                        onSuccess = {
+                            assetLinkFound = true
+                            if (it.linked) {
+                                ValidateOriginResult.Success(null)
+                            } else {
+                                null
+                            }
+                        },
+                        onFailure = {
+                            null
+                        },
+                    )
+            }
+            ?: if (assetLinkFound) {
+                ValidateOriginResult.Error.PasskeyNotSupportedForApp
+            } else {
+                ValidateOriginResult.Error.AssetLinkNotFound
+            }
     }
 
     private suspend fun validatePrivilegedAppOrigin(
