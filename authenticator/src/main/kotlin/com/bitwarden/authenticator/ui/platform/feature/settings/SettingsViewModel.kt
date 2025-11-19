@@ -81,6 +81,11 @@ class SettingsViewModel @Inject constructor(
             .map { SettingsAction.Internal.DefaultSaveOptionUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        settingsRepository
+            .isUnlockWithBiometricsEnabledFlow
+            .map { SettingsAction.Internal.UnlockWithBiometricsUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: SettingsAction) {
@@ -118,6 +123,30 @@ class SettingsViewModel @Inject constructor(
             }
 
             is SettingsAction.Internal.DynamicColorsUpdated -> handleDynamicColorsUpdated(action)
+
+            is SettingsAction.Internal.UnlockWithBiometricsUpdated -> {
+                handleUnlockWithBiometricsUpdated(action)
+            }
+
+            is SettingsAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
+            }
+        }
+    }
+
+    private fun handleBiometricSupportChanged(action: SettingsAction.BiometricSupportChanged) {
+        mutableStateFlow.update {
+            it.copy(hasBiometricsSupport = action.isBiometricsSupported)
+        }
+    }
+
+    private fun handleUnlockWithBiometricsUpdated(
+        action: SettingsAction.Internal.UnlockWithBiometricsUpdated,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action.isEnabled,
+            )
         }
     }
 
@@ -385,6 +414,7 @@ class SettingsViewModel @Inject constructor(
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
+                hasBiometricsSupport = true,
             )
         }
     }
@@ -398,6 +428,7 @@ data class SettingsState(
     val appearance: Appearance,
     val defaultSaveOption: DefaultSaveOption,
     val isUnlockWithBiometricsEnabled: Boolean,
+    val hasBiometricsSupport: Boolean,
     val isSubmitCrashLogsEnabled: Boolean,
     val showSyncWithBitwarden: Boolean,
     val showDefaultSaveOptionRow: Boolean,
@@ -503,6 +534,11 @@ sealed class SettingsAction(
             val message: Text,
         ) : Dialog()
     }
+
+    /**
+     * Indicates an update on device biometrics support.
+     */
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : SettingsAction()
 
     /**
      * Models actions for the Security section of settings.
@@ -646,6 +682,13 @@ sealed class SettingsAction(
          * Indicates that the dynamic colors state on disk was updated.
          */
         data class DynamicColorsUpdated(
+            val isEnabled: Boolean,
+        ) : SettingsAction()
+
+        /**
+         * Indicates that the biometric state on disk was updated.
+         */
+        data class UnlockWithBiometricsUpdated(
             val isEnabled: Boolean,
         ) : SettingsAction()
     }

@@ -1,0 +1,49 @@
+{
+  "catch_all_label": "t:misc",
+  "title_patterns": {
+    "t:new-feature": ["feat", "feature"],
+    "t:enhancement": ["enhancement", "enh", "impr"],
+    "t:bug": ["fix", "bug", "bugfix"],
+    "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
+    "t:docs": ["docs"],
+    "t:ci": ["ci", "build", "chore(ci)"],
+    "t:deps": ["deps"],
+    "t:breaking-change": ["breaking", "breaking-change"],
+    "t:misc": ["misc"]
+  },
+  "path_patterns": {
+    "app:shared": [
+      "annotation/",
+      "core/",
+      "data/",
+      "network/",
+      "ui/",
+      "authenticatorbridge/",
+      "gradle/"
+    ],
+    "app:password-manager": [
+      "app/",
+      "cxf/"
+    ],
+    "app:authenticator": [
+      "authenticator/"
+    ],
+    "t:ci": [
+      ".github/",
+      "scripts/",
+      "fastlane/",
+      ".gradle/",
+      ".claude/",
+      "detekt-config.yml"
+    ],
+    "t:docs": [
+      "docs/"
+    ],
+    "t:deps": [
+      "gradle/"
+    ],
+    "t:misc": [
+      "keystore/"
+    ]
+  }
+}

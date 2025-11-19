@@ -1169,4 +1169,7 @@
     <string name="lock_app">Заблокировать приложение</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Используйте метод блокировки вашего устройства, чтобы разблокировать приложение</string>
     <string name="loading_vault_data">Загрузка данных хранилища…</string>
+    <string name="compatibility_mode_warning">Режим совместимости следует включать только в том случае, если автозаполнение не работает в вашем браузере. Этот параметр снижает защищенность и может позволить вредоносным сайтам перехватывать ваши пароли. Включайте его, только если вы готовы принять этот риск.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Использовать режим совместимости для автозаполнения браузера</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Использует менее защищенный метод автозаполнения, совместимый с большим количеством браузеров.\n<annotation link="learnMore">Подробнее\">Узнайте больше о режиме совместимости</annotation></string>
 </resources>

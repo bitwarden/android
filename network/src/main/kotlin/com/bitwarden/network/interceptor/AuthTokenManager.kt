@@ -81,6 +81,7 @@ internal class AuthTokenManager(
         }
     }
 
+    @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = getAccessToken()
             ?: throw IOException(IllegalStateException(MISSING_TOKEN_MESSAGE))
@@ -96,9 +97,12 @@ internal class AuthTokenManager(
     }
 
     @Synchronized
+    @Throws(IOException::class)
     private fun getAccessToken(): String? = authTokenProvider
         .getAuthTokenDataOrNull()
-        ?.let { getAccessToken(authTokenData = it).getOrThrow() }
+        ?.let { authTokenData ->
+            getAccessToken(authTokenData = authTokenData).getOrElse { throw it.toIoException() }
+        }
 
     @Synchronized
     private fun getAccessToken(authTokenData: AuthTokenData): Result<String> {
@@ -117,3 +121,12 @@ internal class AuthTokenManager(
 
     private fun Response.shouldSkipAuthentication(): Boolean = this.priorResponse != null
 }
+
+/**
+ * Helper method to ensure the exception is an [IOException].
+ */
+private fun Throwable.toIoException(): IOException =
+    when (this) {
+        is IOException -> this
+        else -> IOException(this)
+    }
