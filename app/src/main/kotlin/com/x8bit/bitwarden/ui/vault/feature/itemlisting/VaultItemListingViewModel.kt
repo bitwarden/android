@@ -1094,16 +1094,19 @@ class VaultItemListingViewModel @Inject constructor(
         providerRequest: ProviderCreateCredentialRequest,
     ) {
         when (providerRequest.callingRequest) {
-            is CreatePublicKeyCredentialRequest -> registerFido2CredentialToCipher(
-                cipherView = cipherView,
-                providerRequest = providerRequest,
-            )
+            is CreatePublicKeyCredentialRequest -> {
+                registerFido2CredentialToCipher(
+                    cipherView = cipherView,
+                    providerRequest = providerRequest,
+                )
+            }
 
-            else ->
+            else -> {
                 showCredentialManagerErrorDialog(
                     BitwardenString.credential_operation_failed_because_the_request_is_invalid
                         .asText(),
                 )
+            }
         }
     }
 
@@ -2038,19 +2041,24 @@ class VaultItemListingViewModel @Inject constructor(
         action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
     ) {
         when (action.request.providerRequest.callingRequest) {
-            is CreatePublicKeyCredentialRequest ->
+            is CreatePublicKeyCredentialRequest -> {
                 handleRegisterFido2CredentialRequestReceive(action)
+            }
 
-            is CreatePasswordRequest -> observeVaultData()
+            is CreatePasswordRequest -> {
+                observeVaultData()
+            }
 
-            else -> mutableStateFlow.update {
-                it.copy(
-                    dialogState =
-                        VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                            title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
-                        ),
-                )
+            else -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState =
+                            VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
+                            ),
+                    )
+                }
             }
         }
     }
