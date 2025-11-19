@@ -746,9 +746,9 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but there is a ProviderCreateCredential with password request the nav state should be VaultUnlockedForCreatePasswordRequest`() {
         mockkObject(ProviderCreateCredentialRequest.Companion)
 
-        val username = "testUser"
-        val password = "testPassword123"
-        val packageName = "com.example.app"
+        val mockUsername = "testUser"
+        val mockPassword = "testPassword123"
+        val mockPackageName = "com.example.app"
 
         val createCredentialRequest = CreateCredentialRequest(
             userId = "activeUserId",
@@ -758,11 +758,11 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
         every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
             every { callingRequest } returns mockk<CreatePasswordRequest> {
-                every { id } returns username
-                every { password } returns password
+                every { id } returns mockUsername
+                every { password } returns mockPassword
             }
             every { callingAppInfo } returns mockk {
-                every { packageName } returns packageName
+                every { packageName } returns mockPackageName
             }
         }
 
@@ -800,9 +800,9 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlockedForCreatePasswordRequest(
-                username = username,
-                password = password,
-                uri = "androidapp://$packageName",
+                username = mockUsername,
+                password = mockPassword,
+                uri = "androidapp://$mockPackageName",
             ),
             viewModel.stateFlow.value,
         )
