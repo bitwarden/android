@@ -313,6 +313,31 @@ class RootNavScreenTest : BitwardenComposeTest() {
             }
         }
 
+        // Make sure navigating to vault unlocked for create password request works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForCreatePasswordRequest(
+            username = "activeUserId",
+            password = "mockPassword",
+            uri = "mockUri",
+        )
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = VaultUnlockedGraphRoute,
+                    navOptions = expectedNavOptions,
+                )
+                mockNavHostController.navigate(
+                    route = VaultAddEditRoute(
+                        vaultAddEditMode = VaultAddEditMode.ADD,
+                        vaultItemId = null,
+                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        selectedFolderId = null,
+                        selectedCollectionId = null,
+                    ),
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
         // Make sure navigating to vault unlocked for CreateCredentialRequest works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlockedForFido2Save(
             activeUserId = "activeUserId",

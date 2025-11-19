@@ -59,6 +59,13 @@ interface CredentialManagerPendingIntentManager {
     ): PendingIntent
 
     /**
+     * Creates a pending intent to use when providing options for Password credential creation.
+     */
+    fun createPasswordCreationPendingIntent(
+        userId: String,
+    ): PendingIntent
+
+    /**
      * Creates a pending intent to use when providing options for Password credential filling.
      */
     fun createPasswordGetCredentialPendingIntent(
