@@ -2,7 +2,6 @@
 
 package com.bitwarden.testharness.ui.platform.feature.credentialmanager
 
-import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -45,26 +44,24 @@ fun NavGraphBuilder.credentialManagerGraph(
     navigation<CredentialManagerGraphRoute>(
         startDestination = CredentialManagerListRoute,
     ) {
-        composableWithRootPushTransitions<CredentialManagerListRoute> {
-            credentialManagerListDestination(
-                onNavigateBack = onNavigateBack,
-                onNavigateToGetPassword = {
-                    navController.navigateToGetPassword()
-                },
-                onNavigateToCreatePassword = {
-                    navController.navigateToCreatePassword()
-                },
-                onNavigateToGetPasskey = {
-                    navController.navigateToGetPasskey()
-                },
-                onNavigateToCreatePasskey = {
-                    navController.navigateToCreatePasskey()
-                },
-                onNavigateToGetPasswordOrPasskey = {
-                    navController.navigateToGetPasswordOrPasskey()
-                },
-            )
-        }
+        credentialManagerListDestination(
+            onNavigateBack = onNavigateBack,
+            onNavigateToGetPassword = {
+                navController.navigateToGetPassword()
+            },
+            onNavigateToCreatePassword = {
+                navController.navigateToCreatePassword()
+            },
+            onNavigateToGetPasskey = {
+                navController.navigateToGetPasskey()
+            },
+            onNavigateToCreatePasskey = {
+                navController.navigateToCreatePasskey()
+            },
+            onNavigateToGetPasswordOrPasskey = {
+                navController.navigateToGetPasswordOrPasskey()
+            },
+        )
 
         getPasswordDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -88,8 +85,8 @@ fun NavGraphBuilder.credentialManagerGraph(
     }
 }
 
-@Composable
-private fun credentialManagerListDestination(
+@Suppress("LongParameterList")
+private fun NavGraphBuilder.credentialManagerListDestination(
     onNavigateBack: () -> Unit,
     onNavigateToGetPassword: () -> Unit,
     onNavigateToCreatePassword: () -> Unit,
@@ -97,14 +94,16 @@ private fun credentialManagerListDestination(
     onNavigateToCreatePasskey: () -> Unit,
     onNavigateToGetPasswordOrPasskey: () -> Unit,
 ) {
-    CredentialManagerListScreen(
-        onNavigateBack = onNavigateBack,
-        onNavigateToGetPassword = { onNavigateToGetPassword() },
-        onNavigateToCreatePassword = { onNavigateToCreatePassword() },
-        onNavigateToGetPasskey = { onNavigateToGetPasskey() },
-        onNavigateToCreatePasskey = { onNavigateToCreatePasskey() },
-        onNavigateToGetPasswordOrPasskey = { onNavigateToGetPasswordOrPasskey() },
-    )
+    composableWithRootPushTransitions<CredentialManagerListRoute> {
+        CredentialManagerListScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToGetPassword = { onNavigateToGetPassword() },
+            onNavigateToCreatePassword = { onNavigateToCreatePassword() },
+            onNavigateToGetPasskey = { onNavigateToGetPasskey() },
+            onNavigateToCreatePasskey = { onNavigateToCreatePasskey() },
+            onNavigateToGetPasswordOrPasskey = { onNavigateToGetPasswordOrPasskey() },
+        )
+    }
 }
 
 /**

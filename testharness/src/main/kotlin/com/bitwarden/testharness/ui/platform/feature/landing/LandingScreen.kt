@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -63,7 +64,7 @@ fun LandingScreen(
 private fun LandingScreenContent(
     onAutofillClick: () -> Unit,
     onCredentialManagerClick: () -> Unit,
-    scrollBehavior: androidx.compose.material3.TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     BitwardenScaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

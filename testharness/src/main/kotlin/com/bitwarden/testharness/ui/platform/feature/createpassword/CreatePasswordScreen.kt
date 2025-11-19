@@ -62,7 +62,7 @@ fun CreatePasswordScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = "Back",
+                    navigationIconContentDescription = stringResource(BitwardenString.back),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(CreatePasswordAction.BackClick) }
                     },

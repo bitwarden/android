@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Get Passkey test screen.
@@ -61,7 +62,7 @@ fun GetPasskeyScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = "Back",
+                    navigationIconContentDescription = stringResource(BitwardenString.back),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(GetPasskeyAction.BackClick) }
                     },

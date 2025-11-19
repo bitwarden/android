@@ -5,9 +5,9 @@ package com.bitwarden.testharness.ui.platform.feature.autofill
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -34,11 +34,19 @@ fun NavGraphBuilder.autofillGraph(
     navigation<AutofillGraphRoute>(
         startDestination = AutofillPlaceholderRoute,
     ) {
-        composable<AutofillPlaceholderRoute> {
-            AutofillPlaceholderScreen(
-                onNavigateBack = onNavigateBack,
-            )
-        }
+        autofillPlaceholderDestination(
+            onNavigateBack = onNavigateBack,
+        )
+    }
+}
+
+private fun NavGraphBuilder.autofillPlaceholderDestination(
+    onNavigateBack: () -> Unit,
+) {
+    composableWithRootPushTransitions<AutofillPlaceholderRoute> {
+        AutofillPlaceholderScreen(
+            onNavigateBack = onNavigateBack,
+        )
     }
 }
 
