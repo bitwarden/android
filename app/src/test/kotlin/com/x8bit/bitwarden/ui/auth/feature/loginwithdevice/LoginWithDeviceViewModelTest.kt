@@ -121,8 +121,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick)
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    isResendNotificationLoading = true,
+                dialogState = LoginWithDeviceState.DialogState.Loading(
+                    message = BitwardenString.resending.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -610,7 +610,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     fingerprintPhrase = FINGERPRINT,
-                    isResendNotificationLoading = false,
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
@@ -661,7 +660,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     fingerprintPhrase = FINGERPRINT,
-                    isResendNotificationLoading = false,
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = null,
@@ -693,7 +691,6 @@ private const val FINGERPRINT = "fingerprint"
 
 private val DEFAULT_CONTENT_VIEW_STATE = LoginWithDeviceState.ViewState.Content(
     fingerprintPhrase = FINGERPRINT,
-    isResendNotificationLoading = false,
     loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
 )
 
