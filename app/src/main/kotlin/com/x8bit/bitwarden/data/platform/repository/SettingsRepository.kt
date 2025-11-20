@@ -156,11 +156,6 @@ interface SettingsRepository : FlightRecorderManager {
     var isAutofillSavePromptDisabled: Boolean
 
     /**
-     * Whether or not the autofill web domain parsing is enabled.
-     */
-    var isAutofillWebDomainCompatMode: Boolean
-
-    /**
      * A list of blocked autofill URI's for the current user.
      */
     var blockedAutofillUris: List<String>
