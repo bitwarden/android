@@ -42,6 +42,10 @@ class OriginManagerImpl(
         return digitalAssetLinkService
             .checkDigitalAssetLinksRelations(
                 sourceWebSite = relyingPartyId
+                    // The DAL API does not allow redirects, so we add `www.` to prevent redirects
+                    // when it is absent from the `relyingPartyId`. This ensures that relying
+                    // parties storing their `assetlinks.json` at the `www.` subdomain do not fail
+                    // verification checks.
                     .prefixWwwIfNecessary()
                     .prefixHttpsIfNecessary(),
                 targetPackageName = callingAppInfo.packageName,
