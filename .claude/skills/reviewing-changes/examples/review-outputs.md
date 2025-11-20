@@ -2,6 +2,27 @@
 
 Well-structured code reviews demonstrating appropriate depth, tone, and formatting for different change types.
 
+## Table of Contents
+
+**Format Reference:**
+- [Quick Format Reference](#quick-format-reference)
+  - [Inline Comment Format](#inline-comment-format-required)
+  - [Summary Comment Format](#summary-comment-format)
+
+**Examples:**
+- [Example 1: Clean PR (No Issues)](#example-1-clean-pr-no-issues)
+- [Example 2: Dependency Update with Breaking Changes](#example-2-dependency-update-with-breaking-changes)
+- [Example 3: Feature Addition with Critical Issues](#example-3-feature-addition-with-critical-issues)
+
+**Anti-Patterns:**
+- [❌ Anti-Patterns to Avoid](#-anti-patterns-to-avoid)
+  - [Problem: Verbose Summary with Multiple Sections](#problem-verbose-summary-with-multiple-sections)
+  - [Problem: Praise-Only Inline Comments](#problem-praise-only-inline-comments)
+  - [Problem: Missing `<details>` Tags](#problem-missing-details-tags)
+
+**Summary:**
+- [Summary](#summary)
+
 ---
 
 ## Quick Format Reference
@@ -25,10 +46,11 @@ Reference: [docs link if applicable]
 ```
 
 **Severity Levels:**
-- ⚠️ **CRITICAL** - Blocking, must fix
-- 📋 **IMPORTANT** - Should fix
-- 💡 **SUGGESTED** - Nice to have
-- ❓ **QUESTION** - Seeking clarification
+- ❌ **CRITICAL** - Blocking, must fix (security, crashes, architecture violations)
+- ⚠️ **IMPORTANT** - Should fix (missing tests, quality issues)
+- ♻️ **DEBT** - Technical debt (duplication, convention violations, future rework needed)
+- 🎨 **SUGGESTED** - Nice to have (refactoring, improvements)
+- 💭 **QUESTION** - Seeking clarification (requirements, design decisions)
 
 ### Summary Comment Format
 
@@ -81,7 +103,7 @@ See inline comments for migration details.
 
 **Inline Comment 1** (on `network/api/BitwardenApiService.kt:34`):
 ```markdown
-⚠️ **CRITICAL**: API migration required for Retrofit 3.0
+❌ **CRITICAL**: API migration required for Retrofit 3.0
 
 <details>
 <summary>Details and fix</summary>
@@ -136,7 +158,7 @@ See inline comments for all issues and suggestions.
 
 **Inline Comment 1** (on `app/vault/unlock/UnlockViewModel.kt:78`):
 ```markdown
-⚠️ **CRITICAL**: Exposes mutable state
+❌ **CRITICAL**: Exposes mutable state
 
 <details>
 <summary>Details and fix</summary>
@@ -160,7 +182,7 @@ Reference: docs/ARCHITECTURE.md#mvvm-pattern
 
 **Inline Comment 2** (on `data/vault/UnlockRepository.kt:145`):
 ```markdown
-⚠️ **CRITICAL**: PIN stored without encryption - SECURITY ISSUE
+❌ **CRITICAL**: PIN stored without encryption - SECURITY ISSUE
 
 <details>
 <summary>Details and fix</summary>
@@ -188,7 +210,7 @@ Reference: docs/ARCHITECTURE.md#security
 
 **Inline Comment 3** (on `app/vault/unlock/UnlockViewModel.kt:92`):
 ```markdown
-📋 **IMPORTANT**: Missing error handling test
+⚠️ **IMPORTANT**: Missing error handling test
 
 <details>
 <summary>Details and fix</summary>
@@ -214,7 +236,7 @@ Ensures error flow remains robust across refactorings.
 
 **Inline Comment 4** (on `app/vault/unlock/UnlockViewModel.kt:105`):
 ```markdown
-💡 **SUGGESTED**: Consider rate limiting for PIN attempts
+🎨 **SUGGESTED**: Consider rate limiting for PIN attempts
 
 <details>
 <summary>Details and fix</summary>
@@ -246,7 +268,7 @@ Would add security layer against brute force. Consider discussing threat model w
 
 **Inline Comment 5** (on `app/vault/unlock/UnlockScreen.kt:134`):
 ```markdown
-❓ **QUESTION**: Can we use BitwardenTextField?
+💭 **QUESTION**: Can we use BitwardenTextField?
 
 <details>
 <summary>Details</summary>
@@ -356,7 +378,7 @@ This is exactly the right approach for fail-safe security.
 **What NOT to do:**
 
 ```markdown
-⚠️ **CRITICAL**: Missing test coverage for security-critical code
+❌ **CRITICAL**: Missing test coverage for security-critical code
 
 The `@OmitFromCoverage` annotation excludes this entire class from test coverage.
 
@@ -382,7 +404,7 @@ Security-critical code should have the highest test coverage, not be omitted.
 
 **Correct approach:**
 ```markdown
-⚠️ **CRITICAL**: Missing test coverage for security-critical code
+❌ **CRITICAL**: Missing test coverage for security-critical code
 
 <details>
 <summary>Details and fix</summary>
@@ -422,5 +444,3 @@ Security-critical code should have the highest test coverage, not be omitted.
 - Praise-only inline comments
 - Duplication between summary and inline comments
 - Verbose analysis in summary (belongs in inline comments)
-
-See `SKILL.md` for complete review guidelines.
