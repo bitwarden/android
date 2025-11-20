@@ -99,13 +99,11 @@ class LoginWithDeviceViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is CreateAuthRequestResult.Success -> {
+                updateContent { content ->
+                    content.copy(isResendNotificationLoading = false)
+                }
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = null,
                         loginData = LoginWithDeviceState.LoginData(
                             accessCode = result.accessCode,
@@ -133,13 +131,11 @@ class LoginWithDeviceViewModel @Inject constructor(
             }
 
             is CreateAuthRequestResult.Error -> {
+                updateContent { content ->
+                    content.copy(isResendNotificationLoading = false)
+                }
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
                             message = BitwardenString.generic_error_message.asText(),
@@ -153,13 +149,11 @@ class LoginWithDeviceViewModel @Inject constructor(
             CreateAuthRequestResult.Declined -> Unit
 
             CreateAuthRequestResult.Expired -> {
+                updateContent { content ->
+                    content.copy(isResendNotificationLoading = false)
+                }
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = null,
                             message = BitwardenString.login_request_has_already_expired.asText(),
