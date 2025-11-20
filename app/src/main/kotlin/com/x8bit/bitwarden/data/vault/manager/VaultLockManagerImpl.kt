@@ -259,7 +259,7 @@ class VaultLockManagerImpl(
         kdf: Kdf,
         userId: String,
     ) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock) {
+        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
@@ -702,11 +702,21 @@ class VaultLockManagerImpl(
     }
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
-        if (initUserCryptoMethod !is InitUserCryptoMethod.MasterPasswordUnlock) return
+        val password = when (initUserCryptoMethod) {
+            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
+            is InitUserCryptoMethod.AuthRequest,
+            is InitUserCryptoMethod.DecryptedKey,
+            is InitUserCryptoMethod.DeviceKey,
+            is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.Password,
+            is InitUserCryptoMethod.Pin,
+            is InitUserCryptoMethod.PinEnvelope,
+                -> return
+        }
 
         kdfManager
             .updateKdfToMinimumsIfNeeded(
-                password = initUserCryptoMethod.password,
+                password = password,
             )
             .also { result ->
                 if (result is UpdateKdfMinimumsResult.Error) {
