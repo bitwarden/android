@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.credentials.manager
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
+import com.bitwarden.ui.platform.base.util.prefixWwwIfNecessary
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -40,7 +41,9 @@ class OriginManagerImpl(
     ): ValidateOriginResult {
         return digitalAssetLinkService
             .checkDigitalAssetLinksRelations(
-                sourceWebSite = relyingPartyId.prefixHttpsIfNecessary(),
+                sourceWebSite = relyingPartyId
+                    .prefixWwwIfNecessary()
+                    .prefixHttpsIfNecessary(),
                 targetPackageName = callingAppInfo.packageName,
                 targetCertificateFingerprint = callingAppInfo
                     .getSignatureFingerprintAsHexString()
