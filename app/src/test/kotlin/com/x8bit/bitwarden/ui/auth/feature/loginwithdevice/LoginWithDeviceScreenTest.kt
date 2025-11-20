@@ -7,6 +7,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performFirstLinkClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -92,7 +93,10 @@ class LoginWithDeviceScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `view all log in options click should send ViewAllLogInOptionsClick action`() {
-        composeTestRule.onNodeWithText("View all log in options").performScrollTo().performClick()
+        composeTestRule
+            .onNodeWithText(text = "Need another option? View all login options")
+            .performScrollTo()
+            .performFirstLinkClick()
         verify {
             viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick)
         }
@@ -168,7 +172,6 @@ private val DEFAULT_STATE = LoginWithDeviceState(
     emailAddress = EMAIL,
     viewState = LoginWithDeviceState.ViewState.Content(
         fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
-        isResendNotificationLoading = false,
         loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
     ),
     dialogState = null,
