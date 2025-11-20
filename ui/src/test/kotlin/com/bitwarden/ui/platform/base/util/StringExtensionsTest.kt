@@ -281,4 +281,65 @@ class StringExtensionsTest {
     fun `orZeroWidthSpace returns the original value for a non-blank string`() {
         assertEquals("test", "test".orZeroWidthSpace())
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should prefix www when URI is valid and no scheme and no www`() {
+        val uri = "example.com"
+        val expected = "www.$uri"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should return URI unchanged when starts with www`() {
+        val uri = "www.example.com"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should prefix www when scheme is http and no www`() {
+        val uri = "http://example.com"
+        val expected = "http://www.example.com"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should prefix www when scheme is https and no www`() {
+        val uri = "https://example.com"
+        val expected = "https://www.example.com"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should return URI unchanged when scheme is http and www is present`() {
+        val uri = "http://www.example.com"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should return URI unchanged when scheme is https and www is present`() {
+        val uri = "https://www.example.com"
+        val actual = uri.prefixWwwIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should return null when URI is empty string`() {
+        val uri = ""
+        assertNull(uri.prefixWwwIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixWwwIfNecessaryOrNull should return null when URI is invalid`() {
+        val invalidUri = "invalid uri"
+        assertNull(invalidUri.prefixWwwIfNecessaryOrNull())
+    }
 }

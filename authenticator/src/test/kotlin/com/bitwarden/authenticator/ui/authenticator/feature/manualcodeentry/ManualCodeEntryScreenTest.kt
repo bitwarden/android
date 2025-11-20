@@ -82,7 +82,7 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
-    fun `on Close click should emit `() {
+    fun `on Close click should emit CloseClick`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .performClick()

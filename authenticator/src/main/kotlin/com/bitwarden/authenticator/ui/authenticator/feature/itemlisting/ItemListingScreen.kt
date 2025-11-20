@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import android.Manifest
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -96,8 +93,6 @@ fun ItemListingScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val context = LocalContext.current
-    val resources = LocalResources.current
     val launcher = permissionsManager.getLauncher { isGranted ->
         if (isGranted) {
             viewModel.trySendAction(ItemListingAction.ScanQrCodeClick)
@@ -112,8 +107,8 @@ fun ItemListingScreen(
             is ItemListingEvent.NavigateToSearch -> onNavigateToSearch()
             is ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
             is ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
-            is ItemListingEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_LONG).show()
+            is ItemListingEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(snackbarData = event.data)
             }
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
@@ -133,10 +128,6 @@ fun ItemListingScreen(
 
             ItemListingEvent.NavigateToBitwardenSettings -> {
                 intentManager.startBitwardenAccountSettings()
-            }
-
-            is ItemListingEvent.ShowSnackbar -> {
-                snackbarHostState.showSnackbar(snackbarData = event.data)
             }
         }
     }
@@ -429,7 +420,7 @@ private fun ItemListingContent(
 
         when (state.sharedItems) {
             is SharedCodesDisplayState.Codes -> {
-                state.sharedItems.sections.forEachIndexed { index, section ->
+                state.sharedItems.sections.forEachIndexed { _, section ->
                     item(key = "sharedSection_${section.id}") {
                         AuthenticatorExpandingHeader(
                             label = section.label(),

@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.importing
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -67,7 +65,6 @@ fun ImportingScreen(
         }
     }
 
-    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             ImportEvent.NavigateBack -> onNavigateBack()
@@ -78,12 +75,6 @@ fun ImportingScreen(
                         mimeType = event.importFileFormat.mimeType,
                     ),
                 )
-            }
-
-            is ImportEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
-                    .show()
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 
 import android.Manifest
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,18 +73,10 @@ fun ManualCodeEntryScreen(
         }
     }
 
-    val context = LocalContext.current
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ManualCodeEntryEvent.NavigateToAppSettings -> {
                 intentManager.startAppSettingsActivity()
-            }
-
-            is ManualCodeEntryEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message.invoke(context.resources), Toast.LENGTH_SHORT)
-                    .show()
             }
 
             is ManualCodeEntryEvent.NavigateToQrCodeScreen -> {
