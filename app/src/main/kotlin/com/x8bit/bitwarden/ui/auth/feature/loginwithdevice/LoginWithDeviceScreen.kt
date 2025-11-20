@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -122,7 +121,6 @@ private fun LoginWithDeviceScreenContent(
     ) {
         Text(
             text = state.title(),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.headlineMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -134,7 +132,6 @@ private fun LoginWithDeviceScreenContent(
 
         Text(
             text = state.subtitle(),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -146,7 +143,6 @@ private fun LoginWithDeviceScreenContent(
 
         Text(
             text = state.description(),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -158,7 +154,6 @@ private fun LoginWithDeviceScreenContent(
 
         Text(
             text = stringResource(id = BitwardenString.fingerprint_phrase),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.titleLarge,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -170,7 +165,6 @@ private fun LoginWithDeviceScreenContent(
 
         Text(
             text = state.fingerprintPhrase,
-            textAlign = TextAlign.Start,
             color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             minLines = 2,
@@ -209,7 +203,6 @@ private fun LoginWithDeviceScreenContent(
 
         Text(
             text = state.otherOptions(),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier

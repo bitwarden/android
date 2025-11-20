@@ -13,6 +13,9 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import com.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
@@ -25,6 +28,7 @@ import com.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.bitwarden.ui.platform.theme.type.BitwardenTypography
 import com.bitwarden.ui.platform.theme.type.bitwardenTypography
 import com.bitwarden.ui.platform.theme.type.toMaterialTypography
+import com.bitwarden.ui.platform.theme.type.updateTextAlign
 import com.bitwarden.ui.platform.util.isDarkMode
 
 /**
@@ -91,6 +95,15 @@ fun BitwardenTheme(
         darkTheme -> darkBitwardenColorScheme
         else -> lightBitwardenColorScheme
     }
+
+    // Update text alignment according to the current layout direction.
+    val textAlign =
+        if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+            TextAlign.Right
+        } else {
+            TextAlign.Left
+        }
+    val bitwardenTypography = bitwardenTypography.updateTextAlign(textAlign)
 
     CompositionLocalProvider(
         LocalBitwardenColorScheme provides bitwardenColorScheme,
