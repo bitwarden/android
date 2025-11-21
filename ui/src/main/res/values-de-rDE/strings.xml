@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">E-Mail mit Bestätigungscode erneut versenden</string>
     <string name="verification_email_not_sent">Bestätigungsmail konnte nicht gesendet werden. Erneut versuchen.</string>
     <string name="verification_email_sent">Verifizierung-E-Mail versendet</string>
-    <string name="yubi_key_instruction">Um fortzufahren, halte deinen YubiKey NEO an die Rückseite des Geräts oder stecke deinen YubiKey in den USB-Steckplatz deines Geräts und tippe dann auf seinen Button.</string>
-    <string name="yubi_key_title">YubiKey Sicherheitsschlüssel</string>
+    <string name="yubi_key_instruction">Um fortzufahren, halte deinen Yubico-Sicherheitsschlüssel an die Rückseite des Geräts oder stecke ihn in den USB-Steckplatz deines Geräts und tippe dann auf seinen Button.</string>
+    <string name="yubi_key_title">Yubico-Sicherheitsschlüssel</string>
     <string name="add_new_attachment">Neuen Anhang hinzufügen</string>
     <string name="attachments">Anhänge</string>
     <string name="unable_to_download_file">Datei kann nicht heruntergeladen werden.</string>
@@ -690,6 +690,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Folge den Schritten von Duo, um die Anmeldung abzuschließen.</string>
     <string name="launch_duo">Duo starten</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Dein Passkey wird in deinem Bitwarden-Tresor für %1$s gespeichert</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Dein Passwort wird in deinem Bitwarden-Tresor für %1$s gespeichert</string>
     <string name="passkeys_not_supported_for_this_app">Passkeys werden für diese App nicht unterstützt</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser nicht autorisiert ist</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Der Passkey-Vorgang ist fehlgeschlagen, da die Browser-Signatur nicht übereinstimmt</string>
@@ -916,6 +917,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht existiert.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Der Passwort-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage ungültig ist.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage nicht unterstützt wird.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Der Anmeldevorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Der Berechtigungsvorgang ist fehlgeschlagen, da der Benutzer gesperrt ist.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Der Anmeldevorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht vorhanden ist.</string>
@@ -1152,4 +1155,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="lock_app">App sperren</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Nutze die Sperrmethode deines Geräts, um die App zu entsperren</string>
     <string name="loading_vault_data">Tresor-Daten werden geladen…</string>
+    <string name="compatibility_mode_warning">Der Kompatibilitätsmodus sollte nur aktiviert werden, wenn Auto-Ausfüllen in deinem Browser nicht funktioniert. Diese Einstellung verringert die Sicherheit und könnte es bösartigen Websites erlauben, deine Passwörter zu erfassen. Aktiviere sie nur, wenn du dieses Risiko akzeptierst.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Kompatibilitätsmodus für Browser-Auto-Ausfüllen verwenden</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Verwende eine weniger sicher Auto-Ausfüllen-Methode, die mit weiteren Browsern kompatibel ist.\n<annotation link="learnMore">Erfahre mehr über den Kompatibilitätsmodus</annotation></string>
 </resources>

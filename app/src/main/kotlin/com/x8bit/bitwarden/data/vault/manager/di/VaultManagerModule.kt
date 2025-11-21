@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -30,6 +31,8 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.SendManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -145,6 +148,7 @@ object VaultManagerModule {
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
         kdfManager: KdfManager,
+        pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -159,6 +163,18 @@ object VaultManagerModule {
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
             kdfManager = kdfManager,
+            pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+        )
+
+    @Provides
+    @Singleton
+    fun providePinProtectedUserKeyManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+    ): PinProtectedUserKeyManager =
+        PinProtectedUserKeyManagerImpl(
+            authDiskSource = authDiskSource,
+            vaultSdkSource = vaultSdkSource,
         )
 
     @Provides
@@ -210,11 +226,13 @@ object VaultManagerModule {
         vaultSdkSource: VaultSdkSource,
         ciphersService: CiphersService,
         vaultSyncManager: VaultSyncManager,
+        policyManager: PolicyManager,
         json: Json,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        policyManager = policyManager,
         json = json,
     )
 }

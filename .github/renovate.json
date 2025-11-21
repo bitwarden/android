@@ -29,7 +29,8 @@
         "gradle"
       ],
       "excludePackageNames": [
-        "com.github.bumptech.glide:compose"
+        "com.github.bumptech.glide:compose",
+        "com.bitwarden:sdk-android"
       ]
     },
     {

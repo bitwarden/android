@@ -191,7 +191,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                            fingerprintPhrase = "",
+                            fingerprintPhrase = FINGERPRINT,
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                         dialogState = LoginWithDeviceState.DialogState.Loading(
@@ -203,7 +203,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                            fingerprintPhrase = "",
+                            fingerprintPhrase = FINGERPRINT,
                         ),
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
@@ -261,7 +261,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         viewState = initialViewState.copy(
-                            fingerprintPhrase = "",
+                            fingerprintPhrase = FINGERPRINT,
                         ),
                         dialogState = LoginWithDeviceState.DialogState.Loading(
                             message = BitwardenString.logging_in.asText(),
@@ -273,7 +273,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         viewState = initialViewState.copy(
-                            fingerprintPhrase = "",
+                            fingerprintPhrase = FINGERPRINT,
                         ),
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
@@ -365,7 +365,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
@@ -377,7 +377,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -431,7 +431,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
@@ -443,7 +443,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -496,7 +496,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
@@ -508,7 +508,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -561,7 +561,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
@@ -573,7 +573,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     assertEquals(
                         DEFAULT_STATE.copy(
                             viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                                fingerprintPhrase = "",
+                                fingerprintPhrase = FINGERPRINT,
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -609,7 +609,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = "",
+                    fingerprintPhrase = FINGERPRINT,
                     isResendNotificationLoading = false,
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
@@ -660,7 +660,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = "",
+                    fingerprintPhrase = FINGERPRINT,
                     isResendNotificationLoading = false,
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(

@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -22,10 +25,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ImportingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
-) :
-    BaseViewModel<ImportState, ImportEvent, ImportAction>(
-        initialState = ImportState(importFileFormat = ImportFileFormat.BITWARDEN_JSON),
-    ) {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+) : BaseViewModel<ImportState, ImportEvent, ImportAction>(
+    initialState = ImportState(importFileFormat = ImportFileFormat.BITWARDEN_JSON),
+) {
 
     override fun handleAction(action: ImportAction) {
         when (action) {
@@ -110,10 +113,9 @@ class ImportingViewModel @Inject constructor(
 
             ImportDataResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    ImportEvent.ShowToast(
-                        message = BitwardenString.import_success.asText(),
-                    ),
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = BitwardenString.import_success.asText()),
+                    relay = SnackbarRelay.IMPORT_SUCCESS,
                 )
                 sendEvent(ImportEvent.NavigateBack)
             }
@@ -162,11 +164,6 @@ sealed class ImportEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : ImportEvent()
-
-    /**
-     * Show a Toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : ImportEvent()
 
     /**
      * Navigate to the select import file screen.

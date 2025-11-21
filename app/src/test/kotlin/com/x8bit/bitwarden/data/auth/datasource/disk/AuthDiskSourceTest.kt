@@ -267,9 +267,15 @@ class AuthDiskSourceTest {
             userId = userId,
             biometricsKey = "1234-9876-0192",
         )
+        val pinProtectedUserKey = "pinProtectedUserKey"
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
-            pinProtectedUserKey = "pinProtectedUserKey",
+            pinProtectedUserKey = pinProtectedUserKey,
+        )
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        authDiskSource.storePinProtectedUserKeyEnvelope(
+            userId = userId,
+            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
         )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
@@ -304,7 +310,8 @@ class AuthDiskSourceTest {
                 refreshToken = "refreshToken",
             ),
         )
-        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
+        val encryptedPin = "encryptedPin"
+        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
         authDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = userId,
@@ -326,12 +333,16 @@ class AuthDiskSourceTest {
             OnboardingStatus.AUTOFILL_SETUP,
             authDiskSource.getOnboardingStatus(userId = userId),
         )
+        assertEquals(encryptedPin, authDiskSource.getEncryptedPin(userId = userId))
+        assertEquals(pinProtectedUserKey, authDiskSource.getPinProtectedUserKey(userId = userId))
+        assertEquals(
+            pinProtectedUserKeyEnvelope,
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId),
+        )
 
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
-        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
-        assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
@@ -341,7 +352,6 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
         assertNull(authDiskSource.getAccountTokens(userId = userId))
-        assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
         assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
         assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
@@ -712,6 +722,25 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getUserBiometricUnlockKeyFlow should react to changes in getUserBiometricUnlockKey`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            val biometricsKey = "1234"
+            authDiskSource.getUserBiometricUnlockKeyFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(authDiskSource.getUserBiometricUnlockKey(userId = mockUserId))
+                assertNull(awaitItem())
+
+                // Updating the disk source updates shared preferences
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = mockUserId,
+                    biometricsKey = biometricsKey,
+                )
+                assertEquals(biometricsKey, awaitItem())
+            }
+        }
+
+    @Test
     fun `storeUserBiometricInitVector for non-null values should update SharedPreferences`() {
         val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
         val mockUserId = "mockUserId"
@@ -773,11 +802,11 @@ class AuthDiskSourceTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometicUnlockKeyFlow`() =
+    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometricUnlockKeyFlow`() =
         runTest {
             val topSecretKey = "topsecret"
             val mockUserId = "mockUserId"
-            authDiskSource.getUserBiometicUnlockKeyFlow(mockUserId).test {
+            authDiskSource.getUserBiometricUnlockKeyFlow(mockUserId).test {
                 assertNull(awaitItem())
                 authDiskSource.storeUserBiometricUnlockKey(
                     userId = mockUserId,

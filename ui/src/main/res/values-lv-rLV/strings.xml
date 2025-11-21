@@ -180,7 +180,7 @@
     <string name="send_verification_code_again">Atkārtoti nosūtīt kodu</string>
     <string name="verification_email_not_sent">Nevarēja nosūtīt apliecinājuma e-pasta ziņojumu. Jāmēģina vēlreiz.</string>
     <string name="verification_email_sent">Apliecināšanas e-pasta ziņojums ir nosūtīts</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey drošības atslēga</string>
     <string name="add_new_attachment">Pievienot jaunu pielikumu</string>
     <string name="attachments">Pielikumi</string>
@@ -695,6 +695,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Jāseko Duo norādēm, lai pabeigtu pieteikšanos.</string>
     <string name="launch_duo">Palaist Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s piekļuves atslēga tiks saglabāta Bitwarden glabātavā</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Šai lietotnei netiek nodrošinātas piekļuves atslēgas</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Darbība ar piekļuves atslēgu neizdevās, jo pārlūkam nav atļauju</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Darbība ar piekļuves atslēgu neizdevās, jo neatbilst pārlūka paraksts</string>
@@ -922,6 +923,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Darbība ar paroli neizdevās, jo atlasītais vienums nepastāv.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Darbība ar paroli neizdevās, jo netika atlasīts neviens vienums.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Darbība ar paroli neizdevās, jo tika pārsniegts lietotāja apliecināšanas mēģinājumu skaits.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Darbība ar paroli neizdevās, jo lietotājs ir izslēgts.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Darbība ar piekļuves datiem neizdevās, jo atlasītais vienums nepastāv.</string>
@@ -1161,4 +1164,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="lock_app">Aizslēgt lietotni</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Jāizmanto ierīces slēgšanas veids, lai atslēgtu lietotni</string>
     <string name="loading_vault_data">Ielādē glabātavas datus…</string>
+    <string name="compatibility_mode_warning">Saderības režīmu vajadzētu iespējot tikai tad, ja pārlūkā nedarbojas automātiskā aizpilde. Šis iestatījums samazina drošību un varētu ļaut ļaunprātīgām vietnēm pārtvert paroles. Iespējo to tikai tad, ja pieņem šo iespējamo bīstamību!</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Izmantot saderības režīmu automātiskai aizpildei pārlūkā</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Izmanto mazāk drošu auotmātiskās aizpildes veidu, kas ir saderīgs ar vairāk pārlūkiem.\n<annotation link="learnMore">Uzzināt vairāk par saderības režīmu</annotation></string>
 </resources>

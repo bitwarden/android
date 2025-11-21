@@ -8,17 +8,23 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -32,6 +38,9 @@ class EditItemViewModelTest : BaseViewModelTest() {
 
     private val authenticatorRepository: AuthenticatorRepository = mockk {
         every { getItemStateFlow(itemId = DEFAULT_ITEM_ID) } returns mutableItemStateFlow
+    }
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every { sendSnackbarData(data = any(), relay = SnackbarRelay.ITEM_SAVED) } just runs
     }
 
     @BeforeEach
@@ -353,11 +362,13 @@ class EditItemViewModelTest : BaseViewModelTest() {
                 ),
                 stateFlow.awaitItem(),
             )
-            assertEquals(
-                EditItemEvent.ShowToast(BitwardenString.item_saved.asText()),
-                eventFlow.awaitItem(),
-            )
             assertEquals(EditItemEvent.NavigateBack, eventFlow.awaitItem())
+        }
+        verify(exactly = 1) {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = BitwardenString.item_saved.asText()),
+                relay = SnackbarRelay.ITEM_SAVED,
+            )
         }
         coVerify(exactly = 1) {
             authenticatorRepository.createItem(
@@ -448,6 +459,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: EditItemState? = null,
     ): EditItemViewModel = EditItemViewModel(
+        snackbarRelayManager = snackbarRelayManager,
         authenticatorRepository = authenticatorRepository,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)

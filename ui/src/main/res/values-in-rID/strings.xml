@@ -3,7 +3,7 @@
     <string name="about">Tentang</string>
     <string name="add_folder">Tambah Folder</string>
     <string name="add_item">Tambah Item</string>
-    <string name="an_error_has_occurred">Terjadi kesalahan.</string>
+    <string name="an_error_has_occurred">Terjadi kesalahan</string>
     <string name="apply">Terapkan</string>
     <string name="back">Kembali</string>
     <string name="cancel">Batal</string>
@@ -17,7 +17,7 @@
     <string name="edit_folder">Edit Folder</string>
     <string name="email">Email</string>
     <string name="email_address">Alamat Email</string>
-    <string name="enter_pin">Masukkan kode PIN Anda.</string>
+    <string name="enter_pin">Masukkan kode PIN Anda</string>
     <string name="favorites">Favorit</string>
     <string name="folder">Folder</string>
     <string name="folder_created">Folder baru telah dibuat.</string>
@@ -426,7 +426,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="privacy_policy">Kebijakan pribadi</string>
     <string name="passkey_management">Pengelolaan kunci sandi</string>
     <string name="autofill_services">Layanan isi otomatis</string>
-    <string name="display_autofill_suggestions">Tampilkan saran isi otomatis</string>
+    <string name="display_autofill_suggestions">Tampilan saran isi otomatis</string>
     <string name="autofill_suggestions_inline">Sebaris (muncul di papan ketik)</string>
     <string name="autofill_suggestions_popup">Popup (muncul di kolom input)</string>
     <string name="accessibility">Gunakan aksesibilitas</string>
@@ -540,7 +540,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="verification_codes">Kode Verifikasi</string>
     <string name="premium_subscription_required">Diperlukan langganan premium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Tidak ada menambahkan kunci autentikator? <annotation link="scanQrCode">Pindai kode QR</annotation></string>
-    <string name="scan_qr_code">Pindai kode QR</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Pindai kode QR</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Tidak bisa memindai kode QR? <annotation link="enterKeyManually">Masukkan secara manual</annotation></string>
     <string name="authenticator_key_scanner">Kunci Autentikator</string>
     <string name="authenticator_key_help">Bantuan kunci autentikator</string>
@@ -687,6 +687,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Ikuti langkah dari Duo untuk menyelesaikan login.</string>
     <string name="launch_duo">Luncurkan Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Kunci sandi Anda akan disimpan ke brankas Bitwarden untuk %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Sandi Anda akan disimpan ke brankas Bitwarden Anda selama %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Aplikasi ini tidak mendukung kunci sandi</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Gagal menjalankan kunci sandi karena browser bukan apl dengan hak khusus</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Gagal menjalankan kunci sandi karena signature browser tidak sesuai</string>
@@ -694,7 +695,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Gagal menjalankan kunci sandi karena aplikasi tidak terverifikasi</string>
     <string name="confirm_file_password">Konfirmasi sandi file</string>
     <string name="file_password">Sandi file</string>
-    <string name="password_protected">Terlindungi Sandi</string>
+    <string name="password_protected">Sandi Terproteksi</string>
     <string name="password_used_to_export">Sandi ini akan digunakan untuk mengekspor dan mengimpor file ini</string>
     <string name="autofill_suggestion">Saran isi otomatis</string>
     <string name="continue_to_complete_web_authn_verification">Lanjutkan untuk menyelesaikan verifikasi WebAuthn.</string>
@@ -912,6 +913,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operasi kunci sandi gagal karena permintaan tidak didukung.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operasi sandi gagal karena item yang dipilih tidak ada.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operasi sandi gagal karena tidak ada item yang dipilih.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operasi kredensial gagal karena permintaan tidak valid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operasi kredensial gagal karena permintaan tidak didukung.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operasi kredensial gagal karena percobaan verifikasi pengguna sudah melebihi batas.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operasi kredensial gagal karena pengguna terkunci.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operasi kredensial gagal karena item yang dipilih tidak ada.</string>
@@ -1145,4 +1148,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="lock_app">Kunci aplikasi</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gunakan metode kunci perangkat Anda untuk membuka kunci aplikasi</string>
     <string name="loading_vault_data">Memuat data brangkas…</string>
+    <string name="compatibility_mode_warning">Mode kompatibilitas hanya boleh diaktifkan jika pengisian otomatis tidak berfungsi di peramban Anda. Pengaturan ini mengurangi keamanan dan dapat memungkinkan situs jahat untuk menangkap sandi Anda. Hanya aktifkan jika Anda menerima risiko ini.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Gunakan mode kompatibilitas untuk pengisian otomatis peramban</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Gunakan metode pengisian otomatis kurang aman yang kompatibel dengan lebih banyak peramban.\n<annotation link="learnMore">Pelajari lebih lanjut tentang mode kompatibilitas</annotation></string>
 </resources>

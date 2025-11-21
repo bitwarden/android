@@ -50,7 +50,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwriteCredentialConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
@@ -179,8 +179,8 @@ fun VaultItemListingScreen(
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
 
-            is VaultItemListingEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(event.result)
+            is VaultItemListingEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(event.result)
             }
 
             is VaultItemListingEvent.CredentialManagerUserVerification -> {
@@ -392,7 +392,13 @@ private fun VaultItemListingDialogs(
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
-            BitwardenOverwritePasskeyConfirmationDialog(
+            @Suppress("MaxLineLength")
+            BitwardenOverwriteCredentialConfirmationDialog(
+                title = stringResource(id = BitwardenString.overwrite_passkey),
+                message = stringResource(
+                    id = BitwardenString
+                        .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
+                ),
                 onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
                 onDismissRequest = onDismissRequest,
             )

@@ -15,11 +15,15 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -46,6 +50,7 @@ class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     clock: Clock,
     authenticatorRepository: AuthenticatorRepository,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
@@ -80,6 +85,16 @@ class SettingsViewModel @Inject constructor(
             .defaultSaveOptionFlow
             .map { SettingsAction.Internal.DefaultSaveOptionUpdated(it) }
             .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .isUnlockWithBiometricsEnabledFlow
+            .map { SettingsAction.Internal.UnlockWithBiometricsUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.IMPORT_SUCCESS)
+            .map(SettingsEvent::ShowSnackbar)
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
     }
 
@@ -118,6 +133,30 @@ class SettingsViewModel @Inject constructor(
             }
 
             is SettingsAction.Internal.DynamicColorsUpdated -> handleDynamicColorsUpdated(action)
+
+            is SettingsAction.Internal.UnlockWithBiometricsUpdated -> {
+                handleUnlockWithBiometricsUpdated(action)
+            }
+
+            is SettingsAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
+            }
+        }
+    }
+
+    private fun handleBiometricSupportChanged(action: SettingsAction.BiometricSupportChanged) {
+        mutableStateFlow.update {
+            it.copy(hasBiometricsSupport = action.isBiometricsSupported)
+        }
+    }
+
+    private fun handleUnlockWithBiometricsUpdated(
+        action: SettingsAction.Internal.UnlockWithBiometricsUpdated,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action.isEnabled,
+            )
         }
     }
 
@@ -385,6 +424,7 @@ class SettingsViewModel @Inject constructor(
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
+                hasBiometricsSupport = true,
             )
         }
     }
@@ -398,6 +438,7 @@ data class SettingsState(
     val appearance: Appearance,
     val defaultSaveOption: DefaultSaveOption,
     val isUnlockWithBiometricsEnabled: Boolean,
+    val hasBiometricsSupport: Boolean,
     val isSubmitCrashLogsEnabled: Boolean,
     val showSyncWithBitwarden: Boolean,
     val showDefaultSaveOptionRow: Boolean,
@@ -482,6 +523,27 @@ sealed class SettingsEvent {
      * Navigate to the Bitwarden Play Store listing.
      */
     data object NavigateToBitwardenPlayStoreListing : SettingsEvent()
+
+    /**
+     * Navigate to the Bitwarden Play Store listing.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : SettingsEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
@@ -503,6 +565,11 @@ sealed class SettingsAction(
             val message: Text,
         ) : Dialog()
     }
+
+    /**
+     * Indicates an update on device biometrics support.
+     */
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : SettingsAction()
 
     /**
      * Models actions for the Security section of settings.
@@ -646,6 +713,13 @@ sealed class SettingsAction(
          * Indicates that the dynamic colors state on disk was updated.
          */
         data class DynamicColorsUpdated(
+            val isEnabled: Boolean,
+        ) : SettingsAction()
+
+        /**
+         * Indicates that the biometric state on disk was updated.
+         */
+        data class UnlockWithBiometricsUpdated(
             val isEnabled: Boolean,
         ) : SettingsAction()
     }

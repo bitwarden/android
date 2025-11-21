@@ -477,7 +477,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="seven_days">7 ngày</string>
     <string name="thirty_days">30 ngày</string>
     <string name="custom">Tùy chỉnh</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Thời gian chờ tùy chỉnh</string>
     <string name="add_this_authenticator_key_to_a_login">Thêm khóa xác thực này vào thông tin đăng nhập hiện có hoặc tạo thông tin đăng nhập mới.</string>
     <string name="send_disabled_warning">Do chính sách doanh nghiệp, bạn chỉ có thể xóa những Send hiện có.</string>
     <string name="about_send">Về Send</string>
@@ -498,16 +498,16 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="other">%1$d hours</item>
+        <item quantity="other">%1$d giờ</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="other">%1$d phút</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Tổ chức của bạn đã đặt thời gian phiên tối đa thành %1$s và %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Tổ chức của bạn đã đặt thời gian phiên tối đa thành %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Cài đặt này do tổ chức của bạn quản lý.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Tổ chức của bạn đã đặt thời gian chờ phiên mặc định thành không bao giờ.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Tổ chức của bạn đã đặt thời gian chờ phiên mặc định thành khi khởi động lại ứng dụng.</string>
     <string name="vault_timeout_to_large">Thời gian mở kho vượt quá giới hạn do tổ chức của bạn đặt ra.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Các chính sách của tổ chức ngăn cản bạn xuất kho lưu trữ cá nhân của mình.</string>
     <string name="add_account">Thêm tài khoản</string>
@@ -687,6 +687,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Làm theo các bước từ Dou để hoàn tất đăng nhập.</string>
     <string name="launch_duo">Khởi chạy Dou</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Mã khóa sẽ được lưu vào kho Bitwarden của bạn trong %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ứng dụng này không hỗ trợ mã khóa</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Vận hành mã khóa thất bại vì trình duyệt không có quyền</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Vận hành mã khóa không thành công vì chữ ký trình duyệt không khớp</string>
@@ -912,6 +913,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>
@@ -1149,4 +1152,7 @@ các vấn đề.</string>
     <string name="lock_app">Khóa ứng dụng</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
     <string name="loading_vault_data">Đang tải dữ liệu kho…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

@@ -114,6 +114,7 @@ fun QrCodeScanScreen(
                     { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
+                modifier = Modifier.fillMaxSize(),
             )
 
             if (LocalConfiguration.current.isPortrait) {

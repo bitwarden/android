@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Send megerősítő kód újraküldése emailben</string>
     <string name="verification_email_not_sent">Nem sikerült elküldeni a megerősítő emailt. Próbáljuk újra.</string>
     <string name="verification_email_sent">Az ellenőrző kódot tartalmazó email elküldésre került.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey biztonsági kulcs</string>
     <string name="add_new_attachment">Melléklet hozzáadása</string>
     <string name="attachments">Mellékletek</string>
@@ -690,6 +690,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Kövessük a Duo lépéseit a bejelentkezés befejezéséhez.</string>
     <string name="launch_duo">Duo indítása</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A belépőkulcs mentésre kerül a Bitwarden széfbe: %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">A jelszó mentésre kerül a Bitwarden széfbe: %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ennél az alkalmazásnál a belépőkulcsok nem támogatottak.</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">A belépőkulcs művelet nem sikerült, mert a böngésző nem privilegizált.</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">A belépőkulcs művelet nem sikerült, mert a böngésző aláírás nem egyezik.</string>
@@ -916,6 +917,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A hitelesítő művelet nem sikerült, mert a felhasználói ellenőrzési kísérletek túllépésre kerültek.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">A hitelesítő művelet nem sikerült, mert a felhasználó ki van zárva.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A hitelesítő művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
@@ -1152,4 +1155,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="lock_app">Alkalmazás zárolása</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Az alkalmazás feloldásához használjuk a készülék zárolási módszerét.</string>
     <string name="loading_vault_data">Széf adatok betöltése…</string>
+    <string name="compatibility_mode_warning">A kompatibilitási módot csak akkor szabad engedélyezni, ha az automatikus kitöltés nem működik a böngészőben. Ez a beállítás csökkenti a biztonságot és lehetővé teheti a rosszindulatú webhelyek számára a jelszavak rögzítését. Csak akkor engedélyezzük, ha elfogadjuk ezt a kockázatot.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">A kompatibilitási mód használata a böngésző automatikus kitöltéséhez.</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Kevésbé biztonságos, több böngészővel kompatibilis automatikus kitöltési módszert használunk.\n<annotation link="learnMore">Tudjunk meg többet a kompatibilitási módról</annotation></string>
 </resources>

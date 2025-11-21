@@ -36,7 +36,6 @@ env:
 permissions:
   contents: read
   packages: read
-  id-token: write
 
 jobs:
   version:
@@ -48,7 +47,6 @@ jobs:
       version_name: ${{ inputs.version-name }}
       version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
-    secrets: inherit
 
   build:
     name: Build Authenticator
@@ -56,17 +54,9 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
-        env:
-          INPUTS: ${{ toJson(inputs) }}
-        run: |
-          {
-            echo "<details><summary>Job Inputs</summary>"
-            echo ""
-            echo '```json'
-            echo "$INPUTS"
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
 
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -124,6 +114,8 @@ jobs:
       - version
       - build
     runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -293,7 +285,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.bitwarden.authenticator.aab
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
@@ -301,7 +293,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: com.bitwarden.authenticator.apk
           path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
@@ -321,7 +313,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt
@@ -329,7 +321,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: authenticator-android-aab-sha256.txt
           path: ./authenticator-android-aab-sha256.txt

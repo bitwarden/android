@@ -57,7 +57,7 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -112,7 +112,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
-        every { completeFido2Registration(any()) } just runs
+        every { completeCredentialRegistration(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk {
         every { isUserVerificationSupported } returns true
@@ -233,18 +233,18 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
-        val result = RegisterFido2CredentialResult.Success(
+    fun `on CompleteCredentialCreate event should invoke CredentialProviderCompletionManager`() {
+        val result = CreateCredentialResult.Success.Fido2CredentialRegistered(
             responseJson = "mockRegistrationResponse",
         )
-        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
-        verify { credentialProviderCompletionManager.completeFido2Registration(result) }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteCredentialRegistration(result = result))
+        verify { credentialProviderCompletionManager.completeCredentialRegistration(result) }
     }
 
     @Test
-    fun `Fido2Error dialog should display based on state`() {
+    fun `CredentialError dialog should display based on state`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+            dialog = VaultAddEditState.DialogState.CredentialError("mockMessage".asText()),
         )
 
         composeTestRule
@@ -464,7 +464,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking dismiss dialog on Fido2Error dialog should send Fido2ErrorDialogDismissed action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+            dialog = VaultAddEditState.DialogState.CredentialError("mockMessage".asText()),
         )
 
         composeTestRule
@@ -474,7 +474,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.Fido2ErrorDialogDismissed("mockMessage".asText()),
+                VaultAddEditAction.Common.CredentialErrorDialogDismissed("mockMessage".asText()),
             )
         }
     }
@@ -1266,7 +1266,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem(id = "TestId", uri = "TestURI", match = null, checksum = null),
+                    UriItem(id = "TestId", uri = "URITest", match = null, checksum = null),
                 ),
             )
         }

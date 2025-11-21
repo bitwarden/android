@@ -279,7 +279,7 @@ class SettingsRepositoryImpl(
         get() = activeUserId
             ?.let { userId ->
                 authDiskSource
-                    .getUserBiometicUnlockKeyFlow(userId)
+                    .getUserBiometricUnlockKeyFlow(userId)
                     .map { it != null }
             }
             ?: flowOf(false)

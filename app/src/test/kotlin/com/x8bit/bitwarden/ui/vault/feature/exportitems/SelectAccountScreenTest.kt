@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems
 
-import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isNotDisplayed
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -63,11 +63,11 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
     fun `initial state should be correct`() = runTest {
         composeTestRule
             .onNodeWithText("Select account")
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText(ACTIVE_ACCOUNT_SUMMARY.email)
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -143,18 +143,17 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("No accounts available")
-            .isDisplayed()
+            .assertIsDisplayed()
 
+        val text = "You don’t have any accounts you can import from. Your organization’s " +
+            "security policy may restrict importing items from Bitwarden to another app."
         composeTestRule
-            .onNodeWithText(
-                text = "You don't have any accounts you can import from.",
-                substring = true,
-            )
-            .isDisplayed()
+            .onNodeWithText(text = text)
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Select an account")
-            .isNotDisplayed()
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -166,7 +165,7 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
         )
         composeTestRule
             .onNodeWithText("Loading")
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 }
 

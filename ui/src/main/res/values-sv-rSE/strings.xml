@@ -507,11 +507,11 @@ Skanningen sker automatiskt.</string>
         <item quantity="one">%1$d minut</item>
         <item quantity="other">%1$d minuter</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Din organisation har ställt in maximal tidsgräns för sessionen till %1$s och %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Din organisation har ställt in maximal tidsgräns för sessionen till %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Den här inställningen hanteras av din organisation.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Din organisation har ställt in standardtidsgräns för sessionen till aldrig.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Din organisation har ställt in standardtidsgräns för sessionen till vid omstart av appen.</string>
     <string name="vault_timeout_to_large">Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</string>
     <string name="disable_personal_vault_export_policy_in_effect">En eller flera organisationsprinciper hindrar dig från att exportera ditt personliga valv.</string>
     <string name="add_account">Lägg till konto</string>
@@ -691,6 +691,7 @@ Vill du byta till detta konto?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Följ stegen från Duo för att slutföra inloggningen.</string>
     <string name="launch_duo">Starta Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Din inloggningsnyckel kommer att sparas i ditt Bitwarden-valv för %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Ditt lösenord kommer att sparas i ditt Bitwarden-valv för %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Inloggningsnycklar stöds inte för den här appen</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsaren inte är privilegierad</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsarens signatur inte stämmer överens</string>
@@ -917,6 +918,8 @@ Vill du byta till detta konto?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsnyckel misslyckades eftersom begäran inte stöds.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för lösenord misslyckades därför att det valda objektet inte finns.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Åtgärd för lösenord misslyckades därför att inget objekt valdes.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran är ogiltig.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran inte stöds.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Åtgärd för inloggningsuppgifter misslyckades därför att antalet försök att verifiera användaren överstegs.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Åtgärd för inloggningsuppgifter misslyckades därför att användaren är utlåst.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för inloggningsuppgifter misslyckades därför att det valda objektet inte finns.</string>
@@ -1153,4 +1156,7 @@ Vill du byta till detta konto?</string>
     <string name="lock_app">Lås app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Använd enhetens låsningsmetod för att låsa upp appen</string>
     <string name="loading_vault_data">Läser in valvdata…</string>
+    <string name="compatibility_mode_warning">Kompatibilitetsläget bör endast aktiveras om automatisk ifyllning inte fungerar i din webbläsare. Denna inställning minskar säkerheten och kan göra det möjligt för skadliga webbplatser att få tillgång till dina lösenord. Aktivera den endast om du accepterar denna risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Använd kompatibilitetsläge för automatisk ifyllning i webbläsaren</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Använder en mindre säker metod för automatisk ifyllning som är kompatibel med fler webbläsare.\n<annotation link="learnMore">Läs mer om kompatibilitetsläge</annotation></string>
 </resources>

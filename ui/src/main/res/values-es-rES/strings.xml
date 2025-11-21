@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Reenviar código de verificación por correo electrónico</string>
     <string name="verification_email_not_sent">No se puedo enviar el correo de verificación. Prueba de nuevo.</string>
     <string name="verification_email_sent">Correo de verificación enviado</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Clave de seguridad YubiKey</string>
     <string name="add_new_attachment">Añadir nuevo archivo adjunto</string>
     <string name="attachments">Adjuntos</string>
@@ -692,6 +692,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga los pasos de Duo para terminar de iniciar sesión.</string>
     <string name="launch_duo">Iniciar Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tu clave de acceso se guardará en tu caja fuerte de Bitwarden para %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Claves de acceso no soportadas para esta aplicación</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">La operación de la clave de acceso falló porque el navegador no tiene privilegios</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">La operación de la clave de acceso falló porque la firma del navegador no coincide</string>
@@ -918,6 +919,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">La operación de la clave de acceso falló porque la petición no está soportada.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
@@ -1154,4 +1157,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
+    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
+    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
+    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
 </resources>

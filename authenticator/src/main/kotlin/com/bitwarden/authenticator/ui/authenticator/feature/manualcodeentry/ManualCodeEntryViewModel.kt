@@ -11,9 +11,12 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isBase32
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -36,6 +39,7 @@ class ManualCodeEntryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authenticatorRepository: AuthenticatorRepository,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<ManualCodeEntryState, ManualCodeEntryEvent, ManualCodeEntryAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -147,7 +151,7 @@ class ManualCodeEntryViewModel @Inject constructor(
                     id = UUID.randomUUID().toString(),
                     key = sanitizedCode,
                     issuer = state.issuer,
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     type = if (isSteamCode) {
                         AuthenticatorItemType.STEAM
@@ -157,14 +161,11 @@ class ManualCodeEntryViewModel @Inject constructor(
                     favorite = false,
                 ),
             )
-            sendEvent(
-                event = ManualCodeEntryEvent.ShowToast(
-                    message = BitwardenString.verification_code_added.asText(),
-                ),
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(BitwardenString.verification_code_added.asText()),
+                relay = SnackbarRelay.ITEM_ADDED,
             )
-            sendEvent(
-                event = ManualCodeEntryEvent.NavigateBack,
-            )
+            sendEvent(event = ManualCodeEntryEvent.NavigateBack)
         }
     }
 
@@ -283,11 +284,6 @@ sealed class ManualCodeEntryEvent {
      * Navigate to the app settings.
      */
     data object NavigateToAppSettings : ManualCodeEntryEvent()
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : ManualCodeEntryEvent()
 }
 
 /**

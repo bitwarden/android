@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -112,7 +111,7 @@ class FoldersScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("There are no folders to list.")
-            .isNotDisplayed()
+            .assertIsDisplayed()
 
         mutableStateFlow.update { DEFAULT_LOADED_STATE }
         composeTestRule

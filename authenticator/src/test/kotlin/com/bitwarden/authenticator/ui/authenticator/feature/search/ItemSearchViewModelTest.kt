@@ -13,10 +13,14 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -50,6 +54,12 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
     }
     private val authenticatorBridgeManager = mockk<AuthenticatorBridgeManager>()
     private val mockClipboardManager = mockk<BitwardenClipboardManager>()
+    private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarFlow
+    }
 
     @Test
     fun `initial state is correct`() {
@@ -58,6 +68,16 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarFlow.tryEmit(expectedSnackbarData)
+            assertEquals(ItemSearchEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
     }
 
     @Test
@@ -345,6 +365,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
             clipboardManager = mockClipboardManager,
             authenticatorRepository = mockAuthenticatorRepository,
             authenticatorBridgeManager = authenticatorBridgeManager,
+            snackbarRelayManager = snackbarRelayManager,
         )
 }
 
