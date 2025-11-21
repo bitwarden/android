@@ -101,7 +101,7 @@ jobs:
           versionCode:"$VERSION_CODE" \
           versionName:"$VERSION_NAME_INPUT"
 
-          regex='appVersionName = "([^"]+)"'
+          regex='appVersionName = "(.+)"'
           if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
