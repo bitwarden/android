@@ -391,6 +391,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate.toInstant(),
         archivedDate = archivedDate?.toInstant(),
+        data = null,
     )
 
 /**
