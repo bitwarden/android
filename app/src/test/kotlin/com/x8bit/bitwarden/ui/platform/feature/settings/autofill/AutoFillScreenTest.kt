@@ -18,7 +18,6 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.util.startSystemAccessibilitySettingsActivity
 import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -867,86 +866,6 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on NavigateToCompatibilityModeLearnMore should launch the browser to the autofill help page`() {
-        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToCompatibilityModeLearnMore)
-        verify(exactly = 1) {
-            intentManager.launchUri(
-                uri = "https://bitwarden.com/help/auto-fill-android/#compatibility-mode".toUri(),
-            )
-        }
-    }
-
-    @Test
-    fun `on web domain compatibility mode click should display confirmation dialog`() {
-        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
-        composeTestRule.assertNoDialogExists()
-        composeTestRule
-            .onNodeWithText(text = "Use compatibility mode for browser autofill")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Warning")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `on web domain compatibility mode dialog Cancel click should close dialog`() {
-        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
-        composeTestRule.assertNoDialogExists()
-        composeTestRule
-            .onNodeWithText(text = "Use compatibility mode for browser autofill")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Cancel")
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on web domain compatibility mode dialog Accept click should close dialog and send event`() {
-        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
-        composeTestRule.assertNoDialogExists()
-        composeTestRule
-            .onNodeWithText(text = "Use compatibility mode for browser autofill")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Accept")
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(AutoFillAction.WebDomainModeCompatToggle(true))
-        }
-        composeTestRule.assertNoDialogExists()
-    }
-
-    @Test
-    fun `on learn more about compatibility mode should send WebDomainModeLearnMoreClick`() {
-        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
-        composeTestRule
-            .onNodeWithText(
-                text = "Uses a less secure autofill method compatible with more " +
-                    "browsers.\nLearn more about compatibility mode",
-            )
-            .performScrollTo()
-            .performCustomAccessibilityAction(label = "Learn more")
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(AutoFillAction.WebDomainModeCompatLearnMoreClick)
-        }
-    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -962,5 +881,4 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
-    isWebDomainCompatModeEnabled = false,
 )

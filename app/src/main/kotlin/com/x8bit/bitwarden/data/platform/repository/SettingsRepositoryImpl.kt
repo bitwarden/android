@@ -338,12 +338,6 @@ class SettingsRepositoryImpl(
             )
         }
 
-    override var isAutofillWebDomainCompatMode: Boolean
-        get() = settingsDiskSource.isAutofillWebDomainCompatMode ?: false
-        set(value) {
-            settingsDiskSource.isAutofillWebDomainCompatMode = value
-        }
-
     override var blockedAutofillUris: List<String>
         get() = activeUserId
             ?.let { settingsDiskSource.getBlockedAutofillUris(userId = it) }

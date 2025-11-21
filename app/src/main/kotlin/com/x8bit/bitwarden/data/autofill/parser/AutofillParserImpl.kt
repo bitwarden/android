@@ -93,7 +93,6 @@ class AutofillParserImpl(
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
-            ?.takeIf { settingsRepository.isAutofillWebDomainCompatMode }
 
         // Take only the autofill views from the node that currently has focus.
         // Then remove all the fields that cannot be filled with data.

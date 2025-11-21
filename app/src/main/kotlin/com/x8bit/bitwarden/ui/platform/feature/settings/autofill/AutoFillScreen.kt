@@ -32,9 +32,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -135,13 +132,6 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToLearnMore -> {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
-            }
-
-            AutoFillEvent.NavigateToCompatibilityModeLearnMore -> {
-                intentManager.launchUri(
-                    uri = "https://bitwarden.com/help/auto-fill-android/#compatibility-mode"
-                        .toUri(),
-                )
             }
 
             AutoFillEvent.NavigateToAutofillHelp -> {
@@ -255,20 +245,6 @@ private fun AutoFillScreenContent(
             }
         }
 
-        AnimatedVisibility(visible = state.isAutoFillServicesEnabled) {
-            Column {
-                WebDomainCompatibilityModeRow(
-                    isChecked = state.isWebDomainCompatModeEnabled,
-                    onToggle = autoFillHandlers.onWebDomainCompatModeToggled,
-                    onLearnMoreClick = autoFillHandlers.onWebDomainModeCompatLearnMoreClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
-            }
-        }
-
         if (state.showPasskeyManagementRow) {
             BitwardenExternalLinkRow(
                 text = stringResource(id = BitwardenString.passkey_management),
@@ -368,76 +344,6 @@ private fun AutoFillScreenContent(
         Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
-}
-
-@Suppress("LongMethod")
-@Composable
-private fun WebDomainCompatibilityModeRow(
-    isChecked: Boolean,
-    onToggle: (isEnabled: Boolean) -> Unit,
-    onLearnMoreClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var showConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    if (showConfirmationDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.warning),
-            message = stringResource(id = BitwardenString.compatibility_mode_warning),
-            confirmButtonText = stringResource(id = BitwardenString.accept),
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onConfirmClick = {
-                onToggle(true)
-                showConfirmationDialog = false
-            },
-            onDismissClick = { showConfirmationDialog = false },
-            onDismissRequest = { showConfirmationDialog = false },
-        )
-    }
-
-    BitwardenSwitch(
-        label = stringResource(id = BitwardenString.use_compatibility_mode_for_browser_autofill),
-        isChecked = isChecked,
-        onCheckedChange = {
-            if (isChecked) {
-                onToggle(false)
-            } else {
-                showConfirmationDialog = true
-            }
-        },
-        cardStyle = CardStyle.Full,
-        modifier = modifier,
-        supportingContent = {
-            val learnMore = stringResource(id = BitwardenString.learn_more)
-            Text(
-                text = annotatedStringResource(
-                    id = BitwardenString
-                        .use_a_less_secure_autofill_method_compatible_with_more_browsers,
-                    style = spanStyleOf(
-                        textStyle = BitwardenTheme.typography.bodyMedium,
-                        color = BitwardenTheme.colorScheme.text.secondary,
-                    ),
-                    onAnnotationClick = {
-                        when (it) {
-                            "learnMore" -> onLearnMoreClick()
-                        }
-                    },
-                ),
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier.semantics {
-                    customActions = listOf(
-                        CustomAccessibilityAction(
-                            label = learnMore,
-                            action = {
-                                onLearnMoreClick()
-                                true
-                            },
-                        ),
-                    )
-                },
-            )
-        },
-    )
 }
 
 @Composable

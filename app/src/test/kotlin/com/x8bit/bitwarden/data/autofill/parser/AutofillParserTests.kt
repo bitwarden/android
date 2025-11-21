@@ -69,7 +69,6 @@ class AutofillParserTests {
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
         every { blockedAutofillUris } returns emptyList()
-        every { isAutofillWebDomainCompatMode } returns false
     }
 
     private var mockIsInlineAutofillEnabled = true
@@ -177,86 +176,13 @@ class AutofillParserTests {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `parse should return Fillable without website in AutofillView from url bar but compatibility mode is off`() {
-        // Setup
-        val packageName = "com.microsoft.emmx"
-        every {
-            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-        } returns packageName
-        every { settingsRepository.isAutofillWebDomainCompatMode } returns false
-        every { assistStructure.windowNodeCount } returns 2
-        // Override the idPackage to be Edge's package name.
-        every { loginViewNode.idPackage } returns packageName
-        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
-        val urlBarNode: AssistStructure.ViewNode = mockk {
-            every { autofillHints } returns emptyArray()
-            every { autofillId } returns null
-            every { childCount } returns 0
-            every { idEntry } returns "url_bar"
-            every { idPackage } returns packageName
-            every { webDomain } returns "m.facebook.com"
-            every { webScheme } returns null
-        }
-        val urlBarWindowNode: AssistStructure.WindowNode = mockk {
-            every { this@mockk.rootViewNode } returns urlBarNode
-        }
-        every { assistStructure.getWindowNodeAt(1) } returns urlBarWindowNode
-        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            data = AutofillView.Data(
-                autofillId = loginAutofillId,
-                autofillOptions = emptyList(),
-                autofillType = AUTOFILL_TYPE,
-                isFocused = true,
-                textValue = null,
-                hasPasswordTerms = false,
-                website = null,
-            ),
-        )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
-        val autofillPartition = AutofillPartition.Login(
-            views = listOf(loginAutofillView),
-        )
-        val expected = AutofillRequest.Fillable(
-            ignoreAutofillIds = emptyList(),
-            inlinePresentationSpecs = inlinePresentationSpecs,
-            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
-            packageName = packageName,
-            partition = autofillPartition,
-            uri = "androidapp://$packageName",
-        )
-
-        // Test
-        val actual = parser.parse(
-            autofillAppInfo = autofillAppInfo,
-            fillRequest = fillRequest,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-        verify(exactly = 1) {
-            fillRequest.getInlinePresentationSpecs(
-                autofillAppInfo = autofillAppInfo,
-                isInlineAutofillEnabled = true,
-            )
-            fillRequest.getMaxInlineSuggestionsCount(
-                autofillAppInfo = autofillAppInfo,
-                isInlineAutofillEnabled = true,
-            )
-            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<AutofillView>().buildUriOrNull(packageName)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `parse should return Fillable with website in AutofillView from url bar but compatibility mode is on`() {
+    fun `parse should return Fillable with website in AutofillView from url bar for compatible browser`() {
         // Setup
         val website = "https://m.facebook.com"
         val packageName = "com.microsoft.emmx"
         every {
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
         } returns packageName
-        every { settingsRepository.isAutofillWebDomainCompatMode } returns true
         every { assistStructure.windowNodeCount } returns 2
         // Override the idPackage to be Edge's package name.
         every { loginViewNode.idPackage } returns packageName
