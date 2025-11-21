@@ -699,6 +699,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">עקוב אחר השלבים של Duo כדי לסיים להיכנס.</string>
     <string name="launch_duo">פתח את Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">מפתח הגישה שלך יישמר בכספת ה־Bitwarden שלך עבור %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">מפתחות גישה אינן נתמכות עבור יישום זה</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">פעולת מפתח גישה נכשלה בגלל שהדפדפן אינו בעל הרשאות</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">פעולת מפתח גישה נכשלה בגלל שחתימת הדפדפן שלך אינה תואמת</string>
@@ -927,6 +928,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה נתמכת.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">פעולת הסיסמה נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
     <string name="password_operation_failed_because_no_item_was_selected">פעולת הסיסמה נכשלה בגלל שלא נבחר פריט.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">פעולת האישור נכשלה בגלל שניסיונות אימות המשתמש חרגו.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">פעולת האישור נכשלה בגלל שהמשתמש נעול.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">פעולת האישור נכשלה בגלל שהפריט שנבחר אינו קיים.</string>

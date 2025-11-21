@@ -698,6 +698,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Postupujte podle kroků od DUO pro dokončení přihlášení.</string>
     <string name="launch_duo">Spustit DUO</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Váš přístupový klíč bude pro %1$s uložen do Vašeho trezoru na Bitwardenu</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Vaše heslo bude pro %1$s uloženo do Vašeho trezoru na Bitwardenu</string>
     <string name="passkeys_not_supported_for_this_app">Přístupové klíče nejsou pro tuto aplikaci podporovány</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operace přístupového klíče se nezdařila, protože prohlížeč nemá oprávnění</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operace přístupového klíče se nezdařila, protože se neshoduje s podpisem prohlížeče</string>
@@ -926,6 +927,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operace hesla se nezdařila, protože vybraná položka neexistuje.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operace hesla se nezdařila, protože nebyla vybrána žádná položka.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operace přístupových údajů se nezdařila, protože je požadavek neplatný.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operace přístupových údajů se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operace s přihlašovacími údaji se nezdařila, protože byly vyčerpány všechny pokusy o ověření uživatele.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operace s přihlašovacími údaji se nezdařila, protože byl uživatel uzamčen.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operace s přihlašovacími údaji se nezdařila, protože vybraná položka neexistuje.</string>

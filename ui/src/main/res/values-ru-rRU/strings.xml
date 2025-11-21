@@ -699,6 +699,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Следуйте указаниям Duo, чтобы завершить авторизацию.</string>
     <string name="launch_duo">Запустить Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш passkey будет сохранен в вашем хранилище Bitwarden для %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Ваш пароль будет сохранен в вашем хранилище Bitwarden для %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ваш ключ доступа будет сохранен в вашем хранилище Bitwarden</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операция с Passkey не удалась, поскольку браузер не имеет привилегий</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операция с Passkey не удалась, поскольку подпись браузера не совпадает</string>
@@ -927,6 +928,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операция с паролем не удалась, поскольку выбранный элемент не существует.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операция с паролем не удалась, поскольку не был выбран ни один элемент.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Операция с учетными данными не удалась, поскольку запрос некорректен.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Операция с учетными данными не удалась, поскольку запрос не поддерживается.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операция с учетными данными не удалась, поскольку превышено количество попыток верификации пользователя.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операция с учетными данными не удалась, поскольку пользователь заблокирован.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операция с учетными данными не удалась, поскольку выбранный элемент не существует.</string>

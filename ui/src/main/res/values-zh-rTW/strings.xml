@@ -688,6 +688,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">跟隨 Duo 的步驟來完成登入。</string>
     <string name="launch_duo">啟動 Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">您的密碼金鑰已經儲存在您的 %1$s Bitwarden 密碼庫</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">您的密碼已經儲存在您的 %1$s Bitwarden 密碼庫</string>
     <string name="passkeys_not_supported_for_this_app">此應用程式不支援密碼金鑰</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">由於您的瀏覽器未獲得權限，密碼金鑰動作失敗</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">由於您的瀏覽器憑證不正確，密碼金鑰動作失敗</string>
@@ -913,6 +914,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">通行金鑰操作失敗，因為該請求不受支援。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">密碼操作失敗，因為所選項目不存在。</string>
     <string name="password_operation_failed_because_no_item_was_selected">密碼操作失敗，因為未選取任何項目。</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">憑證操作失敗，因為請求無效。</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">憑證操作失敗，因為該請求不受支援。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">憑證操作失敗，因為超過使用者驗證嘗試次數。</string>
     <string name="credential_operation_failed_because_user_is_locked_out">憑證操作失敗，因為使用者已被鎖定。</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">憑證操作失敗，因為所選項目不存在。</string>

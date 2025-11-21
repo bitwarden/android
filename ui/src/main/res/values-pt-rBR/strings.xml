@@ -691,6 +691,7 @@ Você deseja mudar para esta conta?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga os passos no Duo para finalizar a autenticação.</string>
     <string name="launch_duo">Abrir o Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Sua chave de acesso será salva no seu cofre do Bitwarden para %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">A sua senha será salva no seu cofre do Bitwarden para %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Chaves de acesso não são suportadas para este app</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operação de chave de acesso falhou pois o navegador não é privilegiado</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operação de chave de acesso falhou pois a assinatura do navegador não corresponde</string>
@@ -917,6 +918,8 @@ Você deseja mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é suportada.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação de senha falhou porque o item selecionado não existe.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A operação de senha falhou porque nenhum item foi selecionado.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">A operação de credencial falhou pois a solicitação é inválida.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">A operação de credencial falhou pois a solicitação não é suportada.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação de credenciais falhou porque o número de tentativas de verificação do usuário foi excedido.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">A operação de credenciais falhou porque o usuário está bloqueado.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação de credencial falhou porque o item selecionado não existe.</string>
