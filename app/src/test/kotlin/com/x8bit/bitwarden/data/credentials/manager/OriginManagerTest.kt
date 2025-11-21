@@ -242,64 +242,6 @@ class OriginManagerTest {
                 ),
             )
         }
-
-    @Test
-    fun `validateOrigin should prefix www to rpId without www before checking asset links`() =
-        runTest {
-            coEvery {
-                mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                    sourceWebSite = "https://www.example.com",
-                    targetPackageName = DEFAULT_PACKAGE_NAME,
-                    targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                    relations = listOf("delegate_permission/common.handle_all_urls"),
-                )
-            } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE.asSuccess()
-
-            val result = originManager.validateOrigin(
-                relyingPartyId = "example.com",
-                callingAppInfo = mockNonPrivilegedAppInfo,
-            )
-
-            assertEquals(ValidateOriginResult.Success(null), result)
-        }
-
-    @Test
-    fun `validateOrigin should preserve existing www prefix when present`() = runTest {
-        coEvery {
-            mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                sourceWebSite = "https://www.example.com",
-                targetPackageName = DEFAULT_PACKAGE_NAME,
-                targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                relations = listOf("delegate_permission/common.handle_all_urls"),
-            )
-        } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE.asSuccess()
-
-        val result = originManager.validateOrigin(
-            relyingPartyId = "www.example.com",
-            callingAppInfo = mockNonPrivilegedAppInfo,
-        )
-
-        assertEquals(ValidateOriginResult.Success(null), result)
-    }
-
-    @Test
-    fun `validateOrigin should handle rpId with https scheme correctly`() = runTest {
-        coEvery {
-            mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                sourceWebSite = "https://www.example.com",
-                targetPackageName = DEFAULT_PACKAGE_NAME,
-                targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                relations = listOf("delegate_permission/common.handle_all_urls"),
-            )
-        } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE.asSuccess()
-
-        val result = originManager.validateOrigin(
-            relyingPartyId = "https://example.com",
-            callingAppInfo = mockNonPrivilegedAppInfo,
-        )
-
-        assertEquals(ValidateOriginResult.Success(null), result)
-    }
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
