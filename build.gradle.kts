@@ -27,6 +27,7 @@ dependencies {
     kover(project(":cxf"))
     kover(project(":data"))
     kover(project(":network"))
+    kover(project(":testharness"))
     kover(project(":ui"))
 }
 
@@ -42,6 +43,7 @@ detekt {
         "cxf/src",
         "data/src",
         "network/src",
+        "testharness/src",
         "ui/src",
     )
 }
