@@ -691,6 +691,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">உள்நுழைவை முடிக்க Duo-இன் படிகளைப் பின்பற்றவும்.</string>
     <string name="launch_duo">Duo-ஐ தொடங்கவும்</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">உங்கள் கிடைத்தொடர் உங்கள் Bitwarden பெட்டகத்தில் %1$s-க்கு சேமிக்கப்படும்</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">இந்த பயன்பாட்டிற்கு கிடைத்தொடர்கள் ஆதரிக்கப்படவில்லை</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">உலாவி சலுகை இல்லாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">உலாவி கையொப்பம் பொருந்தாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது</string>
@@ -917,6 +918,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">கோரிக்கை ஆதரிக்கப்படாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை என்பதால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_no_item_was_selected">உருப்படி எதுவும் தேர்ந்தெடுக்கப்படாததால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">பயனர் சரிபார்ப்பு முயற்சிகள் அதிகமாக இருந்ததால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">பயனர் பூட்டப்பட்டதால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை என்பதால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>

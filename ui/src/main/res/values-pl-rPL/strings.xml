@@ -181,8 +181,8 @@
     <string name="send_verification_code_again">Wyślij ponownie kod</string>
     <string name="verification_email_not_sent">Nie można wysłać wiadomości weryfikacyjnej. Spróbuj ponownie.</string>
     <string name="verification_email_sent">Wiadomość weryfikacyjna została wysłana</string>
-    <string name="yubi_key_instruction">Przyłóż klucz YubiKey NEO z tyłu urządzenia lub włóż go do portu USB urządzenia, a następnie dotknij jego przycisku.</string>
-    <string name="yubi_key_title">Klucz bezpieczeństwa YubiKey</string>
+    <string name="yubi_key_instruction">Przyłóż klucz bezpieczeństwa YubiKey z tyłu urządzenia lub włóż go do portu USB urządzenia, a następnie dotknij jego przycisku.</string>
+    <string name="yubi_key_title">Klucz bezpieczeństwa Yubico</string>
     <string name="add_new_attachment">Dodaj nowy załącznik</string>
     <string name="attachments">Załączniki</string>
     <string name="unable_to_download_file">Nie można pobrać pliku.</string>
@@ -698,6 +698,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Wykonaj kroki od Duo, aby zakończyć logowanie.</string>
     <string name="launch_duo">Uruchom Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Klucz dostępu zostanie zapisany w sejfie Bitwarden w danych logowania %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Hasło zostanie zapisane w sejfie Bitwarden w danych logowania %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Klucze dostępu nie są obsługiwane dla tej aplikacji</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka nie jest dozwolona</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operacja klucza dostępu nie powiodła się, ponieważ podpis przeglądarki się nie zgadza</string>
@@ -926,6 +927,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacja klucza dostępu nie powiodła się, ponieważ żądanie nie jest obsługiwane.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacja hasła nie powiodła się, ponieważ element nie istnieje.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacja hasła nie powiodła się, ponieważ nie wybrano elementu.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operacja nie powiodła się, ponieważ żądanie jest nieprawidłowe.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operacja nie powiodła się, ponieważ żądanie jest nieobsługiwane.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacja danych logowania nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operacja danych logowania nie powiodła się, ponieważ użytkownik jest zablokowany.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operacja danych logowania nie powiodła się, ponieważ element nie istnieje.</string>

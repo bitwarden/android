@@ -695,6 +695,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Пратите кораке од Duo да завршите пријављивање.</string>
     <string name="launch_duo">Покренути Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш приступни кључ ће бити сачуван у вашем Bitwarden сефу за %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Приступни кључеви нису подржани за ову апликацију</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операција лозинке није успела јер прегледач није привилегован</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операција лозинке није успела јер се потпис прегледача не подудара</string>
@@ -922,6 +923,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операција са кључем за приступ није успела јер је захтев неподржан.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операција лозинке није успела јер изабрана ставка не постоји.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операција лозинке није успела јер нема изабране ставке.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операција акредитива није успела јер су прекорачени покушаји верификације корисника.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операција акредитива није успела јер је корисник закључан.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операција акредитива није успела јер изабрана ставка не постоји.</string>

@@ -691,6 +691,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Следвайте стъпките от Duo, за да завършите вписването.</string>
     <string name="launch_duo">Стартиране на Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Секретният ключ ще бъде запазен в трезора на Битуорден за %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">За това приложение не се поддържат секретни ключове</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операцията със секретния ключ беше неуспешна, тъй като подписът в браузъра не съвпада</string>
@@ -917,6 +918,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операцията с паролата беше неуспешна, тъй като избраният елемент не съществува.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операцията с паролата беше неуспешна, тъй като няма избран елемент.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операцията с удостоверителните данни беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операцията с удостоверителните данни беше неуспешна, тъй като потребителят е заключен извън системата.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операцията с удостоверителните данни беше неуспешна, тъй като избраният елемент не съществува.</string>

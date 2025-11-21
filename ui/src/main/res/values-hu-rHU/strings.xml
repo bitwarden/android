@@ -690,6 +690,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Kövessük a Duo lépéseit a bejelentkezés befejezéséhez.</string>
     <string name="launch_duo">Duo indítása</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A belépőkulcs mentésre kerül a Bitwarden széfbe: %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">A jelszó mentésre kerül a Bitwarden széfbe: %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ennél az alkalmazásnál a belépőkulcsok nem támogatottak.</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">A belépőkulcs művelet nem sikerült, mert a böngésző nem privilegizált.</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">A belépőkulcs művelet nem sikerült, mert a böngésző aláírás nem egyezik.</string>
@@ -916,6 +917,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A hitelesítő művelet nem sikerült, mert a felhasználói ellenőrzési kísérletek túllépésre kerültek.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">A hitelesítő művelet nem sikerült, mert a felhasználó ki van zárva.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A hitelesítő művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>

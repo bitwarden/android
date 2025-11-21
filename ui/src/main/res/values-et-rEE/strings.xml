@@ -691,6 +691,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Sisselogimise lõpetamiseks järgige Duo juhiseid.</string>
     <string name="launch_duo">Käivita Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">See rakendus ei toeta pääsuvõtmeid</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Pääsuvõtme funktsiooni kasutamine ebaõnnestus, sest see brauser ei ole toetatud</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Pääsuvõtme funktsiooni kasutamine ebaõnnestus, sest brauseri sõrmejälg ei ühti</string>
@@ -917,6 +918,8 @@ Soovid selle konto peale lülituda?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>

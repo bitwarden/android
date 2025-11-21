@@ -687,6 +687,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Làm theo các bước từ Dou để hoàn tất đăng nhập.</string>
     <string name="launch_duo">Khởi chạy Dou</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Mã khóa sẽ được lưu vào kho Bitwarden của bạn trong %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ứng dụng này không hỗ trợ mã khóa</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Vận hành mã khóa thất bại vì trình duyệt không có quyền</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Vận hành mã khóa không thành công vì chữ ký trình duyệt không khớp</string>
@@ -912,6 +913,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>

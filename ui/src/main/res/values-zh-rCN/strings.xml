@@ -159,7 +159,7 @@
     <string name="web_vault">Bitwarden 网页版密码库</string>
     <string name="items">项目</string>
     <string name="items_for_uri">适用于 %1$s 的项目</string>
-    <string name="no_items_for_uri">您的密码库中没有可用于 %1$s 的项目。</string>
+    <string name="no_items_for_uri">您的密码库中没有适用于 %1$s 的项目。</string>
     <string name="no_items_for_vault">您的密码库中没有匹配「%1$s」的项目</string>
     <string name="search_for_a_login_or_add_a_new_login">搜索登录或添加新的登录</string>
     <string name="disabled">已禁用</string>
@@ -686,7 +686,8 @@
     <string name="duo_two_step_login_is_required_for_your_account">您的账户要求使用 Duo 两步登录。</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">按照 Duo 的步骤完成登录。</string>
     <string name="launch_duo">启动 Duo</string>
-    <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">您的通行密钥将保存在您的 %1$s Bitwarden 密码库中</string>
+    <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">您的通行密钥将保存到您的 %1$s Bitwarden 密码库中</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">您的密码将保存到您的 %1$s Bitwarden 密码库中</string>
     <string name="passkeys_not_supported_for_this_app">此 App 不支持通行密钥</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">由于浏览器没有权限，通行密钥操作失败</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">由于浏览器签名不匹配，通行密钥操作失败</string>
@@ -912,6 +913,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
     <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">由于请求无效，凭据操作失败。</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">由于请求不受支持，凭据操作失败。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，凭据操作失败。</string>
     <string name="credential_operation_failed_because_user_is_locked_out">由于用户被锁定，凭据操作失败。</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，凭据操作失败。</string>
@@ -1146,7 +1149,7 @@
     <string name="lock_app">锁定 App</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用您设备的锁定方式解锁此 App</string>
     <string name="loading_vault_data">正在加载密码库数据…</string>
-    <string name="compatibility_mode_warning">兼容性模式仅应在浏览器自动填充功能无法正常工作时启用。此设置会降低安全性，并可能允许恶意网站窃取您的密码。仅当您接受此风险时才启用该功能。</string>
-    <string name="use_compatibility_mode_for_browser_autofill">为浏览器自动填充使用兼容性模式</string>
+    <string name="compatibility_mode_warning">兼容性模式仅应在浏览器自动填充功能无法正常工作时启用。此设置会降低安全性，并可能允许恶意网站窃取您的密码。仅当您接受此风险时才启用它。</string>
+    <string name="use_compatibility_mode_for_browser_autofill">为浏览器自动填充功能使用兼容性模式</string>
     <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">使用安全性较低的自动填充方式以兼容更多浏览器。\n<annotation link="learnMore">了解更多有关兼容性模式的信息</annotation></string>
 </resources>
