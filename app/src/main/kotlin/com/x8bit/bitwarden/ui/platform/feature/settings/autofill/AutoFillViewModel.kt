@@ -69,7 +69,6 @@ class AutoFillViewModel @Inject constructor(
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
                     .toBrowserAutoFillSettingsOptions(),
-                isWebDomainCompatModeEnabled = settingsRepository.isAutofillWebDomainCompatMode,
             )
         },
 ) {
@@ -135,10 +134,6 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
         AutoFillAction.LearnMoreClick -> handleLearnMoreClick()
         AutoFillAction.HelpCardClick -> handleHelpCardClick()
-        is AutoFillAction.WebDomainModeCompatToggle -> handleWebDomainModeCompatToggle(action)
-        AutoFillAction.WebDomainModeCompatLearnMoreClick -> {
-            handleNavigateToCompatibilityModeLearnMore()
-        }
     }
 
     private fun handlePrivilegedAppsClick() {
@@ -151,15 +146,6 @@ class AutoFillViewModel @Inject constructor(
 
     private fun handleHelpCardClick() {
         sendEvent(AutoFillEvent.NavigateToAutofillHelp)
-    }
-
-    private fun handleNavigateToCompatibilityModeLearnMore() {
-        sendEvent(AutoFillEvent.NavigateToCompatibilityModeLearnMore)
-    }
-
-    private fun handleWebDomainModeCompatToggle(action: AutoFillAction.WebDomainModeCompatToggle) {
-        settingsRepository.isAutofillWebDomainCompatMode = action.isEnabled
-        mutableStateFlow.update { it.copy(isWebDomainCompatModeEnabled = action.isEnabled) }
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -319,7 +305,6 @@ data class AutoFillState(
     val showBrowserAutofillActionCard: Boolean,
     val activeUserId: String,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
-    val isWebDomainCompatModeEnabled: Boolean,
 ) : Parcelable {
     /**
      * Indicates which call-to-action that should be displayed.
@@ -434,11 +419,6 @@ sealed class AutoFillEvent {
     data object NavigateToLearnMore : AutoFillEvent()
 
     /**
-     * Navigate to the web domain learn more site.
-     */
-    data object NavigateToCompatibilityModeLearnMore : AutoFillEvent()
-
-    /**
      * Navigate to the autofill help page.
      */
     data object NavigateToAutofillHelp : AutoFillEvent()
@@ -547,16 +527,6 @@ sealed class AutoFillAction {
      * User has clicked the help CTA.
      */
     data object HelpCardClick : AutoFillAction()
-
-    /**
-     * User has clicked to learn more about compatibility mode.
-     */
-    data object WebDomainModeCompatLearnMoreClick : AutoFillAction()
-
-    /**
-     * User has changed their compatibility setting.
-     */
-    data class WebDomainModeCompatToggle(val isEnabled: Boolean) : AutoFillAction()
 
     /**
      * Internal actions.
