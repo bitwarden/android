@@ -89,7 +89,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedFlightRecorderData: FlightRecorderDataSet? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
     private var storedBrowserAutofillDialogReshowTime: Instant? = null
-    private var storedIsAutofillWebDomainCompatMode: Boolean? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -216,12 +215,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = storedBrowserAutofillDialogReshowTime
         set(value) {
             storedBrowserAutofillDialogReshowTime = value
-        }
-
-    override var isAutofillWebDomainCompatMode: Boolean?
-        get() = storedIsAutofillWebDomainCompatMode
-        set(value) {
-            storedIsAutofillWebDomainCompatMode = value
         }
 
     override fun getAccountBiometricIntegrityValidity(

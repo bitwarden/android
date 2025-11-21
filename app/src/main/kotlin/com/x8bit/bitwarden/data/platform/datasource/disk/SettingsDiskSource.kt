@@ -111,11 +111,6 @@ interface SettingsDiskSource {
     var browserAutofillDialogReshowTime: Instant?
 
     /**
-     * The current status of whether the web domain compatibility mode is enabled.
-     */
-    var isAutofillWebDomainCompatMode: Boolean?
-
-    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
