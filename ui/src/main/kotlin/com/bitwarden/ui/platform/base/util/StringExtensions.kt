@@ -240,34 +240,6 @@ fun String.prefixHttpsIfNecessary(): String =
     prefixHttpsIfNecessaryOrNull() ?: this
 
 /**
- * If the given [String] is a valid URI, "www." will be prepended (or inserted after the scheme
- * if present) if it is not already present. Otherwise `null` will be returned.
- *
- * Examples:
- * - "example.com" -> "www.example.com"
- * - "www.example.com" -> "www.example.com"
- * - "https://example.com" -> "https://www.example.com"
- * - "https://www.example.com" -> "https://www.example.com"
- */
-fun String.prefixWwwIfNecessaryOrNull(): String? =
-    when {
-        this.isBlank() || !this.isValidUri() -> null
-        this.startsWith("www.") -> this
-        this.startsWith("http://") || this.startsWith("https://") -> {
-            if ("://www." in this) this else this.replaceFirst("://", "://www.")
-        }
-
-        else -> "www.$this"
-    }
-
-/**
- * If the given [String] is a valid URI, "www." will be prepended (or inserted after the scheme
- * if present) if it is not already present. Otherwise the original [String] will be returned.
- */
-fun String.prefixWwwIfNecessary(): String =
-    prefixWwwIfNecessaryOrNull() ?: this
-
-/**
  * Checks if a string is using base32 digits.
  */
 fun String.isBase32(): Boolean = "^[A-Za-z2-7]+=*$".toRegex().matches(this)
