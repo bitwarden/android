@@ -97,10 +97,10 @@ module Supply
   end
   class Client
     def update_track(track_name, track_object)
-      UI.verbose("Using custom `update_track` method.")
+      UI.message("Using custom `update_track` method.")
       ensure_active_edit!
 
-      UI.verbose("name:#{track_name} object:#{track_object} package:#{current_package_name}")
+      UI.message("name:#{track_name} object:#{track_object} package:#{current_package_name}")
       call_google_api do
         client.update_edit_track(
           current_package_name,
