@@ -95,4 +95,20 @@ module Supply
       UI.message("confirmed that update_track was reached: #{Supply.config[:track_promote_to]} #{release}")
     end
   end
+  class Client
+    def update_track(track_name, track_object)
+      UI.verbose("Using custom `update_track` method.")
+      ensure_active_edit!
+
+      UI.verbose("name:#{track_name} object:#{track_object} package:#{current_package_name}")
+      call_google_api do
+        client.update_edit_track(
+          current_package_name,
+          current_edit.id,
+          track_name,
+          track_object
+        )
+      end
+    end
+  end
 end
