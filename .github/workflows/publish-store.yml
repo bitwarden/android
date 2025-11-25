@@ -152,11 +152,6 @@ jobs:
 
           decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
 
-          bundle exec fastlane updateReleaseNotes \
-            releaseNotes:"$RELEASE_NOTES" \
-            versionCode:"$VERSION_CODE" \
-            packageName:"$PACKAGE_NAME"
-
           bundle exec fastlane promoteToProduction \
             versionCode:"$VERSION_CODE" \
             versionName:"$VERSION_NAME" \
