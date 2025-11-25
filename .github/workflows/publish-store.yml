@@ -37,6 +37,7 @@ on:
         type: choice
         options:
           - internal
+          - qa
           - Fastlane Automation Source
         required: true
         default: "internal"
