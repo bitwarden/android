@@ -78,7 +78,7 @@ module Supply
         release.user_fraction = nil
       end
 
-      UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first})")
+      UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first} Track: #{Supply.config[:track_promote_to]})")
 
       if track_to
         # Its okay to set releases to an array containing the newest release
