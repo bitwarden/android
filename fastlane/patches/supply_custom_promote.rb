@@ -28,6 +28,7 @@ module Supply
       releases = track_from.releases
       UI.message("Total releases in track: #{releases.length}")
       if releases.length == 1
+        release = releases.first
         UI.message("One release found: name[#{release.name}] status[#{release.status}] code[#{release.version_codes}]")
       end
 
