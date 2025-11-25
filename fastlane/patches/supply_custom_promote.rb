@@ -26,6 +26,7 @@ module Supply
       end
 
       releases = track_from.releases
+      UI.message("Total releases in track: #{releases.length}")
 
       version_code = Supply.config[:version_code].to_s
       if !Supply.config[:skip_release_verification]
@@ -56,12 +57,35 @@ module Supply
         if Supply.config[:version_name].nil?
           UI.user_error!("To force promote a :version_code, it is mandatory to enter the :version_name")
         end
-        release = AndroidPublisher::TrackRelease.new(
-          name: Supply.config[:version_name],
-          version_codes: [version_code],
-          status: Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
-        )
-      end
+      end 
+        # release = AndroidPublisher::TrackRelease.new(
+        #   name: Supply.config[:version_name],
+        #   version_codes: [version_code],
+        #   status: Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
+        # )
+
+        # filter only releases that contain the target version code
+        releases = releases.select do |release|
+            release.version_codes == [version_code]
+        end
+
+        if releases.length < 1
+          UI.user_error!("No releases match version code #{version_code}.")
+        end
+        
+        if releases.length > 1
+          UI.user_error!("Multiple releases match version code #{version_code}.")
+        else
+          release = releases.first
+        end
+
+        UI.message("Release info: name[#{release.name}] status[#{release.status}] code[#{release.version_codes}]")
+
+        # releases = releases.select do |release|
+        #     release.name == Supply.config[:version_name] &&
+        #     release.version_codes == [version_code] &&
+        #     release.status == 'completed'
+        # end
 
       release = releases.first unless Supply.config[:skip_release_verification]
       track_to = client.tracks(Supply.config[:track_promote_to]).first || AndroidPublisher::Track.new(
