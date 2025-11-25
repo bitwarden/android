@@ -27,6 +27,9 @@ module Supply
 
       releases = track_from.releases
       UI.message("Total releases in track: #{releases.length}")
+      if releases.length == 1:
+        UI.message("One release found: name[#{release.name}] status[#{release.status}] code[#{release.version_codes}]")
+      end
 
       version_code = Supply.config[:version_code].to_s
       if !Supply.config[:skip_release_verification]
@@ -72,7 +75,7 @@ module Supply
         if releases.length < 1
           UI.user_error!("No releases match version code #{version_code}.")
         end
-        
+
         if releases.length > 1
           UI.user_error!("Multiple releases match version code #{version_code}.")
         else
