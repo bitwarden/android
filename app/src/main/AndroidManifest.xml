@@ -30,6 +30,10 @@
         android:protectionLevel="signature|knownSigner"
         tools:targetApi="s" />
 
+    <permission
+        android:name="${applicationId}.permission.AUTOFILL_CALLBACK"
+        android:protectionLevel="signature" />
+
     <application
         android:name=".BitwardenApplication"
         android:allowBackup="false"
@@ -131,7 +135,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:noHistory="true"
-            android:theme="@style/AutofillCallbackTheme" />
+            android:theme="@style/AutofillCallbackTheme"
+            android:permission="${applicationId}.permission.AUTOFILL_CALLBACK" />
 
         <activity
             android:name=".AuthCallbackActivity"
