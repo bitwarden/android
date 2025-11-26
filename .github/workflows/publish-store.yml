@@ -46,6 +46,7 @@ on:
         type: choice
         options:
           - Unused
+          - Unused2
         required: true
       dry-run:
         description: "Dry-Run, Run the workflow without publishing to the store"
