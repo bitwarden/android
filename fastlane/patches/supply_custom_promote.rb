@@ -114,7 +114,7 @@ module Supply
 
       # get version code
       version_code = Supply.config[:version_code].to_s
-
+      bundles = client.list_edit_bundles
       # build release object
       release = AndroidPublisher::TrackRelease.new(
         name: Supply.config[:version_name],
