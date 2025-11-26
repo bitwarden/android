@@ -113,8 +113,19 @@ module Supply
       # end
 
       # get version code
-      version_code = Supply.config[:version_code].to_s
+      #version_code = Supply.config[:version_code].to_s
+      version_code = '20274'
       bundles = client.list_edit_bundles
+
+      target_bundle = bundles.bundles.find { |b| b.version_code.to_s == version_code }
+      UI.message("Total bundles:#{bundles.bundles.length}")
+      if target_bundle
+        UI.message("Found bundle with version code #{version_code}")
+      else
+        UI.message("Bundle with version code #{version_code} not found in available bundles")
+      end
+
+
       # build release object
       release = AndroidPublisher::TrackRelease.new(
         name: Supply.config[:version_name],
