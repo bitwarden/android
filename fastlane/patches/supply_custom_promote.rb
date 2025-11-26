@@ -116,6 +116,9 @@ module Supply
       #version_code = Supply.config[:version_code].to_s
       version_code = '20274'
       bundles = client.list_edit_bundles
+      bundles.bundles.each do |bundle|
+        UI.message("Bundle version code: #{bundle.version_code}")
+      end
 
       target_bundle = bundles.bundles.find { |b| b.version_code.to_s == version_code }
       UI.message("Total bundles:#{bundles.bundles.length}")
@@ -130,17 +133,18 @@ module Supply
       release = AndroidPublisher::TrackRelease.new(
         name: Supply.config[:version_name],
         version_codes: [version_code], 
+        status: 'completed'
       )
 
-      # set release attributes based on the rollout values
-      rollout = (Supply.config[:rollout] || 0).to_f
-      if rollout > 0 && rollout < 1
-        release.status = Supply::ReleaseStatus::IN_PROGRESS
-        release.user_fraction = rollout
-      else
-        release.status = Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
-        release.user_fraction = nil
-      end
+      # # set release attributes based on the rollout values
+      # rollout = (Supply.config[:rollout] || 0).to_f
+      # if rollout > 0 && rollout < 1
+      #   release.status = Supply::ReleaseStatus::IN_PROGRESS
+      #   release.user_fraction = rollout
+      # else
+      #   release.status = Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
+      #   release.user_fraction = nil
+      # end
 
       # build track object, including the release
       track = AndroidPublisher::Track.new(
