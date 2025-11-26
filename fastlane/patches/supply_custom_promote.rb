@@ -143,6 +143,17 @@ module Supply
     end
   end
   class Client
+    def list_edit_bundles
+      ensure_active_edit!
+    
+      call_google_api do
+        client.list_edit_bundles(
+          current_package_name,
+          current_edit.id
+        )
+      end
+    end
+
     def update_track(track_name, track_object)
       UI.message("Using custom `update_track` method.")
       ensure_active_edit!
