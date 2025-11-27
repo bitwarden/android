@@ -37,7 +37,7 @@ class TestProcessReleaseNotes(unittest.TestCase):
 
     def test_process_line(self):
         test_cases = [
-            ("* [ABC-123] BACKPORT Some text", "* Some text"),
+            ("* [ABC-123] BACKPORT Some text by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042", "* Some text by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042"),
             ("* DEF-456: feat(component): Some text", "* Some text"),
             ("* GHI-789 - bug(fix): Some text", "* Some text"),
             ("* ci: Some text", "* Some text"),

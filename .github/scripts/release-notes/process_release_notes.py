@@ -111,7 +111,7 @@ def process_line(line: str) -> str:
     patterns = [
         r'🍒',                      # 🍒 -> ""
         r'BACKPORT',                # BACKPORT -> ""
-        r'[deps]:',                 # [deps]: -> ""
+        r'\[deps\]:',                 # [deps]: -> ""
         r'feat(?:\([^)]*\))?:',     # feat: or feat(ui): -> ""
         r'bug(?:\([^)]*\))?:',      # bug: or bug(core): -> ""
         r'ci(?:\([^)]*\))?:'        # ci: or ci(workflow): -> ""
