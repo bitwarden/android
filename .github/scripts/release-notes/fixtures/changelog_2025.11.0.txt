@@ -1,0 +1,58 @@
+# Overview
+
+* Fixed an issue that could cause unexpected app crashes.
+* General stability improvements and bug fixes.
+
+## What's Changed
+* Update OkHttp to latest version by @david-livefront in https://github.com/bitwarden/android/pull/6054
+* Update SDK to 1.0.0-3436-2a00b727 by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042
+* [PM-26986] Hide select other account button if user has no other account by @aj-rosado in https://github.com/bitwarden/android/pull/6041
+* [PM-23290] Migrate PIN unlock keys to PinProtectedUserKeyEnvelope by @andrebispo5 in https://github.com/bitwarden/android/pull/6024
+* [PM-27130] Update alert (Snackbar) color to inverseSurface in dynamic color scheme by @SaintPatrck in https://github.com/bitwarden/android/pull/6057
+* PM-27136: Replace FirstTimeSyncSnackbarHost with BitwardenSnackbarHost by @david-livefront in https://github.com/bitwarden/android/pull/6058
+* PM-27149: Update empty vault illustration by @david-livefront in https://github.com/bitwarden/android/pull/6059
+* [PM-26420] Add flight recorder logs for vault unlock method and PIN migration by @andrebispo5 in https://github.com/bitwarden/android/pull/6052
+* Update drawable names with consistent prefixes by @david-livefront in https://github.com/bitwarden/android/pull/6060
+* PM-27153: Update copy in Authenticator app by @david-livefront in https://github.com/bitwarden/android/pull/6061
+* [PM-27001] Skip account selection only one exists on cxp flow by @aj-rosado in https://github.com/bitwarden/android/pull/6055
+* PM-27210: Add dynamic color support to Authenticator by @david-livefront in https://github.com/bitwarden/android/pull/6063
+* PM-27202: Update ItemListingScreen layout for improved spacing by @david-livefront in https://github.com/bitwarden/android/pull/6065
+* PM-27263: Add enum for Vault Timeout Policy actions by @david-livefront in https://github.com/bitwarden/android/pull/6067
+* Remove night-mode icon variants where possible by @david-livefront in https://github.com/bitwarden/android/pull/6066
+* [PM-27088] fix unit test execution by @Nailik in https://github.com/bitwarden/android/pull/6048
+* [PM-26810] Remove loading dialog flicker on vault data updates by @SaintPatrck in https://github.com/bitwarden/android/pull/6068
+* Fix TopAppBar height for multiline titles by @david-livefront in https://github.com/bitwarden/android/pull/6069
+* [PM-26810] Clear password input after successful OTP verification by @SaintPatrck in https://github.com/bitwarden/android/pull/6070
+* PM-27271: Update selection button disabled state by @david-livefront in https://github.com/bitwarden/android/pull/6071
+* Create reusable supporting content composable by @david-livefront in https://github.com/bitwarden/android/pull/6075
+* [PM-27092] Changing screen capture flow from event based to state based on Authenticator by @aj-rosado in https://github.com/bitwarden/android/pull/6062
+* Crowdin Pull by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6077
+* [PM-27176] Switch to using SDK's init crypto with MasterPasswordUnlock by @andrebispo5 in https://github.com/bitwarden/android/pull/6073
+* Minor clean up for the Account Security Screen by @david-livefront in https://github.com/bitwarden/android/pull/6076
+* Implement reusable Claude code review workflow by @theMickster in https://github.com/bitwarden/android/pull/6072
+* PM-19302: Add support for a typed vault timeout policy by @david-livefront in https://github.com/bitwarden/android/pull/6078
+* [PM-22157] independent version names in build workflows by @mpbw2 in https://github.com/bitwarden/android/pull/6074
+* [PM-26420] FlightRecorder vault unlock method by @andrebispo5 in https://github.com/bitwarden/android/pull/6084
+* PM-27497: Update Snackbar font when there is no header by @david-livefront in https://github.com/bitwarden/android/pull/6086
+* PM-27494: Update custom vault timeout UI by @david-livefront in https://github.com/bitwarden/android/pull/6085
+* [deps]: Lock file maintenance by @renovate[bot] in https://github.com/bitwarden/android/pull/6083
+* [PM-27516] [PM 27157] Custom text field edit multiline fix by @dev-sharma3624 in https://github.com/bitwarden/android/pull/6088
+* [PM-27589] [PM-27158] fix : Sub folders always show 0 items by @dev-sharma3624 in https://github.com/bitwarden/android/pull/6092
+* Update Androidx dependencies by @david-livefront in https://github.com/bitwarden/android/pull/6093
+* Update Kotlin, ksp, and kover to the latest versions by @david-livefront in https://github.com/bitwarden/android/pull/6094
+* Update the Google Protobuf library by @david-livefront in https://github.com/bitwarden/android/pull/6095
+* Fix deprecation within the app by @david-livefront in https://github.com/bitwarden/android/pull/6096
+* [deps]: Update com.google.devtools.ksp to v2.3.0 by @renovate[bot] in https://github.com/bitwarden/android/pull/6080
+* Update androidx.credentials to 1.6.0-beta03 by @SaintPatrck in https://github.com/bitwarden/android/pull/6097
+* Fix topAppBar flicker when text is long by @david-livefront in https://github.com/bitwarden/android/pull/6098
+* Update Readme compatibility docs by @david-livefront in https://github.com/bitwarden/android/pull/6100
+* [PM-27120] cxp hide user account when remove individual export is enabled by @aj-rosado in https://github.com/bitwarden/android/pull/6089
+* Crowdin Pull by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6101
+* Add Push chevron to Block autofill button by @david-livefront in https://github.com/bitwarden/android/pull/6102
+* 🍒 [PM-27806] Reverted changes to order of StorePolicies after sync by @aj-rosado in https://github.com/bitwarden/android/pull/6132
+* 🍒 [PM-27902] Logout user after successful master password reset by @aj-rosado in https://github.com/bitwarden/android/pull/6137
+* 🍒 Update Autofill to detect url bar webDomain for certain browsers by @david-livefront in https://github.com/bitwarden/android/pull/6155
+
+
+**Full Changelog**: https://github.com/bitwarden/android/compare/v2025.10.1-bwa...v2025.11.0-bwpm
+**Builds Source:** https://github.com/bitwarden/android/actions/runs/19309927902
