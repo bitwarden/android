@@ -434,6 +434,7 @@ class AddEditSendViewModel @Inject constructor(
 
     private fun handleRemovePasswordClick() {
         onEdit { editItem ->
+            if (state.dialogState is AddEditSendState.DialogState.Loading) return@onEdit
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
@@ -556,6 +557,9 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
+
+            if (state.dialogState is AddEditSendState.DialogState.Loading) return@onContent
+
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(

@@ -401,6 +401,8 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSaveClick() = onContent { content ->
         if (hasValidationErrors(content)) return@onContent
 
+        if (state.dialog is VaultAddEditState.DialogState.Loading) return@onContent
+
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Loading(

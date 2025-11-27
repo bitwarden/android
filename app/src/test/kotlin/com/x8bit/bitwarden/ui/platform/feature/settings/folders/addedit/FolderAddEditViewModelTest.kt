@@ -778,6 +778,77 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveClick while Loading dialog is shown should not trigger duplicate save operation`() =
+        runTest {
+            val stateWithLoadingDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = FolderAddEditState.DialogState.Loading(
+                    BitwardenString.saving.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithLoadingDialog,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(mockk())
+
+            viewModel.stateFlow.test {
+                viewModel.trySendAction(FolderAddEditAction.SaveClick)
+                assertEquals(stateWithLoadingDialog, awaitItem())
+                coVerify(exactly = 0) {
+                    vaultRepository.createFolder(any())
+                }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick while Loading dialog is shown should not trigger duplicate delete operation`() =
+        runTest {
+            val stateWithLoadingDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = FolderAddEditState.DialogState.Loading(
+                    BitwardenString.deleting.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithLoadingDialog,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.deleteFolder(any())
+            } returns DeleteFolderResult.Success
+
+            viewModel.stateFlow.test {
+                // First DeleteClick - should be ignored because dialog is already Loading
+                viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+                // State should remain unchanged (Loading dialog still showing)
+                assertEquals(stateWithLoadingDialog, awaitItem())
+                // Verify deleteFolder was NOT called
+                coVerify(exactly = 0) {
+                    vaultRepository.deleteFolder(any())
+                }
+            }
+        }
+
     private fun createSavedStateHandleWithState(
         state: FolderAddEditState? = DEFAULT_STATE,
     ) = SavedStateHandle().apply {
