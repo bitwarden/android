@@ -54,9 +54,10 @@ class TestProcessReleaseNotes(unittest.TestCase):
 
     def test_extract_pr_url(self):
         test_cases = [
-            ("* Update SDK to 1.0.0-3436-2a00b727 by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042", ["https://github.com/bitwarden/android/pull/6042"]),
-            ("* Bump JUnit from 6.0.0 to 6.0.1 by SaintPatrick in https://github.com/bitwarden/android/pull/6149", ["https://github.com/bitwarden/android/pull/6149"]),
-            ("* [PM-26986] Hide select other account button if user has no other account by @aj-rosado in https://github.com/bitwarden/android/pull/6041", ["https://github.com/bitwarden/android/pull/6041"]),
+            ("* Update SDK to 1.0.0-3436-2a00b727 by @bw-ghapp[bot] in https://github.com/bitwarden/android/pull/6042", "https://github.com/bitwarden/android/pull/6042"),
+            ("* Bump JUnit from 6.0.0 to 6.0.1 by SaintPatrick in https://github.com/bitwarden/android/pull/6149", "https://github.com/bitwarden/android/pull/6149"),
+            ("* [PM-26986] Hide select other account button if user has no other account by @aj-rosado in https://github.com/bitwarden/android/pull/6041", "https://github.com/bitwarden/android/pull/6041"),
+            ("* No PR URL here", ""),
         ]
         for input_text, expected in test_cases:
             with self.subTest(input_text=input_text):
