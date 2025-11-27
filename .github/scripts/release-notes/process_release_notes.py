@@ -3,7 +3,7 @@ import sys
 import subprocess
 import json
 import argparse
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 def extract_jira_tickets(line: str) -> List[str]:
     """Find all Jira tickets in format ABC-123 (with any prefix/suffix)"""
@@ -21,6 +21,45 @@ def extract_pr_url(line: str) -> str:
     """
     matches = re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', line)
     return matches[0] if matches else ""
+
+def extract_pr_number_from_url(pr_url: str) -> str:
+    """Extract PR number from a GitHub PR URL.
+
+    Args:
+        pr_url: GitHub PR URL (e.g., https://github.com/foo/bar/pull/123)
+
+    Returns:
+        PR number as string, or empty string if not found
+    """
+    match = re.search(r'/pull/(\d+)', pr_url)
+    return match.group(1) if match else ""
+
+def precache_pr_labels(limit: int = 500) -> Dict[str, List[str]]:
+    """Fetch the last N PRs and cache their labels in a map.
+
+    Args:
+        limit: Number of PRs to fetch (default: 500)
+
+    Returns:
+        Dictionary mapping PR number to list of label names
+    """
+    print(f"Pre-caching labels for last {limit} PRs...")
+    result = subprocess.run(
+        ['gh', 'pr', 'list', '--state', 'merged', '--json', 'number,labels', '--limit', str(limit)],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+
+    pr_cache = {}
+    prs = json.loads(result.stdout)
+    for pr in prs:
+        pr_number = str(pr['number'])
+        labels = [label['name'] for label in pr.get('labels', [])]
+        pr_cache[pr_number] = labels
+
+    print(f"Cached {len(pr_cache)} PRs")
+    return pr_cache
 
 def fetch_labels(github_pr_url: str) -> List[str]:
     """Fetch labels from a GitHub PR using the GitHub CLI."""
@@ -98,6 +137,11 @@ def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], Li
 
     print("Processing file: ", input_file)
 
+    # GitHub API / CLI does not support fetching labels for multiple PRs in a single request
+    # individual requests are slow, we're caching the most recent merged PRs which should cover most cases
+    # falling back to individual requests if the PR is not in the cache
+    pr_label_cache = precache_pr_labels(500)
+
     with open(input_file, 'r') as f:
         for line in f:
             line = line.strip()
@@ -109,7 +153,16 @@ def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], Li
 
                 # Fetch labels from PR URL if available
                 if pr_url:
-                    pr_labels = fetch_labels(pr_url)
+                    pr_number = extract_pr_number_from_url(pr_url)
+                    pr_numbers.append(pr_number)
+                    # Check cache first, fallback to individual fetch
+                    if pr_number in pr_label_cache:
+                        pr_labels = pr_label_cache[pr_number]
+                        print(f"Using cached labels for PR #{pr_number}")
+                    else:
+                        print(f"PR #{pr_number} not in cache, fetching individually...")
+                        pr_labels = fetch_labels(pr_url)
+
                     if should_skip_pr(release_app_label, pr_labels):
                         debug_lines.append(f"{line} | skipped - labels: {pr_labels}")
                         continue # skip the PR if it is not labeled with the app label

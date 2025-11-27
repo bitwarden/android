@@ -93,6 +93,26 @@ class TestProcessReleaseNotes(unittest.TestCase):
                 result = should_skip_pr(release_app_label, pr_labels)
                 self.assertEqual(result, expected_skip)
 
+    def test_extract_pr_number_from_url(self):
+        test_cases = [
+            ("https://github.com/bitwarden/android/pull/6042", "6042"),
+            ("https://github.com/foo/bar/pull/999", "999"),
+            ("https://github.com/test/repo/pull/1", "1"),
+            ("no url here", ""),
+            ("https://github.com/test/repo/issues/123", ""),
+        ]
+        for pr_url, expected in test_cases:
+            with self.subTest(pr_url=pr_url):
+                result = extract_pr_number_from_url(pr_url)
+                self.assertEqual(result, expected)
+
+    def test_precache_pr_labels(self):
+        result = precache_pr_labels(50)
+        print(f"\nCached {len(result)} PRs")
+        for pr_id, labels in result.items():
+            print(f"  PR #{pr_id}: {labels}")
+        self.assertEqual(len(result), 50)
+
     def test_process_file(self):
         content = """
 ### Features:
