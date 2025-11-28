@@ -1149,7 +1149,4 @@
     <string name="lock_app">鎖定應用程式</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用你的裝置鎖定方式來解鎖此應用程式</string>
     <string name="loading_vault_data">正在載入密碼庫資料…</string>
-    <string name="compatibility_mode_warning">只有在您的瀏覽器無法使用自動填入時，才應啟用相容模式。此設定會降低安全性，且可能讓惡意網站取得您的密碼。只有在您能接受此風險時才啟用。</string>
-    <string name="use_compatibility_mode_for_browser_autofill">對瀏覽器自動填入使用相容模式</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">使用安全性較低、但與更多瀏覽器相容的自動填入方式。\n<annotation link="learnMore">進一步了解相容模式</annotation></string>
 </resources>

@@ -693,7 +693,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Pratite Duo korake za dovršetak prijave.</string>
     <string name="launch_duo">Pokreni Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tvoj pristupni ključ za %1$s će biti spremljen u trezor</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Tvoja će lozinka biti spremljena u tvoj Bitwatden trezor za %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Pristupni ključ nije podržan za ovu aplikaciju</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacija lozinke nije uspjela jer preglednik nema privilegiju</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operacija pristupnog ključa nije uspjela jer se potpis preglednika ne podudara</string>
@@ -922,8 +922,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacija lozinke nije uspjela jer odabrana stavka ne postoji.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacija lozinke nije uspjela jer nije odabrana niti jedna stavka.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operacija vjerodajnice nije uspjela jer zahtjev nije valjan.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operacija vjerodajnice nije uspjela jer zahtjev nije podržan.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacije vjerodajnice nije uspjela jer je premašen broj provjere korisnika.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operacija vjerodajnice nije uspjela jer je korisnik zaključan.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operacija vjerodajnice nije uspjela jer ne postoji odabrana stavka.</string>
@@ -1164,7 +1164,4 @@ bilo kakav problem.</string>
     <string name="lock_app">Zaključaj aplikaciju</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
     <string name="loading_vault_data">Učitavanje podataka trezora…</string>
-    <string name="compatibility_mode_warning">Način kompatibilnosti treba omogućiti samo ako automatsko popunjavanje ne radi u tvojem pregledniku. Ova postavka smanjuje sigurnost i mogla bi omogućiti zlonamjernim stranicama da snime tvoje lozinke. Omogući samo ako prihvaćaš taj rizik.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Koristi način kompatibilnosti za auto-ispunu preglednika</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Koristi manje sigurnu metodu auto-ispune kompatibilnu s više preglednika.\n<annotation link="learnMore">Saznaj više o načinu kompatibilnosti</annotation></string>
 </resources>

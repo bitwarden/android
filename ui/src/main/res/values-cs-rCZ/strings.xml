@@ -1173,7 +1173,4 @@ při opakování problémů.</string>
     <string name="lock_app">Uzamknout aplikaci</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
     <string name="loading_vault_data">Načítání dat trezoru...</string>
-    <string name="compatibility_mode_warning">Režim kompatibility by měl být povolen jen v případě, že automatické vyplňování nefunguje ve Vašem prohlížeči. Toto nastavení snižuje bezpečnost a umožňuje zachytávání Vašich hesel škodlivým webům. Povolte jen pokud toto riziko přijmete.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Použít režim kompatibility pro automatické vyplňování prohlížeče</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Používá méně bezpečnou metodu automatického vyplňování, která je kompatibilní s více prohlížeči.\n<annotation link="learnMore">Další informace o režimu kompatibility</annotation></string>
 </resources>

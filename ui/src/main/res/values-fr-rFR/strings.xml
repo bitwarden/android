@@ -691,7 +691,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Suivez les étapes à partir de Duo pour terminer la connexion.</string>
     <string name="launch_duo">Lancer Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Votre clé d\'accès sera enregistrée votre coffre Bitwarden pour %1$s</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Votre mot de passe sera enregistré dans votre coffre Bitwarden pour %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Clés d\'accès non supportées par cette application</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">L\'opération Passkey a échoué car le navigateur n\'est pas privilégié</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">L\'opération de clé de passe a échoué car la signature du navigateur ne correspond pas</string>
@@ -918,8 +918,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">L\'opération de clé de passe a échoué car la demande n\'est pas prise en charge.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">L\'opération de mot de passe a échoué car l\'élément sélectionné n\'existe pas.</string>
     <string name="password_operation_failed_because_no_item_was_selected">L\'opération de mot de passe a échoué car aucun élément n\'a été sélectionné.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Opération d\'identification échouée car la requête n\'est pas valide.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Opération d\'identification échouée car la requête n\'est pas prise en charge.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">L\'opération d\'identification a échoué car les tentatives de vérification de l\'utilisateur ont été dépassées.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">L\'opération d\'identification a échoué car l\'utilisateur est bloqué.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">L\'opération d\'identification a échoué car l\'élément sélectionné n\'existe pas.</string>
@@ -1156,7 +1156,4 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="lock_app">Verrouiller l\'application</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilisez la méthode de verrouillage de votre appareil pour déverrouiller l\'application</string>
     <string name="loading_vault_data">Chargement des données du coffre…</string>
-    <string name="compatibility_mode_warning">Le mode de compatibilité ne devrait être activé que si le remplissage automatique ne fonctionne pas dans votre navigateur. Ce paramètre réduit la sécurité et peut permettre à des sites malveillants de saisir vos mots de passe. Ne l\'activez que si vous acceptez ce risque.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Utiliser le mode de compatibilité pour la saisie automatique du navigateur</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Utilise une méthode de saisie automatique moins sécurisée compatible avec plus de navigateurs.\n<annotation link="learnMore">En savoir plus sur le mode de compatibilité</annotation></string>
 </resources>
