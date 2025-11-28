@@ -117,7 +117,8 @@ fun AddEditSendScreen(
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        isEnabled = !state.policyDisablesSend,
+                        isEnabled = !state.policyDisablesSend &&
+                            state.dialogState !is AddEditSendState.DialogState.Loading,
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(AddEditSendAction.SaveClick) }
                         },

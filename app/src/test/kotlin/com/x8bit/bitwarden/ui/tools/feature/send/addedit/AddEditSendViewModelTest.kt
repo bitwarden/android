@@ -993,6 +993,61 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `SaveClick while Loading dialog is shown should not trigger duplicate save operation`() =
+        runTest {
+            val viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(name = "input"),
+            )
+            val initialState = DEFAULT_STATE.copy(
+                shouldFinishOnComplete = true,
+                isShared = true,
+                viewState = viewState,
+                dialogState = AddEditSendState.DialogState.Loading(
+                    message = BitwardenString.saving.asText(),
+                ),
+            )
+            val mockSendView = mockk<SendView>()
+            every { viewState.toSendView(clock) } returns mockSendView
+            val sendUrl = "www.test.com/send/test"
+            val resultSendView = mockk<SendView> {
+                every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
+            }
+            coEvery {
+                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+            } returns CreateSendResult.Success(sendView = resultSendView)
+
+            val viewModel = createViewModel(initialState)
+            viewModel.trySendAction(AddEditSendAction.SaveClick)
+            coVerify(exactly = 0) {
+                vaultRepository.createSend(sendView = any(), fileUri = any())
+            }
+        }
+
+    @Test
+    fun `RemovePasswordClick while Loading dialog is shown should not trigger operation`() =
+        runTest {
+            val sendId = "mockId-1"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Success(mockSendView)
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+                    dialogState = AddEditSendState.DialogState.Loading(
+                        message = BitwardenString.saving.asText(),
+                    ),
+                ),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(
         state: AddEditSendState? = null,
         addEditSendType: AddEditSendType = AddEditSendType.AddItem,

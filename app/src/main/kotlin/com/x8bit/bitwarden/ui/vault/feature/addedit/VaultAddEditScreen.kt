@@ -347,6 +347,7 @@ fun VaultAddEditScreen(
                             onClick = remember(viewModel) {
                                 { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                             },
+                            isEnabled = state.dialog !is VaultAddEditState.DialogState.Loading,
                             modifier = Modifier.testTag("SaveButton"),
                         )
                         BitwardenOverflowActionItem(
