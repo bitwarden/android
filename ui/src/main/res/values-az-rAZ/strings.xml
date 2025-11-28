@@ -1157,7 +1157,4 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="lock_app">Tətbiqi kilidlə</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Tətbiqin kilidini açmaq üçün cihazın kilid üsulunu istifadə edin</string>
     <string name="loading_vault_data">Seyf veriləri yüklənir…</string>
-    <string name="compatibility_mode_warning">Uyumluluq rejimi, yalnız brauzerinizdə avto-doldurma işləməsə fəallaşdırılmalıdır. Bu ayar, təhlükəsizliyi azaldır və zərərli saytların parollarınızı ələ keçirməsinə imkan verə bilər. Yalnız bu riski qəbul etdiyiniz təqdirdə fəallaşdırın.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Brauzerdə avto-doldurma üçün uyumluluq rejimini istifadə et</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Daha çox brauzerlə uyumlu olarkən daha az güvənli avto-doldurma üsulunu istifadə edir.\n<annotation link="learnMore">Uyumluluq rejimi barədə daha ətraflı</annotation></string>
 </resources>

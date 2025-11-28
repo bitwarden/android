@@ -1155,7 +1155,4 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="lock_app">Uygulamayı kilitle</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Uygulamanın kilidini açmak için cihazınızın kilit yöntemini kullanın</string>
     <string name="loading_vault_data">Kasa verileri yükleniyor…</string>
-    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Tarayıcıda otomatik doldurma için uyumluluk modunu kullan</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Daha fazla tarayıcıyla uyumlu ama daha güvensiz bir yöntem kullanır.\n<annotation link="learnMore">Uyumluluk modu hakkında bilgi alın</annotation></string>
 </resources>

@@ -136,7 +136,7 @@
     <string name="other">Altro</string>
     <string name="password_generator">Generatore di password</string>
     <string name="password_hint">Suggerimento per la password</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">Ti abbiamo inviato un\'email con il suggerimento per la tua password principale.</string>
     <string name="password_override_alert">Vuoi davvero sovrascrivere questa password?</string>
     <string name="retype_master_password">Conferma della password principale</string>
     <string name="retype_new_master_password_required">Conferma della nuova password (necessaria)</string>
@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Invia un nuovo codice di verifica</string>
     <string name="verification_email_not_sent">Invio dell\'email di verifica non riuscito</string>
     <string name="verification_email_sent">Email di verifica inviata</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">Appoggia la YubiKey NEO sul retro del dispositivo o inserisci la Yubikey nella porta USB e premi il pulsante dedicato.</string>
     <string name="yubi_key_title">Chiave di sicurezza YubiKey</string>
     <string name="add_new_attachment">Aggiungi un allegato</string>
     <string name="attachments">File allegati</string>
@@ -341,7 +341,7 @@
     <string name="generator">Generatore</string>
     <string name="no_folders_to_list">Nessuna cartella</string>
     <string name="fingerprint_phrase">Frase impronta</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">Frase di verifica dell\'account</string>
     <string name="export_vault">Esporta la cassaforte</string>
     <string name="lock_now">Blocca</string>
     <string name="pin">Codice PIN</string>
@@ -375,7 +375,7 @@
     <string name="download">Scarica</string>
     <string name="login_expired">Sessione scaduta</string>
     <string name="biometrics_direction">Autenticazione biometrica</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Verifica del dispositivo</string>
     <string name="biometrics_failed">Autenticazione biometrica fallita</string>
     <string name="biometrics_decoding_failure">Effettua l\'accesso con la password principale o il codice PIN. Puoi riabilitare l\'autenticazione biometrica nelle impostazioni.</string>
     <string name="use_biometrics_to_unlock">Sblocca con dati biometrici</string>
@@ -388,7 +388,7 @@
     <string name="export_vault_file_pw_protect_info">Questa esportazione contiene i dati della cassaforte in un formato crittografato. Sarà necessario inserire la password del file per decrittografarlo.</string>
     <string name="export_vault_confirmation_title">Esporta la cassaforte</string>
     <string name="warning">Avviso</string>
-    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
+    <string name="export_vault_failure">Esportazione della cassaforte non riuscita. Prova a ripetere l\'operazione da Bitwarden Web.</string>
     <string name="export_vault_success">Cassaforte esportata</string>
     <string name="clone">Copia</string>
     <string name="password_generator_policy_in_effect">Il generatore di password è limitato dalle politiche dell\'organizzazione</string>
@@ -409,7 +409,7 @@
     <string name="enable_sync_on_refresh">Gesto di sincronizzazione</string>
     <string name="enable_sync_on_refresh_description">Sincronizza la cassaforte quando scorri verso il basso.</string>
     <string name="log_in_sso">Single Sign-On aziendale</string>
-    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
+    <string name="log_in_sso_summary">Effettua l\'accesso in modo più comodo, veloce e centralizzato con l\'SSO della tua organizzazione. Inserisci il tuo identificativo per iniziare.</string>
     <string name="org_identifier">Identificativo dell\'organizzazione</string>
     <string name="login_sso_error">Accesso con SSO non riuscito</string>
     <string name="set_master_password">Imposta la password principale</string>
@@ -478,7 +478,7 @@
     <string name="seven_days">7 giorni</string>
     <string name="thirty_days">30 giorni</string>
     <string name="custom">Personalizzata</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Timeout personalizzato</string>
     <string name="add_this_authenticator_key_to_a_login">Aggiungi questa chiave di autenticazione a un login esistente o crea un nuovo login</string>
     <string name="send_disabled_warning">L\'eliminazione dei Send è limitata dall\'organizzazione a solo i Send esistenti</string>
     <string name="about_send">Scopri di più sui Send</string>
@@ -500,18 +500,18 @@ Tutte le sessioni attive verranno terminate entro un\'ora.</string>
     <string name="reset_password_auto_enroll_invite_warning">Questa organizzazione ha una politica che consente agli amministratori dell\'organizzazione di cambiare la tua password principale</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d ora</item>
+        <item quantity="other">%1$d ore</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minuti</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">La tua organizzazione ha impostato %1$s e %2$s come durata massima della sessione.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">La tua organizzazione ha impostato il timeout massimo per la sessione a %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Questa impostazione è gestita dalla tua organizzazione.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">La tua organizzazione ha disabilitato il timeout di sessione.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">La tua organizzazione ha stabilito un timeout di sessione ad ogni riavvio dell\'app.</string>
     <string name="vault_timeout_to_large">La scadenza della sessione supera il limite impostato dall\'organizzazione</string>
     <string name="disable_personal_vault_export_policy_in_effect">L\'esportazione della cassaforte è negata dalle politiche dell\'organizzazione</string>
     <string name="add_account">Aggiungi un account</string>
@@ -586,8 +586,8 @@ Tutte le sessioni attive verranno terminate entro un\'ora.</string>
     <string name="api_access_token">Token API (necessario)</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vuoi davvero sovrascrivere il nome utente attuale?</string>
     <string name="generate_username">Genera nome utente</string>
-    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
-    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
+    <string name="plus_addressed_email_description">Usa le funzionalità di sub-indirizzamento del tuo provider email</string>
+    <string name="catch_all_email_description">Usa una casella di posta \'catch-all\' di dominio.</string>
     <string name="forwarded_email_description">Genera un alias email con un servizio di inoltro esterno.</string>
     <string name="accessibility_service_disclosure">Ulteriori informazioni sul servizio di accessibilità</string>
     <string name="accessibility_disclosure_text">Questa app utilizza il servizio di accessibilità di sistema per cercare i campi di login e verifica se nella tua cassaforte ci sono corrispondenze per la pagina Web visualizzata o l\'app attiva. Bitwarden non memorizza nessuna delle informazioni consultate dal servizio, e non legge né controlla altri dati durante l\'inserimento delle credenziali.</string>
@@ -690,7 +690,7 @@ Vuoi passare a questo account?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Segui i passaggi da DUO per finire di accedere.</string>
     <string name="launch_duo">Avvia DUO</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">La tua passkey sarà salvata nella tua cassaforte di Bitwarden per %1$s</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">La tua password sarà salvata nella tua cassaforte per %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Passkey non supportate per questa app</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">L\'operazione della passkey non è riuscita perché il browser non dispone dei privilegi necessari</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">L\'operazione della passkey non è riuscita perché la firma del browser non corrisponde</string>
@@ -917,8 +917,8 @@ Vuoi passare a questo account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operazione passkey non riuscita perché la richiesta non è supportata.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operazione password non riuscita: l\'elemento selezionato non esiste.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operazione password non riuscita: non è stato selezionato un elemento.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operazione non riuscita: richiesta non valida.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operazione non riuscita: richiesta non supportata.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operazione sulle credenziali non riuscita: il limite dei tentativi di verifica è stato superato.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operazione sulle credenziali non riuscita: l\'utente è bloccato.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operazione sulle credenziali non riuscita: l\'elemento selezionato non esiste.</string>
@@ -1152,10 +1152,7 @@ Vuoi passare a questo account?</string>
     <string name="select_a_different_account">Scegli un altro account</string>
     <string name="verify_your_account_email_address">Verifica l\'indirizzo email del tuo account</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Inserisci il codice a 6 cifre che hai ricevuto via email a</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
-    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
+    <string name="lock_app">Blocca l\'app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Usa il metodo di blocco del dispositivo per sbloccare l\'app</string>
+    <string name="loading_vault_data">Caricamento cassaforte…</string>
 </resources>

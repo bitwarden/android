@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Tentang</string>
-    <string name="add_folder">Tambah Folder</string>
+    <string name="add_folder">Tambah folder</string>
     <string name="add_item">Tambah Item</string>
     <string name="an_error_has_occurred">Terjadi kesalahan</string>
     <string name="apply">Terapkan</string>
@@ -1148,7 +1148,4 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="lock_app">Kunci aplikasi</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gunakan metode kunci perangkat Anda untuk membuka kunci aplikasi</string>
     <string name="loading_vault_data">Memuat data brangkas…</string>
-    <string name="compatibility_mode_warning">Mode kompatibilitas hanya boleh diaktifkan jika pengisian otomatis tidak berfungsi di peramban Anda. Pengaturan ini mengurangi keamanan dan dapat memungkinkan situs jahat untuk menangkap sandi Anda. Hanya aktifkan jika Anda menerima risiko ini.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Gunakan mode kompatibilitas untuk pengisian otomatis peramban</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Gunakan metode pengisian otomatis kurang aman yang kompatibel dengan lebih banyak peramban.\n<annotation link="learnMore">Pelajari lebih lanjut tentang mode kompatibilitas</annotation></string>
 </resources>

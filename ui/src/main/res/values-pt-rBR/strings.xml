@@ -33,7 +33,7 @@
     <string name="launch">Abrir</string>
     <string name="log_in_verb">Entrar</string>
     <string name="log_in_noun">Credencial</string>
-    <string name="log_out">Sair</string>
+    <string name="log_out">Desconectar</string>
     <string name="logout_confirmation">Tem certeza que deseja sair?</string>
     <string name="remove_account">Remover conta</string>
     <string name="remove_account_confirmation">Tem certeza que deseja remover essa conta?</string>
@@ -273,7 +273,7 @@ A leitura será feita automaticamente.</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir para o meu cofre</string>
     <string name="collections">Coleções</string>
-    <string name="no_items_collection">Não há itens nesta coleção.</string>
+    <string name="no_items_collection">Não há itens neste conjunto.</string>
     <string name="no_items_folder">Não há itens nesta pasta.</string>
     <string name="no_items_trash">Não há itens na lixeira.</string>
     <string name="autofill_accessibility_summary">Ajude a preencher campos de nomes de usuário e senhas em outros apps e na web.</string>
@@ -1158,7 +1158,4 @@ quaisquer problema.</string>
     <string name="lock_app">Bloquear aplicativo</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
     <string name="loading_vault_data">Carregando dados do cofre…</string>
-    <string name="compatibility_mode_warning">O modo de compatibilidade só deve ser ativado se o preenchimento automático não funcionar no seu navegador. Esta configuração reduz a segurança e pode permitir que sites maliciosos capture suas senhas. Apenas ative se você aceitar este risco.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Usar modo de compatibilidade para preenchimento automático do navegador</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Usa um método de preenchimento automático menos seguro compatível com mais navegadores.\n<annotation link="learnMore">Saiba mais sobre o modo de compatibilidade</annotation></string>
 </resources>

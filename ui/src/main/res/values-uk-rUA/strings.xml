@@ -1174,7 +1174,4 @@
     <string name="lock_app">Заблокувати програму</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Використовуйте метод блокування пристрою для розблокування програми</string>
     <string name="loading_vault_data">Завантаження даних сховища…</string>
-    <string name="compatibility_mode_warning">Режим сумісності необхідно вмикати лише тоді, коли автозаповнення не працює у вашому браузері. Цей параметр знижує рівень безпеки і може дозволити зловмисним сайтам перехоплювати ваші паролі. Вмикайте його, лише якщо розумієте ризик.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Використовувати режим сумісності для автозаповнення браузера</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Використовується менш безпечний метод автозаповнення, сумісний з більшістю браузерів.\n<annotation link="learnMore">Докладніше про режим сумісності</annotation></string>
 </resources>
