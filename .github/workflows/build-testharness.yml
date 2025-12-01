@@ -1,6 +1,9 @@
 name: Build Test Harness
 
 on:
+  push:
+    paths:
+      - testharness/**
   workflow_dispatch:
     inputs:
       version-name:
@@ -28,7 +31,7 @@ jobs:
     name: Calculate Version Name and Number
     uses: bitwarden/android/.github/workflows/_version.yml@main
     with:
-      app_codename: "bwth"
+      app_codename: "bwpm"
       base_version_number: 0
       version_name: ${{ inputs.version-name }}
       version_number: ${{ inputs.version-code }}
