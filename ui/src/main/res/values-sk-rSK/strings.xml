@@ -436,7 +436,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="autofill_suggestions_inline">Inline (zobrazí sa na klávesnici)</string>
     <string name="autofill_suggestions_popup">Vyskakovacie okno (zobrazí sa cez vstupné pole)</string>
     <string name="accessibility">Použiť dostupnosť</string>
-    <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
+    <string name="accessibility_description5">Vyžaduje sa na použitie dlaždice rýchleho automatického vypĺňania.</string>
     <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
     <string name="send">Send</string>
     <string name="send_details">Podrobnosti o Sende</string>
@@ -1172,7 +1172,4 @@ Chcete prepnúť na tento účet?</string>
     <string name="lock_app">Uzamknúť aplikáciu</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Na odomknutie aplikácie použite metódu uzamknutia zariadenia</string>
     <string name="loading_vault_data">Načítavajú sa údaje trezora…</string>
-    <string name="compatibility_mode_warning">Režim kompatibility by mal byť povolený len vtedy, ak automatické vypĺňanie vo vašom prehliadači nefunguje. Toto nastavenie znižuje bezpečnosť a mohlo by umožniť škodlivým stránkam odchytiť vaše heslá. Povoľte ho len vtedy, ak toto riziko akceptujete.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Na automatické vypĺňanie pre prehliadače použiť režim kompatibility</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Používa menej bezpečnú metódu automatického vypĺňania kompatibilnú s viacerými prehliadačmi.\n<annotation link="learnMore">Viac informácií o režime kompatibility</annotation></string>
 </resources>
