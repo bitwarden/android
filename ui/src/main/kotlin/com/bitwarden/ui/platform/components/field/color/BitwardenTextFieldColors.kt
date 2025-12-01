@@ -24,6 +24,7 @@ fun bitwardenTextFieldButtonColors(): TextFieldColors = bitwardenTextFieldColors
  */
 @Composable
 fun bitwardenTextFieldColors(
+    textColor: Color = BitwardenTheme.colorScheme.text.primary,
     disabledTextColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
     disabledLeadingIconColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
     disabledTrailingIconColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
@@ -31,8 +32,8 @@ fun bitwardenTextFieldColors(
     disabledPlaceholderColor: Color = BitwardenTheme.colorScheme.text.secondary,
     disabledSupportingTextColor: Color = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
 ): TextFieldColors = TextFieldColors(
-    focusedTextColor = BitwardenTheme.colorScheme.text.primary,
-    unfocusedTextColor = BitwardenTheme.colorScheme.text.primary,
+    focusedTextColor = textColor,
+    unfocusedTextColor = textColor,
     disabledTextColor = disabledTextColor,
     errorTextColor = BitwardenTheme.colorScheme.text.primary,
     focusedContainerColor = Color.Transparent,
