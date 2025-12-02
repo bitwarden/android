@@ -103,7 +103,6 @@ fun FolderAddEditScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(FolderAddEditAction.SaveClick) }
                         },
-                        isEnabled = state.dialog !is FolderAddEditState.DialogState.Loading,
                         modifier = Modifier.testTag("SaveButton"),
                     )
                     if (state.shouldShowOverflowMenu) {
