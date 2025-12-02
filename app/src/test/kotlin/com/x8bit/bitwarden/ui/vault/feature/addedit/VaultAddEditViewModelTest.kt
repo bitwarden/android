@@ -4936,7 +4936,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         } returns mockProviderCreateCredentialRequest
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `SaveClick while Loading dialog is shown should not trigger save operation`() =
         runTest {

@@ -778,7 +778,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `SaveClick while Loading dialog is shown should not trigger duplicate save operation`() =
         runTest {
