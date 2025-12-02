@@ -385,7 +385,7 @@ Scanning will happen automatically.</string>
     <string name="send_verification_code_to_email">Send a verification code to your email</string>
     <string name="code_sent">Code sent!</string>
     <string name="confirm_your_identity">Confirm your identity to continue.</string>
-    <string name="export_vault_warning">This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
+    <string name="export_vault_warning">For your security, don’t share or send this file over unsecured channels (like email), and delete it when you’re done.</string>
     <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
     <string name="export_vault_confirmation_title">Confirm vault export</string>
     <string name="warning">Warning</string>
@@ -1042,6 +1042,8 @@ Do you want to switch to this account?</string>
     <string name="export">Export</string>
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_success">Data exported successfully</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Security</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Version</string>
