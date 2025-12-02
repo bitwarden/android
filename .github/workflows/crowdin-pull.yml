@@ -5,14 +5,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 5"
+    
+permissions: {}
 
 jobs:
   crowdin-sync:
     name: Crowdin Pull - ${{ github.event_name }}
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
     steps:
       - name: Checkout repo
