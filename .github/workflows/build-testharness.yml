@@ -124,7 +124,7 @@ jobs:
       - name: Create checksum for Test Harness APK
         run: |
           sha256sum "testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk" \
-            > ./com.bitwarden.testharness.dev-debug.apk-sha256.txt
+            > ./com.bitwarden.testharness.dev.apk-sha256.txt
 
       - name: Upload Test Harness SHA file
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
