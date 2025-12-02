@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -37,6 +38,15 @@ android {
                 "proguard-rules.pro",
             )
         }
+    }
+
+    applicationVariants.all {
+        outputs
+            .mapNotNull { it as? BaseVariantOutputImpl }
+            .forEach { output ->
+                // Set the APK output filename.
+                output.outputFileName = "$applicationId.apk"
+            }
     }
 
     buildFeatures {
