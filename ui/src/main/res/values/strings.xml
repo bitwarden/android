@@ -165,7 +165,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Disabled</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="autofill_noun">Autofill</string>
+    <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Do you want to autofill or view this item?</string>
     <string name="search">Search</string>
     <string name="learn_org">Learn about organizations</string>

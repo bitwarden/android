@@ -261,7 +261,7 @@
             android:name="com.x8bit.bitwarden.AutofillTileService"
             android:exported="true"
             android:icon="@drawable/ic_notification"
-            android:label="@string/autofill_title"
+            android:label="@string/autofill_verb"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">
             <intent-filter>

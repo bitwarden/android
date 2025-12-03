@@ -241,7 +241,7 @@ enum class Settings(
         testTag = "AccountSecuritySettingsButton",
     ),
     AUTO_FILL(
-        text = BitwardenString.autofill_title.asText(),
+        text = BitwardenString.autofill_noun.asText(),
         vectorIconRes = BitwardenDrawable.ic_check_mark,
         testTag = "AutofillSettingsButton",
     ),
