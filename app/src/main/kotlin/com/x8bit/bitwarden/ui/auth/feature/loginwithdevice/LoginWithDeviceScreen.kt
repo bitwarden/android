@@ -27,18 +27,18 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.bitwarden.ui.platform.components.field.model.TextToolbarType
-import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * The top level composable for the Login with Device screen.
@@ -156,18 +156,18 @@ private fun LoginWithDeviceScreenContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        BitwardenTextField(
-            label = stringResource(id = BitwardenString.fingerprint_phrase),
-            value = state.fingerprintPhrase,
-            textFieldTestTag = "FingerprintPhraseValue",
-            onValueChange = { },
-            readOnly = true,
-            singleLine = false,
-            textToolbarType = TextToolbarType.NONE,
-            textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-            textColor = BitwardenTheme.colorScheme.text.codePink,
-            cardStyle = CardStyle.Full,
+        BitwardenContentCard(
+            contentItems = persistentListOf(
+                ContentBlockData(
+                    headerText = stringResource(id = BitwardenString.fingerprint_phrase),
+                    subtitleText = state.fingerprintPhrase,
+                ),
+            ),
+            contentHeaderTextStyle = BitwardenTheme.typography.titleMedium,
+            contentSubtitleTextStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+            contentSubtitleColor = BitwardenTheme.colorScheme.text.codePink,
             modifier = Modifier
+                .testTag(tag = "FingerprintPhraseValue")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
