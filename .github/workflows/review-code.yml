@@ -9,7 +9,7 @@ permissions: {}
 jobs:
   review:
     name: Review
-    uses: bitwarden/gh-actions/.github/workflows/_review-code.yml@main
+    uses: bitwarden/gh-actions/.github/workflows/_review-code.yml@PM-29151-use-marketplace-absolute-path-in-claude-config
     secrets:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
