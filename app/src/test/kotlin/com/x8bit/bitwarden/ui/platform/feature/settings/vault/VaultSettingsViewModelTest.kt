@@ -94,14 +94,15 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ImportItemsClick should emit NavigateToImportVault when policy is not empty`() = runTest {
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+        } returns true
+        every {
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(mockk())
+
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
-            } returns true
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockk())
             viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
             assertEquals(
                 VaultSettingsEvent.NavigateToImportVault,
