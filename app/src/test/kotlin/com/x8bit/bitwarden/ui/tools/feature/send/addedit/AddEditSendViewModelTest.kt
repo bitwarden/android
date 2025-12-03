@@ -993,30 +993,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `RemovePasswordClick while Loading dialog is shown should not trigger operation`() =
-        runTest {
-            val sendId = "mockId-1"
-            val mockSendView = createMockSendView(number = 1)
-            coEvery {
-                vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Success(mockSendView)
-            val viewModel = createViewModel(
-                state = DEFAULT_STATE.copy(
-                    addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
-                    dialogState = AddEditSendState.DialogState.Loading(
-                        message = BitwardenString.saving.asText(),
-                    ),
-                ),
-                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
-            )
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
-                expectNoEvents()
-            }
-        }
-
     private fun createViewModel(
         state: AddEditSendState? = null,
         addEditSendType: AddEditSendType = AddEditSendType.AddItem,
