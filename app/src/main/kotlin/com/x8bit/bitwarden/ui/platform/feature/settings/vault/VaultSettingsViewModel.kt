@@ -2,14 +2,17 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -25,6 +28,7 @@ class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
@@ -55,7 +59,13 @@ class VaultSettingsViewModel @Inject constructor(
 
         featureFlagManager
             .getFeatureFlagFlow(key = FlagKey.CredentialExchangeProtocolImport)
-            .map { VaultSettingsAction.Internal.ImportFeatureUpdated(it) }
+            .combine(
+                policyManager.getActivePoliciesFlow(type = PolicyTypeJson.PERSONAL_OWNERSHIP),
+            ) { isEnabled, policies ->
+                VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
+                    isEnabled = isEnabled && policies.isEmpty(),
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -80,8 +90,8 @@ class VaultSettingsViewModel @Inject constructor(
                 handleSnackbarDataReceived(action)
             }
 
-            is VaultSettingsAction.Internal.ImportFeatureUpdated -> {
-                handleImportFeatureUpdated(action)
+            is VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged -> {
+                handleCredentialExchangeAvailabilityChanged(action)
             }
         }
     }
@@ -92,8 +102,8 @@ class VaultSettingsViewModel @Inject constructor(
         sendEvent(VaultSettingsEvent.ShowSnackbar(action.data))
     }
 
-    private fun handleImportFeatureUpdated(
-        action: VaultSettingsAction.Internal.ImportFeatureUpdated,
+    private fun handleCredentialExchangeAvailabilityChanged(
+        action: VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged,
     ) {
         mutableStateFlow.update { it.copy(showImportItemsChevron = action.isEnabled) }
     }
@@ -128,7 +138,9 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)) {
+        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
+        ) {
             sendEvent(VaultSettingsEvent.NavigateToImportItems)
         } else {
             sendEvent(VaultSettingsEvent.NavigateToImportVault)
@@ -218,9 +230,9 @@ sealed class VaultSettingsAction {
      */
     sealed class Internal : VaultSettingsAction() {
         /**
-         * Indicates that the import feature flag has been updated.
+         * Indicates that the CXF import feature availability has changed.
          */
-        data class ImportFeatureUpdated(
+        data class CredentialExchangeAvailabilityChanged(
             val isEnabled: Boolean,
         ) : Internal()
 
