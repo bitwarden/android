@@ -91,7 +91,7 @@ class VaultSettingsViewModel @Inject constructor(
             }
 
             is VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged -> {
-                handleCredentialExchangeUpdate(action)
+                handleCredentialExchangeAvailabilityChanged(action)
             }
         }
     }
@@ -102,7 +102,7 @@ class VaultSettingsViewModel @Inject constructor(
         sendEvent(VaultSettingsEvent.ShowSnackbar(action.data))
     }
 
-    private fun handleCredentialExchangeUpdate(
+    private fun handleCredentialExchangeAvailabilityChanged(
         action: VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged,
     ) {
         mutableStateFlow.update { it.copy(showImportItemsChevron = action.isEnabled) }
