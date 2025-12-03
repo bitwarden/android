@@ -778,39 +778,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Test
-    fun `SaveClick while Loading dialog is shown should not trigger duplicate save operation`() =
-        runTest {
-            val stateWithLoadingDialog = FolderAddEditState(
-                folderAddEditType = FolderAddEditType.AddItem,
-                dialog = FolderAddEditState.DialogState.Loading(
-                    BitwardenString.saving.asText(),
-                ),
-                viewState = FolderAddEditState.ViewState.Content(
-                    folderName = DEFAULT_FOLDER_NAME,
-                ),
-                parentFolderName = null,
-            )
-
-            val viewModel = createViewModel(
-                createSavedStateHandleWithState(
-                    state = stateWithLoadingDialog,
-                ),
-            )
-
-            coEvery {
-                vaultRepository.createFolder(any())
-            } returns CreateFolderResult.Success(mockk())
-
-            viewModel.stateFlow.test {
-                viewModel.trySendAction(FolderAddEditAction.SaveClick)
-                assertEquals(stateWithLoadingDialog, awaitItem())
-                coVerify(exactly = 0) {
-                    vaultRepository.createFolder(any())
-                }
-            }
-        }
-
     private fun createSavedStateHandleWithState(
         state: FolderAddEditState? = DEFAULT_STATE,
     ) = SavedStateHandle().apply {

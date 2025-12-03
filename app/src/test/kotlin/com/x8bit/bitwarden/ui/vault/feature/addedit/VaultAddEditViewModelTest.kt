@@ -4936,37 +4936,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         } returns mockProviderCreateCredentialRequest
     }
 
-    @Test
-    fun `SaveClick while Loading dialog is shown should not trigger save operation`() =
-        runTest {
-            val stateWithDialog = createVaultAddItemState(
-                dialogState = VaultAddEditState.DialogState.Loading(
-                    BitwardenString.saving.asText(),
-                ),
-                commonContentViewState = createCommonContentViewState(
-                    name = "mockName-1",
-                ),
-            )
-            mutableVaultDataFlow.value = DataState.Loaded(
-                createVaultData(),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = stateWithDialog,
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.LOGIN,
-                ),
-            )
-            coEvery {
-                vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                expectNoEvents()
-            }
-        }
-
     //endregion Helper functions
 }
 

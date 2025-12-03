@@ -103,8 +103,6 @@ class FolderAddEditViewModel @Inject constructor(
             return@onContent
         }
 
-        if (state.dialog is FolderAddEditState.DialogState.Loading) return@onContent
-
         mutableStateFlow.update {
             it.copy(
                 dialog = FolderAddEditState.DialogState.Loading(
