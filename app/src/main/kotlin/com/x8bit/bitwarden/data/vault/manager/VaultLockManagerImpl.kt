@@ -268,10 +268,10 @@ class VaultLockManagerImpl(
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
-                .onSuccess { passwordHash ->
+                .onSuccess {
                     authDiskSource.storeMasterPasswordHash(
                         userId = userId,
-                        passwordHash = passwordHash,
+                        passwordHash = it,
                     )
                 }
         }
