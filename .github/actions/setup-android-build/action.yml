@@ -44,6 +44,5 @@ runs:
     - name: Install Fastlane
       shell: bash
       run: |
-        gem install bundler:2.6.2
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
