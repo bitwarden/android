@@ -240,7 +240,7 @@ fun BitwardenPasswordField(
                         // setting. When visible, the password will always be spoken aloud
                         // regardless of the user's configuration.
                         contentDescription = textFieldValue.text
-                            .takeUnless { !showPassword }
+                            .takeIf { showPassword }
                             .orEmpty()
                         isSensitiveData = true
                     }
