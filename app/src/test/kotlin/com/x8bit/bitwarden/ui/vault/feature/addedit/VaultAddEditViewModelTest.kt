@@ -4935,7 +4935,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ProviderCreateCredentialRequest.fromBundle(any())
         } returns mockProviderCreateCredentialRequest
     }
-
     //endregion Helper functions
 }
 

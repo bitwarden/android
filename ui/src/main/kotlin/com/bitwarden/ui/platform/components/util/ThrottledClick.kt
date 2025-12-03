@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
  * @param onClick The action to perform when clicked.
  * @return A throttled click handler function.
  */
-
 @Composable
 fun throttledClick(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),

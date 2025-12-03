@@ -556,7 +556,6 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
-
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
