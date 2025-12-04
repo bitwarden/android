@@ -57,7 +57,7 @@ class OriginManagerImpl(
                     }
                 },
                 onFailure = {
-                    Timber.e("Failed to validate origin: ${callingAppInfo.packageName}")
+                    Timber.e("Failed to validate origin for calling app")
                     ValidateOriginResult.Error.AssetLinkNotFound
                 },
             )
@@ -107,7 +107,7 @@ class OriginManagerImpl(
             .fold(
                 onSuccess = { it },
                 onFailure = {
-                    Timber.e(it, "Failed to validate privileged app: ${callingAppInfo.packageName}")
+                    Timber.e(it, "Failed to validate calling app is privileged.")
                     ValidateOriginResult.Error.Unknown
                 },
             )

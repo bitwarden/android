@@ -67,7 +67,7 @@ class CredentialProviderProcessorImpl(
         Timber.d("Create credential request received.")
         val userId = authRepository.activeUserId
         if (userId == null) {
-            Timber.w("No active user. Can't create credential.")
+            Timber.w("No active user. Cannot create credential.")
             callback.onError(CreateCredentialUnknownException("Active user is required."))
             return
         }
@@ -98,7 +98,7 @@ class CredentialProviderProcessorImpl(
         // If the user is not logged in, return an error.
         val userState = authRepository.userStateFlow.value
         if (userState == null) {
-            Timber.w("No active user. Can't get credentials.")
+            Timber.w("No active user. Cannot get credentials.")
             callback.onError(GetCredentialUnknownException("Active user is required."))
             return
         }
