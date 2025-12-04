@@ -9,6 +9,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -353,7 +354,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "Test Organization",
                 id = "testId",
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
@@ -446,7 +447,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -2801,7 +2802,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
