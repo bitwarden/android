@@ -78,9 +78,6 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("You vault is locked. Verify your master password to continue.")
-
-        composeTestRule
             .onNodeWithText("Continue")
             .assertIsNotEnabled()
     }
@@ -99,6 +96,7 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Verify your account email address")
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Enter the 6-digit code that was emailed to the address below")

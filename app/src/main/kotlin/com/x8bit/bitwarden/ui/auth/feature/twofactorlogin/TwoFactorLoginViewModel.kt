@@ -185,7 +185,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 // The url should not be empty unless the environment is somehow not supported.
                 authUrl
                     ?.let {
-                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)))
+                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = it.toUri()))
                     }
                     ?: mutableStateFlow.update {
                         it.copy(

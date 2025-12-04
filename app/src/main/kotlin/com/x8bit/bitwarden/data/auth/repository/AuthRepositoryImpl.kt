@@ -1356,10 +1356,10 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = {
-                    when (val json = it) {
+                    when (it) {
                         VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
                         is VerifyEmailTokenResponseJson.Invalid -> {
-                            EmailTokenResult.Error(message = json.message, error = null)
+                            EmailTokenResult.Error(message = it.message, error = null)
                         }
 
                         VerifyEmailTokenResponseJson.TokenExpired -> EmailTokenResult.Expired

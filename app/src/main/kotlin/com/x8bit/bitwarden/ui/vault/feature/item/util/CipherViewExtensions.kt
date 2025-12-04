@@ -257,7 +257,7 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential.getCreationDateText(clock: Clock): Text? =
+private fun Fido2Credential.getCreationDateText(clock: Clock): Text =
     BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,

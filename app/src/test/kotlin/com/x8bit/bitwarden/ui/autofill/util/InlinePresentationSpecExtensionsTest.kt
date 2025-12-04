@@ -418,7 +418,7 @@ class InlinePresentationSpecExtensionsTest {
 }
 
 private fun createMockContentDescription(cipherType: String): String =
-    "${AUTOFILL_SUGGESTION}, $cipherType, ${AUTOFILL_CIPHER_NAME}, ${AUTOFILL_CIPHER_SUBTITLE}"
+    "$AUTOFILL_SUGGESTION, $cipherType, $AUTOFILL_CIPHER_NAME, $AUTOFILL_CIPHER_SUBTITLE"
 
 private const val AUTOFILL_SUGGESTION = "Autofill suggestion"
 private const val CARD = "Card"
