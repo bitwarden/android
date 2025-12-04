@@ -115,6 +115,7 @@ data class SyncResponseJson(
      * @property type The type of policy.
      * @property isEnabled If the policy is enabled or not.
      * @property data Any extra data about the policy, in the form of a JSON string.
+     * @property revisionDate The revision date of the policy (nullable).
      */
     @Serializable
     data class Policy(
@@ -132,6 +133,10 @@ data class SyncResponseJson(
 
         @SerialName("data")
         val data: JsonObject?,
+
+        @SerialName("revisionDate")
+        @Contextual
+        val revisionDate: ZonedDateTime?,
     )
 
     /**
