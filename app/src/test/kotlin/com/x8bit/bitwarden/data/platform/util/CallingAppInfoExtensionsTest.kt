@@ -180,6 +180,49 @@ class CallingAppInfoExtensionsTest {
 
         assertNull(mockAppInfo.getAppSigningSignatureFingerprint())
     }
+
+    @Test
+    fun `getAllSignatureFingerprintsAsHexStrings should return all certificate fingerprints`() {
+        val signature1 = "ABCDEF0123456789"
+        val signature2 = "9876543210FEDCBA"
+        val mockMessageDigest = mockk<MessageDigest> {
+            every { digest(signature1.toByteArray()) } returns signature1.toByteArray()
+            every { digest(signature2.toByteArray()) } returns signature2.toByteArray()
+        }
+        every { MessageDigest.getInstance(any()) } returns mockMessageDigest
+
+        val mockSigningInfo = mockk<SigningInfo> {
+            every { hasMultipleSigners() } returns false
+            every { signingCertificateHistory } returns arrayOf(
+                mockk { every { toByteArray() } returns signature1.toByteArray() },
+                mockk { every { toByteArray() } returns signature2.toByteArray() },
+            )
+        }
+        val appInfo = mockk<CallingAppInfo> {
+            every { signingInfo } returns mockSigningInfo
+        }
+
+        val result = appInfo.getAllSignatureFingerprintsAsHexStrings()
+
+        assertEquals(2, result.size)
+        assertEquals("41:42:43:44:45:46:30:31:32:33:34:35:36:37:38:39", result[0])
+        assertEquals("39:38:37:36:35:34:33:32:31:30:46:45:44:43:42:41", result[1])
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAllSignatureFingerprintsAsHexStrings should return empty list when app has multiple signers`() {
+        val mockSigningInfo = mockk<SigningInfo> {
+            every { hasMultipleSigners() } returns true
+        }
+        val appInfo = mockk<CallingAppInfo> {
+            every { signingInfo } returns mockSigningInfo
+        }
+
+        val result = appInfo.getAllSignatureFingerprintsAsHexStrings()
+
+        assertEquals(0, result.size)
+    }
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"
