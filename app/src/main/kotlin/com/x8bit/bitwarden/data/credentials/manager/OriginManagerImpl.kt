@@ -49,6 +49,7 @@ class OriginManagerImpl(
             )
             .fold(
                 onSuccess = {
+                    Timber.d("Digital asset link validation result: linked = ${it.linked}")
                     if (it.linked) {
                         ValidateOriginResult.Success(null)
                     } else {
@@ -56,6 +57,7 @@ class OriginManagerImpl(
                     }
                 },
                 onFailure = {
+                    Timber.e("Failed to validate origin: ${callingAppInfo.packageName}")
                     ValidateOriginResult.Error.AssetLinkNotFound
                 },
             )
