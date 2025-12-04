@@ -169,7 +169,7 @@ GEM
     httpclient (2.9.0)
       mutex_m
     jmespath (1.6.2)
-    json (2.16.0)
+    json (2.17.1)
     jwt (2.10.2)
       base64
     logger (1.7.0)
