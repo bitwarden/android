@@ -100,7 +100,6 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          gem install bundler:2.2.27
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
@@ -143,7 +142,6 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          gem install bundler:2.2.27
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
@@ -462,7 +460,6 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          gem install bundler:2.2.27
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
