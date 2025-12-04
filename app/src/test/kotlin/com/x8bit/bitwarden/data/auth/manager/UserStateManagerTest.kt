@@ -7,8 +7,8 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
@@ -259,7 +259,7 @@ class UserStateManagerTest {
     @Test
     fun `userStateFlow should update isExportable when getUserPolicies returns policies`() =
         runTest {
-            val policy = SyncResponseJson.Policy(
+            val policy = createMockPolicy(
                 id = "policyId",
                 organizationId = "mockId-1",
                 type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,

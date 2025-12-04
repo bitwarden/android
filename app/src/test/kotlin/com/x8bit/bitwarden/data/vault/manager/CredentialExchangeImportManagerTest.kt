@@ -10,7 +10,7 @@ import com.bitwarden.cxf.model.CredentialExchangeVersion
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.vault.Cipher
@@ -358,7 +358,7 @@ class CredentialExchangeImportManagerTest {
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
             } returns listOf(
-                SyncResponseJson.Policy(
+                createMockPolicy(
                     id = "mockId-1",
                     organizationId = "mockId-1",
                     type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -448,7 +448,7 @@ class CredentialExchangeImportManagerTest {
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
             } returns listOf(
-                SyncResponseJson.Policy(
+                createMockPolicy(
                     id = "mockId-1",
                     organizationId = "mockId-1",
                     type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -497,7 +497,7 @@ class CredentialExchangeImportManagerTest {
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
             } returns listOf(
-                SyncResponseJson.Policy(
+                createMockPolicy(
                     id = "mockId-1",
                     organizationId = "mockId-1",
                     type = PolicyTypeJson.RESTRICT_ITEM_TYPES,

@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -127,7 +127,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 id = "123",
                 type = PolicyTypeJson.SEND_OPTIONS,
                 isEnabled = true,

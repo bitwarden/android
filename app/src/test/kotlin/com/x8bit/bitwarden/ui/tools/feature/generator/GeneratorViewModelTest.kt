@@ -222,7 +222,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             "useLower" to JsonPrimitive(true),
         )
         val policies = listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "organizationId",
                 id = "id",
                 type = PolicyTypeJson.PASSWORD_GENERATOR,

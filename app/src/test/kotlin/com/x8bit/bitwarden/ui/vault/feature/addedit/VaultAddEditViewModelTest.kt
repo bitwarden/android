@@ -15,7 +15,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -304,7 +304,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "Test Org",
                 id = "testId",
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
@@ -3940,7 +3940,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 every {
                     policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 } returns listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Org",
                         id = "testId",
                         type = PolicyTypeJson.PERSONAL_OWNERSHIP,
