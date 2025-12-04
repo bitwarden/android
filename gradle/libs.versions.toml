@@ -57,7 +57,7 @@ sonarqube = "7.0.1.6134"
 testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.1"
-zxing = "3.5.3"
+zxing = "3.5.4"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
