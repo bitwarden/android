@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -89,14 +90,17 @@ private fun VaultTakeoverContent(
 ) {
     Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = painterResource(id = BitwardenDrawable.ic_bw_passkey),
+            painter = painterResource(id = BitwardenDrawable.ill_organization_takeover),
             contentDescription = null,
+            contentScale = ContentScale.FillHeight,
             modifier = Modifier
+                .standardHorizontalMargin()
                 .size(100.dp)
-                .align(Alignment.CenterHorizontally),
+                .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(24.dp))
         VaultTakeoverTextContent(organizationName = organizationName)
