@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.error
+package com.bitwarden.core.data.repository.error
 
 /**
  * An exception indicating that a required property was missing.
