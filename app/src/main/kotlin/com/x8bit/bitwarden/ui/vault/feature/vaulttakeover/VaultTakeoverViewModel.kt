@@ -8,13 +8,14 @@ import javax.inject.Inject
  * View model for the [VaultTakeoverScreen].
  */
 @HiltViewModel
-class VaultTakeoverViewModel @Inject constructor(
-    // TODO: Inject required repositories/managers
-) : BaseViewModel<VaultTakeoverState, VaultTakeoverEvent, VaultTakeoverAction>(
-    initialState = VaultTakeoverState(
-        organizationName = "TODO", // TODO: Get from navigation args or repository
-    ),
-) {
+class VaultTakeoverViewModel @Inject constructor() :
+    BaseViewModel<VaultTakeoverState, VaultTakeoverEvent, VaultTakeoverAction>(
+        initialState = VaultTakeoverState(
+            // TODO: Get from navigation args or repository (PM-28468)
+            organizationName = "TODO",
+        ),
+    ) {
+
     override fun handleAction(action: VaultTakeoverAction) {
         when (action) {
             VaultTakeoverAction.ContinueClicked -> handleContinueClicked()
@@ -32,6 +33,7 @@ class VaultTakeoverViewModel @Inject constructor(
     }
 
     private fun handleHelpLinkClicked() {
+        // TODO: Update URL when available.
         sendEvent(VaultTakeoverEvent.LaunchUri("TODO_HELP_URL"))
     }
 }
