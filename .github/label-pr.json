@@ -23,7 +23,8 @@
     ],
     "app:password-manager": [
       "app/",
-      "cxf/"
+      "cxf/",
+      "testharness/"
     ],
     "app:authenticator": [
       "authenticator/"

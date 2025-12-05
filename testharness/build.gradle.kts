@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -19,8 +20,8 @@ android {
         // API 28 - CredentialManager with Play Services support
         minSdk = libs.versions.minSdkBwa.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +38,15 @@ android {
                 "proguard-rules.pro",
             )
         }
+    }
+
+    applicationVariants.all {
+        outputs
+            .mapNotNull { it as? BaseVariantOutputImpl }
+            .forEach { output ->
+                // Set the APK output filename.
+                output.outputFileName = "$applicationId.apk"
+            }
     }
 
     buildFeatures {
