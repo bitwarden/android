@@ -10,7 +10,7 @@ class FakeNetworkConnectionManager(
     isNetworkConnected: Boolean,
     networkConnection: NetworkConnection,
 ) : NetworkConnectionManager {
-    private val mutableIsNetworkConnectedStateFlow = MutableStateFlow<Boolean>(isNetworkConnected)
+    private val mutableIsNetworkConnectedStateFlow = MutableStateFlow(isNetworkConnected)
     private val mutableNetworkConnectionStateFlow = MutableStateFlow(networkConnection)
 
     var fakeIsNetworkConnected: Boolean

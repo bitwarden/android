@@ -235,11 +235,11 @@ private fun ManualCodeEntryDialogs(
     dialog: ManualCodeEntryState.DialogState?,
     onDismissRequest: () -> Unit,
 ) {
-    when (val dialogString = dialog) {
+    when (dialog) {
         is ManualCodeEntryState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = dialogString.title?.invoke(),
-                message = dialogString.message(),
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
                 onDismissRequest = onDismissRequest,
             )
         }

@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import app.cash.turbine.test
-import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -1635,7 +1634,6 @@ class VaultLockManagerTest {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unlockVault with initializeCrypto success should migrate pinProtectedUserKey`() =
         runTest {
@@ -1644,12 +1642,6 @@ class VaultLockManagerTest {
             val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
-            val userKeyEncryptedPin = "encryptedPin"
-            val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
-            val enrollResponse = EnrollPinResponse(
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                userKeyEncryptedPin = userKeyEncryptedPin,
-            )
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,

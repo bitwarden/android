@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.authenticator.repository.util
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
@@ -12,7 +12,7 @@ fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorIt
     flatMap { sharedAccount ->
         sharedAccount.totpUris.mapNotNull { totpUriString ->
             runCatching {
-                val uri = Uri.parse(totpUriString)
+                val uri = totpUriString.toUri()
                 val issuer = uri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
                 val label = uri.pathSegments
                     .firstOrNull()

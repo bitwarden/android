@@ -40,7 +40,7 @@ class BiometricsManagerImpl(
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
             BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED,
-            -> false
+                -> false
 
             else -> false
         }
@@ -71,13 +71,13 @@ class BiometricsManagerImpl(
                         BiometricPrompt.ERROR_NO_BIOMETRICS,
                         BiometricPrompt.ERROR_HW_NOT_PRESENT,
                         BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL,
-                        -> onError()
+                            -> onError()
 
                         BiometricPrompt.ERROR_NEGATIVE_BUTTON -> onCancel()
 
                         BiometricPrompt.ERROR_LOCKOUT,
                         BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
-                        -> onLockOut()
+                            -> onLockOut()
                     }
                 }
 

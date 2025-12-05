@@ -36,7 +36,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
     private var onNavigateToScanQrCodeCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<ManualCodeEntryEvent>()
-    private val mutableStateFlow = MutableStateFlow<ManualCodeEntryState>(DEFAULT_STATE)
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
     private val intentManager = mockk<IntentManager>(relaxed = true)

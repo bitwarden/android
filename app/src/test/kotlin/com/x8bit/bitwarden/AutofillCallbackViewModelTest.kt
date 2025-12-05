@@ -168,9 +168,6 @@ class AutofillCallbackViewModelTest : BaseViewModelTest() {
     fun `on IntentReceived should emit FinishActivity when cipherID is extracted, vault unlocked, and cipherView not found`() =
         runTest {
             // Setup
-            val cipherView: CipherView = mockk {
-                every { id } returns "NEW CIPHER ID"
-            }
             val totpCopyData = AutofillCallbackData(
                 cipherId = CIPHER_ID,
             )
