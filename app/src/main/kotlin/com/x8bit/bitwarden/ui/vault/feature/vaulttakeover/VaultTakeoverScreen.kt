@@ -153,7 +153,7 @@ private fun VaultTakeoverActions(
 ) {
     Column(modifier = modifier) {
         BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.continue_label),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -182,11 +182,13 @@ private fun VaultTakeoverActions(
 @Composable
 private fun VaultTakeoverScreen_preview() {
     BitwardenTheme {
-        VaultTakeoverContent(
-            organizationName = "Test Organization",
-            onContinueClick = {},
-            onDeclineClick = {},
-            onHelpClick = {},
-        )
+        BitwardenScaffold {
+            VaultTakeoverContent(
+                organizationName = "Test Organization",
+                onContinueClick = {},
+                onDeclineClick = {},
+                onHelpClick = {},
+            )
+        }
     }
 }
