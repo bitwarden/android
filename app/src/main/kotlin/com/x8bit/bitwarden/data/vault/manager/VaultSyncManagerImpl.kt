@@ -310,7 +310,7 @@ class VaultSyncManagerImpl(
                     localSecurityStamp?.let {
                         if (serverSecurityStamp != localSecurityStamp) {
                             // Ensure UserLogoutManager is available
-                            userLogoutManager.softLogout(
+                            userLogoutManager.logout(
                                 userId = userId,
                                 reason = LogoutReason.SecurityStamp,
                             )

@@ -126,7 +126,7 @@ class VaultSyncManagerTest {
         }
     }
     private val userLogoutManager: UserLogoutManager = mockk {
-        every { softLogout(any(), any()) } just runs
+        every { logout(userId = any(), reason = LogoutReason.SecurityStamp) } just runs
     }
     private val userStateManager: UserStateManager = mockk {
         val blockSlot = slot<suspend () -> SyncVaultDataResult>()
@@ -786,7 +786,7 @@ class VaultSyncManagerTest {
             vaultSyncManager.sync()
 
             coVerify(exactly = 1) {
-                userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
+                userLogoutManager.logout(userId = userId, reason = LogoutReason.SecurityStamp)
             }
 
             coVerify(exactly = 0) {

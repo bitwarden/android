@@ -267,15 +267,14 @@ class AuthDiskSourceTest {
             userId = userId,
             biometricsKey = "1234-9876-0192",
         )
-        val pinProtectedUserKey = "pinProtectedUserKey"
+        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
-            pinProtectedUserKey = pinProtectedUserKey,
+            pinProtectedUserKey = "pinProtectedUserKey",
         )
-        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         authDiskSource.storePinProtectedUserKeyEnvelope(
             userId = userId,
-            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
         )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
@@ -310,8 +309,6 @@ class AuthDiskSourceTest {
                 refreshToken = "refreshToken",
             ),
         )
-        val encryptedPin = "encryptedPin"
-        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
         authDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = userId,
@@ -333,12 +330,6 @@ class AuthDiskSourceTest {
             OnboardingStatus.AUTOFILL_SETUP,
             authDiskSource.getOnboardingStatus(userId = userId),
         )
-        assertEquals(encryptedPin, authDiskSource.getEncryptedPin(userId = userId))
-        assertEquals(pinProtectedUserKey, authDiskSource.getPinProtectedUserKey(userId = userId))
-        assertEquals(
-            pinProtectedUserKeyEnvelope,
-            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId),
-        )
 
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
@@ -357,6 +348,9 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
         assertNull(authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId))
         assertNull(authDiskSource.getShowImportLogins(userId = userId))
+        assertNull(authDiskSource.getEncryptedPin(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
     }
 
     @Test
