@@ -35,6 +35,7 @@ sealed class FlagKey<out T : Any> {
                 ForceUpdateKdfSettings,
                 CipherKeyEncryption,
                 NoLogoutOnKdfChange,
+                MigrateMyVaultToMyItems,
             )
         }
     }
@@ -86,6 +87,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
         override val keyName: String = "pm-23995-no-logout-on-kdf-change"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Migrate My Vault to My Items feature.
+     */
+    data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
+        override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
         override val defaultValue: Boolean = false
     }
 
