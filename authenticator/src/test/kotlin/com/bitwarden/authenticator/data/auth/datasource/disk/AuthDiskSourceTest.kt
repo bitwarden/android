@@ -40,6 +40,28 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `userBiometricKeyInitVector should store and update from EncryptedSharedPreferences`() {
+        val sharedPrefsKey = "bwSecureStorage:biometricInitializationVector"
+
+        // Shared preferences and the repository start with the same value:
+        assertNull(authDiskSource.userBiometricKeyInitVector)
+        assertNull(fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null))
+
+        // Updating the repository updates shared preferences:
+        val userBiometricKeyInitVector = byteArrayOf(3, 4)
+        authDiskSource.userBiometricKeyInitVector = userBiometricKeyInitVector
+        assertEquals(
+            userBiometricKeyInitVector.toString(Charsets.ISO_8859_1),
+            fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null),
+        )
+
+        // Retrieving the key from repository should give same byte array despite String conversion:
+        assertTrue(
+            authDiskSource.userBiometricKeyInitVector.contentEquals(userBiometricKeyInitVector),
+        )
+    }
+
+    @Test
     fun `uniqueAppId should generate a new ID and update SharedPreferences if none exists`() {
         val rememberedUniqueAppIdKey = "bwPreferencesStorage:appId"
 

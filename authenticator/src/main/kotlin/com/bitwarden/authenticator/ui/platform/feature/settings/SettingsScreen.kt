@@ -76,6 +76,7 @@ import com.bitwarden.ui.platform.util.displayLabel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.toImmutableList
+import javax.crypto.Cipher
 
 /**
  * Display the settings screen.
@@ -92,8 +93,15 @@ fun SettingsScreen(
     onNavigateToImport: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarState = rememberBitwardenSnackbarHostState()
+    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
+        {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(cipher = it),
+            )
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
@@ -135,6 +143,20 @@ fun SettingsScreen(
             }
 
             is SettingsEvent.ShowSnackbar -> snackbarState.showSnackbar(event.data)
+
+            is SettingsEvent.ShowBiometricsPrompt -> {
+                showBiometricsPrompt = true
+                biometricsManager.promptBiometrics(
+                    onSuccess = {
+                        unlockWithBiometricToggle(it)
+                        showBiometricsPrompt = false
+                    },
+                    onCancel = { showBiometricsPrompt = false },
+                    onLockOut = { showBiometricsPrompt = false },
+                    onError = { showBiometricsPrompt = false },
+                    cipher = event.cipher,
+                )
+            }
         }
     }
 
@@ -147,6 +169,7 @@ fun SettingsScreen(
         },
     )
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -452,7 +475,6 @@ private fun UnlockWithBiometricsRow(
     modifier: Modifier = Modifier,
 ) {
     if (!biometricsManager.isBiometricsSupported) return
-    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenSwitch(
         modifier = modifier,
         cardStyle = CardStyle.Top(),
@@ -460,23 +482,8 @@ private fun UnlockWithBiometricsRow(
         subtext = stringResource(
             id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
         ),
-        isChecked = isChecked || showBiometricsPrompt,
-        onCheckedChange = { toggled ->
-            if (toggled) {
-                showBiometricsPrompt = true
-                biometricsManager.promptBiometrics(
-                    onSuccess = {
-                        onBiometricToggle(true)
-                        showBiometricsPrompt = false
-                    },
-                    onCancel = { showBiometricsPrompt = false },
-                    onLockOut = { showBiometricsPrompt = false },
-                    onError = { showBiometricsPrompt = false },
-                )
-            } else {
-                onBiometricToggle(false)
-            }
-        },
+        isChecked = isChecked,
+        onCheckedChange = onBiometricToggle,
     )
 }
 

@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.data.platform.repository
 
-import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -53,16 +52,6 @@ interface SettingsRepository {
     val defaultSaveOptionFlow: Flow<DefaultSaveOption>
 
     /**
-     * Whether or not biometric unlocking is enabled for the current user.
-     */
-    val isUnlockWithBiometricsEnabled: Boolean
-
-    /**
-     * Tracks whether or not biometric unlocking is enabled for the current user.
-     */
-    val isUnlockWithBiometricsEnabledFlow: StateFlow<Boolean>
-
-    /**
      * Tracks changes to the expiration alert threshold.
      */
     val authenticatorAlertThresholdSecondsFlow: StateFlow<Int>
@@ -91,17 +80,6 @@ interface SettingsRepository {
      * A set of Bitwarden account IDs that have previously been synced.
      */
     var previouslySyncedBitwardenAccountIds: Set<String>
-
-    /**
-     * Clears any previously stored encrypted user key used with biometrics for the current user.
-     */
-    fun clearBiometricsKey()
-
-    /**
-     * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
-     * user's vault.
-     */
-    suspend fun setupBiometricsKey(): BiometricsKeyResult
 
     /**
      * The current setting for crash logging.
