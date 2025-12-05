@@ -10,6 +10,7 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private var lastActiveTimeMillis: Long? = null
     private var userBiometricUnlockKey: String? = null
+    private var userBiometricInitVector: ByteArray? = null
     private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>(replay = 1)
 
     override val uniqueAppId: String
@@ -36,4 +37,10 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     override var authenticatorBridgeSymmetricSyncKey: ByteArray? = null
+
+    override var userBiometricKeyInitVector: ByteArray?
+        get() = userBiometricInitVector
+        set(value) {
+            userBiometricInitVector = value
+        }
 }

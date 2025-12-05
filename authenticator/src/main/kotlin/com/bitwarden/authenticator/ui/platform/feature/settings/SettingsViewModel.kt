@@ -10,6 +10,7 @@ import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
+import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
@@ -37,6 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Year
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -54,6 +56,7 @@ class SettingsViewModel @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: createInitialState(
@@ -179,6 +182,10 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.SecurityClick.AllowScreenCaptureToggle -> {
                 handleAllowScreenCaptureToggle(action)
             }
+
+            is SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled -> {
+                handleUnlockWithBiometricToggleEnabled(action)
+            }
         }
     }
 
@@ -186,18 +193,24 @@ class SettingsViewModel @Inject constructor(
         action: SettingsAction.SecurityClick.UnlockWithBiometricToggle,
     ) {
         if (action.enabled) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = SettingsState.Dialog.Loading(BitwardenString.saving.asText()),
-                    isUnlockWithBiometricsEnabled = true,
-                )
-            }
-            viewModelScope.launch {
-                val result = settingsRepository.setupBiometricsKey()
-                sendAction(SettingsAction.Internal.BiometricsKeyResultReceive(result))
-            }
+            biometricsEncryptionManager
+                .createCipherOrNull()
+                ?.let {
+                    // Generate a new key in case the previous one was invalidated
+                    sendEvent(SettingsEvent.ShowBiometricsPrompt(cipher = it))
+                }
+                ?: run {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = SettingsState.Dialog.Error(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
+                            ),
+                        )
+                    }
+                }
         } else {
-            settingsRepository.clearBiometricsKey()
+            biometricsEncryptionManager.clearBiometrics()
             mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
         }
     }
@@ -206,7 +219,7 @@ class SettingsViewModel @Inject constructor(
         action: SettingsAction.Internal.BiometricsKeyResultReceive,
     ) {
         when (action.result) {
-            BiometricsKeyResult.Error -> {
+            is BiometricsKeyResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = null,
@@ -231,6 +244,21 @@ class SettingsViewModel @Inject constructor(
     ) {
         settingsRepository.isScreenCaptureAllowed = action.enabled
         mutableStateFlow.update { it.copy(allowScreenCapture = action.enabled) }
+    }
+
+    private fun handleUnlockWithBiometricToggleEnabled(
+        action: SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = SettingsState.Dialog.Loading(BitwardenString.saving.asText()),
+                isUnlockWithBiometricsEnabled = true,
+            )
+        }
+        viewModelScope.launch {
+            val result = settingsRepository.setupBiometricsKey(cipher = action.cipher)
+            sendAction(SettingsAction.Internal.BiometricsKeyResultReceive(result = result))
+        }
     }
 
     private fun handleVaultClick(action: SettingsAction.DataClick) {
@@ -453,6 +481,13 @@ data class SettingsState(
      */
     @Parcelize
     sealed class Dialog : Parcelable {
+        /**
+         * Displays an error dialog with a title and message.
+         */
+        data class Error(
+            val title: Text,
+            val message: Text,
+        ) : Dialog()
 
         /**
          * Displays a loading dialog with a [message].
@@ -544,28 +579,19 @@ sealed class SettingsEvent {
             ),
         )
     }
+
+    /**
+     * Shows the prompt for biometrics using with the given [cipher].
+     */
+    data class ShowBiometricsPrompt(
+        val cipher: Cipher,
+    ) : SettingsEvent()
 }
 
 /**
  * Models actions for the settings screen.
  */
-sealed class SettingsAction(
-    val dialog: Dialog? = null,
-) {
-
-    /**
-     * Represents dialogs that may be displayed by the Settings screen.
-     */
-    sealed class Dialog {
-
-        /**
-         * Display the loading screen with a [message].
-         */
-        data class Loading(
-            val message: Text,
-        ) : Dialog()
-    }
-
+sealed class SettingsAction {
     /**
      * Indicates an update on device biometrics support.
      */
@@ -579,6 +605,13 @@ sealed class SettingsAction(
          * Indicates the user clicked unlock with biometrics toggle.
          */
         data class UnlockWithBiometricToggle(val enabled: Boolean) : SecurityClick()
+
+        /**
+         * User toggled the unlock with biometrics switch to on.
+         */
+        data class UnlockWithBiometricToggleEnabled(
+            val cipher: Cipher,
+        ) : SecurityClick()
 
         /**
          * Indicates the user clicked allow screen capture toggle.

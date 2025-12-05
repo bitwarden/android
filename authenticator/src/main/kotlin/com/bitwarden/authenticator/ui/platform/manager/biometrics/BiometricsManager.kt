@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.manager.biometrics
 
 import androidx.compose.runtime.Immutable
+import javax.crypto.Cipher
 
 /**
  * Interface to manage biometrics within the app.
@@ -16,9 +17,10 @@ interface BiometricsManager {
      * Display a prompt for biometrics.
      */
     fun promptBiometrics(
-        onSuccess: () -> Unit,
+        onSuccess: (Cipher) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
+        cipher: Cipher,
     )
 }

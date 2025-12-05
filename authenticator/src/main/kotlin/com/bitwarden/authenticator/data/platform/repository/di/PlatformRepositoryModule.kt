@@ -4,7 +4,6 @@ import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepositoryImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
@@ -30,14 +29,12 @@ object PlatformRepositoryModule {
         settingsDiskSource: SettingsDiskSource,
         authDiskSource: AuthDiskSource,
         dispatcherManager: DispatcherManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
         authenticatorSdkSource: AuthenticatorSdkSource,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             settingsDiskSource = settingsDiskSource,
             authDiskSource = authDiskSource,
             dispatcherManager = dispatcherManager,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             authenticatorSdkSource = authenticatorSdkSource,
         )
 
