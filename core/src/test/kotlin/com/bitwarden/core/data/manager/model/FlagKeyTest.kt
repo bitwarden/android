@@ -28,6 +28,10 @@ class FlagKeyTest {
             FlagKey.ForceUpdateKdfSettings.keyName,
             "pm-18021-force-update-kdf-settings",
         )
+        assertEquals(
+            FlagKey.MigrateMyVaultToMyItems.keyName,
+            "pm-20558-migrate-myvault-to-myitems",
+        )
     }
 
     @Test
@@ -39,6 +43,7 @@ class FlagKeyTest {
                 FlagKey.CipherKeyEncryption,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
+                FlagKey.MigrateMyVaultToMyItems,
             ).all {
                 !it.defaultValue
             },
