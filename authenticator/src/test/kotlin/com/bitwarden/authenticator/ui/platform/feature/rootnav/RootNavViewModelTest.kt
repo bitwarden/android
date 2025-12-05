@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import javax.crypto.Cipher
 
 class RootNavViewModelTest : BaseViewModelTest() {
 
@@ -26,9 +27,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { hasSeenWelcomeTutorial = any() } just runs
         every { hasSeenWelcomeTutorialFlow } returns mutableHasSeenWelcomeTutorialFlow
         every { isUnlockWithBiometricsEnabled } returns false
-        every { clearBiometricsKey() } just runs
     }
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
+    private val mockCipher: Cipher = mockk()
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
+        every { clearBiometrics() } just runs
+        every { getOrCreateCipher() } returns mockCipher
+    }
 
     @Test
     fun `initialState should be correct when hasSeenWelcomeTutorial is false`() = runTest {
@@ -71,7 +75,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `on HasSeenWelcomeTutorialChange with true and biometrics enabled and valid should navigate to Locked`() {
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns true
+        every { biometricsEncryptionManager.isBiometricIntegrityValid(mockCipher) } returns true
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -92,7 +96,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `on HasSeenWelcomeTutorialChange with true and biometrics enabled but invalid should navigate to Unlocked`() {
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns false
+        every { biometricsEncryptionManager.isBiometricIntegrityValid(mockCipher) } returns false
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -255,7 +259,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
 
-        verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+        verify(exactly = 1) { biometricsEncryptionManager.clearBiometrics() }
     }
 
     @Test
@@ -264,40 +268,40 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(RootNavAction.BiometricSupportChanged(true))
 
-        verify(exactly = 0) { settingsRepository.clearBiometricsKey() }
+        verify(exactly = 0) { biometricsEncryptionManager.clearBiometrics() }
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `on BiometricSupportChanged with false when Locked should navigate to Unlocked`() = runTest {
-        every { settingsRepository.hasSeenWelcomeTutorial } returns true
-        every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns true
-        mutableHasSeenWelcomeTutorialFlow.value = true
-        val viewModel = createViewModel()
+    fun `on BiometricSupportChanged with false when Locked should navigate to Unlocked`() =
+        runTest {
+            every { settingsRepository.hasSeenWelcomeTutorial } returns true
+            every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
+            every { biometricsEncryptionManager.isBiometricIntegrityValid(mockCipher) } returns true
+            mutableHasSeenWelcomeTutorialFlow.value = true
+            val viewModel = createViewModel()
 
-        // Verify initial state is Locked
-        assertEquals(
-            RootNavState(
-                hasSeenWelcomeGuide = true,
-                navState = RootNavState.NavState.Locked,
-            ),
-            viewModel.stateFlow.value,
-        )
+            // Verify initial state is Locked
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Locked,
+                ),
+                viewModel.stateFlow.value,
+            )
 
-        // Send BiometricSupportChanged with false
-        viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
+            // Send BiometricSupportChanged with false
+            viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
 
-        // Should navigate to Unlocked and clear biometric key
-        assertEquals(
-            RootNavState(
-                hasSeenWelcomeGuide = true,
-                navState = RootNavState.NavState.Unlocked,
-            ),
-            viewModel.stateFlow.value,
-        )
-        verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
-    }
+            // Should navigate to Unlocked and clear biometric key
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Unlocked,
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) { biometricsEncryptionManager.clearBiometrics() }
+        }
 
     @Test
     @Suppress("MaxLineLength")
@@ -327,7 +331,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value,
             )
-            verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+            verify(exactly = 1) { biometricsEncryptionManager.clearBiometrics() }
         }
 
     @Test
@@ -361,7 +365,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
             }
         }
 
-    private fun createViewModel() = RootNavViewModel(
+    private fun createViewModel(): RootNavViewModel = RootNavViewModel(
         authRepository = authRepository,
         settingsRepository = settingsRepository,
         biometricsEncryptionManager = biometricsEncryptionManager,

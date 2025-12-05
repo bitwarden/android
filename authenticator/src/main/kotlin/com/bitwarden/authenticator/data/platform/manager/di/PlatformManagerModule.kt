@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
@@ -74,8 +75,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBiometricsEncryptionManager(
+        authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
-    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(settingsDiskSource)
+    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+    )
 
     @Provides
     @Singleton

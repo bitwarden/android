@@ -77,7 +77,9 @@ class RootNavViewModel @Inject constructor(
         settingsRepository.hasSeenWelcomeTutorial = action.hasSeenWelcomeGuide
         if (action.hasSeenWelcomeGuide) {
             if (settingsRepository.isUnlockWithBiometricsEnabled &&
-                biometricsEncryptionManager.isBiometricIntegrityValid()
+                biometricsEncryptionManager.isBiometricIntegrityValid(
+                    cipher = biometricsEncryptionManager.getOrCreateCipher(),
+                )
             ) {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Locked) }
             } else {
@@ -111,7 +113,7 @@ class RootNavViewModel @Inject constructor(
         action: RootNavAction.BiometricSupportChanged,
     ) {
         if (!action.isBiometricsSupported) {
-            settingsRepository.clearBiometricsKey()
+            biometricsEncryptionManager.clearBiometrics()
 
             // If currently locked, navigate to unlocked since biometrics are no longer available
             if (mutableStateFlow.value.navState is RootNavState.NavState.Locked) {

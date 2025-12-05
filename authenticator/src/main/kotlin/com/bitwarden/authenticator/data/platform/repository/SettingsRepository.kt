@@ -1,11 +1,13 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
+import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import javax.crypto.Cipher
 
 /**
  * Provides an API for observing and modifying settings state.
@@ -93,15 +95,15 @@ interface SettingsRepository {
     var previouslySyncedBitwardenAccountIds: Set<String>
 
     /**
-     * Clears any previously stored encrypted user key used with biometrics for the current user.
-     */
-    fun clearBiometricsKey()
-
-    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
-    suspend fun setupBiometricsKey(): BiometricsKeyResult
+    suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult
+
+    /**
+     * Attempt to unlock the vault using the stored biometric key.
+     */
+    suspend fun unlockWithBiometrics(cipher: Cipher): BiometricsUnlockResult
 
     /**
      * The current setting for crash logging.

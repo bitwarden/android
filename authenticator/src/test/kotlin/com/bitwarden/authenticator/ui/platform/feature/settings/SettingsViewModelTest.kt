@@ -7,6 +7,7 @@ import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
+import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -77,6 +78,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarFlow
     }
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
 
     @BeforeEach
     fun setup() {
@@ -311,6 +313,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         clipboardManager = clipboardManager,
         snackbarRelayManager = snackbarRelayManager,
+        biometricsEncryptionManager = biometricsEncryptionManager,
     )
 }
 
