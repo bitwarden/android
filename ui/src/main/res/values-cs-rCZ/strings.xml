@@ -167,7 +167,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
     <string name="disabled">Zakázáno</string>
     <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
-    <string name="autofill_title">Automatické vyplňování</string>
+    <string name="autofill_noun">Automatické vyplňování</string>
+    <string name="autofill_verb">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
     <string name="search">Hledat</string>
     <string name="learn_org">Více o organizacích</string>
@@ -660,7 +661,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="invalid_uri">Neplatný URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je již blokován</string>
     <string name="login_approved">Přihlášení bylo schváleno</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Potřebujete další volby? <annotation link="viewAll">Zobrazit všechny volby přihlášení</annotation></string>
     <string name="log_in_with_device">Přihlásit se zařízením</string>
     <string name="logging_in_on">Přihlašování na</string>
     <string name="logging_in_on_with_colon">Přihlašování na:</string>
@@ -1054,6 +1056,8 @@ při opakování problémů.</string>
     <string name="export">Exportovat</string>
     <string name="export_confirmation_title">Potvrdit export</string>
     <string name="export_success">Export dat proběhl úspěšně</string>
+    <string name="included_in_this_export">Zahrnuto do tohoto exportu</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Budou exportovány jen kódy uložené v tomto zařízení. Synchronizované kódy nejsou zahrnuty.</string>
     <string name="security">Zabezpečení</string>
     <string name="too_many_failed_biometric_attempts">Příliš mnoho neúspěšných pokusů o biometrii.</string>
     <string name="version">Verze</string>
@@ -1173,4 +1177,5 @@ při opakování problémů.</string>
     <string name="lock_app">Uzamknout aplikaci</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
     <string name="loading_vault_data">Načítání dat trezoru...</string>
+    <string name="resending">Opakované odesílání</string>
 </resources>

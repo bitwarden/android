@@ -166,7 +166,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Meklēt pieteikšanās vienumu vai pievienot jaunu</string>
     <string name="disabled">Atspējots</string>
     <string name="bitwarden_autofill_service_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir ar Bitwarden automātiskās aizpildes pakalpojumu. Vairāk par Bitwarden automātisko aizpildi var uzzināt iestatījumu skatā.</string>
-    <string name="autofill_title">Automātiskā aizpilde</string>
+    <string name="autofill_noun">Automātiskā aizpilde</string>
+    <string name="autofill_verb">Automātiskā aizpilde</string>
     <string name="autofill_or_view">Automātiski aizpildīt vai apskatīt šo vienumu?</string>
     <string name="search">Meklēt</string>
     <string name="learn_org">Uzzināt par apvienībām</string>
@@ -657,7 +658,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="invalid_uri">Nederīgs URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s jau ir neatļauts</string>
     <string name="login_approved">Pieteikšanās apstiprināta</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos. Nepieciešama cita iespēja?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos.</string>
+    <string name="need_another_option_view_all_login_options">Nepieciešama cita iespēja? <annotation link="viewAll">Apskatīt visas pieteikšanās iespējas</annotation></string>
     <string name="log_in_with_device">Pieteikties ar ierīci</string>
     <string name="logging_in_on">Piesakās</string>
     <string name="logging_in_on_with_colon">Piesakās:</string>
@@ -1047,6 +1049,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="export">Izgūšana</string>
     <string name="export_confirmation_title">Apstiprināt izgūšanu</string>
     <string name="export_success">Dati sekmīgi izgūti</string>
+    <string name="included_in_this_export">Iekļauts šajā izguvē</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Tiks izgūti tikai kodi, kas tiek glabāti šajā ierīcē vietēji. Sinhronizētie kodi netiks iekļauti</string>
     <string name="security">Drošība</string>
     <string name="too_many_failed_biometric_attempts">Pārāk daudz neizdevušos biometrijas mēģinājumu.</string>
     <string name="version">Laidiens</string>
@@ -1164,4 +1168,5 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="lock_app">Aizslēgt lietotni</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Jāizmanto ierīces slēgšanas veids, lai atslēgtu lietotni</string>
     <string name="loading_vault_data">Ielādē glabātavas datus…</string>
+    <string name="resending">Nosūta atkārtoti</string>
 </resources>
