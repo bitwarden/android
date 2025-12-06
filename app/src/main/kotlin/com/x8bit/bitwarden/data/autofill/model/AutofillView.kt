@@ -26,7 +26,10 @@ sealed class AutofillView {
         val textValue: String?,
         val hasPasswordTerms: Boolean,
         val website: String?,
+        val idEntry: String? = null,
+        val hint: String? = null,
     )
+
 
     /**
      * The core data that describes this [AutofillView].
@@ -117,6 +120,14 @@ sealed class AutofillView {
          */
         data class Username(
             override val data: Data,
+        ) : Login()
+
+        /**
+         * A custom [AutofillView] for the [Login] data partition.
+         */
+        data class Custom(
+            override val data: Data,
+            val inputType: Int,
         ) : Login()
     }
 

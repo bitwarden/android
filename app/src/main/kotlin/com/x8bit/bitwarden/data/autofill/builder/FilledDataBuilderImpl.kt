@@ -154,8 +154,21 @@ class FilledDataBuilderImpl(
                     val value = when (autofillView) {
                         is AutofillView.Login.Username -> autofillCipher.username
                         is AutofillView.Login.Password -> autofillCipher.password
+                        is AutofillView.Login.Custom -> {
+                            // Only fill custom fields if we have a strict match.
+                            if (autofillCipher.isStrictMatch) {
+                                autofillCipher.customFields.firstOrNull { field ->
+                                    val name = field.name
+                                    // Match against hint or idEntry
+                                    autofillView.data.hint?.contains(name, ignoreCase = true) == true ||
+                                        autofillView.data.idEntry?.contains(name, ignoreCase = true) == true
+                                }?.value
+                            } else {
+                                null
+                            }
+                        }
                     }
-                    autofillView.buildFilledItemOrNull(value = value)
+                    value?.let { autofillView.buildFilledItemOrNull(value = it) }
                 } else {
                     null
                 }

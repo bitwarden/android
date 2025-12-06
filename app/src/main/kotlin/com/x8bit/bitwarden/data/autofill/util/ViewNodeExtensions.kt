@@ -32,6 +32,8 @@ private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
  */
 private val AssistStructure.ViewNode.isInputField: Boolean
     get() {
+        if (!isEnabled || !isFocusable) return false
+
         val isEditText = className
             ?.let {
                 try {
@@ -41,7 +43,11 @@ private val AssistStructure.ViewNode.isInputField: Boolean
                 }
             }
             ?.let { EditText::class.java.isAssignableFrom(it) } == true
-        return isEditText || htmlInfo.isInputField
+        
+        // Ensure it's not a null input type (0)
+        val hasValidInputType = inputType != 0
+
+        return (isEditText || htmlInfo.isInputField) && hasValidInputType
     }
 
 /**
@@ -53,7 +59,8 @@ fun AssistStructure.ViewNode.toAutofillView(
     parentWebsite: String?,
 ): AutofillView? {
     val nonNullAutofillId = this.autofillId ?: return null
-    if (this.supportedAutofillHint == null && !this.isInputField) return null
+    val isInput = this.isInputField
+    if (this.supportedAutofillHint == null && !isInput) return null
     val autofillOptions = this
         .autofillOptions
         .orEmpty()
@@ -66,11 +73,22 @@ fun AssistStructure.ViewNode.toAutofillView(
         textValue = this.autofillValue?.extractTextValue(),
         hasPasswordTerms = this.hasPasswordTerms(),
         website = this.website ?: parentWebsite,
+        idEntry = this.idEntry,
+        hint = this.hint,
     )
+    
+    val supportedHint = this.supportedAutofillHint
+    if (supportedHint == null && isInput) {
+        return AutofillView.Login.Custom(
+            data = autofillViewData,
+            inputType = this.inputType,
+        )
+    }
+
     return buildAutofillView(
         autofillOptions = autofillOptions,
         autofillViewData = autofillViewData,
-        autofillHint = this.supportedAutofillHint,
+        autofillHint = supportedHint,
     )
 }
 
