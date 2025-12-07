@@ -29,6 +29,7 @@ fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorIt
                     ?: cipherData.username
 
                 AuthenticatorItem(
+                    cipherId = cipherData.id,
                     source = AuthenticatorItem.Source.Shared(
                         userId = sharedAccount.userId,
                         nameOfUser = sharedAccount.name,

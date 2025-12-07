@@ -4,12 +4,14 @@ package com.bitwarden.authenticator.data.authenticator.repository.model
  * Represents all the information required to generate TOTP verification codes, including both
  * local codes and codes shared from the main Bitwarden app.
  *
- * @param source Distinguishes between local and shared items.
- * @param otpUri OTP URI.
- * @param issuer The issuer of the codes.
- * @param label The label of the item.
+ * @property cipherId The cipher ID.
+ * @property source Distinguishes between local and shared items.
+ * @property otpUri OTP URI.
+ * @property issuer The issuer of the codes.
+ * @property label The label of the item.
  */
 data class AuthenticatorItem(
+    val cipherId: String,
     val source: Source,
     val otpUri: String,
     val issuer: String?,
@@ -24,22 +26,20 @@ data class AuthenticatorItem(
         /**
          * The item is from the local Authenticator app database.
          *
-         * @param cipherId Local cipher ID.
-         * @param isFavorite Whether the user has marked the item as a favorite.
+         * @property isFavorite Whether the user has marked the item as a favorite.
          */
         data class Local(
-            val cipherId: String,
             val isFavorite: Boolean,
         ) : Source()
 
         /**
          * The item is shared from the main Bitwarden app.
          *
-         * @param userId User ID from the main Bitwarden app. Used to group authenticator items
+         * @property userId User ID from the main Bitwarden app. Used to group authenticator items
          * by account.
-         * @param nameOfUser Username from the main Bitwarden app.
-         * @param email Email of the user.
-         * @param environmentLabel Label for the Bitwarden environment, like "bitwaren.com"
+         * @property nameOfUser Username from the main Bitwarden app.
+         * @property email Email of the user.
+         * @property environmentLabel Label for the Bitwarden environment, like "bitwaren.com"
          */
         data class Shared(
             val userId: String,

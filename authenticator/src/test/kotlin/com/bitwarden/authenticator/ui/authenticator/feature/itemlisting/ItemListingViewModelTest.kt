@@ -604,7 +604,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
         id = "1",
         issuer = "issuer",
         label = "accountName",
-        source = AuthenticatorItem.Source.Local("1", isFavorite = false),
+        source = AuthenticatorItem.Source.Local(isFavorite = false),
     ),
     VerificationCodeItem(
         code = "123456",
@@ -614,7 +614,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
         id = "1",
         issuer = "issuer",
         label = "accountName",
-        source = AuthenticatorItem.Source.Local("1", isFavorite = true),
+        source = AuthenticatorItem.Source.Local(isFavorite = true),
     ),
 )
 
