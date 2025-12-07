@@ -1,15 +1,15 @@
 package com.bitwarden.ui.platform.components.card
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import com.bitwarden.ui.platform.base.util.cardBackground
 import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 
@@ -20,6 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @param contentItems list of [ContentBlockData] items to display.
  * @param contentHeaderTextStyle the text style to use for the header text of the content.
  * @param contentSubtitleTextStyle the text style to use for the subtitle text of the content.
+ * @param contentSubtitleColor the color that should be applied to subtitle text of the content.
  * @param contentBackgroundColor the background color to use for the content.
  */
 @Composable
@@ -28,13 +29,13 @@ fun BitwardenContentCard(
     modifier: Modifier = Modifier,
     contentHeaderTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
     contentSubtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
+    contentSubtitleColor: Color = BitwardenTheme.colorScheme.text.secondary,
     contentBackgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(shape = BitwardenTheme.shapes.content)
-            .background(color = BitwardenTheme.colorScheme.background.secondary),
+            .cardBackground(cardStyle = CardStyle.Full, color = contentBackgroundColor),
     ) {
         contentItems.forEachIndexed { index, item ->
             BitwardenContentBlock(
@@ -42,6 +43,7 @@ fun BitwardenContentCard(
                 showDivider = index != contentItems.lastIndex,
                 headerTextStyle = contentHeaderTextStyle,
                 subtitleTextStyle = contentSubtitleTextStyle,
+                subtitleColor = contentSubtitleColor,
                 backgroundColor = contentBackgroundColor,
             )
         }

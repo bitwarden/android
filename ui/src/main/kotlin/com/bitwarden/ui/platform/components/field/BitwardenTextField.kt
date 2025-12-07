@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
@@ -94,6 +95,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
@@ -123,6 +125,7 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
+    textColor: Color = BitwardenTheme.colorScheme.text.primary,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -158,6 +161,7 @@ fun BitwardenTextField(
         readOnly = readOnly,
         enabled = enabled,
         textStyle = textStyle,
+        textColor = textColor,
         shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
         keyboardType = keyboardType,
         keyboardActions = keyboardActions,
@@ -194,6 +198,7 @@ fun BitwardenTextField(
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
@@ -226,6 +231,7 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
+    textColor: Color = BitwardenTheme.colorScheme.text.primary,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -312,7 +318,7 @@ fun BitwardenTextField(
                 var focused by remember { mutableStateOf(false) }
 
                 TextField(
-                    colors = bitwardenTextFieldColors(),
+                    colors = bitwardenTextFieldColors(textColor = textColor),
                     enabled = enabled,
                     label = label?.let {
                         {

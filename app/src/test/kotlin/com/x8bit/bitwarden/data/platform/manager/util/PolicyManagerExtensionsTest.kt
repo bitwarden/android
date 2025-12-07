@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import io.mockk.every
@@ -81,7 +82,7 @@ class PolicyManagerExtensionsTest {
     }
 }
 
-private val MASTER_PASSWORD_POLICY = SyncResponseJson.Policy(
+private val MASTER_PASSWORD_POLICY = createMockPolicy(
     organizationId = "organizationId",
     id = "master_password_id",
     type = PolicyTypeJson.MASTER_PASSWORD,
@@ -109,7 +110,7 @@ private val MASTER_PASSWORD_POLICY_INFO = PolicyInformation.MasterPassword(
     enforceOnLogin = true,
 )
 
-private val PASSWORD_GENERATOR_POLICY = SyncResponseJson.Policy(
+private val PASSWORD_GENERATOR_POLICY = createMockPolicy(
     organizationId = "organizationId",
     id = "password_generator_id",
     type = PolicyTypeJson.PASSWORD_GENERATOR,

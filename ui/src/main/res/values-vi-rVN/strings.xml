@@ -164,7 +164,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Tìm kiếm mục đăng nhập hoặc thêm mục đăng nhập mới</string>
     <string name="disabled">Vô hiệu hóa</string>
     <string name="bitwarden_autofill_service_alert2">Cách dễ nhất để thêm thông tin đăng nhập mới vào kho của bạn là từ Dịch vụ Tự động điền Bitwarden. Tìm hiểu thêm về cách sử dụng Dịch vụ Tự động điền Bitwarden bằng cách chuyển đến trang \"Cài đặt\".</string>
-    <string name="autofill_title">Tự động điền</string>
+    <string name="autofill_noun">Tự động điền</string>
+    <string name="autofill_verb">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
     <string name="search">Tìm kiếm</string>
     <string name="learn_org">Tìm hiểu về tổ chức</string>
@@ -649,7 +650,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="invalid_uri">Đường dẫn không hợp lệ</string>
     <string name="the_urix_is_already_blocked">Đường dẫn %1$s đã bị chặn</string>
     <string name="login_approved">Lượt đăng nhập đã duyệt</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Đăng nhập bằng thiết bị phải được thiết lập trong phần cài đặt của ứng dụng Bitwarden. Dùng cách khác?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Đăng nhập bằng thiết bị</string>
     <string name="logging_in_on">Đang đăng nhập vào</string>
     <string name="logging_in_on_with_colon">Đang đăng nhập vào:</string>
@@ -1037,6 +1039,8 @@ các vấn đề.</string>
     <string name="export">Xuất</string>
     <string name="export_confirmation_title">Xác nhận xuất</string>
     <string name="export_success">Đã xuất dữ liệu thành công</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Bảo mật</string>
     <string name="too_many_failed_biometric_attempts">Xác thực sinh trắc thất bại quá nhiều lần.</string>
     <string name="version">Phiên bản</string>
@@ -1152,7 +1156,5 @@ các vấn đề.</string>
     <string name="lock_app">Khóa ứng dụng</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
     <string name="loading_vault_data">Đang tải dữ liệu kho…</string>
-    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
+    <string name="resending">Resending</string>
 </resources>

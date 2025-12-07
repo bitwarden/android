@@ -10,7 +10,7 @@ import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -100,7 +100,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
             } returns listOf(
-                SyncResponseJson.Policy(
+                createMockPolicy(
                     organizationId = "org-id",
                     id = "policy-id",
                     type = PolicyTypeJson.RESTRICT_ITEM_TYPES,

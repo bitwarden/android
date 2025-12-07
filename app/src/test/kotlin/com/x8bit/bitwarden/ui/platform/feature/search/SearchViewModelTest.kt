@@ -10,6 +10,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -189,7 +190,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "Test Org",
                 id = "testId",
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
@@ -1677,7 +1678,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,

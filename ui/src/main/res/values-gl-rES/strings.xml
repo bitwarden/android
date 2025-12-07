@@ -165,7 +165,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Buscar unha credencial ou engadir unha nova</string>
     <string name="disabled">Deshabilitado</string>
     <string name="bitwarden_autofill_service_alert2">O xeito máis sinxelo de engadir credenciais á túa caixa forte é dende o Servizo de Autoenchido de Bitwarden. Aprende máis do Servizo de Autoenchido de Bitwarden na pantalla de \"Axustes\".</string>
-    <string name="autofill_title">Autoencher</string>
+    <string name="autofill_noun">Autoencher</string>
+    <string name="autofill_verb">Autoencher</string>
     <string name="autofill_or_view">Queres autoencher ou ver esta entrada?</string>
     <string name="search">Busca</string>
     <string name="learn_org">Aprende sobre as organizacións</string>
@@ -653,7 +654,8 @@ Queres comprobalo dende esa conta?</string>
     <string name="invalid_uri">URI inválida</string>
     <string name="the_urix_is_already_blocked">A URI %1$s xa está bloqueada</string>
     <string name="login_approved">Inicio de sesión aprobado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">O inicio de sesión con dispositivos debe estar activado nos axustes da app de Bitwarden. Precisas doutro método?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Iniciar sesión cun dispositivo</string>
     <string name="logging_in_on">Iniciando sesión en</string>
     <string name="logging_in_on_with_colon">Entrando en:</string>
@@ -1041,6 +1043,8 @@ Queres comprobalo dende esa conta?</string>
     <string name="export">Exportar</string>
     <string name="export_confirmation_title">Confirmar a exportación</string>
     <string name="export_success">Exportación de datos exitosa</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Seguridade</string>
     <string name="too_many_failed_biometric_attempts">Demasiados intentos de autenticación biometrica errados.</string>
     <string name="version">Versión</string>
@@ -1156,7 +1160,5 @@ Queres comprobalo dende esa conta?</string>
     <string name="lock_app">Lock app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
-    <string name="compatibility_mode_warning">Compatibility mode should only be enabled if autofill doesn’t work in your browser. This setting reduces security and could allow malicious sites to capture your passwords. Only enable it if you accept this risk.</string>
-    <string name="use_compatibility_mode_for_browser_autofill">Use compatibility mode for browser autofill</string>
-    <string name="use_a_less_secure_autofill_method_compatible_with_more_browsers">Uses a less secure autofill method compatible with more browsers.\n<annotation link="learnMore">Learn more about compatibility mode</annotation></string>
+    <string name="resending">Resending</string>
 </resources>
