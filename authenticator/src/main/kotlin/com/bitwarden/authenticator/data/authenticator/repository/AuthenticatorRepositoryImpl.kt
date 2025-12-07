@@ -157,7 +157,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
             .stateIn(
                 scope = unconfinedScope,
-                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
+                started = SharingStarted.WhileSubscribed(),
                 initialValue = SharedVerificationCodesState.Loading,
             )
     }
@@ -197,7 +197,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             }
             .stateIn(
                 scope = unconfinedScope,
-                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
+                started = SharingStarted.WhileSubscribed(),
                 initialValue = DataState.Loading,
             )
     }
