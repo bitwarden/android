@@ -91,11 +91,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
         storedPinProtectedUserKeyEnvelopes.remove(userId)
+        storedEncryptedPins.remove(userId)
+        storedPinProtectedUserKeys.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+        mutablePinProtectedUserKeyEnvelopesFlowMap.remove(userId)
     }
 
     private fun getMutablePinProtectedUserKeyEnvelopeFlow(

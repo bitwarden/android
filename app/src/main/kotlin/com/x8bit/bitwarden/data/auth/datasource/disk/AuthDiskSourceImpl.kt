@@ -159,11 +159,11 @@ class AuthDiskSourceImpl(
         storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
         storeShowImportLogins(userId = userId, showImportLogins = null)
         storeLastLockTimestamp(userId = userId, lastLockTimestamp = null)
+        storeEncryptedPin(userId = userId, encryptedPin = null)
+        storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+        storePinProtectedUserKeyEnvelope(userId = userId, pinProtectedUserKeyEnvelope = null)
 
         // Certain values are never removed as required by the feature requirements:
-        // * EncryptedPin
-        // * PinProtectedUserKey
-        // * PinProtectedUserKeyEnvelope
         // * DeviceKey
         // * PendingAuthRequest
         // * OnboardingStatus

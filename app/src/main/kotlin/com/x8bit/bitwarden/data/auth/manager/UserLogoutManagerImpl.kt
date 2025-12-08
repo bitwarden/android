@@ -49,14 +49,14 @@ class UserLogoutManagerImpl(
     override fun logout(userId: String, reason: LogoutReason) {
         authDiskSource.userState ?: return
         Timber.d("logout reason=$reason")
-        val isExpired = reason == LogoutReason.SecurityStamp
-        if (isExpired) {
+        val isSecurityStamp = reason == LogoutReason.SecurityStamp
+        if (isSecurityStamp) {
             showToast(message = BitwardenString.login_expired)
         }
 
         val ableToSwitchToNewAccount = switchUserIfAvailable(
             currentUserId = userId,
-            isExpired = isExpired,
+            isSecurityStamp = isSecurityStamp,
             removeCurrentUserFromAccounts = true,
         )
 
@@ -73,19 +73,24 @@ class UserLogoutManagerImpl(
 
     override fun softLogout(userId: String, reason: LogoutReason) {
         Timber.d("softLogout reason=$reason")
-        val isExpired = reason == LogoutReason.SecurityStamp
-        if (isExpired) {
+        val isSecurityStamp = reason == LogoutReason.SecurityStamp
+        if (isSecurityStamp) {
             showToast(message = BitwardenString.login_expired)
         }
 
-        // Save any data that will still need to be retained after otherwise clearing all dat
+        // Save any data that will still need to be retained after otherwise clearing all data
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        val encryptedPin = authDiskSource.getEncryptedPin(userId = userId)
+        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+        val pinProtectedUserKeyEnvelope = authDiskSource.getPinProtectedUserKeyEnvelope(
+            userId = userId,
+        )
 
         switchUserIfAvailable(
             currentUserId = userId,
             removeCurrentUserFromAccounts = false,
-            isExpired = isExpired,
+            isSecurityStamp = isSecurityStamp,
         )
 
         clearData(userId = userId)
@@ -100,6 +105,14 @@ class UserLogoutManagerImpl(
             storeVaultTimeoutAction(
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
+            )
+        }
+        authDiskSource.apply {
+            storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            storePinProtectedUserKey(userId = userId, pinProtectedUserKey = pinProtectedUserKey)
+            storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
         }
     }
@@ -123,7 +136,7 @@ class UserLogoutManagerImpl(
     private fun switchUserIfAvailable(
         currentUserId: String,
         removeCurrentUserFromAccounts: Boolean,
-        isExpired: Boolean = false,
+        isSecurityStamp: Boolean,
     ): Boolean {
         val currentUserState = authDiskSource.userState ?: return false
 
@@ -135,7 +148,7 @@ class UserLogoutManagerImpl(
 
         // Check if there is a new active user
         return if (updatedAccounts.isNotEmpty()) {
-            if (currentUserId == currentUserState.activeUserId && !isExpired) {
+            if (currentUserId == currentUserState.activeUserId && !isSecurityStamp) {
                 showToast(message = BitwardenString.account_switched_automatically)
             }
 
