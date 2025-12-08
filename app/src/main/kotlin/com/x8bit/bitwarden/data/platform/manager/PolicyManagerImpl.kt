@@ -66,6 +66,11 @@ class PolicyManagerImpl(
             )
             .orEmpty()
 
+    override fun getPersonalOwnershipPolicyOrganizationId(): String? = this
+            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .sortedBy { it.revisionDate }
+            .firstOrNull()
+            ?.organizationId
     /**
      * A helper method to filter policies.
      */

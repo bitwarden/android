@@ -1390,6 +1390,100 @@ class VaultRepositoryTest {
         }
     }
 
+    @Test
+    fun `hasPersonalVaultItems returns false when vault data is loading`() {
+        mutableVaultDataStateFlow.value = DataState.Loading
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when all items belong to organizations`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = "org-1"),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items without organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = null),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items with empty organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = ""),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when successes list is empty`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = emptyList(),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
     //region Helper functions
 
     /**
