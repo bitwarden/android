@@ -21,7 +21,6 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
@@ -55,7 +54,6 @@ private const val KEY_STATE = "state"
 class VaultUnlockViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val appResumeManager: AppResumeManager,
@@ -68,10 +66,6 @@ class VaultUnlockViewModel @Inject constructor(
         val activeAccount = userState.activeAccount
         val accountSummaries = userState.toAccountSummaries()
         val activeAccountSummary = userState.toActiveAccountSummary()
-        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
-            userId = userState.activeUserId,
-            cipher = biometricsEncryptionManager.getOrCreateCipher(userState.activeUserId),
-        )
         val vaultUnlockType = activeAccount.vaultUnlockType
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
         if (!activeAccount.hasManualUnlockMechanism) {
@@ -82,7 +76,6 @@ class VaultUnlockViewModel @Inject constructor(
         }
 
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-
         val showAccountMenu =
             savedStateHandle.toVaultUnlockArgs().unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.ProviderGetCredentials &&
@@ -97,7 +90,7 @@ class VaultUnlockViewModel @Inject constructor(
             environmentUrl = activeAccount.environment.label,
             input = "",
             isBiometricEnabled = activeAccount.isBiometricsEnabled,
-            isBiometricsValid = isBiometricsValid,
+            isBiometricsValid = authRepository.isBiometricIntegrityValid(userState.activeUserId),
             showAccountMenu = showAccountMenu,
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
@@ -233,7 +226,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleBiometricsUnlockClick() {
-        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        val cipher = authRepository.getOrCreateCipher(state.userId)
         if (cipher != null) {
             sendEvent(
                 event = VaultUnlockEvent.PromptForBiometrics(
@@ -244,7 +237,7 @@ class VaultUnlockViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     isBiometricsValid = false,
-                    showBiometricInvalidatedMessage = !biometricsEncryptionManager
+                    showBiometricInvalidatedMessage = !authRepository
                         .isAccountBiometricIntegrityValid(state.userId),
                 )
             }
@@ -351,7 +344,7 @@ class VaultUnlockViewModel @Inject constructor(
             }
 
             is VaultUnlockResult.BiometricDecodingError -> {
-                biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+                authRepository.clearBiometrics(userId = state.userId)
                 mutableStateFlow.update {
                     it.copy(
                         isBiometricsValid = false,
@@ -433,13 +426,9 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun promptForBiometricsIfAvailable() {
-        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        val cipher = authRepository.getOrCreateCipher(state.userId)
         if (state.showBiometricLogin && cipher != null && !state.isFromLockFlow) {
-            sendEvent(
-                VaultUnlockEvent.PromptForBiometrics(
-                    cipher = cipher,
-                ),
-            )
+            sendEvent(VaultUnlockEvent.PromptForBiometrics(cipher = cipher))
         }
     }
 }

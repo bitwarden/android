@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -60,6 +61,7 @@ object AuthRepositoryModule {
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
         keyConnectorManager: KeyConnectorManager,
         authRequestManager: AuthRequestManager,
         trustedDeviceManager: TrustedDeviceManager,
@@ -85,6 +87,7 @@ object AuthRepositoryModule {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        biometricsEncryptionManager = biometricsEncryptionManager,
         keyConnectorManager = keyConnectorManager,
         authRequestManager = authRequestManager,
         trustedDeviceManager = trustedDeviceManager,
