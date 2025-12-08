@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vaulttakeover
+package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
@@ -13,19 +13,19 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
-class VaultTakeoverScreenTest : BitwardenComposeTest() {
+class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     private var onNavigateToVaultCalled = false
     private var onNavigateToLeaveOrganizationCalled = false
 
-    private val mutableEventFlow = bufferedMutableSharedFlow<VaultTakeoverEvent>()
+    private val mutableEventFlow = bufferedMutableSharedFlow<MigrateToMyItemsEvent>()
 
     private val mutableStateFlow = MutableStateFlow(
-        VaultTakeoverState(
+        MigrateToMyItemsState(
             organizationName = "Test Organization",
         ),
     )
 
-    private val viewModel = mockk<VaultTakeoverViewModel>(relaxed = true) {
+    private val viewModel = mockk<MigrateToMyItemsViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
@@ -33,7 +33,7 @@ class VaultTakeoverScreenTest : BitwardenComposeTest() {
     @Before
     fun setup() {
         setContent {
-            VaultTakeoverScreen(
+            MigrateToMyItemsScreen(
                 viewModel = viewModel,
                 onNavigateToVault = { onNavigateToVaultCalled = true },
                 onNavigateToLeaveOrganization = { onNavigateToLeaveOrganizationCalled = true },
@@ -65,7 +65,7 @@ class VaultTakeoverScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Continue").performClick()
 
         verify {
-            viewModel.trySendAction(VaultTakeoverAction.ContinueClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
         }
     }
 
@@ -74,7 +74,7 @@ class VaultTakeoverScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Decline and leave").performClick()
 
         verify {
-            viewModel.trySendAction(VaultTakeoverAction.DeclineAndLeaveClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked)
         }
     }
 
@@ -83,19 +83,19 @@ class VaultTakeoverScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Why am I seeing this?").performClick()
 
         verify {
-            viewModel.trySendAction(VaultTakeoverAction.HelpLinkClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked)
         }
     }
 
     @Test
     fun `NavigateToVault event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(VaultTakeoverEvent.NavigateToVault)
+        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToVault)
         assertTrue(onNavigateToVaultCalled)
     }
 
     @Test
     fun `NavigateToLeaveOrganization event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(VaultTakeoverEvent.NavigateToLeaveOrganization)
+        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
         assertTrue(onNavigateToLeaveOrganizationCalled)
     }
 }

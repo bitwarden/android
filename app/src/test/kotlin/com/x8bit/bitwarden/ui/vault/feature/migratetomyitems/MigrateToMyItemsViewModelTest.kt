@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vaulttakeover
+package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -6,14 +6,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class VaultTakeoverViewModelTest : BaseViewModelTest() {
+class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClicked sends NavigateToVault event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultTakeoverAction.ContinueClicked)
-            assertEquals(VaultTakeoverEvent.NavigateToVault, awaitItem())
+            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            assertEquals(MigrateToMyItemsEvent.NavigateToVault, awaitItem())
         }
     }
 
@@ -21,8 +21,8 @@ class VaultTakeoverViewModelTest : BaseViewModelTest() {
     fun `DeclineAndLeaveClicked sends NavigateToLeaveOrganization event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultTakeoverAction.DeclineAndLeaveClicked)
-            assertEquals(VaultTakeoverEvent.NavigateToLeaveOrganization, awaitItem())
+            viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked)
+            assertEquals(MigrateToMyItemsEvent.NavigateToLeaveOrganization, awaitItem())
         }
     }
 
@@ -30,13 +30,13 @@ class VaultTakeoverViewModelTest : BaseViewModelTest() {
     fun `HelpLinkClicked sends LaunchUri event with help URL`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultTakeoverAction.HelpLinkClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked)
             val event = awaitItem()
-            assert(event is VaultTakeoverEvent.LaunchUri)
-            assertEquals("TODO_HELP_URL", (event as VaultTakeoverEvent.LaunchUri).uri)
+            assert(event is MigrateToMyItemsEvent.LaunchUri)
+            assertEquals("TODO_HELP_URL", (event as MigrateToMyItemsEvent.LaunchUri).uri)
         }
     }
 
-    private fun createViewModel(): VaultTakeoverViewModel =
-        VaultTakeoverViewModel()
+    private fun createViewModel(): MigrateToMyItemsViewModel =
+        MigrateToMyItemsViewModel()
 }

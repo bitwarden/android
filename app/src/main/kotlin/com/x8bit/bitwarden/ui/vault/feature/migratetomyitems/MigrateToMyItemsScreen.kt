@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vaulttakeover
+package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -38,37 +38,37 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * Top level screen component for the VaultTakeover screen.
+ * Top level screen component for the MigrateToMyItems screen.
  */
 @Composable
-fun VaultTakeoverScreen(
+fun MigrateToMyItemsScreen(
     onNavigateToVault: () -> Unit,
     onNavigateToLeaveOrganization: () -> Unit,
-    viewModel: VaultTakeoverViewModel = hiltViewModel(),
+    viewModel: MigrateToMyItemsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultTakeoverEvent.NavigateToVault -> onNavigateToVault()
-            VaultTakeoverEvent.NavigateToLeaveOrganization -> onNavigateToLeaveOrganization()
-            is VaultTakeoverEvent.LaunchUri -> intentManager.launchUri(event.uri.toUri())
+            MigrateToMyItemsEvent.NavigateToVault -> onNavigateToVault()
+            MigrateToMyItemsEvent.NavigateToLeaveOrganization -> onNavigateToLeaveOrganization()
+            is MigrateToMyItemsEvent.LaunchUri -> intentManager.launchUri(event.uri.toUri())
         }
     }
 
     val onContinueClick = remember(viewModel) {
-        { viewModel.trySendAction(VaultTakeoverAction.ContinueClicked) }
+        { viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked) }
     }
     val onDeclineClick = remember(viewModel) {
-        { viewModel.trySendAction(VaultTakeoverAction.DeclineAndLeaveClicked) }
+        { viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked) }
     }
     val onHelpClick = remember(viewModel) {
-        { viewModel.trySendAction(VaultTakeoverAction.HelpLinkClicked) }
+        { viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked) }
     }
 
     BitwardenScaffold {
-        VaultTakeoverContent(
+        MigrateToMyItemsContent(
             organizationName = state.organizationName,
             onContinueClick = onContinueClick,
             onDeclineClick = onDeclineClick,
@@ -81,7 +81,7 @@ fun VaultTakeoverScreen(
 }
 
 @Composable
-private fun VaultTakeoverContent(
+private fun MigrateToMyItemsContent(
     organizationName: String,
     onContinueClick: () -> Unit,
     onDeclineClick: () -> Unit,
@@ -94,7 +94,7 @@ private fun VaultTakeoverContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = painterResource(id = BitwardenDrawable.ill_organization_takeover),
+            painter = painterResource(id = BitwardenDrawable.ill_migrate_to_my_items),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
@@ -103,9 +103,9 @@ private fun VaultTakeoverContent(
                 .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(24.dp))
-        VaultTakeoverTextContent(organizationName = organizationName)
+        MigrateToMyItemsTextContent(organizationName = organizationName)
         Spacer(modifier = Modifier.height(24.dp))
-        VaultTakeoverActions(
+        MigrateToMyItemsActions(
             onContinueClick = onContinueClick,
             onDeclineClick = onDeclineClick,
             onHelpClick = onHelpClick,
@@ -115,7 +115,7 @@ private fun VaultTakeoverContent(
 }
 
 @Composable
-private fun VaultTakeoverTextContent(
+private fun MigrateToMyItemsTextContent(
     organizationName: String,
     modifier: Modifier = Modifier,
 ) {
@@ -149,7 +149,7 @@ private fun VaultTakeoverTextContent(
 }
 
 @Composable
-private fun VaultTakeoverActions(
+private fun MigrateToMyItemsActions(
     onContinueClick: () -> Unit,
     onDeclineClick: () -> Unit,
     onHelpClick: () -> Unit,
@@ -184,10 +184,10 @@ private fun VaultTakeoverActions(
 
 @Preview(showBackground = true)
 @Composable
-private fun VaultTakeoverScreen_preview() {
+private fun MigrateToMyItemsScreen_preview() {
     BitwardenTheme {
         BitwardenScaffold {
-            VaultTakeoverContent(
+            MigrateToMyItemsContent(
                 organizationName = "Test Organization",
                 onContinueClick = {},
                 onDeclineClick = {},
