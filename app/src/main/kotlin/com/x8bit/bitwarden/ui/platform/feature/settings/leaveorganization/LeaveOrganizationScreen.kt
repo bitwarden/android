@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -123,6 +124,7 @@ private fun LeaveOrganizationDialogs(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun LeaveOrganizationContent(
     organizationName: String,
@@ -132,17 +134,19 @@ private fun LeaveOrganizationContent(
 ) {
     Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .standardHorizontalMargin(),
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
-        Icon(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ic_organization),
+        Image(
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_leave_organization),
             contentDescription = null,
-            modifier = Modifier.size(100.dp),
-            tint = BitwardenTheme.colorScheme.icon.secondary,
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .size(100.dp)
+                .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -155,6 +159,9 @@ private fun LeaveOrganizationContent(
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -164,6 +171,9 @@ private fun LeaveOrganizationContent(
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -174,7 +184,9 @@ private fun LeaveOrganizationContent(
                 organizationName,
             ),
             onClick = onLeaveClick,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -182,6 +194,9 @@ private fun LeaveOrganizationContent(
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.how_to_manage_my_vault),
             onClick = onHelpLinkClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())
