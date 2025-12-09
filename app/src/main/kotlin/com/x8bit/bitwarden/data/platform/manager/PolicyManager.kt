@@ -25,4 +25,10 @@ interface PolicyManager {
         userId: String,
         type: PolicyTypeJson,
     ): List<SyncResponseJson.Policy>
+
+    /**
+     * Get the organization id of the personal ownership policy.
+     * If multiple organizations enforce the policy, return the first to set it.
+     */
+    fun getPersonalOwnershipPolicyOrganizationId(): String?
 }
