@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -53,7 +52,6 @@ class CredentialProviderProcessorImpl(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val pendingIntentManager: CredentialManagerPendingIntentManager,
     private val clock: Clock,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     dispatcherManager: DispatcherManager,
 ) : CredentialProviderProcessor {
 
@@ -203,7 +201,7 @@ class CredentialProviderProcessorImpl(
             .setAutoSelectAllowed(true)
 
         if (isVaultUnlocked) {
-            biometricsEncryptionManager
+            authRepository
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
         }
@@ -251,7 +249,7 @@ class CredentialProviderProcessorImpl(
             .setAutoSelectAllowed(true)
 
         if (isVaultUnlocked) {
-            biometricsEncryptionManager
+            authRepository
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
         }
