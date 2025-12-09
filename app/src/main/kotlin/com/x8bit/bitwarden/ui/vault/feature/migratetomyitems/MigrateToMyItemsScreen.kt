@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,12 +29,15 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.handler.rememberMigrateToMyItemsHandler
 
 /**
  * Top level screen component for the MigrateToMyItems screen.
@@ -48,6 +50,7 @@ fun MigrateToMyItemsScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val handlers = rememberMigrateToMyItemsHandler(viewModel)
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -57,22 +60,17 @@ fun MigrateToMyItemsScreen(
         }
     }
 
-    val onContinueClick = remember(viewModel) {
-        { viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked) }
-    }
-    val onDeclineClick = remember(viewModel) {
-        { viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked) }
-    }
-    val onHelpClick = remember(viewModel) {
-        { viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked) }
-    }
+    MigrateToMyItemsDialogs(
+        dialog = state.dialog,
+        onDismissRequest = handlers.onDismissDialog,
+    )
 
     BitwardenScaffold {
         MigrateToMyItemsContent(
-            organizationName = state.organizationName,
-            onContinueClick = onContinueClick,
-            onDeclineClick = onDeclineClick,
-            onHelpClick = onHelpClick,
+            viewState = state.viewState,
+            onContinueClick = handlers.onContinueClick,
+            onDeclineClick = handlers.onDeclineClick,
+            onHelpClick = handlers.onHelpClick,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
@@ -81,8 +79,30 @@ fun MigrateToMyItemsScreen(
 }
 
 @Composable
+private fun MigrateToMyItemsDialogs(
+    dialog: MigrateToMyItemsState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialog) {
+        is MigrateToMyItemsState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = dialog.title(),
+                message = dialog.message(),
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is MigrateToMyItemsState.DialogState.Loading -> {
+            BitwardenLoadingDialog(text = dialog.message())
+        }
+
+        null -> Unit
+    }
+}
+
+@Composable
 private fun MigrateToMyItemsContent(
-    organizationName: String,
+    viewState: MigrateToMyItemsState.ViewState,
     onContinueClick: () -> Unit,
     onDeclineClick: () -> Unit,
     onHelpClick: () -> Unit,
@@ -103,7 +123,7 @@ private fun MigrateToMyItemsContent(
                 .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(24.dp))
-        MigrateToMyItemsTextContent(organizationName = organizationName)
+        MigrateToMyItemsTextContent(organizationName = viewState.organizationName)
         Spacer(modifier = Modifier.height(24.dp))
         MigrateToMyItemsActions(
             onContinueClick = onContinueClick,
@@ -188,7 +208,7 @@ private fun MigrateToMyItemsScreen_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             MigrateToMyItemsContent(
-                organizationName = "Test Organization",
+                viewState = MigrateToMyItemsState.ViewState(organizationName = "Bitwarden"),
                 onContinueClick = {},
                 onDeclineClick = {},
                 onHelpClick = {},

@@ -3,10 +3,16 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
@@ -17,11 +23,19 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     private var onNavigateToVaultCalled = false
     private var onNavigateToLeaveOrganizationCalled = false
 
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(any()) } just runs
+    }
+
     private val mutableEventFlow = bufferedMutableSharedFlow<MigrateToMyItemsEvent>()
 
     private val mutableStateFlow = MutableStateFlow(
         MigrateToMyItemsState(
-            organizationName = "Test Organization",
+            viewState = MigrateToMyItemsState.ViewState(
+                organizationName = "Test Organization",
+            ),
+            dialog = null,
+            organizationId = "test-org-id",
         ),
     )
 
@@ -32,7 +46,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(intentManager = intentManager) {
             MigrateToMyItemsScreen(
                 viewModel = viewModel,
                 onNavigateToVault = { onNavigateToVaultCalled = true },
@@ -97,5 +111,74 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     fun `NavigateToLeaveOrganization event should trigger navigation callback`() {
         mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
         assertTrue(onNavigateToLeaveOrganizationCalled)
+    }
+
+    @Test
+    fun `LaunchUri event should launch URI via intent manager`() {
+        val testUri = "https://bitwarden.com/help/transfer-ownership/"
+        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.LaunchUri(testUri))
+        verify {
+            intentManager.launchUri(testUri.toUri())
+        }
+    }
+
+    @Test
+    fun `Loading dialog should display when dialog state is Loading`() {
+        mutableStateFlow.value = MigrateToMyItemsState(
+            viewState = MigrateToMyItemsState.ViewState(
+                organizationName = "Test Organization",
+            ),
+            dialog = MigrateToMyItemsState.DialogState.Loading(
+                message = "Migrating items to Test Organization...".asText(),
+            ),
+            organizationId = "test-org-id",
+        )
+
+        composeTestRule
+            .onNodeWithText("Migrating items to Test Organization...")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Error dialog should display when dialog state is Error`() {
+        mutableStateFlow.value = MigrateToMyItemsState(
+            viewState = MigrateToMyItemsState.ViewState(
+                organizationName = "Test Organization",
+            ),
+            dialog = MigrateToMyItemsState.DialogState.Error(
+                title = "An error has occurred".asText(),
+                message = "Failed to migrate items".asText(),
+            ),
+            organizationId = "test-org-id",
+        )
+
+        composeTestRule
+            .onNodeWithText("An error has occurred")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Failed to migrate items")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Error dialog dismiss should send DismissDialogClicked action`() {
+        mutableStateFlow.value = MigrateToMyItemsState(
+            viewState = MigrateToMyItemsState.ViewState(
+                organizationName = "Test Organization",
+            ),
+            dialog = MigrateToMyItemsState.DialogState.Error(
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = "Failed to migrate items".asText(),
+            ),
+            organizationId = "test-org-id",
+        )
+
+        composeTestRule
+            .onNodeWithText("Okay")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
+        }
     }
 }

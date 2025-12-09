@@ -1,31 +1,93 @@
 package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * View model for the [MigrateToMyItemsScreen].
  */
 @HiltViewModel
-class MigrateToMyItemsViewModel @Inject constructor() :
-    BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
-        initialState = MigrateToMyItemsState(
-            // TODO: Get from repository or manager (PM-28468).
-            organizationName = "TODO",
-        ),
-    ) {
+class MigrateToMyItemsViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val policyManager: PolicyManager,
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val organizationId = requireNotNull(
+            policyManager.getPersonalOwnershipPolicyOrganizationId(),
+        )
+        val organization = requireNotNull(
+            authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.organizations
+                ?.firstOrNull { it.id == organizationId },
+        )
+
+        MigrateToMyItemsState(
+            organizationId = organizationId,
+            viewState = MigrateToMyItemsState.ViewState(
+                organizationName = organization.name.orEmpty(),
+            ),
+            dialog = null,
+        )
+    },
+) {
+
+    init {
+        stateFlow
+            .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: MigrateToMyItemsAction) {
         when (action) {
             MigrateToMyItemsAction.ContinueClicked -> handleContinueClicked()
             MigrateToMyItemsAction.DeclineAndLeaveClicked -> handleDeclineAndLeaveClicked()
             MigrateToMyItemsAction.HelpLinkClicked -> handleHelpLinkClicked()
+            MigrateToMyItemsAction.DismissDialogClicked -> handleDismissDialogClicked()
+            is MigrateToMyItemsAction.Internal -> handleInternalAction(action)
         }
     }
 
     private fun handleContinueClicked() {
-        sendEvent(MigrateToMyItemsEvent.NavigateToVault)
+        mutableStateFlow.update {
+            it.copy(
+                dialog = MigrateToMyItemsState.DialogState.Loading(
+                    message = BitwardenString.migrating_items_to_x.asText(
+                        it.viewState.organizationName,
+                    ),
+                ),
+            )
+        }
+
+        viewModelScope.launch {
+            // TODO: Replace `delay` with actual migration (PM-28444).
+            delay(timeMillis = 100L)
+            trySendAction(
+                MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                    success = true,
+                ),
+            )
+        }
     }
 
     private fun handleDeclineAndLeaveClicked() {
@@ -33,17 +95,87 @@ class MigrateToMyItemsViewModel @Inject constructor() :
     }
 
     private fun handleHelpLinkClicked() {
-        // TODO: Update URL when available.
-        sendEvent(MigrateToMyItemsEvent.LaunchUri("TODO_HELP_URL"))
+        sendEvent(
+            MigrateToMyItemsEvent.LaunchUri(
+                uri = "https://bitwarden.com/help/transfer-ownership/",
+            ),
+        )
+    }
+
+    private fun handleDismissDialogClicked() {
+        clearDialog()
+    }
+
+    private fun handleInternalAction(action: MigrateToMyItemsAction.Internal) {
+        when (action) {
+            is MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived -> {
+                handleMigrateToMyItemsResultReceived(action)
+            }
+        }
+    }
+
+    private fun handleMigrateToMyItemsResultReceived(
+        action: MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived,
+    ) {
+        if (action.success) {
+            clearDialog()
+            sendEvent(MigrateToMyItemsEvent.NavigateToVault)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = MigrateToMyItemsState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.failed_to_migrate_items_to_x.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun clearDialog() {
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 }
 
 /**
  * Models the state for the [MigrateToMyItemsScreen].
  */
+@Parcelize
 data class MigrateToMyItemsState(
-    val organizationName: String,
-)
+    val viewState: ViewState,
+    val dialog: DialogState?,
+    // Internal view model properties
+    private val organizationId: String,
+) : Parcelable {
+    /**
+     * Models the view state for the [MigrateToMyItemsScreen].
+     */
+    @Parcelize
+    data class ViewState(
+        val organizationName: String,
+    ) : Parcelable
+
+    /**
+     * Models the dialog state for the [MigrateToMyItemsScreen].
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Displays a loading dialog.
+         */
+        @Parcelize
+        data class Loading(val message: Text) : DialogState()
+
+        /**
+         * Displays an error dialog.
+         */
+        @Parcelize
+        data class Error(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models the events that can be sent from the [MigrateToMyItemsViewModel].
@@ -83,4 +215,23 @@ sealed class MigrateToMyItemsAction {
      * User clicked the "Why am I seeing this?" help link.
      */
     data object HelpLinkClicked : MigrateToMyItemsAction()
+
+    /**
+     * User dismissed the dialog.
+     */
+    data object DismissDialogClicked : MigrateToMyItemsAction()
+
+    /**
+     * Models internal actions that the [MigrateToMyItemsViewModel] itself may send.
+     */
+    sealed class Internal : MigrateToMyItemsAction() {
+
+        /**
+         * The result of the migration has been received.
+         */
+        data class MigrateToMyItemsResultReceived(
+            // TODO: Replace `success` with actual migration result (PM-28444).
+            val success: Boolean,
+        ) : Internal()
+    }
 }
