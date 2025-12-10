@@ -1,9 +1,9 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization.handler
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handler
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization.LeaveOrganizationAction
-import com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization.LeaveOrganizationViewModel
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationAction
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationViewModel
 
 /**
  * A class to handle user interactions for the Leave Organization screen.

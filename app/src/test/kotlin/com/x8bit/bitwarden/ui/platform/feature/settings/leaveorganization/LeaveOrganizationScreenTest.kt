@@ -12,6 +12,11 @@ import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationAction
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationEvent
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationScreen
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationState
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

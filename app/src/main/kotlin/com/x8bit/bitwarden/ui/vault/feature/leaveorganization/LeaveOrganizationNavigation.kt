@@ -1,6 +1,6 @@
 @file:OmitFromCoverage
 
-package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController

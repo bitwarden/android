@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle

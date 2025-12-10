@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -42,7 +42,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization.handler.rememberLeaveOrganizationHandler
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handler.rememberLeaveOrganizationHandler
 
 /**
  * Top-level composable for the Leave Organization screen.
