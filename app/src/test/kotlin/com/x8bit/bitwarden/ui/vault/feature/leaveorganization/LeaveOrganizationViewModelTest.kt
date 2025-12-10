@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -17,12 +17,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationAction
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationArgs
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationEvent
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationState
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.LeaveOrganizationViewModel
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.toLeaveOrganizationArgs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
