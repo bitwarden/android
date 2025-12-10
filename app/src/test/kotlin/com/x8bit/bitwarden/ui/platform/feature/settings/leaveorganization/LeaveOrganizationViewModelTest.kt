@@ -15,19 +15,22 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class LeaveOrganizationViewModelTest : BaseViewModelTest() {
@@ -36,12 +39,18 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns MutableStateFlow(DEFAULT_USER_STATE)
     }
 
-    private val mockPolicyManager: PolicyManager = mockk {
-        every { getPersonalOwnershipPolicyOrganizationId() } returns ORGANIZATION_ID
-    }
-
     private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toLeaveOrganizationArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toLeaveOrganizationArgs)
     }
 
     @Test
@@ -159,6 +168,25 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `state should be restored from SavedStateHandle`() {
+        val savedOrganization = Organization(
+            id = "saved-org-id",
+            name = "Saved Organization",
+            shouldManageResetPassword = false,
+            shouldUseKeyConnector = false,
+            role = OrganizationType.USER,
+            keyConnectorUrl = null,
+            userIsClaimedByOrganization = false,
+            limitItemDeletion = false,
+        )
+        val userStateWithSavedOrg = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_USER_STATE.accounts.first().copy(
+                    organizations = listOf(savedOrganization),
+                ),
+            ),
+        )
+        every { mockAuthRepository.userStateFlow } returns MutableStateFlow(userStateWithSavedOrg)
+
         val savedState = LeaveOrganizationState(
             organizationId = "saved-org-id",
             viewState = LeaveOrganizationState.ViewState(
@@ -170,7 +198,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
         val viewModel = LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
-            policyManager = mockPolicyManager,
             snackbarRelayManager = mockSnackbarRelayManager,
             savedStateHandle = savedStateHandle,
         )
@@ -180,12 +207,16 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
-    ): LeaveOrganizationViewModel = LeaveOrganizationViewModel(
-        authRepository = mockAuthRepository,
-        policyManager = mockPolicyManager,
-        snackbarRelayManager = mockSnackbarRelayManager,
-        savedStateHandle = savedStateHandle,
-    )
+    ): LeaveOrganizationViewModel {
+        every { savedStateHandle.toLeaveOrganizationArgs() } returns LeaveOrganizationArgs(
+            organizationId = ORGANIZATION_ID,
+        )
+        return LeaveOrganizationViewModel(
+            authRepository = mockAuthRepository,
+            snackbarRelayManager = mockSnackbarRelayManager,
+            savedStateHandle = savedStateHandle,
+        )
+    }
 }
 
 private const val ORGANIZATION_ID = "organization-id-1"

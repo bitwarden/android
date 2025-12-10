@@ -11,10 +11,10 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,27 +29,22 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LeaveOrganizationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val policyManager: PolicyManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LeaveOrganizationState, LeaveOrganizationEvent, LeaveOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val organizationId = requireNotNull(
-            policyManager.getPersonalOwnershipPolicyOrganizationId(),
-        )
-        val organization = requireNotNull(
-            authRepository
-                .userStateFlow
-                .value
-                ?.activeAccount
-                ?.organizations
-                ?.firstOrNull { it.id == organizationId },
-        )
+        val args = savedStateHandle.toLeaveOrganizationArgs()
+        val organization = authRepository
+            .userStateFlow
+            .value
+            ?.activeAccount
+            ?.organizations
+            ?.firstOrNull { it.id == args.organizationId }
 
         LeaveOrganizationState(
-            organizationId = organizationId,
+            organizationId = args.organizationId,
             viewState = LeaveOrganizationState.ViewState(
-                organizationName = organization.name.orEmpty(),
+                organizationName = organization?.name.orEmpty(),
             ),
             dialogState = null,
         )
@@ -59,6 +54,25 @@ class LeaveOrganizationViewModel @Inject constructor(
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+
+        authRepository
+            .userStateFlow
+            .map { userState ->
+                userState
+                    ?.activeAccount
+                    ?.organizations
+                    ?.firstOrNull { it.id == state.organizationId }
+            }
+            .onEach { organization ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = currentState.viewState.copy(
+                            organizationName = organization?.name.orEmpty(),
+                        ),
+                    )
+                }
+            }
             .launchIn(viewModelScope)
     }
 

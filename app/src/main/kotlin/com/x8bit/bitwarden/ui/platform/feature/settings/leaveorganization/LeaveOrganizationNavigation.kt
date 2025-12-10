@@ -2,19 +2,44 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.settings.leaveorganization
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.toRoute
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the leave organization screen.
+ *
+ * @property organizationId The ID of the organization to leave.
  */
 @OmitFromCoverage
 @Serializable
-data object LeaveOrganizationRoute
+data class LeaveOrganizationRoute(
+    val organizationId: String,
+)
+
+/**
+ * Class to retrieve leave organization arguments from the [SavedStateHandle].
+ *
+ * @property organizationId The ID of the organization to leave.
+ */
+data class LeaveOrganizationArgs(
+    val organizationId: String,
+)
+
+/**
+ * Constructs a [LeaveOrganizationArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toLeaveOrganizationArgs(): LeaveOrganizationArgs {
+    val route = this.toRoute<LeaveOrganizationRoute>()
+    return LeaveOrganizationArgs(
+        organizationId = route.organizationId,
+    )
+}
 
 /**
  * Add the leave organization screen to the nav graph.
@@ -33,12 +58,17 @@ fun NavGraphBuilder.leaveOrganizationDestination(
 
 /**
  * Navigate to the leave organization screen.
+ *
+ * @param organizationId The ID of the organization to leave.
  */
 fun NavController.navigateToLeaveOrganization(
+    organizationId: String,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = LeaveOrganizationRoute,
+        route = LeaveOrganizationRoute(
+            organizationId = organizationId,
+        ),
         navOptions = navOptions,
     )
 }
