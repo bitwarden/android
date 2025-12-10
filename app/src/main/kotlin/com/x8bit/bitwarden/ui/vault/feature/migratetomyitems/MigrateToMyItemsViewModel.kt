@@ -7,8 +7,6 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -25,27 +23,14 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class MigrateToMyItemsViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val organizationId = requireNotNull(
-            policyManager.getPersonalOwnershipPolicyOrganizationId(),
-        )
-        val organization = requireNotNull(
-            authRepository
-                .userStateFlow
-                .value
-                ?.activeAccount
-                ?.organizations
-                ?.firstOrNull { it.id == organizationId },
-        )
-
+        val args = savedStateHandle.toMigrateToMyItemsArgs()
         MigrateToMyItemsState(
-            organizationId = organizationId,
+            organizationId = args.organizationId,
             viewState = MigrateToMyItemsState.ViewState(
-                organizationName = organization.name.orEmpty(),
+                organizationName = args.organizationName,
             ),
             dialog = null,
         )
