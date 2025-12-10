@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.handler
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsAction
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsScreen
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsViewModel
@@ -43,4 +44,4 @@ class MigrateToMyItemsHandler(
  */
 @Composable
 fun rememberMigrateToMyItemsHandler(viewModel: MigrateToMyItemsViewModel): MigrateToMyItemsHandler =
-    MigrateToMyItemsHandler.create(viewModel)
+    remember(viewModel) { MigrateToMyItemsHandler.create(viewModel) }
