@@ -29,9 +29,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
         val args = savedStateHandle.toMigrateToMyItemsArgs()
         MigrateToMyItemsState(
             organizationId = args.organizationId,
-            viewState = MigrateToMyItemsState.ViewState(
-                organizationName = args.organizationName,
-            ),
+            organizationName = args.organizationName,
             dialog = null,
         )
     },
@@ -58,7 +56,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
             it.copy(
                 dialog = MigrateToMyItemsState.DialogState.Loading(
                     message = BitwardenString.migrating_items_to_x.asText(
-                        it.viewState.organizationName,
+                        it.organizationName,
                     ),
                 ),
             )
@@ -111,7 +109,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
                     dialog = MigrateToMyItemsState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
                         message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                            it.viewState.organizationName,
+                            it.organizationName,
                         ),
                     ),
                 )
@@ -129,18 +127,10 @@ class MigrateToMyItemsViewModel @Inject constructor(
  */
 @Parcelize
 data class MigrateToMyItemsState(
-    val viewState: ViewState,
+    val organizationName: String,
+    val organizationId: String,
     val dialog: DialogState?,
-    // Internal view model properties
-    private val organizationId: String,
 ) : Parcelable {
-    /**
-     * Models the view state for the [MigrateToMyItemsScreen].
-     */
-    @Parcelize
-    data class ViewState(
-        val organizationName: String,
-    ) : Parcelable
 
     /**
      * Models the dialog state for the [MigrateToMyItemsScreen].

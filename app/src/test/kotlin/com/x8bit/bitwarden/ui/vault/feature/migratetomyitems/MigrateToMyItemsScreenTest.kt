@@ -31,11 +31,9 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
 
     private val mutableStateFlow = MutableStateFlow(
         MigrateToMyItemsState(
-            viewState = MigrateToMyItemsState.ViewState(
-                organizationName = "Test Organization",
-            ),
-            dialog = null,
             organizationId = "test-org-id",
+            organizationName = "Test Organization",
+            dialog = null,
         ),
     )
 
@@ -125,13 +123,11 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `Loading dialog should display when dialog state is Loading`() {
         mutableStateFlow.value = MigrateToMyItemsState(
-            viewState = MigrateToMyItemsState.ViewState(
-                organizationName = "Test Organization",
-            ),
+            organizationId = "test-org-id",
+            organizationName = "Test Organization",
             dialog = MigrateToMyItemsState.DialogState.Loading(
                 message = "Migrating items to Test Organization...".asText(),
             ),
-            organizationId = "test-org-id",
         )
 
         composeTestRule
@@ -142,14 +138,12 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `Error dialog should display when dialog state is Error`() {
         mutableStateFlow.value = MigrateToMyItemsState(
-            viewState = MigrateToMyItemsState.ViewState(
-                organizationName = "Test Organization",
-            ),
+            organizationId = "test-org-id",
+            organizationName = "Test Organization",
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = "An error has occurred".asText(),
                 message = "Failed to migrate items".asText(),
             ),
-            organizationId = "test-org-id",
         )
 
         composeTestRule
@@ -163,14 +157,12 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `Error dialog dismiss should send DismissDialogClicked action`() {
         mutableStateFlow.value = MigrateToMyItemsState(
-            viewState = MigrateToMyItemsState.ViewState(
-                organizationName = "Test Organization",
-            ),
+            organizationId = "test-org-id",
+            organizationName = "Test Organization",
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = "Failed to migrate items".asText(),
             ),
-            organizationId = "test-org-id",
         )
 
         composeTestRule

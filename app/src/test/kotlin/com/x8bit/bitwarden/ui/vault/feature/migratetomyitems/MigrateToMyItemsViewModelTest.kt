@@ -30,7 +30,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be set from organization data`() {
         val viewModel = createViewModel()
-        assertEquals(ORGANIZATION_NAME, viewModel.stateFlow.value.viewState.organizationName)
+        assertEquals(ORGANIZATION_NAME, viewModel.stateFlow.value.organizationName)
         assertNull(viewModel.stateFlow.value.dialog)
     }
 
@@ -97,7 +97,10 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             assert(errorState.dialog is MigrateToMyItemsState.DialogState.Error)
             val errorDialog = errorState.dialog as MigrateToMyItemsState.DialogState.Error
             assertEquals(BitwardenString.an_error_has_occurred.asText(), errorDialog.title)
-            assertEquals(BitwardenString.failed_to_migrate_items_to_x.asText(), errorDialog.message)
+            assertEquals(
+                BitwardenString.failed_to_migrate_items_to_x.asText(ORGANIZATION_NAME),
+                errorDialog.message,
+            )
         }
     }
 
