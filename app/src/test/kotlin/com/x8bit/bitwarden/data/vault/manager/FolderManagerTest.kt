@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -49,6 +50,7 @@ import java.time.temporal.ChronoUnit
 
 class FolderManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val folderService = mockk<FolderService>()
     private val vaultDiskSource = mockk<VaultDiskSource>()
     private val vaultSdkSource = mockk<VaultSdkSource>()
@@ -61,6 +63,7 @@ class FolderManagerTest {
 
     private val folderManager: FolderManager = FolderManagerImpl(
         authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = fakeSettingsDiskSource,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -435,6 +438,7 @@ class FolderManagerTest {
 
         mutableSyncFolderUpsertFlow.tryEmit(
             SyncFolderUpsertData(
+                userId = userId,
                 folderId = folderId,
                 revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                 isUpdate = false,
@@ -460,6 +464,7 @@ class FolderManagerTest {
 
         mutableSyncFolderUpsertFlow.tryEmit(
             SyncFolderUpsertData(
+                userId = userId,
                 folderId = folderId,
                 revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                 isUpdate = true,
@@ -486,6 +491,7 @@ class FolderManagerTest {
 
         mutableSyncFolderUpsertFlow.tryEmit(
             SyncFolderUpsertData(
+                userId = userId,
                 folderId = folderId,
                 revisionDate = ZonedDateTime.ofInstant(
                     Instant.ofEpochSecond(0), ZoneId.of("UTC"),
@@ -518,6 +524,7 @@ class FolderManagerTest {
 
             mutableSyncFolderUpsertFlow.tryEmit(
                 SyncFolderUpsertData(
+                    userId = userId,
                     folderId = folderId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = false,
@@ -552,6 +559,7 @@ class FolderManagerTest {
 
             mutableSyncFolderUpsertFlow.tryEmit(
                 SyncFolderUpsertData(
+                    userId = userId,
                     folderId = folderId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = true,
@@ -563,6 +571,42 @@ class FolderManagerTest {
                 vaultDiskSource.saveFolder(userId = userId, folder = folder)
             }
         }
+
+    @Test
+    fun `syncFolderUpsertFlow with inactive userId should clear the last sync time`() = runTest {
+        val number = 1
+        val userId = "nonActiveUserId"
+        val folderId = "mockId-$number"
+        val lastSyncTime = FIXED_CLOCK.instant()
+
+        fakeSettingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = lastSyncTime)
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val folderView = createMockFolder(
+            number = number,
+            revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+        )
+        coEvery {
+            vaultDiskSource.getFolders(userId = userId)
+        } returns MutableStateFlow(listOf(folderView))
+
+        mutableSyncFolderUpsertFlow.tryEmit(
+            SyncFolderUpsertData(
+                userId = userId,
+                folderId = folderId,
+                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                isUpdate = true,
+            ),
+        )
+
+        fakeSettingsDiskSource.assertLastSyncTime(userId = userId, expected = null)
+        coVerify(exactly = 1) {
+            vaultDiskSource.getFolders(userId = userId)
+        }
+        coVerify(exactly = 0) {
+            folderService.getFolder(folderId = folderId)
+            vaultDiskSource.saveFolder(userId = userId, folder = any())
+        }
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -64,6 +65,7 @@ class SendManagerTest {
         coEvery { delete(files = anyVararg()) } just runs
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val sendsService = mockk<SendsService>()
     private val vaultDiskSource = mockk<VaultDiskSource>()
     private val vaultSdkSource = mockk<VaultSdkSource>()
@@ -82,6 +84,7 @@ class SendManagerTest {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = fakeSettingsDiskSource,
         fileManager = fileManager,
         reviewPromptManager = reviewPromptManager,
         pushManager = pushManager,
@@ -129,6 +132,7 @@ class SendManagerTest {
 
         mutableSyncSendUpsertFlow.tryEmit(
             SyncSendUpsertData(
+                userId = userId,
                 sendId = sendId,
                 revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                 isUpdate = false,
@@ -152,6 +156,7 @@ class SendManagerTest {
 
         mutableSyncSendUpsertFlow.tryEmit(
             SyncSendUpsertData(
+                userId = userId,
                 sendId = sendId,
                 revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                 isUpdate = true,
@@ -182,6 +187,7 @@ class SendManagerTest {
 
         mutableSyncSendUpsertFlow.tryEmit(
             SyncSendUpsertData(
+                userId = userId,
                 sendId = sendId,
                 revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
                 isUpdate = true,
@@ -221,6 +227,7 @@ class SendManagerTest {
 
             mutableSyncSendUpsertFlow.tryEmit(
                 SyncSendUpsertData(
+                    userId = userId,
                     sendId = sendId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = true,
@@ -251,6 +258,7 @@ class SendManagerTest {
 
             mutableSyncSendUpsertFlow.tryEmit(
                 SyncSendUpsertData(
+                    userId = userId,
                     sendId = sendId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = false,
@@ -283,6 +291,7 @@ class SendManagerTest {
 
             mutableSyncSendUpsertFlow.tryEmit(
                 SyncSendUpsertData(
+                    userId = userId,
                     sendId = sendId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = false,
@@ -318,6 +327,7 @@ class SendManagerTest {
 
             mutableSyncSendUpsertFlow.tryEmit(
                 SyncSendUpsertData(
+                    userId = userId,
                     sendId = sendId,
                     revisionDate = ZonedDateTime.now(FIXED_CLOCK),
                     isUpdate = true,
@@ -329,6 +339,42 @@ class SendManagerTest {
                 vaultDiskSource.saveSend(userId = userId, send = send)
             }
         }
+
+    @Test
+    fun `syncSendUpsertFlow with inactive userId should clear the last sync time`() = runTest {
+        val number = 1
+        val userId = "nonActiveUserId"
+        val sendId = "mockId-$number"
+        val lastSyncTime = FIXED_CLOCK.instant()
+
+        fakeSettingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = lastSyncTime)
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val sendView = createMockSend(
+            number = number,
+            revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+        )
+        coEvery {
+            vaultDiskSource.getSends(userId = userId)
+        } returns MutableStateFlow(listOf(sendView))
+
+        mutableSyncSendUpsertFlow.tryEmit(
+            SyncSendUpsertData(
+                userId = userId,
+                sendId = sendId,
+                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                isUpdate = true,
+            ),
+        )
+
+        fakeSettingsDiskSource.assertLastSyncTime(userId = userId, expected = null)
+        coVerify(exactly = 1) {
+            vaultDiskSource.getSends(userId = userId)
+        }
+        coVerify(exactly = 0) {
+            sendsService.getSend(sendId = sendId)
+            vaultDiskSource.saveSend(userId = userId, send = any())
+        }
+    }
 
     @Test
     fun `createSend with no active user should return CreateSendResult Error`() =
