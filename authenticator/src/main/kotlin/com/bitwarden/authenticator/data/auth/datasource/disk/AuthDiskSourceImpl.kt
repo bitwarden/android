@@ -10,6 +10,7 @@ import java.util.UUID
 private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetricKey"
 private const val LAST_ACTIVE_TIME_KEY = "lastActiveTime"
 private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
+private const val BIOMETRICS_INIT_VECTOR_KEY = "biometricInitializationVector"
 private const val UNIQUE_APP_ID_KEY = "appId"
 
 /**
@@ -59,6 +60,16 @@ class AuthDiskSourceImpl(
         )
         mutableUserBiometricUnlockKeyFlow.tryEmit(biometricsKey)
     }
+
+    override var userBiometricKeyInitVector: ByteArray?
+        get() = getEncryptedString(key = BIOMETRICS_INIT_VECTOR_KEY)
+            ?.toByteArray(Charsets.ISO_8859_1)
+        set(value) {
+            putEncryptedString(
+                key = BIOMETRICS_INIT_VECTOR_KEY,
+                value = value?.toString(Charsets.ISO_8859_1),
+            )
+        }
 
     override var authenticatorBridgeSymmetricSyncKey: ByteArray?
         set(value) {
