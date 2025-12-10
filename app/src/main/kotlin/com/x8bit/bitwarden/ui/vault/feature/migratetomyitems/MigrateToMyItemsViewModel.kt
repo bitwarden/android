@@ -110,7 +110,9 @@ class MigrateToMyItemsViewModel @Inject constructor(
                 it.copy(
                     dialog = MigrateToMyItemsState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.failed_to_migrate_items_to_x.asText(),
+                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                            it.viewState.organizationName,
+                        ),
                     ),
                 )
             }
