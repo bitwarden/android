@@ -5,6 +5,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -53,6 +54,14 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
     fun `NavigateToVault event should call onNavigateToVault`() {
         mutableEventFlow.tryEmit(LeaveOrganizationEvent.NavigateToVault)
         assertTrue(onNavigateToVaultCalled)
+    }
+
+    @Test
+    fun `back button click should emit NavigateBack event`() {
+        composeTestRule
+            .onNodeWithContentDescription("Back")
+            .performClick()
+        verify { viewModel.trySendAction(LeaveOrganizationAction.BackClick) }
     }
 
     @Test
