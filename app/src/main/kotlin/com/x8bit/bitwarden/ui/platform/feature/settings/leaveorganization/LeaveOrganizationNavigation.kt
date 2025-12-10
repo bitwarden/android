@@ -15,20 +15,24 @@ import kotlinx.serialization.Serializable
  * The type-safe route for the leave organization screen.
  *
  * @property organizationId The ID of the organization to leave.
+ * @property organizationName The name of the organization to leave.
  */
 @OmitFromCoverage
 @Serializable
 data class LeaveOrganizationRoute(
     val organizationId: String,
+    val organizationName: String,
 )
 
 /**
  * Class to retrieve leave organization arguments from the [SavedStateHandle].
  *
  * @property organizationId The ID of the organization to leave.
+ * @property organizationName The name of the organization to leave.
  */
 data class LeaveOrganizationArgs(
     val organizationId: String,
+    val organizationName: String,
 )
 
 /**
@@ -38,6 +42,7 @@ fun SavedStateHandle.toLeaveOrganizationArgs(): LeaveOrganizationArgs {
     val route = this.toRoute<LeaveOrganizationRoute>()
     return LeaveOrganizationArgs(
         organizationId = route.organizationId,
+        organizationName = route.organizationName,
     )
 }
 
@@ -60,14 +65,17 @@ fun NavGraphBuilder.leaveOrganizationDestination(
  * Navigate to the leave organization screen.
  *
  * @param organizationId The ID of the organization to leave.
+ * @param organizationName The name of the organization to leave.
  */
 fun NavController.navigateToLeaveOrganization(
     organizationId: String,
+    organizationName: String,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
         route = LeaveOrganizationRoute(
             organizationId = organizationId,
+            organizationName = organizationName,
         ),
         navOptions = navOptions,
     )

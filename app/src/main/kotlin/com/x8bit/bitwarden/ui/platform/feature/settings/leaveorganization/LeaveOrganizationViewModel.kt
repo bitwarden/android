@@ -14,7 +14,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,17 +33,10 @@ class LeaveOrganizationViewModel @Inject constructor(
 ) : BaseViewModel<LeaveOrganizationState, LeaveOrganizationEvent, LeaveOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toLeaveOrganizationArgs()
-        val organization = authRepository
-            .userStateFlow
-            .value
-            ?.activeAccount
-            ?.organizations
-            ?.firstOrNull { it.id == args.organizationId }
-
         LeaveOrganizationState(
             organizationId = args.organizationId,
             viewState = LeaveOrganizationState.ViewState(
-                organizationName = organization?.name.orEmpty(),
+                organizationName = args.organizationName,
             ),
             dialogState = null,
         )
@@ -54,25 +46,6 @@ class LeaveOrganizationViewModel @Inject constructor(
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-
-        authRepository
-            .userStateFlow
-            .map { userState ->
-                userState
-                    ?.activeAccount
-                    ?.organizations
-                    ?.firstOrNull { it.id == state.organizationId }
-            }
-            .onEach { organization ->
-                mutableStateFlow.update { currentState ->
-                    currentState.copy(
-                        viewState = currentState.viewState.copy(
-                            organizationName = organization?.name.orEmpty(),
-                        ),
-                    )
-                }
-            }
             .launchIn(viewModelScope)
     }
 

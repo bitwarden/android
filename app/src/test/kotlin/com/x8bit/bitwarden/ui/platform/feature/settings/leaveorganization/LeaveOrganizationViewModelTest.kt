@@ -168,25 +168,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `state should be restored from SavedStateHandle`() {
-        val savedOrganization = Organization(
-            id = "saved-org-id",
-            name = "Saved Organization",
-            shouldManageResetPassword = false,
-            shouldUseKeyConnector = false,
-            role = OrganizationType.USER,
-            keyConnectorUrl = null,
-            userIsClaimedByOrganization = false,
-            limitItemDeletion = false,
-        )
-        val userStateWithSavedOrg = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                DEFAULT_USER_STATE.accounts.first().copy(
-                    organizations = listOf(savedOrganization),
-                ),
-            ),
-        )
-        every { mockAuthRepository.userStateFlow } returns MutableStateFlow(userStateWithSavedOrg)
-
         val savedState = LeaveOrganizationState(
             organizationId = "saved-org-id",
             viewState = LeaveOrganizationState.ViewState(
@@ -210,6 +191,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     ): LeaveOrganizationViewModel {
         every { savedStateHandle.toLeaveOrganizationArgs() } returns LeaveOrganizationArgs(
             organizationId = ORGANIZATION_ID,
+            organizationName = ORGANIZATION_NAME,
         )
         return LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
