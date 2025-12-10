@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.platform.feature.rootnav
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.auth.repository.AuthRepository
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -20,15 +19,14 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableHasSeenWelcomeTutorialFlow = MutableStateFlow(false)
     private val authRepository: AuthRepository = mockk {
         every { updateLastActiveTime() } just runs
+        every { isUnlockWithBiometricsEnabled } returns false
+        every { clearBiometrics() } just runs
     }
     private val settingsRepository: SettingsRepository = mockk {
         every { hasSeenWelcomeTutorial } returns false
         every { hasSeenWelcomeTutorial = any() } just runs
         every { hasSeenWelcomeTutorialFlow } returns mutableHasSeenWelcomeTutorialFlow
-        every { isUnlockWithBiometricsEnabled } returns false
-        every { clearBiometricsKey() } just runs
     }
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
 
     @Test
     fun `initialState should be correct when hasSeenWelcomeTutorial is false`() = runTest {
@@ -70,8 +68,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Test
     @Suppress("MaxLineLength")
     fun `on HasSeenWelcomeTutorialChange with true and biometrics enabled and valid should navigate to Locked`() {
-        every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns true
+        every { authRepository.isUnlockWithBiometricsEnabled } returns true
+        every { authRepository.isBiometricIntegrityValid() } returns true
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -91,8 +89,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Test
     @Suppress("MaxLineLength")
     fun `on HasSeenWelcomeTutorialChange with true and biometrics enabled but invalid should navigate to Unlocked`() {
-        every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns false
+        every { authRepository.isUnlockWithBiometricsEnabled } returns true
+        every { authRepository.isBiometricIntegrityValid() } returns false
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -112,7 +110,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Test
     @Suppress("MaxLineLength")
     fun `on HasSeenWelcomeTutorialChange with true and biometrics disabled should navigate to Unlocked`() {
-        every { settingsRepository.isUnlockWithBiometricsEnabled } returns false
+        every { authRepository.isUnlockWithBiometricsEnabled } returns false
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -255,7 +253,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
 
-        verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+        verify(exactly = 1) { authRepository.clearBiometrics() }
     }
 
     @Test
@@ -264,40 +262,40 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(RootNavAction.BiometricSupportChanged(true))
 
-        verify(exactly = 0) { settingsRepository.clearBiometricsKey() }
+        verify(exactly = 0) { authRepository.clearBiometrics() }
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `on BiometricSupportChanged with false when Locked should navigate to Unlocked`() = runTest {
-        every { settingsRepository.hasSeenWelcomeTutorial } returns true
-        every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.isBiometricIntegrityValid() } returns true
-        mutableHasSeenWelcomeTutorialFlow.value = true
-        val viewModel = createViewModel()
+    fun `on BiometricSupportChanged with false when Locked should navigate to Unlocked`() =
+        runTest {
+            every { settingsRepository.hasSeenWelcomeTutorial } returns true
+            every { authRepository.isUnlockWithBiometricsEnabled } returns true
+            every { authRepository.isBiometricIntegrityValid() } returns true
+            mutableHasSeenWelcomeTutorialFlow.value = true
+            val viewModel = createViewModel()
 
-        // Verify initial state is Locked
-        assertEquals(
-            RootNavState(
-                hasSeenWelcomeGuide = true,
-                navState = RootNavState.NavState.Locked,
-            ),
-            viewModel.stateFlow.value,
-        )
+            // Verify initial state is Locked
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Locked,
+                ),
+                viewModel.stateFlow.value,
+            )
 
-        // Send BiometricSupportChanged with false
-        viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
+            // Send BiometricSupportChanged with false
+            viewModel.trySendAction(RootNavAction.BiometricSupportChanged(false))
 
-        // Should navigate to Unlocked and clear biometric key
-        assertEquals(
-            RootNavState(
-                hasSeenWelcomeGuide = true,
-                navState = RootNavState.NavState.Unlocked,
-            ),
-            viewModel.stateFlow.value,
-        )
-        verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
-    }
+            // Should navigate to Unlocked and clear biometric key
+            assertEquals(
+                RootNavState(
+                    hasSeenWelcomeGuide = true,
+                    navState = RootNavState.NavState.Unlocked,
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) { authRepository.clearBiometrics() }
+        }
 
     @Test
     @Suppress("MaxLineLength")
@@ -327,14 +325,14 @@ class RootNavViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value,
             )
-            verify(exactly = 1) { settingsRepository.clearBiometricsKey() }
+            verify(exactly = 1) { authRepository.clearBiometrics() }
         }
 
     @Test
     @Suppress("MaxLineLength")
     fun `hasSeenWelcomeTutorialFlow updates should trigger HasSeenWelcomeTutorialChange action`() =
         runTest {
-            every { settingsRepository.isUnlockWithBiometricsEnabled } returns false
+            every { authRepository.isUnlockWithBiometricsEnabled } returns false
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -361,9 +359,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
             }
         }
 
-    private fun createViewModel() = RootNavViewModel(
+    private fun createViewModel(): RootNavViewModel = RootNavViewModel(
         authRepository = authRepository,
         settingsRepository = settingsRepository,
-        biometricsEncryptionManager = biometricsEncryptionManager,
     )
 }

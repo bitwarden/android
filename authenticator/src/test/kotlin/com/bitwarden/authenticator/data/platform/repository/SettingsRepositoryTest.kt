@@ -1,11 +1,7 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
-import com.bitwarden.authenticator.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -26,15 +22,9 @@ class SettingsRepositoryTest {
     private val settingsDiskSource: SettingsDiskSource = mockk {
         every { getAlertThresholdSeconds() } returns 7
     }
-    private val authDiskSource: AuthDiskSource = FakeAuthDiskSource()
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
-    private val authenticatorSdkSource: AuthenticatorSdkSource = mockk()
 
     private val settingsRepository = SettingsRepositoryImpl(
         settingsDiskSource = settingsDiskSource,
-        authDiskSource = authDiskSource,
-        biometricsEncryptionManager = biometricsEncryptionManager,
-        authenticatorSdkSource = authenticatorSdkSource,
         dispatcherManager = FakeDispatcherManager(),
     )
 
@@ -164,20 +154,5 @@ class SettingsRepositoryTest {
         } just runs
         settingsRepository.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3")
         verify { settingsDiskSource.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3") }
-    }
-
-    @Test
-    fun `isUnlockWithBiometricsEnabledFlow should react to changes in AuthDiskSource`() = runTest {
-        settingsRepository.isUnlockWithBiometricsEnabledFlow.test {
-            assertFalse(awaitItem())
-            authDiskSource.storeUserBiometricUnlockKey(
-                biometricsKey = "biometricsKey",
-            )
-            assertTrue(awaitItem())
-            authDiskSource.storeUserBiometricUnlockKey(
-                biometricsKey = null,
-            )
-            assertFalse(awaitItem())
-        }
     }
 }

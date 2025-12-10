@@ -7,11 +7,14 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.resource.BitwardenString
+import javax.crypto.Cipher
 
 /**
  * Default implementation of the [BiometricsManager] to manage biometrics within the app.
  */
+@OmitFromCoverage
 class BiometricsManagerImpl(
     private val activity: Activity,
 ) : BiometricsManager {
@@ -46,10 +49,11 @@ class BiometricsManagerImpl(
         }
 
     override fun promptBiometrics(
-        onSuccess: () -> Unit,
+        onSuccess: (Cipher) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
+        cipher: Cipher,
     ) {
         val biometricPrompt = BiometricPrompt(
             fragmentActivity,
@@ -57,7 +61,7 @@ class BiometricsManagerImpl(
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult,
-                ) = onSuccess()
+                ) = result.cryptoObject?.cipher?.let(onSuccess) ?: onError()
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     when (errorCode) {
@@ -91,9 +95,10 @@ class BiometricsManagerImpl(
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(BitwardenString.bitwarden_authenticator))
             .setDescription(activity.getString(BitwardenString.device_verification))
+            .setConfirmationRequired(false)
             .setAllowedAuthenticators(allowedAuthenticators)
             .build()
 
-        biometricPrompt.authenticate(promptInfo)
+        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
     }
 }

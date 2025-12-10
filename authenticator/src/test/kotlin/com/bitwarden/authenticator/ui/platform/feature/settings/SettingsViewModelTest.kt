@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.authenticator.BuildConfig
+import com.bitwarden.authenticator.data.auth.repository.AuthRepository
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
@@ -55,12 +56,15 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val mutableIsUnlockWithBiometricsEnabledFlow = MutableStateFlow(true)
+    private val authRepository: AuthRepository = mockk {
+        every { isUnlockWithBiometricsEnabled } returns true
+        every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
+    }
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
         every { defaultSaveOption } returns DEFAULT_SAVE_OPTION
         every { defaultSaveOptionFlow } returns mutableDefaultSaveOptionFlow
-        every { isUnlockWithBiometricsEnabled } returns true
         every { isCrashLoggingEnabled } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedStateFlow
         every { isScreenCaptureAllowed } answers { mutableScreenCaptureAllowedStateFlow.value }
@@ -68,7 +72,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
-        every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
@@ -303,9 +306,10 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
-    ) = SettingsViewModel(
+    ): SettingsViewModel = SettingsViewModel(
         savedStateHandle = SavedStateHandle().apply { this["state"] = savedState },
         clock = CLOCK,
+        authRepository = authRepository,
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorRepository = authenticatorRepository,
         settingsRepository = settingsRepository,

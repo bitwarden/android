@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +30,7 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import javax.crypto.Cipher
 
 /**
  * Top level composable for the unlock screen.
@@ -45,57 +44,39 @@ fun UnlockScreen(
     onUnlocked: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    var showBiometricsPrompt by remember { mutableStateOf(true) }
 
-    EventsEffect(viewModel = viewModel) { event ->
-        when (event) {
-            UnlockEvent.NavigateToItemListing -> onUnlocked()
-        }
-    }
-
-    when (val dialog = state.dialog) {
-        is UnlockState.Dialog.Error -> BitwardenBasicDialog(
-            title = stringResource(id = BitwardenString.an_error_has_occurred),
-            message = dialog.message(),
-            onDismissRequest = remember(viewModel) {
-                {
-                    viewModel.trySendAction(UnlockAction.DismissDialog)
-                }
-            },
-        )
-
-        UnlockState.Dialog.Loading -> BitwardenLoadingDialog(
-            text = stringResource(id = BitwardenString.loading),
-        )
-
-        null -> Unit
-    }
-
-    val onBiometricsUnlock: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(UnlockAction.BiometricsUnlock) }
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
+        { viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(it)) }
     }
     val onBiometricsLockOut: () -> Unit = remember(viewModel) {
         { viewModel.trySendAction(UnlockAction.BiometricsLockout) }
     }
 
-    if (showBiometricsPrompt) {
-        biometricsManager.promptBiometrics(
-            onSuccess = {
-                showBiometricsPrompt = false
-                onBiometricsUnlock()
-            },
-            onCancel = {
-                showBiometricsPrompt = false
-            },
-            onError = {
-                showBiometricsPrompt = false
-            },
-            onLockOut = {
-                showBiometricsPrompt = false
-                onBiometricsLockOut()
-            },
-        )
+    EventsEffect(viewModel = viewModel) { event ->
+        when (event) {
+            UnlockEvent.NavigateToItemListing -> onUnlocked()
+            is UnlockEvent.PromptForBiometrics -> {
+                biometricsManager.promptBiometrics(
+                    onSuccess = onBiometricsUnlockSuccess,
+                    onCancel = {
+                        // no-op
+                    },
+                    onError = {
+                        // no-op
+                    },
+                    onLockOut = onBiometricsLockOut,
+                    cipher = event.cipher,
+                )
+            }
+        }
     }
+
+    UnlockDialogs(
+        dialog = state.dialog,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(UnlockAction.DismissDialog) }
+        },
+    )
 
     BitwardenScaffold(
         modifier = Modifier
@@ -118,17 +99,8 @@ fun UnlockScreen(
             Spacer(modifier = Modifier.height(32.dp))
             BitwardenFilledButton(
                 label = stringResource(id = BitwardenString.unlock),
-                onClick = {
-                    biometricsManager.promptBiometrics(
-                        onSuccess = onBiometricsUnlock,
-                        onCancel = {
-                            // no-op
-                        },
-                        onError = {
-                            // no-op
-                        },
-                        onLockOut = onBiometricsLockOut,
-                    )
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(UnlockAction.BiometricsUnlockClick) }
                 },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -138,5 +110,28 @@ fun UnlockScreen(
             Spacer(modifier = Modifier.height(height = 12.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
+    }
+}
+
+@Composable
+private fun UnlockDialogs(
+    dialog: UnlockState.Dialog?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialog) {
+        is UnlockState.Dialog.Error -> {
+            BitwardenBasicDialog(
+                title = dialog.title(),
+                message = dialog.message(),
+                throwable = dialog.throwable,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        UnlockState.Dialog.Loading -> {
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.loading))
+        }
+
+        null -> Unit
     }
 }
