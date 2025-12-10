@@ -8,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -53,7 +53,7 @@ fun NavGraphBuilder.leaveOrganizationDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVault: () -> Unit,
 ) {
-    composableWithSlideTransitions<LeaveOrganizationRoute> {
+    composableWithPushTransitions<LeaveOrganizationRoute> {
         LeaveOrganizationScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVault = onNavigateToVault,
