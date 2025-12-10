@@ -58,9 +58,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val expectedState = LeaveOrganizationState(
             organizationId = ORGANIZATION_ID,
-            viewState = LeaveOrganizationState.ViewState(
-                organizationName = ORGANIZATION_NAME,
-            ),
+            organizationName = ORGANIZATION_NAME,
             dialogState = null,
         )
         assertEquals(expectedState, viewModel.stateFlow.value)
@@ -170,9 +168,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     fun `state should be restored from SavedStateHandle`() {
         val savedState = LeaveOrganizationState(
             organizationId = "saved-org-id",
-            viewState = LeaveOrganizationState.ViewState(
-                organizationName = "Saved Organization",
-            ),
+            organizationName = "Saved Organization",
             dialogState = null,
         )
         val savedStateHandle = SavedStateHandle(mapOf("state" to savedState))

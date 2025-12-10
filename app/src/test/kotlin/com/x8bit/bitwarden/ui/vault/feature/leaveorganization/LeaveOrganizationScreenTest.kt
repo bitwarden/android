@@ -186,8 +186,6 @@ private const val ORGANIZATION_NAME = "Test Organization"
 
 private val DEFAULT_STATE = LeaveOrganizationState(
     organizationId = ORGANIZATION_ID,
-    viewState = LeaveOrganizationState.ViewState(
-        organizationName = ORGANIZATION_NAME,
-    ),
+    organizationName = ORGANIZATION_NAME,
     dialogState = null,
 )

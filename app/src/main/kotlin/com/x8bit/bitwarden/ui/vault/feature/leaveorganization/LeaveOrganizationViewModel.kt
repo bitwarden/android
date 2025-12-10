@@ -35,9 +35,7 @@ class LeaveOrganizationViewModel @Inject constructor(
         val args = savedStateHandle.toLeaveOrganizationArgs()
         LeaveOrganizationState(
             organizationId = args.organizationId,
-            viewState = LeaveOrganizationState.ViewState(
-                organizationName = args.organizationName,
-            ),
+            organizationName = args.organizationName,
             dialogState = null,
         )
     },
@@ -128,17 +126,9 @@ class LeaveOrganizationViewModel @Inject constructor(
 @Parcelize
 data class LeaveOrganizationState(
     val organizationId: String,
-    val viewState: ViewState,
+    val organizationName: String,
     val dialogState: DialogState?,
 ) : Parcelable {
-
-    /**
-     * Display data for the view.
-     */
-    @Parcelize
-    data class ViewState(
-        val organizationName: String,
-    ) : Parcelable
 
     /**
      * Dialog states for transient UI.

@@ -88,7 +88,7 @@ fun LeaveOrganizationScreen(
         },
     ) {
         LeaveOrganizationContent(
-            organizationName = state.viewState.organizationName,
+            state = state,
             onLeaveClick = handlers.onLeaveClick,
             onHelpLinkClick = handlers.onHelpClick,
             modifier = Modifier.fillMaxSize(),
@@ -124,7 +124,7 @@ private fun LeaveOrganizationDialogs(
 @Suppress("LongMethod")
 @Composable
 private fun LeaveOrganizationContent(
-    organizationName: String,
+    state: LeaveOrganizationState,
     onLeaveClick: () -> Unit,
     onHelpLinkClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -151,7 +151,7 @@ private fun LeaveOrganizationContent(
         Text(
             text = stringResource(
                 id = BitwardenString.are_you_sure_you_want_to_leave_organization,
-                organizationName,
+                state.organizationName,
             ),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -178,7 +178,7 @@ private fun LeaveOrganizationContent(
         BitwardenFilledErrorButton(
             label = stringResource(
                 id = BitwardenString.leave_organization_button,
-                organizationName,
+                state.organizationName,
             ),
             onClick = onLeaveClick,
             modifier = Modifier
@@ -218,7 +218,11 @@ private fun LeaveOrganizationScreen_preview() {
             },
         ) {
             LeaveOrganizationContent(
-                organizationName = "Acme Corporation",
+                state = LeaveOrganizationState(
+                    organizationId = "",
+                    organizationName = "Test Organization",
+                    dialogState = null,
+                ),
                 onLeaveClick = {},
                 onHelpLinkClick = {},
                 modifier = Modifier.fillMaxSize(),
