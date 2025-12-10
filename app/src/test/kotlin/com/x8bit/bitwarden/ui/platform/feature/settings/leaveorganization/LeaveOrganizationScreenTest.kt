@@ -93,9 +93,9 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
     fun `warning text should be displayed`() {
         composeTestRule
             .onNodeWithText(
-                text = "You will lose access to items shared with this organization. " +
-                    "Your personal items will remain in your vault. " +
-                    "If you need access again, contact your organization administrator.",
+                text = "By declining, your personal items will stay in your account, but you’ll " +
+                    "lose access to shared items and organization features.\n\nContact your " +
+                    "admin to regain access.",
             )
             .assertExists()
     }
