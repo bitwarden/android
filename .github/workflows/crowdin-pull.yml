@@ -5,14 +5,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 5"
+    
+permissions: {}
 
 jobs:
   crowdin-sync:
     name: Crowdin Pull - ${{ github.event_name }}
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
     steps:
       - name: Checkout repo
@@ -50,6 +51,8 @@ jobs:
         with:
           app-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
           private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-contents: write      # for creating and pushing a new branch
+          permission-pull-requests: write # for creating pull request
 
       - name: Download translations
         uses: crowdin/github-action@0749939f635900a2521aa6aac7a3766642b2dc71 # v2.11.0
