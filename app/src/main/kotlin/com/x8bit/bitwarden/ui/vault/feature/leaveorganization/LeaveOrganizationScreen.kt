@@ -42,7 +42,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handler.rememberLeaveOrganizationHandler
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handlers.rememberLeaveOrganizationHandler
 
 /**
  * Top-level composable for the Leave Organization screen.

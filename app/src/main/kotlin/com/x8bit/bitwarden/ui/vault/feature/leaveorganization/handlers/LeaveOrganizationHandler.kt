@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handler
+package com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handlers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
