@@ -63,7 +63,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO: Replace `delay` with actual migration (PM-28444).
+            // TODO: Replace `delay` with actual migration using `state.organizationId` (PM-28444).
             delay(timeMillis = 100L)
             trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
@@ -127,8 +127,8 @@ class MigrateToMyItemsViewModel @Inject constructor(
  */
 @Parcelize
 data class MigrateToMyItemsState(
-    val organizationName: String,
     val organizationId: String,
+    val organizationName: String,
     val dialog: DialogState?,
 ) : Parcelable {
 
