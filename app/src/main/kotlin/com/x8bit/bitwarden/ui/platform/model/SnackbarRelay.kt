@@ -24,4 +24,5 @@ enum class SnackbarRelay {
     LOGINS_IMPORTED,
     SEND_DELETED,
     SEND_UPDATED,
+    LEFT_ORGANIZATION,
 }
