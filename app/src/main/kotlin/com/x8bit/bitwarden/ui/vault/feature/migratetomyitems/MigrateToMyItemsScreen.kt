@@ -119,8 +119,7 @@ private fun MigrateToMyItemsContent(
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .size(100.dp)
-                .fillMaxWidth(),
+                .size(100.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
         MigrateToMyItemsTextContent(organizationName = state.organizationName)
