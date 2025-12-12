@@ -494,6 +494,10 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="remove_master_password">Hapus sandi utama</string>
     <string name="leave_organization">Tinggalkan Organisasi</string>
     <string name="leave_organization_name">Tinggalkan %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Otentikasi WebAuthn</string>
     <string name="fido2_return_to_app">Kembali ke apl</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisasi ini memiliki kebijakan enterprise yang akan otomatis mendaftarkan Anda ke reset sandi. Pendaftaran ini memungkinkan administrator organisasi mengubah sandi utama Anda.</string>
@@ -1153,4 +1157,5 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gunakan metode kunci perangkat Anda untuk membuka kunci aplikasi</string>
     <string name="loading_vault_data">Memuat data brangkas…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

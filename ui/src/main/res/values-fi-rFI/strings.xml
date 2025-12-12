@@ -4,7 +4,7 @@
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Käytä</string>
     <string name="back">Takaisin</string>
     <string name="cancel">Peruuta</string>
     <string name="copy">Kopioi</string>
@@ -50,7 +50,7 @@
     <string name="no">Ei</string>
     <string name="notes">Merkinnät</string>
     <string name="private_notes">Yksityiset muistiinpanot</string>
-    <string name="okay">Okay</string>
+    <string name="okay">Selvä</string>
     <string name="password">Salasana</string>
     <string name="save">Tallenna</string>
     <string name="move">Siirrä</string>
@@ -110,8 +110,8 @@
     <string name="master_password_hint">Pääsalasanan vihje (valinnainen)</string>
     <string name="master_password_hint_description">Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">Master password must be at least %d character long.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="one">Pääsalasanassa tulee olla vähintään %d merkkiä.</item>
+        <item quantity="other">Pääsalasanassa tulee olla vähintään %d merkkiä.</item>
     </plurals>
     <string name="min_numbers">Numeroita vähintään</string>
     <string name="min_special">Erikoismerkkejä vähintään</string>
@@ -149,7 +149,7 @@
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkronointi suoritettiin</string>
     <string name="two_step_login">Kaksivaiheinen kirjautuminen</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Avaa biometrialla</string>
     <string name="unlock_with_pin">Avaus PIN-koodilla</string>
     <string name="verification_code">Todennuskoodi</string>
     <string name="view_login">Näytä kirjautumistieto</string>
@@ -204,7 +204,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="no_attachments">Ei liitteitä.</string>
     <string name="file_source">Tiedoston lähde</string>
     <string name="max_file_size">Tiedoston enimmäiskoko on 100 MB.</string>
-    <string name="required_max_file_size">Required. Maximum file size is 100 MB.</string>
+    <string name="required_max_file_size">Vaadittu. Tiedoston enimmäiskoko on 100 Mt.</string>
     <string name="learn_more">Lue lisää</string>
     <string name="api_url">API-palvelimen URL</string>
     <string name="client_certificate_mtls">Asiakasvarmenne (mTLS)</string>
@@ -313,8 +313,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="contact_info">Yhteystiedot</string>
     <string name="check_password_for_data_breaches">Tarkasta salasana tietomurtojen varalta</string>
     <plurals name="password_exposed">
-        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">Tämä salasana on paljastunut %d kerran tietomurroissa. Sinun tulisi vaihtaa se.</item>
+        <item quantity="other">Tämä salasana on paljastunut %d kertaa tietomurroissa. Sinun pitäisi vaihtaa se.</item>
     </plurals>
     <string name="password_safe">Salasanaa ei löytynyt tunnetuista tietovuodoista. Sen pitäisi olla turvallinen.</string>
     <string name="identity_name">Henkilöllisyyden nimi</string>
@@ -496,6 +496,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="remove_master_password">Poista pääsalasana</string>
     <string name="leave_organization">Poistu organisaatiosta</string>
     <string name="leave_organization_name">Poistutaanko organisaatiosta %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-tunnistautuminen</string>
     <string name="fido2_return_to_app">Palaa sovellukseen</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</string>
@@ -508,9 +512,9 @@ Koodi skannataan automaattisesti.</string>
         <item quantity="one">%1$d minute</item>
         <item quantity="other">%1$d minutes</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Organisaatiosi on asettanut istunnon enimmäisajan %1$s ja %2$s.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="this_setting_is_managed_by_your_organization">Organisaatiosi hallitsee tätä asetusta.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</string>
@@ -584,7 +588,7 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
     <string name="api_key">API-avain</string>
     <string name="api_key_required_parenthesis">API-avain (pakollinen)</string>
     <string name="service">Palvelu</string>
-    <string name="api_access_token_required_parenthesis">API access token (required)</string>
+    <string name="api_access_token_required_parenthesis">API pääsyavain (pakollinen)</string>
     <string name="api_access_token">API-käyttötunniste</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Haluatko varmasti korvata nykyisen käyttäjätunnuksen?</string>
     <string name="generate_username">Luo käyttäjätunnus</string>
@@ -1161,4 +1165,5 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

@@ -390,7 +390,7 @@ Načtení proběhne automaticky.</string>
     <string name="send_verification_code_to_email">Poslat ověřovací kód na Váš e-mail</string>
     <string name="code_sent">Kód byl odeslán!</string>
     <string name="confirm_your_identity">Pro pokračování potvrďte svou identitu.</string>
-    <string name="export_vault_warning">Tento export obsahuje data Vašeho trezoru v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití.</string>
+    <string name="export_vault_warning">Z důvodu bezpečnosti nesdílejte ani neposílejte tento soubor na nezabezpečené kanály (jako je e-mail) a smažte jej, když jste hotovi.</string>
     <string name="export_vault_file_pw_protect_info">Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru.</string>
     <string name="export_vault_confirmation_title">Potvrdit export trezoru</string>
     <string name="warning">Varování</string>
@@ -500,6 +500,10 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete opustit %1$s?</string>
+    <string name="leave_organization_button">Opustit %1$s</string>
+    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace.\n\nKontaktujte svého správce pro opětovné udělení přístupu.</string>
+    <string name="how_to_manage_my_vault">Jak spravovat můj trezor</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -1178,4 +1182,5 @@ při opakování problémů.</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
     <string name="loading_vault_data">Načítání dat trezoru...</string>
     <string name="resending">Opakované odesílání</string>
+    <string name="you_left_the_organization">Opustili jste organizaci</string>
 </resources>
