@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.authenticator.manager
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Manages the flows for getting verification codes.
@@ -11,11 +11,13 @@ import kotlinx.coroutines.flow.Flow
 interface TotpCodeManager {
 
     /**
-     * Flow for getting a DataState with multiple verification code items.
+     * StateFlow for getting multiple verification code items. Returns a StateFlow that emits
+     * updated verification codes every second. The StateFlow is cached per-item to prevent
+     * recreation on each subscribe, ensuring smooth UI updates when returning from background.
      */
     fun getTotpCodesFlow(
         itemList: List<AuthenticatorItem>,
-    ): Flow<List<VerificationCodeItem>>
+    ): StateFlow<List<VerificationCodeItem>>
 
     @Suppress("UndocumentedPublicClass")
     companion object {
