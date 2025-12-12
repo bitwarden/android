@@ -496,6 +496,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="remove_master_password">Master-Passwort entfernen</string>
     <string name="leave_organization">Organisation verlassen</string>
     <string name="leave_organization_name">%1$s verlassen?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Bist du sicher, dass du %1$s verlassen möchtest?</string>
+    <string name="leave_organization_button">%1$s verlassen</string>
+    <string name="leave_organization_warning">Wenn du ablehnst, bleiben deine persönlichen Einträge in deinem Konto erhalten, aber du wirst den Zugriff auf geteilte Einträge und Organisationsfunktionen verlieren.\n\nKontaktiere deinen Administrator, um den Zugriff wiederherzustellen.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">WebAuthn authentifizieren</string>
     <string name="fido2_return_to_app">Zurück zur App</string>
     <string name="reset_password_auto_enroll_invite_warning">Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</string>
@@ -1160,4 +1164,5 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Nutze die Sperrmethode deines Geräts, um die App zu entsperren</string>
     <string name="loading_vault_data">Tresor-Daten werden geladen…</string>
     <string name="resending">Wird erneut gesendet</string>
+    <string name="you_left_the_organization">Du hast die Organisation verlassen</string>
 </resources>

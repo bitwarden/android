@@ -500,6 +500,10 @@
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
     <string name="leave_organization_name">Покинуть %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть %1$s?</string>
+    <string name="leave_organization_button">Покинуть %1$s</string>
+    <string name="leave_organization_warning">В случае отказа ваши личные данные останутся в вашем аккаунте, но вы потеряете доступ к общим элементам и возможностям организации.\n\nОбратитесь к своему администратору, чтобы восстановить доступ.</string>
+    <string name="how_to_manage_my_vault">Как управлять моим хранилищем</string>
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
     <string name="reset_password_auto_enroll_invite_warning">В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль.</string>
@@ -1177,4 +1181,5 @@
     <string name="use_your_devices_lock_method_to_unlock_the_app">Используйте метод блокировки вашего устройства, чтобы разблокировать приложение</string>
     <string name="loading_vault_data">Загрузка данных хранилища…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">Вы покинули организацию</string>
 </resources>
