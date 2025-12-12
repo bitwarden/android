@@ -494,6 +494,10 @@
     <string name="remove_master_password">移除主密码</string>
     <string name="leave_organization">退出组织</string>
     <string name="leave_organization_name">退出 %1$s？</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">验证 WebAuthn</string>
     <string name="fido2_return_to_app">返回 App</string>
     <string name="reset_password_auto_enroll_invite_warning">此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</string>
@@ -1154,4 +1158,5 @@
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用您设备的锁定方式解锁此 App</string>
     <string name="loading_vault_data">正在加载密码库数据…</string>
     <string name="resending">再次发送</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

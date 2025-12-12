@@ -179,8 +179,8 @@
     <string name="send_verification_code_again">Gửi lại mã</string>
     <string name="verification_email_not_sent">Không thể gửi email xác minh. Thử lại.</string>
     <string name="verification_email_sent">Đã gửi email xác minh</string>
-    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ YubiKey NEO của bạn áp vào mặt sau thiết bị hoặc cắm YubiKey vào cổng USB của thiết bị, sau đó chạm vào nút của nó.</string>
-    <string name="yubi_key_title">Khóa bảo mật YubiKey</string>
+    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ khóa bảo mật Yubico của bạn áp vào mặt sau thiết bị hoặc cắm nó vào cổng USB, rồi chạm vào nút trên khóa.</string>
+    <string name="yubi_key_title">Khóa bảo mật Yubico</string>
     <string name="add_new_attachment">Thêm tệp đính kèm mới</string>
     <string name="attachments">Tệp đính kèm</string>
     <string name="unable_to_download_file">Không thể tải về tệp tin.</string>
@@ -384,7 +384,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="send_verification_code_to_email">Gửi mã xác minh tới email của bạn</string>
     <string name="code_sent">Đã gửi mã!</string>
     <string name="confirm_your_identity">Xác minh danh tính để tiếp tục.</string>
-    <string name="export_vault_warning">Tệp trích xuất này chứa dữ liệu kho của bạn dưới một định dạng không được mã hóa. Bạn không nên lưu trữ hay gửi tệp này thông qua phương thức không an toàn (như email). Xóa nó ngay lập tức khi bạn đã dùng xong.</string>
+    <string name="export_vault_warning">Vì lý do bảo mật, bạn không nên chia sẻ hay gửi tệp này qua các kênh không an toàn (như email), và hãy xóa nó ngay sau khi bạn dùng xong.</string>
     <string name="export_vault_file_pw_protect_info">Tệp tin này sẽ được bảo vệ bằng mật khẩu và yêu cầu mật khẩu tệp tin để giải mã.</string>
     <string name="export_vault_confirmation_title">Xác nhận xuất kho</string>
     <string name="warning">Cảnh báo</string>
@@ -494,6 +494,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
@@ -650,8 +654,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="invalid_uri">Đường dẫn không hợp lệ</string>
     <string name="the_urix_is_already_blocked">Đường dẫn %1$s đã bị chặn</string>
     <string name="login_approved">Lượt đăng nhập đã duyệt</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Tính năng đăng nhập bằng thiết bị phải được thiết lập trong phần cài đặt của ứng dụng Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Cần tùy chọn khác? <annotation link="viewAll">Xem tất cả tùy chọn đăng nhập</annotation></string>
     <string name="log_in_with_device">Đăng nhập bằng thiết bị</string>
     <string name="logging_in_on">Đang đăng nhập vào</string>
     <string name="logging_in_on_with_colon">Đang đăng nhập vào:</string>
@@ -689,7 +693,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Làm theo các bước từ Dou để hoàn tất đăng nhập.</string>
     <string name="launch_duo">Khởi chạy Dou</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Mã khóa sẽ được lưu vào kho Bitwarden của bạn trong %1$s</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Mật khẩu của bạn sẽ được lưu vào kho Bitwarden cho %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ứng dụng này không hỗ trợ mã khóa</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Vận hành mã khóa thất bại vì trình duyệt không có quyền</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Vận hành mã khóa không thành công vì chữ ký trình duyệt không khớp</string>
@@ -915,8 +919,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Thao tác thông tin đăng nhập thất bại vì yêu cầu không hợp lệ.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Thao tác thông tin đăng nhập thất bại vì yêu cầu không được hỗ trợ.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>
@@ -1039,8 +1043,8 @@ các vấn đề.</string>
     <string name="export">Xuất</string>
     <string name="export_confirmation_title">Xác nhận xuất</string>
     <string name="export_success">Đã xuất dữ liệu thành công</string>
-    <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="included_in_this_export">Bao gồm trong bản xuất này</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Chỉ các mã được lưu cục bộ trên thiết bị này mới được xuất. Các mã đã đồng bộ sẽ không được bao gồm.</string>
     <string name="security">Bảo mật</string>
     <string name="too_many_failed_biometric_attempts">Xác thực sinh trắc thất bại quá nhiều lần.</string>
     <string name="version">Phiên bản</string>
@@ -1065,7 +1069,7 @@ các vấn đề.</string>
     <string name="learn_more_link"><annotation link="learnMore">Tìm hiểu thêm</annotation></string>
     <string name="shared_codes_error">Không thể đồng bộ mã từ ứng dụng Bitwarden. Hãy đảm bảo cả hai ứng dụng đều được cập nhật phiên bản mới nhất. Bạn vẫn có thể truy cập các mã hiện có trong ứng dụng Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Để xem tất cả mã xác minh của bạn, bạn cần cho phép đồng bộ hóa trên tất cả tài khoản của mình.</string>
+    <string name="sync_with_bitwarden_action_card_message">Cho phép đồng bộ ứng dụng Authenticator trong phần cài đặt để xem toàn bộ mã xác minh của bạn tại đây.</string>
     <string name="take_me_to_app_settings">Đi đến cài đặt ứng dụng</string>
     <string name="something_went_wrong">Đã xảy ra lỗi</string>
     <string name="please_try_again">Vui lòng thử lại</string>
@@ -1156,5 +1160,6 @@ các vấn đề.</string>
     <string name="lock_app">Khóa ứng dụng</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
     <string name="loading_vault_data">Đang tải dữ liệu kho…</string>
-    <string name="resending">Resending</string>
+    <string name="resending">Đang gửi lại</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

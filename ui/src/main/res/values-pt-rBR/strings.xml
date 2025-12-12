@@ -166,7 +166,7 @@
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de Preenchimento Automático do Bitwarden. Saiba mais sobre como usar o Serviço de Preenchimento Automático do Bitwarden navegando até a tela de \"Configurações\".</string>
     <string name="autofill_noun">Preenchimento automático</string>
-    <string name="autofill_verb">Preenchimento automático</string>
+    <string name="autofill_verb">Preencher automaticamente</string>
     <string name="autofill_or_view">Quer preencher ou ver este item?</string>
     <string name="search">Buscar</string>
     <string name="learn_org">Saiba mais sobre organizações</string>
@@ -496,6 +496,10 @@ A leitura será feita automaticamente.</string>
     <string name="remove_master_password">Remover senha principal</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair de %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Voltar ao aplicativo</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na reconfiguração de senha. A inscrição permitirá que os administradores da organização alterem sua senha principal.</string>
@@ -516,9 +520,9 @@ A leitura será feita automaticamente.</string>
     <string name="vault_timeout_to_large">O tempo limite do seu cofre excede as restrições estabelecidas pela sua organização.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Uma ou mais políticas da organização impedem que você exporte seu cofre individual.</string>
     <string name="add_account">Adicionar conta</string>
-    <string name="account_unlocked">Desbloqueado</string>
-    <string name="account_locked">Bloqueado</string>
-    <string name="account_logged_out">Desconectado</string>
+    <string name="account_unlocked">Desbloqueada</string>
+    <string name="account_locked">Bloqueada</string>
+    <string name="account_logged_out">Desconectada</string>
     <string name="account_switched_automatically">Trocado para a próxima conta disponível</string>
     <string name="delete_account">Apagar conta</string>
     <string name="deleting_your_account_is_permanent">O apagamento da sua conta é para sempre</string>
@@ -559,9 +563,9 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="generic_error_message">Não foi possível processar o seu pedido. Tente novamente ou entre em contato conosco.</string>
     <string name="allow_screen_capture">Permitir captura de tela</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Tem certeza que quer ativar a captura de tela?</string>
-    <string name="log_in_requested">Autenticação solicitada</string>
+    <string name="log_in_requested">Acesso solicitado</string>
     <string name="are_you_trying_to_log_in">Você está tentando se conectar?</string>
-    <string name="log_in_attempt_by_x_on_y">Tentativa de autenticação por %1$s em %2$s</string>
+    <string name="log_in_attempt_by_x_on_y">Tentativa de acesso por %1$s em %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Endereço de IP</string>
     <string name="time">Horário</string>
@@ -595,7 +599,7 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de Acessibilidade para procurar campos de autenticação em aplicativos e sites, e então estabelecer os IDs de campo apropriados para digitar um nome de usuário e senha quando uma correspondência para o aplicativo ou site for encontrada. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos na tela além da entrada de credenciais em texto.</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
-    <string name="login_request_has_already_expired">A solicitação de autenticação já expirou.</string>
+    <string name="login_request_has_already_expired">A solicitação de acesso já expirou.</string>
     <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de autenticação de:
 %1$s
 Quer trocar para esta conta?</string>
@@ -611,7 +615,7 @@ Quer trocar para esta conta?</string>
     <string name="view_all_login_options">Ver todas as opções de autenticação</string>
     <string name="pending_log_in_requests">Solicitações de acesso pendentes</string>
     <string name="decline_all_requests">Recusar todas as solicitações</string>
-    <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Tem certeza que quer recusar todas as solicitações de autenticação pendentes?</string>
+    <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Tem certeza que quer recusar todas as solicitações de acesso pendentes?</string>
     <string name="no_pending_requests">Nenhuma solicitação pendente</string>
     <string name="enable_camer_permission_to_use_the_scanner">Conceda permissão ao uso da câmera para usar o leitor</string>
     <string name="language">Idioma</string>
@@ -809,14 +813,14 @@ Quer trocar para esta conta?</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">No seu computador, <annotation emphasis="bold">acesse o seu navegador ou gerenciador de senhas atual.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exporte suas senhas.</annotation> Esta opção é geralmente encontrada nas suas configurações.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Clique em Importar dados</annotation> no aplicativo web, depois clique em Pronto para concluir a sincronização.</string>
-    <string name="step_1_of_3">1ª etapa de 3</string>
+    <string name="step_1_of_3">1ª de 3 etapas</string>
     <string name="export_your_saved_logins">Exporte suas credenciais salvas</string>
     <string name="delete_this_file_after_import_is_complete">Você vai apagar esse arquivo depois que a importação for concluída.</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">No seu computador, abra uma nova aba do navegador e <annotation emphasis="bold">vá para <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Conecte-se ao aplicativo web do Bitwarden.</string>
-    <string name="step_2_of_3">2ª etapa de 3</string>
+    <string name="step_2_of_3">2ª de 3 etapas</string>
     <string name="log_in_to_bitwarden">Conecte-se ao Bitwarden</string>
-    <string name="step_3_of_3">3ª etapa de 3</string>
+    <string name="step_3_of_3">3ª de 3 etapas</string>
     <string name="import_logins_to_bitwarden">Importe as credenciais no Bitwarden</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Na navegação do Bitwarden, encontre a opção de <annotation emphasis="bold">Ferramentas</annotation> e clique em <annotation emphasis="bold">Importar dados.</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Preencha o formulário e <annotation emphasis="bold">importe o seu arquivo de senhas salvo.</annotation></string>
@@ -847,7 +851,7 @@ Quer trocar para esta conta?</string>
     <string name="copy_fingerprint">Copiar impressão digital</string>
     <string name="enable_notifications">Ativar notificações</string>
     <string name="log_in_quickly_and_easily_across_devices">Conecte-se de forma rápida e fácil entre dispositivos</string>
-    <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">O Bitwarden pode notificá-lo toda vez que receber uma nova solicitação de autenticação de outro dispositivo.</string>
+    <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">O Bitwarden pode notificá-lo toda vez que receber uma nova solicitação de acessso de outro dispositivo.</string>
     <string name="skip_for_now">Pular por enquanto</string>
     <string name="done_text">Pronto</string>
     <string name="page_number_x_of_y">%1$sª de %2$s</string>
@@ -914,7 +918,7 @@ Quer trocar para esta conta?</string>
     <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operação de chave de acesso falhou porque a URL do servidor não está presente na solicitação.</string>
     <string name="passkey_operation_failed_because_app_signature_is_invalid">A operação da chave de acesso falhou porque a assinatura do aplicativo é inválida.</string>
     <string name="passkey_registration_failed_due_to_an_internal_error">O cadastro da chave de acesso falhou devido a um erro interno.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operação de chave de acesso falhou porque uma dependência de parte não pôde ser identificada.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operação de chave de acesso falhou pois a parte dependente não pode ser identificada.</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">A operação da chave de acesso falhou por a solicitação ser inválida.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é suportada.</string>
@@ -1161,4 +1165,5 @@ Quer trocar para esta conta?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
     <string name="loading_vault_data">Carregando dados do cofre…</string>
     <string name="resending">Reenviando</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

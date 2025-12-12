@@ -165,8 +165,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Procure uma credencial ou adicione uma nova</string>
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã “Definições”.</string>
-    <string name="autofill_noun">Preencher automaticamente</string>
-    <string name="autofill_verb">Preencher automaticamente</string>
+    <string name="autofill_noun">Preenchimento automático</string>
+    <string name="autofill_verb">Preenchimento automático</string>
     <string name="autofill_or_view">Pretende preencher automaticamente ou ver este item?</string>
     <string name="search">Procurar</string>
     <string name="learn_org">Saiba mais sobre as organizações</string>
@@ -496,6 +496,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="remove_master_password">Remover palavra-passe mestra</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair da %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Tem a certeza de que pretende sair de %1$s?</string>
+    <string name="leave_organization_button">Sair de %1$s</string>
+    <string name="leave_organization_warning">Ao recusar, os seus itens pessoais permanecerão na sua conta, mas perderá o acesso aos itens partilhados e às funcionalidades da organização.\n\nEntre em contacto com o seu administrador para recuperar o acesso.</string>
+    <string name="how_to_manage_my_vault">Como gerir o meu cofre</string>
     <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
     <string name="fido2_return_to_app">Voltar à aplicação</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
@@ -1161,4 +1165,5 @@ Pretende mudar para esta conta?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilize o método de bloqueio do seu dispositivo para desbloquear a app</string>
     <string name="loading_vault_data">A carregar os dados do cofre…</string>
     <string name="resending">A reenviar</string>
+    <string name="you_left_the_organization">Saiu da organização</string>
 </resources>

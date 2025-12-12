@@ -3,7 +3,7 @@
     <string name="about">Over</string>
     <string name="add_folder">Map toevoegen</string>
     <string name="add_item">Item toevoegen</string>
-    <string name="an_error_has_occurred">Er is een fout opgetreden.</string>
+    <string name="an_error_has_occurred">Er is een fout opgetreden</string>
     <string name="apply">Toepassen</string>
     <string name="back">Terug</string>
     <string name="cancel">Annuleren</string>
@@ -54,7 +54,7 @@
     <string name="password">Wachtwoord</string>
     <string name="save">Opslaan</string>
     <string name="move">Verplaatsen</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Opslaan…</string>
     <string name="settings">Instellingen</string>
     <string name="show">Weergeven</string>
     <string name="item_deleted">Item verwijderd</string>
@@ -102,8 +102,8 @@
     <string name="four_hours">4 uur</string>
     <string name="immediately">Onmiddellijk</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="vault_timeout_log_out_confirmation_message">Na de time-out periode zal je uitgelogd worden. Je moet met internet verbonden zijn om in te loggen en weer toegang tot je kluis te krijgen. Je instellingen en PIN die opgeslagen zijn op dit apparaat zullen niet veranderen.</string>
+    <string name="logging_in">In aan het loggen…</string>
     <string name="login_to_bitwarden">Login op Bitwarden</string>
     <string name="master_password_confirmation_val_message">De wachtwoorden komen niet overeen.</string>
     <string name="master_password_description">Het hoofdwachtwoord is het wachtwoord waarmee je toegang krijgt tot je beveiligde kluis. Het is belangrijk dat je het hoofdwachtwoord niet vergeet, want er is geen manier om het te herstellen.</string>
@@ -180,7 +180,7 @@
     <string name="send_verification_code_again">E-mail met verificatiecode opnieuw versturen</string>
     <string name="verification_email_not_sent">Kon de verificatie-e-mail niet versturen. Probeer het opnieuw.</string>
     <string name="verification_email_sent">E-mail met verificatiecode verzonden.</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">Om verder te gaan hou je je Yubico beveiligingssleutel tegen de achterkant van dit apparaat of plug het in de USB poort van dit apparaat, druk vervolgens op de knop.</string>
     <string name="yubi_key_title">YubiKey beveiligingssleutel</string>
     <string name="add_new_attachment">Nieuwe bijlage toevoegen</string>
     <string name="attachments">Bijlagen</string>
@@ -290,7 +290,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="new_uri">Nieuwe URI</string>
     <string name="add_website">Website toevoegen</string>
     <string name="base_domain">Basisdomein</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Standaard (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Hostnaam</string>
     <string name="reg_ex">Reguliere expressie</string>
@@ -365,7 +365,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="default_uri_match_detection">Standaard URI-overeenkomstdetectie</string>
     <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Thema</string>
-    <string name="theme_description">Change the application’s color theme</string>
+    <string name="theme_description">Verander het kleurthema van deze applicatie</string>
     <string name="copy_notes">Notities kopiëren</string>
     <string name="require_master_password_on_app_restart">Hoofdwachtwoord vereisen bij herstart van de app?</string>
     <string name="pin_require_master_password_restart">Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</string>
@@ -377,7 +377,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="download">Downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Apparaat verificatie</string>
     <string name="biometrics_failed">Biometrie mislukt</string>
     <string name="biometrics_decoding_failure">Log in met je hoofdwachtwoord of pincode en schakel daarna biometrische login opnieuw in in bij de instellingen.</string>
     <string name="use_biometrics_to_unlock">Biometrie gebruiken om te ontgrendelen</string>
@@ -496,6 +496,10 @@ Het scannen gebeurt automatisch.</string>
     <string name="remove_master_password">Hoofdwachtwoord verwijderen</string>
     <string name="leave_organization">Organisatie verlaten</string>
     <string name="leave_organization_name">%1$s verlaten?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Weet je zeker dat je %1$s wilt verlaten?</string>
+    <string name="leave_organization_button">%1$s verlaten</string>
+    <string name="leave_organization_warning">Door te weigeren, blijven je persoonlijke items in je account, maar verlies je toegang tot gedeelde items en organisatiefunctionaliteit.\n\nNeem contact op met je beheerder om weer toegang te krijgen.</string>
+    <string name="how_to_manage_my_vault">Hoe Mijn kluis beheren</string>
     <string name="fido2_authenticate_web_authn">Authenticeer WebAuthn</string>
     <string name="fido2_return_to_app">Terug naar de app</string>
     <string name="reset_password_auto_enroll_invite_warning">Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</string>
@@ -512,7 +516,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Je organisatie heeft de maximale sessie time-out ingesteld op %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Deze instelling wordt beheerd door je organisatie.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_never">Je organisatie heeft de standaard sessie time-out op nooit ingesteld.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Je organisatie heeft de standaard sessie time-out op herstaten applicatie ingesteld.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Je organisatie heeft de standaard sessie time-out ingesteld op Herstarten.</string>
     <string name="vault_timeout_to_large">Je kluis time-out is hoger dan het maximum van jouw organisatie.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</string>
     <string name="add_account">Voeg account toe.</string>
@@ -929,7 +933,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="self_host_server_url">URL zelfgehoste server</string>
     <string name="use_brave_autofill_integration">Brave-integratie voor automatisch invullen gebruiken</string>
     <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
-    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_chrome_beta_autofill_integration">Gebruik de Chrome Bèta autofill intergratie</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Verbetert het invullen van inloggegevens voor ondersteunde websites op geselecteerde webbrowsers. Eenmaal ingeschakeld word je doorgestuurd naar de instellingen van de webbrowser voor het inschakelen van automatisch invullen door derden.</string>
     <string name="show_more">Meer weergeven</string>
     <string name="no_folder">Geen map</string>
@@ -991,7 +995,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="trust">Vertrouwen</string>
     <string name="trusted_by_you_learn_more">Dit zijn applicaties of browsers die Bitwarden standaard niet vertrouwt, maar JIJ vertrouwt voor passkey-acties.</string>
     <string name="trusted_by_community_learn_more">Dit zijn applicaties die niet zijn opgenomen in de Google Play Store, maar Bitwarden vertrouwt op het uitvoeren van passkey-acties nadat gemeenschapsleden deze gebruikten en als veilig rapporteerden.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_google_learn_more">Dit zijn applicaties die Google veilig beschouwd en beschikbaar zijn in de Google Play Store.</string>
     <string name="trusted_by_you">Door jou vertrouwd</string>
     <string name="trusted_by_the_community">Door de gemeenschap vertrouwd</string>
     <string name="trusted_by_google">Door Google vertrouwd</string>
@@ -1161,4 +1165,5 @@ Wilt u naar dit account wisselen?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gebruik de vergrendelingsmethode van je apparaat om de app te ontgrendelen</string>
     <string name="loading_vault_data">Kluisdata inladen…</string>
     <string name="resending">Opnieuw versturen</string>
+    <string name="you_left_the_organization">Je hebt de organisatie verlaten</string>
 </resources>

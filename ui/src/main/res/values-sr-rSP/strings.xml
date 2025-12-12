@@ -498,14 +498,18 @@
     <string name="remove_master_password">Уклони главну лозинку</string>
     <string name="leave_organization">Напусти организацију</string>
     <string name="leave_organization_name">Напустити %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d сат</item>
+        <item quantity="few">%1$d сата</item>
+        <item quantity="other">%1$d сати</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">%1$d minute</item>
@@ -1121,8 +1125,8 @@
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Почиње са“ је напредна опција са повећаним ризиком од откривања акредитива.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регуларни израз“ је напредна опција са повећаним ризиком од откривања акредитива ако се неправилно користе.</string>
     <string name="later">Касније</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
+    <string name="encryption_settings_updated">Подешавања шифровања су ажурирана</string>
+    <string name="update_your_encryption_settings">Ажурирај своје поставке за шифровање</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
     <string name="import_was_cancelled_in_the_selected_app">Увоз акредитива је отказан у одабраној апликацији. Није било увоз предмета.</string>
     <string name="import_cancelled">Увоз је отказан</string>
@@ -1171,4 +1175,5 @@
     <string name="use_your_devices_lock_method_to_unlock_the_app">Користите метод закључавања уређаја да бисте откључали апликацију</string>
     <string name="loading_vault_data">Loading vault data…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

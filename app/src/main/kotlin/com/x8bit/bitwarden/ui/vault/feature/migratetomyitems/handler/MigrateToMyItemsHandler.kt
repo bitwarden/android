@@ -8,9 +8,6 @@ import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsVie
 
 /**
  * Action handlers for the [MigrateToMyItemsScreen].
- */
-/**
- * Action handlers for the [MigrateToMyItemsScreen].
  *
  * @property onAcceptClick Handler for when the user clicks the Accept button to accept migration.
  * @property onDeclineClick Handler for when the user clicks the decline and leave button.

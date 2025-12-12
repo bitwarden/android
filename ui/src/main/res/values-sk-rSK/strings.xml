@@ -500,6 +500,10 @@ Skenovanie prebehne automaticky.</string>
     <string name="remove_master_password">Odstrániť hlavné heslo</string>
     <string name="leave_organization">Opustiť organizáciu</string>
     <string name="leave_organization_name">Opustiť %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Naozaj chcete opustiť %1$s?</string>
+    <string name="leave_organization_button">Opustiť %1$s</string>
+    <string name="leave_organization_warning">Ak odmietnete, vaše osobné položky zostanú vo vašom účte, ale stratíte prístup k zdieľaným položkám a funkciám organizácie.\n\nAk chcete prístup obnoviť, obráťte sa na správcu.</string>
+    <string name="how_to_manage_my_vault">Ako spravovať môj trezor</string>
     <string name="fido2_authenticate_web_authn">Overiť cez WebAuthn</string>
     <string name="fido2_return_to_app">Vrátiť sa do aplikácie</string>
     <string name="reset_password_auto_enroll_invite_warning">Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</string>
@@ -1177,4 +1181,5 @@ Chcete prepnúť na tento účet?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Na odomknutie aplikácie použite metódu uzamknutia zariadenia</string>
     <string name="loading_vault_data">Načítavajú sa údaje trezora…</string>
     <string name="resending">Znovu sa odosiela</string>
+    <string name="you_left_the_organization">Opustili ste organizáciu</string>
 </resources>

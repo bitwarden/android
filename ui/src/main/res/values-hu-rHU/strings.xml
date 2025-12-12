@@ -495,6 +495,10 @@
     <string name="remove_master_password">Mesterjelszó eltávolítása</string>
     <string name="leave_organization">Kilépés a szervezetből</string>
     <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni %1$s szervezetet?</string>
+    <string name="leave_organization_button">%1$s elhagyása</string>
+    <string name="leave_organization_warning">Az elutasítással a személyes elemek a fiókban maradnak, de elveszítjük hozzáférést a megosztott elemekhez és a szervezeti funkciókhoz.\n\nVegyük fel a kkapcsolatot az adminisztrátorral a visszaszerzéshez.</string>
+    <string name="how_to_manage_my_vault">Hogyan kezeljük a saját széfet</string>
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
@@ -1160,4 +1164,5 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Az alkalmazás feloldásához használjuk a készülék zárolási módszerét.</string>
     <string name="loading_vault_data">Széf adatok betöltése…</string>
     <string name="resending">Ismételt küldés</string>
+    <string name="you_left_the_organization">Megtörtént a szervezet elhagyása.</string>
 </resources>

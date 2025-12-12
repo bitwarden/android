@@ -496,6 +496,10 @@
     <string name="remove_master_password">பிரதான கடவுச்சொல்லை நீக்கு</string>
     <string name="leave_organization">நிறுவனத்தைவிட்டு விலகு</string>
     <string name="leave_organization_name">%1$s விட்டு விலகவா?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-ஐ அங்கீகரி</string>
     <string name="fido2_return_to_app">செயலிக்குத் திரும்பு</string>
     <string name="reset_password_auto_enroll_invite_warning">உம்மைத் தானாகக் கடவுச்சொல் அகரமாக்கலில் சேர்க்கும் முனைவகக் கொள்கை இந்நிறுவனத்திடமுள்ளது. சேர்க்கையானது உம் பிரதான கடவுச்சொல்லை நிறுவன நிர்வாகிகள் மாற்ற அனுமதிக்கும்.</string>
@@ -1161,4 +1165,5 @@
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>
