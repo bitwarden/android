@@ -9,8 +9,16 @@ import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsVie
 /**
  * Action handlers for the [MigrateToMyItemsScreen].
  */
+/**
+ * Action handlers for the [MigrateToMyItemsScreen].
+ *
+ * @property onAcceptClick Handler for when the user clicks the Accept button to accept migration.
+ * @property onDeclineClick Handler for when the user clicks the decline and leave button.
+ * @property onHelpClick Handler for when the user clicks the help link.
+ * @property onDismissDialog Handler for when the user dismisses a dialog.
+ */
 class MigrateToMyItemsHandler(
-    val onContinueClick: () -> Unit,
+    val onAcceptClick: () -> Unit,
     val onDeclineClick: () -> Unit,
     val onHelpClick: () -> Unit,
     val onDismissDialog: () -> Unit,
@@ -23,8 +31,8 @@ class MigrateToMyItemsHandler(
          * [MigrateToMyItemsViewModel].
          */
         fun create(viewModel: MigrateToMyItemsViewModel) = MigrateToMyItemsHandler(
-            onContinueClick = {
-                viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            onAcceptClick = {
+                viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
             },
             onDeclineClick = {
                 viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked)

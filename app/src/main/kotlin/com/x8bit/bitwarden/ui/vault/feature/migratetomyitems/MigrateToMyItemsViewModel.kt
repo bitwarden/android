@@ -43,7 +43,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
 
     override fun handleAction(action: MigrateToMyItemsAction) {
         when (action) {
-            MigrateToMyItemsAction.ContinueClicked -> handleContinueClicked()
+            MigrateToMyItemsAction.AcceptClicked -> handleAcceptClicked()
             MigrateToMyItemsAction.DeclineAndLeaveClicked -> handleDeclineAndLeaveClicked()
             MigrateToMyItemsAction.HelpLinkClicked -> handleHelpLinkClicked()
             MigrateToMyItemsAction.DismissDialogClicked -> handleDismissDialogClicked()
@@ -51,7 +51,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
         }
     }
 
-    private fun handleContinueClicked() {
+    private fun handleAcceptClicked() {
         mutableStateFlow.update {
             it.copy(
                 dialog = MigrateToMyItemsState.DialogState.Loading(
@@ -179,9 +179,9 @@ sealed class MigrateToMyItemsEvent {
  */
 sealed class MigrateToMyItemsAction {
     /**
-     * User clicked the Continue button.
+     * User clicked the Accept button.
      */
-    data object ContinueClicked : MigrateToMyItemsAction()
+    data object AcceptClicked : MigrateToMyItemsAction()
 
     /**
      * User clicked the Decline and Leave button.

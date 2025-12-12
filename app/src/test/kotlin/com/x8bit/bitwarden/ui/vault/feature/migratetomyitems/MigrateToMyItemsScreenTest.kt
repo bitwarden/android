@@ -73,11 +73,11 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `Continue button click should send ContinueClicked action`() {
-        composeTestRule.onNodeWithText("Continue").performClick()
+    fun `Accept button click should send AcceptClicked action`() {
+        composeTestRule.onNodeWithText("Accept").performClick()
 
         verify {
-            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
         }
     }
 

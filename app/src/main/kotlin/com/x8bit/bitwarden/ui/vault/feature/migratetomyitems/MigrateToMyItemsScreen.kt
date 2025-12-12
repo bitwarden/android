@@ -68,7 +68,7 @@ fun MigrateToMyItemsScreen(
     BitwardenScaffold {
         MigrateToMyItemsContent(
             state = state,
-            onContinueClick = handlers.onContinueClick,
+            onAcceptClick = handlers.onAcceptClick,
             onDeclineClick = handlers.onDeclineClick,
             onHelpClick = handlers.onHelpClick,
             modifier = Modifier
@@ -103,7 +103,7 @@ private fun MigrateToMyItemsDialogs(
 @Composable
 private fun MigrateToMyItemsContent(
     state: MigrateToMyItemsState,
-    onContinueClick: () -> Unit,
+    onAcceptClick: () -> Unit,
     onDeclineClick: () -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -125,7 +125,7 @@ private fun MigrateToMyItemsContent(
         MigrateToMyItemsTextContent(organizationName = state.organizationName)
         Spacer(modifier = Modifier.height(24.dp))
         MigrateToMyItemsActions(
-            onContinueClick = onContinueClick,
+            onContinueClick = onAcceptClick,
             onDeclineClick = onDeclineClick,
             onHelpClick = onHelpClick,
         )
@@ -176,7 +176,7 @@ private fun MigrateToMyItemsActions(
 ) {
     Column(modifier = modifier) {
         BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.continue_text),
+            label = stringResource(id = BitwardenString.accept),
             onClick = onContinueClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -212,7 +212,7 @@ private fun MigrateToMyItemsScreen_preview() {
                     organizationName = "Bitwarden",
                     dialog = null,
                 ),
-                onContinueClick = {},
+                onAcceptClick = {},
                 onDeclineClick = {},
                 onHelpClick = {},
             )

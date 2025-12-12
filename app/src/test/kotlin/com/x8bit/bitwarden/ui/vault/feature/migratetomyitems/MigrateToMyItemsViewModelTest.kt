@@ -35,12 +35,12 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClicked should show loading dialog and trigger migration`() = runTest {
+    fun `AcceptClicked should show loading dialog and trigger migration`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(null, awaitItem().dialog)
 
-            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
 
             val loadingState = awaitItem()
             assert(loadingState.dialog is MigrateToMyItemsState.DialogState.Loading)
@@ -52,10 +52,10 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClicked should navigate to vault on success`() = runTest {
+    fun `AcceptClicked should navigate to vault on success`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
             assertEquals(MigrateToMyItemsEvent.NavigateToVault, awaitItem())
         }
     }
@@ -66,7 +66,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             // First show the loading dialog
-            viewModel.trySendAction(MigrateToMyItemsAction.ContinueClicked)
+            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
