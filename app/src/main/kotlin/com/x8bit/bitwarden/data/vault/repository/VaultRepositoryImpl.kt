@@ -550,4 +550,9 @@ class VaultRepositoryImpl(
             organizationKeys = organizationKeys,
         )
     }
+
+    override fun hasPersonalVaultItems(): Boolean {
+        val vaultData = vaultSyncManager.vaultDataStateFlow.value.data ?: return false
+        return vaultData.decryptCipherListResult.successes.any { it.organizationId.isNullOrEmpty() }
+    }
 }

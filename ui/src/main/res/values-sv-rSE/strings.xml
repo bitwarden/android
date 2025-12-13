@@ -496,6 +496,10 @@ Skanningen sker automatiskt.</string>
     <string name="remove_master_password">Ta bort huvudlösenord</string>
     <string name="leave_organization">Lämna organisation</string>
     <string name="leave_organization_name">Lämna %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna %1$s?</string>
+    <string name="leave_organization_button">Lämna %1$s</string>
+    <string name="leave_organization_warning">Genom att avböja kommer dina personliga saker att finnas kvar på ditt konto, men du kommer att förlora åtkomst till delade objekt och organisationsfunktioner.\n\nKontakta administratören för att återfå åtkomst.</string>
+    <string name="how_to_manage_my_vault">Hur man hanterar Mitt valv</string>
     <string name="fido2_authenticate_web_authn">Autentisera WebAuthn</string>
     <string name="fido2_return_to_app">Återvänd till app</string>
     <string name="reset_password_auto_enroll_invite_warning">Denna organisation har en företagspolicy som automatiskt registrerar dig för lösenordsåterställning. Deltagandet gör det möjligt för organisationsadministratörer att ändra ditt huvudlösenord.</string>
@@ -1161,4 +1165,5 @@ Vill du byta till detta konto?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Använd enhetens låsningsmetod för att låsa upp appen</string>
     <string name="loading_vault_data">Läser in valvdata…</string>
     <string name="resending">Skickar igen</string>
+    <string name="you_left_the_organization">Du lämnade organisationen</string>
 </resources>

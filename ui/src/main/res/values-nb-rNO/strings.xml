@@ -496,6 +496,10 @@ Skanning skjer automatisk.</string>
     <string name="remove_master_password">Fjern hovedpassord</string>
     <string name="leave_organization">Forlat organisasjonen</string>
     <string name="leave_organization_name">Vil du forlate %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Autentiser WebAuthn</string>
     <string name="fido2_return_to_app">Gå tilbake til appen</string>
     <string name="reset_password_auto_enroll_invite_warning">Denne organisasjonen har en virksomhetsvilkår som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt.</string>
@@ -1161,4 +1165,5 @@ Vil du bytte til denne kontoen?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
     <string name="loading_vault_data">Loading vault data…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>

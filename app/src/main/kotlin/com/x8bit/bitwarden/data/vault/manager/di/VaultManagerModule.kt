@@ -61,6 +61,7 @@ object VaultManagerModule {
     @Singleton
     fun provideCipherManager(
         ciphersService: CiphersService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -71,6 +72,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
+        settingsDiskSource = settingsDiskSource,
         authDiskSource = authDiskSource,
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
@@ -85,6 +87,7 @@ object VaultManagerModule {
     @Singleton
     fun provideFolderManager(
         folderService: FolderService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -92,6 +95,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): FolderManager = FolderManagerImpl(
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -106,6 +110,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         fileManager: FileManager,
         reviewPromptManager: ReviewPromptManager,
         pushManager: PushManager,
@@ -113,6 +118,7 @@ object VaultManagerModule {
     ): SendManager = SendManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         sendsService = sendsService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,

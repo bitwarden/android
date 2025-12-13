@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryIm
 import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
 import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -54,7 +53,6 @@ object CredentialProviderModule {
         bitwardenCredentialManager: BitwardenCredentialManager,
         dispatcherManager: DispatcherManager,
         pendingIntentManager: CredentialManagerPendingIntentManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
         clock: Clock,
     ): CredentialProviderProcessor =
         CredentialProviderProcessorImpl(
@@ -63,7 +61,6 @@ object CredentialProviderModule {
             bitwardenCredentialManager = bitwardenCredentialManager,
             pendingIntentManager = pendingIntentManager,
             clock = clock,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = dispatcherManager,
         )
 
@@ -108,11 +105,11 @@ object CredentialProviderModule {
     fun provideCredentialEntryBuilder(
         @ApplicationContext context: Context,
         pendingIntentManager: CredentialManagerPendingIntentManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
+        authRepository: AuthRepository,
     ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
         context = context,
         pendingIntentManager = pendingIntentManager,
-        biometricsEncryptionManager = biometricsEncryptionManager,
+        authRepository = authRepository,
     )
 
     @Provides

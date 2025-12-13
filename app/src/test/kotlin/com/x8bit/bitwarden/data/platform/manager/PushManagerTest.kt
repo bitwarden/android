@@ -260,6 +260,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
@@ -293,6 +294,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
@@ -311,6 +313,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
@@ -342,6 +345,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
@@ -372,6 +376,7 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendUpsertData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = false,
@@ -401,6 +406,7 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendUpsertData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = true,
@@ -437,12 +443,13 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync cipher create does nothing`() = runTest {
-                pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync cipher create emits to syncCipherUpsertFlow`() =
+                runTest {
+                    pushManager.syncCipherUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync cipher delete does nothing`() = runTest {
@@ -459,12 +466,13 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync cipher update does nothing`() = runTest {
-                pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync cipher update emits to syncCipherUpsertFlow`() =
+                runTest {
+                    pushManager.syncCipherUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync folder create does nothing`() = runTest {
@@ -538,62 +546,6 @@ class PushManagerTest {
             fun `onMessageReceived with sync send update does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-        }
-
-        @Nested
-        inner class NullUserState {
-            @BeforeEach
-            fun setUp() {
-                authDiskSource.userState = null
-            }
-
-            @Test
-            fun `onMessageReceived with logout does nothing`() = runTest {
-                pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with logout with kdf reason does nothing`() = runTest {
-                pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync ciphers does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync org keys does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync settings does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync vault does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }

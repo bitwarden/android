@@ -17,6 +17,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -53,6 +54,7 @@ import java.time.Clock
 class CipherManagerImpl(
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val ciphersService: CiphersService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -689,7 +691,7 @@ class CipherManagerImpl(
      * for now.
      */
     private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
-        val userId = activeUserId ?: return
+        val userId = syncCipherUpsertData.userId
         val cipherId = syncCipherUpsertData.cipherId
         val organizationId = syncCipherUpsertData.organizationId
         val collectionIds = syncCipherUpsertData.collectionIds
@@ -732,6 +734,12 @@ class CipherManagerImpl(
         }
 
         if (!shouldUpdate) return
+        if (activeUserId != userId) {
+            // We cannot update right now since the accounts do not match, so we will
+            // do a full-sync on the next check.
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+            return
+        }
 
         ciphersService
             .getCipher(cipherId = cipherId)

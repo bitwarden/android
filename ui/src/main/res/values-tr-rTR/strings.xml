@@ -496,6 +496,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="remove_master_password">Ana parolayı kaldır</string>
     <string name="leave_organization">Kuruluştan ayrıl</string>
     <string name="leave_organization_name">%1$s kuruluşundan ayrılınsın mı?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">%1$s kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
+    <string name="leave_organization_button">%1$s kuruluşundan ayrıl</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">Kasamı nasıl yönetebilirim</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</string>
@@ -508,11 +512,11 @@ Kod otomatik olarak taranacaktır.</string>
         <item quantity="one">%1$d dakika</item>
         <item quantity="other">%1$d dakika</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Kuruluşunuz maksimum oturum zaman aşımını %1$s ve %2$s olarak ayarladı.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Kuruluşunuz maksimum oturum zaman aşımını %1$s olarak ayarladı.</string>
+    <string name="this_setting_is_managed_by_your_organization">Bu ayar kuruluşunuz tarafından yönetiliyor.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Kuruluşunuz varsayılan oturum zaman aşımını \"Asla\" olarak ayarladı.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Kuruluşunuz varsayılan oturum zaman aşımını \"Uygulama yeniden başlatıldığında\" olarak ayarladı.</string>
     <string name="vault_timeout_to_large">Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</string>
     <string name="add_account">Hesap ekle</string>
@@ -692,7 +696,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Girişi tamamlamak için Duo\'daki adımları izleyin.</string>
     <string name="launch_duo">Duo\'yu başlat</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s için geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Parolanız Bitwarden kasanıza %1$s için kaydedilecektir</string>
     <string name="passkeys_not_supported_for_this_app">Bu uygulamada geçiş anahtarları desteklenmiyor</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Tarayıcı izinli olmadığı için geçiş anahtarı işlemi başarısız oldu</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Tarayıcı imzası eşleşmediği için geçiş anahtarı işlemi başarısız oldu</string>
@@ -919,8 +923,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Kullanıcı doğrulama denemeleri aşıldığı için kimlik bilgisi işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Kullanıcı kilitli olduğu için kimlik bilgisi işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından kimlik bilgisi işlemi başarısız oldu.</string>
@@ -972,7 +976,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="log_deleted">Günlük silindi</string>
     <string name="app_settings">Uygulama ayarları</string>
     <string name="replace_existing_certificate">Mevcut sertifika değiştirilsin mi?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">“%s” takma adına sahip bir sertifika zaten mevcut. Onu değiştirmek istiyor musunuz?\nSertifikayı değiştirmek, şu anda bu sertifikayı kullanan ortamlara olan bağlantınızı etkileyebilir.</string>
     <string name="replace_certificate">Sertifikayı değiştir</string>
     <string name="unable_to_read_certificate">Sertifika okunamıyor.</string>
     <string name="cannot_delete_your_account">Hesabınız silinemiyor</string>
@@ -985,12 +989,12 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_dynamic_colors">Dinamik renkler kullan</string>
     <string name="use_dynamic_colors_question">Dinamik renkler kullanılsın mı?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik renkler sistem renklerini kullandığı için erişilebilirlik yönergelerine uygun olmayabilir.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey işlemi, tarayıcı (%1$s) tanınmadığı için başarısız oldu. %1$s uygulamasını yerel olarak güvenilen uygulamalar listesine eklemek için “Güven”i seçin.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Tarayıcı güvenilir olmadığı için anahtar işlemi başarısız oldu.</string>
     <string name="trust">Güven</string>
     <string name="trusted_by_you_learn_more">Bunlar, Bitwarden\'ın varsayılan olarak güvenmediği, ancak sizin anahtar işlemlerini gerçekleştirmek için güvendiğiniz uygulamalar veya tarayıcılardır.</string>
     <string name="trusted_by_community_learn_more">Bunlar Google Play Store\'da bulunmayan uygulamalardır, ancak Bitwarden, topluluk üyeleri bunları kullandıktan ve güvenli olarak bildirdikten sonra şifre anahtarı işlemlerini gerçekleştirmeleri için bu uygulamalara güvenmektedir.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_google_learn_more">Bunlar, Google’ın güvenli olarak gördüğü ve Google Play Store’da sunulan uygulamalardır.</string>
     <string name="trusted_by_you">Sizin Tarafınızdan Güvenilen</string>
     <string name="trusted_by_the_community">Topluluk Tarafından Güvenilen</string>
     <string name="trusted_by_google">Google Tarafından Güvenilen</string>
@@ -1113,7 +1117,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="later">Daha sonra</string>
     <string name="encryption_settings_updated">Şifreleme ayarları güncellendi</string>
     <string name="update_your_encryption_settings">Şifreleme ayarlarınızı güncelleyin</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Yeni önerilen şifreleme ayarları hesap güvenliğinizi artıracaktır. Şimdi güncellemek için ana parolanızı girin.</string>
     <string name="import_was_cancelled_in_the_selected_app">Seçilen uygulamada kimlik bilgilerinin içe aktarılması iptal edildi. Hiçbir kayıt içe aktarılmadı.</string>
     <string name="import_cancelled">İçe aktarım iptal edildi</string>
     <string name="no_items_imported">Hiçbir kayıt içe aktarılmadı</string>
@@ -1130,14 +1134,14 @@ Bu hesaba geçmek ister misiniz?</string>
         <item quantity="other">%1$d kayıt kasaya aktarıldı.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Parolaları doldurmaya devam etmek için tarayıcıda otomatik doldurma etkinleştirin</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Tarayıcınız yakın zamanda güncellendi ve bu güncelleme Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurmayı tarayıcı otomatik doldurma ayarlarından etkinleştirin.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Tarayıcılarınız yakın zamanda güncellendi ve bu güncellemeler Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurma ayarlarından yüklü tüm tarayıcılar için tarayıcı otomatik doldurmayı etkinleştirin.</string>
     <string name="not_now">Şimdi değil</string>
     <string name="import_from_bitwarden">Bitwarden\'dan içe aktar</string>
     <string name="select_account">Hesap seç</string>
     <string name="no_accounts_available">Hesap mevcut değil</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
-    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">İçe aktarabileceğiniz herhangi bir hesabınız yok. Kuruluşunuzun güvenlik ilkesi, Bitwarden’dan başka bir uygulamaya kayıt içe aktarmanızı kısıtlıyor olabilir.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">İçe aktarma kısıtlı, bu hesaptan kartlar içe aktarılamıyor.</string>
     <string name="verify_your_master_password">Ana parolanızı doğrulayın</string>
     <string name="having_trouble_with_autofill">Otomatik doldurmayla ilgili sorun mu yaşıyorsunuz?</string>
     <string name="access_help_and_troubleshooting_documentation_here">Yardım ve sorun giderme belgelerine buradan erişin</string>
@@ -1148,11 +1152,11 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passwords">Parolalar</string>
     <string name="passkeys">Geçiş anahtarları</string>
     <string name="why_is_this_step_required">Bu adım neden gerekli?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
+    <string name="kdf_update_failed_active_account_not_found">KDF güncellemesi başarısız oldu, etkin hesap bulunamadı. Lütfen tekrar deneyin veya bizimle iletişime geçin.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">KDF ayarlarınızı güncellemeye çalışırken bir hata oluştu. Lütfen tekrar deneyin veya bizimle iletişime geçin.</string>
     <string name="the_import_request_could_not_be_processed">İçe aktarma isteği işleme alınamadı.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Kasanız boş olabilir veya hesabınız için bazı kayıt türlerinin içe aktarılmasına izin verilmiyor.</string>
+    <string name="no_items_available_to_import">İçe aktarılacak kayıt yok</string>
     <string name="select_a_different_account">Başka bir hesap seçin</string>
     <string name="verify_your_account_email_address">Hesabınızın e-posta adresini doğrulayın</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Aşağıdaki e-posta adresine gönderdiğimiz 6 basamaklı kodu girin</string>
@@ -1160,4 +1164,5 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Uygulamanın kilidini açmak için cihazınızın kilit yöntemini kullanın</string>
     <string name="loading_vault_data">Kasa verileri yükleniyor…</string>
     <string name="resending">Yeniden gönderiliyor</string>
+    <string name="you_left_the_organization">Kuruluştan ayrıldınız</string>
 </resources>

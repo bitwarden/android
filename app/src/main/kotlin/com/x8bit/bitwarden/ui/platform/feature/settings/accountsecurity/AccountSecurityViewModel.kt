@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -51,28 +50,20 @@ class AccountSecurityViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
-            userId = userId,
-            cipher = biometricsEncryptionManager.getOrCreateCipher(userId),
-        )
+        val userState = requireNotNull(authRepository.userStateFlow.value)
+        val userId = userState.activeUserId
         AccountSecurityState(
             dialog = null,
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
             isAuthenticatorSyncChecked = settingsRepository.isAuthenticatorSyncEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
-                isBiometricsValid,
-            isUnlockWithPasswordEnabled = authRepository
-                .userStateFlow
-                .value
-                ?.activeAccount
-                ?.hasMasterPassword != false,
+                authRepository.isBiometricIntegrityValid(userId = userId),
+            isUnlockWithPasswordEnabled = userState.activeAccount.hasMasterPassword,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             shouldShowEnableAuthenticatorSync = isBuildVersionAtLeast(Build.VERSION_CODES.S),
             userId = userId,
@@ -230,7 +221,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        biometricsEncryptionManager
+        authRepository
             .createCipherOrNull(userId = state.userId)
             ?.let {
                 sendEvent(
@@ -319,7 +310,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithBiometricToggleDisabled() {
-        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+        authRepository.clearBiometrics(userId = state.userId)
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
         validateVaultTimeoutAction()
     }

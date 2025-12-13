@@ -40,6 +40,11 @@ interface AuthDiskSource : AppIdProvider {
     fun storeUserBiometricUnlockKey(biometricsKey: String?)
 
     /**
+     * Gets and sets the biometrics initialization vector.
+     */
+    var userBiometricKeyInitVector: ByteArray?
+
+    /**
      * Stores the symmetric key data used for encrypting TOTP data.
      */
     var authenticatorBridgeSymmetricSyncKey: ByteArray?

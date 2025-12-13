@@ -280,6 +280,7 @@ class AuthRepositoryTest {
             updateKdfToMinimumsIfNeeded(password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
+
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
         accountsService = accountsService,
@@ -296,6 +297,7 @@ class AuthRepositoryTest {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRequestManager = authRequestManager,
+        biometricsEncryptionManager = mockk(),
         keyConnectorManager = keyConnectorManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,

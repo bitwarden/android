@@ -10,7 +10,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -33,17 +32,12 @@ class SetupUnlockViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
-            userId = userId,
-            cipher = biometricsEncryptionManager.getOrCreateCipher(userId = userId),
-        )
         // whether or not the user has completed the initial setup prior to this.
         val isInitialSetup = savedStateHandle.toSetupUnlockArgs().isInitialSetup
         SetupUnlockState(
@@ -55,7 +49,7 @@ class SetupUnlockViewModel @Inject constructor(
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
-                isBiometricsValid,
+                authRepository.isBiometricIntegrityValid(userId = userId),
             dialogState = null,
             isInitialSetup = isInitialSetup,
         )
@@ -100,7 +94,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        biometricsEncryptionManager
+        authRepository
             .createCipherOrNull(userId = state.userId)
             ?.let {
                 sendEvent(
@@ -134,7 +128,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithBiometricToggleDisabled() {
-        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+        authRepository.clearBiometrics(userId = state.userId)
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
     }
 

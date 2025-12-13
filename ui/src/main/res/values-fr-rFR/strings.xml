@@ -496,6 +496,10 @@ La numérisation se fera automatiquement.</string>
     <string name="remove_master_password">Supprimer le mot de passe principal</string>
     <string name="leave_organization">Quitter l’organisation</string>
     <string name="leave_organization_name">Quitter %1$s ?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Authentifier WebAuthn</string>
     <string name="fido2_return_to_app">Retourner à l’application</string>
     <string name="reset_password_auto_enroll_invite_warning">Cette organisation dispose d\'une politique d\'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L\'inscription permettra aux administrateurs de l\'organisation de changer votre mot de passe principal.</string>
@@ -1161,4 +1165,5 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilisez la méthode de verrouillage de votre appareil pour déverrouiller l\'application</string>
     <string name="loading_vault_data">Chargement des données du coffre…</string>
     <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
 </resources>
