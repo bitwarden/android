@@ -12,6 +12,7 @@ import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.cxf.registry.CredentialExchangeRegistry
 import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.NativeLibraryManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
@@ -64,8 +65,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
@@ -115,11 +114,11 @@ object PlatformManagerModule {
         dispatcherManager: DispatcherManager,
         settingsDiskSource: SettingsDiskSource,
         flightRecorderWriter: FlightRecorderWriter,
-    ): FlightRecorderManager = FlightRecorderManagerImpl(
+    ): FlightRecorderManager = FlightRecorderManager.create(
         context = context,
         clock = clock,
         dispatcherManager = dispatcherManager,
-        settingsDiskSource = settingsDiskSource,
+        flightRecorderDiskSource = settingsDiskSource,
         flightRecorderWriter = flightRecorderWriter,
     )
 

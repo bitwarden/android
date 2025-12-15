@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.util
 
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 
 /**
  * A helper function to map the [FlightRecorderDuration] to a displayable label.
