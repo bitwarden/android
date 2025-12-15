@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -39,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
@@ -171,12 +173,10 @@ class VaultLockManagerImpl(
 
     @Suppress("LongMethod")
     override suspend fun unlockVault(
+        accountCryptographicState: WrappedAccountCryptographicState,
         userId: String,
         email: String,
         kdf: Kdf,
-        privateKey: String,
-        signingKey: String?,
-        securityState: String?,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult = withContext(context = NonCancellable) {
@@ -187,13 +187,11 @@ class VaultLockManagerImpl(
                     .initializeCrypto(
                         userId = userId,
                         request = InitUserCryptoRequest(
+                            accountCryptographicState = accountCryptographicState,
                             kdfParams = kdf,
                             email = email,
-                            privateKey = privateKey,
                             method = initUserCryptoMethod,
                             userId = userId,
-                            signingKey = signingKey,
-                            securityState = securityState,
                         ),
                     )
                     .flatMap { result ->
@@ -693,14 +691,18 @@ class VaultLockManagerImpl(
             )
         val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
         val securityState = accountKeys?.securityState?.securityState
+        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
+            accountCryptographicState = createWrappedAccountCryptographicState(
+                privateKey = privateKey,
+                securityState = securityState,
+                signingKey = signingKey,
+                signedPublicKey = signedPublicKey,
+            ),
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
-            privateKey = privateKey,
-            signingKey = signingKey,
-            securityState = securityState,
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )

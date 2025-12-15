@@ -599,6 +599,7 @@ class VaultSdkSourceImpl(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         getClient(userId)
             .platform()
@@ -607,7 +608,7 @@ class VaultSdkSourceImpl(
                 userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                 credentialStore = fido2CredentialStore,
             )
-            .silentlyDiscoverCredentials(relyingPartyId)
+            .silentlyDiscoverCredentials(relyingPartyId, userHandle?.toByteArray())
     }
 
     override suspend fun makeUpdateKdf(

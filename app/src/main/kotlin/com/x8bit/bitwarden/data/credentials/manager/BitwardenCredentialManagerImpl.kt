@@ -258,6 +258,7 @@ class BitwardenCredentialManagerImpl(
                         userId = userId,
                         fido2CredentialStore = fido2CredentialStore,
                         relyingPartyId = relyingPartyId,
+                        userHandle = null,
                     )
                     .fold(
                         onSuccess = { it },

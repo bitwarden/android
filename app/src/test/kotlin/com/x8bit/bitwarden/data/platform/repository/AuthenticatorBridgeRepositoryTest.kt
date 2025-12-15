@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -86,15 +87,18 @@ class AuthenticatorBridgeRepositoryTest {
             scopedVaultSdkSource.initializeCrypto(
                 userId = USER_1_ID,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = USER_1_PRIVATE_KEY,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_1_ID,
                     kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                     email = USER_1_EMAIL,
-                    privateKey = USER_1_PRIVATE_KEY,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_1_UNLOCK_KEY,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -102,15 +106,18 @@ class AuthenticatorBridgeRepositoryTest {
             scopedVaultSdkSource.initializeCrypto(
                 userId = USER_2_ID,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = USER_2_PRIVATE_KEY,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_2_ID,
                     kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                     email = USER_2_EMAIL,
-                    privateKey = USER_2_PRIVATE_KEY,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_2_UNLOCK_KEY,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -200,15 +207,18 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_2_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
-                        privateKey = USER_2_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -239,15 +249,18 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_1_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
-                        privateKey = USER_1_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -262,15 +275,18 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_2_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
-                        privateKey = USER_2_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -297,15 +313,18 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_1_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
-                        privateKey = USER_1_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
@@ -319,29 +338,35 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_1_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
-                        privateKey = USER_1_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = USER_2_PRIVATE_KEY,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
-                        privateKey = USER_2_PRIVATE_KEY,
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
