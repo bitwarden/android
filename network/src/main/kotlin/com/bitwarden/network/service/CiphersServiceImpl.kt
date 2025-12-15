@@ -6,7 +6,9 @@ import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
@@ -183,6 +185,13 @@ internal class CiphersServiceImpl(
                 cipherId = cipherId,
                 body = body,
             )
+            .toResult()
+
+    override suspend fun bulkShareCiphers(
+        body: BulkShareCiphersJsonRequest,
+    ): Result<List<CipherMiniResponseJson>> =
+        ciphersApi
+            .bulkShareCiphers(body = body)
             .toResult()
 
     override suspend fun updateCipherCollections(
