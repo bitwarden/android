@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recorded
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.data.util.toFormattedTimeStyle
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.util.formatBytes

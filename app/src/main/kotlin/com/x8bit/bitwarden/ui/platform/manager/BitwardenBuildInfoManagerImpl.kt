@@ -12,6 +12,8 @@ class BitwardenBuildInfoManagerImpl : BuildInfoManager {
     override val applicationId: String
         get() = BuildConfig.APPLICATION_ID
 
+    override val applicationName: String get() = "Password Manager"
+
     override val isFdroid: Boolean
         get() = BuildConfig.FLAVOR == "fdroid"
 
@@ -39,4 +41,6 @@ class BitwardenBuildInfoManagerImpl : BuildInfoManager {
             "release" -> "prod"
             else -> BuildConfig.BUILD_TYPE
         }
+
+    override val buildAndFlavor: String get() = "${BuildConfig.BUILD_TYPE}/${BuildConfig.FLAVOR}"
 }
