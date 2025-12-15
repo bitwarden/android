@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -101,6 +102,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param imeAction the preferred IME action for the keyboard to have.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -129,6 +131,7 @@ fun BitwardenTextField(
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -165,6 +168,7 @@ fun BitwardenTextField(
         shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
         keyboardType = keyboardType,
         keyboardActions = keyboardActions,
+        imeAction = imeAction,
         isError = isError,
         autoFocus = autoFocus,
         visualTransformation = visualTransformation,
@@ -204,6 +208,7 @@ fun BitwardenTextField(
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param imeAction the preferred IME action for the keyboard to have.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -235,6 +240,7 @@ fun BitwardenTextField(
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -368,7 +374,10 @@ fun BitwardenTextField(
                     singleLine = singleLine,
                     readOnly = readOnly,
                     textStyle = textStyle,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = keyboardType,
+                        imeAction = imeAction,
+                    ),
                     keyboardActions = keyboardActions,
                     trailingIcon = actions?.let {
                         {
