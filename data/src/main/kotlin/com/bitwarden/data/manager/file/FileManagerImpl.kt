@@ -1,15 +1,15 @@
 @file:OmitFromCoverage
 
-package com.x8bit.bitwarden.data.vault.manager
+package com.bitwarden.data.manager.file
 
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.util.sdkAgnosticTransferTo
+import com.bitwarden.data.manager.model.DownloadResult
+import com.bitwarden.data.manager.model.ZipFileResult
 import com.bitwarden.network.service.DownloadService
-import com.x8bit.bitwarden.data.platform.util.sdkAgnosticTransferTo
-import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
-import com.x8bit.bitwarden.data.vault.manager.model.ZipFileResult
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -29,7 +29,7 @@ private const val BUFFER_SIZE: Int = 1024
 /**
  * The default implementation of the [FileManager] interface.
  */
-class FileManagerImpl(
+internal class FileManagerImpl(
     private val context: Context,
     private val downloadService: DownloadService,
     private val dispatcherManager: DispatcherManager,

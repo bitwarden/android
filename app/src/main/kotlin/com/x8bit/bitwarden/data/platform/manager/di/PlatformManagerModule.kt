@@ -12,6 +12,7 @@ import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.cxf.registry.CredentialExchangeRegistry
 import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.NativeLibraryManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
@@ -84,7 +85,6 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module

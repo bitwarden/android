@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.square.okhttp)
     implementation(libs.timber)
 
     // Pull in test fixtures from other modules

@@ -1,10 +1,14 @@
 package com.bitwarden.data.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.BitwardenPackageManager
 import com.bitwarden.data.manager.BitwardenPackageManagerImpl
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.manager.NativeLibraryManagerImpl
+import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.data.manager.file.FileManagerImpl
+import com.bitwarden.network.service.DownloadService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +28,18 @@ object DataManagerModule {
     fun provideBitwardenPackageManager(
         @ApplicationContext context: Context,
     ): BitwardenPackageManager = BitwardenPackageManagerImpl(context = context)
+
+    @Provides
+    @Singleton
+    fun provideFileManager(
+        @ApplicationContext context: Context,
+        downloadService: DownloadService,
+        dispatcherManager: DispatcherManager,
+    ): FileManager = FileManagerImpl(
+        context = context,
+        downloadService = downloadService,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton
