@@ -7,8 +7,9 @@ import android.content.IntentFilter
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
