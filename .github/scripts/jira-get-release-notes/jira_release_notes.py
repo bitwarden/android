@@ -70,7 +70,7 @@ def main():
     )
 
     if response.status_code != 200:
-        print(f"Error fetching Jira issue: {response.status_code}", file=sys.stderr)
+        print(f"Error fetching Jira issue ({jira_issue_id}). Status code: {response.status_code}. Msg: {response.text}", file=sys.stderr)
         sys.exit(1)
 
     release_notes = parse_release_notes(response.json())
