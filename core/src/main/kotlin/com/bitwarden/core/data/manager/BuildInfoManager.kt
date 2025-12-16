@@ -15,6 +15,11 @@ interface BuildInfoManager {
     val applicationId: String
 
     /**
+     * The human readable name of the running application (untranslated).
+     */
+    val applicationName: String
+
+    /**
      * A boolean property that indicates whether the current build flavor is "fdroid".
      */
     val isFdroid: Boolean
@@ -48,4 +53,9 @@ interface BuildInfoManager {
      * A string representing the build type.
      */
     val buildTypeName: String
+
+    /**
+     * A string representing the raw build and flavor types.
+     */
+    val buildAndFlavor: String
 }

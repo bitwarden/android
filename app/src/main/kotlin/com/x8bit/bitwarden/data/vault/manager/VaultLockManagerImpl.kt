@@ -10,6 +10,7 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.concurrentMapOf
@@ -27,7 +28,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
@@ -257,29 +257,19 @@ class VaultLockManagerImpl(
         kdf: Kdf,
         userId: String,
     ) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.Password ||
-            initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock
-        ) {
-            val password = when (initUserCryptoMethod) {
-                is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
-                is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-                else -> throw IllegalStateException(
-                    "Invalid initUserCryptoMethod ${initUserCryptoMethod.logTag}.",
-                )
-            }
-
+        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
                     email = email,
-                    password = password,
+                    password = initUserCryptoMethod.password,
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
-                .onSuccess { passwordHash ->
+                .onSuccess {
                     authDiskSource.storeMasterPasswordHash(
                         userId = userId,
-                        passwordHash = passwordHash,
+                        passwordHash = it,
                     )
                 }
         }
@@ -715,15 +705,15 @@ class VaultLockManagerImpl(
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
         val password = when (initUserCryptoMethod) {
-            is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
             is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
             is InitUserCryptoMethod.AuthRequest,
             is InitUserCryptoMethod.DecryptedKey,
             is InitUserCryptoMethod.DeviceKey,
             is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.Password,
             is InitUserCryptoMethod.Pin,
             is InitUserCryptoMethod.PinEnvelope,
-            -> return
+                -> return
         }
 
         kdfManager

@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.data.vault.manager.di
 import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
-import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
@@ -27,8 +27,6 @@ import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CipherManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManagerImpl
-import com.x8bit.bitwarden.data.vault.manager.FileManager
-import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
@@ -61,6 +59,7 @@ object VaultManagerModule {
     @Singleton
     fun provideCipherManager(
         ciphersService: CiphersService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -71,6 +70,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
+        settingsDiskSource = settingsDiskSource,
         authDiskSource = authDiskSource,
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
@@ -85,6 +85,7 @@ object VaultManagerModule {
     @Singleton
     fun provideFolderManager(
         folderService: FolderService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -92,6 +93,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): FolderManager = FolderManagerImpl(
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -106,6 +108,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         fileManager: FileManager,
         reviewPromptManager: ReviewPromptManager,
         pushManager: PushManager,
@@ -113,23 +116,12 @@ object VaultManagerModule {
     ): SendManager = SendManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         sendsService = sendsService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         reviewPromptManager = reviewPromptManager,
         pushManager = pushManager,
-        dispatcherManager = dispatcherManager,
-    )
-
-    @Provides
-    @Singleton
-    fun provideFileManager(
-        @ApplicationContext context: Context,
-        downloadService: DownloadService,
-        dispatcherManager: DispatcherManager,
-    ): FileManager = FileManagerImpl(
-        context = context,
-        downloadService = downloadService,
         dispatcherManager = dispatcherManager,
     )
 

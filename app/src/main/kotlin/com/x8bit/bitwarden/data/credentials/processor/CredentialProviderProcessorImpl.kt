@@ -34,9 +34,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.Clock
 import javax.crypto.Cipher
 
@@ -52,7 +52,6 @@ class CredentialProviderProcessorImpl(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val pendingIntentManager: CredentialManagerPendingIntentManager,
     private val clock: Clock,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     dispatcherManager: DispatcherManager,
 ) : CredentialProviderProcessor {
 
@@ -63,8 +62,10 @@ class CredentialProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
+        Timber.d("Create credential request received.")
         val userId = authRepository.activeUserId
         if (userId == null) {
+            Timber.w("No active user. Cannot create credential.")
             callback.onError(CreateCredentialUnknownException("Active user is required."))
             return
         }
@@ -72,12 +73,16 @@ class CredentialProviderProcessorImpl(
         val createCredentialJob = ioScope.launch {
             (handleCreatePasskeyQuery(request) ?: handleCreatePasswordQuery(request))
                 ?.let { callback.onResult(it) }
-                ?: callback.onError(CreateCredentialUnknownException())
+                ?: run {
+                    Timber.w("Unknown create credential request.")
+                    callback.onError(CreateCredentialUnknownException())
+                }
         }
         cancellationSignal.setOnCancelListener {
             if (createCredentialJob.isActive) {
                 createCredentialJob.cancel()
             }
+            Timber.d("Create credential request cancelled by system.")
             callback.onError(CreateCredentialCancellationException())
         }
     }
@@ -87,15 +92,18 @@ class CredentialProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
     ) {
+        Timber.d("Get credential request received.")
         // If the user is not logged in, return an error.
         val userState = authRepository.userStateFlow.value
         if (userState == null) {
+            Timber.w("No active user. Cannot get credentials.")
             callback.onError(GetCredentialUnknownException("Active user is required."))
             return
         }
 
         // Return an unlock action if the current account is locked.
         if (!userState.activeAccount.isVaultUnlocked) {
+            Timber.d("Vault is locked. Requesting unlock.")
             val authenticationAction = AuthenticationAction(
                 title = context.getString(BitwardenString.unlock),
                 pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
@@ -120,10 +128,17 @@ class CredentialProviderProcessorImpl(
                         BeginGetCredentialRequest.asBundle(request),
                     ),
                 )
-                .onSuccess { callback.onResult(BeginGetCredentialResponse(credentialEntries = it)) }
-                .onFailure { callback.onError(GetCredentialUnknownException(it.message)) }
+                .onSuccess {
+                    Timber.d("Credentials retrieved.")
+                    callback.onResult(BeginGetCredentialResponse(credentialEntries = it))
+                }
+                .onFailure {
+                    Timber.w("Error getting credentials.")
+                    callback.onError(GetCredentialUnknownException(it.message))
+                }
         }
         cancellationSignal.setOnCancelListener {
+            Timber.d("Get credential request cancelled by system.")
             callback.onError(GetCredentialCancellationException())
             getCredentialJob.cancel()
         }
@@ -135,6 +150,7 @@ class CredentialProviderProcessorImpl(
         callback: OutcomeReceiver<Void?, ClearCredentialException>,
     ) {
         // no-op: RFU
+        Timber.w("Unsupported clear credential state request received.")
         callback.onError(ClearCredentialUnsupportedException())
     }
 
@@ -185,7 +201,7 @@ class CredentialProviderProcessorImpl(
             .setAutoSelectAllowed(true)
 
         if (isVaultUnlocked) {
-            biometricsEncryptionManager
+            authRepository
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
         }
@@ -233,7 +249,7 @@ class CredentialProviderProcessorImpl(
             .setAutoSelectAllowed(true)
 
         if (isVaultUnlocked) {
-            biometricsEncryptionManager
+            authRepository
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
         }

@@ -1,13 +1,13 @@
-package com.x8bit.bitwarden.data.platform.manager.flightrecorder
+package com.bitwarden.data.manager.flightrecorder
 
 import android.os.Build
 import android.util.Log
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.toFormattedPattern
-import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.manager.file.FileManager
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.BufferedWriter
@@ -25,10 +25,11 @@ private const val LOG_TIME_PATTERN: String = "yyyy-MM-dd HH:mm:ss:SSS"
  * The default implementation of the [FlightRecorderWriter].
  */
 @OmitFromCoverage
-class FlightRecorderWriterImpl(
+internal class FlightRecorderWriterImpl(
     private val clock: Clock,
     private val fileManager: FileManager,
     private val dispatcherManager: DispatcherManager,
+    private val buildInfoManager: BuildInfoManager,
 ) : FlightRecorderWriter {
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
         fileManager.delete(File(File(fileManager.logsDirectory), data.fileName))
@@ -55,19 +56,18 @@ class FlightRecorderWriterImpl(
                 val startTime = Instant
                     .ofEpochMilli(data.startTimeMs)
                     .toFormattedPattern(pattern = LOG_TIME_PATTERN, clock = clock)
-                val appVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
                 val operatingSystem = "${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})"
                 // Upon creating the new file, we pre-populate it with basic data
                 BufferedWriter(FileWriter(logFile, true)).use { bw ->
-                    bw.append("Bitwarden Android")
+                    bw.append("Bitwarden Android - ${buildInfoManager.applicationName}")
                     bw.newLine()
                     bw.append("Log Start Time: $startTime")
                     bw.newLine()
                     bw.append("Log Duration: ${data.durationMs.milliseconds}")
                     bw.newLine()
-                    bw.append("App Version: $appVersion")
+                    bw.append("App Version: ${buildInfoManager.versionData}")
                     bw.newLine()
-                    bw.append("Build: ${BuildConfig.BUILD_TYPE}/${BuildConfig.FLAVOR}")
+                    bw.append("Build: ${buildInfoManager.buildAndFlavor}")
                     bw.newLine()
                     bw.append("Operating System: $operatingSystem")
                     bw.newLine()

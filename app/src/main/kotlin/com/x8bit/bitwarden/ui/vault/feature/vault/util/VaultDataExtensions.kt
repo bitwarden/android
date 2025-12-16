@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -249,7 +249,7 @@ fun List<LoginUriView>?.toLoginIconData(
         uri = "http://$uri"
     }
 
-    val iconUri = Uri.parse(uri)
+    val iconUri = uri.toUri()
     val hostname = iconUri.host
 
     val url = "$baseIconUrl/$hostname/icon.png"

@@ -34,6 +34,8 @@ import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -134,7 +136,6 @@ class PushManagerImpl @Inject constructor(
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun onMessageReceived(notification: BitwardenNotification) {
         if (authDiskSource.uniqueAppId == notification.contextId) return
-        val userId = activeUserId ?: return
         Timber.d("Push Notification Received: ${notification.notificationType}")
 
         when (val type = notification.notificationType) {
@@ -179,11 +180,13 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.takeIf { it.cipherId != null && it.revisionDate != null }
+                    .takeIf {
+                        it.cipherId != null && it.revisionDate != null && isLoggedIn(it.userId)
+                    }
                     ?.let {
                         mutableSyncCipherUpsertSharedFlow.tryEmit(
                             SyncCipherUpsertData(
+                                userId = requireNotNull(it.userId),
                                 cipherId = requireNotNull(it.cipherId),
                                 revisionDate = requireNotNull(it.revisionDate),
                                 organizationId = it.organizationId,
@@ -228,11 +231,13 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncFolderNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.takeIf { it.folderId != null && it.revisionDate != null }
+                    .takeIf {
+                        it.folderId != null && it.revisionDate != null && isLoggedIn(it.userId)
+                    }
                     ?.let {
                         mutableSyncFolderUpsertSharedFlow.tryEmit(
                             SyncFolderUpsertData(
+                                userId = requireNotNull(it.userId),
                                 folderId = requireNotNull(it.folderId),
                                 revisionDate = requireNotNull(it.revisionDate),
                                 isUpdate = type == NotificationType.SYNC_FOLDER_UPDATE,
@@ -273,11 +278,13 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncSendNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.takeIf { it.sendId != null && it.revisionDate != null }
+                    .takeIf {
+                        it.sendId != null && it.revisionDate != null && isLoggedIn(it.userId)
+                    }
                     ?.let {
                         mutableSyncSendUpsertSharedFlow.tryEmit(
                             SyncSendUpsertData(
+                                userId = requireNotNull(it.userId),
                                 sendId = requireNotNull(it.sendId),
                                 revisionDate = requireNotNull(it.revisionDate),
                                 isUpdate = type == NotificationType.SYNC_SEND_UPDATE,
@@ -361,11 +368,11 @@ class PushManagerImpl @Inject constructor(
             )
     }
 
+    @OptIn(ExperimentalContracts::class)
     private fun isLoggedIn(
-        userId: String,
-    ): Boolean = authDiskSource.getAccountTokens(userId)?.isLoggedIn == true
-}
-
-private fun NotificationPayload.userMatchesNotification(userId: String): Boolean {
-    return this.userId != null && this.userId == userId
+        userId: String?,
+    ): Boolean {
+        contract { returns(true) implies (userId != null) }
+        return userId?.let { authDiskSource.getAccountTokens(it) }?.isLoggedIn == true
+    }
 }

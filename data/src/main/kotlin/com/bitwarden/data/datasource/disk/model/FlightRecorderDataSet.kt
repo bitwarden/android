@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.disk.model
+package com.bitwarden.data.datasource.disk.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

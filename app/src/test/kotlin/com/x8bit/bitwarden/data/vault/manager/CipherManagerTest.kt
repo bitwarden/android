@@ -6,6 +6,8 @@ import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
@@ -29,6 +31,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -41,7 +44,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
-import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -91,6 +93,7 @@ class CipherManagerTest {
         coEvery { delete(*anyVararg()) } just runs
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val ciphersService: CiphersService = mockk()
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
@@ -106,6 +109,7 @@ class CipherManagerTest {
 
     private val cipherManager: CipherManager = CipherManagerImpl(
         ciphersService = ciphersService,
+        settingsDiskSource = fakeSettingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
@@ -2403,6 +2407,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = false,
@@ -2450,6 +2455,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = false,
@@ -2492,6 +2498,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = true,
@@ -2518,6 +2525,7 @@ class CipherManagerTest {
 
         mutableSyncCipherUpsertFlow.tryEmit(
             SyncCipherUpsertData(
+                userId = userId,
                 cipherId = cipherId,
                 revisionDate = ZonedDateTime.now(clock),
                 isUpdate = true,
@@ -2552,6 +2560,7 @@ class CipherManagerTest {
 
         mutableSyncCipherUpsertFlow.tryEmit(
             SyncCipherUpsertData(
+                userId = userId,
                 cipherId = cipherId,
                 revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
                 isUpdate = true,
@@ -2589,6 +2598,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = true,
@@ -2620,6 +2630,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = false,
@@ -2659,6 +2670,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = false,
@@ -2697,6 +2709,7 @@ class CipherManagerTest {
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
+                    userId = userId,
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(clock),
                     isUpdate = true,
@@ -2711,6 +2724,43 @@ class CipherManagerTest {
                 vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
             }
         }
+
+    @Test
+    fun `syncCipherUpsertFlow with inactive userId should clear the last sync time`() = runTest {
+        val number = 1
+        val userId = "nonActiveUserId"
+        val cipherId = "mockId-$number"
+        val originalCipher = mockk<SyncResponseJson.Cipher> {
+            every { revisionDate } returns ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES)
+        }
+        val lastSyncTime = clock.instant()
+
+        fakeSettingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = lastSyncTime)
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
+        } returns originalCipher
+
+        mutableSyncCipherUpsertFlow.tryEmit(
+            SyncCipherUpsertData(
+                userId = userId,
+                cipherId = cipherId,
+                revisionDate = ZonedDateTime.now(clock),
+                isUpdate = true,
+                collectionIds = null,
+                organizationId = null,
+            ),
+        )
+
+        fakeSettingsDiskSource.assertLastSyncTime(userId = userId, expected = null)
+        coVerify(exactly = 1) {
+            vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
+        }
+        coVerify(exactly = 0) {
+            ciphersService.getCipher(cipherId)
+            vaultDiskSource.saveCipher(userId = userId, cipher = any())
+        }
+    }
 
     private fun setupMockUri(
         url: String,

@@ -167,7 +167,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
     <string name="disabled">Vypnuté</string>
     <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
-    <string name="autofill_title">Automatické vypĺňanie</string>
+    <string name="autofill_noun">Automatické vypĺňanie</string>
+    <string name="autofill_verb">Automatické vypĺňanie</string>
     <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
     <string name="search">Hladať</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
@@ -389,7 +390,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="send_verification_code_to_email">Poslať overovací kód na váš e-mail</string>
     <string name="code_sent">Kód bol odoslaný!</string>
     <string name="confirm_your_identity">Ak chcete pokračovať, potvrďte svoju identitu.</string>
-    <string name="export_vault_warning">Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. e-mail). Okamžite ho odstráňte, keď ho prestanete používať.</string>
+    <string name="export_vault_warning">V záujme bezpečnosti nezdieľajte ani neposielajte tento súbor nezabezpečenými kanálmi (napríklad e-mailom) a po skončení ho odstráňte.</string>
     <string name="export_vault_file_pw_protect_info">Tento exportovaný súbor bude chránený heslom a na dešifrovanie bude potrebné heslo súboru.</string>
     <string name="export_vault_confirmation_title">Potvrdiť export trezoru</string>
     <string name="warning">Upozornenie</string>
@@ -499,6 +500,10 @@ Skenovanie prebehne automaticky.</string>
     <string name="remove_master_password">Odstrániť hlavné heslo</string>
     <string name="leave_organization">Opustiť organizáciu</string>
     <string name="leave_organization_name">Opustiť %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Naozaj chcete opustiť %1$s?</string>
+    <string name="leave_organization_button">Opustiť %1$s</string>
+    <string name="leave_organization_warning">Ak odmietnete, vaše osobné položky zostanú vo vašom účte, ale stratíte prístup k zdieľaným položkám a funkciám organizácie.\n\nAk chcete prístup obnoviť, obráťte sa na správcu.</string>
+    <string name="how_to_manage_my_vault">Ako spravovať môj trezor</string>
     <string name="fido2_authenticate_web_authn">Overiť cez WebAuthn</string>
     <string name="fido2_return_to_app">Vrátiť sa do aplikácie</string>
     <string name="reset_password_auto_enroll_invite_warning">Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</string>
@@ -661,7 +666,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="invalid_uri">Neplatné URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je už blokované</string>
     <string name="login_approved">Schválené prihlásenie</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Potrebujete inú možnosť? <annotation link="viewAll">Zobraziť všetky možnosti prihlásenia</annotation></string>
     <string name="log_in_with_device">Prihlásiť pomocou zariadenia</string>
     <string name="logging_in_on">Prihlásenie na</string>
     <string name="logging_in_on_with_colon">Prihlásenie na:</string>
@@ -815,22 +821,22 @@ Chcete prepnúť na tento účet?</string>
     <string name="class_3_biometrics_description">Odomykanie pomocou biometrie vyžaduje silné biometrické overenie a nemusí byť kompatibilné so všetkými biometrickými možnosťami tohto zariadenia.</string>
     <string name="class_2_biometrics_description">Odomykanie pomocou biometrie vyžaduje silné biometrické overenie a nie je kompatibilné s biometrickými možnosťami tohto zariadenia.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Na počítači sa <annotation emphasis="bold">prihláste do aktuálneho prehliadača alebo správcu hesiel.</annotation></string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Exportovať heslá. Táto voľba sa zvyčajne nachádza v nastaveniach.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Vyberte údaje na importovanie vo webovej aplikácii, potom Hotovo na ukončenie synchronizácie.</string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exportujte svoje heslá.</annotation> Táto voľba sa zvyčajne nachádza v nastaveniach.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Vyberte údaje na importovanie</annotation> vo webovej aplikácii, potom Hotovo na ukončenie synchronizácie.</string>
     <string name="step_1_of_3">Krok 1 z 3</string>
     <string name="export_your_saved_logins">Export vašich prihlasovacích údajov</string>
     <string name="delete_this_file_after_import_is_complete">Tento súbor odstráňte po dokončení importu.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na počítači otvorte novú kartu prehliadača a prejdite na vault.bitwarden.com</string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na počítači otvorte novú kartu prehliadača a <annotation emphasis="bold">prejdite na <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Prihláste sa do webovej aplikácie Bitwarden.</string>
     <string name="step_2_of_3">Krok 2 z 3</string>
     <string name="log_in_to_bitwarden">Prihlásiť sa do Bitwardenu</string>
     <string name="step_3_of_3">Krok 3 z 3</string>
     <string name="import_logins_to_bitwarden">Importovať prihlasovacie údaje do Bitwardenu</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">V ponuke Bitwardenu nájdite možnosť Nástroje a vyberte možnosť Importovať údaje.</string>
-    <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulár a importujte uložený súbor s heslami.</string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">V záujme vašej bezpečnosti nezabudnite odstrániť uložený súbor s heslami.</string>
-    <string name="need_help_check_out_import_help">Potrebujete pomoc? Pozrite si pomoc pre importovanie.</string>
-    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný súbor na miesto v počítači, ktoré ľahko nájdete.</string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">V ponuke Bitwardenu <annotation emphasis="bold">nájdite možnosť Nástroje</annotation> a <annotation emphasis="bold">vyberte možnosť Importovať údaje.</annotation></string>
+    <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulár a <annotation emphasis="bold">importujte súbor s uloženými heslami.</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">V záujme vašej bezpečnosti nezabudnite <annotation emphasis="bold">odstrániť súbor s uloženými heslami.</annotation></string>
+    <string name="need_help_check_out_import_help">Potrebujete pomoc? Pozrite si <annotation link="importHelp">pomoc pre importovanie</annotation>.</string>
+    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný súbor</annotation> na miesto v počítači, ktoré ľahko nájdete.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Toto nie je známy Bitwarden server. Možno bude potrebné overiť si to u svojho poskytovateľa alebo aktualizovať server.</string>
     <string name="syncing_logins_loading_message">Synchronizujú sa prihlásenia…</string>
     <string name="download_the_browser_extension">Stiahnuť rozšírenie pre prehliadač</string>
@@ -872,11 +878,11 @@ Chcete prepnúť na tento účet?</string>
     <string name="cxp_import">Import CXP</string>
     <string name="cxp_export">Export CXP</string>
     <string name="choose_three_or_four_random_words">Vyberte tri alebo štytri náhodné slová</string>
-    <string name="pick_three_or_four_random_unrelated_words">Vyberte si tri alebo štyri náhodné, nesúvisiace slová, ktoré si ľahko zapamätáte. Spomeňte si na predmety, miesta alebo veci, ktoré máte radi.</string>
+    <string name="pick_three_or_four_random_unrelated_words">Vyberte si tri alebo štyri náhodné nesúvisiace slová, ktoré si ľahko zapamätáte. Spomeňte si na <annotation emphasis="bold">predmety, miesta alebo veci</annotation>, ktoré máte radi.</string>
     <string name="combine_those_words_together">Spojte tieto slová dohromady</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Slová poskladajte v ľubovoľnom poradí a vytvorte tak prístupovú frázu. Použite pomlčky, medzery alebo ich nechajte ako jedno dlhé slovo – je to na vás!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Slová poskladajte v ľubovoľnom poradí a vytvorte tak prístupovú frázu. <annotation emphasis="bold">Použite pomlčky, medzery alebo ich nechajte ako jedno dlhé slovo</annotation> – je to na vás!</string>
     <string name="make_it_yours">Vytvorte si vlastné</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger">Pridajte číslo alebo symbol, aby ste ho ešte viac zvýraznili. Teraz máte jedinečnú, bezpečnú a zapamätateľnú prístupovú frázu!</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Pridajte číslo alebo symbol</annotation>, aby ste ho ešte viac zvýraznili. Teraz máte jedinečnú, bezpečnú a zapamätateľnú prístupovú frázu!</string>
     <string name="need_some_inspiration">Potrebujete inšpiráciu?</string>
     <string name="check_out_the_passphrase_generator">Vyskúšajte náš generátor prístupových fráz</string>
     <string name="we_couldnt_verify_the_servers_certificate">Certifikát servera sa nám nepodarilo overiť. Reťazec certifikátov alebo nastavenia proxy servera na vašom zariadení alebo serveri Bitwarden nemusia byť správne nastavené.</string>
@@ -897,7 +903,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="enter_the_client_certificate_password_and_alias">Zadajte heslo klientskeho certifikátu a požadovaný alias pre tento certifikát.</string>
     <string name="alias">Alias</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Pomocou generátora môžete vytvárať bezpečné heslá, prístupové frázy a používateľské mená.</string>
-    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Prístupové frázy sú silné heslá, ktoré sa často ľahšie pamätajú a zadávajú ako náhodné heslá. Sú užitočné pri prihlasovaní do účtov, kde nie je k dispozícii funkcia automatického vypĺňania, napríklad do streamovacej služby na televízore.</string>
+    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Prístupové frázy sú silné heslá, ktoré sa často ľahšie pamätajú a zadávajú ako náhodné heslá. Sú užitočné pri prihlasovaní sa do účtov, kde nie je k dispozícii funkcia automatického vypĺňania, napríklad do streamovacej služby na televízore.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unikátne používateľské mená predstavujú ďalšiu úroveň zabezpečenia a môžu pomôcť zabrániť hackerom nájsť vaše účty.</string>
     <string name="coachmark_1_of_6">1 Z 6</string>
     <string name="coachmark_2_of_6">2 Z 6</string>
@@ -993,11 +999,11 @@ Chcete prepnúť na tento účet?</string>
     <string name="missing_send_resync_your_vault">Chýba Send, znovu synchronizujte trezor</string>
     <string name="use_dynamic_colors">Použiť dynamické farby</string>
     <string name="use_dynamic_colors_question">Použiť dynamické farby?</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické farby používajú systémové farby a nemusia spĺňať všetky usmernenia o prístupnosti.</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Táto farebná schéma automaticky aplikuje systémové farby na Bitwarden na základe vašej aktuálnej tapety. Tieto farby nemusia spĺňať všetky pravidlá prístupnosti.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operácia Passkey zlyhala, pretože prehliadač (%1$s) nie je rozpoznaný. Vyberte \"Dôverovať\", aby ste pridali %1$s do zoznamu lokálne dôveryhodných aplikácií.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operácia prístupového kľúča zlyhala, pretože prehliadač nie je dôveryhodný.</string>
     <string name="trust">Dôverovať</string>
-    <string name="trusted_by_you_learn_more">Toto sú aplikácie alebo prehliadače, ktorým Bitwarden predvolene nedôveruje, ale VY im dôverujete pri vykonávaní operácií s prístupovými kľúčmi.</string>
+    <string name="trusted_by_you_learn_more">Toto sú aplikácie alebo prehliadače, ktorým Bitwarden predvolene nedôveruje, ale vy im dôverujete pri vykonávaní operácií s prístupovými kľúčmi.</string>
     <string name="trusted_by_community_learn_more">Tieto aplikácie sa nenachádzajú v obchode Google Play, ale Bitwarden dôveruje vykonávaným operáciám s prístupovými kľúčmi po tom, čo ich členovia komunity použijú a nahlásia ako bezpečné.</string>
     <string name="trusted_by_google_learn_more">Tieto aplikácie považuje Google za bezpečné a sú k dispozícii v obchode Google Play.</string>
     <string name="trusted_by_you">Dôveryhodné podľa vás</string>
@@ -1053,6 +1059,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="export">Exportovať</string>
     <string name="export_confirmation_title">Potvrdiť export</string>
     <string name="export_success">Údaje boli úspešne exportované</string>
+    <string name="included_in_this_export">Zahrnuté v tomto exporte</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Exportovať sa budú len miestne kódy v tomto zariadení. Synchronizované kódy nie sú zahrnuté</string>
     <string name="security">Zabezpečenie</string>
     <string name="too_many_failed_biometric_attempts">Príliš veľa neúspešných pokusov o prihlásenie pomocou biometrických údajov.</string>
     <string name="version">Verzia</string>
@@ -1077,7 +1085,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="learn_more_link"><annotation link="learnMore">Viac informácií</annotation></string>
     <string name="shared_codes_error">Nie je možné synchronizovať kódy z Bitwardenu. Skontrolujte, či sú obe aplikácie aktuálne. K existujúcim kódom máte stále prístup v Bitwardene.</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovať s apkou Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Ak chcete zobraziť všetky svoje overovacie kódy, musíte povoliť synchronizáciu na všetkých svojich účtoch.</string>
+    <string name="sync_with_bitwarden_action_card_message">Ak chcete zobraziť všetky svoje overovacie kódy, povoľte v nastaveniach synchronizáciu aplikácie Authenticator.</string>
     <string name="take_me_to_app_settings">Prejsť do nastavení apky</string>
     <string name="something_went_wrong">Niečo sa pokazilo</string>
     <string name="please_try_again">Prosím, skúste to znova</string>
@@ -1172,4 +1180,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="lock_app">Uzamknúť aplikáciu</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Na odomknutie aplikácie použite metódu uzamknutia zariadenia</string>
     <string name="loading_vault_data">Načítavajú sa údaje trezora…</string>
+    <string name="resending">Znovu sa odosiela</string>
+    <string name="you_left_the_organization">Opustili ste organizáciu</string>
 </resources>

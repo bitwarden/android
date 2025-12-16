@@ -12,6 +12,8 @@ class AuthenticatorBuildInfoManagerImpl : BuildInfoManager {
     override val applicationId: String
         get() = BuildConfig.APPLICATION_ID
 
+    override val applicationName: String get() = "Authenticator"
+
     /**
      * Indicates whether the build is from the F-Droid flavor.
      * This is always false for Authenticator as it does not have an F-Droid compatible flavor.
@@ -44,4 +46,6 @@ class AuthenticatorBuildInfoManagerImpl : BuildInfoManager {
             "release" -> "prod"
             else -> BuildConfig.BUILD_TYPE
         }
+
+    override val buildAndFlavor: String get() = BuildConfig.BUILD_TYPE
 }

@@ -49,6 +49,7 @@ class OriginManagerImpl(
             )
             .fold(
                 onSuccess = {
+                    Timber.d("Digital asset link validation result: linked = ${it.linked}")
                     if (it.linked) {
                         ValidateOriginResult.Success(null)
                     } else {
@@ -56,6 +57,7 @@ class OriginManagerImpl(
                     }
                 },
                 onFailure = {
+                    Timber.e("Failed to validate origin for calling app")
                     ValidateOriginResult.Error.AssetLinkNotFound
                 },
             )
@@ -105,7 +107,7 @@ class OriginManagerImpl(
             .fold(
                 onSuccess = { it },
                 onFailure = {
-                    Timber.e(it, "Failed to validate privileged app: ${callingAppInfo.packageName}")
+                    Timber.e(it, "Failed to validate calling app is privileged.")
                     ValidateOriginResult.Error.Unknown
                 },
             )

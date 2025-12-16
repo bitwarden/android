@@ -12,6 +12,7 @@ import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.cxf.registry.CredentialExchangeRegistry
 import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.NativeLibraryManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
@@ -65,8 +66,6 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriter
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriterImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
@@ -84,7 +83,6 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
@@ -108,18 +106,6 @@ object PlatformManagerModule {
     fun provideAppStateManager(
         application: Application,
     ): AppStateManager = AppStateManagerImpl(application = application)
-
-    @Provides
-    @Singleton
-    fun provideFlightRecorderWriter(
-        clock: Clock,
-        fileManager: FileManager,
-        dispatcherManager: DispatcherManager,
-    ): FlightRecorderWriter = FlightRecorderWriterImpl(
-        clock = clock,
-        fileManager = fileManager,
-        dispatcherManager = dispatcherManager,
-    )
 
     @Provides
     @Singleton

@@ -5,7 +5,7 @@ import com.bitwarden.core.WrappedAccountCryptographicState
 /**
  * Creates a [WrappedAccountCryptographicState] based on the available cryptographic parameters.
  *
- * Returns [WrappedAccountCryptographicState.V2] if signing key, signed public key, and security
+ * Returns [WrappedAccountCryptographicState.V2] if signing key and security
  * state are present, otherwise returns [WrappedAccountCryptographicState.V1].
  *
  * @param privateKey The user's wrapped private key.
@@ -19,7 +19,7 @@ fun createWrappedAccountCryptographicState(
     signingKey: String?,
     signedPublicKey: String?,
 ): WrappedAccountCryptographicState {
-    return if (signingKey != null && signedPublicKey != null && securityState != null) {
+    return if (signingKey != null && securityState != null) {
         WrappedAccountCryptographicState.V2(
             privateKey = privateKey,
             securityState = securityState,
@@ -27,7 +27,6 @@ fun createWrappedAccountCryptographicState(
             signedPublicKey = signedPublicKey,
         )
     } else {
-        // V1 user: only private key
         WrappedAccountCryptographicState.V1(
             privateKey = privateKey,
         )

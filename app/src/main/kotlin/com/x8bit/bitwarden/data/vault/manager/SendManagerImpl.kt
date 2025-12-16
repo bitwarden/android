@@ -5,6 +5,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.UpdateSendResponseJson
@@ -13,6 +14,7 @@ import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -38,6 +40,7 @@ import retrofit2.HttpException
 @Suppress("LongParameterList")
 class SendManagerImpl(
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val sendsService: SendsService,
@@ -265,7 +268,7 @@ class SendManagerImpl(
      * now.
      */
     private suspend fun syncSendIfNecessary(syncSendUpsertData: SyncSendUpsertData) {
-        val userId = activeUserId ?: return
+        val userId = syncSendUpsertData.userId
         val sendId = syncSendUpsertData.sendId
         val isUpdate = syncSendUpsertData.isUpdate
         val revisionDate = syncSendUpsertData.revisionDate
@@ -278,6 +281,12 @@ class SendManagerImpl(
             localSend != null &&
             localSend.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
         if (!isValidCreate && !isValidUpdate) return
+        if (activeUserId != userId) {
+            // We cannot update right now since the accounts do not match, so we will
+            // do a full-sync on the next check.
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+            return
+        }
 
         sendsService
             .getSend(sendId = sendId)

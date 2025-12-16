@@ -4,8 +4,10 @@ import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -31,7 +33,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -564,9 +565,13 @@ class VaultRepositoryTest {
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = "mockPassword-1",
-                        userKey = "mockKey-1",
+                        masterPasswordUnlock = MasterPasswordUnlockData(
+                            kdf = MOCK_PROFILE.toSdkParams(),
+                            masterKeyWrappedUserKey = "mockKey-1",
+                            salt = "mockSalt-1",
+                        ),
                     ),
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
@@ -652,7 +657,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword without masterPasswordUnlock data should use Password method`() =
+    fun `unlockVaultWithMasterPassword without masterPasswordUnlock data should return InvalidStateError`() =
         runTest {
             val userId = "mockId-1"
             val masterPassword = "mockPassword-1"
@@ -670,47 +675,13 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
             fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
 
-            coEvery {
-                vaultLockManager.unlockVault(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = "mockPrivateKey-1",
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-
             val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = masterPassword,
             )
 
-            assertEquals(VaultUnlockResult.Success, result)
-            coVerify {
-                vaultLockManager.unlockVault(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = "mockPrivateKey-1",
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                    organizationKeys = null,
-                )
+            assertTrue(result is VaultUnlockResult.InvalidStateError)
+            coVerify(exactly = 0) {
+                vaultLockManager.unlockVault(any(), any(), any(), any(), any(), any())
             }
         }
 
@@ -741,9 +712,13 @@ class VaultRepositoryTest {
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = "mockPassword-1",
-                        userKey = "mockKey-1",
+                        masterPasswordUnlock = MasterPasswordUnlockData(
+                            kdf = MOCK_PROFILE.toSdkParams(),
+                            masterKeyWrappedUserKey = "mockKey-1",
+                            salt = "mockSalt-1",
+                        ),
                     ),
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
@@ -1465,6 +1440,100 @@ class VaultRepositoryTest {
         }
     }
 
+    @Test
+    fun `hasPersonalVaultItems returns false when vault data is loading`() {
+        mutableVaultDataStateFlow.value = DataState.Loading
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when all items belong to organizations`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = "org-1"),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items without organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = null),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items with empty organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = ""),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when successes list is empty`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = emptyList(),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
     //region Helper functions
 
     /**
@@ -1519,9 +1588,13 @@ class VaultRepositoryTest {
                 userId = userId,
                 email = "email",
                 kdf = MOCK_PROFILE.toSdkParams(),
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = mockMasterPassword,
-                    userKey = "mockKey-1",
+                    masterPasswordUnlock = MasterPasswordUnlockData(
+                        kdf = MOCK_PROFILE.toSdkParams(),
+                        masterKeyWrappedUserKey = "mockKey-1",
+                        salt = "mockSalt-1",
+                    ),
                 ),
                 organizationKeys = createMockOrganizationKeys(number = 1),
             )
@@ -1570,7 +1643,7 @@ class VaultRepositoryTest {
     //endregion Helper functions
 }
 
-private val MOCK_PROFILE = AccountJson.Profile(
+private val MOCK_BASE_PROFILE = AccountJson.Profile(
     userId = "mockId-1",
     email = "email",
     isEmailVerified = true,
@@ -1587,6 +1660,19 @@ private val MOCK_PROFILE = AccountJson.Profile(
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
     creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+)
+
+private val MOCK_PROFILE = MOCK_BASE_PROFILE.copy(
+    userDecryptionOptions = UserDecryptionOptionsJson(
+        hasMasterPassword = true,
+        trustedDeviceUserDecryptionOptions = null,
+        keyConnectorUserDecryptionOptions = null,
+        masterPasswordUnlock = MasterPasswordUnlockDataJson(
+            kdf = MOCK_BASE_PROFILE.toSdkParams().toKdfRequestModel(),
+            masterKeyWrappedUserKey = "mockKey-1",
+            salt = "mockSalt-1",
+        ),
+    ),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

@@ -32,7 +32,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.coEvery
 import io.mockk.every
@@ -71,7 +70,6 @@ class CredentialProviderProcessorTest {
     }
     private val pendingIntentManager: CredentialManagerPendingIntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val cancellationSignal: CancellationSignal = mockk()
 
     private val clock = FIXED_CLOCK
@@ -84,7 +82,6 @@ class CredentialProviderProcessorTest {
             bitwardenCredentialManager = bitwardenCredentialManager,
             pendingIntentManager = pendingIntentManager,
             clock = clock,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = dispatcherManager,
         )
 
@@ -167,9 +164,7 @@ class CredentialProviderProcessorTest {
                 userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(userId = any())
-        } returns mockk<Cipher>()
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onResult(capture(captureSlot)) } just runs
 
@@ -208,9 +203,7 @@ class CredentialProviderProcessorTest {
                 userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(any())
-        } returns mockk<Cipher>()
+        every { authRepository.getOrCreateCipher(any()) } returns mockk<Cipher>()
         every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
 
         credentialProviderProcessor.processCreateCredentialRequest(
@@ -249,7 +242,7 @@ class CredentialProviderProcessorTest {
         ) { "Expected all entries to have BIOMETRIC_STRONG authenticators." }
 
         // Verify entries have no biometric prompt data when cipher is null
-        every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns null
+        every { authRepository.getOrCreateCipher(any()) } returns null
         credentialProviderProcessor.processCreateCredentialRequest(
             request = request,
             cancellationSignal = cancellationSignal,
@@ -279,9 +272,7 @@ class CredentialProviderProcessorTest {
                 userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(userId = any())
-        } returns mockk<Cipher>()
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onResult(capture(captureSlot)) } just runs
         every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns false
@@ -332,7 +323,7 @@ class CredentialProviderProcessorTest {
         )
 
         verify(exactly = 1) { callback.onResult(any()) }
-        verify(exactly = 0) { biometricsEncryptionManager.getOrCreateCipher(any()) }
+        verify(exactly = 0) { authRepository.getOrCreateCipher(any()) }
 
         // Verify entries have no biometric prompt data when vault is locked
         assertTrue(captureSlot.captured.createEntries.all { it.biometricPromptData == null }) {
@@ -416,9 +407,7 @@ class CredentialProviderProcessorTest {
                 userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(userId = any())
-        } returns mockk<Cipher>()
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { request.candidateQueryData } returns candidateQueryData
         every {
@@ -464,9 +453,7 @@ class CredentialProviderProcessorTest {
                 userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(any())
-        } returns mockk<Cipher>()
+        every { authRepository.getOrCreateCipher(any()) } returns mockk<Cipher>()
         every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
 
         credentialProviderProcessor.processCreateCredentialRequest(
@@ -505,7 +492,7 @@ class CredentialProviderProcessorTest {
         ) { "Expected all entries to have BIOMETRIC_STRONG authenticators." }
 
         // Verify entries have no biometric prompt data when cipher is null
-        every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns null
+        every { authRepository.getOrCreateCipher(any()) } returns null
         credentialProviderProcessor.processCreateCredentialRequest(
             request = request,
             cancellationSignal = cancellationSignal,

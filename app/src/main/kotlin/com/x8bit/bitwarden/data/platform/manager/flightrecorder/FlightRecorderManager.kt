@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.flightrecorder
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import kotlinx.coroutines.flow.StateFlow
 

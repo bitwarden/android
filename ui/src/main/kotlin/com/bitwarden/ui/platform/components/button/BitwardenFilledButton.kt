@@ -18,6 +18,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.color.bitwardenFilledButtonColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -48,7 +49,7 @@ fun BitwardenFilledButton(
         modifier = modifier
             .semantics(mergeDescendants = true) {}
             .cardStyle(cardStyle = cardStyle, padding = cardInsets),
-        onClick = onClick,
+        onClick = throttledClick(onClick = onClick),
         enabled = isEnabled,
         contentPadding = PaddingValues(
             top = 10.dp,

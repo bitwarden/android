@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.manager.model
+package com.bitwarden.data.manager.model
 
 import java.io.File
 

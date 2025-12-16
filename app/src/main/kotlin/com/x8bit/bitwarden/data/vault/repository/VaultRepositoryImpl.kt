@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.repository
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.repository.util.combineDataStates
@@ -21,7 +22,6 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -344,25 +344,19 @@ class VaultRepositoryImpl(
     ): VaultUnlockResult {
         val userId = activeUserId
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val userKey = authDiskSource.getUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(
-                error = MissingPropertyException("User key"),
-            )
+
         val activeAccount = authDiskSource.userState?.activeAccount
-        val initUserCryptoMethod = activeAccount
+        val masterPasswordUnlock = activeAccount
             ?.profile
             ?.userDecryptionOptions
             ?.masterPasswordUnlock
-            ?.let { masterPasswordUnlock ->
-                InitUserCryptoMethod.MasterPasswordUnlock(
-                    password = masterPassword,
-                    masterPasswordUnlock = masterPasswordUnlock.toSdkMasterPasswordUnlock(),
-                )
-            }
-            ?: InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = userKey,
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("MasterPasswordUnlock data"),
             )
+        val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+            password = masterPassword,
+            masterPasswordUnlock = masterPasswordUnlock.toSdkMasterPasswordUnlock(),
+        )
         return this
             .unlockVaultForUser(
                 userId = userId,
@@ -562,5 +556,10 @@ class VaultRepositoryImpl(
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
+    }
+
+    override fun hasPersonalVaultItems(): Boolean {
+        val vaultData = vaultSyncManager.vaultDataStateFlow.value.data ?: return false
+        return vaultData.decryptCipherListResult.successes.any { it.organizationId.isNullOrEmpty() }
     }
 }

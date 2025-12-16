@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface AuthRepository :
     AuthenticatorProvider,
     AuthRequestManager,
+    BiometricsEncryptionManager,
     KdfManager,
     UserStateManager {
     /**
