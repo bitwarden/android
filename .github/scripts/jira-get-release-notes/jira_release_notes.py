@@ -26,7 +26,7 @@ def extract_text_from_content(content):
 def parse_release_notes(response_json):
     try:
         fields = response_json.get('fields', {})
-        release_notes_field = fields.get('customfield_10335', {})
+        release_notes_field = fields.get('customfield_10309', {})
 
         if not release_notes_field or not release_notes_field.get('content'):
             return ''
