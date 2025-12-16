@@ -23,6 +23,17 @@ def extract_text_from_content(content):
 
     return ''
 
+def log_customfields_with_content(fields):
+    """Log all customfield_* fields that have a 'content' key to help troubleshoot structure changes."""
+    print("Available customfield_* fields with 'content':", file=sys.stderr)
+    found = False
+    for key, value in fields.items():
+        if key.startswith('customfield_') and isinstance(value, dict) and 'content' in value:
+            found = True
+            print(f"  {key}: {json.dumps(value, indent=2)}", file=sys.stderr)
+    if not found:
+        print("  None found", file=sys.stderr)
+
 def parse_release_notes(response_json):
     release_notes_field_name = 'customfield_10309'
     try:
@@ -34,11 +45,13 @@ def parse_release_notes(response_json):
         release_notes_field = fields.get(release_notes_field_name)
         if not release_notes_field:
             print(f"Release notes field is empty or missing. Field name: {release_notes_field_name}", file=sys.stderr)
+            log_customfields_with_content(fields)
             return ''
 
         content = release_notes_field.get('content', [])
         if not content:
             print(f"Release notes field was found but 'content' is empty or missing in {release_notes_field_name}", file=sys.stderr)
+            log_customfields_with_content(fields)
             return ''
 
         release_notes = extract_text_from_content(content)
