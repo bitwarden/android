@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.platform.manager.flightrecorder
+package com.bitwarden.data.manager.flightrecorder
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import java.io.File
 
 /**
