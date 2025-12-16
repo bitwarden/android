@@ -11,6 +11,8 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -29,6 +31,7 @@ private const val KEY_STATE = "state"
 class LeaveOrganizationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val organizationEventManager: OrganizationEventManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LeaveOrganizationState, LeaveOrganizationEvent, LeaveOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -94,6 +97,9 @@ class LeaveOrganizationViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is LeaveOrganizationResult.Success -> {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationDeclined,
+                )
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
