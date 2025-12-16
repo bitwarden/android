@@ -1,0 +1,30 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - tests-only
+  categories:
+    - title:  ':tada: Exciting New Features'
+      labels:
+        - '*'
+      exclude:
+        authors:
+          - renovate[bot]
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+    - title: ':mega: Community Contributions Highlight'
+      labels:
+        - community-pr
+    - title: ⚡ Performance
+      labels:
+        - performance
+    - title: 👒 Dependencies & Housekeeping
+      authors:
+        - renovate[bot]
+      labels:
+        - ci/cd
+        - chore
+        - tests-only
+        - refactor
+        - tests-only
