@@ -24,14 +24,24 @@ def extract_text_from_content(content):
     return ''
 
 def parse_release_notes(response_json):
+    release_notes_field_name = 'customfield_10309'
     try:
-        fields = response_json.get('fields', {})
-        release_notes_field = fields.get('customfield_10309', {})
-
-        if not release_notes_field or not release_notes_field.get('content'):
+        fields = response_json.get('fields')
+        if not fields:
+            print("'fields' is empty or missing in response", file=sys.stderr)
             return ''
 
-        release_notes = extract_text_from_content(release_notes_field.get('content', []))
+        release_notes_field = fields.get(release_notes_field_name)
+        if not release_notes_field:
+            print(f"Release notes field is empty or missing. Field name: {release_notes_field_name}", file=sys.stderr)
+            return ''
+
+        content = release_notes_field.get('content', [])
+        if not content:
+            print(f"Release notes field was found but 'content' is empty or missing in {release_notes_field_name}", file=sys.stderr)
+            return ''
+
+        release_notes = extract_text_from_content(content)
         return release_notes
 
     except Exception as e:
