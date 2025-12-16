@@ -5,6 +5,8 @@ import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
@@ -19,11 +21,13 @@ import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockCipherMiniResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.encodeToString
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -287,6 +291,49 @@ class CiphersServiceTest : BaseServiceTest() {
             createMockCipher(number = 1),
             result.getOrThrow(),
         )
+    }
+
+    @Test
+    fun `bulkShareCiphers with success response should return Success`() = runTest {
+        val expectedCiphers = listOf(
+            createMockCipherMiniResponse(number = 1),
+            createMockCipherMiniResponse(number = 2),
+        )
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(json.encodeToString<List<CipherMiniResponseJson>>(expectedCiphers)),
+        )
+
+        val result = ciphersService.bulkShareCiphers(
+            body = BulkShareCiphersJsonRequest(
+                ciphers = listOf(
+                    createMockCipherJsonRequest(number = 1),
+                    createMockCipherJsonRequest(number = 2),
+                ),
+                collectionIds = listOf("mockId-1"),
+            ),
+        )
+
+        assertEquals(expectedCiphers, result.getOrThrow())
+    }
+
+    @Test
+    fun `bulkShareCiphers with failure response should return Failure`() = runTest {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(500)
+                .setBody("""{"message":"Server error"}"""),
+        )
+
+        val result = ciphersService.bulkShareCiphers(
+            body = BulkShareCiphersJsonRequest(
+                ciphers = listOf(createMockCipherJsonRequest(number = 1)),
+                collectionIds = listOf("mockId-1"),
+            ),
+        )
+
+        assertTrue(result.isFailure)
     }
 
     @Test
