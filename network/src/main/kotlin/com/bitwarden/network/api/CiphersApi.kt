@@ -2,7 +2,9 @@ package com.bitwarden.network.api
 
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.NetworkResult
@@ -74,6 +76,14 @@ internal interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Body body: ShareCipherJsonRequest,
     ): NetworkResult<SyncResponseJson.Cipher>
+
+    /**
+     * Shares multiple ciphers in bulk.
+     */
+    @PUT("ciphers/share")
+    suspend fun bulkShareCiphers(
+        @Body body: BulkShareCiphersJsonRequest,
+    ): NetworkResult<List<CipherMiniResponseJson>>
 
     /**
      * Shares an attachment.
