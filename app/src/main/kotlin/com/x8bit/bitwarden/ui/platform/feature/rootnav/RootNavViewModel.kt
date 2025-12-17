@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -17,8 +18,12 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -35,6 +40,10 @@ import javax.inject.Inject
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
+    private val policyManager: PolicyManager,
+    private val connectionManager: NetworkConnectionManager,
+    private val featureFlagManager: FeatureFlagManager,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -43,11 +52,13 @@ class RootNavViewModel @Inject constructor(
             authRepository.authStateFlow,
             authRepository.userStateFlow,
             specialCircumstanceManager.specialCircumstanceStateFlow,
-        ) { authState, userState, specialCircumstance ->
+            vaultRepository.shouldMigratePersonalVaultFlow,
+        ) { authState, userState, specialCircumstance, shouldMigratePersonalVault ->
             RootNavAction.Internal.UserStateUpdateReceive(
                 authState = authState,
                 userState = userState,
                 specialCircumstance = specialCircumstance,
+                shouldMigratePersonalVault = shouldMigratePersonalVault,
             )
         }
             .onEach(::handleAction)
@@ -66,6 +77,7 @@ class RootNavViewModel @Inject constructor(
     ) {
         val userState = action.userState
         val specialCircumstance = action.specialCircumstance
+
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 authRepository.tdeLoginComplete != true &&
@@ -108,6 +120,14 @@ class RootNavViewModel @Inject constructor(
             userState.activeAccount.isVaultUnlocked &&
                 userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE -> {
                 getOnboardingNavState(onboardingStatus = userState.activeAccount.onboardingStatus)
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                action.shouldMigratePersonalVault &&
+                featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
+                connectionManager.isNetworkConnected &&
+                specialCircumstance == null -> {
+                RootNavState.MigrateToMyItems
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -318,6 +338,12 @@ sealed class RootNavState : Parcelable {
     data object VaultLocked : RootNavState()
 
     /**
+     * App should show MigrateToMyItems screen.
+     */
+    @Parcelize
+    data object MigrateToMyItems : RootNavState()
+
+    /**
      * App should show vault unlocked nav graph for the given [activeUserId].
      */
     @Parcelize
@@ -494,6 +520,7 @@ sealed class RootNavAction {
             val authState: AuthState,
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
+            val shouldMigratePersonalVault: Boolean = false,
         ) : RootNavAction()
     }
 }

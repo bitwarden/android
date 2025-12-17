@@ -63,6 +63,12 @@ interface VaultSyncManager {
     val sendDataStateFlow: StateFlow<DataState<SendData>>
 
     /**
+     * Flow that emits when conditions are met for the user to migrate their personal vault.
+     * Updated after each sync to reflect current policy and vault state.
+     */
+    val shouldMigratePersonalVaultFlow: StateFlow<Boolean>
+
+    /**
      * Sync the vault data for the current user.
      *
      * Unlike [syncIfNecessary], this will always perform the requested sync and should only be

@@ -70,6 +70,8 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsRoute
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.navigateToMigrateToMyItems
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -153,6 +155,7 @@ fun RootNavScreen(
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
         RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
+        RootNavState.MigrateToMyItems -> MigrateToMyItemsRoute
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -202,6 +205,10 @@ fun RootNavScreen(
             RootNavState.ExpiredRegistrationLink -> {
                 navController.navigateToAuthGraph(rootNavOptions)
                 navController.navigateToExpiredRegistrationLinkScreen()
+            }
+
+            RootNavState.MigrateToMyItems -> {
+                navController.navigateToMigrateToMyItems(navOptions = rootNavOptions)
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)

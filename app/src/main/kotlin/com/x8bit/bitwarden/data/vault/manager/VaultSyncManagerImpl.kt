@@ -3,13 +3,17 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.SyncResponseJson.Cipher
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -22,7 +26,10 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.error.SecurityStampMismatchException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -81,6 +88,9 @@ class VaultSyncManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val userStateManager: UserStateManager,
     private val vaultLockManager: VaultLockManager,
+    private val policyManager: PolicyManager,
+    private val featureFlagManager: FeatureFlagManager,
+    private val connectionManager: NetworkConnectionManager,
     private val clock: Clock,
     databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
@@ -107,6 +117,8 @@ class VaultSyncManagerImpl(
     private val mutableDomainsStateFlow =
         MutableStateFlow<DataState<DomainsData>>(DataState.Loading)
 
+    private val mutableShouldMigratePersonalVaultFlow = MutableStateFlow(false)
+
     override val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
         get() = mutableDecryptCipherListResultFlow.asStateFlow()
 
@@ -121,6 +133,9 @@ class VaultSyncManagerImpl(
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = mutableSendDataStateFlow.asStateFlow()
+
+    override val shouldMigratePersonalVaultFlow: StateFlow<Boolean>
+        get() = mutableShouldMigratePersonalVaultFlow.asStateFlow()
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
         combine(
@@ -341,6 +356,9 @@ class VaultSyncManagerImpl(
                     )
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
+                    syncResponse.ciphers?.let {
+                        verifyAndUpdateIfUserShouldMigrateVaultToMyItems(it)
+                    }
                     SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
             },
@@ -409,6 +427,11 @@ class VaultSyncManagerImpl(
                     )
                     .fold(
                         onSuccess = { result ->
+                            // We need to be sure the data on device is updated
+                            // before sending the user to the migration screen
+                            if (userShouldMigrateVault(cipherListView = result.successes)) {
+                                sync(forced = true)
+                            }
                             DataState.Loaded(
                                 result.copy(successes = result.successes.sortAlphabetically()),
                             )
@@ -520,6 +543,34 @@ class VaultSyncManagerImpl(
         }
         mutableSendDataStateFlow.update { currentState ->
             throwable.toNetworkOrErrorState(data = currentState.data)
+        }
+    }
+
+    /**
+     * Evaluates if the user should migrate their personal vault based on
+     * policies, personal ciphers, feature flag, and network connectivity.
+     */
+    private fun userShouldMigrateVault(
+        cipherListView: List<CipherListView>,
+    ): Boolean {
+        return policyManager
+            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .any() &&
+            featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
+            connectionManager.isNetworkConnected &&
+            cipherListView.any { it.organizationId == null }
+    }
+
+    // Updates [shouldMigratePersonalVaultFlow].
+    private fun verifyAndUpdateIfUserShouldMigrateVaultToMyItems(cipherList: List<Cipher>) {
+        val shouldMigrate = policyManager
+            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .any() &&
+            featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
+            connectionManager.isNetworkConnected &&
+            cipherList.any { it.organizationId == null }
+        mutableShouldMigratePersonalVaultFlow.update {
+            shouldMigrate
         }
     }
 

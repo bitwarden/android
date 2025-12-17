@@ -17,9 +17,11 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -193,6 +195,9 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         userStateManager: UserStateManager,
         vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
+        featureFlagManager: FeatureFlagManager,
+        connectionManager: NetworkConnectionManager,
         clock: Clock,
         databaseSchemeManager: DatabaseSchemeManager,
         pushManager: PushManager,
@@ -206,6 +211,9 @@ object VaultManagerModule {
         userLogoutManager = userLogoutManager,
         userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
+        featureFlagManager = featureFlagManager,
+        connectionManager = connectionManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
         pushManager = pushManager,
