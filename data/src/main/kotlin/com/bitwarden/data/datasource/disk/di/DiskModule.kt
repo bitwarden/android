@@ -1,8 +1,10 @@
 package com.bitwarden.data.datasource.disk.di
 
 import android.content.SharedPreferences
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.ConfigDiskSourceImpl
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +25,17 @@ object DiskModule {
         json: Json,
     ): ConfigDiskSource =
         ConfigDiskSourceImpl(
+            sharedPreferences = sharedPreferences,
+            json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun provideFlightRecorderDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        json: Json,
+    ): FlightRecorderDiskSource =
+        FlightRecorderDiskSourceImpl(
             sharedPreferences = sharedPreferences,
             json = json,
         )
