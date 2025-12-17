@@ -186,7 +186,7 @@ jobs:
           echo "Getting product release notes"
           product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN")
 
-          if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
+          if [[ -z "$product_release_notes" || $product_release_notes == "[jira_release_notes.py]"* ]]; then
             echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
             product_release_notes="<insert product release notes here>"
           else
@@ -285,5 +285,5 @@ jobs:
             echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`"
             echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch"
             echo "> [!NOTE]"
-            echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." 
+            echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes."
           } >> "$GITHUB_STEP_SUMMARY"
