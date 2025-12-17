@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
+import com.x8bit.bitwarden.data.auth.repository.util.getRedirectUri
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -408,7 +409,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val authMethodsData = mapOf(
                 TwoFactorAuthMethod.DUO to JsonObject(
-                    mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")),
+                    mapOf(
+                        "AuthUrl" to JsonPrimitive("bitwarden.com"),
+                        "RedirectUri" to JsonPrimitive("bitwarden://duo-callback"),
+                    ),
                 ),
             )
             val response = GetTokenResponseJson.TwoFactorRequired(
@@ -424,10 +428,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 ),
             )
             every { Uri.parse("bitwarden.com") } returns mockkUri
+            every { Uri.parse("bitwarden://duo-callback") } returns mockk {
+                every { scheme } returns "bitwarden"
+            }
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToDuo(mockkUri),
+                    TwoFactorLoginEvent.NavigateToDuo(uri = mockkUri, redirectScheme = "bitwarden"),
                     awaitItem(),
                 )
             }
@@ -479,7 +486,16 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueButtonClick login should emit NavigateToWebAuth when auth method is WEB_AUTH and data is non-null`() =
         runTest {
-            val data = JsonObject(mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")))
+            val redirectUri = "https://bitwarden.com/webauthn-callback"
+            every { Uri.parse(redirectUri) } returns mockk {
+                every { scheme } returns "https"
+            }
+            val data = JsonObject(
+                mapOf(
+                    "AuthUrl" to JsonPrimitive("bitwarden.com"),
+                    "RedirectUri" to JsonPrimitive(redirectUri),
+                ),
+            )
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = mapOf(TwoFactorAuthMethod.WEB_AUTH to data),
                 ssoToken = null,
@@ -497,6 +513,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 resourceManager.getString(BitwardenString.fido2_return_to_app)
             } returns returnButtonText
             every { authRepository.twoFactorResponse } returns response
+            every { data.getRedirectUri() } returns redirectUri
             every {
                 generateUriForWebAuth(
                     baseUrl = Environment.Us.environmentUrlData.baseWebVaultUrlOrDefault,
@@ -512,7 +529,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToWebAuth(mockkUri),
+                    TwoFactorLoginEvent.NavigateToWebAuth(
+                        uri = mockkUri,
+                        redirectScheme = "https",
+                    ),
                     awaitItem(),
                 )
             }

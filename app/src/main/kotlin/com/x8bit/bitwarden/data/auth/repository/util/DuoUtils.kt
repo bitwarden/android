@@ -17,9 +17,14 @@ private const val DUO_HOST: String = "duo-callback"
  *
  * - [DuoCallbackTokenResult.Success]: Intent is the Duo callback, and it has a token.
  */
+@Suppress("ComplexCondition")
 fun Intent.getDuoCallbackTokenResult(): DuoCallbackTokenResult? {
     val localData = data
-    return if (action == Intent.ACTION_VIEW && localData != null && localData.host == DUO_HOST) {
+    return if (action == Intent.ACTION_VIEW &&
+        localData != null &&
+        // We check the host for Deeplinks, and the path for App Links.
+        (localData.host == DUO_HOST || localData.path == DUO_HOST)
+    ) {
         localData.getDuoCallbackTokenResult()
     } else {
         null

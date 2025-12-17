@@ -16,6 +16,7 @@ class SsoUtilsTest {
         val token = "Test Token"
         val state = "test_state"
         val codeVerifier = "test_code_verifier"
+        val redirectUri = "bitwarden://sso-callback"
 
         val uri = generateUriForSso(
             identityBaseUrl = identityBaseUrl,
@@ -23,6 +24,7 @@ class SsoUtilsTest {
             token = token,
             state = state,
             codeVerifier = codeVerifier,
+            redirectUri = redirectUri,
         )
         assertEquals(
             "https://identity.bitwarden.com/connect/authorize" +
@@ -79,10 +81,17 @@ class SsoUtilsTest {
             every { data?.getQueryParameter("state") } returns "myState"
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "sso-callback"
+            every {
+                data?.buildUpon()?.path(null)?.query(null)?.fragment(null)?.build()?.toString()
+            } returns "bitwarden://sso-callback"
         }
         val result = intent.getSsoCallbackResult()
         assertEquals(
-            SsoCallbackResult.Success(state = "myState", code = "myCode"),
+            SsoCallbackResult.Success(
+                state = "myState",
+                code = "myCode",
+                redirectUri = "bitwarden://sso-callback",
+            ),
             result,
         )
     }

@@ -1200,7 +1200,11 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SsoResult should setSsoCallbackResult with result`() = runTest {
-        val result = SsoCallbackResult.Success(state = null, code = "code")
+        val result = SsoCallbackResult.Success(
+            state = null,
+            code = "code",
+            redirectUri = "bitwarden://sso-callback",
+        )
         val authResult = mockk<AuthTabIntent.AuthResult> {
             every { getSsoCallbackResult() } returns result
         }

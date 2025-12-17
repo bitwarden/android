@@ -11,7 +11,6 @@ import java.security.MessageDigest
 import java.util.Base64
 
 private const val SSO_HOST: String = "sso-callback"
-const val SSO_URI: String = "bitwarden://$SSO_HOST"
 
 /**
  * Generates a URI for the SSO custom tab.
@@ -21,15 +20,18 @@ const val SSO_URI: String = "bitwarden://$SSO_HOST"
  * @param token The prevalidated SSO token.
  * @param state Random state used to verify the validity of the response.
  * @param codeVerifier A random string used to generate the code challenge.
+ * @param redirectUri The redirect URI for the SSO flow.
  */
+@Suppress("LongParameterList")
 fun generateUriForSso(
     identityBaseUrl: String,
     organizationIdentifier: String,
     token: String,
     state: String,
     codeVerifier: String,
+    redirectUri: String,
 ): String {
-    val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
+    val encodedRedirectUri = URLEncoder.encode(redirectUri, "UTF-8")
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
 
@@ -41,7 +43,7 @@ fun generateUriForSso(
 
     return "$identityBaseUrl/connect/authorize" +
         "?client_id=mobile" +
-        "&redirect_uri=$redirectUri" +
+        "&redirect_uri=$encodedRedirectUri" +
         "&response_type=code" +
         "&scope=api%20offline_access" +
         "&state=$state" +
@@ -63,7 +65,10 @@ fun generateUriForSso(
  */
 fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
     val localData = data
-    return if (action == Intent.ACTION_VIEW && localData?.host == SSO_HOST) {
+    return if (action == Intent.ACTION_VIEW &&
+        // We check the host for Deeplinks, and the path for App Links.
+        (localData?.host == SSO_HOST || localData?.path == SSO_HOST)
+    ) {
         localData.getSsoCallbackResult()
     } else {
         null
@@ -92,7 +97,17 @@ private fun Uri?.getSsoCallbackResult(): SsoCallbackResult {
     val state = this?.getQueryParameter("state")
     val code = this?.getQueryParameter("code")
     return if (code != null) {
-        SsoCallbackResult.Success(state = state, code = code)
+        SsoCallbackResult.Success(
+            state = state,
+            code = code,
+            redirectUri = this
+                .buildUpon()
+                .path(null)
+                .query(null)
+                .fragment(null)
+                .build()
+                .toString(),
+        )
     } else {
         SsoCallbackResult.MissingCode
     }
@@ -117,5 +132,6 @@ sealed class SsoCallbackResult : Parcelable {
     data class Success(
         val state: String?,
         val code: String,
+        val redirectUri: String,
     ) : SsoCallbackResult()
 }
