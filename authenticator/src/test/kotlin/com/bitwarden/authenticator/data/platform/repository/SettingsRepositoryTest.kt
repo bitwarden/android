@@ -23,8 +23,9 @@ class SettingsRepositoryTest {
         every { getAlertThresholdSeconds() } returns 7
     }
 
-    private val settingsRepository = SettingsRepositoryImpl(
+    private val settingsRepository: SettingsRepository = SettingsRepositoryImpl(
         settingsDiskSource = settingsDiskSource,
+        flightRecorderManager = mockk(),
         dispatcherManager = FakeDispatcherManager(),
     )
 

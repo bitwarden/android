@@ -5,6 +5,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.BaseDiskSource
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
@@ -32,8 +33,10 @@ private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
  */
 class SettingsDiskSourceImpl(
     sharedPreferences: SharedPreferences,
+    flightRecorderDiskSource: FlightRecorderDiskSource,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
-    SettingsDiskSource {
+    SettingsDiskSource,
+    FlightRecorderDiskSource by flightRecorderDiskSource {
     private val mutableAppThemeFlow =
         bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
