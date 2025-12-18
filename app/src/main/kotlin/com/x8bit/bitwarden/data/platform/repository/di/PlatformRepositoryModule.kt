@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository.di
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
@@ -10,7 +11,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository

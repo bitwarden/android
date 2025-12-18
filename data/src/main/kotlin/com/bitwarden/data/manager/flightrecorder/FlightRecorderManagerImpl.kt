@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.flightrecorder
+package com.bitwarden.data.manager.flightrecorder
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,9 +7,9 @@ import android.content.IntentFilter
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.toFormattedPattern
-import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -33,7 +33,7 @@ private const val EXPIRATION_DURATION_DAYS: Long = 30
 internal class FlightRecorderManagerImpl(
     private val context: Context,
     private val clock: Clock,
-    private val settingsDiskSource: SettingsDiskSource,
+    private val flightRecorderDiskSource: FlightRecorderDiskSource,
     private val flightRecorderWriter: FlightRecorderWriter,
     dispatcherManager: DispatcherManager,
 ) : FlightRecorderManager {
@@ -44,10 +44,12 @@ internal class FlightRecorderManagerImpl(
     private val flightRecorderTree = FlightRecorderTree()
 
     override val flightRecorderData: FlightRecorderDataSet
-        get() = settingsDiskSource.flightRecorderData ?: FlightRecorderDataSet(data = emptySet())
+        get() = flightRecorderDiskSource
+            .flightRecorderData
+            ?: FlightRecorderDataSet(data = emptySet())
 
     override val flightRecorderDataFlow: StateFlow<FlightRecorderDataSet>
-        get() = settingsDiskSource
+        get() = flightRecorderDiskSource
             .flightRecorderDataFlow
             .map { it ?: FlightRecorderDataSet(data = emptySet()) }
             .stateIn(
@@ -73,7 +75,7 @@ internal class FlightRecorderManagerImpl(
 
     override fun dismissFlightRecorderBanner() {
         val originalData = flightRecorderData
-        settingsDiskSource.flightRecorderData = originalData.copy(
+        flightRecorderDiskSource.flightRecorderData = originalData.copy(
             data = originalData.data.map { it.copy(isBannerDismissed = true) }.toSet(),
         )
     }
@@ -81,7 +83,7 @@ internal class FlightRecorderManagerImpl(
     override fun startFlightRecorder(duration: FlightRecorderDuration) {
         val startTime = clock.instant()
         val originalData = flightRecorderData
-        settingsDiskSource.flightRecorderData = originalData.copy(
+        flightRecorderDiskSource.flightRecorderData = originalData.copy(
             data = originalData
                 .data
                 .mapToInactive(clock = clock)
@@ -106,7 +108,7 @@ internal class FlightRecorderManagerImpl(
 
     override fun endFlightRecorder() {
         val originalData = flightRecorderData
-        settingsDiskSource.flightRecorderData = originalData.copy(
+        flightRecorderDiskSource.flightRecorderData = originalData.copy(
             data = originalData.data.mapToInactive(clock = clock),
         )
     }
@@ -117,7 +119,7 @@ internal class FlightRecorderManagerImpl(
             data = flightRecorderData.data.filterNot { it.isActive }.toSet(),
         )
         // Clear everything but the active log.
-        settingsDiskSource.flightRecorderData = activeLog?.let {
+        flightRecorderDiskSource.flightRecorderData = activeLog?.let {
             FlightRecorderDataSet(data = setOf(it))
         }
         // Clear all logs but the active one.
@@ -127,7 +129,7 @@ internal class FlightRecorderManagerImpl(
     override fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
         if (data.isActive) return
         val originalData = flightRecorderData
-        settingsDiskSource.flightRecorderData = originalData.copy(
+        flightRecorderDiskSource.flightRecorderData = originalData.copy(
             data = originalData.data.filterNot { it == data }.toSet(),
         )
         ioScope.launch { flightRecorderWriter.deleteLog(data = data) }

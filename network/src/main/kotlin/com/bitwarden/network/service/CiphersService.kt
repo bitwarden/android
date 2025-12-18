@@ -3,7 +3,9 @@ package com.bitwarden.network.service
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ImportCiphersJsonRequest
@@ -62,6 +64,13 @@ interface CiphersService {
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to share multiple ciphers in bulk.
+     */
+    suspend fun bulkShareCiphers(
+        body: BulkShareCiphersJsonRequest,
+    ): Result<List<CipherMiniResponseJson>>
 
     /**
      * Attempt to share an attachment.

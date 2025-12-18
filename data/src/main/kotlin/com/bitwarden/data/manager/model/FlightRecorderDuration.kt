@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.repository.model
+package com.bitwarden.data.manager.model
 
 /**
  * The selectable durations allowed for the flight recorder.

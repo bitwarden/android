@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.util
 
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

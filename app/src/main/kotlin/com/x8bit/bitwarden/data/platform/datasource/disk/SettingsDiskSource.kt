@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -13,7 +13,7 @@ import java.time.Instant
  * Primary access point for general settings-related disk information.
  */
 @Suppress("TooManyFunctions")
-interface SettingsDiskSource {
+interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
      * The currently persisted app language (or `null` if not set).
@@ -94,16 +94,6 @@ interface SettingsDiskSource {
      * Emits updates that track [hasUserLoggedInOrCreatedAccount].
      */
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
-
-    /**
-     * The current status of whether the flight recorder is enabled.
-     */
-    var flightRecorderData: FlightRecorderDataSet?
-
-    /**
-     * Emits updates that track [flightRecorderData].
-     */
-    val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
 
     /**
      * The time at which the browser autofill dialog is allowed to be shown to the user again.

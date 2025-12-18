@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.flightrecorder
+package com.bitwarden.data.manager.flightrecorder
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -6,9 +6,9 @@ import android.content.Context
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.datasource.disk.util.FakeFlightRecorderDiskSource
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -37,7 +37,7 @@ class FlightRecorderManagerTest {
     private val context: Context = mockk {
         every { registerReceiver(capture(broadcastReceiver), any()) } returns null
     }
-    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
+    private val fakeFlightRecorderDiskSource = FakeFlightRecorderDiskSource()
     private val flightRecorderWriter = mockk<FlightRecorderWriter> {
         coEvery { getOrCreateLogFile(data = any()) } returns mockk<File>().asSuccess()
         coEvery { deleteLogs(dataset = any()) } just runs
@@ -57,7 +57,7 @@ class FlightRecorderManagerTest {
     private val flightRecorder = FlightRecorderManagerImpl(
         context = context,
         clock = FIXED_CLOCK,
-        settingsDiskSource = fakeSettingsDiskSource,
+        flightRecorderDiskSource = fakeFlightRecorderDiskSource,
         flightRecorderWriter = flightRecorderWriter,
         dispatcherManager = fakeDispatcherManager,
     )
@@ -75,7 +75,7 @@ class FlightRecorderManagerTest {
 
     @Test
     fun `flightRecorderData should pull from and update SettingsDiskSource`() {
-        fakeSettingsDiskSource.flightRecorderData = null
+        fakeFlightRecorderDiskSource.flightRecorderData = null
         assertEquals(FlightRecorderDataSet(data = emptySet()), flightRecorder.flightRecorderData)
 
         val expected = FlightRecorderDataSet(
@@ -93,13 +93,13 @@ class FlightRecorderManagerTest {
                 ),
             ),
         )
-        fakeSettingsDiskSource.flightRecorderData = expected
+        fakeFlightRecorderDiskSource.flightRecorderData = expected
         assertEquals(expected, flightRecorder.flightRecorderData)
     }
 
     @Test
     fun `flightRecorderDataFlow should react to changes in SettingsDiskSource`() = runTest {
-        fakeSettingsDiskSource.flightRecorderData = null
+        fakeFlightRecorderDiskSource.flightRecorderData = null
         flightRecorder
             .flightRecorderDataFlow
             .test {
@@ -120,7 +120,7 @@ class FlightRecorderManagerTest {
                         ),
                     ),
                 )
-                fakeSettingsDiskSource.flightRecorderData = unexpired
+                fakeFlightRecorderDiskSource.flightRecorderData = unexpired
                 assertEquals(unexpired, awaitItem())
 
                 val expired = FlightRecorderDataSet(
@@ -138,21 +138,21 @@ class FlightRecorderManagerTest {
                         ),
                     ),
                 )
-                fakeSettingsDiskSource.flightRecorderData = expired
+                fakeFlightRecorderDiskSource.flightRecorderData = expired
                 assertEquals(FlightRecorderDataSet(data = emptySet()), awaitItem())
 
-                fakeSettingsDiskSource.flightRecorderData = null
+                fakeFlightRecorderDiskSource.flightRecorderData = null
                 expectNoEvents()
             }
     }
 
     @Test
     fun `startFlightRecorder should properly update SettingsDiskSource`() {
-        fakeSettingsDiskSource.flightRecorderData = null
+        fakeFlightRecorderDiskSource.flightRecorderData = null
 
         flightRecorder.startFlightRecorder(duration = FlightRecorderDuration.ONE_HOUR)
 
-        fakeSettingsDiskSource.assertFlightRecorderData(
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(
             expected = FlightRecorderDataSet(
                 data = setOf(
                     FlightRecorderDataSet.FlightRecorderData(
@@ -195,11 +195,11 @@ class FlightRecorderManagerTest {
                 ),
             ),
         )
-        fakeSettingsDiskSource.flightRecorderData = data
+        fakeFlightRecorderDiskSource.flightRecorderData = data
 
         flightRecorder.dismissFlightRecorderBanner()
 
-        fakeSettingsDiskSource.assertFlightRecorderData(
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(
             expected = FlightRecorderDataSet(
                 data = setOf(
                     FlightRecorderDataSet.FlightRecorderData(
@@ -254,11 +254,11 @@ class FlightRecorderManagerTest {
                 ),
             ),
         )
-        fakeSettingsDiskSource.flightRecorderData = data
+        fakeFlightRecorderDiskSource.flightRecorderData = data
 
         flightRecorder.endFlightRecorder()
 
-        fakeSettingsDiskSource.assertFlightRecorderData(
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(
             expected = FlightRecorderDataSet(
                 data = setOf(
                     FlightRecorderDataSet.FlightRecorderData(
@@ -309,7 +309,7 @@ class FlightRecorderManagerTest {
         val activeDataset = FlightRecorderDataSet(data = setOf(activeData))
         val inactiveDataset = FlightRecorderDataSet(data = setOf(inactiveData))
 
-        fakeSettingsDiskSource.flightRecorderData = FlightRecorderDataSet(
+        fakeFlightRecorderDiskSource.flightRecorderData = FlightRecorderDataSet(
             data = setOf(activeData, inactiveData),
         )
 
@@ -318,7 +318,7 @@ class FlightRecorderManagerTest {
         coVerify(exactly = 1) {
             flightRecorderWriter.deleteLogs(dataset = inactiveDataset)
         }
-        fakeSettingsDiskSource.assertFlightRecorderData(expected = activeDataset)
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(expected = activeDataset)
     }
 
     @Test
@@ -331,14 +331,14 @@ class FlightRecorderManagerTest {
             isActive = true,
         )
         val dataset = FlightRecorderDataSet(data = setOf(data))
-        fakeSettingsDiskSource.flightRecorderData = dataset
+        fakeFlightRecorderDiskSource.flightRecorderData = dataset
 
         flightRecorder.deleteLog(data = data)
 
         coVerify(exactly = 0) {
             flightRecorderWriter.deleteLog(data = data)
         }
-        fakeSettingsDiskSource.assertFlightRecorderData(expected = dataset)
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(expected = dataset)
     }
 
     @Test
@@ -351,14 +351,14 @@ class FlightRecorderManagerTest {
             isActive = false,
             expirationTimeMs = FIXED_CLOCK.instant().plus(1L, ChronoUnit.HOURS).toEpochMilli(),
         )
-        fakeSettingsDiskSource.flightRecorderData = FlightRecorderDataSet(data = setOf(data))
+        fakeFlightRecorderDiskSource.flightRecorderData = FlightRecorderDataSet(data = setOf(data))
 
         flightRecorder.deleteLog(data = data)
 
         coVerify(exactly = 1) {
             flightRecorderWriter.deleteLog(data = data)
         }
-        fakeSettingsDiskSource.assertFlightRecorderData(
+        fakeFlightRecorderDiskSource.assertFlightRecorderData(
             expected = FlightRecorderDataSet(data = emptySet()),
         )
     }
