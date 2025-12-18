@@ -1814,14 +1814,18 @@ class AuthRepositoryImpl(
                     accessToken = loginResponse.accessToken,
                 )
                 .map {
-                    val accountKeys = loginResponse.accountKeys
                     unlockVault(
                         accountCryptographicState = createWrappedAccountCryptographicState(
                             privateKey = privateKey,
-                            securityState = accountKeys?.securityState?.securityState,
-                            signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey,
-                            signedPublicKey =
-                                accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey,
+                            securityState = loginResponse.accountKeys
+                                ?.securityState
+                                ?.securityState,
+                            signingKey = loginResponse.accountKeys
+                                ?.signatureKeyPair
+                                ?.wrappedSigningKey,
+                            signedPublicKey = loginResponse.accountKeys
+                                ?.publicKeyEncryptionKeyPair
+                                ?.signedPublicKey,
                         ),
                         accountProfile = profile,
                         initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
@@ -1852,10 +1856,15 @@ class AuthRepositoryImpl(
                     val result = unlockVault(
                         accountCryptographicState = createWrappedAccountCryptographicState(
                             privateKey = keyConnectorResponse.keys.private,
-                            securityState = accountKeys?.securityState?.securityState,
-                            signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey,
-                            signedPublicKey =
-                                accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey,
+                            securityState = accountKeys
+                                ?.securityState
+                                ?.securityState,
+                            signingKey = accountKeys
+                                ?.signatureKeyPair
+                                ?.wrappedSigningKey,
+                            signedPublicKey = accountKeys
+                                ?.publicKeyEncryptionKeyPair
+                                ?.signedPublicKey,
                         ),
                         accountProfile = profile,
                         initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
@@ -1915,10 +1924,15 @@ class AuthRepositoryImpl(
         return unlockVault(
             accountCryptographicState = createWrappedAccountCryptographicState(
                 privateKey = privateKey,
-                securityState = loginResponse.accountKeys?.securityState?.securityState,
-                signingKey = loginResponse.accountKeys?.signatureKeyPair?.wrappedSigningKey,
-                signedPublicKey =
-                    loginResponse.accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey,
+                securityState = loginResponse.accountKeys
+                    ?.securityState
+                    ?.securityState,
+                signingKey = loginResponse.accountKeys
+                    ?.signatureKeyPair
+                    ?.wrappedSigningKey,
+                signedPublicKey = loginResponse.accountKeys
+                    ?.publicKeyEncryptionKeyPair
+                    ?.signedPublicKey,
             ),
             accountProfile = profile,
             initUserCryptoMethod = initUserCryptoMethod,
@@ -1928,6 +1942,7 @@ class AuthRepositoryImpl(
     /**
      * Attempt to unlock the current user's vault with trusted device specific data.
      */
+    @Suppress("LongMethod")
     private suspend fun unlockVaultWithTdeOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
         profile: AccountJson.Profile,
@@ -1942,10 +1957,15 @@ class AuthRepositoryImpl(
                 return unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
                         privateKey = privateKey,
-                        securityState = loginResponse.accountKeys?.securityState?.securityState,
-                        signingKey = loginResponse.accountKeys?.signatureKeyPair?.wrappedSigningKey,
-                        signedPublicKey =
-                            loginResponse.accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey,
+                        securityState = loginResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signingKey = loginResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                        signedPublicKey = loginResponse.accountKeys
+                            ?.publicKeyEncryptionKeyPair
+                            ?.signedPublicKey,
                     ),
                     accountProfile = profile,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
@@ -1977,11 +1997,18 @@ class AuthRepositoryImpl(
                         unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
                             options = options,
                             profile = profile,
-                            privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
-                            securityState = accountKeys.securityState?.securityState,
-                            signedPublicKey =
-                                accountKeys.publicKeyEncryptionKeyPair.signedPublicKey,
-                            signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
+                            privateKey = accountKeys
+                                .publicKeyEncryptionKeyPair
+                                .wrappedPrivateKey,
+                            securityState = accountKeys
+                                .securityState
+                                ?.securityState,
+                            signedPublicKey = accountKeys
+                                .publicKeyEncryptionKeyPair
+                                .signedPublicKey,
+                            signingKey = accountKeys
+                                .signatureKeyPair
+                                ?.wrappedSigningKey,
                         )
                     }
                     ?: loginResponse.privateKey
