@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -18,11 +17,8 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,10 +36,7 @@ import javax.inject.Inject
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
-    private val policyManager: PolicyManager,
-    private val connectionManager: NetworkConnectionManager,
-    private val featureFlagManager: FeatureFlagManager,
-    private val vaultRepository: VaultRepository,
+    vaultRepository: VaultRepository,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -123,28 +116,27 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-                action.shouldMigratePersonalVault &&
-                featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
-                connectionManager.isNetworkConnected &&
-                specialCircumstance == null -> {
+            specialCircumstance is SpecialCircumstance.AutofillSave -> {
+                RootNavState.VaultUnlockedForAutofillSave(
+                    autofillSaveItem = specialCircumstance.autofillSaveItem,
+                )
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                specialCircumstance is SpecialCircumstance.AutofillSelection -> {
+                RootNavState.VaultUnlockedForAutofillSelection(
+                    activeUserId = userState.activeAccount.userId,
+                    type = specialCircumstance.autofillSelectionData.type,
+                )
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                action.shouldMigratePersonalVault -> {
                 RootNavState.MigrateToMyItems
             }
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
-                    is SpecialCircumstance.AutofillSave -> {
-                        RootNavState.VaultUnlockedForAutofillSave(
-                            autofillSaveItem = specialCircumstance.autofillSaveItem,
-                        )
-                    }
-
-                    is SpecialCircumstance.AutofillSelection -> {
-                        RootNavState.VaultUnlockedForAutofillSelection(
-                            activeUserId = userState.activeAccount.userId,
-                            type = specialCircumstance.autofillSelectionData.type,
-                        )
-                    }
-
                     is SpecialCircumstance.AddTotpLoginItem -> {
                         RootNavState.VaultUnlockedForNewTotp(
                             activeUserId = userState.activeAccount.userId,
@@ -227,6 +219,8 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.CredentialExchangeExport,
                     is SpecialCircumstance.RegistrationEvent,
+                    is SpecialCircumstance.AutofillSave,
+                    is SpecialCircumstance.AutofillSelection,
                         -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
