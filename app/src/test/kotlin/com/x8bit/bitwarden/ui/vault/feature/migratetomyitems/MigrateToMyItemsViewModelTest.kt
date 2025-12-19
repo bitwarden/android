@@ -2,29 +2,35 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.every
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toMigrateToMyItemsArgs)
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(MOCK_USER_STATE)
+    private val authRepository = mockk<AuthRepository> {
+        every { userStateFlow } returns mutableUserStateFlow
     }
 
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toMigrateToMyItemsArgs)
+    private val policyManager = mockk<PolicyManager> {
+        every { getPersonalOwnershipPolicyOrganizationId() } returns ORGANIZATION_ID
     }
 
     @Test
@@ -150,18 +156,76 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `initial state should handle null organization ID`() {
+        every { policyManager.getPersonalOwnershipPolicyOrganizationId() } returns null
+        val viewModel = createViewModel()
+
+        assertEquals("", viewModel.stateFlow.value.organizationId)
+        assertEquals("", viewModel.stateFlow.value.organizationName)
+        assertNull(viewModel.stateFlow.value.dialog)
+    }
+
+    @Test
+    fun `initial state should handle null organization name`() {
+        mutableUserStateFlow.value = MOCK_USER_STATE.copy(
+            accounts = listOf(
+                MOCK_USER_STATE.activeAccount.copy(organizations = emptyList()),
+            ),
+        )
+        val viewModel = createViewModel()
+
+        assertEquals(ORGANIZATION_ID, viewModel.stateFlow.value.organizationId)
+        assertEquals("", viewModel.stateFlow.value.organizationName)
+        assertNull(viewModel.stateFlow.value.dialog)
+    }
+
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
-    ): MigrateToMyItemsViewModel {
-        every { savedStateHandle.toMigrateToMyItemsArgs() } returns MigrateToMyItemsArgs(
-            organizationId = ORGANIZATION_ID,
-            organizationName = ORGANIZATION_NAME,
-        )
-        return MigrateToMyItemsViewModel(
+    ): MigrateToMyItemsViewModel =
+        MigrateToMyItemsViewModel(
+            authRepository = authRepository,
+            policyManager = policyManager,
             savedStateHandle = savedStateHandle,
         )
-    }
 }
 
 private const val ORGANIZATION_ID = "test-organization-id"
 private const val ORGANIZATION_NAME = "Test Organization"
+
+private val MOCK_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Test User",
+            email = "test@example.com",
+            avatarColorHex = "#FF0000",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            needsMasterPassword = false,
+            hasMasterPassword = true,
+            trustedDevice = null,
+            organizations = listOf(
+                Organization(
+                    id = ORGANIZATION_ID,
+                    name = ORGANIZATION_NAME,
+                    shouldManageResetPassword = false,
+                    shouldUseKeyConnector = false,
+                    role = OrganizationType.USER,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
+                ),
+            ),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = false),
+            isExportable = true,
+        ),
+    ),
+)
