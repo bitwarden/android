@@ -5,9 +5,15 @@ import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,6 +22,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
+
+    private val mockOrganizationEventManager: OrganizationEventManager = mockk {
+        every { trackEvent(any()) } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -60,8 +70,9 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `MigrateToMyItemsResultReceived with success should clear dialog and navigate to vault`() =
+    fun `MigrateToMyItemsResultReceived with success should track ItemOrganizationAccepted event, clear dialog, and navigate to vault`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -78,6 +89,12 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             }
 
             assertNull(viewModel.stateFlow.value.dialog)
+
+            verify {
+                mockOrganizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationAccepted,
+                )
+            }
         }
 
     @Test
@@ -158,6 +175,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             organizationName = ORGANIZATION_NAME,
         )
         return MigrateToMyItemsViewModel(
+            organizationEventManager = mockOrganizationEventManager,
             savedStateHandle = savedStateHandle,
         )
     }

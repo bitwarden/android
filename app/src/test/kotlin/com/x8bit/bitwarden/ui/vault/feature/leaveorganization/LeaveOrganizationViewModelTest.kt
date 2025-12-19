@@ -15,7 +15,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.every
@@ -41,6 +43,10 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
+
+    private val mockOrganizationEventManager: OrganizationEventManager = mockk {
+        every { trackEvent(any()) } just runs
     }
 
     @BeforeEach
@@ -108,8 +114,9 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `LeaveOrganizationClick with Success should send snackbar and navigate to vault`() =
+    fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and navigate to vault`() =
         runTest {
             coEvery {
                 mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
@@ -127,6 +134,9 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                     data = BitwardenSnackbarData(
                         message = BitwardenString.you_left_the_organization.asText(),
                     ),
+                )
+                mockOrganizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationDeclined,
                 )
             }
         }
@@ -176,6 +186,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         val viewModel = LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
+            organizationEventManager = mockOrganizationEventManager,
             savedStateHandle = savedStateHandle,
         )
 
@@ -192,6 +203,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         return LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
+            organizationEventManager = mockOrganizationEventManager,
             savedStateHandle = savedStateHandle,
         )
     }
