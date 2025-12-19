@@ -79,9 +79,6 @@ sealed class GetTokenResponseJson {
         @SerialName("ForcePasswordReset")
         val shouldForcePasswordReset: Boolean,
 
-        @SerialName("ResetMasterPassword")
-        val shouldResetMasterPassword: Boolean,
-
         @SerialName("TwoFactorToken")
         val twoFactorToken: String?,
 
