@@ -561,7 +561,6 @@ class VaultSyncManagerImpl(
             cipherListView.any { it.organizationId == null }
     }
 
-    // Updates [shouldMigratePersonalVaultFlow].
     private fun verifyAndUpdateIfUserShouldMigrateVaultToMyItems(cipherList: List<Cipher>) {
         val shouldMigrate = policyManager
             .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
