@@ -41,6 +41,18 @@ val GetTokenResponseJson.TwoFactorRequired?.twoFactorDuoAuthUrl: String?
         ?.contentOrNull
 
 /**
+ * If it exists, return the value of the Duo redirect uri.
+ */
+val GetTokenResponseJson.TwoFactorRequired?.twoFactorDuoRedirectUri: String
+    get() = this
+        ?.authMethodsData
+        ?.duo
+        ?.get("RedirectUri")
+        ?.jsonPrimitive
+        ?.contentOrNull
+        ?: "bitwarden://duo-callback"
+
+/**
  * If it exists, return the value to display for the email used with two-factor authentication.
  */
 val GetTokenResponseJson.TwoFactorRequired?.twoFactorDisplayEmail: String

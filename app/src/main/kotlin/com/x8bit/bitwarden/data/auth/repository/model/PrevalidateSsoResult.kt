@@ -9,6 +9,7 @@ sealed class PrevalidateSsoResult {
      */
     data class Success(
         val token: String,
+        val redirectUri: String,
     ) : PrevalidateSsoResult()
 
     /**

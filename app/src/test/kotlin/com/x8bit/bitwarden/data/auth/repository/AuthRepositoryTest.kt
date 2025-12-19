@@ -5690,14 +5690,14 @@ class AuthRepositoryTest {
 
     @Test
     fun `setSsoCallbackResult should change the value of ssoCallbackResultFlow`() = runTest {
+        val callbackResult = SsoCallbackResult.Success(
+            state = "mockk_state",
+            code = "mockk_code",
+            redirectUri = "bitwarden://sso-callback",
+        )
         repository.ssoCallbackResultFlow.test {
-            repository.setSsoCallbackResult(
-                SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
-            )
-            assertEquals(
-                SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
-                awaitItem(),
-            )
+            repository.setSsoCallbackResult(callbackResult)
+            assertEquals(callbackResult, awaitItem())
         }
     }
 
@@ -5796,7 +5796,7 @@ class AuthRepositoryTest {
         val organizationId = "organizationid"
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns PrevalidateSsoResponseJson.Success(token = "").asSuccess()
+        } returns PrevalidateSsoResponseJson.Success(token = "", redirectUri = null).asSuccess()
         val result = repository.prevalidateSso(organizationId)
         assertEquals(
             PrevalidateSsoResult.Failure(error = MissingPropertyException("Token")),
@@ -5804,15 +5804,42 @@ class AuthRepositoryTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `prevalidateSso Success with a valid token should return Success`() = runTest {
-        val organizationId = "organizationid"
-        coEvery {
-            identityService.prevalidateSso(organizationId)
-        } returns PrevalidateSsoResponseJson.Success(token = "token").asSuccess()
-        val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Success(token = "token"), result)
-    }
+    fun `prevalidateSso Success with a valid token and null redirectUri should return Success with default redirectUri`() =
+        runTest {
+            val organizationId = "organizationid"
+            coEvery {
+                identityService.prevalidateSso(organizationId)
+            } returns PrevalidateSsoResponseJson.Success(token = "token", redirectUri = null)
+                .asSuccess()
+            val result = repository.prevalidateSso(organizationId)
+            assertEquals(
+                PrevalidateSsoResult.Success(
+                    token = "token",
+                    redirectUri = "bitwarden://sso-callback",
+                ),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `prevalidateSso Success with a valid token and redirectUri should return Success with matching redirectUri`() =
+        runTest {
+            val organizationId = "organizationid"
+            val token = "token"
+            val redirectUri = "https://bitwarden.com/sso-callback"
+            coEvery {
+                identityService.prevalidateSso(organizationId)
+            } returns PrevalidateSsoResponseJson.Success(token = token, redirectUri = redirectUri)
+                .asSuccess()
+            val result = repository.prevalidateSso(organizationId)
+            assertEquals(
+                PrevalidateSsoResult.Success(token = token, redirectUri = redirectUri),
+                result,
+            )
+        }
 
     @Test
     fun `logout for an inactive account should call logout on the UserLogoutManager`() {

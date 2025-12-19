@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
-import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -206,7 +205,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         action: EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
+        sendEvent(
+            EnterpriseSignOnEvent.NavigateToSsoLogin(
+                uri = action.uri,
+                redirectScheme = action.scheme,
+            ),
+        )
     }
 
     private fun handleOnSsoPrevalidationFailure(
@@ -338,14 +342,13 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 if (ssoCallbackResult.state == ssoData.state) {
                     showLoading()
                     viewModelScope.launch {
-                        val result = authRepository
-                            .login(
-                                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
-                                ssoCode = ssoCallbackResult.code,
-                                ssoCodeVerifier = ssoData.codeVerifier,
-                                ssoRedirectUri = SSO_URI,
-                                organizationIdentifier = state.orgIdentifierInput,
-                            )
+                        val result = authRepository.login(
+                            email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                            ssoCode = ssoCallbackResult.code,
+                            ssoCodeVerifier = ssoData.codeVerifier,
+                            ssoRedirectUri = ssoCallbackResult.redirectUri,
+                            organizationIdentifier = state.orgIdentifierInput,
+                        )
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
                 } else {
@@ -397,11 +400,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
             token = prevalidateSsoResult.token,
             state = generatedSsoState,
             codeVerifier = codeVerifier,
+            redirectUri = prevalidateSsoResult.redirectUri,
         )
 
         // Hide any dialog since we're about to launch a custom tab and could return without getting
         // a result due to user intervention
-        sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(uri.toUri()))
+        sendAction(
+            EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(
+                uri = uri.toUri(),
+                scheme = requireNotNull(prevalidateSsoResult.redirectUri.toUri().scheme),
+            ),
+        )
     }
 
     private fun showError(
@@ -507,7 +516,10 @@ sealed class EnterpriseSignOnEvent {
     /**
      * Navigates to a custom tab for SSO login using [uri].
      */
-    data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
+    data class NavigateToSsoLogin(
+        val uri: Uri,
+        val redirectScheme: String,
+    ) : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the set master password screen.
@@ -568,7 +580,10 @@ sealed class EnterpriseSignOnAction {
         /**
          * A [uri] has been generated to request an SSO result.
          */
-        data class OnGenerateUriForSsoResult(val uri: Uri) : Internal()
+        data class OnGenerateUriForSsoResult(
+            val uri: Uri,
+            val scheme: String,
+        ) : Internal()
 
         /**
          * A login result has been received.

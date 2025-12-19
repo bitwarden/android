@@ -33,6 +33,7 @@ class DuoUtilsTest {
     fun `getDuoCallbackTokenResult should return null when host is not the duo callback`() {
         val intent = mockk<Intent> {
             every { data?.host } returns "wrongHost"
+            every { data?.path } returns "wrongPath"
             every { action } returns Intent.ACTION_VIEW
         }
         val result = intent.getDuoCallbackTokenResult()
@@ -64,9 +65,22 @@ class DuoUtilsTest {
     }
 
     @Test
-    fun `getDuoCallbackTokenResult should return Success when all data is present`() {
+    fun `getDuoCallbackTokenResult should return Success when all data is present with duo host`() {
         val intent = mockk<Intent> {
             every { data?.host } returns "duo-callback"
+            every { data?.getQueryParameter("code") } returns "code"
+            every { data?.getQueryParameter("state") } returns "state"
+            every { action } returns Intent.ACTION_VIEW
+        }
+        val result = intent.getDuoCallbackTokenResult()
+        assertEquals(DuoCallbackTokenResult.Success(token = "code|state"), result)
+    }
+
+    @Test
+    fun `getDuoCallbackTokenResult should return Success when all data is present with duo path`() {
+        val intent = mockk<Intent> {
+            every { data?.host } returns "bitwarden.com"
+            every { data?.path } returns "duo-callback"
             every { data?.getQueryParameter("code") } returns "code"
             every { data?.getQueryParameter("state") } returns "state"
             every { action } returns Intent.ACTION_VIEW

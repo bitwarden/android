@@ -137,6 +137,8 @@ import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
 
+private const val DEFAULT_SSO_REDIRECT_URI: String = "bitwarden://sso-callback"
+
 /**
  * Default implementation of [AuthRepository].
  */
@@ -1194,7 +1196,15 @@ class AuthRepositoryImpl(
                     is PrevalidateSsoResponseJson.Success -> {
                         response.token
                             ?.takeUnless { it.isBlank() }
-                            ?.let { PrevalidateSsoResult.Success(token = it) }
+                            ?.let { token ->
+                                PrevalidateSsoResult.Success(
+                                    token = token,
+                                    redirectUri = response
+                                        .redirectUri
+                                        ?.takeUnless { it.isBlank() }
+                                        ?: DEFAULT_SSO_REDIRECT_URI,
+                                )
+                            }
                             ?: PrevalidateSsoResult.Failure(
                                 error = MissingPropertyException("Token"),
                             )

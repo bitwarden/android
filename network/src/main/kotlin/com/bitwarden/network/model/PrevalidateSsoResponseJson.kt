@@ -14,6 +14,7 @@ sealed class PrevalidateSsoResponseJson {
     @Serializable
     data class Success(
         @SerialName("token") val token: String?,
+        @SerialName("redirect_uri") val redirectUri: String?,
     ) : PrevalidateSsoResponseJson()
 
     /**
