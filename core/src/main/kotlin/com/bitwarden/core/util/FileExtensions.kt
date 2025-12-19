@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.core.util
 
 import com.bitwarden.annotation.OmitFromCoverage
 import java.io.File

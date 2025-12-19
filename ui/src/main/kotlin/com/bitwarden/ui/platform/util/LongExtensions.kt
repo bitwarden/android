@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.ui.platform.util
 
 private const val BASE_DATA_SIZE: Long = 1024L
 private val DATA_SIZE_UNITS = arrayOf("B", "KB", "MB", "GB", "TB")
