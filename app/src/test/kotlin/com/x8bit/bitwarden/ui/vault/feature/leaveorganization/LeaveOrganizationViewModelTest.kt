@@ -135,9 +135,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.you_left_the_organization.asText(),
                     ),
                 )
-            }
-
-            verify {
                 mockOrganizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationDeclined,
                 )
