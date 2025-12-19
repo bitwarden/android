@@ -568,7 +568,6 @@ private const val LOGIN_SUCCESS_JSON = """
     "EnforceOnLogin": true
   },
   "ForcePasswordReset": true,
-  "ResetMasterPassword": true,
   "Kdf": 1,
   "KdfIterations": 600000,
   "KdfMemory": 16,
@@ -603,7 +602,6 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
     privateKey = "privateKey",
     accountKeys = createMockAccountKeysJson(number = 1),
     shouldForcePasswordReset = true,
-    shouldResetMasterPassword = true,
     twoFactorToken = null,
     masterPasswordPolicyOptions = MasterPasswordPolicyOptionsJson(
         minimumComplexity = 10,
