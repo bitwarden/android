@@ -1166,4 +1166,10 @@ Pretende mudar para esta conta?</string>
     <string name="loading_vault_data">A carregar os dados do cofre…</string>
     <string name="resending">A reenviar</string>
     <string name="you_left_the_organization">Saiu da organização</string>
+    <string name="transfer_items_to_org">Transferir itens para %1$s</string>
+    <string name="transfer_items_description">%1$s exige que todos os itens sejam propriedade da organização por motivos de segurança e conformidade. Clique em Aceitar para transferir a propriedade dos seus itens.</string>
+    <string name="decline_and_leave">Recusar e sair</string>
+    <string name="why_am_i_seeing_this">Porque é que estou a ver isto?</string>
+    <string name="migrating_items_to_x">A migrar itens para %s</string>
+    <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
 </resources>

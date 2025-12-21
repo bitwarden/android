@@ -1166,4 +1166,10 @@ Wilt u naar dit account wisselen?</string>
     <string name="loading_vault_data">Kluisdata inladen…</string>
     <string name="resending">Opnieuw versturen</string>
     <string name="you_left_the_organization">Je hebt de organisatie verlaten</string>
+    <string name="transfer_items_to_org">Items overdragen naar %1$s</string>
+    <string name="transfer_items_description">%1$s vereist dat alle items eigendom zijn van de organisatie voor veiligheid en beleidsnaleving. Klik op accepteren voor het overdragen van eigendom van je items.</string>
+    <string name="decline_and_leave">Weigeren en verlaten</string>
+    <string name="why_am_i_seeing_this">Waarom zie ik dit?</string>
+    <string name="migrating_items_to_x">Items overdragen naar %s</string>
+    <string name="failed_to_migrate_items_to_x">Overdracht naar %s mislukt</string>
 </resources>

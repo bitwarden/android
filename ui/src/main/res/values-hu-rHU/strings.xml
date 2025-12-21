@@ -1165,4 +1165,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="loading_vault_data">Széf adatok betöltése…</string>
     <string name="resending">Ismételt küldés</string>
     <string name="you_left_the_organization">Megtörtént a szervezet elhagyása.</string>
+    <string name="transfer_items_to_org">Elemek átruházása: %1$s</string>
+    <string name="transfer_items_description">%1$s biztonsági és megfelelőségi okokból megköveteli, hogy minden elem a szervezet tulajdonában legyen. Kattintás az Elfogadás gombra az elemek tulajdonjogának átruházásához.</string>
+    <string name="decline_and_leave">Elutasítás és kilépés</string>
+    <string name="why_am_i_seeing_this">Miért látható ez?</string>
+    <string name="migrating_items_to_x">Elemek átvitele: %s</string>
+    <string name="failed_to_migrate_items_to_x">Nem sikerült az elemek átvitele: %s</string>
 </resources>

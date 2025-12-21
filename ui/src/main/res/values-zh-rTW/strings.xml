@@ -494,10 +494,10 @@
     <string name="remove_master_password">移除主密碼</string>
     <string name="leave_organization">離開組織</string>
     <string name="leave_organization_name">離開 %1$s？</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">您確定要離開 %1$s？</string>
+    <string name="leave_organization_button">離開 %1$s</string>
+    <string name="leave_organization_warning">若選擇拒絕，您的個人項目將保留在帳號中，但您將失去對共用項目與組織功能的存取權。\n\n請聯絡您的管理員以重新取得存取權限。</string>
+    <string name="how_to_manage_my_vault">如何管理我的密碼庫</string>
     <string name="fido2_authenticate_web_authn">驗證 WebAuthn</string>
     <string name="fido2_return_to_app">返回應用程式</string>
     <string name="reset_password_auto_enroll_invite_warning">此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。</string>
@@ -1158,5 +1158,11 @@
     <string name="use_your_devices_lock_method_to_unlock_the_app">使用你的裝置鎖定方式來解鎖此應用程式</string>
     <string name="loading_vault_data">正在載入密碼庫資料…</string>
     <string name="resending">重新傳送</string>
-    <string name="you_left_the_organization">You left the organization</string>
+    <string name="you_left_the_organization">您已離開組織</string>
+    <string name="transfer_items_to_org">將項目轉移至 %1$s</string>
+    <string name="transfer_items_description">%1$s 為了安全性與合規性，要求所有項目皆由組織擁有。點擊接受即可轉移您項目的擁有權。</string>
+    <string name="decline_and_leave">拒絕並離開</string>
+    <string name="why_am_i_seeing_this">為什麼我會看到此訊息？</string>
+    <string name="migrating_items_to_x">正在將項目遷移至 %s</string>
+    <string name="failed_to_migrate_items_to_x">無法將項目遷移至 %s</string>
 </resources>

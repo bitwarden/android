@@ -1183,4 +1183,10 @@ při opakování problémů.</string>
     <string name="loading_vault_data">Načítání dat trezoru...</string>
     <string name="resending">Opakované odesílání</string>
     <string name="you_left_the_organization">Opustili jste organizaci</string>
+    <string name="transfer_items_to_org">Převést položky do %1$s</string>
+    <string name="transfer_items_description">%1$s vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko pro převod vlastnictví Vašich položek.</string>
+    <string name="decline_and_leave">Odmítnout a opustit</string>
+    <string name="why_am_i_seeing_this">Proč se mi toto zobrazuje?</string>
+    <string name="migrating_items_to_x">Přesouvání položek do %s</string>
+    <string name="failed_to_migrate_items_to_x">Nepodařilo se přesunout položky do %s</string>
 </resources>
