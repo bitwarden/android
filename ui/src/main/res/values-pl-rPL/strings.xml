@@ -500,8 +500,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="remove_master_password">Usuń hasło główne</string>
     <string name="leave_organization">Opuść organizację</string>
     <string name="leave_organization_name">Opuścić organizację %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację %1$s?</string>
+    <string name="leave_organization_button">Opuść organizację %1$s</string>
     <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
     <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
@@ -1181,4 +1181,10 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="loading_vault_data">Ładowanie danych sejfu…</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Przenieś elementy do %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Dlaczego to widzę?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

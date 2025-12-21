@@ -11,7 +11,7 @@
     <string name="copy_password">Ievietot paroli starpliktuvē</string>
     <string name="copy_username">Ievietot lietotājvārdu starpliktuvē</string>
     <string name="delete">Izdzēst</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Izdzēš…</string>
     <string name="do_you_really_want_to_delete">Vai tiešām izdzēst? To nevar atsaukt.</string>
     <string name="edit">Labot</string>
     <string name="edit_folder">Labot mapi</string>
@@ -54,7 +54,7 @@
     <string name="password">Parole</string>
     <string name="save">Saglabāt</string>
     <string name="move">Pārvietot</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Saglabā…</string>
     <string name="settings">Iestatījumi</string>
     <string name="show">Parādīt</string>
     <string name="item_deleted">Vienums ir izdzēsts</string>
@@ -103,7 +103,7 @@
     <string name="immediately">Nekavējoties</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Piesakās…</string>
     <string name="login_to_bitwarden">Pieteikties Bitwarden</string>
     <string name="master_password_confirmation_val_message">Paroles apstiprinājums nav pareizs.</string>
     <string name="master_password_description">Galvenā parole ir parole, kas tiek izmantota, lai piekļūtu glabātavai. Ir ļoti svarīgi, ka tā netiek aizmirsta, jo tādā gadījumā to nav iespējams atgūt.</string>
@@ -186,7 +186,7 @@
     <string name="add_new_attachment">Pievienot jaunu pielikumu</string>
     <string name="attachments">Pielikumi</string>
     <string name="unable_to_download_file">Nav iespējams lejupielādēt datni.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Lejupielādē…</string>
     <string name="attachment_large_warning">Šī pielikuma lielums ir %1$s. Vai tiešām to lejupielādēt šajā ierīcē?</string>
     <string name="authenticator_key">Autentificētāja atslēga (TOTP)</string>
     <string name="verification_code_totp">Apliecinājuma kods (TOTP)</string>
@@ -403,7 +403,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Vienums tika pārvietots uz atkritni.</string>
     <string name="restore">Atjaunot</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Atjauno…</string>
     <string name="item_restored">Vienums tika atjaunots.</string>
     <string name="trash">Atkritne</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Vai tiešām neatgriezeniski izdzēst? To nevar atsaukt.</string>
@@ -498,10 +498,10 @@ Nolasīšana notiks automātiski.</string>
     <string name="remove_master_password">Noņemt galveno paroli</string>
     <string name="leave_organization">Pamest apvienību</string>
     <string name="leave_organization_name">Pamest %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Vai tiešām pamest %1$s?</string>
+    <string name="leave_organization_button">Pamest %1$s</string>
+    <string name="leave_organization_warning">Pēc noraidīšanas personīgie vienumi paliks Tavā kontā, bet Tu zaudēsi piekļuvi kopīgotajiem vienumiem un apvienību iespējām.\n\nJāsazinās ar savu pārvaldītāju, lai atgūdu piekļuvi.</string>
+    <string name="how_to_manage_my_vault">Kā pārvaldīt savu glabātavu</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
@@ -1173,5 +1173,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Jāizmanto ierīces slēgšanas veids, lai atslēgtu lietotni</string>
     <string name="loading_vault_data">Ielādē glabātavas datus…</string>
     <string name="resending">Nosūta atkārtoti</string>
-    <string name="you_left_the_organization">You left the organization</string>
+    <string name="you_left_the_organization">Tu pameti apvienību</string>
+    <string name="transfer_items_to_org">Pārcelt vienumus uz %1$s</string>
+    <string name="transfer_items_description">%1$s ir nepieciešams, lai visi vienumi piederētu apvienībai drošības un atbilstības nolūkos. Jāklikšķina “Pieņemt”, lai pārceltu savu vienumu īpašumtiesības.</string>
+    <string name="decline_and_leave">Noraidīt un pamest</string>
+    <string name="why_am_i_seeing_this">Kāpēc šis ir redzams?</string>
+    <string name="migrating_items_to_x">Pārceļ vienumus uz %s</string>
+    <string name="failed_to_migrate_items_to_x">Neizdevās pārcelt vienumus uz %s</string>
 </resources>

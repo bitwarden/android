@@ -499,7 +499,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="are_you_sure_you_want_to_leave_organization">Bist du sicher, dass du %1$s verlassen möchtest?</string>
     <string name="leave_organization_button">%1$s verlassen</string>
     <string name="leave_organization_warning">Wenn du ablehnst, bleiben deine persönlichen Einträge in deinem Konto erhalten, aber du wirst den Zugriff auf geteilte Einträge und Organisationsfunktionen verlieren.\n\nKontaktiere deinen Administrator, um den Zugriff wiederherzustellen.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="how_to_manage_my_vault">So verwaltest du deinen Tresor</string>
     <string name="fido2_authenticate_web_authn">WebAuthn authentifizieren</string>
     <string name="fido2_return_to_app">Zurück zur App</string>
     <string name="reset_password_auto_enroll_invite_warning">Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</string>
@@ -1165,4 +1165,10 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="loading_vault_data">Tresor-Daten werden geladen…</string>
     <string name="resending">Wird erneut gesendet</string>
     <string name="you_left_the_organization">Du hast die Organisation verlassen</string>
+    <string name="transfer_items_to_org">Eintrag an %1$s übertragen</string>
+    <string name="transfer_items_description">%1$s erfordert zur Sicherheit und Compliance, dass alle Einträge der Organisation gehören. Klicke auf Akzeptieren, um den Besitz deiner Einträge zu übertragen.</string>
+    <string name="decline_and_leave">Ablehnen und verlassen</string>
+    <string name="why_am_i_seeing_this">Warum wird mir das angezeigt?</string>
+    <string name="migrating_items_to_x">Einträge werden nach %s migriert</string>
+    <string name="failed_to_migrate_items_to_x">Fehler beim Migrieren der Einträge zu %s</string>
 </resources>
