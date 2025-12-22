@@ -1796,6 +1796,7 @@ class AuthRepositoryImpl(
     ): VaultUnlockResult? {
         val key = loginResponse.key
         val privateKey = loginResponse.privateKey
+        val accountKeys = loginResponse.accountKeys
         return if (loginResponse.userDecryptionOptions?.hasMasterPassword != false) {
             // This user has a master password, so we skip the key-connector logic as it is not
             // setup yet. The user can still unlock the vault with their master password.
@@ -1815,8 +1816,8 @@ class AuthRepositoryImpl(
                             masterKey = it.masterKey,
                             userKey = key,
                         ),
-                        securityState = loginResponse.accountKeys?.securityState?.securityState,
-                        signingKey = loginResponse.accountKeys?.signatureKeyPair?.wrappedSigningKey,
+                        securityState = accountKeys?.securityState?.securityState,
+                        signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey,
                     )
                 }
                 .fold(
@@ -1840,8 +1841,8 @@ class AuthRepositoryImpl(
                     val result = unlockVault(
                         accountProfile = profile,
                         privateKey = keyConnectorResponse.keys.private,
-                        securityState = loginResponse.accountKeys?.securityState?.securityState,
-                        signingKey = loginResponse.accountKeys?.signatureKeyPair?.wrappedSigningKey,
+                        securityState = accountKeys?.securityState?.securityState,
+                        signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey,
                         initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                             masterKey = keyConnectorResponse.masterKey,
                             userKey = keyConnectorResponse.encryptedUserKey,
