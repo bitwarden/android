@@ -41,6 +41,8 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.util.LRO
+import com.bitwarden.ui.platform.components.util.PDF
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.util.asText
@@ -684,7 +686,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
         composeTestRule
             .onNodeWithText("Password")
-            .assertTextEquals("Password", "p@ssw0rd")
+            .assertTextEquals("Password", "${LRO}p@ssw0rd$PDF")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithContentDescription("Hide")
@@ -1006,7 +1008,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Authenticator key")
-            .assertTextEquals("Authenticator key", "TestCode")
+            .assertTextEquals("Authenticator key", "${LRO}TestCode$PDF")
             .assertIsEnabled()
 
         mutableStateFlow.update { currentState ->
@@ -1015,7 +1017,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Authenticator key")
-            .assertTextEquals("Authenticator key", "NewTestCode")
+            .assertTextEquals("Authenticator key", "${LRO}NewTestCode$PDF")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
@@ -1042,7 +1044,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Authenticator key")
-            .assertTextEquals("Authenticator key", "TestCode")
+            .assertTextEquals("Authenticator key", "${LRO}TestCode$PDF")
             .assertIsEnabled()
 
         composeTestRule
