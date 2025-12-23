@@ -7541,7 +7541,6 @@ class AuthRepositoryTest {
             privateKey = "privateKey",
             accountKeys = null,
             shouldForcePasswordReset = true,
-            shouldResetMasterPassword = true,
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
@@ -7560,7 +7559,6 @@ class AuthRepositoryTest {
             privateKey = "privateKey",
             accountKeys = ACCOUNT_KEYS,
             shouldForcePasswordReset = true,
-            shouldResetMasterPassword = true,
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = UserDecryptionOptionsJson(

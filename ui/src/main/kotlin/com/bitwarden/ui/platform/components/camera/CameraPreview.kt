@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.components.camera
 
 import android.content.Context
+import android.os.Build
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -38,6 +39,8 @@ fun CameraPreview(
     context: Context = LocalContext.current,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
+    // We simply do not draw anything when running in tests to avoid flaky HardwareRenderer issues
+    if ("robolectric" == Build.FINGERPRINT) return
     val surfaceRequests = remember { MutableStateFlow<SurfaceRequest?>(null) }
     val preview = rememberPreview { surfaceRequests.value = it }
     val imageAnalyzer = rememberImageAnalyzer(qrCodeAnalyzer = qrCodeAnalyzer)

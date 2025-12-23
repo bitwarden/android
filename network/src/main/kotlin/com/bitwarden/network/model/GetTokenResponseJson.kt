@@ -27,8 +27,6 @@ sealed class GetTokenResponseJson {
      * public key encryption key pair. This is temporarily nullable to support older accounts that
      * have not been upgraded to use account keys instead of the deprecated `PrivateKey` field.
      * @property shouldForcePasswordReset Whether or not the app must force a password reset.
-     * @property shouldResetMasterPassword Whether or not the user is required to reset their
-     * master password.
      * @property twoFactorToken If the user has chosen to remember the two-factor authorization,
      * this token will be cached and used for future auth requests.
      * @property masterPasswordPolicyOptions The options available for a user's master password.
@@ -78,9 +76,6 @@ sealed class GetTokenResponseJson {
 
         @SerialName("ForcePasswordReset")
         val shouldForcePasswordReset: Boolean,
-
-        @SerialName("ResetMasterPassword")
-        val shouldResetMasterPassword: Boolean,
 
         @SerialName("TwoFactorToken")
         val twoFactorToken: String?,
