@@ -18,7 +18,6 @@ fun createMockPublicKeyAssertionResponse(number: Int) =
         clientExtensionResults = ClientExtensionResults(
             credProps = CredPropsResult(
                 rk = true,
-                authenticatorDisplayName = "mockAuthenticatorDisplayName-$number",
             ),
         ),
         response = AuthenticatorAssertionResponse(

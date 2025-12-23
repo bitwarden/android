@@ -60,7 +60,6 @@ class PublicKeyCredentialAuthenticatorAttestationResponseExtensionsTest {
             number = 1,
             credProps = CredPropsResult(
                 rk = true,
-                authenticatorDisplayName = null,
             ),
         )
         val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = "")

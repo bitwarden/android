@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
@@ -61,12 +62,10 @@ interface VaultLockManager {
      */
     @Suppress("LongParameterList")
     suspend fun unlockVault(
+        accountCryptographicState: WrappedAccountCryptographicState,
         userId: String,
         email: String,
         kdf: Kdf,
-        privateKey: String,
-        signingKey: String?,
-        securityState: String?,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult

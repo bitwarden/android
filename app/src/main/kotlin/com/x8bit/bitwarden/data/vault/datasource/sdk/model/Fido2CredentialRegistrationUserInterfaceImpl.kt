@@ -32,7 +32,7 @@ class Fido2CredentialRegistrationUserInterfaceImpl(
         checkUserResult = CheckUserResult(userPresent = true, userVerified = true),
     )
 
-    override suspend fun isVerificationEnabled(): Boolean = isVerificationSupported
+    override fun isVerificationEnabled(): Boolean = isVerificationSupported
 
     override suspend fun pickCredentialForAuthentication(
         availableCredentials: List<CipherView>,

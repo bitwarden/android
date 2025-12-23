@@ -28,7 +28,7 @@ class Fido2CredentialAuthenticationUserInterfaceImpl(
         newCredential: Fido2CredentialNewView,
     ): CheckUserAndPickCredentialForCreationResult = throw IllegalStateException()
 
-    override suspend fun isVerificationEnabled(): Boolean = isVerificationSupported
+    override fun isVerificationEnabled(): Boolean = isVerificationSupported
 
     override suspend fun pickCredentialForAuthentication(
         availableCredentials: List<CipherView>,

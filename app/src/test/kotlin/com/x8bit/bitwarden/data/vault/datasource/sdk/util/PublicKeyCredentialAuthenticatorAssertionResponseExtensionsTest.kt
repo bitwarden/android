@@ -61,7 +61,6 @@ class PublicKeyCredentialAuthenticatorAssertionResponseExtensionsTest {
             number = 1,
             credProps = CredPropsResult(
                 rk = true,
-                authenticatorDisplayName = null,
             ),
         )
         val result = mockSdkResponse.toAndroidFido2PublicKeyCredential()
@@ -74,7 +73,6 @@ class PublicKeyCredentialAuthenticatorAssertionResponseExtensionsTest {
             number = 1,
             credProps = CredPropsResult(
                 rk = null,
-                authenticatorDisplayName = null,
             ),
         )
         val result = mockSdkResponse.toAndroidFido2PublicKeyCredential()

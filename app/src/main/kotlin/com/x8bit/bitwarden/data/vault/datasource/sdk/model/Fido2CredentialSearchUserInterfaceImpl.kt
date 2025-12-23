@@ -29,7 +29,7 @@ class Fido2CredentialSearchUserInterfaceImpl : Fido2UserInterface {
 
     // Always return true for this property because any problems with verification should
     // be handled downstream where the app can actually offer verification methods.
-    override suspend fun isVerificationEnabled(): Boolean = true
+    override fun isVerificationEnabled(): Boolean = true
 
     override suspend fun pickCredentialForAuthentication(
         availableCredentials: List<CipherView>,

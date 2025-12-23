@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 
@@ -137,17 +138,21 @@ class AuthenticatorBridgeRepositoryImpl(
             ?.securityState
             ?.securityState
         val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
 
         return scopedVaultSdkSource
             .initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = securityState,
+                        signingKey = signingKey,
+                        signedPublicKey = signedPublicKey,
+                    ),
                     userId = userId,
                     kdfParams = account.profile.toSdkParams(),
                     email = account.profile.email,
-                    privateKey = privateKey,
-                    securityState = securityState,
-                    signingKey = signingKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = decryptedUserKey,
                     ),
