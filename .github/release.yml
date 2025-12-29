@@ -8,8 +8,12 @@ changelog:
         - community-pr
     - title: '🚀 New Features & Enhancements'
       labels:
+        - t:feature-app
         - t:new-feature
         - t:enhancement
+    - title: ':shipit: Tools'
+      labels:
+        - t:feature-tool
     - title: '❗ Breaking Changes'
       labels:
         - t:breaking-change
