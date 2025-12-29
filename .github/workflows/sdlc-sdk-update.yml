@@ -190,7 +190,7 @@ jobs:
               --base main \
               --head "$_BRANCH_NAME" \
               --label "automated-pr" \
-              --label "t:ci")
+              --label "t:deps")
             echo "## 🚀 Created PR: $PR_URL" >> "$GITHUB_STEP_SUMMARY"
           fi
 
