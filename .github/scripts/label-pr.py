@@ -222,11 +222,11 @@ def main():
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
         if mode == "add":
-            print(f"::notice::Adding labels: {labels_str}")
+            print(f"::notice::🏷️ Adding labels: {labels_str}")
             if not args.dry_run:
                 gh_add_labels(pr_number, list(all_labels))
         else:
-            print(f"::notice::Replacing labels with: {labels_str}")
+            print(f"::notice::🏷️ Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
     else:
