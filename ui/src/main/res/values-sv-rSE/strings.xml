@@ -1166,4 +1166,10 @@ Vill du byta till detta konto?</string>
     <string name="loading_vault_data">Läser in valvdata…</string>
     <string name="resending">Skickar igen</string>
     <string name="you_left_the_organization">Du lämnade organisationen</string>
+    <string name="transfer_items_to_org">Överför objekt till %1$s</string>
+    <string name="transfer_items_description">%1$s kräver att alla objekt ägs av organisationen för säkerhet och efterlevnad. Klicka på acceptera för att överföra ägarskapet för dina objekt.</string>
+    <string name="decline_and_leave">Avböj och lämna</string>
+    <string name="why_am_i_seeing_this">Varför ser jag det här?</string>
+    <string name="migrating_items_to_x">Migrerar objekt till %s</string>
+    <string name="failed_to_migrate_items_to_x">Det gick inte att migrera objekt till %s</string>
 </resources>

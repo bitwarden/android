@@ -798,7 +798,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="turn_on_browser_autofill_integration_later">Zapnúť integráciu automatického vyplňovania v prehliadači neskôr?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">K tomuto kroku sa môžete kedykoľvek vrátiť a dokončiť ho v Nastaveniach.</string>
     <string name="what_bitwarden_has_to_offer">Teraz môžete preskúmať všetko, čo Bitwarden ponúka, a začať bezpečne spravovať svoje heslá.</string>
-    <string name="youre_all_set">Všetko je pripravené!</string>
+    <string name="youre_all_set">Všetko je nastavené!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
     <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
     <string name="new_master_password_hint">Nová nápoveď pre hlavné heslo</string>
@@ -1182,4 +1182,10 @@ Chcete prepnúť na tento účet?</string>
     <string name="loading_vault_data">Načítavajú sa údaje trezora…</string>
     <string name="resending">Znovu sa odosiela</string>
     <string name="you_left_the_organization">Opustili ste organizáciu</string>
+    <string name="transfer_items_to_org">Prenos položiek do %1$s</string>
+    <string name="transfer_items_description">%1$s vyžaduje, aby všetky položky patrili organizácii z dôvodu bezpečnosti a dodržiavania predpisov. Ak chcete previesť vlastníctvo položiek, kliknite na tlačidlo Prijať.</string>
+    <string name="decline_and_leave">Zamietnuť a odísť</string>
+    <string name="why_am_i_seeing_this">Prečo to vidím?</string>
+    <string name="migrating_items_to_x">Presúvanie položiek do %s</string>
+    <string name="failed_to_migrate_items_to_x">Nepodarilo sa presunúť položky do %s</string>
 </resources>

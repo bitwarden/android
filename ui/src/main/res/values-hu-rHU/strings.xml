@@ -54,7 +54,7 @@
     <string name="password">Jelszó</string>
     <string name="save">Mentés</string>
     <string name="move">Áthelyezés</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Mentés…</string>
     <string name="settings">Beállítások</string>
     <string name="show">Mutat</string>
     <string name="item_deleted">Az elem törlésre került.</string>
@@ -103,7 +103,7 @@
     <string name="immediately">Azonnal</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Bejelentkezés…</string>
     <string name="login_to_bitwarden">Bejelentkezés a Bitwardenbe</string>
     <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
     <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
@@ -145,7 +145,7 @@
     <string name="select">Kijelölés</string>
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
-    <string name="submitting">Submitting…</string>
+    <string name="submitting">Beküldés…</string>
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
     <string name="two_step_login">Kétlépcsős bejelentkezés</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Melléklet hozzáadása</string>
     <string name="attachments">Mellékletek</string>
     <string name="unable_to_download_file">Nem lehet letölteni a fájlt.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Letöltés…</string>
     <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan letöltésre kerüljön az eszközre?</string>
     <string name="authenticator_key">Igazolókód (TOTP)</string>
     <string name="verification_code_totp">Ellenőrzőkód (TOTP)</string>
@@ -289,7 +289,7 @@
     <string name="new_uri">Új URI</string>
     <string name="add_website">Webhely hozzáadása</string>
     <string name="base_domain">Alap domain</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Alapértelmezett (%1$s)</string>
     <string name="exact">Pontos</string>
     <string name="host">Kiszolgáló</string>
     <string name="reg_ex">Reguláris kifejezés</string>
@@ -400,7 +400,7 @@
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Az elem a lomtárba került.</string>
     <string name="restore">Visszaállítás</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Visszaállítás…</string>
     <string name="item_restored">Az elem visszaállításra került.</string>
     <string name="trash">Lomtár</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Valóban végleges legyen a törlés? A művelet nem vonható vissza.</string>
@@ -1114,7 +1114,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="default_uri_match_detection_description_advanced_options">Az URI egyezés észlelése szabályozza, hogy a Bitwarden hogyan azonosítsa az automatikus kitöltési javaslatokat.\n&lt;annotation emphous=„bold“&gt;Figyelem:&lt;/annotation&gt; A “Kezdés:” egy fejlett lehetőség, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">A “Kezdés:” egy fejlett opció, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“A reguláris kifejezés” egy fejlett opció, amely megnöveli a hitelesítő adatok felfedésének kockázatát, ha helytelenül használják.</string>
-    <string name="later">Later</string>
+    <string name="later">Később</string>
     <string name="encryption_settings_updated">A titkosítási beállítások frissítésre kerültek.</string>
     <string name="update_your_encryption_settings">A titkosítási beállítások frissítése</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Az új ajánlott titkosítási beállítások javítják a fiók biztonságát. Adjuk meg a mesterjelszót a frissítéshez most.</string>
@@ -1165,4 +1165,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="loading_vault_data">Széf adatok betöltése…</string>
     <string name="resending">Ismételt küldés</string>
     <string name="you_left_the_organization">Megtörtént a szervezet elhagyása.</string>
+    <string name="transfer_items_to_org">Elemek átruházása: %1$s</string>
+    <string name="transfer_items_description">%1$s biztonsági és megfelelőségi okokból megköveteli, hogy minden elem a szervezet tulajdonában legyen. Kattintás az Elfogadás gombra az elemek tulajdonjogának átruházásához.</string>
+    <string name="decline_and_leave">Elutasítás és kilépés</string>
+    <string name="why_am_i_seeing_this">Miért látható ez?</string>
+    <string name="migrating_items_to_x">Elemek átvitele: %s</string>
+    <string name="failed_to_migrate_items_to_x">Nem sikerült az elemek átvitele: %s</string>
 </resources>

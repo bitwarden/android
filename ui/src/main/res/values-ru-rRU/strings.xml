@@ -182,8 +182,8 @@
     <string name="send_verification_code_again">Отправить код повторно</string>
     <string name="verification_email_not_sent">Не удалось отправить письмо подтверждения. Повторить.</string>
     <string name="verification_email_sent">Отправлено письмо подтверждения.</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
-    <string name="yubi_key_title">Ключ безопасности YubiKey</string>
+    <string name="yubi_key_instruction">Для продолжения приложите ключ безопасности Yubico к задней части устройства или вставьте его в USB-порт устройства и нажмите его кнопку.</string>
+    <string name="yubi_key_title">Ключ безопасности Yubico</string>
     <string name="add_new_attachment">Добавить новое вложение</string>
     <string name="attachments">Вложения</string>
     <string name="unable_to_download_file">Не удается загрузить файл.</string>
@@ -379,7 +379,7 @@
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>
     <string name="download">Загрузить</string>
-    <string name="login_expired">Истек срок действия вашего сеанса.</string>
+    <string name="login_expired">Истек срок действия вашей сессии.</string>
     <string name="biometrics_direction">Биометрическая верификация.</string>
     <string name="device_verification">Проверка устройства</string>
     <string name="biometrics_failed">Сбой биометрии</string>
@@ -390,7 +390,7 @@
     <string name="send_verification_code_to_email">Отправить код подтверждения на ваш email</string>
     <string name="code_sent">Код отправлен!</string>
     <string name="confirm_your_identity">Подтвердите вашу личность, чтобы продолжить.</string>
-    <string name="export_vault_warning">Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</string>
+    <string name="export_vault_warning">В целях безопасности не передавайте и не отправляйте этот файл по незащищенным каналам (например, по электронной почте) и удалите его после использования.</string>
     <string name="export_vault_file_pw_protect_info">Экспорт этого файла будет защищен паролем, и для расшифровки потребуется пароль файла.</string>
     <string name="export_vault_confirmation_title">Подтвердить экспорт хранилища</string>
     <string name="warning">Предупреждение</string>
@@ -495,7 +495,7 @@
     <string name="password_confirmation">Подтверждение мастер-пароля</string>
     <string name="password_confirmation_desc">Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности.</string>
     <string name="update_master_password">Обновить мастер-пароль</string>
-    <string name="update_master_password_warning">Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить мастер-пароль сейчас. В результате текущий сеанс будет завершен, потребуется повторный вход. Активные сеансы на других устройствах могут оставаться активными в течение одного часа.</string>
+    <string name="update_master_password_warning">Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить мастер-пароль сейчас. В результате текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение одного часа.</string>
     <string name="updating_password">Обновление пароля</string>
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
@@ -520,11 +520,11 @@
         <item quantity="many">%1$d минут</item>
         <item quantity="other">%1$d минуты</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Ваша организация установила максимальный тайм-аут сеанса %1$s и %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Ваша организация установила максимальный тайм-аут сеанса равным %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Ваша организация установила максимальный тайм-аут сессии %1$s и %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Ваша организация установила максимальный тайм-аут сессии равным %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Эта настройка управляется вашей организацией.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Ваша организация не установила тайм-аут сеанса по умолчанию.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Ваша организация установила тайм-аут сеанса по умолчанию при перезапуске приложения.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Ваша организация не установила тайм-аут сессии по умолчанию.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Ваша организация установила тайм-аут сессии по умолчанию при перезапуске приложения.</string>
     <string name="vault_timeout_to_large">Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</string>
     <string name="add_account">Добавить аккаунт</string>
@@ -642,7 +642,7 @@
     <string name="there_are_no_items_that_match_the_search">Нет элементов, соответствующих запросу</string>
     <string name="self_hosted">Собственный хостинг</string>
     <string name="region">Регион</string>
-    <string name="update_weak_master_password_warning">Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</string>
+    <string name="update_weak_master_password_warning">Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа.</string>
     <string name="current_master_password_required">Текущий мастер-пароль (обязательно)</string>
     <string name="approve_with_my_other_device">Одобрить с другим устройством</string>
     <string name="request_admin_approval">Запросить одобрение администратора</string>
@@ -666,8 +666,8 @@
     <string name="invalid_uri">Некорректный URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s уже заблокирован</string>
     <string name="login_approved">Вход одобрен</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Вход с устройства должен быть настроен в мобильном приложении Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Нужен другой вариант? <annotation link="viewAll">Просмотреть все варианты авторизации</annotation></string>
     <string name="log_in_with_device">Войти с помощью устройства</string>
     <string name="logging_in_on">Войти на</string>
     <string name="logging_in_on_with_colon">Войти на:</string>
@@ -1180,6 +1180,12 @@
     <string name="lock_app">Заблокировать приложение</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Используйте метод блокировки вашего устройства, чтобы разблокировать приложение</string>
     <string name="loading_vault_data">Загрузка данных хранилища…</string>
-    <string name="resending">Resending</string>
+    <string name="resending">Повторная отправка</string>
     <string name="you_left_the_organization">Вы покинули организацию</string>
+    <string name="transfer_items_to_org">Переместить элементы в %1$s</string>
+    <string name="transfer_items_description">%1$s требует, чтобы все элементы принадлежали организации для обеспечения безопасности и соответствия требованиям. Нажмите Принять, чтобы передать собственность на ваши элементы.</string>
+    <string name="decline_and_leave">Отклонить и покинуть</string>
+    <string name="why_am_i_seeing_this">Почему я это вижу?</string>
+    <string name="migrating_items_to_x">Перенос элементов в %s</string>
+    <string name="failed_to_migrate_items_to_x">Не удалось перенести элементы в %s</string>
 </resources>
