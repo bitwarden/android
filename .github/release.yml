@@ -26,6 +26,7 @@ changelog:
         - t:ci
         - t:docs
         - t:misc
+        - '*'
     - title: '📦 Dependency Updates'
       labels:
         - dependencies

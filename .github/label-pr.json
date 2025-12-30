@@ -30,8 +30,8 @@
       "authenticator/"
     ],
     "t:enhancement": [
-      "fido2_privileged_community.json",
-      "fido2_privileged_google.json"
+      "app/src/main/assets/fido2_privileged_community.json",
+      "app/src/main/assets/fido2_privileged_google.json"
     ],
     "t:ci": [
       ".github/",

@@ -131,7 +131,7 @@ def label_filepaths(changed_files: list[str], path_patterns: dict) -> list[str]:
         labels_to_apply.remove("app:shared")
 
     if not labels_to_apply:
-        print("::warning::No matching file paths found, no labels applied.")
+        print("::notice::No matching file paths found.")
 
     return list(labels_to_apply)
 
@@ -151,7 +151,7 @@ def label_title(pr_title: str, title_patterns: dict) -> list[str]:
                 break
 
     if not labels_to_apply:
-        print("::warning::No matching title patterns found, no labels applied.")
+        print("::notice::No matching title patterns found.")
 
     return list(labels_to_apply)
 
@@ -222,15 +222,15 @@ def main():
     if all_labels:
         labels_str = ', '.join(sorted(all_labels))
         if mode == "add":
-            print(f"🏷️  Adding labels: {labels_str}")
+            print(f"::notice::🏷️ Adding labels: {labels_str}")
             if not args.dry_run:
                 gh_add_labels(pr_number, list(all_labels))
         else:
-            print(f"🏷️  Replacing labels with: {labels_str}")
+            print(f"::notice::🏷️ Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
     else:
-        print("ℹ️  No matching patterns found, no labels applied.")
+        print("::warning::No matching patterns found, no labels applied.")
 
     print("✅ Done")
 
