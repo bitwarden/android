@@ -112,7 +112,6 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     privateKey = "privateKey",
     accountKeys = createMockAccountKeysJson(number = 1),
     shouldForcePasswordReset = false,
-    shouldResetMasterPassword = true,
     twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,

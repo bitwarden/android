@@ -2,8 +2,8 @@ name: Cron / Sync Google Privileged Browsers List
 
 on:
   schedule:
-    # Run weekly on Monday at 00:00 UTC
-    - cron: "0 0 * * 1"
+    # Run weekly on Sunday at 00:00 UTC
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 env:
@@ -96,4 +96,4 @@ jobs:
             --base main \
             --head "$BRANCH_NAME" \
             --label "automated-pr" \
-            --label "t:ci"
+            --label "t:deps"

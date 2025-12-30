@@ -183,11 +183,15 @@ jobs:
           _JIRA_API_EMAIL: ${{ steps.get-kv-secrets.outputs.JIRA-API-EMAIL }}
           _JIRA_API_TOKEN: ${{ steps.get-kv-secrets.outputs.JIRA-API-TOKEN }}
         run: |
-          echo "Getting product release notes"
-          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN")
+          echo "Getting product release notes..."
+          # capture output and exit code so this step continues even if we can't retrieve release notes.
+          script_exit_code=0
+          product_release_notes=$(python .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN") || script_exit_code=$?
+          echo "--------------------------------"
 
-          if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
-            echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
+          if [[ $script_exit_code -ne 0 || -z "$product_release_notes" ]]; then
+            echo "Script Output: $product_release_notes"
+            echo "::warning::Failed to fetch release notes from Jira. Check script logs for more details."
             product_release_notes="<insert product release notes here>"
           else
             echo "✅ Product release notes:"
@@ -285,5 +289,5 @@ jobs:
             echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`"
             echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch"
             echo "> [!NOTE]"
-            echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." 
+            echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes."
           } >> "$GITHUB_STEP_SUMMARY"
