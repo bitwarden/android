@@ -29,6 +29,10 @@
     "app:authenticator": [
       "authenticator/"
     ],
+    "t:enhancement": [
+      "app/src/main/assets/fido2_privileged_community.json",
+      "app/src/main/assets/fido2_privileged_google.json"
+    ],
     "t:ci": [
       ".github/",
       "scripts/",
