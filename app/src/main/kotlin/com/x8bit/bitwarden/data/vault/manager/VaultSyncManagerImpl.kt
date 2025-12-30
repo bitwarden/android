@@ -13,7 +13,6 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.SyncResponseJson.Cipher
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
-import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -429,7 +428,10 @@ class VaultSyncManagerImpl(
                         onSuccess = { result ->
                             // We need to be sure the data on device is updated
                             // before sending the user to the migration screen
-                            if (userShouldMigrateVault(cipherListView = result.successes)) {
+                            if (userShouldMigrateVault {
+                                    result.successes.any { it.organizationId == null }
+                                }
+                            ) {
                                 sync(forced = true)
                             }
                             DataState.Loaded(
@@ -550,26 +552,18 @@ class VaultSyncManagerImpl(
      * Evaluates if the user should migrate their personal vault based on
      * policies, personal ciphers, feature flag, and network connectivity.
      */
-    private fun userShouldMigrateVault(
-        cipherListView: List<CipherListView>,
-    ): Boolean {
+    private fun userShouldMigrateVault(hasPersonalItems: () -> Boolean): Boolean {
         return policyManager
             .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any() &&
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             connectionManager.isNetworkConnected &&
-            cipherListView.any { it.organizationId == null }
+            hasPersonalItems()
     }
 
     private fun verifyAndUpdateIfUserShouldMigrateVaultToMyItems(cipherList: List<Cipher>) {
-        val shouldMigrate = policyManager
-            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            .any() &&
-            featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
-            connectionManager.isNetworkConnected &&
-            cipherList.any { it.organizationId == null }
         mutableShouldMigratePersonalVaultFlow.update {
-            shouldMigrate
+            userShouldMigrateVault { cipherList.any { it.organizationId == null } }
         }
     }
 
