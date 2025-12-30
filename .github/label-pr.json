@@ -1,8 +1,8 @@
 {
   "catch_all_label": "t:misc",
   "title_patterns": {
-    "t:new-feature": ["feat", "feature"],
-    "t:enhancement": ["enhancement", "enh", "impr"],
+    "t:feature-app": ["feat", "feature"],
+    "t:feature-tool": ["tool"],
     "t:bug": ["fix", "bug", "bugfix"],
     "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
     "t:docs": ["docs"],
@@ -29,7 +29,10 @@
     "app:authenticator": [
       "authenticator/"
     ],
-    "t:enhancement": [
+    "t:feature-tool": [
+      "testharness/"
+    ],
+    "t:feature-app": [
       "app/src/main/assets/fido2_privileged_community.json",
       "app/src/main/assets/fido2_privileged_google.json"
     ],
