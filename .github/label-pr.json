@@ -37,6 +37,7 @@
       "app/src/main/assets/fido2_privileged_google.json"
     ],
     "t:ci": [
+      ".checkmarx/",
       ".github/",
       "scripts/",
       "fastlane/",
