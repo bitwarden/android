@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAn
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -116,7 +117,8 @@ class VaultSyncManagerImpl(
     private val mutableDomainsStateFlow =
         MutableStateFlow<DataState<DomainsData>>(DataState.Loading)
 
-    private val mutableShouldMigratePersonalVaultFlow = MutableStateFlow(false)
+    private val mutableShouldMigratePersonalVaultFlow =
+        MutableStateFlow<VaultMigrationData>(value = VaultMigrationData.NoMigrationRequired)
 
     override val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
         get() = mutableDecryptCipherListResultFlow.asStateFlow()
@@ -133,7 +135,7 @@ class VaultSyncManagerImpl(
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = mutableSendDataStateFlow.asStateFlow()
 
-    override val shouldMigratePersonalVaultFlow: StateFlow<Boolean>
+    override val shouldMigratePersonalVaultFlow: StateFlow<VaultMigrationData>
         get() = mutableShouldMigratePersonalVaultFlow.asStateFlow()
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
@@ -562,8 +564,27 @@ class VaultSyncManagerImpl(
     }
 
     private fun verifyAndUpdateIfUserShouldMigrateVaultToMyItems(cipherList: List<Cipher>) {
+        val userId = activeUserId ?: return
+
         mutableShouldMigratePersonalVaultFlow.update {
-            userShouldMigrateVault { cipherList.any { it.organizationId == null } }
+            if (userShouldMigrateVault { cipherList.any { it.organizationId == null } }) {
+                val orgId = policyManager.getPersonalOwnershipPolicyOrganizationId()
+                val orgName = authDiskSource
+                    .getOrganizations(userId = userId)
+                    ?.firstOrNull { it.id == orgId }
+                    ?.name
+
+                if (orgId != null && orgName != null) {
+                    VaultMigrationData.MigrationRequired(
+                        organizationId = orgId,
+                        organizationName = orgName,
+                    )
+                } else {
+                    VaultMigrationData.NoMigrationRequired
+                }
+            } else {
+                VaultMigrationData.NoMigrationRequired
+            }
         }
     }
 

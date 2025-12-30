@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -116,7 +117,7 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-            specialCircumstance is SpecialCircumstance.AutofillSave -> {
+                specialCircumstance is SpecialCircumstance.AutofillSave -> {
                 RootNavState.VaultUnlockedForAutofillSave(
                     autofillSaveItem = specialCircumstance.autofillSaveItem,
                 )
@@ -131,8 +132,11 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-                action.shouldMigratePersonalVault -> {
-                RootNavState.MigrateToMyItems
+                action.shouldMigratePersonalVault is VaultMigrationData.MigrationRequired -> {
+                RootNavState.MigrateToMyItems(
+                    organizationId = action.shouldMigratePersonalVault.organizationId,
+                    organizationName = action.shouldMigratePersonalVault.organizationName,
+                )
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -335,7 +339,10 @@ sealed class RootNavState : Parcelable {
      * App should show MigrateToMyItems screen.
      */
     @Parcelize
-    data object MigrateToMyItems : RootNavState()
+    data class MigrateToMyItems(
+        val organizationId: String,
+        val organizationName: String,
+    ) : RootNavState()
 
     /**
      * App should show vault unlocked nav graph for the given [activeUserId].
@@ -514,7 +521,7 @@ sealed class RootNavAction {
             val authState: AuthState,
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
-            val shouldMigratePersonalVault: Boolean = false,
+            val shouldMigratePersonalVault: VaultMigrationData,
         ) : RootNavAction()
     }
 }

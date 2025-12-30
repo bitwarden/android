@@ -122,7 +122,7 @@ private fun MigrateToMyItemsContent(
                 .size(100.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
-        MigrateToMyItemsTextContent(organizationName = state.organizationName ?: "")
+        MigrateToMyItemsTextContent(organizationName = state.organizationName)
         Spacer(modifier = Modifier.height(24.dp))
         MigrateToMyItemsActions(
             onContinueClick = onAcceptClick,

@@ -155,7 +155,13 @@ fun RootNavScreen(
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
         RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
-        RootNavState.MigrateToMyItems -> MigrateToMyItemsRoute
+        is RootNavState.MigrateToMyItems -> {
+            val migrateState = state as RootNavState.MigrateToMyItems
+            MigrateToMyItemsRoute(
+                organizationId = migrateState.organizationId,
+                organizationName = migrateState.organizationName,
+            )
+        }
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -207,8 +213,12 @@ fun RootNavScreen(
                 navController.navigateToExpiredRegistrationLinkScreen()
             }
 
-            RootNavState.MigrateToMyItems -> {
-                navController.navigateToMigrateToMyItems(navOptions = rootNavOptions)
+            is RootNavState.MigrateToMyItems -> {
+                navController.navigateToMigrateToMyItems(
+                    organizationName = currentState.organizationName,
+                    organizationId = currentState.organizationId,
+                    navOptions = rootNavOptions,
+                )
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
