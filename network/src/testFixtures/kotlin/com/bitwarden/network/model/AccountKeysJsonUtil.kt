@@ -7,9 +7,9 @@ fun createMockAccountKeysJson(
     number: Int,
 ): AccountKeysJson =
     AccountKeysJson(
-        signatureKeyPair = createMockSignatureKeyPair(number = number),
         publicKeyEncryptionKeyPair = createMockPublicKeyEncryptionKeyPair(number = number),
         securityState = createMockSecurityState(number = number),
+        signatureKeyPair = createMockSignatureKeyPair(number = number),
     )
 
 /**
@@ -52,4 +52,19 @@ fun createMockSignatureKeyPair(
     AccountKeysJson.SignatureKeyPair(
         wrappedSigningKey = wrappedSigningKey,
         verifyingKey = verifyingKey,
+    )
+
+/**
+ * Create a mock set of account keys with null nested fields for testing null-safety.
+ */
+fun createMockAccountKeysJsonWithNullFields(
+    number: Int,
+): AccountKeysJson =
+    AccountKeysJson(
+        publicKeyEncryptionKeyPair = createMockPublicKeyEncryptionKeyPair(
+            number = number,
+            signedPublicKey = null,
+        ),
+        securityState = null,
+        signatureKeyPair = null,
     )
