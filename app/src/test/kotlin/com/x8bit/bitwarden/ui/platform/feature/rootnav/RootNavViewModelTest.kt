@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
@@ -60,6 +62,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
+
+    private val mutableShouldMigratePersonalVaultFlow =
+        MutableStateFlow<VaultMigrationData>(VaultMigrationData.NoMigrationRequired)
+    private val vaultRepository = mockk<VaultRepository> {
+        every { shouldMigratePersonalVaultFlow } returns mutableShouldMigratePersonalVaultFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -1579,10 +1587,59 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when shouldMigratePersonalVaultFlow emits true the nav state should be MigrateToMyItems`() {
+        mutableShouldMigratePersonalVaultFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems(
+                organizationId = "mockOrganizationId-1",
+                organizationName = "organizationName",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when vault is locked MigrateToMyItems should not show even if flow emits true`() {
+        mutableShouldMigratePersonalVaultFlow.value = MOCK_VAULT_MIGRATION_DATA
+
+        // Vault is locked
+        mutableUserStateFlow.tryEmit(
+            MOCK_VAULT_UNLOCKED_USER_STATE.copy(
+                accounts = listOf(
+                    MOCK_VAULT_UNLOCKED_USER_STATE.activeAccount.copy(isVaultUnlocked = false),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultLocked,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when shouldMigratePersonalVaultFlow emits false MigrateToMyItems should not show`() {
+        mutableShouldMigratePersonalVaultFlow.value = VaultMigrationData.NoMigrationRequired
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlocked("activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): RootNavViewModel =
         RootNavViewModel(
             authRepository = authRepository,
             specialCircumstanceManager = specialCircumstanceManager,
+            vaultRepository = vaultRepository,
         )
 }
 
@@ -1664,4 +1721,9 @@ private val MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE = UserState(
             isExportable = true,
         ),
     ),
+)
+
+private val MOCK_VAULT_MIGRATION_DATA = VaultMigrationData.MigrationRequired(
+    organizationName = "organizationName",
+    organizationId = "mockOrganizationId-1",
 )
