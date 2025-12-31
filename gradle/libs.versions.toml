@@ -35,6 +35,7 @@ crashlytics = "3.0.6"
 detekt = "1.23.8"
 firebaseBom = "34.5.0"
 glide = "1.0.0-beta01"
+glideKsp = "5.0.0-rc01"
 googleGuava = "33.5.0-jre"
 googleProtoBufJava = "4.33.2"
 googleProtoBufPlugin = "0.9.6"
@@ -99,6 +100,7 @@ androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.re
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
+bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glideKsp" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
