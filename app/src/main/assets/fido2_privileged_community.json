@@ -3,6 +3,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.iode.firefox",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C9:96:DA:AB:86:A8:CD:32:53:77:49:A5:EE:1D:C2:F9:84:F2:9D:43:F3:06:7D:2C:0A:54:BF:8B:BF:AB:62:C0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "eu.weblibre.gecko",
         "signatures": [
           {
