@@ -51,6 +51,7 @@ interface IntentManager {
      */
     fun startAuthTab(
         uri: Uri,
+        redirectScheme: String,
         launcher: ActivityResultLauncher<Intent>,
     )
 

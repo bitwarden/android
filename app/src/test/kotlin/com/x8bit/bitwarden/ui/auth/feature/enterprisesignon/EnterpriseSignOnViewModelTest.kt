@@ -48,7 +48,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         coEvery {
             getVerifiedOrganizationDomainSsoDetails(any())
         } returns VerifiedOrganizationDomainSsoDetailsResult.Success(emptyList())
-        coEvery { prevalidateSso(any()) } returns PrevalidateSsoResult.Success(token = "mockToken")
+        coEvery {
+            prevalidateSso(any())
+        } returns PrevalidateSsoResult.Success(
+            token = "mockToken",
+            redirectUri = "bitwarden://sso-callback",
+        )
     }
 
     private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
@@ -154,6 +159,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `LogInClick with valid organization and successful prevalidation should show a loading dialog, hide a loading dialog, and then emit NavigateToSsoLogin`() =
         runTest {
             val organizationId = "Bitwarden"
+            val redirectUri = "bitwarden://sso-callback"
+            every { Uri.parse(redirectUri) } returns mockk {
+                every { scheme } returns "bitwarden"
+            }
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
 
             every {
@@ -161,11 +170,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             } returns organizationId
             coEvery {
                 authRepository.prevalidateSso(organizationId)
-            } returns PrevalidateSsoResult.Success(token = "token")
+            } returns PrevalidateSsoResult.Success(token = "token", redirectUri = redirectUri)
 
             val ssoUri: Uri = mockk()
             every {
-                generateUriForSso(any(), any(), any(), any(), any())
+                generateUriForSso(any(), any(), any(), any(), any(), any())
             } returns "https://identity.bitwarden.com/sso-test"
             every {
                 Uri.parse("https://identity.bitwarden.com/sso-test")
@@ -192,7 +201,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
             viewModel.eventFlow.test {
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(
+                        uri = ssoUri,
+                        redirectScheme = "bitwarden",
+                    ),
                     awaitItem(),
                 )
             }
@@ -316,7 +328,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(
             ssoData = DEFAULT_SSO_DATA,
         )
-        val ssoCallbackResult = SsoCallbackResult.Success(state = "xyz", code = "lmn")
+        val ssoCallbackResult = SsoCallbackResult.Success(
+            state = "xyz",
+            code = "lmn",
+            redirectUri = "bitwarden://sso-callback",
+        )
         mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
         assertEquals(
             DEFAULT_STATE.copy(
@@ -342,7 +358,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -409,7 +429,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -482,7 +506,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -556,7 +584,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -630,7 +662,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -697,7 +733,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -768,7 +808,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -822,7 +866,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(initialState, stateFlow.awaitItem())
@@ -871,7 +919,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
             )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+            val ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+                redirectUri = "bitwarden://sso-callback",
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(

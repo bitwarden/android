@@ -13,6 +13,7 @@ import com.bitwarden.network.util.availableAuthMethods
 import com.bitwarden.network.util.preferredAuthMethod
 import com.bitwarden.network.util.twoFactorDisplayEmail
 import com.bitwarden.network.util.twoFactorDuoAuthUrl
+import com.bitwarden.network.util.twoFactorDuoRedirectUri
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
+import com.x8bit.bitwarden.data.auth.repository.util.getRedirectUri
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
@@ -175,17 +177,25 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Navigates to the Duo webpage if appropriate, else processes the login.
      */
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleContinueButtonClick() {
+        val twoFactorResponse = authRepository.twoFactorResponse
         when (state.authMethod) {
             TwoFactorAuthMethod.DUO,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
                 -> {
-                val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
                 // The url should not be empty unless the environment is somehow not supported.
-                authUrl
+                twoFactorResponse
+                    .twoFactorDuoAuthUrl
                     ?.let {
-                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = it.toUri()))
+                        sendEvent(
+                            event = TwoFactorLoginEvent.NavigateToDuo(
+                                uri = it.toUri(),
+                                redirectScheme = requireNotNull(
+                                    twoFactorResponse.twoFactorDuoRedirectUri.toUri().scheme,
+                                ),
+                            ),
+                        )
                     }
                     ?: mutableStateFlow.update {
                         it.copy(
@@ -199,8 +209,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             TwoFactorAuthMethod.WEB_AUTH -> {
                 sendEvent(
-                    event = authRepository
-                        .twoFactorResponse
+                    event = twoFactorResponse
                         ?.authMethodsData
                         ?.get(TwoFactorAuthMethod.WEB_AUTH)
                         ?.let {
@@ -220,7 +229,10 @@ class TwoFactorLoginViewModel @Inject constructor(
                                     resId = BitwardenString.fido2_return_to_app,
                                 ),
                             )
-                            TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
+                            TwoFactorLoginEvent.NavigateToWebAuth(
+                                uri = uri,
+                                redirectScheme = requireNotNull(it.getRedirectUri().toUri().scheme),
+                            )
                         }
                         ?: TwoFactorLoginEvent.ShowSnackbar(
                             message = BitwardenString.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
@@ -667,12 +679,18 @@ sealed class TwoFactorLoginEvent {
     /**
      * Navigates to the Duo 2-factor authentication screen.
      */
-    data class NavigateToDuo(val uri: Uri) : TwoFactorLoginEvent()
+    data class NavigateToDuo(
+        val uri: Uri,
+        val redirectScheme: String,
+    ) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the WebAuth authentication screen.
      */
-    data class NavigateToWebAuth(val uri: Uri) : TwoFactorLoginEvent()
+    data class NavigateToWebAuth(
+        val uri: Uri,
+        val redirectScheme: String,
+    ) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the recovery code help page.

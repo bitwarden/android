@@ -7,6 +7,8 @@ import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import java.net.URLEncoder
 import java.util.Base64
@@ -67,8 +69,9 @@ fun generateUriForWebAuth(
     buttonText: String,
     returnButtonText: String,
 ): Uri {
+    val callbackUri = data.getRedirectUri()
     val json = buildJsonObject {
-        put(key = "callbackUri", value = CALLBACK_URI)
+        put(key = "callbackUri", value = callbackUri)
         put(key = "data", value = data.toString())
         put(key = "headerText", value = headerText)
         put(key = "btnText", value = buttonText)
@@ -77,7 +80,7 @@ fun generateUriForWebAuth(
     val base64Data = Base64
         .getEncoder()
         .encodeToString(json.toString().toByteArray(Charsets.UTF_8))
-    val parentParam = URLEncoder.encode(CALLBACK_URI, "UTF-8")
+    val parentParam = URLEncoder.encode(callbackUri, "UTF-8")
     val url = baseUrl +
         "/webauthn-mobile-connector.html" +
         "?data=$base64Data" +
@@ -85,6 +88,14 @@ fun generateUriForWebAuth(
         "&v=2"
     return url.toUri()
 }
+
+/**
+ * Retrieves the redirect URI from from the WebAuthN [JsonObject].
+ */
+fun JsonObject.getRedirectUri(): String = this["RedirectUri"]
+    ?.jsonPrimitive
+    ?.contentOrNull
+    ?: CALLBACK_URI
 
 /**
  * Sealed class representing the result of web auth callback token extraction.

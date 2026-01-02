@@ -73,6 +73,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         val sseCallbackResult = SsoCallbackResult.Success(
             state = "mockk_state",
             code = "mockk_code",
+            redirectUri = "bitwarden://sso-callback",
         )
         every { mockIntent.getSsoCallbackResult() } returns sseCallbackResult
         every { mockIntent.getYubiKeyResultOrNull() } returns null

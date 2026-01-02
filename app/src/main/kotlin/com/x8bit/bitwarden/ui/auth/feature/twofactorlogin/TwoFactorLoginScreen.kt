@@ -102,11 +102,19 @@ fun TwoFactorLoginScreen(
             }
 
             is TwoFactorLoginEvent.NavigateToDuo -> {
-                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.duo)
+                intentManager.startAuthTab(
+                    uri = event.uri,
+                    redirectScheme = event.redirectScheme,
+                    launcher = authTabLaunchers.duo,
+                )
             }
 
             is TwoFactorLoginEvent.NavigateToWebAuth -> {
-                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.webAuthn)
+                intentManager.startAuthTab(
+                    uri = event.uri,
+                    redirectScheme = event.redirectScheme,
+                    launcher = authTabLaunchers.webAuthn,
+                )
             }
 
             is TwoFactorLoginEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)

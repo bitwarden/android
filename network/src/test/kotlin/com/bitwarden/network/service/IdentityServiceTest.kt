@@ -485,6 +485,7 @@ private const val PREVALIDATE_SSO_ERROR_JSON = """
 
 private val PREVALIDATE_SSO_SUCCESS_BODY = PrevalidateSsoResponseJson.Success(
     token = "2ff00750-e2d6-47a6-ae54-67b981e78030",
+    redirectUri = null,
 )
 
 private val PREVALIDATE_SSO_ERROR_BODY = PrevalidateSsoResponseJson.Error(
