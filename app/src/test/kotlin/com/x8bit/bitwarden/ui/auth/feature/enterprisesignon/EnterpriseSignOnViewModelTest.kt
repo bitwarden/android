@@ -172,28 +172,27 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             } returns ssoUri
 
             val viewModel = createViewModel(state)
-            viewModel.stateFlow.test {
-                assertEquals(state, awaitItem())
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(state, stateFlow.awaitItem())
                 viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
 
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            BitwardenString.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
 
                 assertEquals(
                     state.copy(dialogState = null),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
-            }
-            viewModel.eventFlow.test {
+
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
-                    awaitItem(),
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(uri = ssoUri, scheme = "bitwarden"),
+                    eventFlow.awaitItem(),
                 )
             }
         }
