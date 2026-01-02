@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.assertJsonEquals
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
@@ -9,7 +10,6 @@ import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockSend
-import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao

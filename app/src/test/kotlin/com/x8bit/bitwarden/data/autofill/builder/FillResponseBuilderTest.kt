@@ -7,6 +7,7 @@ import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
 import android.view.View
 import android.view.autofill.AutofillId
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
 import com.x8bit.bitwarden.data.autofill.util.createAutofillCallbackIntentSender
-import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor

@@ -13,11 +13,11 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import io.mockk.every
