@@ -8,13 +8,13 @@ import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.core.data.util.mockBuilder
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
-import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView

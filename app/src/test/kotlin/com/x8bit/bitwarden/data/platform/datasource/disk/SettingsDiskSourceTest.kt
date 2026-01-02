@@ -5,14 +5,13 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
-import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,9 +26,10 @@ class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val json = CoreModule.providesJson()
 
-    private val settingsDiskSource = SettingsDiskSourceImpl(
+    private val settingsDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
         json = json,
+        flightRecorderDiskSource = mockk(),
     )
 
     @Test
@@ -83,104 +83,6 @@ class SettingsDiskSourceTest {
             appLanguage.localeName,
             actual,
         )
-    }
-
-    @Test
-    fun `flightRecorderData should pull from SharedPreferences`() {
-        val flightRecorderKey = "bwPreferencesStorage:flightRecorderData"
-        val encodedData = """
-            {
-              "data": [
-                {
-                  "id": "51"
-                  "fileName": "flight_recorder_2025-04-03_14-22-40",
-                  "startTime": 1744059882,
-                  "duration": 3600,
-                  "isActive": false
-                }
-              ]
-            }
-        """
-            .trimIndent()
-        val expected = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "51",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = false,
-                ),
-            ),
-        )
-
-        // Verify initial value is null and disk source matches shared preferences.
-        assertNull(fakeSharedPreferences.getString(flightRecorderKey, null))
-        assertNull(settingsDiskSource.flightRecorderData)
-
-        // Updating the shared preferences should update disk source.
-        fakeSharedPreferences.edit { putString(flightRecorderKey, encodedData) }
-        val actual = settingsDiskSource.flightRecorderData
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `flightRecorderDataFlow should react to changes in isFLightRecorderEnabled`() = runTest {
-        val expected = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "52",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = true,
-                ),
-            ),
-        )
-        settingsDiskSource.flightRecorderDataFlow.test {
-            // The initial values of the Flow and the property are in sync
-            assertNull(settingsDiskSource.flightRecorderData)
-            assertNull(awaitItem())
-
-            settingsDiskSource.flightRecorderData = expected
-            assertEquals(expected, awaitItem())
-
-            settingsDiskSource.flightRecorderData = null
-            assertNull(awaitItem())
-        }
-    }
-
-    @Test
-    fun `setting flightRecorderData should update SharedPreferences`() {
-        val flightRecorderKey = "bwPreferencesStorage:flightRecorderData"
-        val data = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "53",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = true,
-                ),
-            ),
-        )
-        val expected = """
-            {
-              "data": [
-                {
-                  "id": "53",
-                  "fileName": "flight_recorder_2025-04-03_14-22-40",
-                  "startTime": 1744059882,
-                  "duration": 3600,
-                  "isActive": true
-                }
-              ]
-            }
-        """
-            .trimIndent()
-        settingsDiskSource.flightRecorderData = data
-        val actual = fakeSharedPreferences.getString(flightRecorderKey, null)
-        assertJsonEquals(expected, actual!!)
     }
 
     @Test

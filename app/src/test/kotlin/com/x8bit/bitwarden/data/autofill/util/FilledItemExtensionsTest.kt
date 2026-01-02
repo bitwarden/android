@@ -6,8 +6,8 @@ import android.service.autofill.Presentations
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
-import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
