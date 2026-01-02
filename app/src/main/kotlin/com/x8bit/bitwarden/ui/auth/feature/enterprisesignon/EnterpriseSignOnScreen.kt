@@ -64,7 +64,11 @@ fun EnterpriseSignOnScreen(
             EnterpriseSignOnEvent.NavigateBack -> onNavigateBack()
 
             is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
-                intentManager.startAuthTab(uri = event.uri, launcher = authTabLaunchers.sso)
+                intentManager.startAuthTab(
+                    uri = event.uri,
+                    redirectScheme = event.scheme,
+                    launcher = authTabLaunchers.sso,
+                )
             }
 
             is EnterpriseSignOnEvent.NavigateToSetPassword -> {

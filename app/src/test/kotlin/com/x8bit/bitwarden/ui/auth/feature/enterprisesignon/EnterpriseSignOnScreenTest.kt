@@ -45,7 +45,7 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     }
 
     private val intentManager: IntentManager = mockk {
-        every { startAuthTab(uri = any(), launcher = any()) } just runs
+        every { startAuthTab(uri = any(), redirectScheme = any(), launcher = any()) } just runs
     }
 
     @Before
@@ -114,9 +114,14 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToSsoLogin should call startCustomTabsActivity`() {
         val ssoUri = Uri.parse("https://identity.bitwarden.com/sso-test")
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri))
+        val scheme = "bitwarden"
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri, scheme))
         verify(exactly = 1) {
-            intentManager.startAuthTab(uri = ssoUri, launcher = ssoLauncher)
+            intentManager.startAuthTab(
+                uri = ssoUri,
+                redirectScheme = scheme,
+                launcher = ssoLauncher,
+            )
         }
     }
 

@@ -206,7 +206,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         action: EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
+        sendEvent(
+            EnterpriseSignOnEvent.NavigateToSsoLogin(
+                uri = action.uri,
+                scheme = action.scheme,
+            ),
+        )
     }
 
     private fun handleOnSsoPrevalidationFailure(
@@ -401,7 +406,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         // Hide any dialog since we're about to launch a custom tab and could return without getting
         // a result due to user intervention
-        sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(uri.toUri()))
+        sendAction(
+            EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(
+                uri = uri.toUri(),
+                scheme = "bitwarden",
+            ),
+        )
     }
 
     private fun showError(
@@ -507,7 +517,10 @@ sealed class EnterpriseSignOnEvent {
     /**
      * Navigates to a custom tab for SSO login using [uri].
      */
-    data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
+    data class NavigateToSsoLogin(
+        val uri: Uri,
+        val scheme: String,
+    ) : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the set master password screen.
@@ -568,7 +581,7 @@ sealed class EnterpriseSignOnAction {
         /**
          * A [uri] has been generated to request an SSO result.
          */
-        data class OnGenerateUriForSsoResult(val uri: Uri) : Internal()
+        data class OnGenerateUriForSsoResult(val uri: Uri, val scheme: String) : Internal()
 
         /**
          * A login result has been received.

@@ -175,7 +175,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Navigates to the Duo webpage if appropriate, else processes the login.
      */
-    @Suppress("MaxLineLength")
+    @Suppress("LongMethod")
     private fun handleContinueButtonClick() {
         when (state.authMethod) {
             TwoFactorAuthMethod.DUO,
@@ -185,13 +185,21 @@ class TwoFactorLoginViewModel @Inject constructor(
                 // The url should not be empty unless the environment is somehow not supported.
                 authUrl
                     ?.let {
-                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = it.toUri()))
+                        sendEvent(
+                            event = TwoFactorLoginEvent.NavigateToDuo(
+                                uri = it.toUri(),
+                                scheme = "bitwarden",
+                            ),
+                        )
                     }
                     ?: mutableStateFlow.update {
+                        @Suppress("MaxLineLength")
                         it.copy(
                             dialogState = TwoFactorLoginState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
-                                message = BitwardenString.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                                message = BitwardenString
+                                    .error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance
+                                    .asText(),
                             ),
                         )
                     }
@@ -220,10 +228,12 @@ class TwoFactorLoginViewModel @Inject constructor(
                                     resId = BitwardenString.fido2_return_to_app,
                                 ),
                             )
-                            TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
+                            TwoFactorLoginEvent.NavigateToWebAuth(uri = uri, scheme = "bitwarden")
                         }
                         ?: TwoFactorLoginEvent.ShowSnackbar(
-                            message = BitwardenString.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
+                            message = BitwardenString
+                                .there_was_an_error_starting_web_authn_two_factor_authentication
+                                .asText(),
                         ),
                 )
             }
@@ -667,12 +677,12 @@ sealed class TwoFactorLoginEvent {
     /**
      * Navigates to the Duo 2-factor authentication screen.
      */
-    data class NavigateToDuo(val uri: Uri) : TwoFactorLoginEvent()
+    data class NavigateToDuo(val uri: Uri, val scheme: String) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the WebAuth authentication screen.
      */
-    data class NavigateToWebAuth(val uri: Uri) : TwoFactorLoginEvent()
+    data class NavigateToWebAuth(val uri: Uri, val scheme: String) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the recovery code help page.
