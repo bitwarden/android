@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.data.platform.manager.network
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.BitwardenServiceClient
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

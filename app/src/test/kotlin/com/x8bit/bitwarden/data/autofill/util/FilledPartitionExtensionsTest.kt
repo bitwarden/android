@@ -8,11 +8,11 @@ import android.service.autofill.InlinePresentation
 import android.service.autofill.Presentations
 import android.widget.RemoteViews
 import android.widget.inline.InlinePresentationSpec
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
-import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.ui.autofill.buildAutofillRemoteViews
 import com.x8bit.bitwarden.ui.autofill.util.createCipherInlinePresentationOrNull
 import io.mockk.every
