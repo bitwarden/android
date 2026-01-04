@@ -9,6 +9,7 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -37,13 +38,20 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(Uri::parse)
+        mockkStatic(
+            String::getTotpDataOrNull,
+            Uri::parse,
+        )
+        every { VALID_TOTP_CODE.getTotpDataOrNull() } returns mockk()
         every { Uri.parse(VALID_TOTP_CODE) } returns VALID_TOTP_URI
     }
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(Uri::parse)
+        unmockkStatic(
+            String::getTotpDataOrNull,
+            Uri::parse,
+        )
     }
 
     @Test
@@ -242,13 +250,8 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             every {
                 authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             } just runs
-            val invalidUri: Uri = mockk {
-                every { getQueryParameter("secret") } returns "SECRET"
-                every { queryParameterNames } returns setOf("digits")
-                every { getQueryParameter("digits") } returns "100"
-            }
             val invalidQrCode = "otpauth://totp/secret=SECRET"
-            every { Uri.parse(invalidQrCode) } returns invalidUri
+            every { invalidQrCode.getTotpDataOrNull() } returns null
             viewModel.eventFlow.test {
                 viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidQrCode))
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())

@@ -8,7 +8,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -8,11 +8,13 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.core.util.persistentListOfNotNull
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -28,13 +30,11 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
@@ -75,7 +75,7 @@ class VaultItemViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {

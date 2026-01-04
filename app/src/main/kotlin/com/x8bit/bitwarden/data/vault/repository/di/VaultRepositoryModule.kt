@@ -1,12 +1,13 @@
 package com.x8bit.bitwarden.data.vault.repository.di
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -40,6 +41,7 @@ object VaultRepositoryModule {
         totpCodeManager: TotpCodeManager,
         vaultSyncManager: VaultSyncManager,
         credentialExchangeImportManager: CredentialExchangeImportManager,
+        pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     ): VaultRepository = VaultRepositoryImpl(
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -52,5 +54,6 @@ object VaultRepositoryModule {
         totpCodeManager = totpCodeManager,
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
+        pinProtectedUserKeyManager = pinProtectedUserKeyManager,
     )
 }

@@ -180,55 +180,115 @@ Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical
 See inline comments for all issue details.
 ```
 
-## Example Review
+## Example Reviews
 
+### Example 1: Refactoring with Incomplete Migration
+
+**Context**: Refactoring authentication to Repository pattern, but one ViewModel still uses old pattern
+
+**Summary Comment:**
 ```markdown
-## Summary
-Refactors authentication flow to use Repository pattern instead of direct Manager access
+**Overall Assessment:** REQUEST CHANGES
 
-Scope: 12 files changed, 8 ViewModels updated, Repository interface extracted
+**Critical Issues:**
+- Incomplete migration (app/vault/VaultViewModel.kt:89)
 
-## Critical Issues
-None - behavior preserved, tests passing
-
-## Suggested Improvements
-
-**app/vault/VaultViewModel.kt:89** - Old pattern still used
-This ViewModel still injects AuthManager directly. Should it use AuthRepository like the others?
-```kotlin
-// Current
-class VaultViewModel @Inject constructor(
-    private val authManager: AuthManager  // Old pattern
-)
-
-// Should be
-class VaultViewModel @Inject constructor(
-    private val authRepository: AuthRepository  // New pattern
-)
+See inline comments for details.
 ```
 
-**data/auth/AuthManager.kt:1** - Add deprecation notice
+**Inline Comment 1** (on `app/vault/VaultViewModel.kt:89`):
+```markdown
+**IMPORTANT**: Incomplete migration
+
+<details>
+<summary>Details and fix</summary>
+
+This ViewModel still injects AuthManager directly. Should it use AuthRepository like the other 11 ViewModels?
+
+\```kotlin
+// Current (old pattern)
+class VaultViewModel @Inject constructor(
+    private val authManager: AuthManager
+)
+
+// Should be (new pattern)
+class VaultViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+)
+\```
+
+This is the only ViewModel still using the old pattern.
+</details>
+```
+
+**Inline Comment 2** (on `data/auth/AuthManager.kt:1`):
+```markdown
+**SUGGESTED**: Add deprecation notice
+
+<details>
+<summary>Details</summary>
+
 Can we add @Deprecated to AuthManager to guide future development?
-```kotlin
+
+\```kotlin
 @Deprecated(
     message = "Use AuthRepository interface instead",
     replaceWith = ReplaceWith("AuthRepository"),
     level = DeprecationLevel.WARNING
 )
-class AuthManager
+class AuthManager @Inject constructor(...)
+\```
+
+This helps prevent new code from using the old pattern.
+</details>
 ```
 
-**docs/ARCHITECTURE.md** - Document the new pattern
-Should we update the architecture docs to reflect this Repository pattern?
-The current docs still reference AuthManager as the recommended approach.
+---
 
-## Good Practices
-- Repository interface clearly defined
-- All data access methods use Result types
-- Tests updated to match new pattern
+### Example 2: Clean Refactoring (No Issues)
 
-## Action Items
-1. Update VaultViewModel to use AuthRepository
-2. Add @Deprecated to AuthManager with migration guidance
-3. Update ARCHITECTURE.md to document Repository pattern
+**Context**: Refactoring with complete migration, all patterns followed correctly, tests passing
+
+**Review Comment:**
+```markdown
+**Overall Assessment:** APPROVE
+
+Clean refactoring moving ExitManager to :ui module. Follows established patterns, eliminates duplication, tests updated correctly.
 ```
+
+**Token count:** ~30 tokens (vs ~800 for verbose format)
+
+**Why this works:**
+- 3 lines total
+- Clear approval decision
+- Briefly notes what was done
+- No elaborate sections, checkmarks, or excessive praise
+- Author gets immediate green light to merge
+
+**What NOT to do for clean refactorings:**
+```markdown
+❌ DO NOT create these sections:
+
+## Summary
+This PR successfully refactors ExitManager into shared code...
+
+## Key Strengths
+- ✅ Follows established module organization patterns
+- ✅ Removes code duplication between apps
+- ✅ Improves test coverage
+- ✅ Maintains consistent behavior
+[...20 more checkmarks...]
+
+## Code Quality & Architecture
+**Architectural Compliance:** ✅
+- Correctly places manager in :ui module
+- Follows established pattern for UI-layer managers
+[...detailed analysis...]
+
+## Changes
+- ✅ Moved ExitManager interface from app → ui module
+- ✅ Moved ExitManagerImpl from app → ui module
+[...listing every file...]
+```
+
+This is excessive. **For clean PRs: 2-3 lines maximum.**

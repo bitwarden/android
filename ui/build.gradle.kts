@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.compose)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.compose.animation)
@@ -82,6 +83,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":core")))
+
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -89,6 +93,7 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.androidx.compose.ui.test)
+    testImplementation(libs.square.turbine)
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.camera.camera2)

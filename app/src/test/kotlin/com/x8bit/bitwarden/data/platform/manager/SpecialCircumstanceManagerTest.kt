@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance

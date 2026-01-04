@@ -7,14 +7,16 @@ import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.WrappedAccountCryptographicState
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -26,7 +28,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
@@ -39,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
@@ -91,6 +93,7 @@ class VaultLockManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     private val kdfManager: KdfManager,
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : VaultLockManager {
@@ -170,12 +173,10 @@ class VaultLockManagerImpl(
 
     @Suppress("LongMethod")
     override suspend fun unlockVault(
+        accountCryptographicState: WrappedAccountCryptographicState,
         userId: String,
         email: String,
         kdf: Kdf,
-        privateKey: String,
-        signingKey: String?,
-        securityState: String?,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult = withContext(context = NonCancellable) {
@@ -186,13 +187,11 @@ class VaultLockManagerImpl(
                     .initializeCrypto(
                         userId = userId,
                         request = InitUserCryptoRequest(
+                            accountCryptographicState = accountCryptographicState,
                             kdfParams = kdf,
                             email = email,
-                            privateKey = privateKey,
                             method = initUserCryptoMethod,
                             userId = userId,
-                            signingKey = signingKey,
-                            securityState = securityState,
                         ),
                     )
                     .flatMap { result ->
@@ -234,7 +233,8 @@ class VaultLockManagerImpl(
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
                                         updateKdfIfNeeded(initUserCryptoMethod)
-                                        migratePinProtectedUserKeyIfNeeded(userId = userId)
+                                        pinProtectedUserKeyManager
+                                            .migratePinProtectedUserKeyIfNeeded(userId = userId)
                                         setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
@@ -257,29 +257,19 @@ class VaultLockManagerImpl(
         kdf: Kdf,
         userId: String,
     ) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.Password ||
-            initUserCryptoMethod is InitUserCryptoMethod.MasterPasswordUnlock
-        ) {
-            val password = when (initUserCryptoMethod) {
-                is InitUserCryptoMethod.Password -> initUserCryptoMethod.password
-                is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-                else -> throw IllegalStateException(
-                    "Invalid initUserCryptoMethod ${initUserCryptoMethod.logTag}.",
-                )
-            }
-
+        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
                     email = email,
-                    password = password,
+                    password = initUserCryptoMethod.password,
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
-                .onSuccess { passwordHash ->
+                .onSuccess {
                     authDiskSource.storeMasterPasswordHash(
                         userId = userId,
-                        passwordHash = passwordHash,
+                        passwordHash = it,
                     )
                 }
         }
@@ -306,47 +296,6 @@ class VaultLockManagerImpl(
                 onFailure = { setVaultToLocked(userId = userId) },
                 onSuccess = { setVaultToUnlocked(userId = userId) },
             )
-    }
-
-    /**
-     * Migrates the PIN-protected user key for the given user if needed.
-     *
-     * If an encrypted PIN exists and no PIN-protected user key envelope is present,
-     * enrolls the PIN with the encrypted PIN and stores the resulting envelope.
-     * Optionally marks the envelope as in-memory only if the PIN-protected user key is not present.
-     *
-     * @param userId The ID of the user for whom to migrate the PIN-protected user key.
-     */
-    private suspend fun migratePinProtectedUserKeyIfNeeded(
-        userId: String,
-    ) {
-        val encryptedPin = authDiskSource.getEncryptedPin(userId) ?: return
-        if (authDiskSource.getPinProtectedUserKeyEnvelope(userId) != null) return
-
-        val inMemoryOnly = authDiskSource.getPinProtectedUserKey(userId) == null
-
-        vaultSdkSource.enrollPinWithEncryptedPin(userId, encryptedPin)
-            .onSuccess { enrollPinResponse ->
-                authDiskSource.storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = enrollPinResponse.userKeyEncryptedPin,
-                )
-                authDiskSource.storePinProtectedUserKeyEnvelope(
-                    userId = userId,
-                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
-                    inMemoryOnly = inMemoryOnly,
-                )
-                authDiskSource.storePinProtectedUserKey(
-                    userId = userId,
-                    pinProtectedUserKey = null,
-                    inMemoryOnly = inMemoryOnly,
-                )
-                if (inMemoryOnly) {
-                    Timber.d("[Auth] Set PIN-protected user key in memory")
-                } else {
-                    Timber.d("[Auth] Migrated from legacy PIN to PIN-protected user key envelope")
-                }
-            }
     }
 
     /**
@@ -732,14 +681,18 @@ class VaultLockManagerImpl(
             )
         val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
         val securityState = accountKeys?.securityState?.securityState
+        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
+            accountCryptographicState = createWrappedAccountCryptographicState(
+                privateKey = privateKey,
+                securityState = securityState,
+                signingKey = signingKey,
+                signedPublicKey = signedPublicKey,
+            ),
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
-            privateKey = privateKey,
-            signingKey = signingKey,
-            securityState = securityState,
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
@@ -751,17 +704,27 @@ class VaultLockManagerImpl(
     }
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
-        if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
-            kdfManager
-                .updateKdfToMinimumsIfNeeded(
-                    password = initUserCryptoMethod.password,
-                )
-                .also { result ->
-                    if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
-                    }
-                }
+        val password = when (initUserCryptoMethod) {
+            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
+            is InitUserCryptoMethod.AuthRequest,
+            is InitUserCryptoMethod.DecryptedKey,
+            is InitUserCryptoMethod.DeviceKey,
+            is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.Password,
+            is InitUserCryptoMethod.Pin,
+            is InitUserCryptoMethod.PinEnvelope,
+                -> return
         }
+
+        kdfManager
+            .updateKdfToMinimumsIfNeeded(
+                password = password,
+            )
+            .also { result ->
+                if (result is UpdateKdfMinimumsResult.Error) {
+                    Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                }
+            }
     }
 
     /**

@@ -1,0 +1,33 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+  categories:
+    - title: '✨ Community Highlight'
+      labels:
+        - community-pr
+    - title: '🚀 New Features & Enhancements'
+      labels:
+        - t:feature-app
+        - t:new-feature
+        - t:enhancement
+    - title: ':shipit: Tools'
+      labels:
+        - t:feature-tool
+    - title: '❗ Breaking Changes'
+      labels:
+        - t:breaking-change
+    - title: '🐛 Bug fixes'
+      labels:
+        - t:bug
+    - title: '⚙️ Maintenance'
+      labels:
+        - t:tech-debt
+        - t:ci
+        - t:docs
+        - t:misc
+        - '*'
+    - title: '📦 Dependency Updates'
+      labels:
+        - dependencies
+        - t:deps

@@ -4,11 +4,12 @@ import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
@@ -29,9 +30,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -64,6 +65,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.unmockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
@@ -124,7 +126,11 @@ class VaultSyncManagerTest {
         }
     }
     private val userLogoutManager: UserLogoutManager = mockk {
-        every { softLogout(any(), any()) } just runs
+        every { logout(userId = any(), reason = LogoutReason.SecurityStamp) } just runs
+    }
+    private val userStateManager: UserStateManager = mockk {
+        val blockSlot = slot<suspend () -> SyncVaultDataResult>()
+        coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
     }
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<String>()
     private val pushManager: PushManager = mockk {
@@ -142,6 +148,7 @@ class VaultSyncManagerTest {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         userLogoutManager = userLogoutManager,
+        userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
@@ -779,7 +786,7 @@ class VaultSyncManagerTest {
             vaultSyncManager.sync()
 
             coVerify(exactly = 1) {
-                userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
+                userLogoutManager.logout(userId = userId, reason = LogoutReason.SecurityStamp)
             }
 
             coVerify(exactly = 0) {

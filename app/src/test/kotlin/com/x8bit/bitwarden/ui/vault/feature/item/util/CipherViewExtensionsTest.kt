@@ -452,7 +452,7 @@ class CipherViewExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform full CipherView into ViewState with iconData based on cipher type`() {
-        mapOf<CipherType, Int>(
+        mapOf(
             CipherType.LOGIN to BitwardenDrawable.ic_globe,
             CipherType.IDENTITY to BitwardenDrawable.ic_id_card,
             CipherType.CARD to BitwardenDrawable.ic_payment_card,

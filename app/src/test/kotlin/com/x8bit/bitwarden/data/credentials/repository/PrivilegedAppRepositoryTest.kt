@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.credentials.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.datasource.disk.entity.PrivilegedAppEntity
 import com.x8bit.bitwarden.data.credentials.model.PrivilegedAppAllowListJson

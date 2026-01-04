@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -40,6 +39,8 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
         every { setOnboardingStatus(status = any()) } just runs
+        every { isBiometricIntegrityValid(userId = DEFAULT_USER_ID) } returns false
+        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
     private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
@@ -52,13 +53,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
-    }
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
-        every { getOrCreateCipher(userId = DEFAULT_USER_ID) } returns CIPHER
-        every {
-            isBiometricIntegrityValid(userId = DEFAULT_USER_ID, cipher = CIPHER)
-        } returns false
-        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
     private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
         every {
@@ -180,7 +174,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey and update the state`() {
         val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
+        every { authRepository.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
         val viewModel = createViewModel(initialState)
         assertEquals(initialState, viewModel.stateFlow.value)
 
@@ -191,7 +185,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+            authRepository.clearBiometrics(userId = DEFAULT_USER_ID)
         }
     }
 
@@ -340,25 +334,21 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
 
-            viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
-
-            verify {
-                biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
-            }
-
             viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
                 assertEquals(
                     SetupUnlockEvent.ShowBiometricsPrompt(CIPHER),
                     awaitItem(),
                 )
             }
+            verify {
+                authRepository.createCipherOrNull(DEFAULT_USER_ID)
+            }
         }
 
     @Test
     fun `EnableBiometricsClick actin should show error dialog when cipher is null`() {
-        every {
-            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_ID)
-        } returns null
+        every { authRepository.createCipherOrNull(DEFAULT_USER_ID) } returns null
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
@@ -411,7 +401,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             },
             authRepository = authRepository,
             settingsRepository = settingsRepository,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             firstTimeActionManager = firstTimeActionManager,
             browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
         )

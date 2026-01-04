@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -37,7 +37,7 @@ fun SavedStateHandle.toEditItemArgs(): EditItemArgs {
 fun NavGraphBuilder.editItemDestination(
     onNavigateBack: () -> Unit = { },
 ) {
-    composableWithPushTransitions<EditItemRoute> {
+    composableWithSlideTransitions<EditItemRoute> {
         EditItemScreen(
             onNavigateBack = onNavigateBack,
         )

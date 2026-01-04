@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.credentials.di
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -22,8 +22,9 @@ import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcesso
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryImpl
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -52,7 +53,6 @@ object CredentialProviderModule {
         bitwardenCredentialManager: BitwardenCredentialManager,
         dispatcherManager: DispatcherManager,
         pendingIntentManager: CredentialManagerPendingIntentManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
         clock: Clock,
     ): CredentialProviderProcessor =
         CredentialProviderProcessorImpl(
@@ -61,7 +61,6 @@ object CredentialProviderModule {
             bitwardenCredentialManager = bitwardenCredentialManager,
             pendingIntentManager = pendingIntentManager,
             clock = clock,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = dispatcherManager,
         )
 
@@ -75,15 +74,17 @@ object CredentialProviderModule {
         dispatcherManager: DispatcherManager,
         credentialEntryBuilder: CredentialEntryBuilder,
         cipherMatchingManager: CipherMatchingManager,
+        passkeyAttestationOptionsSanitizer: PasskeyAttestationOptionsSanitizer,
     ): BitwardenCredentialManager =
         BitwardenCredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            credentialEntryBuilder = credentialEntryBuilder,
             json = json,
             vaultRepository = vaultRepository,
-            dispatcherManager = dispatcherManager,
-            credentialEntryBuilder = credentialEntryBuilder,
             cipherMatchingManager = cipherMatchingManager,
+            passkeyAttestationOptionsSanitizer = passkeyAttestationOptionsSanitizer,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
@@ -104,11 +105,11 @@ object CredentialProviderModule {
     fun provideCredentialEntryBuilder(
         @ApplicationContext context: Context,
         pendingIntentManager: CredentialManagerPendingIntentManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
+        authRepository: AuthRepository,
     ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
         context = context,
         pendingIntentManager = pendingIntentManager,
-        biometricsEncryptionManager = biometricsEncryptionManager,
+        authRepository = authRepository,
     )
 
     @Provides
@@ -139,4 +140,9 @@ object CredentialProviderModule {
         CredentialManagerPendingIntentManagerImpl(
             context = context,
         )
+
+    @Provides
+    @Singleton
+    fun providePasskeyAttestationOptionsSanitizer(): PasskeyAttestationOptionsSanitizer =
+        PasskeyAttestationOptionsSanitizerImpl
 }

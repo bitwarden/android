@@ -48,7 +48,7 @@ fun createMockCipherView(
     organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
     notes: String? = "mockNotes-$number",
-    password: String = "mockPassword-$number",
+    password: String? = "mockPassword-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),

@@ -56,5 +56,6 @@ include(
     ":cxf",
     ":data",
     ":network",
+    ":testharness",
     ":ui",
 )

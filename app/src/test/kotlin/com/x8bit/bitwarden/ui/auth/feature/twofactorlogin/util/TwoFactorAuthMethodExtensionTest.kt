@@ -43,8 +43,8 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.DUO to
                 BitwardenString.follow_the_steps_from_duo_to_finish_logging_in.asText(),
             TwoFactorAuthMethod.YUBI_KEY to BitwardenString.yubi_key_instruction.asText(),
-            TwoFactorAuthMethod.U2F to "".asText(),
-            TwoFactorAuthMethod.REMEMBER to "".asText(),
+            TwoFactorAuthMethod.U2F to null,
+            TwoFactorAuthMethod.REMEMBER to null,
             TwoFactorAuthMethod.DUO_ORGANIZATION to
                 BitwardenString.duo_two_step_login_is_required_for_your_account
                     .asText()
@@ -54,7 +54,7 @@ class TwoFactorAuthMethodExtensionTest {
                     ),
             TwoFactorAuthMethod.WEB_AUTH to
                 BitwardenString.continue_to_complete_web_authn_verification.asText(),
-            TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
+            TwoFactorAuthMethod.RECOVERY_CODE to null,
         )
             .forEach { (type, title) ->
                 assertEquals(
@@ -142,7 +142,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenDrawable.ill_authenticator,
             TwoFactorAuthMethod.EMAIL to BitwardenDrawable.ill_new_device_verification,
             TwoFactorAuthMethod.DUO to null,
-            TwoFactorAuthMethod.YUBI_KEY to BitwardenDrawable.img_yubi_key,
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenDrawable.ill_yubi_key,
             TwoFactorAuthMethod.U2F to null,
             TwoFactorAuthMethod.REMEMBER to null,
             TwoFactorAuthMethod.DUO_ORGANIZATION to null,

@@ -270,7 +270,7 @@ Whenever questions about code formatting arise in which multiple options are val
 
 #### Documentation
 
-All public classes, functions, and properties should include documentation in the [KDoc style](https://kotlinlang.org/docs/kotlin-doc.html). Private classes, functions, and properties may optionally be documented as needed.
+All public classes, functions, and properties should include documentation in the [KDoc style](https://kotlinlang.org/docs/kotlin-doc.html). Private classes, companion objects, functions, and properties may optionally be documented as needed.
 
 ##### Class Documentation
 
@@ -602,7 +602,7 @@ The following contains general tips and best practices that apply for Kotlin cod
         }
     }
     ```
-  
+
     ```kotlin
     // Good: This class requires a Data object for someMethod to function properly, so we inject
     // an instance of DataProvider.
@@ -615,7 +615,7 @@ The following contains general tips and best practices that apply for Kotlin cod
         }
     }
     ```
-  
+
 - Functions should not intentionally throw exceptions! Any function that needs to represent the possibility of both a success and an error should either:
     - Return the [Result](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/) type.
     - Return a custom sealed class to model the possibilities.
@@ -645,7 +645,7 @@ The following contains general tips and best practices that apply for Kotlin cod
     - Never catch a `RuntimeException` that _can't happen_:
 
         ```kotlin
-        // Bad: A NumberFormatException is not possible here based on what we know about the value 
+        // Bad: A NumberFormatException is not possible here based on what we know about the value
         // we're using, so we're adding code that isn't necessary.
         val definitelyANumber = "1234"
         val value = try {
@@ -671,7 +671,7 @@ The following contains general tips and best practices that apply for Kotlin cod
             e.printStackTrace()
         }
         ```
-      
+
         ```kotlin
         // Good
         try {
@@ -693,7 +693,7 @@ The following contains general tips and best practices that apply for Kotlin cod
             return
         }
         ```
-      
+
         ```kotlin
         // Good
         val locationId = methodReturningNullableString()

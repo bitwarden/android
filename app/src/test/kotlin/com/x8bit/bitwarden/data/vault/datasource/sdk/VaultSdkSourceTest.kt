@@ -11,12 +11,12 @@ import com.bitwarden.core.MasterPasswordAuthenticationData
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.CryptoException
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
@@ -1394,18 +1394,24 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
         val relyingPartyId = "relyingPartyId"
+        val userHandle = "mockUserHandle"
         val mockAutofillView = Fido2CredentialAutofillView(
             credentialId = byteArrayOf(0),
             cipherId = "mockCipherId",
             rpId = "mockRpId",
             userNameForUi = "mockUserNameForUi",
-            userHandle = "mockUserHandle".toByteArray(),
+            userHandle = userHandle.toByteArray(),
             hasCounter = false,
         )
         val autofillViews = listOf(mockAutofillView)
 
         val authenticator: ClientFido2Authenticator = mockk {
-            coEvery { silentlyDiscoverCredentials(relyingPartyId) } returns autofillViews
+            coEvery {
+                silentlyDiscoverCredentials(
+                    relyingPartyId,
+                    userHandle.toByteArray(),
+                )
+            } returns autofillViews
         }
         every {
             clientFido2.authenticator(
@@ -1418,6 +1424,7 @@ class VaultSdkSourceTest {
             userId = userId,
             fido2CredentialStore = fido2CredentialStore,
             relyingPartyId = relyingPartyId,
+            userHandle = userHandle,
         )
 
         assertEquals(
@@ -1432,6 +1439,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val fido2CredentialStore: Fido2CredentialStore = mockk()
             val relyingPartyId = "relyingPartyId"
+            val userHandle = "mockUserHandle"
 
             coEvery {
                 clientFido2
@@ -1439,7 +1447,10 @@ class VaultSdkSourceTest {
                         userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                         credentialStore = fido2CredentialStore,
                     )
-                    .silentlyDiscoverCredentials(relyingPartyId)
+                    .silentlyDiscoverCredentials(
+                        relyingPartyId,
+                        userHandle.toByteArray(),
+                    )
             } throws BitwardenException.SilentlyDiscoverCredentials(
                 mockk<SilentlyDiscoverCredentialsException>("mockException"),
             )
@@ -1448,6 +1459,7 @@ class VaultSdkSourceTest {
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = relyingPartyId,
+                userHandle = userHandle,
             )
 
             assertTrue(result.isFailure)

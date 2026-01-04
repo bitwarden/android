@@ -166,7 +166,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Potraži ili dodaj novu prijavu</string>
     <string name="disabled">Onemogućeno</string>
     <string name="bitwarden_autofill_service_alert2">Najlakši način za dodavanje novih prijava u tvoj trezor je Bitwarden uslugom auto-ispune. Saznajte više o korištenju usluge auto-ispune u Postavkama.</string>
-    <string name="autofill_title">Auto-ispuna</string>
+    <string name="autofill_noun">Auto-ispuna</string>
+    <string name="autofill_verb">Auto-ispuna</string>
     <string name="autofill_or_view">Želiš li auto-ispuniti ili pogledati ovu stavku?</string>
     <string name="search">Traži</string>
     <string name="learn_org">Više o organizacijama</string>
@@ -480,7 +481,7 @@
     <string name="seven_days">7 dana</string>
     <string name="thirty_days">30 dana</string>
     <string name="custom">Prilagođeno</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Osobni istek</string>
     <string name="add_this_authenticator_key_to_a_login">Dodaj ovaj ključ autentifikatora postojećoj prijavi, ili stvori novu prijavu.</string>
     <string name="send_disabled_warning">Pravila tvrtke omogućuju brisanje samo postojećeg Senda</string>
     <string name="about_send">O Sendu</string>
@@ -496,25 +497,29 @@
     <string name="remove_master_password">Ukloni glavnu lozinku</string>
     <string name="leave_organization">Napusti organizaciju</string>
     <string name="leave_organization_name">Napusti %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Autentifikacija WebAuthn</string>
     <string name="fido2_return_to_app">Povratak u aplikaciju</string>
     <string name="reset_password_auto_enroll_invite_warning">Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d sat</item>
+        <item quantity="few">%1$d sata</item>
+        <item quantity="other">%1$d sati</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="few">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d minuta</item>
+        <item quantity="few">%1$d minute</item>
+        <item quantity="other">%1$d minuta</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s i %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Tvoja organizacaija je postavila zadani istek sesije na %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ovom postavkom upravlja tvoje organizacija.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Tvoja organizacaija je postavila zadani istek sesije na nikada.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Tvoja organizacaija je postavila zadani istek sesije na ponovno pokretanje aplikacije.</string>
     <string name="vault_timeout_to_large">Vrijeme isteka premašuje ograničenje koje je postavila tvoja organizacija.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora.</string>
     <string name="add_account">Dodaj račun</string>
@@ -655,7 +660,8 @@
     <string name="invalid_uri">Neispravan URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je već blokiran</string>
     <string name="login_approved">Prijava odobrena</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije. Trebaš drugu opciju?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Prijava uređajem</string>
     <string name="logging_in_on">Prijava na</string>
     <string name="logging_in_on_with_colon">Prijava na:</string>
@@ -693,6 +699,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Pratite Duo korake za dovršetak prijave.</string>
     <string name="launch_duo">Pokreni Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tvoj pristupni ključ za %1$s će biti spremljen u trezor</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Tvoja će lozinka biti spremljena u tvoj Bitwatden trezor za %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Pristupni ključ nije podržan za ovu aplikaciju</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacija lozinke nije uspjela jer preglednik nema privilegiju</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operacija pristupnog ključa nije uspjela jer se potpis preglednika ne podudara</string>
@@ -921,6 +928,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacija lozinke nije uspjela jer odabrana stavka ne postoji.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacija lozinke nije uspjela jer nije odabrana niti jedna stavka.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operacija vjerodajnice nije uspjela jer zahtjev nije valjan.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operacija vjerodajnice nije uspjela jer zahtjev nije podržan.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacije vjerodajnice nije uspjela jer je premašen broj provjere korisnika.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operacija vjerodajnice nije uspjela jer je korisnik zaključan.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operacija vjerodajnice nije uspjela jer ne postoji odabrana stavka.</string>
@@ -1044,6 +1053,8 @@ bilo kakav problem.</string>
     <string name="export">Izvoz</string>
     <string name="export_confirmation_title">Potvrdi izvoz</string>
     <string name="export_success">Podaci uspješno izvezeni</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Sigurnost</string>
     <string name="too_many_failed_biometric_attempts">Previše neuspjelih biometrijskih pokušaja.</string>
     <string name="version">Verzija</string>
@@ -1142,7 +1153,7 @@ bilo kakav problem.</string>
     <string name="import_restricted_unable_to_import_credit_cards">Uvoz je ograničen, nije moguće uvesti platne kartice s ovog računa.</string>
     <string name="verify_your_master_password">Potvrdi glavnu lozinku</string>
     <string name="having_trouble_with_autofill">Imaš problema s auto-ispunom?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Pristupite pomoći i dokumentaciji za rješavanje problema ovdje</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Ovdje možeš pristupiti pomoći i dokumentaciji za rješavanje problema</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Uvezi lozinke, pristupne ključeve i druge vrste stavki iz svog Bitwarden trezora.</string>
     <string name="items_to_import">Stavke za uvoz</string>
     <string name="exporting_items">Izvoz stavaka…</string>
@@ -1161,4 +1172,12 @@ bilo kakav problem.</string>
     <string name="lock_app">Zaključaj aplikaciju</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
     <string name="loading_vault_data">Učitavanje podataka trezora…</string>
+    <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

@@ -7,6 +7,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -17,8 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.every
@@ -42,7 +42,7 @@ class LandingViewModelTest : BaseViewModelTest() {
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
             getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
         } returns mutableSnackbarSharedFlow

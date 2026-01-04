@@ -10,6 +10,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -18,8 +19,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -41,7 +41,7 @@ class LoginApprovalViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginApprovalState, LoginApprovalEvent, LoginApprovalAction>(

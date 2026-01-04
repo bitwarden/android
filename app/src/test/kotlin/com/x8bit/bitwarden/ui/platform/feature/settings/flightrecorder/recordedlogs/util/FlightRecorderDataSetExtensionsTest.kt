@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedlogs.util
 
+import com.bitwarden.core.util.fileOf
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.util.formatBytes
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.util.toViewState
-import com.x8bit.bitwarden.ui.platform.util.formatBytes
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic

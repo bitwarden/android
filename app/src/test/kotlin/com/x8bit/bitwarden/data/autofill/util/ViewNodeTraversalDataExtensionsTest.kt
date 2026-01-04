@@ -21,6 +21,7 @@ class ViewNodeTraversalDataExtensionsTest {
             autofillViews = emptyList(),
             idPackage = ID_PACKAGE,
             ignoreAutofillIds = emptyList(),
+            urlBarWebsites = emptyList(),
         )
 
         // Test
@@ -39,6 +40,7 @@ class ViewNodeTraversalDataExtensionsTest {
             autofillViews = emptyList(),
             idPackage = null,
             ignoreAutofillIds = emptyList(),
+            urlBarWebsites = emptyList(),
         )
         val expected = "com.x8bit.bitwarden"
         every { windowNode.title } returns "com.x8bit.bitwarden/path.deeper.into.app"

@@ -176,7 +176,7 @@ kotlin {
 
 dependencies {
 
-    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
+    implementation(project(":authenticatorbridge"))
 
     implementation(project(":annotation"))
     implementation(project(":core"))
@@ -190,6 +190,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.biometrics)
     implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material3)
@@ -222,12 +223,14 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.timber)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Pull in test fixtures from other modules.
+    testImplementation(testFixtures(project(":core")))
     testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
     testImplementation(testFixtures(project(":ui")))

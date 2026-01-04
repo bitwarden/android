@@ -11,6 +11,9 @@ import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -18,16 +21,15 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
@@ -57,6 +59,7 @@ import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.createMockAccountKeysJson
+import com.bitwarden.network.model.createMockAccountKeysJsonWithNullFields
 import com.bitwarden.network.model.createMockOrganization
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.AccountsService
@@ -120,7 +123,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -132,6 +134,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -279,6 +282,7 @@ class AuthRepositoryTest {
             updateKdfToMinimumsIfNeeded(password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
+
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
         accountsService = accountsService,
@@ -295,6 +299,7 @@ class AuthRepositoryTest {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRequestManager = authRequestManager,
+        biometricsEncryptionManager = mockk(),
         keyConnectorManager = keyConnectorManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,
@@ -403,21 +408,26 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -478,21 +488,26 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -643,7 +658,7 @@ class AuthRepositoryTest {
     @Test
     fun `delete account fails if deleteAccount fails`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
@@ -675,7 +690,7 @@ class AuthRepositoryTest {
     @Test
     fun `delete account fails if deleteAccount fails with message`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -709,7 +724,7 @@ class AuthRepositoryTest {
     @Test
     fun `deleteAccountWithMasterPassword succeeds`() = runTest {
         val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
+        val hashedMasterPassword = "hashed password"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -1410,12 +1425,15 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.storeAccountKeys(userId = USER_ID_1, accountKeys = null)
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1431,12 +1449,15 @@ class AuthRepositoryTest {
             )
             coVerify(exactly = 1) {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1464,12 +1485,15 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                        securityState = accountKeys.securityState?.securityState,
+                        signedPublicKey = accountKeys.publicKeyEncryptionKeyPair.signedPublicKey,
+                        signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
-                    signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
-                    securityState = accountKeys.securityState?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricKey),
@@ -1486,12 +1510,15 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                        securityState = accountKeys.securityState?.securityState,
+                        signedPublicKey = accountKeys.publicKeyEncryptionKeyPair.signedPublicKey,
+                        signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
-                    signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
-                    securityState = accountKeys.securityState?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricKey),
@@ -1517,12 +1544,15 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1539,12 +1569,15 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1569,12 +1602,15 @@ class AuthRepositoryTest {
         val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID_1,
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1591,12 +1627,15 @@ class AuthRepositoryTest {
 
         coVerify(exactly = 1) {
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID_1,
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1610,6 +1649,65 @@ class AuthRepositoryTest {
         }
         assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeTdeLogin with accountKeys with null nested fields should unlock vault with null properties`() =
+        runTest {
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricalKey = "asymmetricalKey"
+            val accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS
+            val orgKeys = mapOf("orgId" to "orgKey")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountKeys(userId = USER_ID_1, accountKeys = accountKeys)
+            fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricalKey,
+            )
+
+            coVerify(exactly = 1) {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+                vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+            }
+            assertEquals(LoginResult.Success, result)
+        }
 
     @Test
     fun `login when pre login fails should return Error with no message`() = runTest {
@@ -1806,21 +1904,26 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1862,21 +1965,133 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+                vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login get token succeeds with accountKeys with null nested fields should unlock vault with null properties`() =
+        runTest {
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
+                accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
+            )
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID_1,
+                passwordHash = PASSWORD_HASH,
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1915,21 +2130,26 @@ class AuthRepositoryTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -1978,21 +2198,26 @@ class AuthRepositoryTest {
                 )
 
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2077,18 +2302,23 @@ class AuthRepositoryTest {
             }
             coVerify(exactly = 0) {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = any(),
                     organizationKeys = null,
                 )
@@ -2120,21 +2350,26 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2186,21 +2421,26 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2314,21 +2554,26 @@ class AuthRepositoryTest {
         } returns successResponse.asSuccess()
         coEvery {
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
+                    signedPublicKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .signedPublicKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                ),
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                privateKey = successResponse.accountKeys!!
-                    .publicKeyEncryptionKeyPair
-                    .wrappedPrivateKey,
-                signingKey = successResponse.accountKeys
-                    ?.signatureKeyPair
-                    ?.wrappedSigningKey,
-                securityState = successResponse.accountKeys
-                    ?.securityState
-                    ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -2416,21 +2661,26 @@ class AuthRepositoryTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -2485,21 +2735,26 @@ class AuthRepositoryTest {
         } returns successResponse.asSuccess()
         coEvery {
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
+                    signedPublicKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .signedPublicKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                ),
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                privateKey = successResponse.accountKeys!!
-                    .publicKeyEncryptionKeyPair
-                    .wrappedPrivateKey,
-                signingKey = successResponse.accountKeys
-                    ?.signatureKeyPair
-                    ?.wrappedSigningKey,
-                securityState = successResponse.accountKeys
-                    ?.securityState
-                    ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -2538,21 +2793,26 @@ class AuthRepositoryTest {
                 twoFactorData = rememberedTwoFactorData,
             )
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
+                    signedPublicKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .signedPublicKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                ),
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                privateKey = successResponse.accountKeys!!
-                    .publicKeyEncryptionKeyPair
-                    .wrappedPrivateKey,
-                signingKey = successResponse.accountKeys
-                    ?.signatureKeyPair
-                    ?.wrappedSigningKey,
-                securityState = successResponse.accountKeys
-                    ?.securityState
-                    ?.securityState,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = PASSWORD,
-                    userKey = successResponse.key!!,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                 ),
                 organizationKeys = null,
             )
@@ -2734,18 +2994,23 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2790,18 +3055,23 @@ class AuthRepositoryTest {
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2848,18 +3118,23 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2904,18 +3179,23 @@ class AuthRepositoryTest {
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -3054,18 +3334,23 @@ class AuthRepositoryTest {
         } returns SINGLE_USER_STATE_1
         coEvery {
             vaultRepository.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
+                    signedPublicKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .signedPublicKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                ),
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = successResponse.accountKeys!!
-                    .publicKeyEncryptionKeyPair
-                    .wrappedPrivateKey,
-                signingKey = successResponse.accountKeys
-                    ?.signatureKeyPair
-                    ?.wrappedSigningKey,
-                securityState = successResponse.accountKeys
-                    ?.securityState
-                    ?.securityState,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                     method = AuthRequestMethod.MasterKey(
@@ -3400,12 +3685,15 @@ class AuthRepositoryTest {
             } returns keyConnectorMasterKeyResponseJson.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "privateKey",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = "privateKey",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = "key",
@@ -3447,12 +3735,125 @@ class AuthRepositoryTest {
                     accessToken = ACCESS_TOKEN,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "privateKey",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = "privateKey",
-                    signingKey = null,
-                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = "key",
+                    ),
+                    organizationKeys = null,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector and accountKeys with null nested fields should unlock vault`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = false,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+            )
+            val masterKey = "masterKey"
+            val keyConnectorMasterKeyResponseJson = mockk<KeyConnectorMasterKeyResponseJson> {
+                every { this@mockk.masterKey } returns masterKey
+            }
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+            } returns keyConnectorMasterKeyResponseJson.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "privateKey",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = "key",
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "privateKey",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = "key",
@@ -3597,12 +3998,15 @@ class AuthRepositoryTest {
             } returns keyConnectorResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = PRIVATE_KEY,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = PRIVATE_KEY,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
@@ -3653,12 +4057,15 @@ class AuthRepositoryTest {
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "privateKey",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = "privateKey",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
@@ -3773,12 +4180,15 @@ class AuthRepositoryTest {
 
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = PRIVATE_KEY,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = PRIVATE_KEY,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
@@ -3847,18 +4257,23 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.UserKey(
@@ -3902,18 +4317,23 @@ class AuthRepositoryTest {
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.UserKey(
@@ -4014,18 +4434,23 @@ class AuthRepositoryTest {
             )
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
                         deviceKey = deviceKey,
                         protectedDevicePrivateKey = encryptedPrivateKey,
@@ -4079,18 +4504,23 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
                         deviceKey = deviceKey,
                         protectedDevicePrivateKey = encryptedPrivateKey,
@@ -4130,18 +4560,23 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.storePendingAuthRequest(USER_ID_1, pendingAuthRequest)
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = pendingAuthRequest.requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = authRequestKey),
@@ -4193,18 +4628,23 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = pendingAuthRequest.requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = authRequestKey),
@@ -5073,6 +5513,12 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             passwordHash = newPasswordHash,
         )
+        verify {
+            userLogoutManager.logout(
+                userId = ACCOUNT_1.profile.userId,
+                reason = LogoutReason.PasswordReset,
+            )
+        }
     }
 
     @Test
@@ -6806,21 +7252,26 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -6879,21 +7330,26 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .wrappedPrivateKey,
+                        securityState = successResponse.accountKeys
+                            ?.securityState
+                            ?.securityState,
+                        signedPublicKey = successResponse.accountKeys!!
+                            .publicKeyEncryptionKeyPair
+                            .signedPublicKey,
+                        signingKey = successResponse.accountKeys
+                            ?.signatureKeyPair
+                            ?.wrappedSigningKey,
+                    ),
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.accountKeys!!
-                        .publicKeyEncryptionKeyPair
-                        .wrappedPrivateKey,
-                    signingKey = successResponse.accountKeys
-                        ?.signatureKeyPair
-                        ?.wrappedSigningKey,
-                    securityState = successResponse.accountKeys
-                        ?.securityState
-                        ?.securityState,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = PASSWORD,
-                        userKey = successResponse.key!!,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
                     ),
                     organizationKeys = null,
                 )
@@ -7029,6 +7485,8 @@ class AuthRepositoryTest {
         private const val ORGANIZATION_IDENTIFIER = "organizationIdentifier"
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val ACCOUNT_KEYS = createMockAccountKeysJson(number = 1)
+        private val ACCOUNT_KEYS_WITH_NULL_FIELDS =
+            createMockAccountKeysJsonWithNullFields(number = 1)
         private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
             TwoFactorAuthMethod.EMAIL to JsonObject(
                 mapOf("Email" to JsonPrimitive("ex***@email.com")),
@@ -7083,7 +7541,6 @@ class AuthRepositoryTest {
             privateKey = "privateKey",
             accountKeys = null,
             shouldForcePasswordReset = true,
-            shouldResetMasterPassword = true,
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
@@ -7102,13 +7559,26 @@ class AuthRepositoryTest {
             privateKey = "privateKey",
             accountKeys = ACCOUNT_KEYS,
             shouldForcePasswordReset = true,
-            shouldResetMasterPassword = true,
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
-            userDecryptionOptions = null,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                    kdf = KdfJson(
+                        kdfType = KdfTypeJson.ARGON2_ID,
+                        iterations = 600000,
+                        memory = 16,
+                        parallelism = 4,
+                    ),
+                    masterKeyWrappedUserKey = "key",
+                    salt = "mockSalt",
+                ),
+            ),
             keyConnectorUrl = null,
         )
-        private val PROFILE_1 = AccountJson.Profile(
+        private val BASE_PROFILE_1 = AccountJson.Profile(
             userId = USER_ID_1,
             email = EMAIL,
             isEmailVerified = true,
@@ -7125,6 +7595,19 @@ class AuthRepositoryTest {
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+
+        private val PROFILE_1 = BASE_PROFILE_1.copy(
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                    kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+                    masterKeyWrappedUserKey = "key",
+                    salt = "mockSalt",
+                ),
+            ),
         )
         private val ACCOUNT_1 = AccountJson(
             profile = PROFILE_1,
@@ -7170,33 +7653,21 @@ class AuthRepositoryTest {
                             hasMasterPassword = true,
                             keyConnectorUserDecryptionOptions = null,
                             trustedDeviceUserDecryptionOptions = null,
-                            masterPasswordUnlock = null,
+                            masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                                kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+                                masterKeyWrappedUserKey = "key",
+                                salt = "mockSalt",
+                            ),
                         ),
                     ),
                 ),
             ),
         )
 
-        private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockDataJson(
+        private val MOCK_MASTER_PASSWORD_UNLOCK = MasterPasswordUnlockData(
+            kdf = ACCOUNT_1.profile.toSdkParams(),
+            masterKeyWrappedUserKey = "key",
             salt = "mockSalt",
-            kdf = ACCOUNT_2.profile.toSdkParams().toKdfRequestModel(),
-            masterKeyWrappedUserKey = "masterKeyWrappedUserKeyMock",
-        )
-
-        private val SINGLE_USER_STATE_1_WITH_DECRYPTION_OPTIONS = UserStateJson(
-            activeUserId = USER_ID_1,
-            accounts = mapOf(
-                USER_ID_1 to ACCOUNT_1.copy(
-                    profile = ACCOUNT_1.profile.copy(
-                        userDecryptionOptions = UserDecryptionOptionsJson(
-                            hasMasterPassword = true,
-                            keyConnectorUserDecryptionOptions = null,
-                            trustedDeviceUserDecryptionOptions = null,
-                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
-                        ),
-                    ),
-                ),
-            ),
         )
 
         private val SINGLE_USER_STATE_2 = UserStateJson(

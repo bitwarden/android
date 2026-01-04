@@ -11,10 +11,14 @@ runs:
   steps:
     - name: Log inputs to job summary
       shell: bash
+      env:
+          INPUTS: ${{ inputs.inputs }}
       run: |
-        echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo '```json' >> $GITHUB_STEP_SUMMARY
-        echo '${{ inputs.inputs }}' >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-        echo "</details>" >> $GITHUB_STEP_SUMMARY
+        {
+          echo "<details><summary>Job Inputs</summary>"
+          echo ""
+          echo '```json'
+          echo "$INPUTS"
+          echo '```'
+          echo "</details>"
+        } >> "$GITHUB_STEP_SUMMARY"

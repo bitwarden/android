@@ -14,5 +14,8 @@ gem 'logger'
 gem 'mutex_m'
 gem 'csv'
 
+# Since ruby 3.4.1 these are not included in the standard library
+gem 'nkf'
+
 # Starting with Ruby 3.5.0, these are not included in the standard library
 gem 'ostruct'

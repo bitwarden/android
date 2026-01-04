@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.vault.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
-import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
@@ -13,9 +13,11 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -25,10 +27,10 @@ import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CipherManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManagerImpl
-import com.x8bit.bitwarden.data.vault.manager.FileManager
-import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.SendManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -57,6 +59,7 @@ object VaultManagerModule {
     @Singleton
     fun provideCipherManager(
         ciphersService: CiphersService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -67,6 +70,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
+        settingsDiskSource = settingsDiskSource,
         authDiskSource = authDiskSource,
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
@@ -81,6 +85,7 @@ object VaultManagerModule {
     @Singleton
     fun provideFolderManager(
         folderService: FolderService,
+        settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
@@ -88,6 +93,7 @@ object VaultManagerModule {
         pushManager: PushManager,
     ): FolderManager = FolderManagerImpl(
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -102,6 +108,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         fileManager: FileManager,
         reviewPromptManager: ReviewPromptManager,
         pushManager: PushManager,
@@ -109,23 +116,12 @@ object VaultManagerModule {
     ): SendManager = SendManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         sendsService = sendsService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         reviewPromptManager = reviewPromptManager,
         pushManager = pushManager,
-        dispatcherManager = dispatcherManager,
-    )
-
-    @Provides
-    @Singleton
-    fun provideFileManager(
-        @ApplicationContext context: Context,
-        downloadService: DownloadService,
-        dispatcherManager: DispatcherManager,
-    ): FileManager = FileManagerImpl(
-        context = context,
-        downloadService = downloadService,
         dispatcherManager = dispatcherManager,
     )
 
@@ -144,6 +140,7 @@ object VaultManagerModule {
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
         kdfManager: KdfManager,
+        pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -158,6 +155,18 @@ object VaultManagerModule {
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
             kdfManager = kdfManager,
+            pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+        )
+
+    @Provides
+    @Singleton
+    fun providePinProtectedUserKeyManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+    ): PinProtectedUserKeyManager =
+        PinProtectedUserKeyManagerImpl(
+            authDiskSource = authDiskSource,
+            vaultSdkSource = vaultSdkSource,
         )
 
     @Provides
@@ -182,6 +191,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         userLogoutManager: UserLogoutManager,
+        userStateManager: UserStateManager,
         vaultLockManager: VaultLockManager,
         clock: Clock,
         databaseSchemeManager: DatabaseSchemeManager,
@@ -194,6 +204,7 @@ object VaultManagerModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         userLogoutManager = userLogoutManager,
+        userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
@@ -207,11 +218,13 @@ object VaultManagerModule {
         vaultSdkSource: VaultSdkSource,
         ciphersService: CiphersService,
         vaultSyncManager: VaultSyncManager,
+        policyManager: PolicyManager,
         json: Json,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
+        policyManager = policyManager,
         json = json,
     )
 }

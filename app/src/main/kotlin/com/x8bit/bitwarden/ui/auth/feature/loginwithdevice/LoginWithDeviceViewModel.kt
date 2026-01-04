@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -13,8 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +34,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginWithDeviceViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -52,7 +52,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     private var authJob: Job = Job().apply { complete() }
 
     init {
-        sendNewAuthRequest(isResend = false)
+        sendNewAuthRequest()
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -74,7 +74,14 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun handleResendNotificationClicked() {
-        sendNewAuthRequest(isResend = true)
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = LoginWithDeviceState.DialogState.Loading(
+                    message = BitwardenString.resending.asText(),
+                ),
+            )
+        }
+        sendNewAuthRequest()
     }
 
     private fun handleViewAllLogInOptionsClicked() {
@@ -101,11 +108,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             is CreateAuthRequestResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = null,
                         loginData = LoginWithDeviceState.LoginData(
                             accessCode = result.accessCode,
@@ -125,7 +127,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                         viewState = LoginWithDeviceState.ViewState.Content(
                             loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = result.authRequest.fingerprint,
-                            isResendNotificationLoading = false,
                         ),
                         dialogState = null,
                     )
@@ -135,11 +136,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             is CreateAuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
                             message = BitwardenString.generic_error_message.asText(),
@@ -155,11 +151,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             CreateAuthRequestResult.Expired -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = null,
                             message = BitwardenString.login_request_has_already_expired.asText(),
@@ -285,8 +276,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
-    private fun sendNewAuthRequest(isResend: Boolean) {
-        setIsResendNotificationLoading(isResend)
+    private fun sendNewAuthRequest() {
         authJob.cancel()
         authJob = authRepository
             .createAuthRequestWithUpdates(
@@ -296,22 +286,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             .map { LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
-    }
-
-    private fun setIsResendNotificationLoading(isResend: Boolean) {
-        updateContent { it.copy(isResendNotificationLoading = isResend) }
-    }
-
-    private inline fun updateContent(
-        crossinline block: (
-            LoginWithDeviceState.ViewState.Content,
-        ) -> LoginWithDeviceState.ViewState.Content?,
-    ) {
-        val currentViewState = state.viewState
-        val updatedContent = (currentViewState as? LoginWithDeviceState.ViewState.Content)
-            ?.let(block)
-            ?: return
-        mutableStateFlow.update { it.copy(viewState = updatedContent) }
     }
 }
 
@@ -355,13 +329,10 @@ data class LoginWithDeviceState(
          * Content state for the [LoginWithDeviceScreen] showing the actual content or items.
          *
          * @property fingerprintPhrase The fingerprint phrase to present to the user.
-         * @property isResendNotificationLoading Indicates if the resend loading spinner should be
-         * displayed.
          */
         @Parcelize
         data class Content(
             val fingerprintPhrase: String,
-            val isResendNotificationLoading: Boolean,
             private val loginWithDeviceType: LoginWithDeviceType,
         ) : ViewState() {
             /**
@@ -407,14 +378,19 @@ data class LoginWithDeviceState(
             /**
              * The text to display indicating that there are other option for logging in.
              */
-            @Suppress("MaxLineLength")
             val otherOptions: Text
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> BitwardenString.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
+                        -> {
+                        BitwardenString
+                            .log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app
+                            .asText()
+                    }
 
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> BitwardenString.trouble_logging_in.asText()
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> {
+                        BitwardenString.trouble_logging_in.asText()
+                    }
                 }
 
             /**

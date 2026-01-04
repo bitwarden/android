@@ -167,7 +167,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
     <string name="disabled">Zakázáno</string>
     <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
-    <string name="autofill_title">Automatické vyplňování</string>
+    <string name="autofill_noun">Automatické vyplňování</string>
+    <string name="autofill_verb">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
     <string name="search">Hledat</string>
     <string name="learn_org">Více o organizacích</string>
@@ -181,8 +182,8 @@
     <string name="send_verification_code_again">Znovu odeslat kód</string>
     <string name="verification_email_not_sent">Nelze odeslat ověřovací e-mail. Zkuste to znovu.</string>
     <string name="verification_email_sent">Ověřovací e-mail byl odeslán.</string>
-    <string name="yubi_key_instruction">Pro pokračování podržte YubiKey NEO blízko zadní strany Vašeho zařízení nebo vložte YubiKey do USB portu a stiskněte tlačítko na klíči.</string>
-    <string name="yubi_key_title">Bezpečnostní klíč YubiKey</string>
+    <string name="yubi_key_instruction">Pro pokračování podržte bezpečnostní klíč Yubico blízko zadní strany Vašeho zařízení nebo jej vložte do portu zařízení a stiskněte jeho tlačítko.</string>
+    <string name="yubi_key_title">Bezpečnostní klíč Yubico</string>
     <string name="add_new_attachment">Přidat novou přílohu</string>
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
@@ -389,7 +390,7 @@ Načtení proběhne automaticky.</string>
     <string name="send_verification_code_to_email">Poslat ověřovací kód na Váš e-mail</string>
     <string name="code_sent">Kód byl odeslán!</string>
     <string name="confirm_your_identity">Pro pokračování potvrďte svou identitu.</string>
-    <string name="export_vault_warning">Tento export obsahuje data Vašeho trezoru v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití.</string>
+    <string name="export_vault_warning">Z důvodu bezpečnosti nesdílejte ani neposílejte tento soubor na nezabezpečené kanály (jako je e-mail) a smažte jej, když jste hotovi.</string>
     <string name="export_vault_file_pw_protect_info">Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru.</string>
     <string name="export_vault_confirmation_title">Potvrdit export trezoru</string>
     <string name="warning">Varování</string>
@@ -499,6 +500,10 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete opustit %1$s?</string>
+    <string name="leave_organization_button">Opustit %1$s</string>
+    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace.\n\nKontaktujte svého správce pro opětovné udělení přístupu.</string>
+    <string name="how_to_manage_my_vault">Jak spravovat můj trezor</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -660,7 +665,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="invalid_uri">Neplatný URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je již blokován</string>
     <string name="login_approved">Přihlášení bylo schváleno</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Potřebujete další volby? <annotation link="viewAll">Zobrazit všechny volby přihlášení</annotation></string>
     <string name="log_in_with_device">Přihlásit se zařízením</string>
     <string name="logging_in_on">Přihlašování na</string>
     <string name="logging_in_on_with_colon">Přihlašování na:</string>
@@ -698,6 +704,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Postupujte podle kroků od DUO pro dokončení přihlášení.</string>
     <string name="launch_duo">Spustit DUO</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Váš přístupový klíč bude pro %1$s uložen do Vašeho trezoru na Bitwardenu</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Vaše heslo bude pro %1$s uloženo do Vašeho trezoru na Bitwardenu</string>
     <string name="passkeys_not_supported_for_this_app">Přístupové klíče nejsou pro tuto aplikaci podporovány</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operace přístupového klíče se nezdařila, protože prohlížeč nemá oprávnění</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operace přístupového klíče se nezdařila, protože se neshoduje s podpisem prohlížeče</string>
@@ -926,6 +933,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operace hesla se nezdařila, protože vybraná položka neexistuje.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operace hesla se nezdařila, protože nebyla vybrána žádná položka.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Operace přístupových údajů se nezdařila, protože je požadavek neplatný.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Operace přístupových údajů se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operace s přihlašovacími údaji se nezdařila, protože byly vyčerpány všechny pokusy o ověření uživatele.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operace s přihlašovacími údaji se nezdařila, protože byl uživatel uzamčen.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operace s přihlašovacími údaji se nezdařila, protože vybraná položka neexistuje.</string>
@@ -1051,6 +1060,8 @@ při opakování problémů.</string>
     <string name="export">Exportovat</string>
     <string name="export_confirmation_title">Potvrdit export</string>
     <string name="export_success">Export dat proběhl úspěšně</string>
+    <string name="included_in_this_export">Zahrnuto do tohoto exportu</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Budou exportovány jen kódy uložené v tomto zařízení. Synchronizované kódy nejsou zahrnuty.</string>
     <string name="security">Zabezpečení</string>
     <string name="too_many_failed_biometric_attempts">Příliš mnoho neúspěšných pokusů o biometrii.</string>
     <string name="version">Verze</string>
@@ -1170,4 +1181,12 @@ při opakování problémů.</string>
     <string name="lock_app">Uzamknout aplikaci</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
     <string name="loading_vault_data">Načítání dat trezoru...</string>
+    <string name="resending">Opakované odesílání</string>
+    <string name="you_left_the_organization">Opustili jste organizaci</string>
+    <string name="transfer_items_to_org">Převést položky do %1$s</string>
+    <string name="transfer_items_description">%1$s vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko pro převod vlastnictví Vašich položek.</string>
+    <string name="decline_and_leave">Odmítnout a opustit</string>
+    <string name="why_am_i_seeing_this">Proč se mi toto zobrazuje?</string>
+    <string name="migrating_items_to_x">Přesouvání položek do %s</string>
+    <string name="failed_to_migrate_items_to_x">Nepodařilo se přesunout položky do %s</string>
 </resources>

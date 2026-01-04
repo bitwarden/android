@@ -25,6 +25,7 @@ import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
@@ -973,7 +974,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Word separator")
             .performScrollTo()
-            .performTextInput("a")
+            .performTextReplacement("a")
 
         verify {
             viewModel.trySendAction(

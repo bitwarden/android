@@ -1,14 +1,10 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.BuildConfig
-import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
-import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
-import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -24,9 +20,6 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
  */
 class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
-    private val authDiskSource: AuthDiskSource,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val authenticatorSdkSource: AuthenticatorSdkSource,
     dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
 
@@ -62,9 +55,6 @@ class SettingsRepositoryImpl(
                 started = SharingStarted.Eagerly,
                 initialValue = isDynamicColorsEnabled,
             )
-
-    override val isUnlockWithBiometricsEnabled: Boolean
-        get() = authDiskSource.getUserBiometricUnlockKey() != null
 
     override val appThemeStateFlow: StateFlow<AppTheme>
         get() = settingsDiskSource
@@ -108,6 +98,7 @@ class SettingsRepositoryImpl(
                 isScreenCaptureAllowed = value,
             )
         }
+
     override var previouslySyncedBitwardenAccountIds: Set<String> by
     settingsDiskSource::previouslySyncedBitwardenAccountIds
 
@@ -120,23 +111,6 @@ class SettingsRepositoryImpl(
                 initialValue = settingsDiskSource.getScreenCaptureAllowed()
                     ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
-
-    override suspend fun setupBiometricsKey(): BiometricsKeyResult {
-        biometricsEncryptionManager.setupBiometrics()
-        return authenticatorSdkSource
-            .generateBiometricsKey()
-            .onSuccess {
-                authDiskSource.storeUserBiometricUnlockKey(biometricsKey = it)
-            }
-            .fold(
-                onSuccess = { BiometricsKeyResult.Success },
-                onFailure = { BiometricsKeyResult.Error },
-            )
-    }
-
-    override fun clearBiometricsKey() {
-        authDiskSource.storeUserBiometricUnlockKey(biometricsKey = null)
-    }
 
     override var isCrashLoggingEnabled: Boolean
         get() = settingsDiskSource.isCrashLoggingEnabled ?: true

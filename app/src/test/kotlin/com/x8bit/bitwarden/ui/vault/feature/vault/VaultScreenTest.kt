@@ -11,7 +11,6 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -2162,7 +2161,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test

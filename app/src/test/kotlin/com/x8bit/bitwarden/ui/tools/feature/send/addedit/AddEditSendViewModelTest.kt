@@ -6,10 +6,11 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -30,8 +31,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
@@ -92,7 +92,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
     }
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
@@ -127,7 +127,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 id = "123",
                 type = PolicyTypeJson.SEND_OPTIONS,
                 isEnabled = true,
@@ -785,7 +785,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FileChose should emit ShowToast`() = runTest {
+    fun `FileChose should update the state accordingly`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 selectedType = AddEditSendState.ViewState.Content.SendType.File(
@@ -824,7 +824,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `ChooseFileClick should emit ShowChooserSheet`() = runTest {
         val arePermissionsGranted = true
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

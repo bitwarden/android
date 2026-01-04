@@ -54,7 +54,11 @@ dependencies {
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.square.okhttp)
     implementation(libs.timber)
+
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":core")))
 
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -65,6 +69,8 @@ dependencies {
     testImplementation(libs.square.turbine)
 
     testFixturesImplementation(project(":core"))
+    testFixturesImplementation(platform(libs.junit.bom))
+    testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
 }
 

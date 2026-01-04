@@ -3,7 +3,7 @@
     <string name="about">אודות</string>
     <string name="add_folder">הוסף תיקייה</string>
     <string name="add_item">הוסף פריט</string>
-    <string name="an_error_has_occurred">אירעה שגיאה.</string>
+    <string name="an_error_has_occurred">אירעה שגיאה</string>
     <string name="apply">החל</string>
     <string name="back">הקודם</string>
     <string name="cancel">ביטול</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">דקה 1</string>
     <string name="four_hours">4 שעות</string>
     <string name="immediately">מיד</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">להגדיר פסק זמן של הפעלה ל“יציאה“?</string>
+    <string name="vault_timeout_log_out_confirmation_message">לאחר תקופת פסק הזמן, אתה תנותק. תצטרך להיות מחובר לאינטרנט כדי להיכנס ולגשת אל הכספת שלך שוב. ההגדרות וה־PIN שלך השמורים במכשיר זה לא ישתנו.</string>
     <string name="logging_in">נכנס…</string>
     <string name="login_to_bitwarden">היכנס אל Bitwarden</string>
     <string name="master_password_confirmation_val_message">אישור הסיסמה אינו נכון.</string>
@@ -138,7 +138,7 @@
     <string name="other">אחר</string>
     <string name="password_generator">מחולל הסיסמאות</string>
     <string name="password_hint">רמז לסיסמה</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">שלחנו לך דוא“ל עם רמז לסיסמה הראשית שלך.</string>
     <string name="password_override_alert">האם אתה בטוח שברצונך לדרוס את הסיסמה הנוכחית?</string>
     <string name="retype_master_password">הקלד שוב סיסמה ראשית</string>
     <string name="retype_new_master_password_required">הקלד שוב סיסמה ראשית חדשה (נדרש)</string>
@@ -167,7 +167,8 @@
     <string name="search_for_a_login_or_add_a_new_login">חפש כניסה או הוסף כניסה חדשה</string>
     <string name="disabled">מושבת</string>
     <string name="bitwarden_autofill_service_alert2">הדרך הקלה ביותר להוסיף כניסות חדשות לכספת שלך היא דרך שירות המילוי האוטומטי של Bitwarden. למד עוד אודות השימוש בשירות המילוי האוטומטי של Bitwarden על ידי ניווט למסך ה\"הגדרות\".</string>
-    <string name="autofill_title">מילוי אוטומטי</string>
+    <string name="autofill_noun">מילוי אוטומטי</string>
+    <string name="autofill_verb">מילוי אוטומטי</string>
     <string name="autofill_or_view">האם ברצונך למלא אוטומטית או להציג פריט זה?</string>
     <string name="search">חיפוש</string>
     <string name="learn_org">למד על ארגונים</string>
@@ -181,7 +182,7 @@
     <string name="send_verification_code_again">שלח קוד מחדש</string>
     <string name="verification_email_not_sent">לא היה ניתן לשלוח דוא\"ל אימות. נסה שוב.</string>
     <string name="verification_email_sent">דוא\"ל אימות נשלח</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">מפתח אבטחה של YubiKey</string>
     <string name="add_new_attachment">הוסף צרופה חדשה</string>
     <string name="attachments">צרופות</string>
@@ -346,7 +347,7 @@
     <string name="generator">מחולל</string>
     <string name="no_folders_to_list">אין תיקיות להצגה ברשימה.</string>
     <string name="fingerprint_phrase">ביטוי טביעת אצבע</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">ביטוי טביעת האצבע של חשבונך</string>
     <string name="export_vault">ייצא כספת</string>
     <string name="lock_now">נעל עכשיו</string>
     <string name="pin">PIN</string>
@@ -368,7 +369,7 @@
     <string name="default_uri_match_detection">ברירת מחדל לזיהוי התאמת URI</string>
     <string name="default_uri_match_detection_description">זיהוי התאמת URI שולט באופן שבו Bitwarden מזהה הצעות למילוי אוטומטי.</string>
     <string name="theme">ערכת נושא</string>
-    <string name="theme_description">Change the application’s color theme</string>
+    <string name="theme_description">שנה את צבעי ערכת הנושא של היישום</string>
     <string name="copy_notes">העתק הערה</string>
     <string name="require_master_password_on_app_restart">לדרוש סיסמה ראשית בעת הפעלה מחדש של היישום?</string>
     <string name="pin_require_master_password_restart">האם ברצונך לדרוש ביטול נעילה עם הסיסמה הראשית שלך כשהיישום מופעל מחדש?</string>
@@ -380,7 +381,7 @@
     <string name="download">הורדה</string>
     <string name="login_expired">פג תוקפה של הפעלת הכניסה שלך.</string>
     <string name="biometrics_direction">אימות ביומטרי</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">אימות מכשיר</string>
     <string name="biometrics_failed">זיהוי ביומטרי נכשל</string>
     <string name="biometrics_decoding_failure">היכנס עם הסיסמה הראשית שלך או PIN ואז תאפשר מחדש כניסה ביומטרית בהגדרות.</string>
     <string name="use_biometrics_to_unlock">השתמש בזיהוי ביומטרי כדי לפתוח</string>
@@ -393,7 +394,7 @@
     <string name="export_vault_file_pw_protect_info">קובץ ייצוא זה יהיה מוגן סיסמה ודורש את סיסמת הקובץ כדי לפענח.</string>
     <string name="export_vault_confirmation_title">אשר ייצוא כספת</string>
     <string name="warning">אזהרה</string>
-    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
+    <string name="export_vault_failure">הייתה בעיה בייצוא הכספת שלך.  אם הבעיה נמשכת, אתה תצטרך לייצא מכספת הרשת.</string>
     <string name="export_vault_success">הכספת יוצאה בהצלחה</string>
     <string name="clone">שכפול</string>
     <string name="password_generator_policy_in_effect">מדיניות ארגון אחת או יותר משפיעה על הגדרות המחולל שלך</string>
@@ -414,7 +415,7 @@
     <string name="enable_sync_on_refresh">אפשר סנכרון בעת רענון</string>
     <string name="enable_sync_on_refresh_description">סנכרון כספת באמצעות מחוות משיכה כלפי מטה.</string>
     <string name="log_in_sso">כניסה יחידה ארגונית</string>
-    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
+    <string name="log_in_sso_summary">כנס במהירות באמצעות הפורטל לכניסה יחידה של הארגון שלך. אנא הזן את המזהה של הארגון שלך כדי להתחיל.</string>
     <string name="org_identifier">מזהה ארגון</string>
     <string name="login_sso_error">כרגע לא ניתן להיכנס באמצעות SSO</string>
     <string name="set_master_password">הגדר סיסמה ראשית</string>
@@ -483,7 +484,7 @@
     <string name="seven_days">7 ימים</string>
     <string name="thirty_days">30 ימים</string>
     <string name="custom">מותאם אישית</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">פסק זמן מותאם אישית</string>
     <string name="add_this_authenticator_key_to_a_login">הוסף מפתח מאמת זה לכניסה קיימת, או צור כניסה חדשה.</string>
     <string name="send_disabled_warning">בשל מדיניות ארגונית, אתה יכול למחוק רק סֵנְד קיים.</string>
     <string name="about_send">אודות סֵנְד</string>
@@ -499,27 +500,31 @@
     <string name="remove_master_password">הסר סיסמה ראשית</string>
     <string name="leave_organization">עזוב ארגון</string>
     <string name="leave_organization_name">לעזוב את %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
     <string name="fido2_return_to_app">חזור ליישום</string>
     <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="two">%1$d hours</item>
-        <item quantity="many">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">שעה %1$d</item>
+        <item quantity="two">%1$d שעות</item>
+        <item quantity="many">%1$d שעות</item>
+        <item quantity="other">%1$d שעות</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="two">%1$d minutes</item>
-        <item quantity="many">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">דקה %1$d</item>
+        <item quantity="two">%1$d דקות</item>
+        <item quantity="many">%1$d דקות</item>
+        <item quantity="other">%1$d דקות</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">הארגון שלך הגדיר את פסק הזמן המרבי להפעלה ל־%1$s ו־%2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">הארגון שלך הגדיר את פסק הזמן המרבי להפעלה ל־%1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">הגדרה זו מנוהלת על ידי הארגון שלך.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">הארגון שלך הגדיר את פסק הזמן להפעלה ברירת המחדל ל\'לעולם לא\'.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">הארגון שלך הגדיר את פסק הזמן להפעלה ברירת המחדל ל\'בהפעלת היישום מחדש\'.</string>
     <string name="vault_timeout_to_large">פסק הזמן לכספת שלך חורג מהמגבלות שנקבעו על ידי הארגון שלך.</string>
     <string name="disable_personal_vault_export_policy_in_effect">מדיניות ארגון אחת או יותר מונעת ממך מלייצא את הכספת האישית שלך.</string>
     <string name="add_account">הוסף חשבון</string>
@@ -595,8 +600,8 @@
     <string name="api_access_token">אסימון גישה ל־API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">האם אתה בטוח שברצונך לדרוס את שם המשתמש הנוכחי?</string>
     <string name="generate_username">צור שם משתמש</string>
-    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
-    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
+    <string name="plus_addressed_email_description">השתמש ביכולות מיעון משנה של ספק הדוא“ל שלך</string>
+    <string name="catch_all_email_description">השתמש בתיבת דואר תפוס־כל המוגדרת בדומיין שלך.</string>
     <string name="forwarded_email_description">צור כינוי דוא\"ל עם שירות העברה חיצוני.</string>
     <string name="accessibility_service_disclosure">גילוי נאות בקשר לשירות הנגישות</string>
     <string name="accessibility_disclosure_text">Bitwarden משתמש בשירות הנגישות כדי לחפש שדות כניסה ביישומים ואתרים, ואז לקבוע את מזהה השדה המתאים להזנת שם משתמש &amp; סיסמה כאשר נמצאה התאמה עבור היישום או האתר. איננו שומרים את המידע שמוגש לנו על ידי השירות, אנחנו גם לא עושים שום ניסיון לשלוט ברכיבים שעל המסך מעבר להזנת טקסט של אישורים.</string>
@@ -661,7 +666,8 @@
     <string name="invalid_uri">כתובת URI לא חוקית</string>
     <string name="the_urix_is_already_blocked">כתובת URI זו %1$s כבר חסומה</string>
     <string name="login_approved">כניסה אושרה</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">כניסה עם מכשיר צריכה להיות מוגדרת בהגדרות של היישום Bitwarden. צריך אפשרות אחרת?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">כניסה עם מכשיר</string>
     <string name="logging_in_on">נכנס ב־</string>
     <string name="logging_in_on_with_colon">נכנס ב:</string>
@@ -699,6 +705,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">עקוב אחר השלבים של Duo כדי לסיים להיכנס.</string>
     <string name="launch_duo">פתח את Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">מפתח הגישה שלך יישמר בכספת ה־Bitwarden שלך עבור %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">מפתחות גישה אינן נתמכות עבור יישום זה</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">פעולת מפתח גישה נכשלה בגלל שהדפדפן אינו בעל הרשאות</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">פעולת מפתח גישה נכשלה בגלל שחתימת הדפדפן שלך אינה תואמת</string>
@@ -779,16 +786,16 @@
     <string name="allow_bitwarden_authenticator_syncing">אפשר סנכרון מאמת</string>
     <string name="there_was_an_issue_validating_the_registration_token">הייתה בעיה באימות אסימון ההרשמה.</string>
     <string name="turn_on_autofill">הפעל מילוי אוטומטי</string>
-    <string name="autofill_setup">Autofill setup</string>
-    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="autofill_setup">הגדרת מילוי אוטומטי</string>
+    <string name="turn_on_browser_autofill_integration">הפעל אינטגרציית מילוי אוטומטי בדפדפן</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">אתה משתמש בדפדפן שדורש הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך. הפעל את אינטגרציית המילוי האוטומטי המועדפת שלך למטה.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך. הפעל מילוי אוטומטי עבור כל הדפדפנים המותקנים שלך כדי להמשיך.</string>
     <string name="use_autofill_to_log_into_your_accounts">השתמש במילוי אוטומטי כדי להיכנס לחשבונות שלך בהקשה אחת.</string>
     <string name="turn_on_later">הפעל מאוחר יותר</string>
     <string name="turn_on_autofill_later">להפעיל מילוי אוטומטי מאוחר יותר?</string>
-    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
+    <string name="turn_on_browser_autofill_integration_later">להפעיל את אינטגרציית המילוי האוטומטי בדפדפן מאוחר יותר?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">אתה יכול לחזור כדי להשלים את השלב הזה בכל עת בהגדרות.</string>
     <string name="what_bitwarden_has_to_offer">אתה יכול עכשיו לגלות את כל מה שיש ל־Bitwarden להציע ולהתחיל לנהל את הסיסמאות שלך באופן מאובטח.</string>
     <string name="youre_all_set">אתה מוכן!</string>
@@ -797,7 +804,7 @@
     <string name="new_master_password_hint">רמז לסיסמה ראשית חדש</string>
     <string name="get_started">התחל</string>
     <string name="save_and_protect_your_data">שמור והגן על הנתונים שלך</string>
-    <string name="the_vault_protects_more_than_just_passwords">הכספת מגינה על יותר מרק סיסמאות. אחסן כניסות מאובטחות, זהויות, כרטיסים והערות באופן מאובטח כאן.</string>
+    <string name="the_vault_protects_more_than_just_passwords">הכספת מגנה על יותר מרק סיסמאות. אחסן כניסות מאובטחות, זהויות, כרטיסים והערות באופן מאובטח כאן.</string>
     <string name="new_login">כניסה חדשה</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">שתף קבצים ונתונים באופן מאובטח עם כל אחד, בכל פלטפורמה. המידע שלך יישאר מוצפן מקצה־לקצה תוך הגבלת חשיפה.</string>
     <string name="send_sensitive_information_safely">שלח מידע רגיש, באופן בטוח</string>
@@ -927,6 +934,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה נתמכת.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">פעולת הסיסמה נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
     <string name="password_operation_failed_because_no_item_was_selected">פעולת הסיסמה נכשלה בגלל שלא נבחר פריט.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">פעולת האישור נכשלה בגלל שניסיונות אימות המשתמש חרגו.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">פעולת האישור נכשלה בגלל שהמשתמש נעול.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">פעולת האישור נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
@@ -934,7 +943,7 @@
     <string name="self_host_server_url">URL של שרת אירוח עצמי</string>
     <string name="use_brave_autofill_integration">השתמש בשילוב מילוי אוטומטי של Brave</string>
     <string name="use_chrome_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_chrome_beta_autofill_integration">השתמש באינטגרציית המילוי האוטומטי של Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">משפר את מילוי הכניסות עבור אתרים נתמכים בדפדפנים נבחרים. ברגע שמופעל, אתה תופנה אל הגדרות הדפדפן כדי להפעיל מילוי אוטומטי של צד שלישי.</string>
     <string name="show_more">הצג עוד</string>
     <string name="no_folder">ללא תיקייה</string>
@@ -978,7 +987,7 @@
     <string name="log_deleted">היומן נמחק</string>
     <string name="app_settings">הגדרות יישום</string>
     <string name="replace_existing_certificate">להחליף תעודה קיימת?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">תעודה עם הכינוי “%s” כבר קיימת. האם ברצונך להחליף אותה?\nהחלפת התעודה עשויה להשפיע על החיבור שלך לכל הסביבות שכרגע משתמשות בה.</string>
     <string name="replace_certificate">החלף תעודה</string>
     <string name="unable_to_read_certificate">לא ניתן לקרוא תעודה.</string>
     <string name="cannot_delete_your_account">לא ניתן למחוק את החשבון שלך</string>
@@ -991,12 +1000,12 @@
     <string name="use_dynamic_colors">השתמש בצבעים דימניים</string>
     <string name="use_dynamic_colors_question">להשתמש בצבעים דינמיים?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">מערך צבעים זה יחיל באופן אוטומטי צבעי מערכת ב־Bitwarden בהתבסס על הטפט הנוכחי שלך. הצבעים האלה עשויים שלא לעמוד בכל הנחיות הנגישות.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">פעולת מפתח הגישה נכשלה בגלל שהדפדפן (%1$s) אינו מזוהה. בחר “תן אמון“ כדי להוסיף את %1$s לרשימת היישומים המהימנים מקומית.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">פעולת מפתח גישה נכשלה בגלל שהדפדפן אינו מהימן.</string>
     <string name="trust">תן אמון</string>
     <string name="trusted_by_you_learn_more">אלה היישומים או הדפדפנים ש־Bitwarden אינו נותן בהם אמון כברירת מחדל, אבל אתה נותן בהם אמון לביצוע פעולות של מפתח גישה.</string>
     <string name="trusted_by_community_learn_more">אלה היישומים שאינם כלולים ב־Google Play Store, אבל Bitwarden נותנת בהם אמון לביצוע פעולות של מפתח גישה לאחר שחברי הקהילה השתמשו ודיווחו כי הם בטוחים.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_google_learn_more">אלה היישומים ש־Google מחשיבה כבטוחים ואשר זמינים ב־Play Store של Google.</string>
     <string name="trusted_by_you">מהימנים על ידך</string>
     <string name="trusted_by_the_community">מהימנים על ידי הקהילה</string>
     <string name="trusted_by_google">מהימנים על ידי Google</string>
@@ -1026,10 +1035,10 @@
     <string name="collapse_advanced_options">כווץ אפשרויות מתקדמות</string>
     <string name="number_of_digits">מספר ספרות</string>
     <plurals name="refresh_period_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="two">%d seconds</item>
-        <item quantity="many">%d seconds</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">שנייה %d</item>
+        <item quantity="two">%d שניות</item>
+        <item quantity="many">%d שניות</item>
+        <item quantity="other">%d שניות</item>
     </plurals>
     <string name="item_saved">הפריט נשמר</string>
     <string name="information">מידע</string>
@@ -1050,6 +1059,8 @@
     <string name="export">ייצוא</string>
     <string name="export_confirmation_title">אשר ייצוא</string>
     <string name="export_success">הנתונים יוצאו בהצלחה</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">אבטחה</string>
     <string name="too_many_failed_biometric_attempts">יותר מדי ניסיונות זיהוי ביומטרי כושלים.</string>
     <string name="version">גרסה</string>
@@ -1118,55 +1129,63 @@
     <string name="default_uri_match_detection_description_advanced_options">זיהוי התאמת URI שולט באופן שבו Bitwarden מזהה הצעות למילוי אוטומטי.\n<annotation emphasis="bold">אזהרה:</annotation> ”מתחיל עם” היא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">”מתחיל עם” היא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”ביטוי רגולרי” הוא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים אם נעשה בו שימוש לא נכון.</string>
-    <string name="later">Later</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
-    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
-    <string name="import_cancelled">Import cancelled</string>
-    <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
-    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="saving_items">Saving items…</string>
-    <string name="unable_to_import_your_items">Unable to import your items</string>
-    <string name="import_from_computer">Import from computer</string>
-    <string name="import_from_another_app">Import from another app</string>
+    <string name="later">מאוחר יותר</string>
+    <string name="encryption_settings_updated">הגדרות ההצפנה עודכנו</string>
+    <string name="update_your_encryption_settings">עדכן את הגדרות ההצפנה שלך</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">הגדרות ההצפנה המומלצות החדשות ישפרו את אבטחת החשבון שלך. הזן את הסיסמה הראשית שלך כדי לעדכן כעת.</string>
+    <string name="import_was_cancelled_in_the_selected_app">ייבוא התעודה בוטל ביישום שנבחר. לא יובאו פריטים.</string>
+    <string name="import_cancelled">הייבוא בוטל</string>
+    <string name="no_items_imported">לא יובאו פריטים</string>
+    <string name="no_items_received_from_the_selected_app">לא התקבלו פריטים מהיישום שנבחר.</string>
+    <string name="vault_sync_failed">סנכרון הכספת נכשל</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">הפריטים שלך יובאו בהצלחה, אבל הם אינם נראים בכספת שלך עד לביצוע הסנכרון.</string>
+    <string name="there_was_a_problem_importing_your_items">אירעה בעיה בייבוא הפריטים שלך. נא לנסות שוב. אם הבעיה נמשכת, צור קשר עם התמיכה.</string>
+    <string name="saving_items">שומר פריטים…</string>
+    <string name="unable_to_import_your_items">לא ניתן לייבא את הפריטים שלך</string>
+    <string name="import_from_computer">ייבא ממחשב</string>
+    <string name="import_from_another_app">ייבא מיישום אחר</string>
     <plurals name="x_items_have_been_imported_to_your_vault">
-        <item quantity="one">%1$d item has been imported to your vault.</item>
-        <item quantity="two">%1$d items have been imported to your vault.</item>
-        <item quantity="many">%1$d items have been imported to your vault.</item>
-        <item quantity="other">%1$d items have been imported to your vault.</item>
+        <item quantity="one">פריט %1$d יובא אל הכספת שלך.</item>
+        <item quantity="two">%1$d פריטים יובאו אל הכספת שלך.</item>
+        <item quantity="many">%1$d פריטים יובאו אל הכספת שלך.</item>
+        <item quantity="other">%1$d פריטים יובאו אל הכספת שלך.</item>
     </plurals>
-    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
-    <string name="not_now">Not now</string>
-    <string name="import_from_bitwarden">Import from Bitwarden</string>
-    <string name="select_account">Select account</string>
-    <string name="no_accounts_available">No accounts available</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
-    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
-    <string name="verify_your_master_password">Verify your master password</string>
-    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
-    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
-    <string name="items_to_import">Items to import</string>
-    <string name="exporting_items">Exporting items…</string>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">הפעל מילוי אוטומטי בדפדפן כדי להמשך למלא סיסמאות</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">הדפדפן שלך עודכן לאחרונה, מה שהשבית את המילוי האוטומטי של Bitwarden. כדי להמשיך למלא סיסמאות עם Bitwarden, יש להפעיל את המילוי האוטומטי של הדפדפן בהגדרות למילוי אוטומטי.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">הדפדפנים שלך עודכנו לאחרונה, מה שהשבית את המילוי האוטומטי של Bitwarden. כדי להמשיך למלא את הסיסמאות שלך עם Bitwarden, יש להפעיל את המילוי האוטומטי של הדפדפן עבור כל הדפדפנים המותקנים בהגדרות למילוי אוטומטי.</string>
+    <string name="not_now">לא כעת</string>
+    <string name="import_from_bitwarden">ייבא מ־Bitwarden</string>
+    <string name="select_account">בחר חשבון</string>
+    <string name="no_accounts_available">אין חשבונות זמינים</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">אין לך חשבונות שמהם אתה יכול לייבא. מדיניות האבטחה של הארגון שלך עלולה להגביל ייבוא פריטים מ־Bitwarden אל יישום אחר.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">הייבוא מוגבל, לא ניתן לייבא כרטיסים מחשבון זה.</string>
+    <string name="verify_your_master_password">אמת את הסיסמה הראשית שלך</string>
+    <string name="having_trouble_with_autofill">נתקלת בבעיה עם מילוי אוטומטי?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">גש לתיעוד של עזרה ופתרון בעיות כאן</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">ייבא סיסמאות, מפתחות גישה, וסוגי פריטים אחרים מכספת ה־Bitwarden שלך.</string>
+    <string name="items_to_import">פריטים לייבוא</string>
+    <string name="exporting_items">מייצא פריטים…</string>
     <string name="export_failed">ייצוא נכשל</string>
     <string name="passwords">סיסמאות</string>
     <string name="passkeys">מפתחות גישה</string>
-    <string name="why_is_this_step_required">Why is this step required?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
-    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
+    <string name="why_is_this_step_required">למה שלב זה נדרש?</string>
+    <string name="kdf_update_failed_active_account_not_found">עדכון ה־KDF נכשל, לא נמצא חשבון פעיל. נא לנסות שוב או ליצור איתנו קשר.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">אירעה שגיאה בעת ניסיון לעדכן את הגדרות ה־Kdf שלך. נא לנסות שוב או ליצור איתנו קשר.</string>
+    <string name="the_import_request_could_not_be_processed">לא היה ניתן לעבד את בקשת הייבוא.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">ייתכן שהכספת שלך ריקה, או שייבוא סוגי פריטים מסוימים אינו מותר עבור חשבונך.</string>
+    <string name="no_items_available_to_import">אין פריטים זמינים לייבוא</string>
+    <string name="select_a_different_account">בחר חשבון אחר</string>
+    <string name="verify_your_account_email_address">אמת את כתובת הדוא\"ל של החשבון שלך</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">הזן את הקוד בן 6 הספרות שנשלח בדוא\"ל אל הכתובת למטה</string>
+    <string name="lock_app">נעל יישום</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">השתמש בשיטת הנעילה של המכשיר שלך כדי לבטל את נעילת היישום</string>
+    <string name="loading_vault_data">טוען נתוני כספת…</string>
+    <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

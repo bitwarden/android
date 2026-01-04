@@ -3,7 +3,7 @@
 
 # App version
 appVersionCode = "1"
-appVersionName = "2025.9.1"
+appVersionName = "2025.11.1"
 
 # SDK Versions
 compileSdk = "36"
@@ -12,52 +12,52 @@ minSdk = "29"
 minSdkBwa = "28"
 
 # Dependency Versions
-androidGradlePlugin = "8.13.0"
-androidxActivity = "1.11.0"
+androidGradlePlugin = "8.13.2"
+androidxActivity = "1.12.1"
 androidxAppCompat = "1.7.1"
 androdixAutofill = "1.3.0"
 androidxBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.9.0"
-androidxCamera = "1.5.1"
-androidxComposeBom = "2025.10.01"
+androidxCamera = "1.5.2"
+androidxComposeBom = "2025.12.00"
 androidxCore = "1.17.0"
 androidxCredentials = "1.6.0-beta03"
 androidxCredentialsProviderEvents = "1.0.0-alpha03"
 androidxHiltNavigationCompose = "1.3.0"
-androidxLifecycle = "2.9.4"
-androidxNavigation = "2.9.5"
-androidxRoom = "2.8.3"
+androidxLifecycle = "2.10.0"
+androidxNavigation = "2.9.6"
+androidxRoom = "2.8.4"
 androidxSecurityCrypto = "1.1.0"
-androidxSplash = "1.1.0-rc01"
+androidxSplash = "1.2.0"
 androidxWork = "2.11.0"
-bitwardenSdk = "1.0.0-3436-2a00b727"
+bitwardenSdk = "2.0.0-4254-6c954013"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
-firebaseBom = "34.4.0"
+firebaseBom = "34.5.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.5.0-jre"
-googleProtoBufJava = "4.33.0"
-googleProtoBufPlugin = "0.9.5"
+googleProtoBufJava = "4.33.2"
+googleProtoBufPlugin = "0.9.6"
 googleServices = "4.4.4"
 googleReview = "2.0.2"
 hilt = "2.57.2"
-junit = "6.0.0"
+junit = "6.0.1"
 jvmTarget = "21"
 kotlin = "2.2.21"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
-kotlinxKover = "0.9.3"
-ksp = "2.3.0"
-mockk = "1.14.6"
-okhttp = "5.2.1"
+kotlinxKover = "0.9.4"
+ksp = "2.3.3"
+mockk = "1.14.7"
+okhttp = "5.3.2"
 retrofitBom = "3.0.0"
 robolectric = "4.16"
-sonarqube = "7.0.1.6134"
+sonarqube = "7.1.0.6387"
 testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.1"
-zxing = "3.5.3"
+zxing = "3.5.4"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
@@ -67,6 +67,7 @@ androidx-autofill = { group = "androidx.autofill", name = "autofill", version.re
 androidx-biometrics = { group = "androidx.biometric", name = "biometric", version.ref = "androidxBiometrics" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCamera" }
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "androidxCamera" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamera" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "androidxCamera" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }

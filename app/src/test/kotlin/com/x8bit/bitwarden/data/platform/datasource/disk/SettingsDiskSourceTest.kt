@@ -5,8 +5,8 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType

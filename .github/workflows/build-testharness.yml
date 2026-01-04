@@ -1,0 +1,134 @@
+name: Build Test Harness
+
+on:
+  push:
+    paths:
+      - testharness/**
+  workflow_dispatch:
+    inputs:
+      version-name:
+        description: "Optional. Version string to use, in X.Y.Z format. Overrides default in the project."
+        required: false
+        type: string
+      version-code:
+        description: "Optional. Build number to use. Overrides default of GitHub run number."
+        required: false
+        type: number
+      patch_version:
+        description: "Order 999 - Overrides Patch version"
+        type: boolean
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JAVA_VERSION: 21
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  version:
+    name: Calculate Version Name and Number
+    uses: bitwarden/android/.github/workflows/_version.yml@main
+    with:
+      app_codename: "bwpm"
+      base_version_number: 0
+      version_name: ${{ inputs.version-name }}
+      version_number: ${{ inputs.version-code }}
+      patch_version: ${{ inputs.patch_version && '999' || '' }}
+
+  build:
+    name: Build Test Harness
+    runs-on: ubuntu-24.04
+    needs: version
+
+    steps:
+      - name: Log inputs to job summary
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
+
+      - name: Check out repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
+
+      - name: Cache Gradle files
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Increment version
+        env:
+          DEFAULT_VERSION_CODE: ${{ github.run_number }}
+          INPUT_VERSION_CODE: "${{ needs.version.outputs.version_number }}"
+          INPUT_VERSION_NAME: ${{ needs.version.outputs.version_name }}
+        run: |
+          VERSION_CODE="${INPUT_VERSION_CODE:-$DEFAULT_VERSION_CODE}"
+          VERSION_NAME_INPUT="${INPUT_VERSION_NAME:-}"
+          bundle exec fastlane setBuildVersionInfo \
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME_INPUT"
+
+          regex='appVersionName = "(.+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
+            VERSION_NAME="${BASH_REMATCH[1]}"
+          fi
+          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build Test Harness Debug APK
+        run: ./gradlew :testharness:assembleDebug
+
+      - name: Upload Test Harness APK
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: com.bitwarden.testharness.dev-debug.apk
+          path: testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk
+          if-no-files-found: error
+
+      - name: Create checksum for Test Harness APK
+        run: |
+          sha256sum "testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk" \
+            > ./com.bitwarden.testharness.dev.apk-sha256.txt
+
+      - name: Upload Test Harness SHA file
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: com.bitwarden.testharness.dev.apk-sha256.txt
+          path: ./com.bitwarden.testharness.dev.apk-sha256.txt
+          if-no-files-found: error

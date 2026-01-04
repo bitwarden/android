@@ -9,9 +9,9 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -599,6 +599,7 @@ class VaultSdkSourceImpl(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         getClient(userId)
             .platform()
@@ -607,7 +608,7 @@ class VaultSdkSourceImpl(
                 userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                 credentialStore = fido2CredentialStore,
             )
-            .silentlyDiscoverCredentials(relyingPartyId)
+            .silentlyDiscoverCredentials(relyingPartyId, userHandle?.toByteArray())
     }
 
     override suspend fun makeUpdateKdf(

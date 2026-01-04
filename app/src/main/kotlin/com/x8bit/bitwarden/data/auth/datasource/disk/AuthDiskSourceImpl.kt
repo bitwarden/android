@@ -145,9 +145,6 @@ class AuthDiskSourceImpl(
         storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
-        storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
-        storePinProtectedUserKeyEnvelope(userId = userId, pinProtectedUserKeyEnvelope = null)
-        storeEncryptedPin(userId = userId, encryptedPin = null)
         storePrivateKey(userId = userId, privateKey = null)
         storeAccountKeys(userId = userId, accountKeys = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
@@ -162,10 +159,14 @@ class AuthDiskSourceImpl(
         storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
         storeShowImportLogins(userId = userId, showImportLogins = null)
         storeLastLockTimestamp(userId = userId, lastLockTimestamp = null)
+        storeEncryptedPin(userId = userId, encryptedPin = null)
+        storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+        storePinProtectedUserKeyEnvelope(userId = userId, pinProtectedUserKeyEnvelope = null)
 
-        // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
-        // indefinitely unless the TDE flow explicitly removes them.
-        // Do not remove OnboardingStatus we want to keep track of this even after logout.
+        // Certain values are never removed as required by the feature requirements:
+        // * DeviceKey
+        // * PendingAuthRequest
+        // * OnboardingStatus
     }
 
     override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
@@ -330,7 +331,7 @@ class AuthDiskSourceImpl(
         getMutableBiometricUnlockKeyFlow(userId).tryEmit(biometricsKey)
     }
 
-    override fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?> =
+    override fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?> =
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId = userId)) }
 

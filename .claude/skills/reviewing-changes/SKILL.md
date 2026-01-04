@@ -1,16 +1,34 @@
 ---
 name: reviewing-changes
-version: 2.0.0
-description: Comprehensive code reviews for Bitwarden Android. Detects change type (dependency update, bug fix, feature, UI, refactoring, infrastructure) and applies appropriate review depth. Validates MVVM patterns, Hilt DI, security requirements, and test coverage per project standards. Use when reviewing pull requests, checking commits, analyzing code changes, or evaluating architectural compliance.
+version: 3.0.0
+description: Android-specific code review workflow additions for Bitwarden Android. Provides change type refinements, checklist loading, and reference material organization. Complements bitwarden-code-reviewer agent's base review standards.
 ---
 
-# Reviewing Changes
+# Reviewing Changes - Android Additions
+
+This skill provides Android-specific workflow additions that complement the base `bitwarden-code-reviewer` agent standards.
 
 ## Instructions
 
-**IMPORTANT**: Use structured thinking throughout your review process. Plan your analysis in `<thinking>` tags before providing final feedback. This improves accuracy by 40% according to research.
+**IMPORTANT**: Use structured thinking throughout your review process. Plan your analysis in `<thinking>` tags before providing final feedback.
 
-### Step 1: Detect Change Type
+### Step 1: Retrieve Additional Details
+
+<thinking>
+Determine if more context is available for the changes:
+1. Are there JIRA tickets or GitHub Issues mentioned in the PR title or body?
+2. Are there other GitHub pull requests mentioned in the PR title or body?
+</thinking>
+
+Retrieve any additional information linked to the pull request using available tools (JIRA MCP, GitHub API).
+
+If pull request title and message do not provide enough context, request additional details from the reviewer:
+- Link a JIRA ticket
+- Associate a GitHub issue
+- Link to another pull request
+- Add more detail to the PR title or body
+
+### Step 2: Detect Change Type with Android Refinements
 
 <thinking>
 Analyze the changeset systematically:
@@ -20,19 +38,15 @@ Analyze the changeset systematically:
 4. What's the risk level of these changes?
 </thinking>
 
-Analyze the changeset to determine the primary change type:
+Use the base change type detection from the agent, with Android-specific refinements:
 
-**Detection Rules:**
-- **Dependency Update**: Only gradle files changed (`libs.versions.toml`, `build.gradle.kts`) with version number modifications
-- **Bug Fix**: PR/commit title contains "fix", "bug", or issue ID; addresses existing broken behavior
-- **Feature Addition**: New files, new ViewModels, significant new functionality
-- **UI Refinement**: Only UI/Compose files changed, layout/styling focus
-- **Refactoring**: Code restructuring without behavior change, pattern improvements
-- **Infrastructure**: CI/CD files, Gradle config, build scripts, tooling changes
+**Android-specific patterns:**
+- **Feature Addition**: New `ViewModel`, new `Repository`, new `@Composable` functions, new `*Screen.kt` files
+- **UI Refinement**: Changes only in `*Screen.kt`, `*Composable.kt`, `ui/` package files
+- **Infrastructure**: Changes to `.github/workflows/`, `gradle/`, `build.gradle.kts`, `libs.versions.toml`
+- **Dependency Update**: Changes only to `libs.versions.toml` or `build.gradle.kts` with version bumps
 
-If changeset spans multiple types, use the most complex type's checklist.
-
-### Step 2: Load Appropriate Checklist
+### Step 3: Load Appropriate Checklist
 
 Based on detected type, read the relevant checklist file:
 
@@ -49,7 +63,7 @@ The checklist provides:
 - What to check and what to skip
 - Structured thinking guidance
 
-### Step 3: Execute Review with Structured Thinking
+### Step 4: Execute Review Following Checklist
 
 <thinking>
 Before diving into details:
@@ -62,7 +76,7 @@ Before diving into details:
 
 Follow the checklist's multi-pass strategy, thinking through each pass systematically.
 
-### Step 4: Consult Reference Materials As Needed
+### Step 5: Consult Android Reference Materials As Needed
 
 Load reference files only when needed for specific questions:
 
@@ -75,95 +89,10 @@ Load reference files only when needed for specific questions:
 - **UI questions** → `reference/ui-patterns.md` (Compose patterns, theming)
 - **Style questions** → `docs/STYLE_AND_BEST_PRACTICES.md`
 
-### Step 5: Document Findings
-
-<thinking>
-Before writing each comment:
-1. Is this issue Critical, Important, Suggested, or just Acknowledgment?
-2. Should I ask a question or provide direction?
-3. What's the rationale I need to explain?
-4. What code example would make this actionable?
-5. Is there a documentation reference to include?
-</thinking>
-
-**CRITICAL**: Use inline comments on specific lines, NOT a single large review comment.
-
-**Inline Comment Rules**:
-- Create separate comment for EACH specific issue on the exact line
-- Do NOT create one large summary comment with all issues
-- Do NOT update existing comments - always create new comments
-- This ensures history is retained for other reviewers
-
-**Inline Comment Format** (Concise with Collapsible Details):
-```
-**[Severity]**: [One-line issue description]
-
-<details>
-<summary>Details and fix</summary>
-
-[Code example or specific fix]
-
-[Rationale explaining why]
-
-Reference: [docs link if applicable]
-</details>
-```
-
-**Example inline comment**:
-```
-**CRITICAL**: Exposes mutable state
-
-<details>
-<summary>Details and fix</summary>
-
-Change `MutableStateFlow<State>` to `StateFlow<State>`:
-
-\```kotlin
-private val _state = MutableStateFlow<State>()
-val state: StateFlow<State> = _state.asStateFlow()
-\```
-
-Exposing MutableStateFlow allows external mutation, violating MVVM unidirectional data flow.
-
-Reference: docs/ARCHITECTURE.md#mvvm-pattern
-</details>
-```
-
-**Summary Comment Format** (Minimal - Avoid Duplication):
-```
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue]
-
-See inline comments for all issue details.
-```
-
-**Output Format Notes**:
-
-**What to Include:**
-- **Inline comments**: Create separate comment for EACH specific issue with full details in `<details>` tag
-- **Summary comment**: Overall assessment (APPROVE/REQUEST CHANGES) + list of CRITICAL issues only
-- **Severity levels**: Use CRITICAL (blocking), IMPORTANT (should fix), SUGGESTED (nice to have), or ACKNOWLEDGED (good practice observed)
-
-**What to Exclude:**
-- **No duplication**: Never repeat inline comment details in the summary
-- **No Important/Suggested in summary**: Only CRITICAL blocking issues belong in summary
-- **No "Good Practices" section**: Acknowledge good practices in inline comments if relevant
-- **No "Action Items" section**: This duplicates inline comments - avoid entirely
-- **No verbose analysis**: Keep detailed analysis (compilation status, security review, rollback plans) in inline comments only
-
-**Visibility Guidelines:**
-- **Inline comments visible**: Severity + one-line description only
-- **Inline comments collapsed**: Code examples, rationale, references in `<details>` tag
-- **Summary visible**: Verdict + critical issues list only
-
-See `examples/review-outputs.md` for complete examples.
-
 ## Core Principles
 
 - **Appropriate depth**: Match review rigor to change complexity and risk
 - **Specific references**: Always use `file:line_number` format for precise location
 - **Actionable feedback**: Say what to do and why, not just what's wrong
-- **Constructive tone**: Ask questions for design decisions, explain rationale, focus on code not people
-- **Efficient reviews**: Use multi-pass strategy, time-box reviews, skip what's not relevant
+- **Efficient reviews**: Use multi-pass strategy, skip what's not relevant
+- **Android patterns**: Validate MVVM, Hilt DI, Compose conventions, Kotlin idioms

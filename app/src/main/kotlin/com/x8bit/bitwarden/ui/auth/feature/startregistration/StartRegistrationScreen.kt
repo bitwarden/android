@@ -319,6 +319,7 @@ private fun TermsAndPrivacyText(
             style = BitwardenTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center,
             ),
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

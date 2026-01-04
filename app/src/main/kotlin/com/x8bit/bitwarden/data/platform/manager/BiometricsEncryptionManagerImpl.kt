@@ -90,8 +90,8 @@ class BiometricsEncryptionManagerImpl(
         return cipher?.takeIf { isCipherInitialized }
     }
 
-    override fun isBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean =
-        isSystemBiometricIntegrityValid(userId, cipher) && isAccountBiometricIntegrityValid(userId)
+    override fun isBiometricIntegrityValid(userId: String): Boolean =
+        isSystemBiometricIntegrityValid(userId) && isAccountBiometricIntegrityValid(userId)
 
     override fun isAccountBiometricIntegrityValid(userId: String): Boolean {
         val systemBioIntegrityState = settingsDiskSource
@@ -203,11 +203,13 @@ class BiometricsEncryptionManagerImpl(
         }
 
     /**
-     * Validates the keystore key and decrypts it using the user-provided [cipher].
+     * Validates the keystore key and decrypts it, if decryption is successful `true` is returned,
+     * `false` otherwise.
      */
-    private fun isSystemBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean {
+    private fun isSystemBiometricIntegrityValid(userId: String): Boolean {
         // Attempt to get the user scoped key. If that fails, we check to see if a legacy key
         // is available.
+        val cipher = getOrCreateCipher(userId = userId)
         val secretKey = getSecretKeyOrNull(userId = userId) ?: getSecretKeyOrNull(userId = null)
         return if (cipher != null && secretKey != null) {
             cipher.initializeCipher(userId = userId, secretKey = secretKey)

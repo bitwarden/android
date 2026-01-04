@@ -92,6 +92,7 @@ interface VaultRepository :
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>>
 
     /**
@@ -166,4 +167,11 @@ interface VaultRepository :
      * `null` if the item cannot be found.
      */
     fun getVaultListItemStateFlow(itemId: String): StateFlow<DataState<CipherListView?>>
+
+    /**
+     * Checks if there are any personal vault items (items without an organization ID) in the vault.
+     *
+     * @return `true` if there are personal vault items, `false` otherwise.
+     */
+    fun hasPersonalVaultItems(): Boolean
 }

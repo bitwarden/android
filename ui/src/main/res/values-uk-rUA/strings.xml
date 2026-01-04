@@ -167,7 +167,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Пошукати запис або додати новий</string>
     <string name="disabled">Вимкнено</string>
     <string name="bitwarden_autofill_service_alert2">Найлегшим способом додавання нових записів до сховища є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню \"Налаштування\".</string>
-    <string name="autofill_title">Автозаповнення</string>
+    <string name="autofill_noun">Автозаповнення</string>
+    <string name="autofill_verb">Автозаповнення</string>
     <string name="autofill_or_view">Автоматично заповнити чи переглянути запис?</string>
     <string name="search">Пошук</string>
     <string name="learn_org">Докладніше про організації</string>
@@ -181,8 +182,8 @@
     <string name="send_verification_code_again">Надіслати новий код</string>
     <string name="verification_email_not_sent">Не вдається надіслати лист для перевірки. Спробуйте знову.</string>
     <string name="verification_email_sent">Лист для підтвердження надіслано</string>
-    <string name="yubi_key_instruction">Для продовження прикладіть свій YubiKey NEO до задньої сторони пристрою, або вставте його в порт USB свого пристрою.</string>
-    <string name="yubi_key_title">Ключ безпеки YubiKey</string>
+    <string name="yubi_key_instruction">Для продовження прикладіть свій ключ безпеки Yubico до задньої сторони пристрою, або вставте його в порт USB свого пристрою і торкніться кнопки.</string>
+    <string name="yubi_key_title">Ключ безпеки Yubico</string>
     <string name="add_new_attachment">Додати нове вкладення</string>
     <string name="attachments">Вкладення</string>
     <string name="unable_to_download_file">Увімкнути для завантаження файлу.</string>
@@ -197,7 +198,7 @@
     <string name="copy_totp">Копіювати TOTP</string>
     <string name="copy_totp_automatically_description">Якщо запис має ключ автентифікації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</string>
     <string name="copy_totp_automatically">Автоматично копіювати коди TOTP</string>
-    <string name="premium_required">Для використання цієї функції необхідна передплата преміум.</string>
+    <string name="premium_required">Для використання цієї функції необхідна передплата Premium.</string>
     <string name="attachment_deleted">Вкладення видалено</string>
     <string name="choose_file">Обрати файл</string>
     <string name="file">Файл</string>
@@ -380,7 +381,7 @@
     <string name="download">Завантажити</string>
     <string name="login_expired">Тривалість вашого сеансу завершилась.</string>
     <string name="biometrics_direction">Біометрична перевірка</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Перевірка пристрою</string>
     <string name="biometrics_failed">Збій біометрії</string>
     <string name="biometrics_decoding_failure">Увійдіть за допомогою головного пароля або PIN-коду, а потім активуйте вхід з біометрією в налаштуваннях.</string>
     <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
@@ -389,7 +390,7 @@
     <string name="send_verification_code_to_email">Надіслати код підтвердження е-поштою</string>
     <string name="code_sent">Код надіслано!</string>
     <string name="confirm_your_identity">Підтвердьте свої облікові дані для продовження.</string>
-    <string name="export_vault_warning">Ваші експортовані дані сховища незашифровані. Не зберігайте і не надсилайте їх незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть їх.</string>
+    <string name="export_vault_warning">З міркувань безпеки не зберігайте і не надсилайте цей файл незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть файл.</string>
     <string name="export_vault_file_pw_protect_info">Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування.</string>
     <string name="export_vault_confirmation_title">Підтвердити експорт сховища</string>
     <string name="warning">Попередження</string>
@@ -483,13 +484,13 @@
     <string name="seven_days">7 днів</string>
     <string name="thirty_days">30 днів</string>
     <string name="custom">Власний</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Власний час очікування</string>
     <string name="add_this_authenticator_key_to_a_login">Додати цей ключ автентифікації до наявного запису або створити новий.</string>
     <string name="send_disabled_warning">У зв\'язку з політикою компанії, ви можете лише видалити наявне відправлення.</string>
     <string name="about_send">Про відправлення</string>
     <string name="hide_email">Приховувати мою адресу електронної пошти від отримувачів</string>
     <string name="send_options_policy_in_effect">На параметри відправлень впливають одна чи декілька політик організації.</string>
-    <string name="send_file_premium_required">З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата преміум.</string>
+    <string name="send_file_premium_required">З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата Premium.</string>
     <string name="password_prompt">Повторний запит головного пароля</string>
     <string name="password_confirmation">Підтвердження головного пароля</string>
     <string name="password_confirmation_desc">Ця дія захищена. Щоб продовжити, повторно введіть головний пароль.</string>
@@ -499,27 +500,31 @@
     <string name="remove_master_password">Вилучити головний пароль</string>
     <string name="leave_organization">Покинути організацію</string>
     <string name="leave_organization_name">Покинути %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Ви дійсно хочете покинути %1$s?</string>
+    <string name="leave_organization_button">Покинути %1$s</string>
+    <string name="leave_organization_warning">Відхиливши, ваші особисті записи залишаться у вашому обліковому записі, але ви втратите доступ до спільних записів та функцій організації.\n\nЗверніться до свого адміністратора, щоб відновити доступ.</string>
+    <string name="how_to_manage_my_vault">Як керувати моїм сховищем</string>
     <string name="fido2_authenticate_web_authn">Автентифікація WebAuthn</string>
     <string name="fido2_return_to_app">Повернутися до програми</string>
     <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="many">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d година</item>
+        <item quantity="few">%1$d години</item>
+        <item quantity="many">%1$d годин</item>
+        <item quantity="other">%1$d годин</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="few">%1$d minutes</item>
-        <item quantity="many">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d хвилина</item>
+        <item quantity="few">%1$d хвилини</item>
+        <item quantity="many">%1$d хвилин</item>
+        <item quantity="other">%1$d хвилин</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Ваша організація встановила максимальний час сеансу %1$s і %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Ваша організація встановила максимальний час сеансу %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Цим параметром керує ваша організація.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Ваша організація встановила максимальний час сеансу без обмежень.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Ваша організація встановила максимальний час сеансу до перезапуску програми.</string>
     <string name="vault_timeout_to_large">Час очікування сховища перевищує обмеження, встановлені вашою організацією.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище.</string>
     <string name="add_account">Додати обліковий запис</string>
@@ -550,7 +555,7 @@
     <string name="all">Усі</string>
     <string name="totp">TOTP</string>
     <string name="verification_codes">Коди підтвердження</string>
-    <string name="premium_subscription_required">Необхідна передплата преміум</string>
+    <string name="premium_subscription_required">Необхідна передплата Premium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Не вдається додати ключ автентифікації? <annotation link="scanQrCode">Скануйте QR-код</annotation></string>
     <string name="scan_qr_code"><annotation link="scanQrCode">Сканувати QR-код</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Не можете сканувати QR-код? <annotation link="enterKeyManually">Введіть ключ вручну</annotation></string>
@@ -661,7 +666,8 @@
     <string name="invalid_uri">Неприпустимий URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s вже заблоковано</string>
     <string name="login_approved">Вхід затверджено</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Потрібно увімкнути схвалення запитів на вхід у налаштуваннях програми Bitwarden. Потрібен інший варіант?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Увійти з пристроєм</string>
     <string name="logging_in_on">Увійти на</string>
     <string name="logging_in_on_with_colon">Вхід на:</string>
@@ -699,6 +705,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Виконайте дії з Duo для завершення входу.</string>
     <string name="launch_duo">Запустити Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш ключ доступу буде збережено в сховищі Bitwarden для %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ця програма не підтримує ключі доступу</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Не вдалося виконати операцію з ключем доступу, оскільки браузер не має права доступу</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Не вдалося виконати операцію з ключем доступу, оскільки не збігається підпис браузера</string>
@@ -781,10 +788,10 @@
     <string name="turn_on_autofill">Увімкніть автозаповнення</string>
     <string name="autofill_setup">Налаштування автозаповнення</string>
     <string name="turn_on_browser_autofill_integration">Увімкнути інтеграцію автозаповнення у браузері</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Ви використовуєте браузер, який потребує спеціальних дозволів для автозаповнення паролів Bitwarden.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Ви використовуєте браузери, які потребують спеціальних дозволів для автозаповнення паролів Bitwarden.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Ви використовуєте браузер, який потребує спеціальних дозволів для автозаповнення паролів Bitwarden. Активуйте бажану інтеграцію автозаповнення нижче.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Ви використовуєте браузери, які потребують спеціальних дозволів для автозаповнення паролів Bitwarden. Активуйте бажані інтеграції автозаповнення нижче.</string>
     <string name="use_autofill_to_log_into_your_accounts">Використовуйте автозаповнення для входу в облікові записи одним дотиком.</string>
     <string name="turn_on_later">Увімкнути пізніше</string>
     <string name="turn_on_autofill_later">Увімкнути автозаповнення пізніше?</string>
@@ -927,6 +934,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з паролем, тому що вибраного елемента не існує.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з паролем, тому що не вибрано жодного елемента.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з обліковими даними через перевищення спроб перевірки користувача.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Не вдалося виконати операцію з обліковими даними, тому що користувача заблоковано.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з обліковими даними, тому що вибраного елемента не існує.</string>
@@ -1052,6 +1061,8 @@
     <string name="export">Експорт</string>
     <string name="export_confirmation_title">Підтвердити експорт</string>
     <string name="export_success">Дані успішно експортовано</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Безпека</string>
     <string name="too_many_failed_biometric_attempts">Забагато невдалих спроб біометричної перевірки.</string>
     <string name="version">Версія</string>
@@ -1076,7 +1087,7 @@
     <string name="learn_more_link"><annotation link="learnMore">Докладніше</annotation></string>
     <string name="shared_codes_error">Неможливо синхронізувати коди з програмою Bitwarden. Переконайтеся, що у вас найновіші версії обох програм. Ви все одно можете отримати доступ до наявних кодів у програмі Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Синхронізувати з програмою Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Щоб переглянути всі коди підтвердження, необхідно дозволити синхронізацію з усіма вашими обліковими записами.</string>
+    <string name="sync_with_bitwarden_action_card_message">Дозвольте синхронізацію програми Authenticator у налаштуваннях, щоб бачити тут свої коди підтвердження.</string>
     <string name="take_me_to_app_settings">Перейти до налаштувань програми</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="please_try_again">Повторіть спробу</string>
@@ -1120,55 +1131,63 @@
     <string name="default_uri_match_detection_description_advanced_options">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.\n<annotation emphasis="bold">Обережно!</annotation> \"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">Регулярний вираз – це функція для досвідчених користувачів, неправильне використання якої може призвести до розкриття облікових даних.</string>
-    <string name="later">Later</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
-    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
-    <string name="import_cancelled">Import cancelled</string>
-    <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
-    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="saving_items">Saving items…</string>
-    <string name="unable_to_import_your_items">Unable to import your items</string>
-    <string name="import_from_computer">Import from computer</string>
-    <string name="import_from_another_app">Import from another app</string>
+    <string name="later">Пізніше</string>
+    <string name="encryption_settings_updated">Налаштування шифрування оновлено</string>
+    <string name="update_your_encryption_settings">Оновіть свої налаштування шифрування</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Нові рекомендовані налаштування шифрування покращать безпеку вашого облікового запису. Щоб оновити їх, введіть свій головний пароль.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Імпорт облікових даних скасовано у вибраній програмі. Жодного запису не імпортовано.</string>
+    <string name="import_cancelled">Імпорт скасовано</string>
+    <string name="no_items_imported">Записи не імпортовано</string>
+    <string name="no_items_received_from_the_selected_app">З вибраної програми не отримано жодного запису.</string>
+    <string name="vault_sync_failed">Помилка синхронізації сховища</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваші записи успішно імпортовано, але вони не з\'являться у сховищі доки не виконається синхронізація.</string>
+    <string name="there_was_a_problem_importing_your_items">Виникла проблема під час імпортування ваших записів. Повторіть спробу. Якщо проблема не зникне, зверніться до служби підтримки.</string>
+    <string name="saving_items">Збереження записів…</string>
+    <string name="unable_to_import_your_items">Не вдалося імпортувати ваші записи</string>
+    <string name="import_from_computer">Імпортувати з комп\'ютера</string>
+    <string name="import_from_another_app">Імпортувати з іншої програми</string>
     <plurals name="x_items_have_been_imported_to_your_vault">
-        <item quantity="one">%1$d item has been imported to your vault.</item>
-        <item quantity="few">%1$d items have been imported to your vault.</item>
-        <item quantity="many">%1$d items have been imported to your vault.</item>
-        <item quantity="other">%1$d items have been imported to your vault.</item>
+        <item quantity="one">%1$d запис імпортовано до сховища.</item>
+        <item quantity="few">%1$d записи імпортовано до сховища.</item>
+        <item quantity="many">%1$d записів імпортовано до сховища.</item>
+        <item quantity="other">%1$d записів імпортовано до сховища.</item>
     </plurals>
-    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
-    <string name="not_now">Not now</string>
-    <string name="import_from_bitwarden">Import from Bitwarden</string>
-    <string name="select_account">Select account</string>
-    <string name="no_accounts_available">No accounts available</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
-    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
-    <string name="verify_your_master_password">Verify your master password</string>
-    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
-    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
-    <string name="items_to_import">Items to import</string>
-    <string name="exporting_items">Exporting items…</string>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Увімкніть автозаповнення браузера для заповнення паролів</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Ваш браузер нещодавно оновився, що призвело до вимкнення автозаповнення Bitwarden. Щоб і надалі заповнювати паролі за допомогою Bitwarden, увімкніть автозаповнення браузера в налаштуваннях.</string>
+    <string name="your_browser_recently_updated_how_autofill_works_plural">Ваш браузер нещодавно оновився, що призвело до вимкнення автозаповнення Bitwarden. Щоб і надалі заповнювати паролі за допомогою Bitwarden, увімкніть автозаповнення для всіх встановлених браузерів у налаштуваннях.</string>
+    <string name="not_now">Не зараз</string>
+    <string name="import_from_bitwarden">Імпортувати з Bitwarden</string>
+    <string name="select_account">Вибрати обліковий запис</string>
+    <string name="no_accounts_available">Немає доступних облікових записів</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">У вас немає жодного облікового запису, з якого можна імпортувати дані. Політика безпеки вашої організації може обмежувати імпорт записів з Bitwarden до іншої програми.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Імпортування обмежено. Не вдається імпортувати картки з цього облікового запису.</string>
+    <string name="verify_your_master_password">Підтвердьте головний пароль</string>
+    <string name="having_trouble_with_autofill">Виникли проблеми з автозаповненням?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Ознайомтеся з довідкою і документацією щодо усунення проблем тут</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Імпортуйте паролі, ключі доступу та інші типи записів зі свого сховища Bitwarden.</string>
+    <string name="items_to_import">Записи для імпорту</string>
+    <string name="exporting_items">Експортування записів…</string>
     <string name="export_failed">Не вдалося експортувати</string>
     <string name="passwords">Паролі</string>
     <string name="passkeys">Ключі доступу</string>
-    <string name="why_is_this_step_required">Why is this step required?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
-    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
+    <string name="why_is_this_step_required">Навіщо потрібен цей крок?</string>
+    <string name="kdf_update_failed_active_account_not_found">Помилка оновлення Kdf, не знайдено активного облікового запису. Повторіть спробу або зв\'яжіться з нами.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Сталася помилка під час оновлення налаштувань kdf. Повторіть спробу або зв\'яжіться з нами.</string>
+    <string name="the_import_request_could_not_be_processed">Не вдалося обробити запит на імпорт.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Можливо, ваше сховище порожнє, або імпортування деяких типів записів не дозволено для вашого облікового запису.</string>
+    <string name="no_items_available_to_import">Немає записів, доступних для імпорту</string>
+    <string name="select_a_different_account">Виберіть інший обліковий запис</string>
+    <string name="verify_your_account_email_address">Підтвердьте адресу е-пошти облікового запису</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Введіть код із 6 цифр, який було надіслано на зазначену нижче адресу</string>
+    <string name="lock_app">Заблокувати програму</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Використовуйте метод блокування пристрою для розблокування програми</string>
+    <string name="loading_vault_data">Завантаження даних сховища…</string>
+    <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

@@ -54,7 +54,7 @@
     <string name="password">Jelszó</string>
     <string name="save">Mentés</string>
     <string name="move">Áthelyezés</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Mentés…</string>
     <string name="settings">Beállítások</string>
     <string name="show">Mutat</string>
     <string name="item_deleted">Az elem törlésre került.</string>
@@ -103,7 +103,7 @@
     <string name="immediately">Azonnal</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Bejelentkezés…</string>
     <string name="login_to_bitwarden">Bejelentkezés a Bitwardenbe</string>
     <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
     <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
@@ -145,7 +145,7 @@
     <string name="select">Kijelölés</string>
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
-    <string name="submitting">Submitting…</string>
+    <string name="submitting">Beküldés…</string>
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
     <string name="two_step_login">Kétlépcsős bejelentkezés</string>
@@ -165,7 +165,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
     <string name="disabled">Letiltva</string>
     <string name="bitwarden_autofill_service_alert2">A legeszerűbben a Bitwarden Automata-kitöltő Szolgáltatással tud belépést hozzáadni széfjéhez. A Beállításokben többet tudhat meg a Bitwarden Automat-kitöltő szolgáltatásról.</string>
-    <string name="autofill_title">Automatikus kitöltés</string>
+    <string name="autofill_noun">Automata-kitöltő</string>
+    <string name="autofill_verb">Automata-kitöltő</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
     <string name="search">Keresés</string>
     <string name="learn_org">Információ szervezetekről</string>
@@ -179,12 +180,12 @@
     <string name="send_verification_code_again">Send megerősítő kód újraküldése emailben</string>
     <string name="verification_email_not_sent">Nem sikerült elküldeni a megerősítő emailt. Próbáljuk újra.</string>
     <string name="verification_email_sent">Az ellenőrző kódot tartalmazó email elküldésre került.</string>
-    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey biztonsági kulcs</string>
     <string name="add_new_attachment">Melléklet hozzáadása</string>
     <string name="attachments">Mellékletek</string>
     <string name="unable_to_download_file">Nem lehet letölteni a fájlt.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Letöltés…</string>
     <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan letöltésre kerüljön az eszközre?</string>
     <string name="authenticator_key">Igazolókód (TOTP)</string>
     <string name="verification_code_totp">Ellenőrzőkód (TOTP)</string>
@@ -288,7 +289,7 @@
     <string name="new_uri">Új URI</string>
     <string name="add_website">Webhely hozzáadása</string>
     <string name="base_domain">Alap domain</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Alapértelmezett (%1$s)</string>
     <string name="exact">Pontos</string>
     <string name="host">Kiszolgáló</string>
     <string name="reg_ex">Reguláris kifejezés</string>
@@ -399,7 +400,7 @@
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Az elem a lomtárba került.</string>
     <string name="restore">Visszaállítás</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Visszaállítás…</string>
     <string name="item_restored">Az elem visszaállításra került.</string>
     <string name="trash">Lomtár</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Valóban végleges legyen a törlés? A művelet nem vonható vissza.</string>
@@ -494,6 +495,10 @@
     <string name="remove_master_password">Mesterjelszó eltávolítása</string>
     <string name="leave_organization">Kilépés a szervezetből</string>
     <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni %1$s szervezetet?</string>
+    <string name="leave_organization_button">%1$s elhagyása</string>
+    <string name="leave_organization_warning">Az elutasítással a személyes elemek a fiókban maradnak, de elveszítjük hozzáférést a megosztott elemekhez és a szervezeti funkciókhoz.\n\nVegyük fel a kkapcsolatot az adminisztrátorral a visszaszerzéshez.</string>
+    <string name="how_to_manage_my_vault">Hogyan kezeljük a saját széfet</string>
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
@@ -652,7 +657,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="invalid_uri">Az URI érvénytelen.</string>
     <string name="the_urix_is_already_blocked">%1$s URI már blokkolásra került.</string>
     <string name="login_approved">A bejelentkezés jóváhagyásra került.</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban.</string>
+    <string name="need_another_option_view_all_login_options">Más opcióra van szükség? <annotation link="viewAll">Az összes bejelentkezési opció</annotation></string>
     <string name="log_in_with_device">Bejelentkezés eszközzel</string>
     <string name="logging_in_on">Bejelentkezés:</string>
     <string name="logging_in_on_with_colon">Bejelentkezés:</string>
@@ -690,6 +696,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Kövessük a Duo lépéseit a bejelentkezés befejezéséhez.</string>
     <string name="launch_duo">Duo indítása</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A belépőkulcs mentésre kerül a Bitwarden széfbe: %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">A jelszó mentésre kerül a Bitwarden széfbe: %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ennél az alkalmazásnál a belépőkulcsok nem támogatottak.</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">A belépőkulcs művelet nem sikerült, mert a böngésző nem privilegizált.</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">A belépőkulcs művelet nem sikerült, mert a böngésző aláírás nem egyezik.</string>
@@ -916,6 +923,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A hitelesítő művelet nem sikerült, mert a felhasználói ellenőrzési kísérletek túllépésre kerültek.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">A hitelesítő művelet nem sikerült, mert a felhasználó ki van zárva.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A hitelesítő művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
@@ -1037,6 +1046,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="export">Exportálás</string>
     <string name="export_confirmation_title">Exportálás megerősítése</string>
     <string name="export_success">Az adatok exportálása sikeres volt.</string>
+    <string name="included_in_this_export">Bevonva ebbe az exportálásba</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Csak az ezen az eszközön helyileg tárolt kódok kerülnek exportálásra. A szinkronizált kódok nem szerepelnek benne.</string>
     <string name="security">Biztonság</string>
     <string name="too_many_failed_biometric_attempts">Túl sok sikertelen biometrikus kísérlet történt.</string>
     <string name="version">Verzió</string>
@@ -1103,7 +1114,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="default_uri_match_detection_description_advanced_options">Az URI egyezés észlelése szabályozza, hogy a Bitwarden hogyan azonosítsa az automatikus kitöltési javaslatokat.\n&lt;annotation emphous=„bold“&gt;Figyelem:&lt;/annotation&gt; A “Kezdés:” egy fejlett lehetőség, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">A “Kezdés:” egy fejlett opció, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“A reguláris kifejezés” egy fejlett opció, amely megnöveli a hitelesítő adatok felfedésének kockázatát, ha helytelenül használják.</string>
-    <string name="later">Later</string>
+    <string name="later">Később</string>
     <string name="encryption_settings_updated">A titkosítási beállítások frissítésre kerültek.</string>
     <string name="update_your_encryption_settings">A titkosítási beállítások frissítése</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Az új ajánlott titkosítási beállítások javítják a fiók biztonságát. Adjuk meg a mesterjelszót a frissítéshez most.</string>
@@ -1152,4 +1163,12 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="lock_app">Alkalmazás zárolása</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Az alkalmazás feloldásához használjuk a készülék zárolási módszerét.</string>
     <string name="loading_vault_data">Széf adatok betöltése…</string>
+    <string name="resending">Ismételt küldés</string>
+    <string name="you_left_the_organization">Megtörtént a szervezet elhagyása.</string>
+    <string name="transfer_items_to_org">Elemek átruházása: %1$s</string>
+    <string name="transfer_items_description">%1$s biztonsági és megfelelőségi okokból megköveteli, hogy minden elem a szervezet tulajdonában legyen. Kattintás az Elfogadás gombra az elemek tulajdonjogának átruházásához.</string>
+    <string name="decline_and_leave">Elutasítás és kilépés</string>
+    <string name="why_am_i_seeing_this">Miért látható ez?</string>
+    <string name="migrating_items_to_x">Elemek átvitele: %s</string>
+    <string name="failed_to_migrate_items_to_x">Nem sikerült az elemek átvitele: %s</string>
 </resources>

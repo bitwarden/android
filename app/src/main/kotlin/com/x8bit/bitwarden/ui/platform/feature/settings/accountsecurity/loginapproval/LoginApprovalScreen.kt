@@ -21,13 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.nullableTestTag
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -35,13 +36,14 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalExitManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 
 /**
  * Displays the login approval screen.
@@ -139,41 +141,46 @@ private fun LoginApprovalContent(
         modifier = modifier
             .verticalScroll(state = rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
         Text(
             text = stringResource(id = BitwardenString.are_you_trying_to_log_in),
-            style = BitwardenTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+            style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(
                 id = BitwardenString.log_in_attempt_by_x_on_y,
                 state.email,
                 state.domainUrl,
             ),
+            textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .testTag("LogInAttemptByLabel"),
         )
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = stringResource(id = BitwardenString.fingerprint_phrase),
-            style = BitwardenTheme.typography.titleLarge,
+            style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
+                .cardStyle(
+                    cardStyle = CardStyle.Top(hasDivider = false),
+                    paddingBottom = 4.dp,
+                )
                 .padding(horizontal = 16.dp),
         )
-        Spacer(modifier = Modifier.height(12.dp))
-
         Text(
             text = state.fingerprint,
             textAlign = TextAlign.Start,
@@ -182,25 +189,41 @@ private fun LoginApprovalContent(
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin()
+                .cardStyle(
+                    cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
+                    paddingTop = 0.dp,
+                    paddingStart = 16.dp,
+                    paddingEnd = 16.dp,
+                ),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         LoginApprovalInfoColumn(
             label = stringResource(id = BitwardenString.device_type),
             value = state.deviceType,
             valueTestTag = "DeviceTypeValueLabel",
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .cardStyle(cardStyle = CardStyle.Middle()),
         )
 
         LoginApprovalInfoColumn(
             label = stringResource(id = BitwardenString.ip_address),
             value = state.ipAddress,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .cardStyle(cardStyle = CardStyle.Middle()),
         )
 
         LoginApprovalInfoColumn(
             label = stringResource(id = BitwardenString.time),
             value = state.time,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .cardStyle(cardStyle = CardStyle.Bottom),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -210,7 +233,7 @@ private fun LoginApprovalContent(
             onClick = onConfirmLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .testTag("ConfirmLoginButton"),
         )
 
@@ -221,10 +244,11 @@ private fun LoginApprovalContent(
             onClick = onDeclineLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .testTag("DenyLoginButton"),
         )
 
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -236,36 +260,31 @@ private fun LoginApprovalContent(
 private fun LoginApprovalInfoColumn(
     label: String,
     value: String,
+    modifier: Modifier = Modifier,
     valueTestTag: String? = null,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Text(
+            text = label,
+            style = BitwardenTheme.typography.titleSmall,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Text(
-        text = label,
-        style = BitwardenTheme.typography.titleSmall,
-        color = BitwardenTheme.colorScheme.text.primary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-    )
+        Spacer(modifier = Modifier.height(height = 4.dp))
 
-    Spacer(modifier = Modifier.height(4.dp))
-
-    Text(
-        text = value,
-        style = BitwardenTheme.typography.bodyMedium,
-        color = BitwardenTheme.colorScheme.text.secondary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .semantics {
-                if (valueTestTag != null) {
-                    testTag = valueTestTag
-                }
-            },
-    )
-
-    Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = value,
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .nullableTestTag(tag = valueTestTag),
+        )
+    }
 }
 
 @Composable

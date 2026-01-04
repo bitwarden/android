@@ -68,20 +68,12 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
-        env:
-          INPUTS: ${{ toJson(inputs) }}
-        run: |
-          {
-            echo "<details><summary>Job Inputs</summary>"
-            echo ""
-            echo '```json'
-            echo "$INPUTS"
-            echo '```'
-            echo "</details>"
-          }  >> "$GITHUB_STEP_SUMMARY"
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
 
       - name: Check out repo
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - name: Configure Ruby
@@ -91,7 +83,6 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          gem install bundler:2.2.27
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 

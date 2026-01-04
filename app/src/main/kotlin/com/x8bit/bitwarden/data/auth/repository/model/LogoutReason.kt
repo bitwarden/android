@@ -67,6 +67,11 @@ sealed class LogoutReason {
     data object Notification : LogoutReason()
 
     /**
+     * Indicates that the logout is happening because the user reset their master password.
+     */
+    data object PasswordReset : LogoutReason()
+
+    /**
      * Indicates that the logout is happening because the sync security stamp was invalidated.
      */
     data object SecurityStamp : LogoutReason()

@@ -40,23 +40,23 @@ import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwriteCredentialConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
@@ -179,8 +179,8 @@ fun VaultItemListingScreen(
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
 
-            is VaultItemListingEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(event.result)
+            is VaultItemListingEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(event.result)
             }
 
             is VaultItemListingEvent.CredentialManagerUserVerification -> {
@@ -392,7 +392,13 @@ private fun VaultItemListingDialogs(
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
-            BitwardenOverwritePasskeyConfirmationDialog(
+            @Suppress("MaxLineLength")
+            BitwardenOverwriteCredentialConfirmationDialog(
+                title = stringResource(id = BitwardenString.overwrite_passkey),
+                message = stringResource(
+                    id = BitwardenString
+                        .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
+                ),
                 onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
                 onDismissRequest = onDismissRequest,
             )

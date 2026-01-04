@@ -10,7 +10,6 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -94,7 +93,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Error message").isDisplayed()
+        composeTestRule.onNodeWithText("Error message").assertIsDisplayed()
     }
 
     @Test
@@ -157,7 +156,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         val emailDetails =
             "Enter the 6 digit verification code that was emailed to ex***@email.com."
         val authAppDetails = "Enter the 6 digit verification code from your authenticator app."
-        composeTestRule.onNodeWithText(emailDetails).isDisplayed()
+        composeTestRule.onNodeWithText(emailDetails).assertIsDisplayed()
         composeTestRule.onNodeWithText(authAppDetails).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -165,7 +164,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithText(emailDetails).assertDoesNotExist()
-        composeTestRule.onNodeWithText(authAppDetails).isDisplayed()
+        composeTestRule.onNodeWithText(authAppDetails).assertIsDisplayed()
     }
 
     @Test
@@ -178,7 +177,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Loading...").isDisplayed()
+        composeTestRule.onNodeWithText("Loading...").assertIsDisplayed()
     }
 
     @Test
@@ -264,15 +263,15 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `title text should update according to state`() {
-        composeTestRule.onNodeWithText("Email").isDisplayed()
-        composeTestRule.onNodeWithText("Authenticator App").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Email").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Authenticator app").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP)
         }
 
         composeTestRule.onNodeWithText("Email").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Authenticator App").isDisplayed()
+        composeTestRule.onNodeWithText("Authenticator app").assertIsDisplayed()
     }
 
     @Test

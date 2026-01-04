@@ -164,7 +164,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Tìm kiếm mục đăng nhập hoặc thêm mục đăng nhập mới</string>
     <string name="disabled">Vô hiệu hóa</string>
     <string name="bitwarden_autofill_service_alert2">Cách dễ nhất để thêm thông tin đăng nhập mới vào kho của bạn là từ Dịch vụ Tự động điền Bitwarden. Tìm hiểu thêm về cách sử dụng Dịch vụ Tự động điền Bitwarden bằng cách chuyển đến trang \"Cài đặt\".</string>
-    <string name="autofill_title">Tự động điền</string>
+    <string name="autofill_noun">Tự động điền</string>
+    <string name="autofill_verb">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
     <string name="search">Tìm kiếm</string>
     <string name="learn_org">Tìm hiểu về tổ chức</string>
@@ -178,8 +179,8 @@
     <string name="send_verification_code_again">Gửi lại mã</string>
     <string name="verification_email_not_sent">Không thể gửi email xác minh. Thử lại.</string>
     <string name="verification_email_sent">Đã gửi email xác minh</string>
-    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ YubiKey NEO của bạn áp vào mặt sau thiết bị hoặc cắm YubiKey vào cổng USB của thiết bị, sau đó chạm vào nút của nó.</string>
-    <string name="yubi_key_title">Khóa bảo mật YubiKey</string>
+    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ khóa bảo mật Yubico của bạn áp vào mặt sau thiết bị hoặc cắm nó vào cổng USB, rồi chạm vào nút trên khóa.</string>
+    <string name="yubi_key_title">Khóa bảo mật Yubico</string>
     <string name="add_new_attachment">Thêm tệp đính kèm mới</string>
     <string name="attachments">Tệp đính kèm</string>
     <string name="unable_to_download_file">Không thể tải về tệp tin.</string>
@@ -383,7 +384,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="send_verification_code_to_email">Gửi mã xác minh tới email của bạn</string>
     <string name="code_sent">Đã gửi mã!</string>
     <string name="confirm_your_identity">Xác minh danh tính để tiếp tục.</string>
-    <string name="export_vault_warning">Tệp trích xuất này chứa dữ liệu kho của bạn dưới một định dạng không được mã hóa. Bạn không nên lưu trữ hay gửi tệp này thông qua phương thức không an toàn (như email). Xóa nó ngay lập tức khi bạn đã dùng xong.</string>
+    <string name="export_vault_warning">Vì lý do bảo mật, bạn không nên chia sẻ hay gửi tệp này qua các kênh không an toàn (như email), và hãy xóa nó ngay sau khi bạn dùng xong.</string>
     <string name="export_vault_file_pw_protect_info">Tệp tin này sẽ được bảo vệ bằng mật khẩu và yêu cầu mật khẩu tệp tin để giải mã.</string>
     <string name="export_vault_confirmation_title">Xác nhận xuất kho</string>
     <string name="warning">Cảnh báo</string>
@@ -477,7 +478,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="seven_days">7 ngày</string>
     <string name="thirty_days">30 ngày</string>
     <string name="custom">Tùy chỉnh</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Thời gian chờ tùy chỉnh</string>
     <string name="add_this_authenticator_key_to_a_login">Thêm khóa xác thực này vào thông tin đăng nhập hiện có hoặc tạo thông tin đăng nhập mới.</string>
     <string name="send_disabled_warning">Do chính sách doanh nghiệp, bạn chỉ có thể xóa những Send hiện có.</string>
     <string name="about_send">Về Send</string>
@@ -493,21 +494,25 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="other">%1$d hours</item>
+        <item quantity="other">%1$d giờ</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="other">%1$d phút</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Tổ chức của bạn đã đặt thời gian phiên tối đa thành %1$s và %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Tổ chức của bạn đã đặt thời gian phiên tối đa thành %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Cài đặt này do tổ chức của bạn quản lý.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Tổ chức của bạn đã đặt thời gian chờ phiên mặc định thành không bao giờ.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Tổ chức của bạn đã đặt thời gian chờ phiên mặc định thành khi khởi động lại ứng dụng.</string>
     <string name="vault_timeout_to_large">Thời gian mở kho vượt quá giới hạn do tổ chức của bạn đặt ra.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Các chính sách của tổ chức ngăn cản bạn xuất kho lưu trữ cá nhân của mình.</string>
     <string name="add_account">Thêm tài khoản</string>
@@ -649,7 +654,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="invalid_uri">Đường dẫn không hợp lệ</string>
     <string name="the_urix_is_already_blocked">Đường dẫn %1$s đã bị chặn</string>
     <string name="login_approved">Lượt đăng nhập đã duyệt</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Đăng nhập bằng thiết bị phải được thiết lập trong phần cài đặt của ứng dụng Bitwarden. Dùng cách khác?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Tính năng đăng nhập bằng thiết bị phải được thiết lập trong phần cài đặt của ứng dụng Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Cần tùy chọn khác? <annotation link="viewAll">Xem tất cả tùy chọn đăng nhập</annotation></string>
     <string name="log_in_with_device">Đăng nhập bằng thiết bị</string>
     <string name="logging_in_on">Đang đăng nhập vào</string>
     <string name="logging_in_on_with_colon">Đang đăng nhập vào:</string>
@@ -687,6 +693,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Làm theo các bước từ Dou để hoàn tất đăng nhập.</string>
     <string name="launch_duo">Khởi chạy Dou</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Mã khóa sẽ được lưu vào kho Bitwarden của bạn trong %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Mật khẩu của bạn sẽ được lưu vào kho Bitwarden cho %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Ứng dụng này không hỗ trợ mã khóa</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Vận hành mã khóa thất bại vì trình duyệt không có quyền</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Vận hành mã khóa không thành công vì chữ ký trình duyệt không khớp</string>
@@ -912,6 +919,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Thao tác thông tin đăng nhập thất bại vì yêu cầu không hợp lệ.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Thao tác thông tin đăng nhập thất bại vì yêu cầu không được hỗ trợ.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>
@@ -1034,6 +1043,8 @@ các vấn đề.</string>
     <string name="export">Xuất</string>
     <string name="export_confirmation_title">Xác nhận xuất</string>
     <string name="export_success">Đã xuất dữ liệu thành công</string>
+    <string name="included_in_this_export">Bao gồm trong bản xuất này</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Chỉ các mã được lưu cục bộ trên thiết bị này mới được xuất. Các mã đã đồng bộ sẽ không được bao gồm.</string>
     <string name="security">Bảo mật</string>
     <string name="too_many_failed_biometric_attempts">Xác thực sinh trắc thất bại quá nhiều lần.</string>
     <string name="version">Phiên bản</string>
@@ -1058,7 +1069,7 @@ các vấn đề.</string>
     <string name="learn_more_link"><annotation link="learnMore">Tìm hiểu thêm</annotation></string>
     <string name="shared_codes_error">Không thể đồng bộ mã từ ứng dụng Bitwarden. Hãy đảm bảo cả hai ứng dụng đều được cập nhật phiên bản mới nhất. Bạn vẫn có thể truy cập các mã hiện có trong ứng dụng Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Để xem tất cả mã xác minh của bạn, bạn cần cho phép đồng bộ hóa trên tất cả tài khoản của mình.</string>
+    <string name="sync_with_bitwarden_action_card_message">Cho phép đồng bộ ứng dụng Authenticator trong phần cài đặt để xem toàn bộ mã xác minh của bạn tại đây.</string>
     <string name="take_me_to_app_settings">Đi đến cài đặt ứng dụng</string>
     <string name="something_went_wrong">Đã xảy ra lỗi</string>
     <string name="please_try_again">Vui lòng thử lại</string>
@@ -1149,4 +1160,12 @@ các vấn đề.</string>
     <string name="lock_app">Khóa ứng dụng</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Sử dụng phương pháp mở khóa thiết bị của bạn để mở khóa ứng dụng</string>
     <string name="loading_vault_data">Đang tải dữ liệu kho…</string>
+    <string name="resending">Đang gửi lại</string>
+    <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

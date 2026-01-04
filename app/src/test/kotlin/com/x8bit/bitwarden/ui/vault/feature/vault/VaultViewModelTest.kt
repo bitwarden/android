@@ -4,14 +4,17 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -26,7 +29,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -57,8 +59,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
@@ -100,7 +101,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     )
 
     private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         // We return an empty flow here to avoid confusion in the tests.
         // Everything should be tested via the mutableSnackbarDataFlow.
         every { getSnackbarDataFlow(SnackbarRelay.LOGIN_SUCCESS) } returns emptyFlow()
@@ -353,7 +354,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "Test Organization",
                 id = "testId",
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
@@ -446,7 +447,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -2801,7 +2802,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,

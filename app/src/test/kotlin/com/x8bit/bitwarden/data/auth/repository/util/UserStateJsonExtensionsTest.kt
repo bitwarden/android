@@ -9,6 +9,7 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.UserDecryptionJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -1586,7 +1587,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            SyncResponseJson.Policy(
+                            createMockPolicy(
                                 id = "policyId",
                                 organizationId = "organizationId",
                                 type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
@@ -1710,7 +1711,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            SyncResponseJson.Policy(
+                            createMockPolicy(
                                 id = "policyId",
                                 organizationId = "organizationId",
                                 type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,

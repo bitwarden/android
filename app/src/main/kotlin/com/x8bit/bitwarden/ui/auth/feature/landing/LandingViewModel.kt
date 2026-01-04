@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -17,8 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -39,7 +39,7 @@ class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
-    snackbarRelayManager: SnackbarRelayManager,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]

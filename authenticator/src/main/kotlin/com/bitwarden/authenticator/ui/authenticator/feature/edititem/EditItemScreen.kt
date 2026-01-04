@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -67,24 +64,9 @@ fun EditItemScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val context = LocalContext.current
-    val resources = LocalResources.current
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            EditItemEvent.NavigateBack -> {
-                onNavigateBack()
-            }
-
-            is EditItemEvent.ShowToast -> {
-                Toast
-                    .makeText(
-                        context,
-                        event.message(resources),
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
-            }
+            EditItemEvent.NavigateBack -> onNavigateBack()
         }
     }
 

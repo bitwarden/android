@@ -24,9 +24,9 @@ sealed class CreateCipherResponseJson {
     @Serializable
     data class Invalid(
         @SerialName("message")
-        val message: String?,
+        override val message: String,
 
         @SerialName("validationErrors")
-        val validationErrors: Map<String, List<String>>?,
-    ) : CreateCipherResponseJson()
+        override val validationErrors: Map<String, List<String>>?,
+    ) : CreateCipherResponseJson(), InvalidJsonResponse
 }

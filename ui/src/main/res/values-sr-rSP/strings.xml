@@ -166,7 +166,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Потражите лозинку или додајте нову лозинку</string>
     <string name="disabled">Онемогућено</string>
     <string name="bitwarden_autofill_service_alert2">Најлакши начин за додавање нових пријава у свој сеф је из сервиса ауто-попуњавања Bitwarden-а. Сазнајте више о коришћењу сервиса ауто-попуњавања Bitwarden-а преко екрана „Подешавања“.</string>
-    <string name="autofill_title">Аутоматско попуњавање</string>
+    <string name="autofill_noun">Аутоматско попуњавање</string>
+    <string name="autofill_verb">Аутоматско попуњавање</string>
     <string name="autofill_or_view">Да ли желите да ауто-попуните или да погледате ову ставку?</string>
     <string name="search">Тражи</string>
     <string name="learn_org">Сазнајте о организацијама</string>
@@ -378,7 +379,7 @@
     <string name="download">Преузми</string>
     <string name="login_expired">Ваша сесија је истекла.</string>
     <string name="biometrics_direction">Биометријска провера</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Провера уређаја</string>
     <string name="biometrics_failed">Биометрија није успела</string>
     <string name="biometrics_decoding_failure">Пријавите се са својом главном лозинком или ПИН-ом, а затим поново омогућите биометријску пријаву у подешавањима.</string>
     <string name="use_biometrics_to_unlock">Користи биометријско откључавање</string>
@@ -481,7 +482,7 @@
     <string name="seven_days">7 дана</string>
     <string name="thirty_days">30 дана</string>
     <string name="custom">Друго</string>
-    <string name="custom_timeout">Custom timeout</string>
+    <string name="custom_timeout">Прилагодити тајмаут</string>
     <string name="add_this_authenticator_key_to_a_login">Додајте овај кључ за аутентификацију постојећој пријави или направите нову пријаву.</string>
     <string name="send_disabled_warning">Због полисе компаније, можеш само да бришеш постојећа слања.</string>
     <string name="about_send">О слању</string>
@@ -497,25 +498,29 @@
     <string name="remove_master_password">Уклони главну лозинку</string>
     <string name="leave_organization">Напусти организацију</string>
     <string name="leave_organization_name">Напустити %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Јесте ли сигурни да желите да напустите “%1$s”?</string>
+    <string name="leave_organization_button">Напустити %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">Како да управљам својим сефом</string>
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="few">%1$d hours</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d сат</item>
+        <item quantity="few">%1$d сата</item>
+        <item quantity="other">%1$d сати</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="few">%1$d minutes</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d минут</item>
+        <item quantity="few">%1$d минута</item>
+        <item quantity="other">%1$d минута</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Ваша организација је подесила максимално временско ограничење сесије на %1$s и %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Ваша организација је поставила максимално временско ограничење сесије на %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Овим подешавањем управља ваша организација.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Ваша организација је поставила подразумевано временско ограничење сесије на никада.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Ваша организација је подесила подразумевано временско ограничење сесије на поновно покретање апликације.</string>
     <string name="vault_timeout_to_large">Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</string>
     <string name="add_account">Додај налог</string>
@@ -657,7 +662,8 @@
     <string name="invalid_uri">Неисправна адреса</string>
     <string name="the_urix_is_already_blocked">Адреса %1$s је већ блокирана</string>
     <string name="login_approved">Пријава је одобрена</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације. Потребна је друга опција?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Пријавите се са уређајем</string>
     <string name="logging_in_on">Пријављено на</string>
     <string name="logging_in_on_with_colon">Пријављено на:</string>
@@ -695,6 +701,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Пратите кораке од Duo да завршите пријављивање.</string>
     <string name="launch_duo">Покренути Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш приступни кључ ће бити сачуван у вашем Bitwarden сефу за %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Приступни кључеви нису подржани за ову апликацију</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операција лозинке није успела јер прегледач није привилегован</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операција лозинке није успела јер се потпис прегледача не подудара</string>
@@ -922,6 +929,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операција са кључем за приступ није успела јер је захтев неподржан.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операција лозинке није успела јер изабрана ставка не постоји.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операција лозинке није успела јер нема изабране ставке.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операција акредитива није успела јер су прекорачени покушаји верификације корисника.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операција акредитива није успела јер је корисник закључан.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операција акредитива није успела јер изабрана ставка не постоји.</string>
@@ -1046,6 +1055,8 @@
     <string name="export">Извези</string>
     <string name="export_confirmation_title">Потврдите извоз</string>
     <string name="export_success">Податци успешно извежени</string>
+    <string name="included_in_this_export">Укључено у овај извоз</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
     <string name="security">Сигурност</string>
     <string name="too_many_failed_biometric_attempts">Превише неуспешних покушаја биометрије.</string>
     <string name="version">Верзија</string>
@@ -1114,8 +1125,8 @@
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Почиње са“ је напредна опција са повећаним ризиком од откривања акредитива.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регуларни израз“ је напредна опција са повећаним ризиком од откривања акредитива ако се неправилно користе.</string>
     <string name="later">Касније</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
+    <string name="encryption_settings_updated">Подешавања шифровања су ажурирана</string>
+    <string name="update_your_encryption_settings">Ажурирај своје поставке за шифровање</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
     <string name="import_was_cancelled_in_the_selected_app">Увоз акредитива је отказан у одабраној апликацији. Није било увоз предмета.</string>
     <string name="import_cancelled">Увоз је отказан</string>
@@ -1156,11 +1167,19 @@
     <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
+    <string name="no_items_available_to_import">Нема доступних ставки за увоз</string>
+    <string name="select_a_different_account">Изаберите други налог</string>
+    <string name="verify_your_account_email_address">Верификујте имејл налога</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Унесите шестоцифрени кôд који је послат на адресу испод</string>
+    <string name="lock_app">Закључај апликацију</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Користите метод закључавања уређаја да бисте откључали апликацију</string>
+    <string name="loading_vault_data">Учитавање података сефа…</string>
+    <string name="resending">Поновно слање</string>
+    <string name="you_left_the_organization">Напустили сте организацију</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>

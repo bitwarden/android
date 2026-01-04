@@ -84,8 +84,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPrivateKeys.remove(userId)
         storedTwoFactorTokens.clear()
         storedUserAutoUnlockKeys.remove(userId)
-        storedPinProtectedUserKeys.remove(userId)
-        storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
@@ -93,6 +91,8 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
         storedPinProtectedUserKeyEnvelopes.remove(userId)
+        storedEncryptedPins.remove(userId)
+        storedPinProtectedUserKeys.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
@@ -277,7 +277,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableBiometricUnlockKeyFlow(userId).tryEmit(biometricsKey)
     }
 
-    override fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?> =
+    override fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?> =
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId)) }
 

@@ -42,7 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
@@ -57,8 +59,11 @@ import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -71,6 +76,7 @@ import com.bitwarden.ui.platform.util.displayLabel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.toImmutableList
+import javax.crypto.Cipher
 
 /**
  * Display the settings screen.
@@ -87,8 +93,15 @@ fun SettingsScreen(
     onNavigateToImport: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
+    val snackbarState = rememberBitwardenSnackbarHostState()
+    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
+        {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(cipher = it),
+            )
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
@@ -113,7 +126,6 @@ fun SettingsScreen(
             }
 
             SettingsEvent.NavigateToBitwardenApp -> {
-
                 intentManager.startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
@@ -129,9 +141,35 @@ fun SettingsScreen(
                     "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
                 )
             }
+
+            is SettingsEvent.ShowSnackbar -> snackbarState.showSnackbar(event.data)
+
+            is SettingsEvent.ShowBiometricsPrompt -> {
+                showBiometricsPrompt = true
+                biometricsManager.promptBiometrics(
+                    onSuccess = {
+                        unlockWithBiometricToggle(it)
+                        showBiometricsPrompt = false
+                    },
+                    onCancel = { showBiometricsPrompt = false },
+                    onLockOut = { showBiometricsPrompt = false },
+                    onError = { showBiometricsPrompt = false },
+                    cipher = event.cipher,
+                )
+            }
         }
     }
 
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = remember(viewModel) {
+            {
+                viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
+            }
+        },
+    )
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -142,6 +180,7 @@ fun SettingsScreen(
                 scrollBehavior = scrollBehavior,
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarState) },
     ) {
         Column(
             modifier = Modifier
@@ -205,6 +244,9 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state.appearance,
+                onLanguageSelection = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it)) }
+                },
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
@@ -282,8 +324,7 @@ private fun SecuritySettings(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
-    val hasBiometrics = biometricsManager.isBiometricsSupported
-    if (hasBiometrics) {
+    if (state.hasBiometricsSupport) {
         UnlockWithBiometricsRow(
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
@@ -297,7 +338,7 @@ private fun SecuritySettings(
 
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        cardStyle = if (hasBiometrics) {
+        cardStyle = if (state.hasBiometricsSupport) {
             CardStyle.Bottom
         } else {
             CardStyle.Full
@@ -333,37 +374,21 @@ private fun ColumnScope.VaultSettings(
         label = stringResource(id = BitwardenString.data),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.import_vault),
         onClick = onImportClick,
+        cardStyle = CardStyle.Top(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Import"),
-        cardStyle = CardStyle.Top(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
-    BitwardenTextRow(
+    BitwardenPushRow(
         text = stringResource(id = BitwardenString.export),
         onClick = onExportClick,
+        cardStyle = CardStyle.Middle(),
         modifier = Modifier
             .standardHorizontalMargin()
             .testTag("Export"),
-        cardStyle = CardStyle.Middle(),
-        content = {
-            Icon(
-                modifier = Modifier.mirrorIfRtl(),
-                painter = painterResource(id = BitwardenDrawable.ic_chevron_right),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        },
     )
     BitwardenExternalLinkRow(
         text = stringResource(BitwardenString.backup),
@@ -450,7 +475,6 @@ private fun UnlockWithBiometricsRow(
     modifier: Modifier = Modifier,
 ) {
     if (!biometricsManager.isBiometricsSupported) return
-    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenSwitch(
         modifier = modifier,
         cardStyle = CardStyle.Top(),
@@ -458,23 +482,8 @@ private fun UnlockWithBiometricsRow(
         subtext = stringResource(
             id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
         ),
-        isChecked = isChecked || showBiometricsPrompt,
-        onCheckedChange = { toggled ->
-            if (toggled) {
-                showBiometricsPrompt = true
-                biometricsManager.promptBiometrics(
-                    onSuccess = {
-                        onBiometricToggle(true)
-                        showBiometricsPrompt = false
-                    },
-                    onCancel = { showBiometricsPrompt = false },
-                    onLockOut = { showBiometricsPrompt = false },
-                    onError = { showBiometricsPrompt = false },
-                )
-            } else {
-                onBiometricToggle(false)
-            }
-        },
+        isChecked = isChecked,
+        onCheckedChange = onBiometricToggle,
     )
 }
 
@@ -526,14 +535,32 @@ private fun ScreenCaptureRow(
 @Composable
 private fun ColumnScope.AppearanceSettings(
     state: SettingsState.Appearance,
+    onLanguageSelection: (language: AppLanguage) -> Unit,
     onThemeSelection: (theme: AppTheme) -> Unit,
     onDynamicColorChange: (isEnabled: Boolean) -> Unit,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier
             .standardHorizontalMargin()
             .padding(horizontal = 16.dp),
         label = stringResource(id = BitwardenString.appearance),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
+    BitwardenMultiSelectButton(
+        label = stringResource(id = BitwardenString.language),
+        options = AppLanguage.entries.map { it.text() }.toImmutableList(),
+        selectedOption = state.language.text(),
+        onOptionSelected = { language ->
+            onLanguageSelection(
+                AppLanguage.entries.first { language == it.text.toString(resources) },
+            )
+        },
+        cardStyle = CardStyle.Full,
+        modifier = Modifier
+            .testTag(tag = "LanguageChooser")
+            .standardHorizontalMargin()
+            .fillMaxWidth(),
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
     ThemeSelectionRow(

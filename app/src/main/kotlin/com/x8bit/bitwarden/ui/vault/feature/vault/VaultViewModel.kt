@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -15,6 +16,7 @@ import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.account.util.initials
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -29,7 +31,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -46,8 +47,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -106,7 +106,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     featureFlagManager: FeatureFlagManager,
-    snackbarRelayManager: SnackbarRelayManager,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)

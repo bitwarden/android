@@ -44,13 +44,13 @@ import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.rememberSetupAutoFillHandler
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 
 /**
  * Top level composable for the Auto-fill setup screen.

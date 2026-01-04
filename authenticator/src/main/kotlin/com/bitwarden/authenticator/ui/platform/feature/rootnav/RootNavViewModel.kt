@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.platform.feature.rootnav
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.auth.repository.AuthRepository
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState(
         hasSeenWelcomeGuide = settingsRepository.hasSeenWelcomeTutorial,
@@ -46,7 +44,7 @@ class RootNavViewModel @Inject constructor(
             }
 
             is RootNavAction.Internal.HasSeenWelcomeTutorialChange -> {
-                handleHasSeenWelcomeTutorialChange(action.hasSeenWelcomeGuide)
+                handleHasSeenWelcomeTutorialChange(action)
             }
 
             RootNavAction.Internal.TutorialFinished -> {
@@ -60,6 +58,10 @@ class RootNavViewModel @Inject constructor(
             RootNavAction.Internal.AppUnlocked -> {
                 handleAppUnlocked()
             }
+
+            is RootNavAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
+            }
         }
     }
 
@@ -67,11 +69,14 @@ class RootNavViewModel @Inject constructor(
         authRepository.updateLastActiveTime()
     }
 
-    private fun handleHasSeenWelcomeTutorialChange(hasSeenWelcomeGuide: Boolean) {
-        settingsRepository.hasSeenWelcomeTutorial = hasSeenWelcomeGuide
-        if (hasSeenWelcomeGuide) {
-            if (settingsRepository.isUnlockWithBiometricsEnabled &&
-                biometricsEncryptionManager.isBiometricIntegrityValid()) {
+    private fun handleHasSeenWelcomeTutorialChange(
+        action: RootNavAction.Internal.HasSeenWelcomeTutorialChange,
+    ) {
+        settingsRepository.hasSeenWelcomeTutorial = action.hasSeenWelcomeGuide
+        if (action.hasSeenWelcomeGuide) {
+            if (authRepository.isUnlockWithBiometricsEnabled &&
+                authRepository.isBiometricIntegrityValid()
+            ) {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Locked) }
             } else {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Unlocked) }
@@ -97,6 +102,19 @@ class RootNavViewModel @Inject constructor(
     private fun handleAppUnlocked() {
         mutableStateFlow.update {
             it.copy(navState = RootNavState.NavState.Unlocked)
+        }
+    }
+
+    private fun handleBiometricSupportChanged(
+        action: RootNavAction.BiometricSupportChanged,
+    ) {
+        if (!action.isBiometricsSupported) {
+            authRepository.clearBiometrics()
+
+            // If currently locked, navigate to unlocked since biometrics are no longer available
+            if (mutableStateFlow.value.navState is RootNavState.NavState.Locked) {
+                mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Unlocked) }
+            }
         }
     }
 }
@@ -152,6 +170,11 @@ sealed class RootNavAction {
      * Indicates the backstack has changed.
      */
     data object BackStackUpdate : RootNavAction()
+
+    /**
+     * Indicates an update on device biometrics support.
+     */
+    data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : RootNavAction()
 
     /**
      * Models actions the [RootNavViewModel] itself may send.

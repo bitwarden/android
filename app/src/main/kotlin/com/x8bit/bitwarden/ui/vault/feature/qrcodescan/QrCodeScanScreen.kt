@@ -35,8 +35,8 @@ import com.bitwarden.ui.platform.components.camera.CameraPreview
 import com.bitwarden.ui.platform.components.camera.QrCodeSquare
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
-import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -55,7 +55,7 @@ fun QrCodeScanScreen(
     onNavigateBack: () -> Unit,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     viewModel: QrCodeScanViewModel = hiltViewModel(),
-    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
+    qrCodeAnalyzer: QrCodeAnalyzer = LocalQrCodeAnalyzer.current,
 ) {
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
@@ -100,6 +100,7 @@ fun QrCodeScanScreen(
                     { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
+                modifier = Modifier.fillMaxSize(),
             )
             when (rememberWindowSize()) {
                 WindowSize.Compact -> {

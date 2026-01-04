@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.authenticator.BuildConfig
+import com.bitwarden.authenticator.data.auth.repository.AuthRepository
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
@@ -11,12 +12,15 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -51,12 +55,16 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(false)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
+    private val mutableIsUnlockWithBiometricsEnabledFlow = MutableStateFlow(true)
+    private val authRepository: AuthRepository = mockk {
+        every { isUnlockWithBiometricsEnabled } returns true
+        every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
+    }
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
         every { defaultSaveOption } returns DEFAULT_SAVE_OPTION
         every { defaultSaveOptionFlow } returns mutableDefaultSaveOptionFlow
-        every { isUnlockWithBiometricsEnabled } returns true
         every { isCrashLoggingEnabled } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedStateFlow
         every { isScreenCaptureAllowed } answers { mutableScreenCaptureAllowedStateFlow.value }
@@ -66,6 +74,12 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -79,6 +93,16 @@ class SettingsViewModelTest : BaseViewModelTest() {
     fun teardown() {
         unmockkStatic(SharedVerificationCodesState::isSyncWithBitwardenEnabled)
         unmockkStatic(::isBuildVersionAtLeast)
+    }
+
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarFlow.tryEmit(expectedSnackbarData)
+            assertEquals(SettingsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
     }
 
     @Test
@@ -263,15 +287,34 @@ class SettingsViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `on BiometricSupportChanged should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.BiometricSupportChanged(isBiometricsSupported = false),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    hasBiometricsSupport = false,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
-    ) = SettingsViewModel(
+    ): SettingsViewModel = SettingsViewModel(
         savedStateHandle = SavedStateHandle().apply { this["state"] = savedState },
         clock = CLOCK,
+        authRepository = authRepository,
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorRepository = authenticatorRepository,
         settingsRepository = settingsRepository,
         clipboardManager = clipboardManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 
@@ -301,4 +344,5 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    hasBiometricsSupport = true,
 )

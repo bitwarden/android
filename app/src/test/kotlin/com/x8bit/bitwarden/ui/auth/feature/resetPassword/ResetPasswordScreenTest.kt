@@ -5,7 +5,6 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -72,7 +71,7 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Error message")
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -87,7 +86,7 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Loading...").isDisplayed()
+        composeTestRule.onNodeWithText("Loading...").assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
@@ -104,7 +103,7 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Are you sure you want to log out?")
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Yes")

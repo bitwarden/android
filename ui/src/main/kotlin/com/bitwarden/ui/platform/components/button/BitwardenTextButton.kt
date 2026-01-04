@@ -15,6 +15,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.color.bitwardenTextButtonColors
+import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -37,7 +38,7 @@ fun BitwardenTextButton(
 ) {
     TextButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
-        onClick = onClick,
+        onClick = throttledClick(onClick = onClick),
         enabled = isEnabled,
         contentPadding = PaddingValues(
             top = 10.dp,

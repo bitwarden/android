@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
+import androidx.credentials.CreatePasswordRequest
+import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
@@ -28,7 +31,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
@@ -64,6 +69,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(::parseJwtTokenDataOrNull)
+        unmockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
     @Test
@@ -682,11 +688,18 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
+        mockkObject(ProviderCreateCredentialRequest.Companion)
+
         val createCredentialRequest = CreateCredentialRequest(
             userId = "activeUserId",
             isUserPreVerified = false,
             requestData = bundleOf(),
         )
+
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
+            every { callingRequest } returns mockk<CreatePublicKeyCredentialRequest>()
+        }
+
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
         mutableUserStateFlow.tryEmit(
@@ -723,6 +736,73 @@ class RootNavViewModelTest : BaseViewModelTest() {
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
                 createCredentialRequest = createCredentialRequest,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is a ProviderCreateCredential with password request the nav state should be VaultUnlockedForCreatePasswordRequest`() {
+        mockkObject(ProviderCreateCredentialRequest.Companion)
+
+        val mockUsername = "testUser"
+        val mockPassword = "testPassword123"
+        val mockPackageName = "com.example.app"
+
+        val createCredentialRequest = CreateCredentialRequest(
+            userId = "activeUserId",
+            isUserPreVerified = false,
+            requestData = bundleOf(),
+        )
+
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
+            every { callingRequest } returns mockk<CreatePasswordRequest> {
+                every { id } returns mockUsername
+                every { password } returns mockPassword
+            }
+            every { callingAppInfo } returns mockk {
+                every { packageName } returns mockPackageName
+            }
+        }
+
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarHexColor",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                        isExportable = true,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlockedForCreatePasswordRequest(
+                username = mockUsername,
+                password = mockPassword,
+                uri = "androidapp://$mockPackageName",
             ),
             viewModel.stateFlow.value,
         )

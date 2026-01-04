@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.UpdateFolderResponseJson
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -25,8 +26,10 @@ import kotlinx.coroutines.flow.onEach
 /**
  * The default implementation of the [FolderManager].
  */
+@Suppress("LongParameterList")
 class FolderManagerImpl(
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val folderService: FolderService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -148,7 +151,7 @@ class FolderManagerImpl(
      * are met.
      */
     private suspend fun syncFolderIfNecessary(syncFolderUpsertData: SyncFolderUpsertData) {
-        val userId = activeUserId ?: return
+        val userId = syncFolderUpsertData.userId
         val folderId = syncFolderUpsertData.folderId
         val isUpdate = syncFolderUpsertData.isUpdate
         val revisionDate = syncFolderUpsertData.revisionDate
@@ -162,6 +165,12 @@ class FolderManagerImpl(
             localFolder.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
 
         if (!isValidCreate && !isValidUpdate) return
+        if (activeUserId != userId) {
+            // We cannot update right now since the accounts do not match, so we will
+            // do a full-sync on the next check.
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+            return
+        }
 
         folderService
             .getFolder(folderId = folderId)

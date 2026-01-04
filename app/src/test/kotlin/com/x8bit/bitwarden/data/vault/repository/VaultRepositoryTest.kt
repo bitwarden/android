@@ -3,13 +3,14 @@ package com.x8bit.bitwarden.data.vault.repository
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.CipherTypeJson
@@ -32,7 +33,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
+import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
@@ -55,6 +56,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
@@ -111,6 +113,9 @@ class VaultRepositoryTest {
         every { sendDataStateFlow } returns mutableSendDataStateFlow
     }
     private val credentialExchangeImportManager: CredentialExchangeImportManager = mockk()
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager = mockk {
+        coEvery { deriveTemporaryPinProtectedUserKeyIfNecessary(userId = any()) } just runs
+    }
 
     private val vaultRepository = VaultRepositoryImpl(
         vaultDiskSource = vaultDiskSource,
@@ -124,6 +129,7 @@ class VaultRepositoryTest {
         sendManager = mockk(),
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
+        pinProtectedUserKeyManager = pinProtectedUserKeyManager,
     )
 
     @BeforeEach
@@ -188,69 +194,6 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithBiometrics with VaultLockManager Success and no encrypted PIN should unlock for the current user and return Success`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            val privateKey = "mockPrivateKey-1"
-            val biometricsKey = "asdf1234"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val encryptedBytes = byteArrayOf(1, 1)
-            val initVector = byteArrayOf(2, 2)
-            val cipher = mockk<Cipher> {
-                every { doFinal(any()) } returns encryptedBytes
-                every { iv } returns initVector
-            }
-            coEvery {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                        decryptedUserKey = biometricsKey,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            fakeAuthDiskSource.apply {
-                storeUserBiometricInitVector(userId = userId, iv = null)
-                storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
-                storePrivateKey(userId = userId, privateKey = privateKey)
-            }
-
-            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
-
-            assertEquals(VaultUnlockResult.Success, result)
-            coVerify {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                        decryptedUserKey = biometricsKey,
-                    ),
-                    organizationKeys = null,
-                )
-            }
-            coVerify(exactly = 0) {
-                vaultSdkSource.enrollPinWithEncryptedPin(any(), any())
-            }
-            fakeAuthDiskSource.apply {
-                assertBiometricsKey(
-                    userId = userId,
-                    biometricsKey = encryptedBytes.toString(Charsets.ISO_8859_1),
-                )
-                assertBiometricInitVector(userId = userId, iv = initVector)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `unlockVaultWithBiometrics with failure to decode biometrics key should return BiometricDecodingError`() =
         runTest {
             val userId = MOCK_USER_STATE.activeUserId
@@ -275,9 +218,6 @@ class VaultRepositoryTest {
                 ),
                 result,
             )
-            coVerify(exactly = 0) {
-                vaultSdkSource.enrollPinWithEncryptedPin(any(), any())
-            }
         }
 
     @Suppress("MaxLineLength")
@@ -302,9 +242,6 @@ class VaultRepositoryTest {
                 VaultUnlockResult.BiometricDecodingError(error = error),
                 result,
             )
-            coVerify(exactly = 0) {
-                vaultSdkSource.enrollPinWithEncryptedPin(any(), any())
-            }
         }
 
     @Suppress("MaxLineLength")
@@ -322,12 +259,15 @@ class VaultRepositoryTest {
             }
             coEvery {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                     ),
@@ -345,20 +285,20 @@ class VaultRepositoryTest {
             assertEquals(VaultUnlockResult.Success, result)
             coVerify(exactly = 1) {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                     ),
                     organizationKeys = null,
                 )
-            }
-            coVerify(exactly = 0) {
-                vaultSdkSource.enrollPinWithEncryptedPin(any(), any())
             }
         }
 
@@ -367,13 +307,7 @@ class VaultRepositoryTest {
     fun `unlockVaultWithBiometrics with VaultLockManager Success and a stored encrypted pin should unlock for the current user, derive a new pin-protected key, and return Success`() =
         runTest {
             val userId = MOCK_USER_STATE.activeUserId
-            val encryptedPin = "encryptedPin"
             val privateKey = "mockPrivateKey-1"
-            val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
-            val enrollResponse = EnrollPinResponse(
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                userKeyEncryptedPin = encryptedPin,
-            )
             val biometricsKey = "asdf1234"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val encryptedBytes = byteArrayOf(1, 1)
@@ -383,19 +317,16 @@ class VaultRepositoryTest {
                 every { iv } returns initVector
             }
             coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(
-                    userId = userId,
-                    encryptedPin = encryptedPin,
-                )
-            } returns enrollResponse.asSuccess()
-            coEvery {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
@@ -406,50 +337,29 @@ class VaultRepositoryTest {
                 storeUserBiometricInitVector(userId = userId, iv = null)
                 storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
                 storePrivateKey(userId = userId, privateKey = privateKey)
-                storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
-                storePinProtectedUserKey(
-                    userId = userId,
-                    pinProtectedUserKey = null,
-                    inMemoryOnly = true,
-                )
-                storePinProtectedUserKeyEnvelope(
-                    userId = userId,
-                    pinProtectedUserKeyEnvelope = null,
-                    inMemoryOnly = true,
-                )
             }
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(VaultUnlockResult.Success, result)
-            fakeAuthDiskSource.assertPinProtectedUserKey(
-                userId = userId,
-                pinProtectedUserKey = null,
-                inMemoryOnly = true,
-            )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
-                userId = userId,
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = true,
-            )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
                     organizationKeys = null,
                 )
-            }
-            coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(
+                pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                     userId = userId,
-                    encryptedPin = encryptedPin,
                 )
             }
             fakeAuthDiskSource.apply {
@@ -471,12 +381,15 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -498,12 +411,15 @@ class VaultRepositoryTest {
             assertEquals(VaultUnlockResult.Success, result)
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -523,12 +439,15 @@ class VaultRepositoryTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = privateKey,
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -550,12 +469,15 @@ class VaultRepositoryTest {
             assertEquals(VaultUnlockResult.InvalidStateError(error = error), result)
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -618,98 +540,11 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword with VaultLockManager Success and no encrypted PIN should unlock for the current user and return Success`() =
-        runTest {
-            val userId = "mockId-1"
-            val mockVaultUnlockResult = VaultUnlockResult.Success
-            val userKeyEncryptedPin = "encryptedPin"
-            val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
-            val enrollResponse = EnrollPinResponse(
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                userKeyEncryptedPin = userKeyEncryptedPin,
-            )
-            coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(any(), any())
-            } returns enrollResponse.asSuccess()
-            prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
-            fakeAuthDiskSource.apply {
-                storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = null,
-                )
-                storePinProtectedUserKey(
-                    userId = userId,
-                    pinProtectedUserKey = null,
-                    inMemoryOnly = true,
-                )
-                storePinProtectedUserKeyEnvelope(
-                    userId = userId,
-                    pinProtectedUserKeyEnvelope = null,
-                    inMemoryOnly = true,
-                )
-            }
-
-            val result = vaultRepository.unlockVaultWithMasterPassword(
-                masterPassword = "mockPassword-1",
-            )
-
-            assertEquals(
-                mockVaultUnlockResult,
-                result,
-            )
-            coVerify {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
-                    ),
-                    organizationKeys = createMockOrganizationKeys(number = 1),
-                )
-            }
-            coVerify(exactly = 0) { vaultSdkSource.enrollPinWithEncryptedPin(any(), any()) }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `unlockVaultWithMasterPassword with VaultLockManager Success and a stored encrypted pin should unlock for the current user, derive a new pin-protected key, and return Success`() =
         runTest {
             val userId = "mockId-1"
-            val pinProtectedUserKey = "pinProtectedUserkeyEnvelope"
-            val encryptedPin = "userKeyEncryptedPin"
-            val enrollResponse = EnrollPinResponse(
-                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
-                userKeyEncryptedPin = encryptedPin,
-            )
             val mockVaultUnlockResult = VaultUnlockResult.Success
-            coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(
-                    userId = userId,
-                    encryptedPin = encryptedPin,
-                )
-            } returns enrollResponse.asSuccess()
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
-            fakeAuthDiskSource.apply {
-                storeEncryptedPin(
-                    userId = userId,
-                    encryptedPin = encryptedPin,
-                )
-                storePinProtectedUserKey(
-                    userId = userId,
-                    pinProtectedUserKey = null,
-                    inMemoryOnly = true,
-                )
-                storePinProtectedUserKeyEnvelope(
-                    userId = userId,
-                    pinProtectedUserKeyEnvelope = null,
-                    inMemoryOnly = true,
-                )
-            }
 
             val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = "mockPassword-1",
@@ -719,35 +554,29 @@ class VaultRepositoryTest {
                 mockVaultUnlockResult,
                 result,
             )
-            fakeAuthDiskSource.assertPinProtectedUserKey(
-                userId = userId,
-                pinProtectedUserKey = null,
-                inMemoryOnly = true,
-            )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
-                userId = userId,
-                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
-                inMemoryOnly = true,
-            )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = "mockPassword-1",
-                        userKey = "mockKey-1",
+                        masterPasswordUnlock = MasterPasswordUnlockData(
+                            kdf = MOCK_PROFILE.toSdkParams(),
+                            masterKeyWrappedUserKey = "mockKey-1",
+                            salt = "mockSalt-1",
+                        ),
                     ),
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
-            }
-            coEvery {
-                vaultSdkSource.enrollPinWithEncryptedPin(
+                pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                     userId = userId,
-                    encryptedPin = encryptedPin,
                 )
             }
         }
@@ -784,12 +613,15 @@ class VaultRepositoryTest {
 
             coEvery {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = masterPassword,
                         masterPasswordUnlock = masterPasswordUnlockData,
@@ -805,12 +637,15 @@ class VaultRepositoryTest {
             assertEquals(VaultUnlockResult.Success, result)
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = masterPassword,
                         masterPasswordUnlock = masterPasswordUnlockData,
@@ -822,7 +657,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword without masterPasswordUnlock data should use Password method`() =
+    fun `unlockVaultWithMasterPassword without masterPasswordUnlock data should return InvalidStateError`() =
         runTest {
             val userId = "mockId-1"
             val masterPassword = "mockPassword-1"
@@ -840,41 +675,13 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
             fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
 
-            coEvery {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-
             val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = masterPassword,
             )
 
-            assertEquals(VaultUnlockResult.Success, result)
-            coVerify {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    email = "email",
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                    organizationKeys = null,
-                )
+            assertTrue(result is VaultUnlockResult.InvalidStateError)
+            coVerify(exactly = 0) {
+                vaultLockManager.unlockVault(any(), any(), any(), any(), any(), any())
             }
         }
 
@@ -896,15 +703,22 @@ class VaultRepositoryTest {
             )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = "mockPassword-1",
-                        userKey = "mockKey-1",
+                        masterPasswordUnlock = MasterPasswordUnlockData(
+                            kdf = MOCK_PROFILE.toSdkParams(),
+                            masterKeyWrappedUserKey = "mockKey-1",
+                            salt = "mockSalt-1",
+                        ),
                     ),
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
@@ -985,12 +799,15 @@ class VaultRepositoryTest {
             )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
                         pin = "1234",
                         pinProtectedUserKeyEnvelope = "mockKey-1",
@@ -1020,12 +837,15 @@ class VaultRepositoryTest {
             )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Pin(
                         pin = "1234",
                         pinProtectedUserKey = "mockKey-1",
@@ -1051,12 +871,15 @@ class VaultRepositoryTest {
             )
             coVerify {
                 vaultLockManager.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockPrivateKey-1",
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
-                    privateKey = "mockPrivateKey-1",
-                    signingKey = null,
-                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
                         pin = "1234",
                         pinProtectedUserKeyEnvelope = "mockKey-1",
@@ -1587,12 +1410,14 @@ class VaultRepositoryTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
         val relyingPartyId = "relyingPartyId"
+        val userHandle = "mockUserHandle"
         val expected: List<Fido2CredentialAutofillView> = mockk()
         coEvery {
             vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = relyingPartyId,
+                userHandle = userHandle,
             )
         } returns expected.asSuccess()
 
@@ -1600,6 +1425,7 @@ class VaultRepositoryTest {
             userId = userId,
             fido2CredentialStore = fido2CredentialStore,
             relyingPartyId = relyingPartyId,
+            userHandle = userHandle,
         )
 
         assertEquals(expected.asSuccess(), result)
@@ -1609,8 +1435,103 @@ class VaultRepositoryTest {
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = relyingPartyId,
+                userHandle = userHandle,
             )
         }
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when vault data is loading`() {
+        mutableVaultDataStateFlow.value = DataState.Loading
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when all items belong to organizations`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = "org-1"),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items without organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = null),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns true when there are items with empty organization ID`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationId = ""),
+                        createMockCipherListView(number = 2, organizationId = "org-2"),
+                    ),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `hasPersonalVaultItems returns false when successes list is empty`() {
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = emptyList(),
+                    failures = emptyList(),
+                ),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        val result = vaultRepository.hasPersonalVaultItems()
+
+        assertEquals(false, result)
     }
 
     //region Helper functions
@@ -1658,15 +1579,22 @@ class VaultRepositoryTest {
         // Master password unlock
         coEvery {
             vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = "mockPrivateKey-1",
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = userId,
                 email = "email",
                 kdf = MOCK_PROFILE.toSdkParams(),
-                privateKey = "mockPrivateKey-1",
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = mockMasterPassword,
-                    userKey = "mockKey-1",
+                    masterPasswordUnlock = MasterPasswordUnlockData(
+                        kdf = MOCK_PROFILE.toSdkParams(),
+                        masterKeyWrappedUserKey = "mockKey-1",
+                        salt = "mockSalt-1",
+                    ),
                 ),
                 organizationKeys = createMockOrganizationKeys(number = 1),
             )
@@ -1675,12 +1603,15 @@ class VaultRepositoryTest {
         // PIN unlock
         coEvery {
             vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = "mockPrivateKey-1",
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = userId,
                 email = "email",
                 kdf = MOCK_PROFILE.toSdkParams(),
-                privateKey = "mockPrivateKey-1",
-                signingKey = null,
-                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Pin(
                     pin = mockPin,
                     pinProtectedUserKey = "mockKey-1",
@@ -1692,12 +1623,15 @@ class VaultRepositoryTest {
         // PIN ENVELOPE unlock
         coEvery {
             vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = "mockPrivateKey-1",
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = userId,
                 email = "email",
                 kdf = MOCK_PROFILE.toSdkParams(),
-                privateKey = "mockPrivateKey-1",
-                signingKey = null,
-                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
                     pin = mockPin,
                     pinProtectedUserKeyEnvelope = "mockKey-1",
@@ -1709,7 +1643,7 @@ class VaultRepositoryTest {
     //endregion Helper functions
 }
 
-private val MOCK_PROFILE = AccountJson.Profile(
+private val MOCK_BASE_PROFILE = AccountJson.Profile(
     userId = "mockId-1",
     email = "email",
     isEmailVerified = true,
@@ -1726,6 +1660,19 @@ private val MOCK_PROFILE = AccountJson.Profile(
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
     creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+)
+
+private val MOCK_PROFILE = MOCK_BASE_PROFILE.copy(
+    userDecryptionOptions = UserDecryptionOptionsJson(
+        hasMasterPassword = true,
+        trustedDeviceUserDecryptionOptions = null,
+        keyConnectorUserDecryptionOptions = null,
+        masterPasswordUnlock = MasterPasswordUnlockDataJson(
+            kdf = MOCK_BASE_PROFILE.toSdkParams().toKdfRequestModel(),
+            masterKeyWrappedUserKey = "mockKey-1",
+            salt = "mockSalt-1",
+        ),
+    ),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

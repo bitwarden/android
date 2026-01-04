@@ -5,7 +5,7 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder

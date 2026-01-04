@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -279,7 +279,7 @@ class SettingsRepositoryImpl(
         get() = activeUserId
             ?.let { userId ->
                 authDiskSource
-                    .getUserBiometicUnlockKeyFlow(userId)
+                    .getUserBiometricUnlockKeyFlow(userId)
                     .map { it != null }
             }
             ?: flowOf(false)

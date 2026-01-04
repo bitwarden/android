@@ -2,6 +2,22 @@
 
 Quick reference for Bitwarden Android architectural patterns during code reviews. For comprehensive details, read `docs/ARCHITECTURE.md` and `docs/STYLE_AND_BEST_PRACTICES.md`.
 
+## Table of Contents
+
+**Core Patterns:**
+- [MVVM + UDF Pattern](#mvvm--udf-pattern)
+  - [ViewModel Structure](#viewmodel-structure)
+  - [UI Layer (Compose)](#ui-layer-compose)
+- [Hilt Dependency Injection](#hilt-dependency-injection)
+  - [ViewModels](#viewmodels)
+  - [Repositories and Managers](#repositories-and-managers)
+- [Module Organization](#module-organization)
+- [Error Handling](#error-handling)
+  - [Use Result Types, Not Exceptions](#use-result-types-not-exceptions)
+- [Quick Checklist](#quick-checklist)
+
+---
+
 ## MVVM + UDF Pattern
 
 ### ViewModel Structure

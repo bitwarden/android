@@ -165,7 +165,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Procure uma credencial ou adicione uma nova</string>
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã “Definições”.</string>
-    <string name="autofill_title">Preencher automaticamente</string>
+    <string name="autofill_noun">Preenchimento automático</string>
+    <string name="autofill_verb">Preenchimento automático</string>
     <string name="autofill_or_view">Pretende preencher automaticamente ou ver este item?</string>
     <string name="search">Procurar</string>
     <string name="learn_org">Saiba mais sobre as organizações</string>
@@ -179,8 +180,8 @@
     <string name="send_verification_code_again">Reenviar código</string>
     <string name="verification_email_not_sent">Não foi possível enviar o e-mail de verificação. Tente novamente.</string>
     <string name="verification_email_sent">E-mail de verificação enviado</string>
-    <string name="yubi_key_instruction">Para continuar, segure a sua YubiKey NEO contra a parte de trás do dispositivo ou introduza a sua YubiKey na porta USB do seu dispositivo, depois toque no seu botão.</string>
-    <string name="yubi_key_title">Chave de segurança YubiKey</string>
+    <string name="yubi_key_instruction">Para continuar, segure a sua chave de segurança Yubico contra a parte de trás do dispositivo ou introduza-a na porta USB do seu dispositivo, depois toque no seu botão.</string>
+    <string name="yubi_key_title">Chave de segurança Yubico</string>
     <string name="add_new_attachment">Adicionar novo anexo</string>
     <string name="attachments">Anexos</string>
     <string name="unable_to_download_file">Não foi possível transferir o ficheiro.</string>
@@ -385,7 +386,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="send_verification_code_to_email">Enviar um código de verificação para o seu e-mail</string>
     <string name="code_sent">Código enviado!</string>
     <string name="confirm_your_identity">Confirme a sua identidade para continuar.</string>
-    <string name="export_vault_warning">Esta exportação contém os dados do seu cofre num formato não encriptado. Não deve armazenar ou enviar o ficheiro exportado através de canais não seguros (como o e-mail). Elimine-o imediatamente após terminar a sua utilização.</string>
+    <string name="export_vault_warning">Para sua segurança, não partilhe nem envie este ficheiro por canais não seguros (como e-mail) e elimine-o quando terminar.</string>
     <string name="export_vault_file_pw_protect_info">A exportação deste ficheiro será protegida por uma palavra-passe e exigirá a palavra-passe do ficheiro para ser desencriptada.</string>
     <string name="export_vault_confirmation_title">Confirmar a exportação do cofre</string>
     <string name="warning">Aviso</string>
@@ -495,6 +496,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="remove_master_password">Remover palavra-passe mestra</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair da %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Tem a certeza de que pretende sair de %1$s?</string>
+    <string name="leave_organization_button">Sair de %1$s</string>
+    <string name="leave_organization_warning">Ao recusar, os seus itens pessoais permanecerão na sua conta, mas perderá o acesso aos itens partilhados e às funcionalidades da organização.\n\nEntre em contacto com o seu administrador para recuperar o acesso.</string>
+    <string name="how_to_manage_my_vault">Como gerir o meu cofre</string>
     <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
     <string name="fido2_return_to_app">Voltar à aplicação</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
@@ -652,7 +657,8 @@ Pretende mudar para esta conta?</string>
     <string name="invalid_uri">URI inválido</string>
     <string name="the_urix_is_already_blocked">O URI %1$s já está bloqueado</string>
     <string name="login_approved">Início de sessão aprovado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">O início de sessão com o dispositivo deve ser ativado nas definições da aplicação Bitwarden. Precisa de outra opção?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">O início de sessão com o dispositivo deve ser ativado nas definições da app Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Precisa de outra opção? <annotation link="viewAll">Veja todas as opções de início de sessão</annotation></string>
     <string name="log_in_with_device">Iniciar sessão com o dispositivo</string>
     <string name="logging_in_on">A iniciar sessão em</string>
     <string name="logging_in_on_with_colon">A iniciar sessão em:</string>
@@ -690,6 +696,7 @@ Pretende mudar para esta conta?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga os passos do Duo para concluir o início de sessão.</string>
     <string name="launch_duo">Iniciar o Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A sua chave de acesso para %1$s será guardada no seu cofre Bitwarden</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">A sua palavra-passe para %1$s será guardada no seu cofre Bitwarden</string>
     <string name="passkeys_not_supported_for_this_app">Chaves de acesso não suportadas por esta app</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">A operação da chave de acesso falhou porque o navegador não tem privilégios</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">A operação da chave de acesso falhou porque a assinatura do navegador não corresponde</string>
@@ -917,6 +924,8 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação da palavra-passe falhou porque o item selecionado não existe.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A operação da palavra-passe falhou porque não foi selecionado nenhum item.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">A operação da credencial falhou porque o pedido é inválido.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">A operação da credencial falhou porque o pedido não é suportado.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação da credencial falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">A operação da credencial falhou porque o utilizador está bloqueado.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação da credencial falhou porque o item selecionado não existe.</string>
@@ -1038,6 +1047,8 @@ Pretende mudar para esta conta?</string>
     <string name="export">Exportar</string>
     <string name="export_confirmation_title">Confirmar a exportação</string>
     <string name="export_success">Dados exportados com sucesso</string>
+    <string name="included_in_this_export">Incluído nesta exportação</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Apenas os códigos armazenados localmente neste dispositivo serão exportados. Os códigos sincronizados não estão incluídos</string>
     <string name="security">Segurança</string>
     <string name="too_many_failed_biometric_attempts">Demasiadas tentativas falhadas de biometria.</string>
     <string name="version">Versão</string>
@@ -1153,4 +1164,12 @@ Pretende mudar para esta conta?</string>
     <string name="lock_app">Bloquear app</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Utilize o método de bloqueio do seu dispositivo para desbloquear a app</string>
     <string name="loading_vault_data">A carregar os dados do cofre…</string>
+    <string name="resending">A reenviar</string>
+    <string name="you_left_the_organization">Saiu da organização</string>
+    <string name="transfer_items_to_org">Transferir itens para %1$s</string>
+    <string name="transfer_items_description">%1$s exige que todos os itens sejam propriedade da organização por motivos de segurança e conformidade. Clique em Aceitar para transferir a propriedade dos seus itens.</string>
+    <string name="decline_and_leave">Recusar e sair</string>
+    <string name="why_am_i_seeing_this">Porque é que estou a ver isto?</string>
+    <string name="migrating_items_to_x">A migrar itens para %s</string>
+    <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
 </resources>

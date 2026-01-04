@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about.util
 
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedTimeStyle
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import java.time.Clock
 import java.time.Instant
 import java.time.format.FormatStyle

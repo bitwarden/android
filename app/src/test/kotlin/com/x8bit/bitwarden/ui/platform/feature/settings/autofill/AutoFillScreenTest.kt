@@ -15,14 +15,14 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startSystemAccessibilitySettingsActivity
+import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -71,7 +71,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every {
             intentManager.startSystemAutofillSettingsActivity()
         } answers { isSystemSettingsRequestSuccess }
-        every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
+        every { intentManager.startSystemAccessibilitySettingsActivity() } returns true
 
         setContent(
             intentManager = intentManager,
@@ -359,6 +359,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Passkey management")
+            .performScrollTo()
             .performClick()
         composeTestRule.onNode(isDialog()).assertExists()
         composeTestRule
@@ -861,7 +862,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on NavigateToLearnMore should call launchUri`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToLearnMore)
-        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        }
     }
 }
 

@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import androidx.core.net.toUri
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
@@ -17,6 +19,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -24,7 +27,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -53,6 +55,7 @@ import java.time.Clock
 class CipherManagerImpl(
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val ciphersService: CiphersService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -91,7 +94,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -131,7 +137,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is CreateCipherResponseJson.Invalid -> {
-                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                        CreateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is CreateCipherResponseJson.Success -> {
@@ -301,7 +310,10 @@ class CipherManagerImpl(
             .map { response ->
                 when (response) {
                     is UpdateCipherResponseJson.Invalid -> {
-                        UpdateCipherResult.Error(errorMessage = response.message, error = null)
+                        UpdateCipherResult.Error(
+                            errorMessage = response.firstValidationErrorMessage,
+                            error = null,
+                        )
                     }
 
                     is UpdateCipherResponseJson.Success -> {
@@ -581,9 +593,7 @@ class CipherManagerImpl(
                         .flatMap { response ->
                             when (response) {
                                 is UpdateCipherResponseJson.Invalid -> {
-                                    IllegalStateException(
-                                        response.message,
-                                    )
+                                    IllegalStateException(response.firstValidationErrorMessage)
                                         .asFailure()
                                 }
 
@@ -682,7 +692,7 @@ class CipherManagerImpl(
      * for now.
      */
     private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
-        val userId = activeUserId ?: return
+        val userId = syncCipherUpsertData.userId
         val cipherId = syncCipherUpsertData.cipherId
         val organizationId = syncCipherUpsertData.organizationId
         val collectionIds = syncCipherUpsertData.collectionIds
@@ -725,6 +735,12 @@ class CipherManagerImpl(
         }
 
         if (!shouldUpdate) return
+        if (activeUserId != userId) {
+            // We cannot update right now since the accounts do not match, so we will
+            // do a full-sync on the next check.
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+            return
+        }
 
         ciphersService
             .getCipher(cipherId = cipherId)

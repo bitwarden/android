@@ -11,10 +11,10 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherListView
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 
 /**
  * Primary implementation of [CredentialEntryBuilder].
@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 class CredentialEntryBuilderImpl(
     private val context: Context,
     private val pendingIntentManager: CredentialManagerPendingIntentManager,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val authRepository: AuthRepository,
 ) : CredentialEntryBuilder {
 
     override fun buildPublicKeyCredentialEntries(
@@ -82,7 +82,7 @@ class CredentialEntryBuilderImpl(
                 .also { builder ->
                     if (!isUserVerified) {
                         builder.setBiometricPromptDataIfSupported(
-                            cipher = biometricsEncryptionManager.getOrCreateCipher(userId),
+                            cipher = authRepository.getOrCreateCipher(userId),
                         )
                     }
                 }
@@ -113,8 +113,7 @@ class CredentialEntryBuilderImpl(
                 .apply {
                     if (!isUserVerified) {
                         setBiometricPromptDataIfSupported(
-                            cipher = biometricsEncryptionManager
-                                .getOrCreateCipher(userId),
+                            cipher = authRepository.getOrCreateCipher(userId),
                         )
                     }
                 }

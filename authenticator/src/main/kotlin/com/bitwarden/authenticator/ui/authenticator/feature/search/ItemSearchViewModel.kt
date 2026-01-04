@@ -13,11 +13,14 @@ import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDi
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -28,6 +31,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -43,6 +47,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class ItemSearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val clipboardManager: BitwardenClipboardManager,
     private val authenticatorRepository: AuthenticatorRepository,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
@@ -56,6 +61,11 @@ class ItemSearchViewModel @Inject constructor(
 ) {
 
     init {
+        snackbarRelayManager
+            .getSnackbarDataFlow(relay = SnackbarRelay.ITEM_SAVED)
+            .map(ItemSearchEvent::ShowSnackbar)
+            .onEach(::sendEvent)
+            .launchIn(viewModelScope)
         combine(
             authenticatorRepository.getLocalVerificationCodesFlow(),
             authenticatorRepository.sharedCodesStateFlow,
@@ -470,7 +480,7 @@ sealed class ItemSearchEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : ItemSearchEvent() {
+    ) : ItemSearchEvent(), BackgroundEvent {
         constructor(
             message: Text,
             messageHeader: Text? = null,
