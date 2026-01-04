@@ -1,6 +1,8 @@
 name: SDLC / Label PR by Files
 
 on:
+  pull_request:
+    types: [opened, synchronize]
   workflow_dispatch:
     inputs:
       pr-number:
@@ -18,6 +20,9 @@ on:
         description: "Dry Run - Don't apply labels"
         type: boolean
         default: false
+
+env:
+  _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
 
 jobs:
   label-pr:
@@ -37,7 +42,6 @@ jobs:
         id: label-mode
         env:
           GH_TOKEN: ${{ github.token }}
-          _PR_NUMBER: ${{ inputs.pr-number }}
           _PR_USER: ${{ github.event.pull_request.user.login }}
           _IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
         run: |
@@ -71,7 +75,6 @@ jobs:
       - name: Label PR based on changed files
         env:
           GH_TOKEN: ${{ github.token }}
-          _PR_NUMBER: ${{ inputs.pr-number || github.event.pull_request.number }}
           _LABEL_MODE: ${{ inputs.mode && format('--{0}', inputs.mode) || steps.label-mode.outputs.label_mode }}
           _DRY_RUN: ${{ inputs.dry-run == true && '--dry-run' || '' }}
         run: |

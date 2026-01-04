@@ -4,7 +4,8 @@ run-name: Crowdin Pull - ${{ github.event_name == 'workflow_dispatch' && 'Manual
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 5"
+    # Run weekly on Sunday at 00:00 UTC
+    - cron: '0 0 * * 0'
     
 permissions: {}
 
@@ -72,5 +73,6 @@ jobs:
           create_pull_request: true
           pull_request_title: "Crowdin Pull"
           pull_request_body: ":inbox_tray: New translations received!"
+          pull_request_labels: "automated-pr, t:misc"
           gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
           gpg_passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}

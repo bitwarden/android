@@ -67,7 +67,7 @@ jobs:
         uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Cache Gradle files
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: |
             ~/.gradle/caches
@@ -77,7 +77,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -205,7 +205,7 @@ jobs:
         uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Cache Gradle files
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: |
             ~/.gradle/caches
@@ -215,7 +215,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -283,7 +283,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.bitwarden.authenticator.aab
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
@@ -291,7 +291,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.bitwarden.authenticator.apk
           path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
@@ -311,7 +311,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt
@@ -319,7 +319,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: authenticator-android-aab-sha256.txt
           path: ./authenticator-android-aab-sha256.txt

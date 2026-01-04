@@ -182,8 +182,8 @@
     <string name="send_verification_code_again">Надіслати новий код</string>
     <string name="verification_email_not_sent">Не вдається надіслати лист для перевірки. Спробуйте знову.</string>
     <string name="verification_email_sent">Лист для підтвердження надіслано</string>
-    <string name="yubi_key_instruction">Для продовження прикладіть свій YubiKey NEO до задньої сторони пристрою, або вставте його в порт USB свого пристрою.</string>
-    <string name="yubi_key_title">Ключ безпеки YubiKey</string>
+    <string name="yubi_key_instruction">Для продовження прикладіть свій ключ безпеки Yubico до задньої сторони пристрою, або вставте його в порт USB свого пристрою і торкніться кнопки.</string>
+    <string name="yubi_key_title">Ключ безпеки Yubico</string>
     <string name="add_new_attachment">Додати нове вкладення</string>
     <string name="attachments">Вкладення</string>
     <string name="unable_to_download_file">Увімкнути для завантаження файлу.</string>
@@ -390,7 +390,7 @@
     <string name="send_verification_code_to_email">Надіслати код підтвердження е-поштою</string>
     <string name="code_sent">Код надіслано!</string>
     <string name="confirm_your_identity">Підтвердьте свої облікові дані для продовження.</string>
-    <string name="export_vault_warning">Ваші експортовані дані сховища незашифровані. Не зберігайте і не надсилайте їх незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть їх.</string>
+    <string name="export_vault_warning">З міркувань безпеки не зберігайте і не надсилайте цей файл незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть файл.</string>
     <string name="export_vault_file_pw_protect_info">Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування.</string>
     <string name="export_vault_confirmation_title">Підтвердити експорт сховища</string>
     <string name="warning">Попередження</string>
@@ -500,10 +500,10 @@
     <string name="remove_master_password">Вилучити головний пароль</string>
     <string name="leave_organization">Покинути організацію</string>
     <string name="leave_organization_name">Покинути %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Ви дійсно хочете покинути %1$s?</string>
+    <string name="leave_organization_button">Покинути %1$s</string>
+    <string name="leave_organization_warning">Відхиливши, ваші особисті записи залишаться у вашому обліковому записі, але ви втратите доступ до спільних записів та функцій організації.\n\nЗверніться до свого адміністратора, щоб відновити доступ.</string>
+    <string name="how_to_manage_my_vault">Як керувати моїм сховищем</string>
     <string name="fido2_authenticate_web_authn">Автентифікація WebAuthn</string>
     <string name="fido2_return_to_app">Повернутися до програми</string>
     <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
@@ -1087,7 +1087,7 @@
     <string name="learn_more_link"><annotation link="learnMore">Докладніше</annotation></string>
     <string name="shared_codes_error">Неможливо синхронізувати коди з програмою Bitwarden. Переконайтеся, що у вас найновіші версії обох програм. Ви все одно можете отримати доступ до наявних кодів у програмі Bitwarden.</string>
     <string name="sync_with_the_bitwarden_app">Синхронізувати з програмою Bitwarden</string>
-    <string name="sync_with_bitwarden_action_card_message">Щоб переглянути всі коди підтвердження, необхідно дозволити синхронізацію з усіма вашими обліковими записами.</string>
+    <string name="sync_with_bitwarden_action_card_message">Дозвольте синхронізацію програми Authenticator у налаштуваннях, щоб бачити тут свої коди підтвердження.</string>
     <string name="take_me_to_app_settings">Перейти до налаштувань програми</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="please_try_again">Повторіть спробу</string>
@@ -1184,4 +1184,10 @@
     <string name="loading_vault_data">Завантаження даних сховища…</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
 </resources>
