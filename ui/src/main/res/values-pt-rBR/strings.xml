@@ -1085,7 +1085,7 @@ Quer trocar para esta conta?</string>
     <string name="default_save_options_subtitle">Selecione onde você gostaria de salvar os novos códigos de verificação.</string>
     <string name="verification_code_created">Código de verificação criado</string>
     <string name="choose_save_location_message">Salve esta chave de autenticador aqui, ou adicione-a a uma credencial no seu aplicativo do Bitwarden.</string>
-    <string name="save_option_as_default">Opção de salvar como padrão</string>
+    <string name="save_option_as_default">Salvar opção como padrão</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada do aplicativo do Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
     <string name="required_information_missing">Informações necessárias ausentes</string>
