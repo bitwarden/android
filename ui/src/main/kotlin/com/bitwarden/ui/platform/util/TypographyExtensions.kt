@@ -31,14 +31,15 @@ import com.bitwarden.annotation.OmitFromCoverage
  */
 @OmitFromCoverage
 @Composable
-fun TextStyle.withForcedLtr(): TextStyle {
-    val layoutDirection = LocalLayoutDirection.current
+fun TextStyle.withForcedLtrDirection(
+    layoutDirection: LayoutDirection = LocalLayoutDirection.current,
+): TextStyle {
     return merge(
         TextStyle(
             textDirection = TextDirection.Ltr,
             textAlign = when (layoutDirection) {
-                LayoutDirection.Rtl -> TextAlign.End
-                LayoutDirection.Ltr -> TextAlign.Start
+                LayoutDirection.Rtl -> TextAlign.Right
+                LayoutDirection.Ltr -> TextAlign.Left
             },
         ),
     )

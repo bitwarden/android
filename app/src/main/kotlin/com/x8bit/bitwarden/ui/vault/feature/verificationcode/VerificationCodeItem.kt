@@ -24,7 +24,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.platform.util.withForcedLtr
+import com.bitwarden.ui.platform.util.withForcedLtrDirection
 
 /**
  * The verification code item displayed to the user.
@@ -108,7 +108,7 @@ fun VaultVerificationCodeItem(
         if (!hideAuthCode) {
             Text(
                 text = authCode.chunked(3).joinToString(" "),
-                style = BitwardenTheme.typography.sensitiveInfoSmall.withForcedLtr(),
+                style = BitwardenTheme.typography.sensitiveInfoSmall.withForcedLtrDirection(),
                 color = BitwardenTheme.colorScheme.text.primary,
             )
 

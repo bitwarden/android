@@ -29,7 +29,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.platform.util.withForcedLtr
+import com.bitwarden.ui.platform.util.withForcedLtrDirection
 
 /**
  * The verification code item displayed to the user.
@@ -156,7 +156,7 @@ fun VaultVerificationCodeItem(
         Text(
             modifier = Modifier.testTag(tag = "AuthCode"),
             text = authCode.chunked(size = 3).joinToString(separator = " "),
-            style = BitwardenTheme.typography.sensitiveInfoSmall.withForcedLtr(),
+            style = BitwardenTheme.typography.sensitiveInfoSmall.withForcedLtrDirection(),
             color = BitwardenTheme.colorScheme.text.primary,
         )
 
