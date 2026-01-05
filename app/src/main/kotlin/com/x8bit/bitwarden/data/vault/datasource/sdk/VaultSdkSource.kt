@@ -487,6 +487,7 @@ interface VaultSdkSource {
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>>
 
     /**

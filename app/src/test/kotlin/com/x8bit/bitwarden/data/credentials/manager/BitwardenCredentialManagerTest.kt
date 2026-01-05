@@ -1165,6 +1165,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1304,6 +1305,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1425,6 +1427,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {

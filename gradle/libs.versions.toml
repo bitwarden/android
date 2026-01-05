@@ -30,14 +30,14 @@ androidxRoom = "2.8.4"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.11.0"
-bitwardenSdk = "1.0.0-4328-km-fix-cherry-pick"
+bitwardenSdk = "2.0.0-4254-6c954013"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
 firebaseBom = "34.5.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.5.0-jre"
-googleProtoBufJava = "4.33.0"
-googleProtoBufPlugin = "0.9.5"
+googleProtoBufJava = "4.33.2"
+googleProtoBufPlugin = "0.9.6"
 googleServices = "4.4.4"
 googleReview = "2.0.2"
 hilt = "2.57.2"
@@ -97,7 +97,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
-bitwarden-sdk = { module = "com.bitwarden:sdk-android.dev", version.ref = "bitwardenSdk" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }

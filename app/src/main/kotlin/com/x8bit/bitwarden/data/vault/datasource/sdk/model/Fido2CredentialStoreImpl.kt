@@ -42,7 +42,11 @@ class Fido2CredentialStoreImpl(
      * @param ids Optional list of FIDO 2 credential ID's to find.
      * @param ripId Relying Party ID to find.
      */
-    override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> =
+    override suspend fun findCredentials(
+        ids: List<ByteArray>?,
+        ripId: String,
+        userHandle: ByteArray?,
+    ): List<CipherView> =
         vaultRepository
             .decryptCipherListResultStateFlow
             .value

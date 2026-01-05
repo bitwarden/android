@@ -101,8 +101,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation_title">Configurar tempo limite de sessão para \"Desconectar\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Depois do período do tempo limite, você será desconectado. Você precisará estar conectado à internet para se conectar e acessar o seu cofre novamente. Suas configurações e PIN salvos neste dispositivo não serão alterados.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Configurar limite de tempo de sessão para \"Desconectar\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Depois do período do limite de tempo, você será desconectado. Você precisará estar conectado à internet para se conectar e acessar o seu cofre novamente. Suas configurações e PIN salvos neste dispositivo não serão alterados.</string>
     <string name="logging_in">Conectando-se…</string>
     <string name="login_to_bitwarden">Conecte-se ao Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
@@ -311,7 +311,7 @@ A leitura será feita automaticamente.</string>
     <string name="secure_notes">Anotações seguras</string>
     <string name="personal_details">Dados pessoais</string>
     <string name="contact_info">Informações de contato</string>
-    <string name="check_password_for_data_breaches">Conferir senha em vazamento de dados</string>
+    <string name="check_password_for_data_breaches">Conferir se a senha vazou</string>
     <plurals name="password_exposed">
         <item quantity="one">Esta senha foi exposta %d vez em vazamentos de dados. Você deve alterá-la.</item>
         <item quantity="other">Esta senha foi exposta %d vezes em vazamentos de dados. Você deve alterá-la.</item>
@@ -480,7 +480,7 @@ A leitura será feita automaticamente.</string>
     <string name="seven_days">7 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
-    <string name="custom_timeout">Tempo limite personalizado</string>
+    <string name="custom_timeout">Limite de tempo personalizado</string>
     <string name="add_this_authenticator_key_to_a_login">Adicione esta chave de autenticador a uma credencial existente, ou crie uma.</string>
     <string name="send_disabled_warning">Devido a uma política corporativa, você só pode apagar um Send existente.</string>
     <string name="about_send">Sobre o Send</string>
@@ -496,10 +496,10 @@ A leitura será feita automaticamente.</string>
     <string name="remove_master_password">Remover senha principal</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair de %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Tem certeza que quer sair de %1$s?</string>
+    <string name="leave_organization_button">Sair de %1$s</string>
+    <string name="leave_organization_warning">Se recusar, seus itens pessoais continuarão na sua conta, mas você perderá o acesso aos itens compartilhados e os recursos de organização.\n\nEntre em contato com o seu administrador para recuperar o acesso.</string>
+    <string name="how_to_manage_my_vault">Como gerencio meu cofre</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Voltar ao aplicativo</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na reconfiguração de senha. A inscrição permitirá que os administradores da organização alterem sua senha principal.</string>
@@ -512,12 +512,12 @@ A leitura será feita automaticamente.</string>
         <item quantity="one">%1$d minuto</item>
         <item quantity="other">%1$d minutos</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A sua organização configurou o tempo de limite máximo da sessão para %1$s e %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A sua organização configurou o tempo de limite máximo da sessão para %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A sua organização configurou o limite de tempo máximo da sessão para %1$s e %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A sua organização configurou o limite de tempo máximo da sessão para %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Esta configuração é gerenciada pela sua organização.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">A sua organização configurou o tempo de limite máximo da sessão para nunca.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A sua organização configurou o tempo de limite máximo da sessão para o reinício do aplicativo.</string>
-    <string name="vault_timeout_to_large">O tempo limite do seu cofre excede as restrições estabelecidas pela sua organização.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">A sua organização configurou o limite de tempo padrão da sessão para nunca.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A sua organização configurou o limite de tempo padrão da sessão para o reinício do aplicativo.</string>
+    <string name="vault_timeout_to_large">O limite de tempo do seu cofre excede as restrições estabelecidas pela sua organização.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Uma ou mais políticas da organização impedem que você exporte seu cofre individual.</string>
     <string name="add_account">Adicionar conta</string>
     <string name="account_unlocked">Desbloqueada</string>
@@ -626,7 +626,7 @@ Quer trocar para esta conta?</string>
     <string name="weak">Fraca</string>
     <string name="good">Boa</string>
     <string name="strong">Forte</string>
-    <string name="check_known_data_breaches_for_this_password">Conferir vazamentos de dados conhecidos por esta senha</string>
+    <string name="check_known_data_breaches_for_this_password">Conferir se esta senha vazou ao público</string>
     <string name="exposed_master_password">Senha principal exposta</string>
     <string name="password_found_in_a_data_breach_alert_description">Senha encontrada em um vazamento de dados. Use uma senha única para proteger sua conta. Tem certeza que quer usar uma senha exposta?</string>
     <string name="weak_and_exposed_master_password">Senha principal fraca e comprometida</string>
@@ -669,8 +669,8 @@ Quer trocar para esta conta?</string>
     <string name="bitwarden_help_center">Central de ajuda do Bitwarden</string>
     <string name="sync_now">Sincronizar agora</string>
     <string name="unlock_options">Opções de desbloqueio</string>
-    <string name="session_timeout">Tempo limite da sessão</string>
-    <string name="session_timeout_action">Ação do tempo limite da sessão</string>
+    <string name="session_timeout">Limite de tempo da sessão</string>
+    <string name="session_timeout_action">Ação do limite de tempo da sessão</string>
     <string name="account_fingerprint_phrase">Frase biométrica da conta</string>
     <string name="passkey_management_explanation_long">Use o Bitwarden para salvar e se conectar com chaves de acesso armazenadas no seu cofre.</string>
     <string name="autofill_services_explanation_long">Permita que o Bitwarden as suas informações de acesso salvas para se conectar a outros aplicativos no seu dispositivo.</string>
@@ -689,7 +689,7 @@ Quer trocar para esta conta?</string>
     <string name="learn_about_organizations_description_long">O Bitwarden permite compartilhar os seus itens do cofre com outros usando uma organização. Saiba mais no site do bitwarden.com.</string>
     <string name="created_x">Criado em %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Sua organização requer que você configure uma senha principal.</string>
-    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure um método de desbloqueio para alterar a ação do tempo limite do cofre.</string>
+    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure um método de desbloqueio para alterar a ação do limite de tempo do cofre.</string>
     <string name="save_passkey_as_new_login">Salvar chave de acesso como nova credencial</string>
     <string name="overwrite_passkey">Substituir chave de acesso?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Este item já contém uma chave de acesso. Tem certeza que deseja substituir a atual?</string>
@@ -1165,5 +1165,11 @@ Quer trocar para esta conta?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Use o método de bloqueio do seu dispositivo para desbloquear o aplicativo</string>
     <string name="loading_vault_data">Carregando dados do cofre…</string>
     <string name="resending">Reenviando</string>
-    <string name="you_left_the_organization">You left the organization</string>
+    <string name="you_left_the_organization">Você saiu da organização</string>
+    <string name="transfer_items_to_org">Transferir itens para %1$s</string>
+    <string name="transfer_items_description">%1$s exige que todos os itens sejam propriedade da organização por segurança e conformidade. Clique em aceitar para transferir a propriedade dos seus itens.</string>
+    <string name="decline_and_leave">Recusar e sair</string>
+    <string name="why_am_i_seeing_this">Por que estou vendo isso?</string>
+    <string name="migrating_items_to_x">Migrando itens para %s</string>
+    <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
 </resources>
