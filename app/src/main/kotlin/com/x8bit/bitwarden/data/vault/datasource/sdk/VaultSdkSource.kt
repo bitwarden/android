@@ -97,12 +97,13 @@ interface VaultSdkSource {
     ): Result<EnrollPinResponse>
 
     /**
-     * Validate the user pin using the [pinProtectedUserKey].
+     * Validates that the given PIN with the encrypted user key and returns `true` if the PIN is
+     * correct, otherwise `false`.
      */
-    suspend fun validatePin(
+    suspend fun validatePinUserKey(
         userId: String,
         pin: String,
-        pinProtectedUserKey: String,
+        pinProtectedUserKeyEnvelope: String,
     ): Result<Boolean>
 
     /**

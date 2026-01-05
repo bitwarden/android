@@ -542,7 +542,7 @@ class VaultItemListingViewModel @Inject constructor(
         action: VaultItemListingsAction.PinUserVerificationSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.validatePin(action.pin)
+            val result = authRepository.validatePinUserKey(action.pin)
             sendAction(
                 VaultItemListingsAction.Internal.ValidateUserVerificationPinResultReceive(
                     result = result,
