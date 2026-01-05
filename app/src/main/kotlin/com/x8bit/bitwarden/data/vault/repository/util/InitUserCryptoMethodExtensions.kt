@@ -15,9 +15,4 @@ val InitUserCryptoMethod.logTag: String
         is InitUserCryptoMethod.Pin -> "Pin"
         is InitUserCryptoMethod.PinEnvelope -> "Pin Envelope"
         is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
-        is InitUserCryptoMethod.Password -> {
-            // PM-27290: InitUserCryptoMethod.Password will be removed from the SDK in a future
-            // release. This else branch can be cleaned up afterwards.
-            throw IllegalArgumentException("Unsupported InitUserCryptoMethod: $this")
-        }
     }
