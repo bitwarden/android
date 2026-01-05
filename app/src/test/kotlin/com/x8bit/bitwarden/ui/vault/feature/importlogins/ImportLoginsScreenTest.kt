@@ -15,12 +15,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isBottomSheet
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just

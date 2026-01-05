@@ -12,6 +12,7 @@ import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import android.widget.inline.InlinePresentationSpec
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
-import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.ui.autofill.buildVaultItemAutofillRemoteViews
 import com.x8bit.bitwarden.ui.autofill.util.createVaultItemInlinePresentationOrNull
 import io.mockk.every
