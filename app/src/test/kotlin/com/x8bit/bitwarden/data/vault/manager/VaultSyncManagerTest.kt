@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -1268,7 +1269,10 @@ class VaultSyncManagerTest {
 
     @Test
     fun `shouldMigratePersonalVaultFlow should initially emit false`() = runTest {
-        assertEquals(false, vaultSyncManager.shouldMigratePersonalVaultFlow.value)
+        assertEquals(
+            VaultMigrationData.NoMigrationRequired,
+            vaultSyncManager.shouldMigratePersonalVaultFlow.value,
+        )
     }
 
     @Test
@@ -1283,6 +1287,9 @@ class VaultSyncManagerTest {
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
             } returns listOf(mockPolicy)
+            every {
+                policyManager.getPersonalOwnershipPolicyOrganizationId()
+            } returns "mockId-1"
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = userId,
@@ -1303,11 +1310,17 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
-                assertEquals(true, awaitItem())
+                assertEquals(
+                    VaultMigrationData.MigrationRequired(
+                        organizationId = "mockId-1",
+                        organizationName = "mockName-1",
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
@@ -1340,7 +1353,7 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
@@ -1383,7 +1396,7 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
@@ -1424,7 +1437,7 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
@@ -1463,7 +1476,7 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
@@ -1501,7 +1514,7 @@ class VaultSyncManagerTest {
             setupVaultDiskSourceFlows(userId)
 
             vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(false, awaitItem())
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
                 vaultSyncManager.sync()
 
