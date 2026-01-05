@@ -1305,7 +1305,7 @@ class AuthRepositoryImpl(
         val pinProtectedUserKeyEnvelope = authDiskSource
             .getPinProtectedUserKeyEnvelope(userId = activeAccount.userId)
             ?: return ValidatePinResult.Error(
-                error = MissingPropertyException("Pin Protected User Key"),
+                error = MissingPropertyException("Pin Protected User Key Envelope"),
             )
         return vaultSdkSource
             .validatePinUserKey(
