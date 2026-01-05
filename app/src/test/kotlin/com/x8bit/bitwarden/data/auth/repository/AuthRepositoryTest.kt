@@ -6767,7 +6767,7 @@ class AuthRepositoryTest {
         val pin = "PIN"
         fakeAuthDiskSource.userState = null
 
-        val result = repository.validatePin(pin = pin)
+        val result = repository.validatePinUserKey(pin = pin)
 
         assertEquals(
             ValidatePinResult.Error(error = NoActiveUserException()),
@@ -6775,8 +6775,9 @@ class AuthRepositoryTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `validatePin returns ValidatePinResult Error when no pin protected user key found`() =
+    fun `validatePinUserKey returns ValidatePinResult Error when no pin protected user key found`() =
         runTest {
             val pin = "PIN"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -6785,7 +6786,7 @@ class AuthRepositoryTest {
                 pinProtectedUserKey = null,
             )
 
-            val result = repository.validatePin(pin = pin)
+            val result = repository.validatePinUserKey(pin = pin)
 
             assertEquals(
                 ValidatePinResult.Error(MissingPropertyException("Pin Protected User Key")),
@@ -6794,75 +6795,42 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `validatePin returns ValidatePinResult Error when SDK validatePin fails`() = runTest {
-        val pin = "PIN"
-        val pinProtectedUserKey = "pinProtectedUserKey"
-        val error = Throwable("Fail!")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
-            userId = SINGLE_USER_STATE_1.activeUserId,
-            pinProtectedUserKeyEnvelope = pinProtectedUserKey,
-        )
-        coEvery {
-            vaultSdkSource.validatePin(
-                userId = SINGLE_USER_STATE_1.activeUserId,
-                pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
-            )
-        } returns error.asFailure()
-
-        val result = repository.validatePin(pin = pin)
-
-        assertEquals(
-            ValidatePinResult.Error(error = error),
-            result,
-        )
-        coVerify(exactly = 1) {
-            vaultSdkSource.validatePin(
-                userId = SINGLE_USER_STATE_1.activeUserId,
-                pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `validatePin returns ValidatePinResult Success with valid false when SDK validatePin returns false`() =
+    fun `validatePinUserKey returns ValidatePinResult Error when SDK validatePin fails`() =
         runTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
+            val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
             coEvery {
-                vaultSdkSource.validatePin(
+                vaultSdkSource.validatePinUserKey(
                     userId = SINGLE_USER_STATE_1.activeUserId,
                     pin = pin,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
                 )
-            } returns false.asSuccess()
+            } returns error.asFailure()
 
-            val result = repository.validatePin(pin = pin)
+            val result = repository.validatePinUserKey(pin = pin)
 
             assertEquals(
-                ValidatePinResult.Success(isValid = false),
+                ValidatePinResult.Error(error = error),
                 result,
             )
             coVerify(exactly = 1) {
-                vaultSdkSource.validatePin(
+                vaultSdkSource.validatePinUserKey(
                     userId = SINGLE_USER_STATE_1.activeUserId,
                     pin = pin,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
                 )
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePin returns ValidatePinResult Success with valid true when SDK validatePin returns true`() =
+    fun `validatePinUserKey returns ValidatePinResult Success with valid false when SDK validatePin returns false`() =
         runTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
@@ -6872,24 +6840,58 @@ class AuthRepositoryTest {
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
             coEvery {
-                vaultSdkSource.validatePin(
+                vaultSdkSource.validatePinUserKey(
                     userId = SINGLE_USER_STATE_1.activeUserId,
                     pin = pin,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
+                )
+            } returns false.asSuccess()
+
+            val result = repository.validatePinUserKey(pin = pin)
+
+            assertEquals(
+                ValidatePinResult.Success(isValid = false),
+                result,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.validatePinUserKey(
+                    userId = SINGLE_USER_STATE_1.activeUserId,
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validatePinUserKey returns ValidatePinResult Success with valid true when SDK validatePin returns true`() =
+        runTest {
+            val pin = "PIN"
+            val pinProtectedUserKey = "pinProtectedUserKey"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = SINGLE_USER_STATE_1.activeUserId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
+            )
+            coEvery {
+                vaultSdkSource.validatePinUserKey(
+                    userId = SINGLE_USER_STATE_1.activeUserId,
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
                 )
             } returns true.asSuccess()
 
-            val result = repository.validatePin(pin = pin)
+            val result = repository.validatePinUserKey(pin = pin)
 
             assertEquals(
                 ValidatePinResult.Success(isValid = true),
                 result,
             )
             coVerify(exactly = 1) {
-                vaultSdkSource.validatePin(
+                vaultSdkSource.validatePinUserKey(
                     userId = SINGLE_USER_STATE_1.activeUserId,
                     pin = pin,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
                 )
             }
         }

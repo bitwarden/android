@@ -734,7 +734,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.PinFido2VerificationSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.validatePin(action.pin)
+            val result = authRepository.validatePinUserKey(action.pin)
             sendAction(
                 VaultAddEditAction.Internal.ValidateFido2PinResultReceive(
                     result = result,

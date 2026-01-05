@@ -4242,7 +4242,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should display CredentialError when Pin verification fails`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
             viewModel.trySendAction(
@@ -4259,7 +4259,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4268,7 +4268,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should display Fido2PinError when user has retries remaining`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = false)
 
             viewModel.trySendAction(
@@ -4282,7 +4282,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4292,7 +4292,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val pin = "PIN"
             every { bitwardenCredentialManager.hasAuthenticationAttemptsRemaining() } returns false
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = false)
 
             viewModel.trySendAction(
@@ -4309,7 +4309,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4318,7 +4318,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should register credential when pin authenticated successfully`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = true)
 
             viewModel.trySendAction(
@@ -4327,7 +4327,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 

@@ -1296,7 +1296,7 @@ class AuthRepositoryImpl(
             }
     }
 
-    override suspend fun validatePin(pin: String): ValidatePinResult {
+    override suspend fun validatePinUserKey(pin: String): ValidatePinResult {
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
@@ -1308,10 +1308,10 @@ class AuthRepositoryImpl(
                 error = MissingPropertyException("Pin Protected User Key"),
             )
         return vaultSdkSource
-            .validatePin(
+            .validatePinUserKey(
                 userId = activeAccount.userId,
                 pin = pin,
-                pinProtectedUserKey = pinProtectedUserKeyEnvelope,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
             .fold(
                 onSuccess = { ValidatePinResult.Success(isValid = it) },

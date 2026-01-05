@@ -359,14 +359,14 @@ interface AuthRepository :
     suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
-     * Validates the master password for the current logged in user.
+     * Validates the master password for the current logged-in user.
      */
     suspend fun validatePassword(password: String): ValidatePasswordResult
 
     /**
-     * Validates the PIN for the current logged in user.
+     * Validates the PIN for the current logged-in user.
      */
-    suspend fun validatePin(pin: String): ValidatePinResult
+    suspend fun validatePinUserKey(pin: String): ValidatePinResult
 
     /**
      * Validates the given [password] against the master password
