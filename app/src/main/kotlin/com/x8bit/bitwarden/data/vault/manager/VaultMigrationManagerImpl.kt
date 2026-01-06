@@ -22,18 +22,16 @@ class VaultMigrationManagerImpl(
     private val featureFlagManager: FeatureFlagManager,
     private val connectionManager: NetworkConnectionManager,
 ) : VaultMigrationManager {
-
-    private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
-
     private val mutableVaultMigrationDataStateFlow =
         MutableStateFlow<VaultMigrationData>(value = VaultMigrationData.NoMigrationRequired)
 
     override val vaultMigrationDataStateFlow: StateFlow<VaultMigrationData>
         get() = mutableVaultMigrationDataStateFlow.asStateFlow()
 
-    override fun verifyAndUpdateMigrationState(cipherList: List<SyncResponseJson.Cipher>) {
-        val userId = activeUserId ?: return
-
+    override fun verifyAndUpdateMigrationState(
+        userId: String,
+        cipherList: List<SyncResponseJson.Cipher>,
+    ) {
         mutableVaultMigrationDataStateFlow.update {
             if (shouldMigrateVault { cipherList.any { it.organizationId == null } }) {
                 val orgId = policyManager.getPersonalOwnershipPolicyOrganizationId()

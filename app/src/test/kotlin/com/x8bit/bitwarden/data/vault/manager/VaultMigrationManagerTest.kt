@@ -81,7 +81,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 assertEquals(
                     VaultMigrationData.MigrationRequired(
@@ -97,6 +100,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when no personal ownership policy`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             every {
@@ -109,7 +113,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since no policy
                 expectNoEvents()
@@ -120,6 +127,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when feature flag is disabled`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -137,7 +145,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since feature flag is disabled
                 expectNoEvents()
@@ -148,6 +159,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when no network connection`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -163,7 +175,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since no network
                 expectNoEvents()
@@ -174,6 +189,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when no personal ciphers exist`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -188,7 +204,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since no personal ciphers
                 expectNoEvents()
@@ -199,6 +218,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when cipher list is empty`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -211,7 +231,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since cipher list is empty
                 expectNoEvents()
@@ -222,6 +245,7 @@ class VaultMigrationManagerTest {
     @Suppress("MaxLineLength")
     fun `verifyAndUpdateMigrationState should emit NoMigrationRequired when organization ID is null`() =
         runTest {
+            val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -238,7 +262,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since organization ID is null
                 expectNoEvents()
@@ -273,7 +300,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since organizations list is null
                 expectNoEvents()
@@ -309,7 +339,10 @@ class VaultMigrationManagerTest {
             vaultMigrationManager.vaultMigrationDataStateFlow.test {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
 
-                vaultMigrationManager.verifyAndUpdateMigrationState(cipherList)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = cipherList,
+                )
 
                 // Should still be NoMigrationRequired since organization is not found
                 expectNoEvents()

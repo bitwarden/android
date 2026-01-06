@@ -19,9 +19,10 @@ interface VaultMigrationManager {
      * Verifies if the user should migrate their personal vault to organization collections
      * based on active policies, feature flags, and the provided cipher list.
      *
+     * @param userId The ID of the user to check for migration
      * @param cipherList List of ciphers from the sync response to check for personal items.
      */
-    fun verifyAndUpdateMigrationState(cipherList: List<SyncResponseJson.Cipher>)
+    fun verifyAndUpdateMigrationState(userId: String, cipherList: List<SyncResponseJson.Cipher>)
 
     /**
      * Checks if the user should migrate their vault based on policies, feature flags,

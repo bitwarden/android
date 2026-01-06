@@ -343,7 +343,10 @@ class VaultSyncManagerImpl(
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
                     syncResponse.ciphers?.let {
-                        vaultMigrationManager.verifyAndUpdateMigrationState(it)
+                        vaultMigrationManager.verifyAndUpdateMigrationState(
+                            userId = userId,
+                            cipherList = it,
+                        )
                     }
                     SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
@@ -407,7 +410,10 @@ class VaultSyncManagerImpl(
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)
                 // Verify migration state after unlock with the cipher list from disk
-                vaultMigrationManager.verifyAndUpdateMigrationState(it)
+                vaultMigrationManager.verifyAndUpdateMigrationState(
+                    userId = userId,
+                    cipherList = it,
+                )
                 vaultSdkSource
                     .decryptCipherListWithFailures(
                         userId = userId,

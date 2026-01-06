@@ -145,7 +145,7 @@ class VaultSyncManagerTest {
         MutableStateFlow<VaultMigrationData>(VaultMigrationData.NoMigrationRequired)
     private val vaultMigrationManager: VaultMigrationManager = mockk {
         every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
-        every { verifyAndUpdateMigrationState(any()) } just runs
+        every { verifyAndUpdateMigrationState(userId = any(), cipherList = any()) } just runs
         every { shouldMigrateVault(any()) } returns false
     }
 
@@ -527,7 +527,10 @@ class VaultSyncManagerTest {
                     assertEquals(DataState.Loaded(mockDecryptCipherListResult), awaitItem())
 
                     verify(exactly = 1) {
-                        vaultMigrationManager.verifyAndUpdateMigrationState(mockCipherList)
+                        vaultMigrationManager.verifyAndUpdateMigrationState(
+                            userId = userId,
+                            cipherList = mockCipherList,
+                        )
                     }
                 }
         }
