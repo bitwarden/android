@@ -19,8 +19,8 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -37,7 +37,7 @@ import javax.inject.Inject
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
-    vaultRepository: VaultRepository,
+    vaultMigrationManager: VaultMigrationManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -46,7 +46,7 @@ class RootNavViewModel @Inject constructor(
             authRepository.authStateFlow,
             authRepository.userStateFlow,
             specialCircumstanceManager.specialCircumstanceStateFlow,
-            vaultRepository.shouldMigratePersonalVaultFlow,
+            vaultMigrationManager.vaultMigrationDataStateFlow,
         ) { authState, userState, specialCircumstance, shouldMigratePersonalVault ->
             RootNavAction.Internal.UserStateUpdateReceive(
                 authState = authState,

@@ -5,7 +5,6 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
-import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -62,12 +61,6 @@ interface VaultSyncManager {
      * Flow that represents the current send data.
      */
     val sendDataStateFlow: StateFlow<DataState<SendData>>
-
-    /**
-     * Flow that emits when conditions are met for the user to migrate their personal vault.
-     * Updated after each sync to reflect current policy and vault state.
-     */
-    val shouldMigratePersonalVaultFlow: StateFlow<VaultMigrationData>
 
     /**
      * Sync the vault data for the current user.

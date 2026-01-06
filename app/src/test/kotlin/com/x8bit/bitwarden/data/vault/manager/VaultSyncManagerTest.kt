@@ -5,13 +5,11 @@ import app.cash.turbine.turbineScope
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
@@ -37,10 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -146,14 +141,12 @@ class VaultSyncManagerTest {
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
-    private val policyManager: PolicyManager = mockk<PolicyManager> {
-        every { getActivePolicies(any()) } returns emptyList()
-    }
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) } returns true
-    }
-    private val connectionManager: NetworkConnectionManager = mockk<NetworkConnectionManager> {
-        every { isNetworkConnected } returns true
+    private val mutableVaultMigrationDataStateFlow =
+        MutableStateFlow<VaultMigrationData>(VaultMigrationData.NoMigrationRequired)
+    private val vaultMigrationManager: VaultMigrationManager = mockk {
+        every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
+        every { verifyAndUpdateMigrationState(any()) } just runs
+        every { shouldMigrateVault(any()) } returns false
     }
 
     private val vaultSyncManager: VaultSyncManager = VaultSyncManagerImpl(
@@ -165,9 +158,7 @@ class VaultSyncManagerTest {
         userLogoutManager = userLogoutManager,
         userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
-        policyManager = policyManager,
-        featureFlagManager = mockFeatureFlagManager,
-        connectionManager = connectionManager,
+        vaultMigrationManager = vaultMigrationManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
         pushManager = pushManager,
@@ -1265,390 +1256,6 @@ class VaultSyncManagerTest {
                 )
             }
             coVerify(exactly = 0) { syncService.sync() }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should initially emit false`() = runTest {
-        assertEquals(
-            VaultMigrationData.NoMigrationRequired,
-            vaultSyncManager.shouldMigratePersonalVaultFlow.value,
-        )
-    }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit true after sync when all conditions are met`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            // Setup conditions for migration
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-            every {
-                policyManager.getPersonalOwnershipPolicyOrganizationId()
-            } returns "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            // Setup sync with personal ciphers (organizationId = null)
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                assertEquals(
-                    VaultMigrationData.MigrationRequired(
-                        organizationId = "mockId-1",
-                        organizationName = "mockName-1",
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when no personal ownership policy`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns emptyList()
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be false since no policy
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when feature flag is disabled`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-
-            every {
-                mockFeatureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems)
-            } returns false
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be false since feature flag is disabled
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when no network connection`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-
-            every { connectionManager.isNetworkConnected } returns false
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be false since no network
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when no personal ciphers exist`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-
-            // All ciphers belong to organizations
-            val orgCipher = createMockCipher(number = 1).copy(organizationId = "org-id")
-            val syncResponse = createMockSyncResponse(number = 1).copy(ciphers = listOf(orgCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be false since no personal ciphers
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when cipher list is null`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-
-            val syncResponse = createMockSyncResponse(number = 1).copy(ciphers = null)
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be false since ciphers is null
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when organization ID is null`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-            every {
-                policyManager.getPersonalOwnershipPolicyOrganizationId()
-            } returns null
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be NoMigrationRequired since organization ID is null
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when organizations list is null`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-            every {
-                policyManager.getPersonalOwnershipPolicyOrganizationId()
-            } returns "mockId-1"
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse = createMockSyncResponse(
-                number = 1,
-                profile = createMockProfile(number = 1, organizations = null),
-            ).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = emptyMap(),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be NoMigrationRequired since organizations list is null
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `shouldMigratePersonalVaultFlow should emit false when organization not found`() =
-        runTest {
-            val userId = "mockId-1"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId)
-
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-            every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            } returns listOf(mockPolicy)
-            every {
-                policyManager.getPersonalOwnershipPolicyOrganizationId()
-            } returns "non-existent-org-id"
-
-            val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-            val syncResponse =
-                createMockSyncResponse(number = 1).copy(ciphers = listOf(personalCipher))
-            coEvery { syncService.sync() } returns syncResponse.asSuccess()
-            coEvery { vaultDiskSource.replaceVaultData(userId = userId, vault = any()) } just runs
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(number = 1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-
-            setupEmptyDecryptionResults(userId)
-            setupVaultDiskSourceFlows(userId)
-
-            vaultSyncManager.shouldMigratePersonalVaultFlow.test {
-                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-                vaultSyncManager.sync()
-
-                // Should still be NoMigrationRequired since organization is not found
-                expectNoEvents()
-            }
         }
 
     //region Helper functions

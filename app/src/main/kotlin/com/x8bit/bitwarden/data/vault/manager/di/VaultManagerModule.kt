@@ -39,6 +39,8 @@ import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManagerImpl
 import dagger.Module
@@ -56,6 +58,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideVaultMigrationManager(
+        authDiskSource: AuthDiskSource,
+        policyManager: PolicyManager,
+        featureFlagManager: FeatureFlagManager,
+        connectionManager: NetworkConnectionManager,
+    ): VaultMigrationManager = VaultMigrationManagerImpl(
+        authDiskSource = authDiskSource,
+        policyManager = policyManager,
+        featureFlagManager = featureFlagManager,
+        connectionManager = connectionManager,
+    )
 
     @Provides
     @Singleton
@@ -195,9 +211,7 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         userStateManager: UserStateManager,
         vaultLockManager: VaultLockManager,
-        policyManager: PolicyManager,
-        featureFlagManager: FeatureFlagManager,
-        connectionManager: NetworkConnectionManager,
+        vaultMigrationManager: VaultMigrationManager,
         clock: Clock,
         databaseSchemeManager: DatabaseSchemeManager,
         pushManager: PushManager,
@@ -211,9 +225,7 @@ object VaultManagerModule {
         userLogoutManager = userLogoutManager,
         userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
-        policyManager = policyManager,
-        featureFlagManager = featureFlagManager,
-        connectionManager = connectionManager,
+        vaultMigrationManager = vaultMigrationManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
         pushManager = pushManager,

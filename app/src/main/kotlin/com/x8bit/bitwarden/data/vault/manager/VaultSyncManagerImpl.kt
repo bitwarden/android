@@ -3,14 +3,11 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.SyncResponseJson.Cipher
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.vault.DecryptCipherListResult
@@ -25,16 +22,12 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.error.SecurityStampMismatchException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
-import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -88,9 +81,7 @@ class VaultSyncManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val userStateManager: UserStateManager,
     private val vaultLockManager: VaultLockManager,
-    private val policyManager: PolicyManager,
-    private val featureFlagManager: FeatureFlagManager,
-    private val connectionManager: NetworkConnectionManager,
+    private val vaultMigrationManager: VaultMigrationManager,
     private val clock: Clock,
     databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
@@ -117,9 +108,6 @@ class VaultSyncManagerImpl(
     private val mutableDomainsStateFlow =
         MutableStateFlow<DataState<DomainsData>>(DataState.Loading)
 
-    private val mutableShouldMigratePersonalVaultFlow =
-        MutableStateFlow<VaultMigrationData>(value = VaultMigrationData.NoMigrationRequired)
-
     override val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
         get() = mutableDecryptCipherListResultFlow.asStateFlow()
 
@@ -134,9 +122,6 @@ class VaultSyncManagerImpl(
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = mutableSendDataStateFlow.asStateFlow()
-
-    override val shouldMigratePersonalVaultFlow: StateFlow<VaultMigrationData>
-        get() = mutableShouldMigratePersonalVaultFlow.asStateFlow()
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
         combine(
@@ -358,7 +343,7 @@ class VaultSyncManagerImpl(
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
                     syncResponse.ciphers?.let {
-                        verifyAndUpdateIfUserShouldMigrateVaultToMyItems(it)
+                        vaultMigrationManager.verifyAndUpdateMigrationState(it)
                     }
                     SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
@@ -430,7 +415,7 @@ class VaultSyncManagerImpl(
                         onSuccess = { result ->
                             // We need to be sure the data on device is updated
                             // before sending the user to the migration screen
-                            if (userShouldMigrateVault {
+                            if (vaultMigrationManager.shouldMigrateVault {
                                     result.successes.any { it.organizationId == null }
                                 }
                             ) {
@@ -547,44 +532,6 @@ class VaultSyncManagerImpl(
         }
         mutableSendDataStateFlow.update { currentState ->
             throwable.toNetworkOrErrorState(data = currentState.data)
-        }
-    }
-
-    /**
-     * Evaluates if the user should migrate their personal vault based on
-     * policies, personal ciphers, feature flag, and network connectivity.
-     */
-    private fun userShouldMigrateVault(hasPersonalItems: () -> Boolean): Boolean {
-        return policyManager
-            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            .any() &&
-            featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
-            connectionManager.isNetworkConnected &&
-            hasPersonalItems()
-    }
-
-    private fun verifyAndUpdateIfUserShouldMigrateVaultToMyItems(cipherList: List<Cipher>) {
-        val userId = activeUserId ?: return
-
-        mutableShouldMigratePersonalVaultFlow.update {
-            if (userShouldMigrateVault { cipherList.any { it.organizationId == null } }) {
-                val orgId = policyManager.getPersonalOwnershipPolicyOrganizationId()
-                val orgName = authDiskSource
-                    .getOrganizations(userId = userId)
-                    ?.firstOrNull { it.id == orgId }
-                    ?.name
-
-                if (orgId != null && orgName != null) {
-                    VaultMigrationData.MigrationRequired(
-                        organizationId = orgId,
-                        organizationName = orgName,
-                    )
-                } else {
-                    VaultMigrationData.NoMigrationRequired
-                }
-            } else {
-                VaultMigrationData.NoMigrationRequired
-            }
         }
     }
 
