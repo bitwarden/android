@@ -7,6 +7,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -26,6 +28,8 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     private val mockOrganizationEventManager: OrganizationEventManager = mockk {
         every { trackEvent(any()) } just runs
     }
+    private val mockVaultMigrationManager: VaultMigrationManager = mockk(relaxed = true)
+    private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
 
     @BeforeEach
     fun setup() {
@@ -176,6 +180,8 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         )
         return MigrateToMyItemsViewModel(
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
+            vaultSyncManager = mockVaultSyncManager,
             savedStateHandle = savedStateHandle,
         )
     }

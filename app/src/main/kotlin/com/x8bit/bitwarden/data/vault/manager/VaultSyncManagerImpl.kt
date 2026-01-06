@@ -406,6 +406,8 @@ class VaultSyncManagerImpl(
             .onStart { mutableDecryptCipherListResultFlow.updateToPendingOrLoading() }
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)
+                // Verify migration state after unlock with the cipher list from disk
+                vaultMigrationManager.verifyAndUpdateMigrationState(it)
                 vaultSdkSource
                     .decryptCipherListWithFailures(
                         userId = userId,
@@ -413,14 +415,6 @@ class VaultSyncManagerImpl(
                     )
                     .fold(
                         onSuccess = { result ->
-                            // We need to be sure the data on device is updated
-                            // before sending the user to the migration screen
-                            if (vaultMigrationManager.shouldMigrateVault {
-                                    result.successes.any { it.organizationId == null }
-                                }
-                            ) {
-                                sync(forced = true)
-                            }
                             DataState.Loaded(
                                 result.copy(successes = result.successes.sortAlphabetically()),
                             )

@@ -497,6 +497,41 @@ class VaultSyncManagerTest {
             }
     }
 
+    @Test
+    fun `vault unlock should trigger migration state verification with cipher list from disk`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherList = listOf(createMockCipher(number = 1))
+            val mockEncryptedCipherList = mockCipherList.toEncryptedSdkCipherList()
+            val mockDecryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+            val mutableCiphersStateFlow =
+                bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>(replay = 1)
+            setupVaultDiskSourceFlows(ciphersFlow = mutableCiphersStateFlow)
+            coEvery {
+                vaultSdkSource.decryptCipherListWithFailures(
+                    userId = userId,
+                    cipherList = mockEncryptedCipherList,
+                )
+            } returns mockDecryptCipherListResult.asSuccess()
+
+            vaultSyncManager
+                .decryptCipherListResultStateFlow
+                .test {
+                    assertEquals(DataState.Loading, awaitItem())
+                    mutableCiphersStateFlow.tryEmit(mockCipherList)
+
+                    expectNoEvents()
+                    setVaultToUnlocked(userId = userId)
+
+                    assertEquals(DataState.Loaded(mockDecryptCipherListResult), awaitItem())
+
+                    verify(exactly = 1) {
+                        vaultMigrationManager.verifyAndUpdateMigrationState(mockCipherList)
+                    }
+                }
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `collectionsStateFlow should emit decrypted list of collections when decryptCollectionList succeeds`() =
