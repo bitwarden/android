@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
 import android.net.Uri
 import android.os.Parcelable
-import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseIdentityUrl
@@ -408,7 +407,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         // a result due to user intervention
         sendAction(
             EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(
-                uri = uri.toUri(),
+                uri = uri,
                 scheme = "bitwarden",
             ),
         )

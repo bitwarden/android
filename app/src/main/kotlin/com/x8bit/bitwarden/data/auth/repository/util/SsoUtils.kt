@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import androidx.browser.auth.AuthTabIntent
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.parcelize.Parcelize
 import java.net.URLEncoder
@@ -28,7 +29,7 @@ fun generateUriForSso(
     token: String,
     state: String,
     codeVerifier: String,
-): String {
+): Uri {
     val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
@@ -39,7 +40,7 @@ fun generateUriForSso(
             .digest(codeVerifier.toByteArray()),
     )
 
-    return "$identityBaseUrl/connect/authorize" +
+    val uri = "$identityBaseUrl/connect/authorize" +
         "?client_id=mobile" +
         "&redirect_uri=$redirectUri" +
         "&response_type=code" +
@@ -50,6 +51,7 @@ fun generateUriForSso(
         "&response_mode=query" +
         "&domain_hint=$encodedOrganizationIdentifier" +
         "&ssoToken=$encodedToken"
+    return uri.toUri()
 }
 
 /**
