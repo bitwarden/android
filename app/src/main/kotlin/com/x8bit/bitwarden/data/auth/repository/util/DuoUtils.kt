@@ -5,7 +5,11 @@ import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import com.bitwarden.annotation.OmitFromCoverage
 
-private const val DUO_HOST: String = "duo-callback"
+private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
+private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private const val APP_LINK_SCHEME: String = "https"
+private const val DEEPLINK_SCHEME: String = "bitwarden"
+private const val CALLBACK: String = "duo-callback"
 
 /**
  * Retrieves a [DuoCallbackTokenResult] from an Intent. There are three possible cases.
@@ -18,11 +22,28 @@ private const val DUO_HOST: String = "duo-callback"
  * - [DuoCallbackTokenResult.Success]: Intent is the Duo callback, and it has a token.
  */
 fun Intent.getDuoCallbackTokenResult(): DuoCallbackTokenResult? {
-    val localData = data
-    return if (action == Intent.ACTION_VIEW && localData != null && localData.host == DUO_HOST) {
-        localData.getDuoCallbackTokenResult()
-    } else {
-        null
+    if (action != Intent.ACTION_VIEW) return null
+    val localData = data ?: return null
+    return when (localData.scheme) {
+        DEEPLINK_SCHEME -> {
+            if (localData.host == CALLBACK) {
+                localData.getDuoCallbackTokenResult()
+            } else {
+                null
+            }
+        }
+
+        APP_LINK_SCHEME -> {
+            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
+                localData.path == "/$CALLBACK"
+            ) {
+                localData.getDuoCallbackTokenResult()
+            } else {
+                null
+            }
+        }
+
+        else -> null
     }
 }
 

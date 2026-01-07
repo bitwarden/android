@@ -140,6 +140,19 @@
             android:launchMode="singleTop"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="bitwarden.com" />
+                <data android:host="bitwarden.eu" />
+                <data android:pathPattern="/duo-callback" />
+                <data android:pathPattern="/sso-callback" />
+                <data android:pathPattern="/webauthn-callback" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
