@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -15,8 +16,9 @@ class SettingDiskSourceTest {
 
     private val sharedPreferences: FakeSharedPreferences = FakeSharedPreferences()
 
-    private val settingDiskSource = SettingsDiskSourceImpl(
-        sharedPreferences,
+    private val settingDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+        flightRecorderDiskSource = mockk(),
     )
 
     @Test

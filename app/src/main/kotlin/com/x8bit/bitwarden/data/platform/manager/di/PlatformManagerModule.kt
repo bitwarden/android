@@ -12,8 +12,6 @@ import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.cxf.registry.CredentialExchangeRegistry
 import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.NativeLibraryManager
-import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
-import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
@@ -105,22 +103,6 @@ object PlatformManagerModule {
     fun provideAppStateManager(
         application: Application,
     ): AppStateManager = AppStateManagerImpl(application = application)
-
-    @Provides
-    @Singleton
-    fun provideFlightRecorderManager(
-        @ApplicationContext context: Context,
-        clock: Clock,
-        dispatcherManager: DispatcherManager,
-        settingsDiskSource: SettingsDiskSource,
-        flightRecorderWriter: FlightRecorderWriter,
-    ): FlightRecorderManager = FlightRecorderManager.create(
-        context = context,
-        clock = clock,
-        dispatcherManager = dispatcherManager,
-        flightRecorderDiskSource = settingsDiskSource,
-        flightRecorderWriter = flightRecorderWriter,
-    )
 
     @Provides
     @Singleton
