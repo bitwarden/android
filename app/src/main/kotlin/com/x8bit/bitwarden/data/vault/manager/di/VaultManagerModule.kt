@@ -63,14 +63,22 @@ object VaultManagerModule {
     @Singleton
     fun provideVaultMigrationManager(
         authDiskSource: AuthDiskSource,
+        vaultDiskSource: VaultDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        vaultLockManager: VaultLockManager,
         policyManager: PolicyManager,
         featureFlagManager: FeatureFlagManager,
         connectionManager: NetworkConnectionManager,
+        dispatcherManager: DispatcherManager,
     ): VaultMigrationManager = VaultMigrationManagerImpl(
         authDiskSource = authDiskSource,
+        vaultDiskSource = vaultDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        vaultLockManager = vaultLockManager,
         policyManager = policyManager,
         featureFlagManager = featureFlagManager,
         connectionManager = connectionManager,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
@@ -211,7 +219,6 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         userStateManager: UserStateManager,
         vaultLockManager: VaultLockManager,
-        vaultMigrationManager: VaultMigrationManager,
         clock: Clock,
         databaseSchemeManager: DatabaseSchemeManager,
         pushManager: PushManager,
@@ -225,7 +232,6 @@ object VaultManagerModule {
         userLogoutManager = userLogoutManager,
         userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
-        vaultMigrationManager = vaultMigrationManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
         pushManager = pushManager,

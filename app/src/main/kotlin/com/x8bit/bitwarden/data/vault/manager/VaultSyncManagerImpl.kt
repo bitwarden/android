@@ -81,7 +81,6 @@ class VaultSyncManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val userStateManager: UserStateManager,
     private val vaultLockManager: VaultLockManager,
-    private val vaultMigrationManager: VaultMigrationManager,
     private val clock: Clock,
     databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
@@ -342,12 +341,6 @@ class VaultSyncManagerImpl(
                     )
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
-                    syncResponse.ciphers?.let {
-                        vaultMigrationManager.verifyAndUpdateMigrationState(
-                            userId = userId,
-                            cipherList = it,
-                        )
-                    }
                     SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
             },
@@ -409,11 +402,6 @@ class VaultSyncManagerImpl(
             .onStart { mutableDecryptCipherListResultFlow.updateToPendingOrLoading() }
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)
-                // Verify migration state after unlock with the cipher list from disk
-                vaultMigrationManager.verifyAndUpdateMigrationState(
-                    userId = userId,
-                    cipherList = it,
-                )
                 vaultSdkSource
                     .decryptCipherListWithFailures(
                         userId = userId,

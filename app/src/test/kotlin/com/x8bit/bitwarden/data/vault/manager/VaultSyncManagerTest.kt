@@ -48,7 +48,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
-import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -141,12 +140,6 @@ class VaultSyncManagerTest {
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
-    private val mutableVaultMigrationDataStateFlow =
-        MutableStateFlow<VaultMigrationData>(VaultMigrationData.NoMigrationRequired)
-    private val vaultMigrationManager: VaultMigrationManager = mockk {
-        every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
-        every { verifyAndUpdateMigrationState(userId = any(), cipherList = any()) } just runs
-    }
 
     private val vaultSyncManager: VaultSyncManager = VaultSyncManagerImpl(
         syncService = syncService,
@@ -157,7 +150,6 @@ class VaultSyncManagerTest {
         userLogoutManager = userLogoutManager,
         userStateManager = userStateManager,
         vaultLockManager = vaultLockManager,
-        vaultMigrationManager = vaultMigrationManager,
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
         pushManager = pushManager,
@@ -524,13 +516,6 @@ class VaultSyncManagerTest {
                     setVaultToUnlocked(userId = userId)
 
                     assertEquals(DataState.Loaded(mockDecryptCipherListResult), awaitItem())
-
-                    verify(exactly = 1) {
-                        vaultMigrationManager.verifyAndUpdateMigrationState(
-                            userId = userId,
-                            cipherList = mockCipherList,
-                        )
-                    }
                 }
         }
 
