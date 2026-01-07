@@ -12,7 +12,7 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "8F:52:6E:1E:53:D6:BD:4D:FB:F4:F4:B9:3C:2A:91:EC:B5:CB:8D:A5:E1:4A:D9:4C:25:70:E1:E3:C7:13:52:7F"
-          },
+          }
         ]
       }
     },
