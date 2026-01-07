@@ -132,6 +132,7 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
+                specialCircumstance == null &&
                 action.vaultMigrationData is VaultMigrationData.MigrationRequired -> {
                 RootNavState.MigrateToMyItems(
                     organizationId = action.vaultMigrationData.organizationId,
