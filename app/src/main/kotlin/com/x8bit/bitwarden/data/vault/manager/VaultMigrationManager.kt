@@ -23,13 +23,4 @@ interface VaultMigrationManager {
      * @param cipherList List of ciphers from the sync response to check for personal items.
      */
     fun verifyAndUpdateMigrationState(userId: String, cipherList: List<SyncResponseJson.Cipher>)
-
-    /**
-     * Checks if the user should migrate their vault based on policies, feature flags,
-     * network connectivity, and whether they have personal items.
-     *
-     * @param hasPersonalItems Callback to check if the user has personal items.
-     * @return true if migration conditions are met, false otherwise.
-     */
-    fun shouldMigrateVault(hasPersonalItems: () -> Boolean): Boolean
 }

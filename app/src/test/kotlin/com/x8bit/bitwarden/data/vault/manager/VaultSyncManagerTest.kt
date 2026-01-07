@@ -146,7 +146,6 @@ class VaultSyncManagerTest {
     private val vaultMigrationManager: VaultMigrationManager = mockk {
         every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
         every { verifyAndUpdateMigrationState(userId = any(), cipherList = any()) } just runs
-        every { shouldMigrateVault(any()) } returns false
     }
 
     private val vaultSyncManager: VaultSyncManager = VaultSyncManagerImpl(

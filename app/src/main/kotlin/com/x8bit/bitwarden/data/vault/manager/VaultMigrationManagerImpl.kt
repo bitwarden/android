@@ -33,7 +33,7 @@ class VaultMigrationManagerImpl(
         cipherList: List<SyncResponseJson.Cipher>,
     ) {
         mutableVaultMigrationDataStateFlow.update {
-            if (shouldMigrateVault { cipherList.any { it.organizationId == null } }) {
+            if (shouldMigrateVault(cipherList)) {
                 val orgId = policyManager.getPersonalOwnershipPolicyOrganizationId()
                 val orgName = authDiskSource
                     .getOrganizations(userId = userId)
@@ -54,12 +54,19 @@ class VaultMigrationManagerImpl(
         }
     }
 
-    override fun shouldMigrateVault(hasPersonalItems: () -> Boolean): Boolean {
+    /**
+     * Checks if the user should migrate their vault based on policies, feature flags,
+     * network connectivity, and whether they have personal items.
+     *
+     * @param cipherList List of ciphers to check for personal items.
+     * @return true if migration conditions are met, false otherwise.
+     */
+    private fun shouldMigrateVault(cipherList: List<SyncResponseJson.Cipher>): Boolean {
         return policyManager
             .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any() &&
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             connectionManager.isNetworkConnected &&
-            hasPersonalItems()
+            cipherList.any { it.organizationId == null }
     }
 }
