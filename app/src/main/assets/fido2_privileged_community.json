@@ -31,18 +31,6 @@
     {
       "type": "android",
       "info": {
-        "package_name": "org.chromium.chrome",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "A8:56:48:50:79:BC:B3:57:BF:BE:69:BA:19:A9:BA:43:CD:0A:D9:AB:22:67:52:C7:80:B6:88:8A:FD:48:21:6B"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
         "package_name": "org.cromite.cromite",
         "signatures": [
           {
