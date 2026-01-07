@@ -24,7 +24,6 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -145,7 +144,7 @@ class AuthenticatorRepositoryTest {
             every { sharedAccounts.toAuthenticatorItems() } returns authenticatorItems
             every {
                 mockTotpCodeManager.getTotpCodesFlow(authenticatorItems)
-            } returns flowOf(verificationCodes)
+            } returns MutableStateFlow(verificationCodes)
             authenticatorRepository.sharedCodesStateFlow.test {
                 assertEquals(SharedVerificationCodesState.Loading, awaitItem())
                 mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
