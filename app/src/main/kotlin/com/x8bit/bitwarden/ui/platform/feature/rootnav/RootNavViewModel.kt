@@ -47,12 +47,12 @@ class RootNavViewModel @Inject constructor(
             authRepository.userStateFlow,
             specialCircumstanceManager.specialCircumstanceStateFlow,
             vaultMigrationManager.vaultMigrationDataStateFlow,
-        ) { authState, userState, specialCircumstance, shouldMigratePersonalVault ->
+        ) { authState, userState, specialCircumstance, vaultMigrationData ->
             RootNavAction.Internal.UserStateUpdateReceive(
                 authState = authState,
                 userState = userState,
                 specialCircumstance = specialCircumstance,
-                shouldMigratePersonalVault = shouldMigratePersonalVault,
+                vaultMigrationData = vaultMigrationData,
             )
         }
             .onEach(::handleAction)
@@ -132,10 +132,10 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-                action.shouldMigratePersonalVault is VaultMigrationData.MigrationRequired -> {
+                action.vaultMigrationData is VaultMigrationData.MigrationRequired -> {
                 RootNavState.MigrateToMyItems(
-                    organizationId = action.shouldMigratePersonalVault.organizationId,
-                    organizationName = action.shouldMigratePersonalVault.organizationName,
+                    organizationId = action.vaultMigrationData.organizationId,
+                    organizationName = action.vaultMigrationData.organizationName,
                 )
             }
 
@@ -521,7 +521,7 @@ sealed class RootNavAction {
             val authState: AuthState,
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
-            val shouldMigratePersonalVault: VaultMigrationData,
+            val vaultMigrationData: VaultMigrationData,
         ) : RootNavAction()
     }
 }
