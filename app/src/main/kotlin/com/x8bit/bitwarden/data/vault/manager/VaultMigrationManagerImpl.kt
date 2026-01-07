@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -63,31 +62,37 @@ class VaultMigrationManagerImpl(
     /**
      * Observes cipher data for the given user and updates migration state when changes occur.
      * Only emits updates after the user has synced at least once to ensure data freshness.
+     *
+     * Uses optimized [VaultDiskSource.hasPersonalCiphersFlow] query that checks only the
+     * indexed organizationId column without loading full cipher JSON data.
      */
     private fun observeCipherDataAndUpdateMigrationState(userId: String) =
         vaultDiskSource
-            .getCiphersFlow(userId = userId)
+            .hasPersonalCiphersFlow(userId = userId)
             .filter {
                 // Only process cipher data after sync has occurred at least once
                 settingsDiskSource.getLastSyncTime(userId = userId) != null
             }
-            .onEach { cipherList ->
-                verifyAndUpdateMigrationState(userId = userId, cipherList = cipherList)
+            .onEach { hasPersonalCiphers ->
+                verifyAndUpdateMigrationState(
+                    userId = userId,
+                    hasPersonalCiphers = hasPersonalCiphers,
+                )
             }
 
     /**
      * Verifies if the user should migrate their personal vault to organization collections
-     * based on active policies, feature flags, and the provided cipher list.
+     * based on active policies, feature flags, and whether they have personal ciphers.
      *
      * @param userId The ID of the user to check for migration.
-     * @param cipherList List of ciphers to check for personal items.
+     * @param hasPersonalCiphers Boolean indicating if the user has any personal ciphers.
      */
     private fun verifyAndUpdateMigrationState(
         userId: String,
-        cipherList: List<SyncResponseJson.Cipher>,
+        hasPersonalCiphers: Boolean,
     ) {
         mutableVaultMigrationDataStateFlow.update {
-            if (!shouldMigrateVault(cipherList)) {
+            if (!shouldMigrateVault(hasPersonalCiphers)) {
                 return@update VaultMigrationData.NoMigrationRequired
             }
 
@@ -111,14 +116,14 @@ class VaultMigrationManagerImpl(
      * Checks if the user should migrate their vault based on policies, feature flags,
      * network connectivity, and whether they have personal items.
      *
-     * @param cipherList List of ciphers to check for personal items.
+     * @param hasPersonalCiphers Boolean indicating if the user has any personal ciphers.
      * @return true if migration conditions are met, false otherwise.
      */
-    private fun shouldMigrateVault(cipherList: List<SyncResponseJson.Cipher>): Boolean =
+    private fun shouldMigrateVault(hasPersonalCiphers: Boolean): Boolean =
         policyManager
             .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any() &&
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             connectionManager.isNetworkConnected &&
-            cipherList.any { it.organizationId == null }
+            hasPersonalCiphers
 }

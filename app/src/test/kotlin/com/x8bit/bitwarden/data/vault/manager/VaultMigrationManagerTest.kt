@@ -4,8 +4,6 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -33,9 +31,9 @@ class VaultMigrationManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeDispatcherManager = FakeDispatcherManager()
 
-    private val mutableCiphersFlow = MutableStateFlow<List<SyncResponseJson.Cipher>>(emptyList())
+    private val mutableHasPersonalCiphersFlow = MutableStateFlow(false)
     private val vaultDiskSource: VaultDiskSource = mockk {
-        every { getCiphersFlow(any()) } returns mutableCiphersFlow
+        every { hasPersonalCiphersFlow(any()) } returns mutableHasPersonalCiphersFlow
     }
 
     private val mutableVaultUnlockDataStateFlow =
@@ -103,10 +101,6 @@ class VaultMigrationManagerTest {
             organizations = syncResponse.profile.organizations,
         )
 
-        // Setup sync with personal ciphers (organizationId = null)
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -120,8 +114,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             assertEquals(
                 VaultMigrationData.MigrationRequired(
@@ -142,9 +136,6 @@ class VaultMigrationManagerTest {
             policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns emptyList()
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -158,8 +149,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since no policy
             expectNoEvents()
@@ -180,9 +171,6 @@ class VaultMigrationManagerTest {
             mockFeatureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems)
         } returns false
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -196,8 +184,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since feature flag is disabled
             expectNoEvents()
@@ -216,9 +204,6 @@ class VaultMigrationManagerTest {
 
         every { connectionManager.isNetworkConnected } returns false
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -232,8 +217,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since no network
             expectNoEvents()
@@ -250,10 +235,6 @@ class VaultMigrationManagerTest {
             policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(mockPolicy)
 
-        // All ciphers belong to organizations
-        val orgCipher = createMockCipher(number = 1).copy(organizationId = "org-id")
-        val cipherList = listOf(orgCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -267,43 +248,10 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit no personal ciphers
+            mutableHasPersonalCiphersFlow.value = false
 
             // Should remain NoMigrationRequired since no personal ciphers
-            expectNoEvents()
-        }
-    }
-
-    @Test
-    fun `should emit NoMigrationRequired when cipher list is empty`() = runTest {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
-        every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-        } returns listOf(mockPolicy)
-
-        val cipherList = emptyList<SyncResponseJson.Cipher>()
-
-        val vaultMigrationManager = createVaultMigrationManager()
-
-        vaultMigrationManager.vaultMigrationDataStateFlow.test {
-            assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-            // Simulate vault unlock
-            mutableVaultUnlockDataStateFlow.value = listOf(
-                VaultUnlockData(
-                    userId = userId,
-                    status = VaultUnlockData.Status.UNLOCKED,
-                ),
-            )
-
-            // Emit empty cipher data
-            mutableCiphersFlow.value = cipherList
-
-            // Should remain NoMigrationRequired since cipher list is empty
             expectNoEvents()
         }
     }
@@ -321,9 +269,6 @@ class VaultMigrationManagerTest {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
         } returns null
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -337,8 +282,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since organization ID is null
             expectNoEvents()
@@ -361,9 +306,6 @@ class VaultMigrationManagerTest {
         // Store organizations as null in authDiskSource
         fakeAuthDiskSource.storeOrganizations(userId = userId, organizations = null)
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -377,8 +319,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since organizations list is null
             expectNoEvents()
@@ -406,9 +348,6 @@ class VaultMigrationManagerTest {
             organizations = syncResponse.profile.organizations,
         )
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -422,8 +361,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since organization is not found
             expectNoEvents()
@@ -449,9 +388,6 @@ class VaultMigrationManagerTest {
             organizations = syncResponse.profile.organizations,
         )
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -460,8 +396,9 @@ class VaultMigrationManagerTest {
             // Vault is locked - no unlock data
             mutableVaultUnlockDataStateFlow.value = emptyList()
 
-            // Emit cipher data - should not trigger migration check since vault is locked
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist - should not trigger migration check since
+            // vault is locked
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since vault is locked
             expectNoEvents()
@@ -490,9 +427,6 @@ class VaultMigrationManagerTest {
             organizations = syncResponse.profile.organizations,
         )
 
-        val personalCipher = createMockCipher(number = 1).copy(organizationId = null)
-        val cipherList = listOf(personalCipher)
-
         val vaultMigrationManager = createVaultMigrationManager()
 
         vaultMigrationManager.vaultMigrationDataStateFlow.test {
@@ -506,8 +440,8 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            // Emit cipher data - should not trigger since no sync has occurred
-            mutableCiphersFlow.value = cipherList
+            // Emit personal ciphers exist - should not trigger since no sync has occurred
+            mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since sync hasn't happened
             expectNoEvents()
