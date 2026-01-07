@@ -61,24 +61,59 @@ class SsoUtilsTest {
     }
 
     @Test
-    fun `getSsoCallbackResult should return MissingCode with missing state code`() {
+    fun `getSsoCallbackResult for deeplink should return MissingCode with missing state code`() {
         val intent = mockk<Intent> {
             every { data?.getQueryParameter("state") } returns "myState"
             every { data?.getQueryParameter("code") } returns null
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "sso-callback"
+            every { data?.scheme } returns "bitwarden"
         }
         val result = intent.getSsoCallbackResult()
         assertEquals(SsoCallbackResult.MissingCode, result)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getSsoCallbackResult should return Success when code query parameter is present`() {
+    fun `getSsoCallbackResult for deeplink should return Success when code query parameter is present`() {
         val intent = mockk<Intent> {
             every { data?.getQueryParameter("code") } returns "myCode"
             every { data?.getQueryParameter("state") } returns "myState"
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "sso-callback"
+            every { data?.scheme } returns "bitwarden"
+        }
+        val result = intent.getSsoCallbackResult()
+        assertEquals(
+            SsoCallbackResult.Success(state = "myState", code = "myCode"),
+            result,
+        )
+    }
+
+    @Test
+    fun `getSsoCallbackResult for app link should return MissingCode with missing state code`() {
+        val intent = mockk<Intent> {
+            every { data?.getQueryParameter("state") } returns "myState"
+            every { data?.getQueryParameter("code") } returns null
+            every { action } returns Intent.ACTION_VIEW
+            every { data?.scheme } returns "https"
+            every { data?.host } returns "bitwarden.eu"
+            every { data?.path } returns "/sso-callback"
+        }
+        val result = intent.getSsoCallbackResult()
+        assertEquals(SsoCallbackResult.MissingCode, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getSsoCallbackResult for app link should return Success when code query parameter is present`() {
+        val intent = mockk<Intent> {
+            every { data?.getQueryParameter("code") } returns "myCode"
+            every { data?.getQueryParameter("state") } returns "myState"
+            every { action } returns Intent.ACTION_VIEW
+            every { data?.scheme } returns "https"
+            every { data?.host } returns "bitwarden.com"
+            every { data?.path } returns "/sso-callback"
         }
         val result = intent.getSsoCallbackResult()
         assertEquals(

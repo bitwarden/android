@@ -11,8 +11,13 @@ import kotlinx.serialization.json.put
 import java.net.URLEncoder
 import java.util.Base64
 
-private const val WEB_AUTH_HOST: String = "webauthn-callback"
-private const val CALLBACK_URI = "bitwarden://$WEB_AUTH_HOST"
+private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
+private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private const val APP_LINK_SCHEME: String = "https"
+private const val DEEPLINK_SCHEME: String = "bitwarden"
+private const val CALLBACK: String = "webauthn-callback"
+
+private const val CALLBACK_URI = "bitwarden://$CALLBACK"
 
 /**
  * Retrieves an [WebAuthResult] from an [Intent]. There are three possible cases.
@@ -22,14 +27,28 @@ private const val CALLBACK_URI = "bitwarden://$WEB_AUTH_HOST"
  * - [WebAuthResult.Failure]: Intent is the web auth key callback with incorrect data.
  */
 fun Intent.getWebAuthResultOrNull(): WebAuthResult? {
-    val localData = data
-    return if (action == Intent.ACTION_VIEW &&
-        localData != null &&
-        localData.host == WEB_AUTH_HOST
-    ) {
-        localData.getWebAuthResult()
-    } else {
-        null
+    if (action != Intent.ACTION_VIEW) return null
+    val localData = data ?: return null
+    return when (localData.scheme) {
+        DEEPLINK_SCHEME -> {
+            if (localData.host == CALLBACK) {
+                localData.getWebAuthResult()
+            } else {
+                null
+            }
+        }
+
+        APP_LINK_SCHEME -> {
+            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
+                localData.path == "/$CALLBACK"
+            ) {
+                localData.getWebAuthResult()
+            } else {
+                null
+            }
+        }
+
+        else -> null
     }
 }
 
