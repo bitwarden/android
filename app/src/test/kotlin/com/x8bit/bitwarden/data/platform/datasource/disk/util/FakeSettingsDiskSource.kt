@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
+import com.bitwarden.data.datasource.disk.util.FakeFlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
@@ -19,7 +20,10 @@ import java.time.Instant
 /**
  * Fake, memory-based implementation of [SettingsDiskSource].
  */
-class FakeSettingsDiskSource : SettingsDiskSource {
+class FakeSettingsDiskSource(
+    flightRecorderDiskSource: FakeFlightRecorderDiskSource = FakeFlightRecorderDiskSource(),
+) : SettingsDiskSource,
+    FlightRecorderDiskSource by flightRecorderDiskSource {
 
     private val mutableAppLanguageFlow = bufferedMutableSharedFlow<AppLanguage?>(replay = 1)
 
@@ -52,9 +56,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableShouldShowGeneratorCoachMarkFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableFlightRecorderDataFlow =
-        bufferedMutableSharedFlow<FlightRecorderDataSet?>(replay = 1)
-
     private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
@@ -86,7 +87,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var createSendActionCount: Int? = null
     private var hasSeenAddLoginCoachMark: Boolean? = null
     private var hasSeenGeneratorCoachMark: Boolean? = null
-    private var storedFlightRecorderData: FlightRecorderDataSet? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
     private var storedBrowserAutofillDialogReshowTime: Instant? = null
 
@@ -199,17 +199,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
         }
-
-    override var flightRecorderData: FlightRecorderDataSet?
-        get() = storedFlightRecorderData
-        set(value) {
-            storedFlightRecorderData = value
-            mutableFlightRecorderDataFlow.tryEmit(value)
-        }
-
-    override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
-        get() = mutableFlightRecorderDataFlow
-            .onSubscription { emit(storedFlightRecorderData) }
 
     override var browserAutofillDialogReshowTime: Instant?
         get() = storedBrowserAutofillDialogReshowTime
@@ -484,13 +473,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
         return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
-    }
-
-    /**
-     * Asserts that the stored [FlightRecorderDataSet] matches the [expected] one.
-     */
-    fun assertFlightRecorderData(expected: FlightRecorderDataSet) {
-        assertEquals(expected, storedFlightRecorderData)
     }
 
     /**

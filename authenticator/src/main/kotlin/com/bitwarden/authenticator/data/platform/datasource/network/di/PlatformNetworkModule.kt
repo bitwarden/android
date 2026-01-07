@@ -12,6 +12,7 @@ import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.ConfigService
+import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.ssl.CertificateProvider
 import dagger.Module
 import dagger.Provides
@@ -71,4 +72,10 @@ object PlatformNetworkModule {
             },
         ),
     )
+
+    @Provides
+    @Singleton
+    fun provideDownloadService(
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): DownloadService = bitwardenServiceClient.downloadService
 }
