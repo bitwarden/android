@@ -39,7 +39,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     private val webAuthnLauncher: ActivityResultLauncher<Intent> = mockk()
     private val intentManager = mockk<IntentManager> {
         every { launchUri(uri = any()) } just runs
-        every { startAuthTab(uri = any(), launcher = any()) } just runs
+        every { startAuthTab(uri = any(), redirectScheme = any(), launcher = any()) } just runs
     }
     private val nfcManager: NfcManager = mockk {
         every { start() } just runs
@@ -283,15 +283,29 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToDuo should call intentManager startAuthTab`() {
         val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
-        verify { intentManager.startAuthTab(uri = mockUri, launcher = duoLauncher) }
+        val scheme = "bitwarden"
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri, scheme))
+        verify(exactly = 1) {
+            intentManager.startAuthTab(
+                uri = mockUri,
+                redirectScheme = scheme,
+                launcher = duoLauncher,
+            )
+        }
     }
 
     @Test
     fun `NavigateToWebAuth should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri))
-        verify { intentManager.startAuthTab(uri = mockUri, launcher = webAuthnLauncher) }
+        val scheme = "bitwarden"
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri, scheme))
+        verify(exactly = 1) {
+            intentManager.startAuthTab(
+                uri = mockUri,
+                redirectScheme = scheme,
+                launcher = webAuthnLauncher,
+            )
+        }
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -16,6 +17,17 @@ class SsoUtilsTest {
         val token = "Test Token"
         val state = "test_state"
         val codeVerifier = "test_code_verifier"
+        val expectedUrl = "https://identity.bitwarden.com/connect/authorize" +
+            "?client_id=mobile" +
+            "&redirect_uri=bitwarden%3A%2F%2Fsso-callback" +
+            "&response_type=code" +
+            "&scope=api%20offline_access" +
+            "&state=test_state" +
+            "&code_challenge=Qq1fGD0HhxwbmeMrqaebgn1qhvKeguQPXqLdpmixaM4" +
+            "&code_challenge_method=S256" +
+            "&response_mode=query" +
+            "&domain_hint=Test+Organization" +
+            "&ssoToken=Test+Token"
 
         val uri = generateUriForSso(
             identityBaseUrl = identityBaseUrl,
@@ -24,20 +36,8 @@ class SsoUtilsTest {
             state = state,
             codeVerifier = codeVerifier,
         )
-        assertEquals(
-            "https://identity.bitwarden.com/connect/authorize" +
-                "?client_id=mobile" +
-                "&redirect_uri=bitwarden%3A%2F%2Fsso-callback" +
-                "&response_type=code" +
-                "&scope=api%20offline_access" +
-                "&state=test_state" +
-                "&code_challenge=Qq1fGD0HhxwbmeMrqaebgn1qhvKeguQPXqLdpmixaM4" +
-                "&code_challenge_method=S256" +
-                "&response_mode=query" +
-                "&domain_hint=Test+Organization" +
-                "&ssoToken=Test+Token",
-            uri,
-        )
+
+        assertEquals(Uri.parse(expectedUrl), uri)
     }
 
     @Test

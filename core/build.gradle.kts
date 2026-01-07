@@ -56,7 +56,11 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
 
+    testFixturesImplementation(libs.kotlinx.serialization)
+    testFixturesImplementation(platform(libs.junit.bom))
+    testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
+    testFixturesImplementation(libs.mockk.mockk)
 }
 
 kotlin {
