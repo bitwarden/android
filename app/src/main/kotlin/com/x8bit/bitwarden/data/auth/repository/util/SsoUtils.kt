@@ -11,8 +11,13 @@ import java.net.URLEncoder
 import java.security.MessageDigest
 import java.util.Base64
 
-private const val SSO_HOST: String = "sso-callback"
-const val SSO_URI: String = "bitwarden://$SSO_HOST"
+private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
+private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private const val APP_LINK_SCHEME: String = "https"
+private const val DEEPLINK_SCHEME: String = "bitwarden"
+private const val CALLBACK: String = "sso-callback"
+
+const val SSO_URI: String = "bitwarden://$CALLBACK"
 
 /**
  * Generates a URI for the SSO custom tab.
@@ -64,11 +69,28 @@ fun generateUriForSso(
  * - [SsoCallbackResult.Success]: Intent is the SSO callback with required data.
  */
 fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
-    val localData = data
-    return if (action == Intent.ACTION_VIEW && localData?.host == SSO_HOST) {
-        localData.getSsoCallbackResult()
-    } else {
-        null
+    if (action != Intent.ACTION_VIEW) return null
+    val localData = data ?: return null
+    return when (localData.scheme) {
+        DEEPLINK_SCHEME -> {
+            if (localData.host == CALLBACK) {
+                localData.getSsoCallbackResult()
+            } else {
+                null
+            }
+        }
+
+        APP_LINK_SCHEME -> {
+            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
+                localData.path == "/$CALLBACK"
+            ) {
+                localData.getSsoCallbackResult()
+            } else {
+                null
+            }
+        }
+
+        else -> null
     }
 }
 

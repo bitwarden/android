@@ -53,24 +53,56 @@ class WebAuthUtilsTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `getWebAuthResultOrNull should return Failure with missing data parameter`() {
+    fun `getWebAuthResultOrNull for deeplink should return Failure with missing data parameter`() {
         val message = "An Error!"
         val intent = mockk<Intent> {
             every { data?.getQueryParameter("data") } returns null
             every { data?.getQueryParameter("error") } returns message
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "webauthn-callback"
+            every { data?.scheme } returns "bitwarden"
         }
         val result = intent.getWebAuthResultOrNull()
         assertEquals(WebAuthResult.Failure(message = message), result)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getWebAuthResultOrNull should return Success when data query parameter is present`() {
+    fun `getWebAuthResultOrNull for deeplink should return Success when data query parameter is present`() {
         val intent = mockk<Intent> {
             every { data?.getQueryParameter("data") } returns "myToken"
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "webauthn-callback"
+            every { data?.scheme } returns "bitwarden"
+        }
+        val result = intent.getWebAuthResultOrNull()
+        assertEquals(WebAuthResult.Success("myToken"), result)
+    }
+
+    @Test
+    fun `getWebAuthResultOrNull for app link should return Failure with missing data parameter`() {
+        val message = "An Error!"
+        val intent = mockk<Intent> {
+            every { data?.getQueryParameter("data") } returns null
+            every { data?.getQueryParameter("error") } returns message
+            every { action } returns Intent.ACTION_VIEW
+            every { data?.scheme } returns "https"
+            every { data?.host } returns "bitwarden.com"
+            every { data?.path } returns "/webauthn-callback"
+        }
+        val result = intent.getWebAuthResultOrNull()
+        assertEquals(WebAuthResult.Failure(message = message), result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getWebAuthResultOrNull for app link should return Success when data query parameter is present`() {
+        val intent = mockk<Intent> {
+            every { data?.getQueryParameter("data") } returns "myToken"
+            every { action } returns Intent.ACTION_VIEW
+            every { data?.scheme } returns "https"
+            every { data?.host } returns "bitwarden.eu"
+            every { data?.path } returns "/webauthn-callback"
         }
         val result = intent.getWebAuthResultOrNull()
         assertEquals(WebAuthResult.Success("myToken"), result)
