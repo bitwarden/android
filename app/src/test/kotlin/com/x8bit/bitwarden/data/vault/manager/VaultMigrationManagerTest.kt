@@ -44,7 +44,8 @@ class VaultMigrationManagerTest {
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
     }
 
-    private val mutableLastSyncTimeFlow = MutableStateFlow<Instant?>(Instant.now())
+    private val mutableLastSyncTimeFlow =
+        MutableStateFlow<Instant?>(Instant.parse("2023-10-27T12:00:00Z"))
     private val settingsDiskSource: SettingsDiskSource = mockk {
         every { getLastSyncTimeFlow(any()) } returns mutableLastSyncTimeFlow
     }
@@ -503,7 +504,7 @@ class VaultMigrationManagerTest {
             expectNoEvents()
 
             // Sync completes - should now trigger migration check
-            mutableLastSyncTimeFlow.value = Instant.now()
+            mutableLastSyncTimeFlow.value = Instant.parse("2023-10-27T12:00:00Z")
 
             assertEquals(
                 VaultMigrationData.MigrationRequired(
