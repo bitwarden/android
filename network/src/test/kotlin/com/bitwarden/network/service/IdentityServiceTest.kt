@@ -184,6 +184,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(LOGIN_SUCCESS.asSuccess(), result)
     }
@@ -198,6 +199,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertTrue(result.isFailure)
     }
@@ -212,6 +214,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(TWO_FACTOR_BODY.asSuccess(), result)
     }
@@ -226,6 +229,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(INVALID_LOGIN.asSuccess(), result)
     }
@@ -241,6 +245,7 @@ class IdentityServiceTest : BaseServiceTest() {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
             assertEquals(INVALID_LOGIN.asSuccess(), result)
         }
@@ -438,6 +443,7 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     companion object {
+        private const val DEEPLINK_SCHEME = "deeplinkScheme"
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val EMAIL_TOKEN = "emailToken"

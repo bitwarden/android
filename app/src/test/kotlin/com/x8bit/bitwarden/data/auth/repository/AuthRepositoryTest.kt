@@ -190,11 +190,9 @@ class AuthRepositoryTest {
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
-    private val fakeEnvironmentRepository =
-        FakeEnvironmentRepository()
-            .apply {
-                environment = Environment.Us
-            }
+    private val fakeEnvironmentRepository = FakeEnvironmentRepository().apply {
+        environment = Environment.Us
+    }
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
         every { hasUserLoggedInOrCreatedAccount = true } just runs
@@ -411,6 +409,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -493,6 +492,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -1761,6 +1761,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns error.asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
@@ -1775,6 +1776,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
         }
@@ -1795,6 +1797,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns RuntimeException().asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
@@ -1818,6 +1821,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns SSLHandshakeException("error").asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
@@ -1851,6 +1855,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .Invalid(
@@ -1872,6 +1877,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
     }
@@ -1891,6 +1897,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .Invalid(
@@ -1924,6 +1931,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -1987,6 +1995,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -2043,6 +2052,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -2100,6 +2110,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -2149,6 +2160,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             val error = Throwable("Fail")
@@ -2219,6 +2231,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
 
                 vaultRepository.unlockVault(
@@ -2284,6 +2297,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -2312,6 +2326,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
                 settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
@@ -2370,6 +2385,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -2443,6 +2459,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -2494,6 +2511,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
@@ -2522,6 +2540,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
     }
@@ -2539,6 +2558,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
@@ -2558,6 +2578,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
 
@@ -2574,6 +2595,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns successResponse.asSuccess()
         coEvery {
@@ -2646,6 +2668,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns twoFactorResponse.asSuccess()
 
@@ -2664,6 +2687,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
 
@@ -2680,6 +2704,7 @@ class AuthRepositoryTest {
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
                     twoFactorData = TWO_FACTOR_DATA,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             val error = Throwable("Fail")
@@ -2755,6 +2780,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns successResponse.asSuccess()
         coEvery {
@@ -2815,6 +2841,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
             vaultRepository.unlockVault(
                 accountCryptographicState = createWrappedAccountCryptographicState(
@@ -2883,6 +2910,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .Invalid(
@@ -2905,6 +2933,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
         }
@@ -2921,6 +2950,7 @@ class AuthRepositoryTest {
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns error.asFailure()
         val result = repository.login(
@@ -2942,6 +2972,7 @@ class AuthRepositoryTest {
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
     }
@@ -2958,6 +2989,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .Invalid(
@@ -2989,6 +3021,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
         }
@@ -3007,6 +3040,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3076,6 +3110,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
@@ -3131,6 +3166,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3200,6 +3236,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
@@ -3252,6 +3289,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .TwoFactorRequired(
@@ -3287,6 +3325,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
         }
@@ -3304,6 +3343,7 @@ class AuthRepositoryTest {
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
@@ -3330,6 +3370,7 @@ class AuthRepositoryTest {
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
 
@@ -3347,6 +3388,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3414,6 +3456,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns error.asFailure()
         val result = repository.login(
@@ -3434,6 +3477,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
     }
@@ -3449,6 +3493,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .Invalid(
@@ -3476,6 +3521,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
     }
@@ -3494,6 +3540,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3533,6 +3580,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
                 settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
@@ -3568,6 +3616,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3598,6 +3647,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -3630,6 +3680,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -3666,6 +3717,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.getMasterKeyFromKeyConnector(
                     url = keyConnectorUrl,
@@ -3699,6 +3751,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -3753,6 +3806,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.getMasterKeyFromKeyConnector(
                     url = keyConnectorUrl,
@@ -3809,6 +3863,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -3863,6 +3918,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.getMasterKeyFromKeyConnector(
                     url = keyConnectorUrl,
@@ -3918,6 +3974,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -3963,6 +4020,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
                     url = keyConnectorUrl,
@@ -4007,6 +4065,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -4070,6 +4129,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
                     url = keyConnectorUrl,
@@ -4129,6 +4189,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             every {
@@ -4180,6 +4241,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4246,6 +4308,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -4270,6 +4333,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4338,6 +4402,7 @@ class AuthRepositoryTest {
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
                 vaultRepository.unlockVault(
@@ -4396,6 +4461,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4430,6 +4496,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -4492,6 +4559,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4526,6 +4594,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -4617,6 +4686,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4650,6 +4720,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
@@ -4702,6 +4773,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4743,6 +4815,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -4770,6 +4843,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .TwoFactorRequired(
@@ -4804,6 +4878,7 @@ class AuthRepositoryTest {
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
         }
@@ -4821,6 +4896,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
@@ -4847,6 +4923,7 @@ class AuthRepositoryTest {
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
 
@@ -4864,6 +4941,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4909,6 +4987,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -4949,6 +5028,7 @@ class AuthRepositoryTest {
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
             vaultRepository.syncIfNecessary()
         }
@@ -6323,6 +6403,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
@@ -6342,6 +6423,7 @@ class AuthRepositoryTest {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
         }
 
@@ -6384,6 +6466,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns GetTokenResponseJson
                 .TwoFactorRequired(
@@ -6403,6 +6486,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             }
 
@@ -7245,6 +7329,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -7323,6 +7408,7 @@ class AuthRepositoryTest {
                         password = PASSWORD_HASH,
                     ),
                     uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
                 )
             } returns successResponse.asSuccess()
             coEvery {
@@ -7445,6 +7531,7 @@ class AuthRepositoryTest {
             Instant.parse("2023-10-27T12:00:00Z"),
             ZoneOffset.UTC,
         )
+        private const val DEEPLINK_SCHEME = "bitwarden"
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
         private const val EMAIL = "test@bitwarden.com"

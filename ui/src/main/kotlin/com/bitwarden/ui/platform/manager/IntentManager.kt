@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.model.FileData
 import java.time.Clock
 
@@ -47,11 +48,11 @@ interface IntentManager {
     fun launchUri(uri: Uri)
 
     /**
-     * Start an Auth Tab Activity using the provided [Uri].
+     * Start an Auth Tab Activity using the provided [Uri] and [AuthTabData].
      */
     fun startAuthTab(
         uri: Uri,
-        redirectScheme: String,
+        authTabData: AuthTabData,
         launcher: ActivityResultLauncher<Intent>,
     )
 

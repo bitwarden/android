@@ -8,16 +8,12 @@ import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import java.net.URLEncoder
 import java.util.Base64
 
-private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
-private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
 private const val APP_LINK_SCHEME: String = "https"
 private const val DEEPLINK_SCHEME: String = "bitwarden"
 private const val CALLBACK: String = "webauthn-callback"
-
-private const val CALLBACK_URI = "bitwarden://$CALLBACK"
 
 /**
  * Retrieves an [WebAuthResult] from an [Intent]. There are three possible cases.
@@ -39,9 +35,7 @@ fun Intent.getWebAuthResultOrNull(): WebAuthResult? {
         }
 
         APP_LINK_SCHEME -> {
-            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
-                localData.path == "/$CALLBACK"
-            ) {
+            if (localData.host in BITWARDEN_HOSTS && localData.path == "/$CALLBACK") {
                 localData.getWebAuthResult()
             } else {
                 null
@@ -79,29 +73,31 @@ private fun Uri?.getWebAuthResult(): WebAuthResult =
 /**
  * Generates a [Uri] to display a web authn challenge for Bitwarden authentication.
  */
+@Suppress("LongParameterList")
 fun generateUriForWebAuth(
     baseUrl: String,
+    callbackScheme: String,
     data: JsonObject,
     headerText: String,
     buttonText: String,
     returnButtonText: String,
 ): Uri {
     val json = buildJsonObject {
-        put(key = "callbackUri", value = CALLBACK_URI)
         put(key = "data", value = data.toString())
         put(key = "headerText", value = headerText)
         put(key = "btnText", value = buttonText)
         put(key = "btnReturnText", value = returnButtonText)
+        put(key = "mobile", value = true)
     }
     val base64Data = Base64
         .getEncoder()
         .encodeToString(json.toString().toByteArray(Charsets.UTF_8))
-    val parentParam = URLEncoder.encode(CALLBACK_URI, "UTF-8")
     val url = baseUrl +
         "/webauthn-mobile-connector.html" +
         "?data=$base64Data" +
-        "&parent=$parentParam" +
-        "&v=2"
+        "&client=mobile" +
+        "&v=2" +
+        "&deeplinkScheme=$callbackScheme"
     return url.toUri()
 }
 

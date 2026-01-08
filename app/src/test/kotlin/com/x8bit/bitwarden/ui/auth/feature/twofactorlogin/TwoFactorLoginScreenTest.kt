@@ -19,6 +19,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
@@ -39,7 +40,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     private val webAuthnLauncher: ActivityResultLauncher<Intent> = mockk()
     private val intentManager = mockk<IntentManager> {
         every { launchUri(uri = any()) } just runs
-        every { startAuthTab(uri = any(), redirectScheme = any(), launcher = any()) } just runs
+        every { startAuthTab(uri = any(), authTabData = any(), launcher = any()) } just runs
     }
     private val nfcManager: NfcManager = mockk {
         every { start() } just runs
@@ -283,12 +284,12 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToDuo should call intentManager startAuthTab`() {
         val mockUri = mockk<Uri>()
-        val scheme = "bitwarden"
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri, scheme))
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri, authTabData))
         verify(exactly = 1) {
             intentManager.startAuthTab(
                 uri = mockUri,
-                redirectScheme = scheme,
+                authTabData = authTabData,
                 launcher = duoLauncher,
             )
         }
@@ -297,12 +298,12 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToWebAuth should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
-        val scheme = "bitwarden"
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri, scheme))
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri, authTabData))
         verify(exactly = 1) {
             intentManager.startAuthTab(
                 uri = mockUri,
-                redirectScheme = scheme,
+                authTabData = authTabData,
                 launcher = webAuthnLauncher,
             )
         }
