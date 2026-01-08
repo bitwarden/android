@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -77,6 +76,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.security.GeneralSecurityException
+import java.time.Instant
 import java.time.ZonedDateTime
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
@@ -996,7 +996,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.generateTotp(
                 cipherId = "totpCode",
-                time = DateTime.now(),
+                time = Instant.parse("2023-10-27T12:00:00Z"),
             )
 
             assertEquals(
@@ -1023,7 +1023,7 @@ class VaultRepositoryTest {
 
         val result = vaultRepository.generateTotp(
             cipherId = "mockId-1",
-            time = DateTime.now(),
+            time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
         assertEquals(

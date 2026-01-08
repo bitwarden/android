@@ -933,7 +933,6 @@ class CipherManagerTest {
                 )
                     .toEncryptedNetworkCipherResponse()
             } returns createMockCipher(number = 1)
-            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
             val cipherId = "mockId-1"
             val attachmentId = "mockId-1"
@@ -960,8 +959,6 @@ class CipherManagerTest {
                 )
             } just runs
             val cipherView = createMockCipherView(number = 1)
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
 
             val result = cipherManager.deleteCipherAttachment(
                 cipherId = cipherId,
@@ -970,7 +967,6 @@ class CipherManagerTest {
             )
 
             assertEquals(DeleteAttachmentResult.Success, result)
-            unmockkStatic(Instant::class)
             unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
         }
 

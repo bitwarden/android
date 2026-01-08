@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -32,7 +31,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class FolderAddEditViewModelTest : BaseViewModelTest() {
@@ -120,9 +121,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -174,9 +175,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -253,9 +254,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -350,8 +351,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode, SaveClick createFolder with no parentFolderNamePresent should just create folder with entered name`() =
         runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
             val viewModel =
                 createViewModel(
                     createSavedStateHandleWithState(
@@ -375,7 +374,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderView = FolderView(
                         name = DEFAULT_FOLDER_NAME,
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
             }
@@ -385,15 +384,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     relay = SnackbarRelay.FOLDER_CREATED,
                 )
             }
-            unmockkStatic(DateTime::class)
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `in add mode, SaveClick createFolder with a parentFolderNamePresent should prepend the parent folder to the entered name`() =
         runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
             val parentFolderName = "parent/folder"
             val viewModel =
                 createViewModel(
@@ -418,7 +414,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderView = FolderView(
                         name = "$parentFolderName/$DEFAULT_FOLDER_NAME",
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
             }
@@ -428,7 +424,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     relay = SnackbarRelay.FOLDER_CREATED,
                 )
             }
-            unmockkStatic(DateTime::class)
         }
 
     @Test
@@ -497,9 +492,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -542,9 +537,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.value =
             DataState.Loaded(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             )
 
@@ -640,9 +635,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.tryEmit(
             DataState.Loaded(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    revisionDate = DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             ),
         )
@@ -738,9 +733,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.tryEmit(
             value = DataState.Pending(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    revisionDate = DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             ),
         )
@@ -793,6 +788,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         savedStateHandle: SavedStateHandle = createSavedStateHandleWithState(),
     ): FolderAddEditViewModel = FolderAddEditViewModel(
         savedStateHandle = savedStateHandle,
+        clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
         relayManager = relayManager,
     )
@@ -803,6 +799,11 @@ private val DEFAULT_STATE = FolderAddEditState(
     dialog = FolderAddEditState.DialogState.Loading("Loading".asText()),
     folderAddEditType = FolderAddEditType.AddItem,
     parentFolderName = null,
+)
+
+private val FIXED_CLOCK = Clock.fixed(
+    Instant.parse("2025-04-11T10:15:30.00Z"),
+    ZoneOffset.UTC,
 )
 
 private const val DEFAULT_EDIT_ITEM_ID = "edit_id"
