@@ -163,7 +163,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
             val ssoUri: Uri = mockk()
             every {
-                generateUriForSso(any(), any(), any(), any(), any())
+                generateUriForSso(any(), any(), any(), any(), any(), any())
             } returns ssoUri
 
             val viewModel = createViewModel(state)
@@ -186,7 +186,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToSsoLogin(uri = ssoUri, scheme = "bitwarden"),
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(uri = ssoUri, scheme = "https"),
                     eventFlow.awaitItem(),
                 )
             }
@@ -385,7 +385,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -451,7 +451,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -474,7 +474,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -548,7 +548,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -622,7 +622,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -739,7 +739,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -792,7 +792,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -848,7 +848,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -912,7 +912,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -1269,6 +1269,7 @@ private val DEFAULT_STATE = EnterpriseSignOnState(
     orgIdentifierInput = "",
 )
 private val DEFAULT_SSO_DATA = SsoResponseData(
+    redirectUri = "https://bitwarden.com/sso-callback",
     state = "abc",
     codeVerifier = "def",
 )

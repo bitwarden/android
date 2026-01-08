@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -8,6 +9,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
 
 class DuoUtilsTest {
+
+    @Test
+    fun `generateUriForDuo should return a valid URI`() {
+        val authUrl = "https://vault.bitwarden.com"
+        val appLinksScheme = "https"
+        val actualUri = generateUriForDuo(authUrl = authUrl, appLinksScheme = appLinksScheme)
+        assertEquals(Uri.parse("$authUrl&deeplinkScheme=$appLinksScheme"), actualUri)
+    }
 
     @Test
     fun `getDuoCallbackTokenResult should return null when action is not VIEW`() {
