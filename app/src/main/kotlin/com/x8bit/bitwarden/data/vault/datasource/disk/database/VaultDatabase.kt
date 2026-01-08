@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
         FolderEntity::class,
         SendEntity::class,
     ],
-    version = 8,
+    version = 9,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 6, to = 7),

@@ -65,4 +65,9 @@ class FakeCiphersDao : CiphersDao {
         ciphersFlow.tryEmit(ciphers.toList())
         return removed || ciphers.isNotEmpty()
     }
+
+    override fun hasPersonalCiphersFlow(userId: String): Flow<Boolean> =
+        ciphersFlow.map { ciphers ->
+            ciphers.any { it.userId == userId && it.organizationId == null }
+        }
 }

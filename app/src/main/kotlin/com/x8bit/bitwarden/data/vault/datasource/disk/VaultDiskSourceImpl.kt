@@ -55,6 +55,7 @@ class VaultDiskSourceImpl(
                     hasTotp = cipher.login?.totp != null,
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(cipher),
+                    organizationId = cipher.organizationId,
                 ),
             ),
         )
@@ -96,6 +97,9 @@ class VaultDiskSourceImpl(
                 .awaitAll()
         }
     }
+
+    override fun hasPersonalCiphersFlow(userId: String): Flow<Boolean> =
+        ciphersDao.hasPersonalCiphersFlow(userId = userId)
 
     override suspend fun getSelectedCiphers(
         userId: String,
@@ -295,6 +299,7 @@ class VaultDiskSourceImpl(
                             hasTotp = cipher.login?.totp != null,
                             cipherType = json.encodeToString(cipher.type),
                             cipherJson = json.encodeToString(cipher),
+                            organizationId = cipher.organizationId,
                         )
                     },
                 )
