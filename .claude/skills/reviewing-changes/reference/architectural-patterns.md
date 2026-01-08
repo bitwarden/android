@@ -11,6 +11,7 @@ Quick reference for Bitwarden Android architectural patterns during code reviews
 - [Hilt Dependency Injection](#hilt-dependency-injection)
   - [ViewModels](#viewmodels)
   - [Repositories and Managers](#repositories-and-managers)
+  - [Clock/Time Handling](#clocktime-handling)
 - [Module Organization](#module-organization)
 - [Error Handling](#error-handling)
   - [Use Result Types, Not Exceptions](#use-result-types-not-exceptions)
@@ -210,6 +211,43 @@ abstract class DataModule {
 
 ---
 
+### Clock/Time Handling
+
+Time-dependent code must use injected `Clock` rather than direct `Instant.now()` or `DateTime.now()` calls. This follows the same DI principle as other dependencies.
+
+**✅ GOOD - Injected Clock**:
+```kotlin
+// ViewModel with Clock injection
+class MyViewModel @Inject constructor(
+    private val clock: Clock,
+) {
+    fun save() {
+        val timestamp = clock.instant()
+    }
+}
+
+// Extension function with Clock parameter
+fun State.getTimestamp(clock: Clock): Instant =
+    existingTime ?: clock.instant()
+```
+
+**❌ BAD - Static/direct calls**:
+```kotlin
+// Hidden dependency, non-testable
+val timestamp = Instant.now()
+val dateTime = DateTime.now()
+```
+
+**Key Rules**:
+- Inject `Clock` via Hilt constructor (like other dependencies)
+- Pass `Clock` as parameter to extension functions
+- `Clock` is provided via `CoreModule` as singleton
+- Enables deterministic testing with `Clock.fixed(...)`
+
+Reference: `docs/STYLE_AND_BEST_PRACTICES.md#best-practices--time-and-clock-handling`
+
+---
+
 ## Module Organization
 
 ```
@@ -299,6 +337,7 @@ Reference: `docs/ARCHITECTURE.md#error-handling`
 - [ ] Business logic in Repository, not ViewModel?
 - [ ] Using Hilt DI (@HiltViewModel, @Inject constructor)?
 - [ ] Injecting interfaces, not implementations?
+- [ ] Time-dependent code uses injected `Clock` (not `Instant.now()`)?
 - [ ] Correct module placement?
 
 ### Error Handling

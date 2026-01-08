@@ -773,3 +773,97 @@ Special consideration should be taken to avoid unnecessary recompositions. There
 - https://developer.android.com/jetpack/compose/performance/bestpractices
 - https://getstream.io/blog/jetpack-compose-guidelines/
 - https://multithreaded.stitchfix.com/blog/2022/08/05/jetpack-compose-recomposition/
+
+## Best Practices : Time and Clock Handling
+
+To ensure testability and deterministic behavior, all code that needs the current time should use an injected `Clock` rather than calling `Instant.now()` or `DateTime.now()` directly.
+
+### Why
+
+- Direct calls to `Instant.now()` or `DateTime.now()` create non-deterministic behavior
+- Testing requires brittle `mockkStatic` that can interfere across tests
+- Injected `Clock` enables deterministic testing with `Clock.fixed(...)`
+- Follows the dependency injection principle (no hidden dependencies)
+
+### Pattern
+
+**In ViewModels and classes with DI:**
+
+```kotlin
+// Good: Clock injected via Hilt
+class MyViewModel @Inject constructor(
+    private val clock: Clock,
+    // other dependencies...
+) : BaseViewModel<...>(...) {
+
+    private fun handleSaveClick() {
+        val item = Item(
+            createdAt = clock.instant(),
+            // ...
+        )
+    }
+}
+
+// Bad: Direct call creates hidden dependency
+class MyViewModel @Inject constructor(
+    // missing Clock...
+) : BaseViewModel<...>(...) {
+
+    private fun handleSaveClick() {
+        val item = Item(
+            createdAt = Instant.now(), // ❌ Non-testable
+            // ...
+        )
+    }
+}
+```
+
+**In extension functions and utilities:**
+
+```kotlin
+// Good: Accept Clock as parameter
+fun SomeState.getRevisionDate(
+    originalItem: Item?,
+    clock: Clock,
+): Instant = originalItem?.revisionDate ?: clock.instant()
+
+// Bad: Hidden dependency on system clock
+fun SomeState.getRevisionDate(
+    originalItem: Item?,
+): Instant = originalItem?.revisionDate ?: Instant.now() // ❌
+```
+
+### Testing
+
+```kotlin
+// Good: Fixed clock for deterministic tests
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
+
+@Test
+fun `test time-dependent logic`() = runTest {
+    val viewModel = MyViewModel(
+        clock = FIXED_CLOCK,
+        // ...
+    )
+    // Test with predictable time
+}
+
+// Bad: Static mocking is fragile
+mockkStatic(Instant::class)  // ❌ Avoid
+every { Instant.now() } returns fixedInstant
+```
+
+### Clock Provider
+
+The `Clock` is provided via Hilt in `CoreModule`:
+
+```kotlin
+@Provides
+@Singleton
+fun provideClock(): Clock = Clock.systemDefaultZone()
+```
+
+Reference: `core/src/main/kotlin/com/bitwarden/core/di/CoreModule.kt`
