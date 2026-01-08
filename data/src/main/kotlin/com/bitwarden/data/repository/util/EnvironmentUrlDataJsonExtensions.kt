@@ -41,10 +41,7 @@ val EnvironmentUrlDataJson.appLinksScheme: String
         EnvironmentRegion.UNITED_STATES,
         EnvironmentRegion.EUROPEAN_UNION,
         EnvironmentRegion.INTERNAL,
-            -> {
-            // TODO: PM-26577 Update this to use "https"
-            "bitwarden"
-        }
+            -> "https"
 
         EnvironmentRegion.SELF_HOSTED -> "bitwarden"
     }
