@@ -15,7 +15,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.update
  * - Vault is unlocked
  * - Sync has occurred at least once
  * - Cipher data changes
+ * - Network connectivity changes
  */
 @Suppress("LongParameterList")
 class VaultMigrationManagerImpl(
@@ -60,39 +62,59 @@ class VaultMigrationManagerImpl(
     }
 
     /**
-     * Observes cipher data for the given user and updates migration state when changes occur.
-     * Only emits updates after the user has synced at least once to ensure data freshness.
+     * Observes cipher data, sync state, and network connectivity for the given user and updates
+     * migration state when changes occur. Only emits updates after the user has synced at least
+     * once to ensure data freshness.
      *
      * Uses optimized [VaultDiskSource.hasPersonalCiphersFlow] query that checks only the
      * indexed organizationId column without loading full cipher JSON data.
+     *
+     * Combines cipher data with [SettingsDiskSource.getLastSyncTimeFlow] to handle multi-account
+     * scenarios where lastSyncTime may be cleared without clearing cipher data. This ensures
+     * migration state updates when sync completes, not just when cipher data changes.
+     *
+     * Also combines with [NetworkConnectionManager.isNetworkConnectedFlow] to ensure migration
+     * state updates reactively when network connectivity changes.
      */
     private fun observeCipherDataAndUpdateMigrationState(userId: String) =
-        vaultDiskSource
-            .hasPersonalCiphersFlow(userId = userId)
-            .filter {
-                // Only process cipher data after sync has occurred at least once
-                settingsDiskSource.getLastSyncTime(userId = userId) != null
-            }
-            .onEach { hasPersonalCiphers ->
+        combine(
+            vaultDiskSource.hasPersonalCiphersFlow(userId = userId),
+            settingsDiskSource.getLastSyncTimeFlow(userId = userId),
+            connectionManager.isNetworkConnectedFlow,
+        ) { hasPersonalCiphers, lastSyncTime, isNetworkConnected ->
+            // Only process after sync has occurred at least once
+            lastSyncTime ?: return@combine null
+            hasPersonalCiphers to isNetworkConnected
+        }
+            .filterNotNull()
+            .onEach { (hasPersonalCiphers, isNetworkConnected) ->
                 verifyAndUpdateMigrationState(
                     userId = userId,
                     hasPersonalCiphers = hasPersonalCiphers,
+                    isNetworkConnected = isNetworkConnected,
                 )
             }
 
     /**
      * Verifies if the user should migrate their personal vault to organization collections
-     * based on active policies, feature flags, and whether they have personal ciphers.
+     * based on active policies, feature flags, network connectivity, and whether they have
+     * personal ciphers.
      *
      * @param userId The ID of the user to check for migration.
      * @param hasPersonalCiphers Boolean indicating if the user has any personal ciphers.
+     * @param isNetworkConnected Boolean indicating if the device has network connectivity.
      */
     private fun verifyAndUpdateMigrationState(
         userId: String,
         hasPersonalCiphers: Boolean,
+        isNetworkConnected: Boolean,
     ) {
         mutableVaultMigrationDataStateFlow.update {
-            if (!shouldMigrateVault(hasPersonalCiphers)) {
+            if (!shouldMigrateVault(
+                    hasPersonalCiphers = hasPersonalCiphers,
+                    isNetworkConnected = isNetworkConnected,
+                )
+            ) {
                 return@update VaultMigrationData.NoMigrationRequired
             }
 
@@ -117,13 +139,17 @@ class VaultMigrationManagerImpl(
      * network connectivity, and whether they have personal items.
      *
      * @param hasPersonalCiphers Boolean indicating if the user has any personal ciphers.
+     * @param isNetworkConnected Boolean indicating if the device has network connectivity.
      * @return true if migration conditions are met, false otherwise.
      */
-    private fun shouldMigrateVault(hasPersonalCiphers: Boolean): Boolean =
+    private fun shouldMigrateVault(
+        hasPersonalCiphers: Boolean,
+        isNetworkConnected: Boolean,
+    ): Boolean =
         policyManager
             .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any() &&
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
-            connectionManager.isNetworkConnected &&
+            isNetworkConnected &&
             hasPersonalCiphers
 }

@@ -13,7 +13,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
+import com.x8bit.bitwarden.data.platform.manager.model.NetworkSignalStrength
+import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -42,8 +44,9 @@ class VaultMigrationManagerTest {
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
     }
 
+    private val mutableLastSyncTimeFlow = MutableStateFlow<Instant?>(Instant.now())
     private val settingsDiskSource: SettingsDiskSource = mockk {
-        every { getLastSyncTime(any()) } returns Instant.now()
+        every { getLastSyncTimeFlow(any()) } returns mutableLastSyncTimeFlow
     }
 
     private val policyManager: PolicyManager = mockk {
@@ -55,9 +58,10 @@ class VaultMigrationManagerTest {
         every { getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) } returns true
     }
 
-    private val connectionManager: NetworkConnectionManager = mockk {
-        every { isNetworkConnected } returns true
-    }
+    private val fakeNetworkConnectionManager = FakeNetworkConnectionManager(
+        isNetworkConnected = true,
+        networkConnection = NetworkConnection.Wifi(strength = NetworkSignalStrength.GOOD),
+    )
 
     private fun createVaultMigrationManager(): VaultMigrationManager =
         VaultMigrationManagerImpl(
@@ -67,7 +71,7 @@ class VaultMigrationManagerTest {
             vaultLockManager = vaultLockManager,
             policyManager = policyManager,
             featureFlagManager = mockFeatureFlagManager,
-            connectionManager = connectionManager,
+            connectionManager = fakeNetworkConnectionManager,
             dispatcherManager = fakeDispatcherManager,
         )
 
@@ -196,13 +200,21 @@ class VaultMigrationManagerTest {
     fun `should emit NoMigrationRequired when no network connection`() = runTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeNetworkConnectionManager.fakeIsNetworkConnected = false
 
         val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         every {
             policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(mockPolicy)
+        every {
+            policyManager.getPersonalOwnershipPolicyOrganizationId()
+        } returns "mockId-1"
 
-        every { connectionManager.isNetworkConnected } returns false
+        val syncResponse = createMockSyncResponse(number = 1)
+        fakeAuthDiskSource.storeOrganizations(
+            userId = userId,
+            organizations = syncResponse.profile.organizations,
+        )
 
         val vaultMigrationManager = createVaultMigrationManager()
 
@@ -410,8 +422,8 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        // Mock sync time as null (never synced)
-        every { settingsDiskSource.getLastSyncTime(any()) } returns null
+        // Set sync time as null (never synced)
+        mutableLastSyncTimeFlow.value = null
 
         val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         every {
@@ -447,6 +459,167 @@ class VaultMigrationManagerTest {
             expectNoEvents()
         }
     }
+
+    @Test
+    fun `should emit MigrationRequired when sync completes after vault unlock`() = runTest {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Start with sync time as null (never synced) - simulates multi-account scenario
+        // where lastSyncTime was cleared without clearing cipher data
+        mutableLastSyncTimeFlow.value = null
+
+        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        every {
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(mockPolicy)
+        every {
+            policyManager.getPersonalOwnershipPolicyOrganizationId()
+        } returns "mockId-1"
+
+        val syncResponse = createMockSyncResponse(number = 1)
+        fakeAuthDiskSource.storeOrganizations(
+            userId = userId,
+            organizations = syncResponse.profile.organizations,
+        )
+
+        val vaultMigrationManager = createVaultMigrationManager()
+
+        vaultMigrationManager.vaultMigrationDataStateFlow.test {
+            assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
+
+            // Simulate vault unlock
+            mutableVaultUnlockDataStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = userId,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+
+            // Emit personal ciphers exist - should not trigger yet since no sync
+            mutableHasPersonalCiphersFlow.value = true
+
+            // Should remain NoMigrationRequired since sync hasn't happened
+            expectNoEvents()
+
+            // Sync completes - should now trigger migration check
+            mutableLastSyncTimeFlow.value = Instant.now()
+
+            assertEquals(
+                VaultMigrationData.MigrationRequired(
+                    organizationId = "mockId-1",
+                    organizationName = "mockName-1",
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `should emit MigrationRequired when network connectivity changes from offline to online`() =
+        runTest {
+            val userId = "mockId-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeNetworkConnectionManager.fakeIsNetworkConnected = false
+
+            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            } returns listOf(mockPolicy)
+            every {
+                policyManager.getPersonalOwnershipPolicyOrganizationId()
+            } returns "mockId-1"
+
+            val syncResponse = createMockSyncResponse(number = 1)
+            fakeAuthDiskSource.storeOrganizations(
+                userId = userId,
+                organizations = syncResponse.profile.organizations,
+            )
+
+            val vaultMigrationManager = createVaultMigrationManager()
+
+            vaultMigrationManager.vaultMigrationDataStateFlow.test {
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
+
+                // Simulate vault unlock while offline
+                mutableVaultUnlockDataStateFlow.value = listOf(
+                    VaultUnlockData(
+                        userId = userId,
+                        status = VaultUnlockData.Status.UNLOCKED,
+                    ),
+                )
+
+                // Emit personal ciphers exist - still offline
+                mutableHasPersonalCiphersFlow.value = true
+
+                // Should remain NoMigrationRequired since no network
+                expectNoEvents()
+
+                // Network comes online - should now emit MigrationRequired
+                fakeNetworkConnectionManager.fakeIsNetworkConnected = true
+
+                assertEquals(
+                    VaultMigrationData.MigrationRequired(
+                        organizationId = "mockId-1",
+                        organizationName = "mockName-1",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `should emit NoMigrationRequired when network connectivity changes from online to offline`() =
+        runTest {
+            val userId = "mockId-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            } returns listOf(mockPolicy)
+            every {
+                policyManager.getPersonalOwnershipPolicyOrganizationId()
+            } returns "mockId-1"
+
+            val syncResponse = createMockSyncResponse(number = 1)
+            fakeAuthDiskSource.storeOrganizations(
+                userId = userId,
+                organizations = syncResponse.profile.organizations,
+            )
+
+            val vaultMigrationManager = createVaultMigrationManager()
+
+            vaultMigrationManager.vaultMigrationDataStateFlow.test {
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
+
+                // Simulate vault unlock while online
+                mutableVaultUnlockDataStateFlow.value = listOf(
+                    VaultUnlockData(
+                        userId = userId,
+                        status = VaultUnlockData.Status.UNLOCKED,
+                    ),
+                )
+
+                // Emit personal ciphers exist
+                mutableHasPersonalCiphersFlow.value = true
+
+                // Should emit MigrationRequired since all conditions met
+                assertEquals(
+                    VaultMigrationData.MigrationRequired(
+                        organizationId = "mockId-1",
+                        organizationName = "mockName-1",
+                    ),
+                    awaitItem(),
+                )
+
+                // Network goes offline - should revert to NoMigrationRequired
+                fakeNetworkConnectionManager.fakeIsNetworkConnected = false
+
+                assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
+            }
+        }
 }
 
 private val MOCK_USER_STATE = UserStateJson(
