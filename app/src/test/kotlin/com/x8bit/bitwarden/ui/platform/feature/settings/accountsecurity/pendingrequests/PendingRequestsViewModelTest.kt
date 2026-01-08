@@ -263,7 +263,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ipAddress = "192.168.0.2",
             key = "publicKey",
             masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.now().minusMinutes(5),
+            creationDate = ZonedDateTime.now(fixedClock).minusMinutes(5),
             responseDate = null,
             requestApproved = false,
             originUrl = "www.bitwarden.com",
@@ -276,7 +276,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ipAddress = "192.168.0.3",
             key = "publicKey",
             masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.now(),
+            creationDate = ZonedDateTime.now(fixedClock),
             responseDate = null,
             requestApproved = false,
             originUrl = "www.bitwarden.com",
@@ -291,7 +291,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(
             authRequest1.copy(
-                responseDate = ZonedDateTime.now(),
+                responseDate = ZonedDateTime.now(fixedClock),
             ),
         )
         coEvery {
@@ -303,7 +303,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(
             authRequest2.copy(
-                responseDate = ZonedDateTime.now(),
+                responseDate = ZonedDateTime.now(fixedClock),
             ),
         )
         val viewModel = createViewModel()

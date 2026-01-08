@@ -5,7 +5,6 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
@@ -415,7 +414,7 @@ class VaultAddEditViewModel @Inject constructor(
                     handleCreatePublicKeyCredentialRequest(
                         request = createPublicKeyCredentialRequest,
                         callingAppInfo = this.callingAppInfo,
-                        cipherView = content.toCipherView(),
+                        cipherView = content.toCipherView(clock = clock),
                     )
                     return@onContent
                 }
@@ -431,7 +430,7 @@ class VaultAddEditViewModel @Inject constructor(
                 is VaultAddEditType.EditItem -> {
                     val result = vaultRepository.updateCipher(
                         cipherId = vaultAddEditType.vaultItemId,
-                        cipherView = content.toCipherView(),
+                        cipherView = content.toCipherView(clock = clock),
                     )
                     sendAction(VaultAddEditAction.Internal.UpdateCipherResultReceive(result))
                 }
@@ -610,7 +609,7 @@ class VaultAddEditViewModel @Inject constructor(
                             handleCreatePublicKeyCredentialRequest(
                                 request = createPublicKeyCredentialRequest,
                                 callingAppInfo = request.callingAppInfo,
-                                cipherView = content.toCipherView(),
+                                cipherView = content.toCipherView(clock = clock),
                             )
                         }
                     }
@@ -641,7 +640,7 @@ class VaultAddEditViewModel @Inject constructor(
                             handleCreatePublicKeyCredentialRequest(
                                 request = createPublicKeyCredentialRequest,
                                 callingAppInfo = request.callingAppInfo,
-                                cipherView = content.toCipherView(),
+                                cipherView = content.toCipherView(clock = clock),
                             )
                         }
                     }
@@ -817,7 +816,7 @@ class VaultAddEditViewModel @Inject constructor(
                 FolderView(
                     name = action.newFolderName,
                     id = null,
-                    revisionDate = DateTime.now(),
+                    revisionDate = clock.instant(),
                 ),
             )
             sendAction(VaultAddEditAction.Internal.AddFolderResultReceive(result = result))
@@ -2191,11 +2190,11 @@ class VaultAddEditViewModel @Inject constructor(
             ?.map { it.id }
             ?.let {
                 vaultRepository.createCipherInOrganization(
-                    cipherView = toCipherView(),
+                    cipherView = toCipherView(clock = clock),
                     collectionIds = it,
                 )
             }
-            ?: vaultRepository.createCipher(cipherView = toCipherView())
+            ?: vaultRepository.createCipher(cipherView = toCipherView(clock = clock))
     }
 
     private fun List<VaultAddEditState.Owner>.toUpdatedOwners(

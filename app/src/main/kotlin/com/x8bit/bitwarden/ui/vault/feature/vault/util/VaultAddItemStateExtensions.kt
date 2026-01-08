@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
@@ -23,12 +22,13 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.util.stringLongNameOrNull
+import java.time.Clock
 import java.time.Instant
 
 /**
  * Transforms [VaultAddEditState.ViewState.Content] into [CipherView].
  */
-fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
+fun VaultAddEditState.ViewState.Content.toCipherView(clock: Clock): CipherView =
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = common.originalCipher?.id,
@@ -39,18 +39,18 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         localData = common.originalCipher?.localData,
         attachments = common.originalCipher?.attachments,
         organizationUseTotp = common.originalCipher?.organizationUseTotp ?: false,
-        passwordHistory = toPasswordHistory(),
+        passwordHistory = toPasswordHistory(clock = clock),
         permissions = common.originalCipher?.permissions,
-        creationDate = common.originalCipher?.creationDate ?: Instant.now(),
+        creationDate = common.originalCipher?.creationDate ?: clock.instant(),
         deletedDate = common.originalCipher?.deletedDate,
-        revisionDate = common.originalCipher?.revisionDate ?: Instant.now(),
+        revisionDate = common.originalCipher?.revisionDate ?: clock.instant(),
         archivedDate = common.originalCipher?.archivedDate,
 
         // Type specific section
         type = type.toCipherType(),
         identity = type.toIdentityView(),
         secureNote = type.toSecureNotesView(),
-        login = type.toLoginView(common = common),
+        login = type.toLoginView(common = common, clock = clock),
         card = type.toCardView(),
         sshKey = type.toSshKeyView(),
 
@@ -134,21 +134,23 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toIdentityView(): Ident
     }
 
 @Suppress("MagicNumber")
-private fun VaultAddEditState.ViewState.Content.toPasswordHistory(): List<PasswordHistoryView>? {
+private fun VaultAddEditState.ViewState.Content.toPasswordHistory(
+    clock: Clock,
+): List<PasswordHistoryView>? {
     val loginCipher = type as? VaultAddEditState.ViewState.Content.ItemType.Login
     val oldPassword = common.originalCipher?.login?.password
-    val timestamp = Instant.now()
+    val timestamp = clock.instant()
 
     val newPasswordHistory = getPasswordHistory(
-        loginCipher,
-        oldPassword,
-        timestamp,
+        loginCipher = loginCipher,
+        oldPassword = oldPassword,
+        timestamp = timestamp,
     )
 
     val newHiddenFieldHistory = getHiddenFieldHistory(
-        timestamp,
-        common.originalCipher?.fields,
-        common.customFieldData,
+        timestamp = timestamp,
+        oldFields = common.originalCipher?.fields,
+        newFields = common.customFieldData,
     )
 
     return listOf(
@@ -204,12 +206,16 @@ private fun getHiddenFieldHistory(
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
     common: VaultAddEditState.ViewState.Content.Common,
+    clock: Clock,
 ): LoginView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.Login)?.let {
         LoginView(
             username = it.username.orNullIfBlank(),
             password = it.password.orNullIfBlank(),
-            passwordRevisionDate = it.getRevisionDate(common.originalCipher),
+            passwordRevisionDate = it.getRevisionDate(
+                originalCipher = common.originalCipher,
+                clock = clock,
+            ),
             uris = it.uriList.toLoginUriView(),
             totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
@@ -280,12 +286,13 @@ private fun List<UriItem>?.toLoginUriView(): List<LoginUriView>? =
 
 private fun VaultAddEditState.ViewState.Content.ItemType.Login.getRevisionDate(
     originalCipher: CipherView?,
-): DateTime? {
+    clock: Clock,
+): Instant? {
     val isOriginalPasswordNull = originalCipher?.login?.password.isNullOrEmpty()
     val hasPasswordHistory = originalCipher?.passwordHistory?.any() ?: false
     val isOriginalAndNewPasswordEqual = originalCipher?.login?.password == this.password
     return if ((!isOriginalPasswordNull || hasPasswordHistory) && !isOriginalAndNewPasswordEqual) {
-        Instant.now()
+        clock.instant()
     } else {
         originalCipher?.login?.passwordRevisionDate
     }

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
@@ -63,6 +62,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.security.GeneralSecurityException
+import java.time.Instant
 import javax.crypto.Cipher
 
 /**
@@ -408,7 +408,7 @@ class VaultRepositoryImpl(
 
     override suspend fun generateTotp(
         cipherId: String,
-        time: DateTime,
+        time: Instant,
     ): GenerateTotpResult {
         val userId = activeUserId
             ?: return GenerateTotpResult.Error(error = NoActiveUserException())

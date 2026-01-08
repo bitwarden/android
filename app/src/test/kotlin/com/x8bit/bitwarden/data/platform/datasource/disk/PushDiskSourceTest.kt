@@ -47,7 +47,7 @@ class PushDiskSourceTest {
         )
         pushDiskSource.storeLastPushTokenRegistrationDate(
             userId = userId,
-            registrationDate = ZonedDateTime.now(),
+            registrationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         )
 
         pushDiskSource.clearData(userId = userId)
@@ -138,7 +138,7 @@ class PushDiskSourceTest {
     fun `storeLastPushTokenRegistrationDate for null values should clear SharedPreferences`() {
         val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
         val mockUserId = "mockUserId"
-        val mockLastPushTokenRegistration = ZonedDateTime.now()
+        val mockLastPushTokenRegistration = ZonedDateTime.parse("2023-10-27T12:00:00Z")
         val lastPushTokenKey = "${lastPushTokenBaseKey}_$mockUserId"
         fakeSharedPreferences.edit {
             putLong(lastPushTokenKey, mockLastPushTokenRegistration.toEpochSecond())
