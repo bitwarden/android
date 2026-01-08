@@ -32,6 +32,10 @@ class FlagKeyTest {
             FlagKey.MigrateMyVaultToMyItems.keyName,
             "pm-20558-migrate-myvault-to-myitems",
         )
+        assertEquals(
+            FlagKey.ArchiveItems.keyName,
+            "pm-19148-innovation-archive",
+        )
     }
 
     @Test
@@ -44,6 +48,7 @@ class FlagKeyTest {
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
+                FlagKey.ArchiveItems,
             ).all {
                 !it.defaultValue
             },

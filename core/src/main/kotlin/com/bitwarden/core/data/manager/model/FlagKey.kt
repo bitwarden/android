@@ -36,6 +36,7 @@ sealed class FlagKey<out T : Any> {
                 CipherKeyEncryption,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
+                ArchiveItems,
             )
         }
     }
@@ -95,6 +96,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
         override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Archive Items feature.
+     */
+    data object ArchiveItems : FlagKey<Boolean>() {
+        override val keyName: String = "pm-19148-innovation-archive"
         override val defaultValue: Boolean = false
     }
 

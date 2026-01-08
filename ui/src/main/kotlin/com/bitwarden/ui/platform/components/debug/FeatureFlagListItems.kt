@@ -30,6 +30,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.ForceUpdateKdfSettings,
     FlagKey.NoLogoutOnKdfChange,
     FlagKey.MigrateMyVaultToMyItems,
+    FlagKey.ArchiveItems,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -79,5 +80,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }
+
     FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
+    FlagKey.ArchiveItems -> stringResource(BitwardenString.archive_items)
 }
