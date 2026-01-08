@@ -14,10 +14,31 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Invokes the [observer] callback whenever the user is logged in, the active changes, and there
- * are subscribers to the [MutableStateFlow]. The flow from all previous calls to the `observer`
- * is canceled whenever the `observer` is re-invoked, there is no active user (logged-out), or
- * there are no subscribers to the [MutableStateFlow].
+ * Lazily invokes the [observer] callback only when this MutableStateFlow has external collectors
+ * and the user is authenticated. Designed for operations that should only run when UI actively
+ * observes the resulting data, but do not require the vault to be unlocked.
+ *
+ * **Subscription Detection:**
+ * Uses [MutableStateFlow.subscriptionCount] to detect external collectors. Only external
+ * `.collect()` calls increment subscriptionCount—internal flow operations (map, flatMapLatest,
+ * update, etc.) do not affect it.
+ *
+ * **Common Pattern:**
+ * ```kotlin
+ * private val _triggerFlow = MutableStateFlow(Unit)
+ * val dataFlow = _triggerFlow
+ *     .observeWhenSubscribedAndLoggedIn(userFlow) { userId ->
+ *         repository.getData(userId)  // Only runs when dataFlow is collected
+ *     }
+ * // _triggerFlow.update {} does NOT affect subscriptionCount
+ * ```
+ *
+ * **Observer Lifecycle:**
+ * - **Invoked** when subscriptionCount > 0 and user is logged in
+ * - **Re-invoked** when active user changes
+ * - **Canceled** when subscribers disconnect or user logs out
+ *
+ * @see observeWhenSubscribedAndUnlocked for variant that also requires vault to be unlocked
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndLoggedIn(
@@ -35,11 +56,31 @@ fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndLoggedIn(
         }
 
 /**
- * Invokes the [observer] callback whenever the user is logged in, the active changes,
- * the vault for the user changes and there are subscribers to the [MutableStateFlow].
- * The flow from all previous calls to the `observer`
- * is canceled whenever the `observer` is re-invoked, there is no active user (logged-out),
- * there are no subscribers to the [MutableStateFlow] or the vault is not unlocked.
+ * Lazily invokes the [observer] callback only when this MutableStateFlow has external collectors,
+ * the user is authenticated, and their vault is unlocked. Designed for expensive operations that
+ * should only run when UI actively observes the resulting data.
+ *
+ * **Subscription Detection:**
+ * Uses [MutableStateFlow.subscriptionCount] to detect external collectors. Only external
+ * `.collect()` calls increment subscriptionCount—internal flow operations (map, flatMapLatest,
+ * update, etc.) do not affect it.
+ *
+ * **Common Pattern:**
+ * ```kotlin
+ * private val _triggerFlow = MutableStateFlow(Unit)
+ * val dataFlow = _triggerFlow
+ *     .observeWhenSubscribedAndUnlocked(userFlow, unlockFlow) { userId ->
+ *         repository.getExpensiveData(userId)  // Only runs when dataFlow is collected
+ *     }
+ * // _triggerFlow.update {} does NOT affect subscriptionCount
+ * ```
+ *
+ * **Observer Lifecycle:**
+ * - **Invoked** when subscriptionCount > 0, user logged in, vault unlocked
+ * - **Re-invoked** when active user or vault state changes
+ * - **Canceled** when subscribers disconnect, user logs out, or vault locks
+ *
+ * @see observeWhenSubscribedAndLoggedIn for variant without vault unlock requirement
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndUnlocked(
