@@ -14,9 +14,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Lazily invokes the [observer] callback only when this MutableStateFlow has external collectors
- * and the user is authenticated. Designed for operations that should only run when UI actively
- * observes the resulting data, but do not require the vault to be unlocked.
+ * Lazily invokes the [observer] callback with the active user's ID only when this MutableStateFlow
+ * has external collectors and a user is logged in. Designed for operations that should only run
+ * when UI actively observes the resulting data, but do not require the vault to be unlocked.
+ *
+ * **Active User Tracking:**
+ * This function specifically tracks the active user from [userStateFlow]. When the active user
+ * changes (e.g., account switching), the previous observer flow is canceled and a new one is
+ * started for the new active user.
  *
  * **Subscription Detection:**
  * Uses [MutableStateFlow.subscriptionCount] to detect external collectors. Only external
@@ -27,15 +32,15 @@ import kotlinx.coroutines.flow.map
  * ```kotlin
  * private val _triggerFlow = MutableStateFlow(Unit)
  * val dataFlow = _triggerFlow
- *     .observeWhenSubscribedAndLoggedIn(userFlow) { userId ->
- *         repository.getData(userId)  // Only runs when dataFlow is collected
+ *     .observeWhenSubscribedAndLoggedIn(userFlow) { activeUserId ->
+ *         repository.getData(activeUserId)  // Only runs when dataFlow is collected
  *     }
  * // _triggerFlow.update {} does NOT affect subscriptionCount
  * ```
  *
  * **Observer Lifecycle:**
- * - **Invoked** when subscriptionCount > 0 and user is logged in
- * - **Re-invoked** when active user changes
+ * - **Invoked** when subscriptionCount > 0 and a user is logged in
+ * - **Re-invoked** when the active user changes (account switch)
  * - **Canceled** when subscribers disconnect or user logs out
  *
  * @see observeWhenSubscribedAndUnlocked for variant that also requires vault to be unlocked
@@ -56,9 +61,14 @@ fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndLoggedIn(
         }
 
 /**
- * Lazily invokes the [observer] callback only when this MutableStateFlow has external collectors,
- * the user is authenticated, and their vault is unlocked. Designed for expensive operations that
- * should only run when UI actively observes the resulting data.
+ * Lazily invokes the [observer] callback with the active user's ID only when this MutableStateFlow
+ * has external collectors, a user is logged in, and the active user's vault is unlocked. Designed
+ * for expensive operations that should only run when UI actively observes the resulting data.
+ *
+ * **Active User Tracking:**
+ * This function specifically tracks the active user from [userStateFlow]. When the active user
+ * changes (e.g., account switching), the previous observer flow is canceled and a new one is
+ * started for the new active user. The vault unlock state is also tracked per-user.
  *
  * **Subscription Detection:**
  * Uses [MutableStateFlow.subscriptionCount] to detect external collectors. Only external
@@ -69,15 +79,15 @@ fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndLoggedIn(
  * ```kotlin
  * private val _triggerFlow = MutableStateFlow(Unit)
  * val dataFlow = _triggerFlow
- *     .observeWhenSubscribedAndUnlocked(userFlow, unlockFlow) { userId ->
- *         repository.getExpensiveData(userId)  // Only runs when dataFlow is collected
+ *     .observeWhenSubscribedAndUnlocked(userFlow, unlockFlow) { activeUserId ->
+ *         repository.getExpensiveData(activeUserId)  // Only runs when dataFlow is collected
  *     }
  * // _triggerFlow.update {} does NOT affect subscriptionCount
  * ```
  *
  * **Observer Lifecycle:**
- * - **Invoked** when subscriptionCount > 0, user logged in, vault unlocked
- * - **Re-invoked** when active user or vault state changes
+ * - **Invoked** when subscriptionCount > 0, a user is logged in, and active user's vault unlocked
+ * - **Re-invoked** when the active user changes (account switch) or vault state changes
  * - **Canceled** when subscribers disconnect, user logs out, or vault locks
  *
  * @see observeWhenSubscribedAndLoggedIn for variant without vault unlock requirement
