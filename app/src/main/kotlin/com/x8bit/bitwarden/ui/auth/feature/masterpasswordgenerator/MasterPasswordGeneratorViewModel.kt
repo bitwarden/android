@@ -131,7 +131,7 @@ class MasterPasswordGeneratorViewModel @Inject constructor(
         val optionsWordCount = options?.numWords ?: DEFAULT_WORD_COUNT
         return PassphraseGeneratorRequest(
             numWords = max(optionsWordCount, DEFAULT_WORD_COUNT).toUByte(),
-            wordSeparator = options?.wordSeparator ?: DEFAULT_SEPARATOR,
+            wordSeparator = options?.wordSeparator.orEmpty(),
             capitalize = policy.requireUpper == true,
             includeNumber = policy.requireNumbers == true,
         )
