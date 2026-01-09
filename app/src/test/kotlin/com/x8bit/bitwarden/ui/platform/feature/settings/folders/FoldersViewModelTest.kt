@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import app.cash.turbine.test
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class FoldersViewModelTest : BaseViewModelTest() {
 
@@ -195,5 +195,9 @@ class FoldersViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_FOLDER_VIEW = FolderView("1", "test", revisionDate = DateTime.now())
+private val DEFAULT_FOLDER_VIEW = FolderView(
+    id = "1",
+    name = "test",
+    revisionDate = Instant.parse("2025-04-11T10:15:30.00Z"),
+)
 private val DEFAULT__DISPLAY_FOLDER = FolderDisplayItem("1", "test")

@@ -336,6 +336,32 @@ class VaultDiskSourceTest {
         assertTrue(foldersDao.deleteFoldersCalled)
         assertTrue(sendsDao.deleteSendsCalled)
     }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit true when personal ciphers exist`() = runTest {
+        val personalCipher = CIPHER_ENTITY.copy(organizationId = null)
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(personalCipher))
+                assertEquals(true, awaitItem())
+            }
+    }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit false when only org ciphers exist`() = runTest {
+        val orgCipher = CIPHER_ENTITY.copy(id = "orgCipherId", organizationId = "org-123")
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(orgCipher))
+                assertEquals(false, awaitItem())
+            }
+    }
 }
 
 private const val USER_ID: String = "test_user_id"
@@ -486,6 +512,7 @@ private val CIPHER_ENTITY = CipherEntity(
     hasTotp = true,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
+    organizationId = "mockOrganizationId-1",
 )
 
 private val COLLECTION_ENTITY = CollectionEntity(

@@ -187,7 +187,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     fun `when password history updates the state updates correctly`() = runTest {
         val viewModel = createViewModel()
 
-        val passwordHistoryView = PasswordHistoryView("password", Instant.now())
+        val passwordHistoryView = PasswordHistoryView("password", fixedClock.instant())
         fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
         val expectedState = createPasswordHistoryState(
@@ -241,7 +241,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     fun `PasswordClearClick action should update to Empty ViewState`() = runTest {
         val viewModel = createViewModel()
 
-        val passwordHistoryView = PasswordHistoryView("password", Instant.now())
+        val passwordHistoryView = PasswordHistoryView("password", fixedClock.instant())
         fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
         viewModel.trySendAction(PasswordHistoryAction.PasswordClearClick)

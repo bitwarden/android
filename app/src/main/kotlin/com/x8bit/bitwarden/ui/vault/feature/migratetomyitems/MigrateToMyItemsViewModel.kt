@@ -9,6 +9,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +27,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class MigrateToMyItemsViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
+    vaultSyncManager: VaultSyncManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -42,6 +44,9 @@ class MigrateToMyItemsViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+        // We need to ensure we have the most recent data. No need to do anything
+        // RootNavViewModel will take care of navigating if needed
+        vaultSyncManager.sync(forced = true)
     }
 
     override fun handleAction(action: MigrateToMyItemsAction) {

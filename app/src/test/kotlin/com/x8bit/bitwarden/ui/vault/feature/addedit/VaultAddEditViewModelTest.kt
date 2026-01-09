@@ -7,7 +7,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -3363,14 +3362,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder action calls create folder from vault repository`() = runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
-
             val folderName = "folderName"
             val expectedFolderResult = FolderView(
                 id = "123",
                 name = folderName,
-                revisionDate = DateTime.now(),
+                revisionDate = fixedClock.instant(),
             )
             coEvery {
                 vaultRepository.createFolder(any())
@@ -3381,23 +3377,20 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     FolderView(
                         name = folderName,
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = fixedClock.instant(),
                     ),
                 )
             }
-
-            unmockkStatic(DateTime::class)
         }
 
         @Test
         fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
-
             val folderId = "123"
             val folderName = "folderName"
             val expectedFolderResult = FolderView(
                 id = folderId,
                 name = folderName,
-                revisionDate = DateTime.now(),
+                revisionDate = fixedClock.instant(),
             )
             coEvery {
                 vaultRepository.createFolder(any())
@@ -3433,7 +3426,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     data = listOf(
                         FolderView(
                             name = "folder",
-                            revisionDate = DateTime.now(),
+                            revisionDate = fixedClock.instant(),
                             id = null,
                         ),
                     ),

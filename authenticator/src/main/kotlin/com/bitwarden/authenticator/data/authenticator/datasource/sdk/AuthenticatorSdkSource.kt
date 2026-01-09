@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.sdk
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.vault.TotpResponse
+import java.time.Instant
 
 /**
  * Source of authenticator information from the Bitwarden SDK.
@@ -13,7 +13,7 @@ interface AuthenticatorSdkSource {
      */
     suspend fun generateTotp(
         totp: String,
-        time: DateTime,
+        time: Instant,
     ): Result<TotpResponse>
 
     /**

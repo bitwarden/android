@@ -39,6 +39,7 @@
     <string name="force_update_kdf_settings">Force update KDF settings</string>
     <string name="avoid_logout_on_kdf_change">Avoid logout on KDF change</string>
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
+    <string name="archive_items">Archive Items</string>
 
     <!-- endregion Debug Menu -->
 </resources>

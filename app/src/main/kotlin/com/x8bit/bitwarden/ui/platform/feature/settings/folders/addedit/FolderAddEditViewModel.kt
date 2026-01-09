@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -25,6 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -37,6 +37,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass")
 class FolderAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
     private val vaultRepository: VaultRepository,
     private val relayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<FolderAddEditState, FolderAddEditEvent, FolderAddEditAction>(
@@ -124,7 +125,7 @@ class FolderAddEditViewModel @Inject constructor(
                                 .orEmpty() +
                                 content.folderName,
                             id = folderAddEditType.folderId,
-                            revisionDate = DateTime.now(),
+                            revisionDate = clock.instant(),
                         ),
                     )
                     sendAction(FolderAddEditAction.Internal.CreateFolderResultReceive(result))
@@ -136,7 +137,7 @@ class FolderAddEditViewModel @Inject constructor(
                         FolderView(
                             name = content.folderName,
                             id = folderAddEditType.folderId,
-                            revisionDate = DateTime.now(),
+                            revisionDate = clock.instant(),
                         ),
                     )
                     sendAction(FolderAddEditAction.Internal.UpdateFolderResultReceive(result))
