@@ -27,4 +27,3 @@ private fun getSystemProperty(key: String): String? {
         null
     }
 }
-

@@ -12,12 +12,11 @@ import javax.crypto.Cipher
 
 /**
  * Sets the biometric prompt data on the [PublicKeyCredentialEntry.Builder] if supported.
- * Note: Xiaomi HyperOS is known to not support biometric prompt.
  */
 fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
     cipher: Cipher?,
 ): PublicKeyCredentialEntry.Builder =
-    if (isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) && !isHyperOS() && cipher != null) {
+    if (isBiometricPromptDataSupported() && cipher != null) {
         setBiometricPromptData(
             biometricPromptData = buildPromptDataWithCipher(cipher),
         )
@@ -27,15 +26,23 @@ fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
 
 /**
  * Sets the biometric prompt data on the [PasswordCredentialEntry.Builder] if supported.
- * Note: Xiaomi HyperOS is known to not support biometric prompt.
  */
 fun PasswordCredentialEntry.Builder.setBiometricPromptDataIfSupported(
     cipher: Cipher?,
 ): PasswordCredentialEntry.Builder =
-    if (isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) && !isHyperOS() && cipher != null) {
+    if (isBiometricPromptDataSupported() && cipher != null) {
         setBiometricPromptData(
             biometricPromptData = buildPromptDataWithCipher(cipher),
         )
     } else {
         this
     }
+
+/**
+ * Returns whether biometric prompt data is supported on this device.
+ * Note: Xiaomi HyperOS is known to be incompatible.
+ */
+private fun isBiometricPromptDataSupported(): Boolean {
+    return isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) &&
+        !isHyperOS()
+}
