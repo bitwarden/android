@@ -166,7 +166,7 @@
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de Preenchimento Automático do Bitwarden. Saiba mais sobre como usar o Serviço de Preenchimento Automático do Bitwarden navegando até a tela de \"Configurações\".</string>
     <string name="autofill_noun">Preenchimento automático</string>
-    <string name="autofill_verb">Preencher automaticamente</string>
+    <string name="autofill_verb">Preencher</string>
     <string name="autofill_or_view">Quer preencher ou ver este item?</string>
     <string name="search">Buscar</string>
     <string name="learn_org">Saiba mais sobre organizações</string>
@@ -297,7 +297,7 @@ A leitura será feita automaticamente.</string>
     <string name="starts_with">Começa com</string>
     <string name="uri_match_detection">Detecção de correspondência de URI</string>
     <string name="match_detection">Detecção de correspondência</string>
-    <string name="autofill_and_save">Preencher automaticamente e salvar</string>
+    <string name="autofill_and_save">Preencher e salvar</string>
     <string name="organization">Organização</string>
     <string name="try_again">Tentar novamente</string>
     <string name="created">Criado: %1$s</string>
@@ -742,7 +742,7 @@ Quer trocar para esta conta?</string>
     <string name="set_up_unlock_later">Configurar desbloqueio depois?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Você pode retornar para concluir esta etapa a qualquer momento a partir do menu de Segurança da Conta nas Configurações.</string>
     <string name="confirm">Confirmar</string>
-    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Configure a biometria ou escolha um código PIN para acessar rapidamente o seu cofre e preencher as suas credenciais automaticamente.</string>
+    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Configure a biometria ou escolha um código PIN para acessar rapidamente o seu cofre e preencher as suas credenciais.</string>
     <string name="never_lose_access_to_your_vault">Nunca perca o acesso ao seu cofre</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">A melhor maneira de garantir que você sempre possa acessar a sua conta é se prevenir desde o começo.</string>
     <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Uma das melhores maneiras de criar uma senha segura e memorável é usar uma frase secreta. \nVeja como:</string>
@@ -778,10 +778,10 @@ Quer trocar para esta conta?</string>
     <string name="turn_on_autofill">Ativar preenchimento automático</string>
     <string name="autofill_setup">Configuração do preenchimento automático</string>
     <string name="turn_on_browser_autofill_integration">Ativar integração com o preenchimento do navegador</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher suas senhas automaticamente.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher suas senhas automaticamente.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher suas senhas automaticamente. Ative a sua integração preferida de preenchimento automático abaixo.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher suas senhas automaticamente. Ative o preenchimento automático para todos os seus navegadores instalados para continuar.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher suas senhas.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher suas senhas.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher senhas. Ative a sua integração preferida de preenchimento automático abaixo.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher senhas. Ative o preenchimento automático para todos os seus navegadores instalados para continuar.</string>
     <string name="use_autofill_to_log_into_your_accounts">Use o preenchimento automático para acessar suas contas com um único toque.</string>
     <string name="turn_on_later">Ativar mais tarde</string>
     <string name="turn_on_autofill_later">Ativar preenchimento automático mais tarde?</string>
