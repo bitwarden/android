@@ -292,12 +292,16 @@ class SettingsRepositoryImpl(
     override val isUnlockWithPinEnabledFlow: Flow<Boolean>
         get() = activeUserId
             ?.let { userId ->
-                authDiskSource
-                    .getPinProtectedUserKeyFlow(userId)
-                    .combine(
+                    combine(
+                        authDiskSource.getPinProtectedUserKeyFlow(userId),
                         authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId),
-                    ) { pinProtectedUserKey, pinProtectedUserKeyEnvelope ->
-                        pinProtectedUserKey != null || pinProtectedUserKeyEnvelope != null
+                        authDiskSource.getIsInMemoryPinEnvelopePresentFlowMap(userId),
+                    ) {
+                            pinProtectedUserKey, pinProtectedUserKeyEnvelope,
+                            isInMemoryPinEnvelopePresent,
+                        ->
+                        pinProtectedUserKey != null ||
+                            pinProtectedUserKeyEnvelope != null || isInMemoryPinEnvelopePresent
                     }
             }
             ?: flowOf(false)

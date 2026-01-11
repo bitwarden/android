@@ -71,6 +71,10 @@ class AuthDiskSourceImpl(
     private val inMemoryPinProtectedUserKeyEnvelopes = mutableMapOf<String, String?>()
     private val mutableShouldUseKeyConnectorFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableIsInMemoryPinEnvelopePresentFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean>>()
+
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
@@ -185,6 +189,12 @@ class AuthDiskSourceImpl(
     override fun getShouldUseKeyConnectorFlow(userId: String): Flow<Boolean?> =
         getMutableShouldUseKeyConnectorFlowMap(userId = userId)
             .onSubscription { emit(getShouldUseKeyConnector(userId = userId)) }
+
+    override fun getIsInMemoryPinEnvelopePresentFlowMap(userId: String): Flow<Boolean> =
+        getMutableIsInMemoryPinEnvelopePresentFlowMap(userId)
+            .onSubscription {
+                emit(inMemoryPinProtectedUserKeyEnvelopes[userId] != null)
+            }
 
     override fun getShouldUseKeyConnector(
         userId: String,
@@ -373,6 +383,8 @@ class AuthDiskSourceImpl(
         inMemoryOnly: Boolean,
     ) {
         inMemoryPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope
+        getMutableIsInMemoryPinEnvelopePresentFlowMap(userId)
+            .tryEmit(pinProtectedUserKeyEnvelope != null)
         if (inMemoryOnly) return
         putString(
             key = PIN_PROTECTED_USER_KEY_KEY_ENVELOPE.appendIdentifier(userId),
@@ -579,6 +591,13 @@ class AuthDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableShouldUseKeyConnectorFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableIsInMemoryPinEnvelopePresentFlowMap(
+        userId: String,
+    ): MutableSharedFlow<Boolean> =
+        mutableIsInMemoryPinEnvelopePresentFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 
