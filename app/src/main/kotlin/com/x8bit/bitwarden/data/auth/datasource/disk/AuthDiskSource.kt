@@ -72,6 +72,12 @@ interface AuthDiskSource : AppIdProvider {
     fun getShouldUseKeyConnectorFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the state indicating whether the in-memory PIN-protected user key envelope
+     * is present as a flow.
+     */
+    fun getIsInMemoryPinEnvelopePresentFlowMap(userId: String): Flow<Boolean>
+
+    /**
      * Stores the boolean indicating that the user should use a key connector.
      */
     fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?)
