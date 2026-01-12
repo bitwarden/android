@@ -4734,7 +4734,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val selectedCipherId = "selectedCipherId"
         val pin = "PIN"
         coEvery {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
         viewModel.trySendAction(
@@ -4754,7 +4754,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialogState,
         )
         coVerify {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         }
     }
 
@@ -4765,7 +4765,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val selectedCipherId = "selectedCipherId"
         val pin = "PIN"
         coEvery {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         } returns ValidatePinResult.Success(isValid = false)
 
         viewModel.trySendAction(
@@ -4784,7 +4784,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialogState,
         )
         coVerify {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         }
     }
 
@@ -4796,7 +4796,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val pin = "PIN"
         every { bitwardenCredentialManager.hasAuthenticationAttemptsRemaining() } returns false
         coEvery {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         } returns ValidatePinResult.Success(isValid = false)
 
         viewModel.trySendAction(
@@ -4816,7 +4816,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialogState,
         )
         coVerify {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         }
     }
 
@@ -4827,7 +4827,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val selectedCipherId = "selectedCipherId"
         val pin = "PIN"
         coEvery {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         } returns ValidatePinResult.Success(isValid = true)
         coEvery {
             vaultRepository.getCipher("selectedCipherId")
@@ -4850,7 +4850,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialogState,
         )
         coVerify {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         }
     }
 
@@ -4874,7 +4874,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
         )
         coEvery {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         } returns ValidatePinResult.Success(isValid = true)
 
         viewModel.trySendAction(
@@ -4884,7 +4884,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
         )
         coVerify {
-            authRepository.validatePin(pin = pin)
+            authRepository.validatePinUserKey(pin = pin)
         }
     }
 

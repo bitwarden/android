@@ -7,7 +7,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -3363,14 +3362,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder action calls create folder from vault repository`() = runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
-
             val folderName = "folderName"
             val expectedFolderResult = FolderView(
                 id = "123",
                 name = folderName,
-                revisionDate = DateTime.now(),
+                revisionDate = fixedClock.instant(),
             )
             coEvery {
                 vaultRepository.createFolder(any())
@@ -3381,23 +3377,20 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     FolderView(
                         name = folderName,
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = fixedClock.instant(),
                     ),
                 )
             }
-
-            unmockkStatic(DateTime::class)
         }
 
         @Test
         fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
-
             val folderId = "123"
             val folderName = "folderName"
             val expectedFolderResult = FolderView(
                 id = folderId,
                 name = folderName,
-                revisionDate = DateTime.now(),
+                revisionDate = fixedClock.instant(),
             )
             coEvery {
                 vaultRepository.createFolder(any())
@@ -3433,7 +3426,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     data = listOf(
                         FolderView(
                             name = "folder",
-                            revisionDate = DateTime.now(),
+                            revisionDate = fixedClock.instant(),
                             id = null,
                         ),
                     ),
@@ -4242,7 +4235,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should display CredentialError when Pin verification fails`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
             viewModel.trySendAction(
@@ -4259,7 +4252,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4268,7 +4261,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should display Fido2PinError when user has retries remaining`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = false)
 
             viewModel.trySendAction(
@@ -4282,7 +4275,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4292,7 +4285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val pin = "PIN"
             every { bitwardenCredentialManager.hasAuthenticationAttemptsRemaining() } returns false
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = false)
 
             viewModel.trySendAction(
@@ -4309,7 +4302,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.dialog,
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 
@@ -4318,7 +4311,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PinFido2VerificationSubmit should register credential when pin authenticated successfully`() {
             val pin = "PIN"
             coEvery {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             } returns ValidatePinResult.Success(isValid = true)
 
             viewModel.trySendAction(
@@ -4327,7 +4320,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             coVerify {
-                authRepository.validatePin(pin = pin)
+                authRepository.validatePinUserKey(pin = pin)
             }
         }
 

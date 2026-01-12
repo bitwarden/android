@@ -7,6 +7,7 @@ import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepositoryI
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
@@ -25,10 +26,12 @@ object PlatformRepositoryModule {
     @Singleton
     fun provideSettingsRepository(
         settingsDiskSource: SettingsDiskSource,
+        flightRecorderManager: FlightRecorderManager,
         dispatcherManager: DispatcherManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             settingsDiskSource = settingsDiskSource,
+            flightRecorderManager = flightRecorderManager,
             dispatcherManager = dispatcherManager,
         )
 

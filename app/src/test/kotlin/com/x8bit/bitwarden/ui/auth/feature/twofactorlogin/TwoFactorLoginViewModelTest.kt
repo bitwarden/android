@@ -427,7 +427,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToDuo(mockkUri),
+                    TwoFactorLoginEvent.NavigateToDuo(uri = mockkUri, scheme = "bitwarden"),
                     awaitItem(),
                 )
             }
@@ -512,7 +512,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToWebAuth(mockkUri),
+                    TwoFactorLoginEvent.NavigateToWebAuth(uri = mockkUri, scheme = "bitwarden"),
                     awaitItem(),
                 )
             }

@@ -115,7 +115,7 @@ class FolderManagerTest {
             val folderView = FolderView(
                 id = null,
                 name = "TestName",
-                revisionDate = Instant.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
             )
             val error = IllegalStateException()
 
@@ -130,7 +130,7 @@ class FolderManagerTest {
     @Test
     fun `createFolder with folderService failure should return CreateFolderResult failure`() =
         runTest {
-            val date = Instant.now(FIXED_CLOCK)
+            val date = FIXED_CLOCK.instant()
             val testFolderName = "TestName"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -157,7 +157,7 @@ class FolderManagerTest {
     fun `createFolder with folderService createFolder should return CreateFolderResult success`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val date = Instant.now(FIXED_CLOCK)
+            val date = FIXED_CLOCK.instant()
             val testFolderName = "TestName"
             val folderView = FolderView(
                 id = null,
@@ -270,7 +270,7 @@ class FolderManagerTest {
             val folderView = FolderView(
                 id = folderId,
                 name = "TestName",
-                revisionDate = Instant.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
             )
             val error = IllegalStateException()
 
@@ -286,7 +286,7 @@ class FolderManagerTest {
     @Test
     fun `updateFolder with folderService failure should return UpdateFolderResult failure`() =
         runTest {
-            val date = Instant.now(FIXED_CLOCK)
+            val date = FIXED_CLOCK.instant()
             val testFolderName = "TestName"
             val folderId = "testId"
 
@@ -317,7 +317,7 @@ class FolderManagerTest {
     @Test
     fun `updateFolder with folderService updateFolder Invalid response should return UpdateFolderResult Error with a non-null message`() =
         runTest {
-            val date = Instant.now(FIXED_CLOCK)
+            val date = FIXED_CLOCK.instant()
             val testFolderName = "TestName"
             val folderId = "testId"
 
@@ -358,7 +358,7 @@ class FolderManagerTest {
     @Test
     fun `updateFolder with folderService updateFolder success should return UpdateFolderResult success`() =
         runTest {
-            val date = Instant.now(FIXED_CLOCK)
+            val date = FIXED_CLOCK.instant()
             val testFolderName = "TestName"
             val folderId = "testId"
 

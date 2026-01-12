@@ -19,6 +19,8 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -35,6 +37,7 @@ import javax.inject.Inject
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
+    vaultMigrationManager: VaultMigrationManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -43,11 +46,13 @@ class RootNavViewModel @Inject constructor(
             authRepository.authStateFlow,
             authRepository.userStateFlow,
             specialCircumstanceManager.specialCircumstanceStateFlow,
-        ) { authState, userState, specialCircumstance ->
+            vaultMigrationManager.vaultMigrationDataStateFlow,
+        ) { authState, userState, specialCircumstance, vaultMigrationData ->
             RootNavAction.Internal.UserStateUpdateReceive(
                 authState = authState,
                 userState = userState,
                 specialCircumstance = specialCircumstance,
+                vaultMigrationData = vaultMigrationData,
             )
         }
             .onEach(::handleAction)
@@ -66,6 +71,7 @@ class RootNavViewModel @Inject constructor(
     ) {
         val userState = action.userState
         val specialCircumstance = action.specialCircumstance
+
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 authRepository.tdeLoginComplete != true &&
@@ -110,21 +116,32 @@ class RootNavViewModel @Inject constructor(
                 getOnboardingNavState(onboardingStatus = userState.activeAccount.onboardingStatus)
             }
 
+            userState.activeAccount.isVaultUnlocked &&
+                specialCircumstance is SpecialCircumstance.AutofillSave -> {
+                RootNavState.VaultUnlockedForAutofillSave(
+                    autofillSaveItem = specialCircumstance.autofillSaveItem,
+                )
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                specialCircumstance is SpecialCircumstance.AutofillSelection -> {
+                RootNavState.VaultUnlockedForAutofillSelection(
+                    activeUserId = userState.activeAccount.userId,
+                    type = specialCircumstance.autofillSelectionData.type,
+                )
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                specialCircumstance == null &&
+                action.vaultMigrationData is VaultMigrationData.MigrationRequired -> {
+                RootNavState.MigrateToMyItems(
+                    organizationId = action.vaultMigrationData.organizationId,
+                    organizationName = action.vaultMigrationData.organizationName,
+                )
+            }
+
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
-                    is SpecialCircumstance.AutofillSave -> {
-                        RootNavState.VaultUnlockedForAutofillSave(
-                            autofillSaveItem = specialCircumstance.autofillSaveItem,
-                        )
-                    }
-
-                    is SpecialCircumstance.AutofillSelection -> {
-                        RootNavState.VaultUnlockedForAutofillSelection(
-                            activeUserId = userState.activeAccount.userId,
-                            type = specialCircumstance.autofillSelectionData.type,
-                        )
-                    }
-
                     is SpecialCircumstance.AddTotpLoginItem -> {
                         RootNavState.VaultUnlockedForNewTotp(
                             activeUserId = userState.activeAccount.userId,
@@ -207,6 +224,8 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.CredentialExchangeExport,
                     is SpecialCircumstance.RegistrationEvent,
+                    is SpecialCircumstance.AutofillSave,
+                    is SpecialCircumstance.AutofillSelection,
                         -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
@@ -316,6 +335,15 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultLocked : RootNavState()
+
+    /**
+     * App should show MigrateToMyItems screen.
+     */
+    @Parcelize
+    data class MigrateToMyItems(
+        val organizationId: String,
+        val organizationName: String,
+    ) : RootNavState()
 
     /**
      * App should show vault unlocked nav graph for the given [activeUserId].
@@ -494,6 +522,7 @@ sealed class RootNavAction {
             val authState: AuthState,
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
+            val vaultMigrationData: VaultMigrationData,
         ) : RootNavAction()
     }
 }

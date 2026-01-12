@@ -57,7 +57,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        setupMockUri()
         mockkStatic(
             SavedStateHandle::toEnterpriseSignOnArgs,
             ::generateUriForSso,
@@ -69,7 +68,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             SavedStateHandle::toEnterpriseSignOnArgs,
             ::generateUriForSso,
-            Uri::parse,
         )
     }
 
@@ -166,34 +164,30 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val ssoUri: Uri = mockk()
             every {
                 generateUriForSso(any(), any(), any(), any(), any())
-            } returns "https://identity.bitwarden.com/sso-test"
-            every {
-                Uri.parse("https://identity.bitwarden.com/sso-test")
             } returns ssoUri
 
             val viewModel = createViewModel(state)
-            viewModel.stateFlow.test {
-                assertEquals(state, awaitItem())
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(state, stateFlow.awaitItem())
                 viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
 
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            BitwardenString.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
 
                 assertEquals(
                     state.copy(dialogState = null),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
-            }
-            viewModel.eventFlow.test {
+
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
-                    awaitItem(),
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(uri = ssoUri, scheme = "bitwarden"),
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -1268,23 +1262,14 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 it.trySendAction(EnterpriseSignOnAction.DialogDismiss)
             }
         }
-
-    private fun setupMockUri() {
-        mockkStatic(Uri::class)
-        val uriMock = mockk<Uri>()
-        every { Uri.parse(any()) } returns uriMock
-        every { uriMock.host } returns "www.bitwarden.com"
-    }
-
-    companion object {
-        private val DEFAULT_STATE = EnterpriseSignOnState(
-            dialogState = null,
-            orgIdentifierInput = "",
-        )
-        private val DEFAULT_SSO_DATA = SsoResponseData(
-            state = "abc",
-            codeVerifier = "def",
-        )
-        private const val DEFAULT_EMAIL = "test@gmail.com"
-    }
 }
+
+private val DEFAULT_STATE = EnterpriseSignOnState(
+    dialogState = null,
+    orgIdentifierInput = "",
+)
+private val DEFAULT_SSO_DATA = SsoResponseData(
+    state = "abc",
+    codeVerifier = "def",
+)
+private const val DEFAULT_EMAIL = "test@gmail.com"

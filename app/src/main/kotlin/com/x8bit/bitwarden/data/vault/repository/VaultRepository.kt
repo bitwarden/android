@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -24,6 +23,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.Instant
 import javax.crypto.Cipher
 
 /**
@@ -135,7 +135,7 @@ interface VaultRepository :
     /**
      * Attempt to get the verification code and the period.
      */
-    suspend fun generateTotp(cipherId: String, time: DateTime): GenerateTotpResult
+    suspend fun generateTotp(cipherId: String, time: Instant): GenerateTotpResult
 
     /**
      * Attempt to get the user's vault data for export.
@@ -167,11 +167,4 @@ interface VaultRepository :
      * `null` if the item cannot be found.
      */
     fun getVaultListItemStateFlow(itemId: String): StateFlow<DataState<CipherListView?>>
-
-    /**
-     * Checks if there are any personal vault items (items without an organization ID) in the vault.
-     *
-     * @return `true` if there are personal vault items, `false` otherwise.
-     */
-    fun hasPersonalVaultItems(): Boolean
 }

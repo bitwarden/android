@@ -506,7 +506,7 @@ private val USER_1_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
 private val USER_1_DELETED_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1Deleted"
     every { login?.username } returns "username"
-    every { deletedDate } returns ZonedDateTime.now()
+    every { deletedDate } returns ZonedDateTime.parse("2023-10-27T12:00:00Z")
     every { name } returns "cipher1"
 }
 

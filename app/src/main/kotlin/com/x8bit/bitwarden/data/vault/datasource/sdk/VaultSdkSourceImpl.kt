@@ -100,6 +100,7 @@ class VaultSdkSourceImpl(
                     is DeriveKeyConnectorException.WrongPassword -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
+
                     is DeriveKeyConnectorException.Crypto -> {
                         DeriveKeyConnectorResult.Error(error = ex)
                     }
@@ -129,15 +130,18 @@ class VaultSdkSourceImpl(
                 .enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
         }
 
-    override suspend fun validatePin(
+    override suspend fun validatePinUserKey(
         userId: String,
         pin: String,
-        pinProtectedUserKey: String,
+        pinProtectedUserKeyEnvelope: String,
     ): Result<Boolean> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .auth()
-                .validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+                .validatePinProtectedUserKeyEnvelope(
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                )
         }
 
     override suspend fun getAuthRequestKey(

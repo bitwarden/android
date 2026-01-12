@@ -77,12 +77,13 @@ internal class IntentManagerImpl(
 
     override fun startAuthTab(
         uri: Uri,
+        redirectScheme: String,
         launcher: ActivityResultLauncher<Intent>,
     ) {
         val providerPackageName = CustomTabsClient.getPackageName(activity, null).toString()
         if (CustomTabsClient.isAuthTabSupported(activity, providerPackageName)) {
             Timber.d("Launching uri with AuthTab for $providerPackageName")
-            AuthTabIntent.Builder().build().launch(launcher, uri, "bitwarden")
+            AuthTabIntent.Builder().build().launch(launcher, uri, redirectScheme)
         } else {
             // Fall back to a Custom Tab.
             Timber.d("Launching uri with CustomTabs fallback for $providerPackageName")

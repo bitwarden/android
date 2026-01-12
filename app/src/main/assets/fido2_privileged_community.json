@@ -3,23 +3,27 @@
     {
       "type": "android",
       "info": {
-        "package_name": "io.github.forkmaintainers.iceraven",
+        "package_name": "eu.weblibre.gecko",
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "9C:0D:22:37:9F:48:7B:70:A4:F9:F8:BE:C0:17:3C:F9:1A:16:44:F0:8F:93:38:5B:5B:78:2C:E3:76:60:BA:81"
-          }
+            "cert_fingerprint_sha256": "BB:2A:97:F5:61:53:35:C9:E5:7C:86:6F:1C:30:ED:4F:D7:D7:BD:DC:BC:BC:06:68:FE:93:A5:79:17:3D:3D:2D"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "8F:52:6E:1E:53:D6:BD:4D:FB:F4:F4:B9:3C:2A:91:EC:B5:CB:8D:A5:E1:4A:D9:4C:25:70:E1:E3:C7:13:52:7F"
+          },
         ]
       }
     },
     {
       "type": "android",
       "info": {
-        "package_name": "org.chromium.chrome",
+        "package_name": "io.github.forkmaintainers.iceraven",
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "A8:56:48:50:79:BC:B3:57:BF:BE:69:BA:19:A9:BA:43:CD:0A:D9:AB:22:67:52:C7:80:B6:88:8A:FD:48:21:6B"
+            "cert_fingerprint_sha256": "9C:0D:22:37:9F:48:7B:70:A4:F9:F8:BE:C0:17:3C:F9:1A:16:44:F0:8F:93:38:5B:5B:78:2C:E3:76:60:BA:81"
           }
         ]
       }

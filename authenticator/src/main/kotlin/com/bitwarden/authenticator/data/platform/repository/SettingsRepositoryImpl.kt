@@ -5,6 +5,7 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSou
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +21,10 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
  */
 class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
+    flightRecorderManager: FlightRecorderManager,
     dispatcherManager: DispatcherManager,
-) : SettingsRepository {
+) : SettingsRepository,
+    FlightRecorderManager by flightRecorderManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 

@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.data.authenticator.manager
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
-import com.bitwarden.core.DateTime
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -46,7 +45,7 @@ class TotpCodeManagerImpl @Inject constructor(
                     // If the item is expired or we haven't generated our first item,
                     // generate a new code using the SDK:
                     item = authenticatorSdkSource
-                        .generateTotp(otpUri, DateTime.now())
+                        .generateTotp(otpUri, clock.instant())
                         .getOrNull()
                         ?.let { response ->
                             VerificationCodeItem(

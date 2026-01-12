@@ -17,9 +17,11 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -37,6 +39,8 @@ import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManagerImpl
 import dagger.Module
@@ -54,6 +58,28 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideVaultMigrationManager(
+        authDiskSource: AuthDiskSource,
+        vaultDiskSource: VaultDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
+        featureFlagManager: FeatureFlagManager,
+        connectionManager: NetworkConnectionManager,
+        dispatcherManager: DispatcherManager,
+    ): VaultMigrationManager = VaultMigrationManagerImpl(
+        authDiskSource = authDiskSource,
+        vaultDiskSource = vaultDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
+        featureFlagManager = featureFlagManager,
+        connectionManager = connectionManager,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton

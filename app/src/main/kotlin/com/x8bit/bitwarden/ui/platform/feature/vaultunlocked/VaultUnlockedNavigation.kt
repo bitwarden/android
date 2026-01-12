@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsDestination
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMoveToOrganization
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
@@ -262,6 +263,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         importLoginsScreenDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+
+        migrateToMyItemsDestination(
+            onNavigateToVault = { navController.popBackStack() },
+            onNavigateToLeaveOrganization = { },
         )
     }
 }

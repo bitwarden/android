@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.credentials)
@@ -79,7 +78,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
-    // For now we are restricted to running Compose tests for debug builds only
+    // For now, we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
