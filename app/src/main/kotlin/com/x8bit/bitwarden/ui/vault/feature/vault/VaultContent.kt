@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -89,7 +89,7 @@ fun VaultContent(
 
             item {
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_clock),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_clock),
                     label = stringResource(id = BitwardenString.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
                     onClick = vaultHandlers.verificationCodesClick,
@@ -169,8 +169,10 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_globe),
-                startIconTestTag = "LoginCipherIcon",
+                startIcon = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_globe,
+                    testTag = "LoginCipherIcon",
+                ),
                 label = stringResource(id = BitwardenString.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = vaultHandlers.loginGroupClick,
@@ -186,8 +188,10 @@ fun VaultContent(
         if (state.showCardGroup) {
             item {
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_payment_card),
-                    startIconTestTag = "CardCipherIcon",
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_payment_card,
+                        testTag = "CardCipherIcon",
+                    ),
                     label = stringResource(id = BitwardenString.type_card),
                     supportingLabel = state.cardItemsCount.toString(),
                     onClick = vaultHandlers.cardGroupClick,
@@ -203,8 +207,10 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_id_card),
-                startIconTestTag = "IdentityCipherIcon",
+                startIcon = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_id_card,
+                    testTag = "IdentityCipherIcon",
+                ),
                 label = stringResource(id = BitwardenString.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = vaultHandlers.identityGroupClick,
@@ -219,8 +225,10 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_note),
-                startIconTestTag = "SecureNoteCipherIcon",
+                startIcon = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_note,
+                    testTag = "SecureNoteCipherIcon",
+                ),
                 label = stringResource(id = BitwardenString.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
@@ -235,8 +243,10 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_ssh_key),
-                startIconTestTag = "SshKeyCipherIcon",
+                startIcon = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_ssh_key,
+                    testTag = "SshKeyCipherIcon",
+                ),
                 label = stringResource(id = BitwardenString.type_ssh_key),
                 supportingLabel = state.sshKeyItemsCount.toString(),
                 onClick = vaultHandlers.sshKeyGroupClick,
@@ -268,7 +278,7 @@ fun VaultContent(
 
             itemsIndexed(state.folderItems) { index, folder ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_folder),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { vaultHandlers.folderClick(folder) },
@@ -352,7 +362,7 @@ fun VaultContent(
 
             itemsIndexed(state.collectionItems) { index, collection ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_collections),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { vaultHandlers.collectionClick(collection) },
@@ -385,7 +395,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_trash),
+                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_trash),
                 label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
