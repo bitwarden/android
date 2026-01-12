@@ -67,6 +67,36 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
+    fun `determineListingPredicate should return the correct predicate for archived cipherView`() {
+        val cipherView = createMockCipherListView(
+            number = 1,
+            isArchived = true,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to true,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to true,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                println("Type: $type")
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for non trash Login cipherView`() {
         val cipherView = createMockCipherListView(
@@ -80,6 +110,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
@@ -109,6 +140,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
@@ -138,6 +170,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to true,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
@@ -167,6 +200,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
@@ -196,6 +230,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to true,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
@@ -225,6 +260,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
@@ -254,6 +290,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to true,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
@@ -283,6 +320,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
@@ -313,6 +351,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.SshKey to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
@@ -344,6 +383,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to true,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = null) to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
@@ -373,6 +413,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
             VaultItemListingState.ItemListingType.Vault.Trash to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,

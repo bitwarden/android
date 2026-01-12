@@ -150,6 +150,19 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Archive`() {
+        val searchTypeData = SearchTypeData.Vault.Archive
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Cards`() {
         val searchTypeData = SearchTypeData.Vault.Cards
         assertEquals(
@@ -304,6 +317,19 @@ class SearchTypeDataExtensionsTest {
             searchTerm = "match",
         )
         assertEquals(listOf(match2), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only archived items`() {
+        val match1 = createMockCipherListView(number = 1, isArchived = true).copy(name = "match1")
+        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
+        val match3 = createMockCipherListView(number = 3, isArchived = true).copy(name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Archive,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
     }
 
     @Test
