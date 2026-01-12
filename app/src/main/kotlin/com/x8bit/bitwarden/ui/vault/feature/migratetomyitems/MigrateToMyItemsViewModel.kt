@@ -7,11 +7,12 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -27,8 +28,10 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class MigrateToMyItemsViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
+    private val vaultMigrationManager: VaultMigrationManager,
     vaultSyncManager: VaultSyncManager,
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toMigrateToMyItemsArgs()
@@ -71,11 +74,24 @@ class MigrateToMyItemsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO: Replace `delay` with actual migration using `state.organizationId` (PM-28444).
-            delay(timeMillis = 100L)
+            val userId = authRepository.userStateFlow.value?.activeUserId
+            if (userId == null) {
+                trySendAction(
+                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                        success = false,
+                    ),
+                )
+                return@launch
+            }
+
+            val result = vaultMigrationManager.migratePersonalVault(
+                userId = userId,
+                organizationId = state.organizationId,
+            )
+
             trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = true,
+                    success = result.isSuccess,
                 ),
             )
         }

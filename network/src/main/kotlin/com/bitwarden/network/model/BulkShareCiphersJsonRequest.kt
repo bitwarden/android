@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a bulk share ciphers request.
  *
- * @property ciphers The list of ciphers to share.
+ * @property ciphers The list of ciphers with IDs to share.
  * @property collectionIds A list of collection IDs to associate with all ciphers.
  */
 @Serializable
 data class BulkShareCiphersJsonRequest(
     @SerialName("Ciphers")
-    val ciphers: List<CipherJsonRequest>,
+    val ciphers: List<CipherWithIdJsonRequest>,
 
     @SerialName("CollectionIds")
     val collectionIds: List<String>,

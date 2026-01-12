@@ -115,4 +115,12 @@ interface CipherManager {
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult
+
+    /**
+     * Migrate the attachments if they don't have their own key
+     */
+    suspend fun migrateAttachments(
+        userId: String,
+        cipherView: CipherView,
+    ): Result<CipherView>
 }

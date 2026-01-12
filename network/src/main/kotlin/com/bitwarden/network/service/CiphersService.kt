@@ -70,7 +70,7 @@ interface CiphersService {
      */
     suspend fun bulkShareCiphers(
         body: BulkShareCiphersJsonRequest,
-    ): Result<List<CipherMiniResponseJson>>
+    ): Result<CipherMiniResponseJson>
 
     /**
      * Attempt to share an attachment.

@@ -64,6 +64,10 @@ object VaultManagerModule {
     fun provideVaultMigrationManager(
         authDiskSource: AuthDiskSource,
         vaultDiskSource: VaultDiskSource,
+        vaultRepository: com.x8bit.bitwarden.data.vault.repository.VaultRepository,
+        vaultSdkSource: com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource,
+        ciphersService: CiphersService,
+        cipherManager: CipherManager,
         settingsDiskSource: SettingsDiskSource,
         vaultLockManager: VaultLockManager,
         policyManager: PolicyManager,
@@ -73,6 +77,10 @@ object VaultManagerModule {
     ): VaultMigrationManager = VaultMigrationManagerImpl(
         authDiskSource = authDiskSource,
         vaultDiskSource = vaultDiskSource,
+        vaultRepository = vaultRepository,
+        vaultSdkSource = vaultSdkSource,
+        ciphersService = ciphersService,
+        cipherManager = cipherManager,
         settingsDiskSource = settingsDiskSource,
         vaultLockManager = vaultLockManager,
         policyManager = policyManager,

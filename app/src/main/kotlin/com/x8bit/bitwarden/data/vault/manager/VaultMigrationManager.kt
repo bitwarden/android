@@ -16,4 +16,16 @@ interface VaultMigrationManager {
      * Automatically updated when cipher data, policies, or feature flags change.
      */
     val vaultMigrationDataStateFlow: StateFlow<VaultMigrationData>
+
+    /**
+     * Migrates all personal vault items to the specified organization.
+     *
+     * @param userId The ID of the user performing the migration.
+     * @param organizationId The ID of the organization to migrate items to.
+     * @return Result indicating success or failure of the migration operation.
+     */
+    suspend fun migratePersonalVault(
+        userId: String,
+        organizationId: String,
+    ): Result<Unit>
 }

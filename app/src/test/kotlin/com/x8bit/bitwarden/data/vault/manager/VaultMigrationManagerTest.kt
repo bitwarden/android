@@ -1,11 +1,16 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import app.cash.turbine.test
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.createMockSyncResponse
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -17,17 +22,30 @@ import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkSignalStrength
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.ZonedDateTime
 
+@Suppress("LargeClass")
 class VaultMigrationManagerTest {
 
     private val fakeAuthDiskSource = FakeAuthDiskSource()
@@ -64,10 +82,35 @@ class VaultMigrationManagerTest {
         networkConnection = NetworkConnection.Wifi(strength = NetworkSignalStrength.GOOD),
     )
 
+    private val mutableVaultDataFlow = MutableStateFlow<DataState<VaultData>>(
+        value = DataState.Loading,
+    )
+
+    private val vaultRepository: VaultRepository = mockk {
+        every { vaultDataStateFlow } returns mutableVaultDataFlow
+        coEvery {
+            getCipher(any())
+        } returns GetCipherResult.Success(
+            cipherView = createMockCipherView(number = 1),
+        )
+    }
+
+    private val vaultSdkSource: com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource =
+        mockk(relaxed = true)
+
+    private val ciphersService: com.bitwarden.network.service.CiphersService =
+        mockk(relaxed = true)
+
+    private val cipherManager: CipherManager = mockk(relaxed = true)
+
     private fun createVaultMigrationManager(): VaultMigrationManager =
         VaultMigrationManagerImpl(
             authDiskSource = fakeAuthDiskSource,
             vaultDiskSource = vaultDiskSource,
+            vaultRepository = vaultRepository,
+            vaultSdkSource = vaultSdkSource,
+            ciphersService = ciphersService,
+            cipherManager = cipherManager,
             settingsDiskSource = settingsDiskSource,
             vaultLockManager = vaultLockManager,
             policyManager = policyManager,
@@ -621,7 +664,290 @@ class VaultMigrationManagerTest {
                 assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
             }
         }
+
+    @Test
+    fun `migratePersonalVault should succeed and call migrateAttachments for each cipher`() =
+        runTest {
+            val userId = "mockId-1"
+            val organizationId = "mockOrganizationId-1"
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                    collectionViewList = listOf(
+                        createMockCollectionView(
+                            number = 1,
+                            type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                        ),
+                    ),
+                ),
+            )
+
+            coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
+                cipherView = createMockCipherView(number = 1),
+            )
+            coEvery {
+                cipherManager.migrateAttachments(any(), any())
+            } returns Result.success(
+                createMockCipherView(number = 1),
+            )
+            coEvery {
+                vaultSdkSource.bulkMoveToOrganization(
+                    userId = any(),
+                    organizationId = any(),
+                    cipherViews = any(),
+                    collectionIds = any(),
+                )
+            } returns Result.success(
+                listOf(
+                    createMockEncryptionContext(
+                        number = 1,
+                        cipher = createMockSdkCipher(number = 1),
+                    ),
+                ),
+            )
+            coEvery {
+                ciphersService.bulkShareCiphers(any())
+            } returns Result.success(mockk())
+
+            val vaultMigrationManager = createVaultMigrationManager()
+            val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+            assertTrue(result.isSuccess)
+            coVerify(exactly = 1) { cipherManager.migrateAttachments(userId, any()) }
+        }
+
+    @Test
+    fun `migratePersonalVault should fail when attachment migration fails`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(
+                cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+            ),
+        )
+
+        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
+            cipherView = createMockCipherView(number = 1),
+        )
+
+        val attachmentError = IllegalStateException("Attachment migration failed")
+        coEvery {
+            cipherManager.migrateAttachments(any(), any())
+        } returns Result.failure(attachmentError)
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        assertTrue(result.isFailure)
+        assertEquals(attachmentError, result.exceptionOrNull())
+        coVerify { cipherManager.migrateAttachments(userId, any()) }
+        coVerify(exactly = 0) {
+            vaultSdkSource.bulkMoveToOrganization(
+                userId = any(),
+                organizationId = any(),
+                cipherViews = any(),
+                collectionIds = any(),
+            )
+        }
+    }
+
+    @Test
+    fun `migratePersonalVault should fail when vault data is not available`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+
+        // Setup mocks - vault data is null
+        val mockDataState = mockk<DataState<VaultData>> {
+            every { data } returns null
+        }
+        every { vaultRepository.vaultDataStateFlow } returns MutableStateFlow(mockDataState)
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalStateException)
+        assertEquals(
+            "Vault data not available",
+            result.exceptionOrNull()?.message,
+        )
+    }
+
+    @Test
+    fun `migratePersonalVault should fail when default collection not found`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+        val cipherListView =
+            createMockCipherListView(number = 2, organizationId = "mockOrganizationId-fail")
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(cipherListView = cipherListView),
+        )
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalStateException)
+        assertEquals(
+            "Default user collection not found for organization",
+            result.exceptionOrNull()?.message,
+        )
+    }
+
+    @Test
+    fun `migratePersonalVault should succeed immediately when no personal ciphers exist`() =
+        runTest {
+            val userId = "mockId-1"
+            val organizationId = "mockOrganizationId-1"
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    collectionViewList = listOf(
+                        createMockCollectionView(
+                            number = 1,
+                            type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                        ),
+                    ),
+                ),
+            )
+
+            val vaultMigrationManager = createVaultMigrationManager()
+            val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+            assertTrue(result.isSuccess)
+            coVerify(exactly = 0) {
+                cipherManager.migrateAttachments(
+                    userId = any(),
+                    cipherView = any(),
+                )
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.bulkMoveToOrganization(
+                    userId = any(),
+                    organizationId = any(),
+                    cipherViews = any(),
+                    collectionIds = any(),
+                )
+            }
+        }
+
+    @Test
+    fun `migratePersonalVault should fail when bulkMoveToOrganization fails`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(
+                cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+            ),
+        )
+        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
+            cipherView = createMockCipherView(number = 1),
+        )
+        coEvery {
+            cipherManager.migrateAttachments(any(), any())
+        } returns Result.success(
+            value = createMockCipherView(number = 1),
+        )
+
+        val encryptionError = IllegalStateException("Encryption failed")
+        coEvery {
+            vaultSdkSource.bulkMoveToOrganization(
+                userId = any(),
+                organizationId = any(),
+                cipherViews = any(),
+                collectionIds = any(),
+            )
+        } returns Result.failure(encryptionError)
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        assertTrue(result.isFailure)
+        assertEquals(encryptionError, result.exceptionOrNull())
+    }
+
+    @Test
+    fun `migratePersonalVault should fail when bulkShareCiphers fails`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(
+                cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+            ),
+        )
+        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
+            cipherView = createMockCipherView(number = 1),
+        )
+        coEvery {
+            cipherManager.migrateAttachments(
+                userId = any(),
+                cipherView = any(),
+            )
+        } returns Result.success(
+            createMockCipherView(number = 1),
+        )
+        coEvery {
+            vaultSdkSource.bulkMoveToOrganization(
+                userId = any(),
+                organizationId = any(),
+                cipherViews = any(),
+                collectionIds = any(),
+            )
+        } returns Result.success(
+            listOf(
+                createMockEncryptionContext(
+                    number = 1,
+                    cipher = createMockSdkCipher(number = 1),
+                ),
+            ),
+        )
+
+        val shareError = IllegalStateException("Share failed")
+        coEvery { ciphersService.bulkShareCiphers(any()) } returns Result.failure(shareError)
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        assertTrue(result.isFailure)
+        assertEquals(shareError, result.exceptionOrNull())
+    }
 }
+
+private fun createVaultData(
+    cipherListView: CipherListView? = null,
+    collectionViewList: List<CollectionView> = emptyList(),
+    folderViewList: List<FolderView> = emptyList(),
+    sendViewList: List<SendView> = emptyList(),
+): VaultData =
+    VaultData(
+        decryptCipherListResult = createMockDecryptCipherListResult(
+            number = 1,
+            successes = cipherListView?.let { listOf(it) } ?: emptyList(),
+        ),
+        collectionViewList = collectionViewList,
+        folderViewList = folderViewList,
+        sendViewList = sendViewList,
+    )
 
 private val MOCK_USER_STATE = UserStateJson(
     activeUserId = "mockId-1",

@@ -1,8 +1,13 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import com.bitwarden.collections.CollectionType
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.toCipherWithIdJsonRequest
+import com.bitwarden.network.service.CiphersService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -10,7 +15,11 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +43,10 @@ import kotlinx.coroutines.flow.update
 class VaultMigrationManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val vaultDiskSource: VaultDiskSource,
+    private val vaultRepository: VaultRepository,
+    private val vaultSdkSource: VaultSdkSource,
+    private val ciphersService: CiphersService,
+    private val cipherManager: CipherManager,
     private val settingsDiskSource: SettingsDiskSource,
     private val policyManager: PolicyManager,
     private val featureFlagManager: FeatureFlagManager,
@@ -152,4 +165,75 @@ class VaultMigrationManagerImpl(
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             isNetworkConnected &&
             hasPersonalCiphers
+
+    override suspend fun migratePersonalVault(
+        userId: String,
+        organizationId: String,
+    ): Result<Unit> = runCatching {
+        val vaultData = vaultRepository.vaultDataStateFlow.value.data
+            ?: return IllegalStateException("Vault data not available").asFailure()
+
+        val defaultUserCollection = vaultData.collectionViewList.find {
+            it.type == CollectionType.DEFAULT_USER_COLLECTION && it.organizationId == organizationId
+        }
+            ?: return IllegalStateException(
+                "Default user collection not found for organization",
+            ).asFailure()
+
+        val personalCiphers = vaultData.decryptCipherListResult.successes
+            .filter { it.organizationId == null }
+
+        if (personalCiphers.isEmpty()) {
+            mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
+            return Result.success(Unit)
+        }
+
+        val cipherViews = personalCiphers.mapNotNull { cipherListView ->
+            val cipherId = cipherListView.id ?: return@mapNotNull null
+            when (val result = vaultRepository.getCipher(cipherId)) {
+                is GetCipherResult.Success -> result.cipherView
+                else -> null
+            }
+        }
+
+        val processedCipherViews = cipherViews.map { cipherView ->
+            cipherManager
+                .migrateAttachments(userId = userId, cipherView = cipherView)
+                .getOrElse { error ->
+                    return Result.failure(error)
+                }
+        }
+
+        val encryptionResult = vaultSdkSource.bulkMoveToOrganization(
+            userId = userId,
+            organizationId = organizationId,
+            cipherViews = processedCipherViews,
+            collectionIds = listOfNotNull(defaultUserCollection.id),
+        )
+
+        encryptionResult.fold(
+            onSuccess = { encryptionContexts ->
+                val cipherRequests = encryptionContexts.mapNotNull { context ->
+                    val cipherId = context.cipher.id ?: return@mapNotNull null
+                    context.toEncryptedNetworkCipher().toCipherWithIdJsonRequest(id = cipherId)
+                }
+
+                val shareResult = ciphersService.bulkShareCiphers(
+                    body = BulkShareCiphersJsonRequest(
+                        ciphers = cipherRequests,
+                        collectionIds = listOfNotNull(defaultUserCollection.id),
+                    ),
+                )
+
+                shareResult.onSuccess {
+                    mutableVaultMigrationDataStateFlow.update {
+                        VaultMigrationData.NoMigrationRequired
+                    }
+                }
+            },
+            onFailure = { error ->
+                Result.failure(error)
+            },
+        ).getOrThrow()
+    }
 }
