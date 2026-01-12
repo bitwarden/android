@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.manager.di
 import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
@@ -49,7 +50,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -252,12 +252,12 @@ object VaultManagerModule {
         ciphersService: CiphersService,
         vaultSyncManager: VaultSyncManager,
         policyManager: PolicyManager,
-        json: Json,
+        credentialExchangePayloadParser: CredentialExchangePayloadParser,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
         vaultSyncManager = vaultSyncManager,
         policyManager = policyManager,
-        json = json,
+        credentialExchangePayloadParser = credentialExchangePayloadParser,
     )
 }

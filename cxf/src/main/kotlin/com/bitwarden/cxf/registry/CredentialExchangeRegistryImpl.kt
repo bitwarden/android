@@ -11,6 +11,7 @@ import androidx.credentials.providerevents.transfer.RegisterExportResponse
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.cxf.R
 import com.bitwarden.cxf.registry.model.RegistrationRequest
 import timber.log.Timber
 import java.util.UUID
@@ -24,6 +25,17 @@ internal class CredentialExchangeRegistryImpl(
 ) : CredentialExchangeRegistry {
     private val providerEventsManager: ProviderEventsManager =
         ProviderEventsManager.create(application)
+
+    /**
+     * This is the default wasm binary provided by Google that runs the logic of deciding whether
+     * the registered exporter can support the incoming import request.
+     *
+     * See https://github.com/danjkim/identity-samples/tree/main/CredentialProvider/credential_exchange_matcher
+     * for source code and documentation.
+     */
+    private val exportMatcher: ByteArray by lazy {
+        application.resources.openRawResource(R.raw.export_matcher).readBytes()
+    }
 
     override suspend fun register(
         registrationRequest: RegistrationRequest,
@@ -47,6 +59,7 @@ internal class CredentialExchangeRegistryImpl(
                     supportedCredentialTypes = registrationRequest.credentialTypes,
                 ),
             ),
+            exportMatcher = exportMatcher,
         )
         return try {
             providerEventsManager
@@ -65,6 +78,7 @@ internal class CredentialExchangeRegistryImpl(
                 //  API is not currently available.
                 request = RegisterExportRequest(
                     entries = emptyList(),
+                    exportMatcher = byteArrayOf(),
                 ),
             )
                 .asSuccess()

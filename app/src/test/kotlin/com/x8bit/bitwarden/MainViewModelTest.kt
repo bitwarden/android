@@ -74,14 +74,18 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -225,6 +229,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
         )
+        unmockkConstructor(JSONObject::class)
     }
 
     @Suppress("MaxLineLength")
@@ -945,9 +950,16 @@ class MainViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on ReceiveNewIntent with import credentials request data should set the special circumstance to CredentialExchangeExport`() {
+        mockkConstructor(JSONObject::class)
+        every {
+            anyConstructed<JSONObject>().put(any<String>(), any<JSONArray>())
+        } returns mockk()
         val viewModel = createViewModel()
         val importCredentialsRequestData = ProviderImportCredentialsRequest(
-            request = ImportCredentialsRequest("mockRequestJson"),
+            request = ImportCredentialsRequest(
+                setOf("mockCredentialType-1"),
+                setOf(),
+            ),
             callingAppInfo = mockk(),
             uri = mockk(),
             credId = "mockCredId",
@@ -966,7 +978,8 @@ class MainViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.CredentialExchangeExport(
                 data = ImportCredentialsRequestData(
                     uri = importCredentialsRequestData.uri,
-                    requestJson = importCredentialsRequestData.request.requestJson,
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
                 ),
             ),
             specialCircumstanceManager.specialCircumstance,
