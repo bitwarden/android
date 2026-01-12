@@ -1115,6 +1115,13 @@ sealed class SearchTypeData : Parcelable {
         }
 
         /**
+         * Indicates that we should be searching all archived vault items.
+         */
+        data object Archive : Vault() {
+            override val title: Text get() = BitwardenString.search_archive.asText()
+        }
+
+        /**
          * Indicates that we should be searching only login ciphers.
          */
         data object Logins : Vault() {
