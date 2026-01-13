@@ -21,7 +21,7 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -142,11 +142,10 @@ fun VaultItemListingContent(
 
             itemsIndexed(state.displayCollectionList) { index, collection ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_collections),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },
-                    showDivider = false,
                     cardStyle = state
                         .displayCollectionList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -173,11 +172,10 @@ fun VaultItemListingContent(
 
             itemsIndexed(state.displayFolderList) { index, folder ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_folder),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
                     label = folder.name,
                     supportingLabel = folder.count.toString(),
                     onClick = { folderClick(folder.id) },
-                    showDivider = false,
                     cardStyle = state
                         .displayFolderList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),

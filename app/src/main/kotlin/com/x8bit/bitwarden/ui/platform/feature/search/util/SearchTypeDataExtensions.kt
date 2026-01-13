@@ -58,6 +58,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Sends.Files -> this
         SearchTypeData.Sends.Texts -> this
         SearchTypeData.Vault.All -> this
+        SearchTypeData.Vault.Archive -> this
         SearchTypeData.Vault.Cards -> this
         SearchTypeData.Vault.Identities -> this
         SearchTypeData.Vault.Logins -> this
@@ -108,6 +109,7 @@ private fun CipherListView.filterBySearchType(
 ): Boolean =
     when (searchTypeData) {
         SearchTypeData.Vault.All -> deletedDate == null
+        SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
         is SearchTypeData.Vault.Cards -> type is CipherListViewType.Card && deletedDate == null
         is SearchTypeData.Vault.Collection -> {
             searchTypeData.collectionId in this.collectionIds && deletedDate == null

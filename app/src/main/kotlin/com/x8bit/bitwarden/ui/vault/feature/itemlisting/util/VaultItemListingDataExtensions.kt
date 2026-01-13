@@ -80,6 +80,10 @@ fun CipherListView.determineListingPredicate(
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
+
+        is VaultItemListingState.ItemListingType.Vault.Archive -> {
+            archivedDate != null && deletedDate == null
+        }
     }
 
 /**
@@ -234,6 +238,10 @@ fun VaultData.toViewState(
                     VaultItemListingState.ItemListingType.Vault.SshKey -> {
                         BitwardenString.no_ssh_keys
                     }
+
+                    VaultItemListingState.ItemListingType.Vault.Archive -> {
+                        BitwardenString.no_archives
+                    }
                 }
                     .asText()
             }
@@ -354,6 +362,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendFile -> this
         is VaultItemListingState.ItemListingType.Send.SendText -> this
         is VaultItemListingState.ItemListingType.Vault.SshKey -> this
+        is VaultItemListingState.ItemListingType.Vault.Archive -> this
     }
 
 @Suppress("LongParameterList")

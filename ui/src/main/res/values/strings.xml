@@ -129,6 +129,7 @@
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+    <string name="no_archives">No items in archive.</string>
     <string name="new_text_send">New text Send</string>
     <string name="new_file_send">New file Send</string>
     <string name="no_username">No Username</string>
@@ -1172,4 +1173,6 @@ Do you want to switch to this account?</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
+    <string name="search_archive">Search archive</string>
+    <string name="archive_noun">Archive</string>
 </resources>

@@ -3104,7 +3104,15 @@ data class VaultItemListingState(
             }
 
             /**
-             * A Secure Trash item listing.
+             * An archive item listing.
+             */
+            data object Archive : Vault() {
+                override val titleText: Text get() = BitwardenString.archive_noun.asText()
+                override val hasFab: Boolean get() = false
+            }
+
+            /**
+             * A Trash item listing.
              */
             data object Trash : Vault() {
                 override val titleText: Text get() = BitwardenString.trash.asText()

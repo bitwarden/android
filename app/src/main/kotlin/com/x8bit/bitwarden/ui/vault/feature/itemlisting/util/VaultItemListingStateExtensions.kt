@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
  */
 fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
     when (this) {
+        is VaultItemListingState.ItemListingType.Vault.Archive -> SearchType.Vault.Archive
         is VaultItemListingState.ItemListingType.Vault.Card -> SearchType.Vault.Cards
         is VaultItemListingState.ItemListingType.Vault.Folder -> {
             folderId
@@ -51,6 +52,7 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Folder -> VaultItemCipherType.LOGIN
+        is VaultItemListingState.ItemListingType.Vault.Archive,
         is VaultItemListingState.ItemListingType.Vault.Trash,
             -> {
             throw IllegalStateException(
