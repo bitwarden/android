@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CipherRepromptTypeJson
 import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.FieldTypeJson
@@ -108,6 +109,30 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         encryptedFor = encryptedFor,
         archivedDate = archivedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
     )
+
+/**
+ * Updates a [SyncResponseJson.Cipher] with metadata from a [CipherMiniResponseJson.CipherMiniResponse].
+ * This is useful for updating local cipher data after bulk operations that return mini responses.
+ *
+ * @param miniResponse The mini response containing updated cipher metadata.
+ * @param collectionIds Optional list of collection IDs to update. If null, keeps existing collection IDs.
+ * @return A new [SyncResponseJson.Cipher] with updated fields from the mini response.
+ */
+fun SyncResponseJson.Cipher.updateFromMiniResponse(
+    miniResponse: CipherMiniResponseJson.CipherMiniResponse,
+    collectionIds: List<String>? = null,
+): SyncResponseJson.Cipher = copy(
+    organizationId = miniResponse.organizationId,
+    collectionIds = collectionIds ?: this.collectionIds,
+    revisionDate = miniResponse.revisionDate,
+    key = miniResponse.key,
+    attachments = miniResponse.attachments,
+    archivedDate = miniResponse.archivedDate,
+    deletedDate = miniResponse.deletedDate,
+    reprompt = miniResponse.reprompt,
+    shouldOrganizationUseTotp = miniResponse.shouldOrganizationUseTotp,
+    type = miniResponse.type,
+)
 
 /**
  * Converts a Bitwarden SDK [Card] object to a corresponding

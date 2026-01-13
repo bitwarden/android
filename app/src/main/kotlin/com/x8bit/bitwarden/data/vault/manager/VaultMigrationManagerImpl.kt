@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.updateFromMiniResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -225,7 +226,21 @@ class VaultMigrationManagerImpl(
                     ),
                 )
 
-                shareResult.onSuccess {
+                shareResult.onSuccess { bulkShareResponse ->
+                    val existingCiphers = vaultDiskSource.getCiphers(userId)
+                    bulkShareResponse.cipherMiniResponse.forEach { miniResponse ->
+                        val existingCipher = existingCiphers.find { it.id == miniResponse.id }
+                        if (existingCipher != null) {
+                            vaultDiskSource.saveCipher(
+                                userId = userId,
+                                cipher = existingCipher.updateFromMiniResponse(
+                                    miniResponse = miniResponse,
+                                    collectionIds = listOfNotNull(defaultUserCollection.id),
+                                ),
+                            )
+                        }
+                    }
+
                     mutableVaultMigrationDataStateFlow.update {
                         VaultMigrationData.NoMigrationRequired
                     }

@@ -6,6 +6,8 @@ import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.createMockCipher
+import com.bitwarden.network.model.createMockCipherMiniResponseJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.createMockSyncResponse
 import com.bitwarden.send.SendView
@@ -52,7 +54,7 @@ class VaultMigrationManagerTest {
     private val fakeDispatcherManager = FakeDispatcherManager()
 
     private val mutableHasPersonalCiphersFlow = MutableStateFlow(false)
-    private val vaultDiskSource: VaultDiskSource = mockk {
+    private val vaultDiskSource: VaultDiskSource = mockk(relaxed = true) {
         every { hasPersonalCiphersFlow(any()) } returns mutableHasPersonalCiphersFlow
     }
 
@@ -707,14 +709,20 @@ class VaultMigrationManagerTest {
                 ),
             )
             coEvery {
+                vaultDiskSource.getCiphers(userId)
+            } returns listOf(
+                createMockCipher(number = 1, organizationId = null),
+            )
+            coEvery {
                 ciphersService.bulkShareCiphers(any())
-            } returns Result.success(mockk())
+            } returns Result.success(createMockCipherMiniResponseJson(1))
 
             val vaultMigrationManager = createVaultMigrationManager()
             val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
             assertTrue(result.isSuccess)
             coVerify(exactly = 1) { cipherManager.migrateAttachments(userId, any()) }
+            coVerify(exactly = 1) { vaultDiskSource.saveCipher(userId, any()) }
         }
 
     @Test
