@@ -44,6 +44,7 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
+    isArchiveEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -206,9 +207,16 @@ fun VaultData.toViewState(
                             },
                     )
                 },
-            trashItemsCount = allCipherViews.count {
-                it.deletedDate != null
-            },
+            trashItemsCount = allCipherViews.count { it.deletedDate != null },
+            archivedItemsCount = allCipherViews
+                .count { it.archivedDate != null }
+                .takeIf { isPremium },
+            archiveEnabled = isArchiveEnabled,
+            archiveEndIcon = BitwardenDrawable.ic_locked.takeUnless { isPremium },
+            archiveSubText = BitwardenString
+                .premium_subscription_required
+                .asText()
+                .takeUnless { isPremium },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
         )
     }
