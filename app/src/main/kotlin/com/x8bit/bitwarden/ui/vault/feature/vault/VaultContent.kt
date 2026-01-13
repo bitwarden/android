@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toImmutableList
 
 private const val TOTP_TYPES_COUNT: Int = 1
+private const val HIDDEN_TYPES_COUNT: Int = 2
 private const val TRASH_TYPES_COUNT: Int = 1
 
 /**
@@ -375,8 +376,12 @@ fun VaultContent(
 
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.trash),
-                supportingLabel = TRASH_TYPES_COUNT.toString(),
+                label = stringResource(id = BitwardenString.hidden_items),
+                supportingLabel = if (state.archiveEnabled) {
+                    HIDDEN_TYPES_COUNT.toString()
+                } else {
+                    TRASH_TYPES_COUNT.toString()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -385,13 +390,31 @@ fun VaultContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
+        if (state.archiveEnabled) {
+            item {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
+                    endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
+                    label = stringResource(id = BitwardenString.archive_noun),
+                    subLabel = state.archiveSubText?.invoke(),
+                    supportingLabel = state.archivedItemsCount?.toString().orEmpty(),
+                    onClick = vaultHandlers.archiveClick,
+                    cardStyle = CardStyle.Top(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(tag = "ArchiveFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
         item {
             BitwardenGroupItem(
                 startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_trash),
                 label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
-                cardStyle = CardStyle.Full,
+                cardStyle = if (state.archiveEnabled) CardStyle.Bottom else CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("TrashFilter")

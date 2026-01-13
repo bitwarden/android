@@ -80,6 +80,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -135,6 +136,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 1,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -164,6 +169,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -186,6 +192,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -224,6 +234,7 @@ class VaultDataExtensionsTest {
             ),
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -257,6 +268,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -282,6 +297,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -309,6 +325,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -337,6 +354,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -353,6 +371,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -379,6 +401,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -395,6 +418,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = null,
+                archiveEnabled = true,
+                archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
             ),
             actual,
@@ -423,6 +450,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -439,6 +467,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = null,
+                archiveEnabled = true,
+                archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
             ),
             actual,
@@ -467,6 +499,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -483,6 +516,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = null,
+                archiveEnabled = true,
+                archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
             ),
             actual,
@@ -695,6 +732,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -711,6 +749,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -739,6 +781,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -755,6 +798,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -786,6 +833,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -808,6 +856,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 100,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -840,6 +892,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -874,6 +927,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -912,6 +969,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -960,6 +1018,10 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -1006,6 +1068,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1022,6 +1085,10 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 0,
                 itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -1064,6 +1131,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1080,6 +1148,10 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 1,
                 itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = false,
             ),
             actual,
@@ -1108,6 +1180,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1126,6 +1199,11 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 // Verify item types count includes all CipherTypes when showSshKeys is true.
                 itemTypesCount = CipherType.entries.size,
+
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
@@ -1168,6 +1246,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1189,6 +1268,10 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 0,
                 itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveEnabled = true,
+                archiveSubText = null,
+                archiveEndIcon = null,
                 showCardGroup = true,
             ),
             actual,
