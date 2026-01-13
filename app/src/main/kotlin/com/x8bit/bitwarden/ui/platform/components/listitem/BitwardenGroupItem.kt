@@ -23,7 +23,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A reusable composable function that displays a group item.
- * The list item consists of a start icon, a label, a supporting label and an optional divider.
+ * The list item consists of a start icon, label, sub-label, supporting label, and an end icon.
  *
  * @param label The main text label to be displayed in the group item.
  * @param supportingLabel The secondary supporting text label to be displayed beside the label.
@@ -33,7 +33,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier The [Modifier] to be applied to the [Row] composable that holds the list item.
  * @param subLabel The secondary text label to be displayed in the group item.
  * @param endIcon The [IconData] object used to draw the icon at the end of the group item.
- * @param showDivider Indicates whether the divider should be shown or not.
  */
 @Composable
 fun BitwardenGroupItem(
@@ -45,7 +44,6 @@ fun BitwardenGroupItem(
     modifier: Modifier = Modifier,
     subLabel: String? = null,
     endIcon: IconData.Local? = null,
-    showDivider: Boolean = true,
 ) {
     Row(
         modifier = modifier
