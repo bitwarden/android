@@ -685,8 +685,13 @@ class VaultMigrationManagerTest {
                 ),
             )
 
-            coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
-                cipherView = createMockCipherView(number = 1),
+            coEvery {
+                vaultRepository.getCipher(any())
+            } returns GetCipherResult.Success(createMockCipherView(number = 1))
+            coEvery {
+                vaultDiskSource.getSelectedCiphers(userId, any())
+            } returns listOf(
+                createMockCipher(number = 1, organizationId = null),
             )
             coEvery {
                 cipherManager.migrateAttachments(any(), any())
@@ -707,11 +712,6 @@ class VaultMigrationManagerTest {
                         cipher = createMockSdkCipher(number = 1),
                     ),
                 ),
-            )
-            coEvery {
-                vaultDiskSource.getCiphers(userId)
-            } returns listOf(
-                createMockCipher(number = 1, organizationId = null),
             )
             coEvery {
                 ciphersService.bulkShareCiphers(any())
@@ -742,8 +742,13 @@ class VaultMigrationManagerTest {
             ),
         )
 
-        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
-            cipherView = createMockCipherView(number = 1),
+        coEvery {
+            vaultRepository.getCipher(any())
+        } returns GetCipherResult.Success(createMockCipherView(number = 1))
+        coEvery {
+            vaultDiskSource.getSelectedCiphers(userId, any())
+        } returns listOf(
+            createMockCipher(number = 1, organizationId = null),
         )
 
         val attachmentError = IllegalStateException("Attachment migration failed")
@@ -848,6 +853,37 @@ class VaultMigrationManagerTest {
         }
 
     @Test
+    fun `migratePersonalVault should fail when cipher decryption fails`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(
+                cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+            ),
+        )
+
+        coEvery {
+            vaultRepository.getCipher(any())
+        } returns GetCipherResult.Failure(IllegalStateException("Decryption failed"))
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        // Should fail when decryption fails (fail-fast behavior)
+        assertTrue(result.isFailure)
+        assertEquals("Decryption failed", result.exceptionOrNull()?.message)
+        coVerify(exactly = 0) { cipherManager.migrateAttachments(any(), any()) }
+        coVerify(exactly = 0) { vaultDiskSource.getSelectedCiphers(any(), any()) }
+    }
+
+    @Test
     fun `migratePersonalVault should fail when bulkMoveToOrganization fails`() = runTest {
         val userId = "mockId-1"
         val organizationId = "mockOrganizationId-1"
@@ -862,8 +898,13 @@ class VaultMigrationManagerTest {
                 ),
             ),
         )
-        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
-            cipherView = createMockCipherView(number = 1),
+        coEvery {
+            vaultRepository.getCipher(any())
+        } returns GetCipherResult.Success(createMockCipherView(number = 1))
+        coEvery {
+            vaultDiskSource.getSelectedCiphers(userId, any())
+        } returns listOf(
+            createMockCipher(number = 1, organizationId = null),
         )
         coEvery {
             cipherManager.migrateAttachments(any(), any())
@@ -903,8 +944,13 @@ class VaultMigrationManagerTest {
                 ),
             ),
         )
-        coEvery { vaultRepository.getCipher(any()) } returns GetCipherResult.Success(
-            cipherView = createMockCipherView(number = 1),
+        coEvery {
+            vaultRepository.getCipher(any())
+        } returns GetCipherResult.Success(createMockCipherView(number = 1))
+        coEvery {
+            vaultDiskSource.getSelectedCiphers(userId, any())
+        } returns listOf(
+            createMockCipher(number = 1, organizationId = null),
         )
         coEvery {
             cipherManager.migrateAttachments(

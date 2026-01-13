@@ -111,11 +111,13 @@ fun Cipher.toEncryptedNetworkCipherResponse(
     )
 
 /**
- * Updates a [SyncResponseJson.Cipher] with metadata from a [CipherMiniResponseJson.CipherMiniResponse].
+ * Updates a [SyncResponseJson.Cipher] with metadata from a
+ * [CipherMiniResponseJson.CipherMiniResponse].
  * This is useful for updating local cipher data after bulk operations that return mini responses.
  *
  * @param miniResponse The mini response containing updated cipher metadata.
- * @param collectionIds Optional list of collection IDs to update. If null, keeps existing collection IDs.
+ * @param collectionIds Optional list of collection IDs to update.
+ * If null, keeps existing collection IDs.
  * @return A new [SyncResponseJson.Cipher] with updated fields from the mini response.
  */
 fun SyncResponseJson.Cipher.updateFromMiniResponse(
