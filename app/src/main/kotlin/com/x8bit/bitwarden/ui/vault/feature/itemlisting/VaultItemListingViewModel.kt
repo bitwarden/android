@@ -3107,7 +3107,7 @@ data class VaultItemListingState(
              * An archive item listing.
              */
             data object Archive : Vault() {
-                override val titleText: Text get() = BitwardenString.archive.asText()
+                override val titleText: Text get() = BitwardenString.archive_noun.asText()
                 override val hasFab: Boolean get() = false
             }
 
