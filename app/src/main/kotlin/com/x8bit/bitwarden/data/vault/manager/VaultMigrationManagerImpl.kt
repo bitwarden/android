@@ -296,9 +296,7 @@ class VaultMigrationManagerImpl(
                             )
                         }
                     }
-                }
-
-                shareResult.map { }
+                }.map { }
             },
             onFailure = { error ->
                 Result.failure(error)
