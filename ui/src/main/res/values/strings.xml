@@ -1174,5 +1174,5 @@ Do you want to switch to this account?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
     <string name="search_archive">Search archive</string>
-    <string name="archive">Archive</string>
+    <string name="archive_noun">Archive</string>
 </resources>
