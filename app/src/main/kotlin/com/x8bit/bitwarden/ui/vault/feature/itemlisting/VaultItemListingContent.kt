@@ -146,7 +146,6 @@ fun VaultItemListingContent(
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },
-                    showDivider = false,
                     cardStyle = state
                         .displayCollectionList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -177,7 +176,6 @@ fun VaultItemListingContent(
                     label = folder.name,
                     supportingLabel = folder.count.toString(),
                     onClick = { folderClick(folder.id) },
-                    showDivider = false,
                     cardStyle = state
                         .displayFolderList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),

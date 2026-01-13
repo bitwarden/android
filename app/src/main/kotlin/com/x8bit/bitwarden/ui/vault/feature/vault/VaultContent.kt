@@ -93,7 +93,6 @@ fun VaultContent(
                     label = stringResource(id = BitwardenString.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
                     onClick = vaultHandlers.verificationCodesClick,
-                    showDivider = false,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -176,7 +175,6 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = vaultHandlers.loginGroupClick,
-                showDivider = false,
                 cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -195,7 +193,6 @@ fun VaultContent(
                     label = stringResource(id = BitwardenString.type_card),
                     supportingLabel = state.cardItemsCount.toString(),
                     onClick = vaultHandlers.cardGroupClick,
-                    showDivider = false,
                     cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -214,7 +211,6 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = vaultHandlers.identityGroupClick,
-                showDivider = false,
                 cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -232,7 +228,6 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
-                showDivider = false,
                 cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -250,7 +245,6 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.type_ssh_key),
                 supportingLabel = state.sshKeyItemsCount.toString(),
                 onClick = vaultHandlers.sshKeyGroupClick,
-                showDivider = false,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -282,7 +276,6 @@ fun VaultContent(
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { vaultHandlers.folderClick(folder) },
-                    showDivider = false,
                     cardStyle = state
                         .folderItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -366,7 +359,6 @@ fun VaultContent(
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { vaultHandlers.collectionClick(collection) },
-                    showDivider = false,
                     cardStyle = state
                         .collectionItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -399,7 +391,6 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
-                showDivider = false,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
