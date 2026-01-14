@@ -409,7 +409,7 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'prod' && env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release artifacts to Firebase
@@ -431,7 +431,7 @@ jobs:
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Verify Play Store credentials
-        if: ${{ matrix.variant == 'prod' && env.PUBLISH_TO_PLAY_STORE }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane run validate_play_store_json_key
 
