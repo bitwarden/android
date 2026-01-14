@@ -27,7 +27,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -63,6 +62,22 @@ class CiphersServiceTest : BaseServiceTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class)
+    }
+
+    @Test
+    fun `archiveCipher should execute the archiveCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.archiveCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `unarchiveCipher should execute the unarchiveCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.unarchiveCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
     }
 
     @Test

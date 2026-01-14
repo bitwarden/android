@@ -22,6 +22,16 @@ import java.io.File
 @Suppress("TooManyFunctions")
 interface CiphersService {
     /**
+     * Attempt to archive a cipher.
+     */
+    suspend fun archiveCipher(cipherId: String): Result<Unit>
+
+    /**
+     * Attempt to unarchive a cipher.
+     */
+    suspend fun unarchiveCipher(cipherId: String): Result<Unit>
+
+    /**
      * Attempt to create a cipher.
      */
     suspend fun createCipher(body: CipherJsonRequest): Result<CreateCipherResponseJson>
