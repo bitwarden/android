@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkSignalStrength
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -97,7 +98,7 @@ class VaultMigrationManagerTest {
         )
     }
 
-    private val vaultSdkSource: com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource =
+    private val vaultSdkSource: VaultSdkSource =
         mockk(relaxed = true)
 
     private val ciphersService: com.bitwarden.network.service.CiphersService =
@@ -974,13 +975,187 @@ class VaultMigrationManagerTest {
         )
 
         val shareError = IllegalStateException("Share failed")
-        coEvery { ciphersService.bulkShareCiphers(any()) } returns Result.failure(shareError)
+        coEvery {
+            ciphersService.bulkShareCiphers(any())
+        } returns Result.failure(shareError)
 
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
         assertTrue(result.isFailure)
         assertEquals(shareError, result.exceptionOrNull())
+    }
+
+    @Test
+    fun `migratePersonalVault should skip cipher when not found in encrypted ciphers map`() =
+        runTest {
+            val userId = "mockId-1"
+            val organizationId = "mockOrganizationId-1"
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherListView = createMockCipherListView(number = 1, organizationId = null),
+                    collectionViewList = listOf(
+                        createMockCollectionView(
+                            number = 1,
+                            type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                        ),
+                    ),
+                ),
+            )
+
+            coEvery {
+                vaultRepository.getCipher(any())
+            } returns GetCipherResult.Success(createMockCipherView(number = 1))
+            // Return encrypted cipher with different ID than what's in mini response
+            coEvery {
+                vaultDiskSource.getSelectedCiphers(userId, any())
+            } returns listOf(
+                createMockCipher(number = 1, id = "different-id", organizationId = null),
+            )
+            coEvery {
+                vaultRepository.migrateAttachments(any(), any())
+            } returns Result.success(
+                createMockCipherView(number = 1),
+            )
+            coEvery {
+                vaultSdkSource.bulkMoveToOrganization(
+                    userId = any(),
+                    organizationId = any(),
+                    cipherViews = any(),
+                    collectionIds = any(),
+                )
+            } returns Result.success(
+                listOf(
+                    createMockEncryptionContext(
+                        number = 1,
+                        cipher = createMockSdkCipher(number = 1),
+                    ),
+                ),
+            )
+            // Return mini response with ID that doesn't match encrypted cipher
+            coEvery {
+                ciphersService.bulkShareCiphers(any())
+            } returns Result.success(
+                createMockCipherMiniResponseJson(1),
+            )
+
+            val vaultMigrationManager = createVaultMigrationManager()
+            val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+            assertTrue(result.isSuccess)
+            // Verify saveCipher was not called since cipher wasn't found in map
+            coVerify(exactly = 0) {
+                vaultDiskSource.saveCipher(any(), any())
+            }
+        }
+
+    @Test
+    fun `migratePersonalVault should skip ciphers with null IDs in cipher list view`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+
+        val mockCipherListViewWithNullId = createMockCipherListView(
+            number = 1,
+            organizationId = null,
+        ).copy(id = null)
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(
+                cipherListView = mockCipherListViewWithNullId,
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+            ),
+        )
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        // Should succeed with empty list (no ciphers to migrate)
+        assertTrue(result.isSuccess)
+        // Verify getCipher was never called since cipher had null ID
+        coVerify(exactly = 0) {
+            vaultRepository.getCipher(any())
+        }
+    }
+
+    @Test
+    fun `migratePersonalVault should skip cipher not found but continue with others`() = runTest {
+        val userId = "mockId-1"
+        val organizationId = "mockOrganizationId-1"
+
+        // Create vault data with 2 ciphers
+        val mockDecryptResult = createMockDecryptCipherListResult(
+            number = 1,
+            successes = listOf(
+                createMockCipherListView(number = 1, organizationId = null),
+                createMockCipherListView(number = 2, organizationId = null),
+            ),
+        )
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = VaultData(
+                decryptCipherListResult = mockDecryptResult,
+                collectionViewList = listOf(
+                    createMockCollectionView(
+                        number = 1,
+                        type = com.bitwarden.collections.CollectionType.DEFAULT_USER_COLLECTION,
+                    ),
+                ),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+
+        // First cipher not found, second succeeds
+        coEvery {
+            vaultRepository.getCipher(cipherId = "mockId-1")
+        } returns GetCipherResult.CipherNotFound
+        coEvery {
+            vaultRepository.getCipher(cipherId = "mockId-2")
+        } returns GetCipherResult.Success(createMockCipherView(number = 2))
+
+        coEvery {
+            vaultDiskSource.getSelectedCiphers(userId, any())
+        } returns listOf(
+            createMockCipher(number = 2, organizationId = null),
+        )
+        coEvery {
+            vaultRepository.migrateAttachments(any(), any())
+        } returns Result.success(
+            createMockCipherView(number = 2),
+        )
+        coEvery {
+            vaultSdkSource.bulkMoveToOrganization(
+                userId = any(),
+                organizationId = any(),
+                cipherViews = any(),
+                collectionIds = any(),
+            )
+        } returns Result.success(
+            listOf(
+                createMockEncryptionContext(
+                    number = 2,
+                    cipher = createMockSdkCipher(number = 2),
+                ),
+            ),
+        )
+        coEvery {
+            ciphersService.bulkShareCiphers(any())
+        } returns Result.success(createMockCipherMiniResponseJson(2))
+
+        val vaultMigrationManager = createVaultMigrationManager()
+        val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
+
+        // Should succeed, only migrating the second cipher
+        assertTrue(result.isSuccess)
+        coVerify(exactly = 1) {
+            vaultRepository.migrateAttachments(userId, match { it.id == "mockId-2" })
+        }
     }
 }
 
