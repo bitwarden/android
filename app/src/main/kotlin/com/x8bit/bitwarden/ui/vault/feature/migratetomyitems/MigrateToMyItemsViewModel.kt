@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -12,12 +13,14 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -78,7 +81,11 @@ class MigrateToMyItemsViewModel @Inject constructor(
             if (userId == null) {
                 trySendAction(
                     MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                        success = false,
+                        result = MigratePersonalVaultResult.Failure(
+                            error = MissingPropertyException(
+                                propertyName = "UserId",
+                            ),
+                        ),
                     ),
                 )
                 return@launch
@@ -91,7 +98,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
 
             trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = result.isSuccess,
+                    result = result,
                 ),
             )
         }
@@ -124,22 +131,27 @@ class MigrateToMyItemsViewModel @Inject constructor(
     private fun handleMigrateToMyItemsResultReceived(
         action: MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived,
     ) {
-        if (action.success) {
-            organizationEventManager.trackEvent(
-                event = OrganizationEvent.ItemOrganizationAccepted,
-            )
-            clearDialog()
-            sendEvent(MigrateToMyItemsEvent.NavigateToVault)
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = MigrateToMyItemsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                            it.organizationName,
-                        ),
-                    ),
+        when (val result = action.result) {
+            is MigratePersonalVaultResult.Success -> {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationAccepted,
                 )
+                clearDialog()
+                sendEvent(MigrateToMyItemsEvent.NavigateToVault)
+            }
+
+            is MigratePersonalVaultResult.Failure -> {
+                Timber.e(result.error, "Failed to migrate personal vault")
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = MigrateToMyItemsState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                                it.organizationName,
+                            ),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -234,7 +246,7 @@ sealed class MigrateToMyItemsAction {
          * The result of the migration has been received.
          */
         data class MigrateToMyItemsResultReceived(
-            val success: Boolean,
+            val result: MigratePersonalVaultResult,
         ) : Internal()
     }
 }

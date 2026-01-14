@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.updateFromMiniResponse
@@ -176,19 +177,21 @@ class VaultMigrationManagerImpl(
     override suspend fun migratePersonalVault(
         userId: String,
         organizationId: String,
-    ): Result<Unit> = runCatching {
+    ): MigratePersonalVaultResult {
         val vaultData = vaultRepository.vaultDataStateFlow.value.data
-            ?: return IllegalStateException("Vault data not available").asFailure()
+            ?: return MigratePersonalVaultResult.Failure(
+                IllegalStateException("Vault data not available"),
+            )
 
         val defaultUserCollection = getDefaultUserCollection(vaultData, organizationId)
-            .getOrElse { return it.asFailure() }
+            .getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
         val personalCiphers = getPersonalCipherViews(vaultData)
-            .getOrElse { return it.asFailure() }
+            .getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
         if (personalCiphers.isEmpty()) {
             mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
-            return Unit.asSuccess()
+            return MigratePersonalVaultResult.Success
         }
 
         val cipherIds = personalCiphers.mapNotNull { it.id }
@@ -199,20 +202,18 @@ class VaultMigrationManagerImpl(
         val encryptedCiphersMap = encryptedCiphers.associateBy { it.id }
 
         val processedCipherViews = migrateAttachments(userId, personalCiphers)
-            .getOrElse { return it.asFailure() }
+            .getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
-        this
-            .encryptAndShareCiphers(
-                userId = userId,
-                organizationId = organizationId,
-                processedCipherViews = processedCipherViews,
-                encryptedCiphersMap = encryptedCiphersMap,
-                collectionIds = listOfNotNull(defaultUserCollection.id),
-            )
-            .getOrElse { return it.asFailure() }
+        encryptAndShareCiphers(
+            userId = userId,
+            organizationId = organizationId,
+            processedCipherViews = processedCipherViews,
+            encryptedCiphersMap = encryptedCiphersMap,
+            collectionIds = listOfNotNull(defaultUserCollection.id),
+        ).getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
         mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
-        Unit.asSuccess()
+        return MigratePersonalVaultResult.Success
     }
 
     private fun getDefaultUserCollection(

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -27,5 +28,5 @@ interface VaultMigrationManager {
     suspend fun migratePersonalVault(
         userId: String,
         organizationId: String,
-    ): Result<Unit>
+    ): MigratePersonalVaultResult
 }

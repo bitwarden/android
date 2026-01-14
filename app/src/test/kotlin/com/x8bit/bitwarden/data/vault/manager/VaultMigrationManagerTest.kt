@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.coEvery
@@ -718,7 +719,7 @@ class VaultMigrationManagerTest {
             val vaultMigrationManager = createVaultMigrationManager()
             val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-            assertTrue(result.isSuccess)
+            assertTrue(result is MigratePersonalVaultResult.Success)
             coVerify(exactly = 1) { vaultRepository.migrateAttachments(userId, any()) }
             coVerify(exactly = 1) { vaultDiskSource.saveCipher(userId, any()) }
         }
@@ -757,8 +758,11 @@ class VaultMigrationManagerTest {
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-        assertTrue(result.isFailure)
-        assertEquals(attachmentError, result.exceptionOrNull())
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertEquals(
+            attachmentError,
+            (result as MigratePersonalVaultResult.Failure).error,
+        )
         coVerify { vaultRepository.migrateAttachments(userId, any()) }
         coVerify(exactly = 0) {
             vaultSdkSource.bulkMoveToOrganization(
@@ -784,11 +788,11 @@ class VaultMigrationManagerTest {
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-        assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is IllegalStateException)
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertTrue((result as MigratePersonalVaultResult.Failure).error is IllegalStateException)
         assertEquals(
             "Vault data not available",
-            result.exceptionOrNull()?.message,
+            (result as MigratePersonalVaultResult.Failure).error?.message,
         )
     }
 
@@ -806,11 +810,11 @@ class VaultMigrationManagerTest {
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-        assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is IllegalStateException)
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertTrue((result as MigratePersonalVaultResult.Failure).error is IllegalStateException)
         assertEquals(
             "Default user collection not found for organization",
-            result.exceptionOrNull()?.message,
+            (result as MigratePersonalVaultResult.Failure).error?.message,
         )
     }
 
@@ -833,7 +837,7 @@ class VaultMigrationManagerTest {
             val vaultMigrationManager = createVaultMigrationManager()
             val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-            assertTrue(result.isSuccess)
+            assertTrue(result is MigratePersonalVaultResult.Success)
             coVerify(exactly = 0) {
                 vaultRepository.migrateAttachments(
                     userId = any(),
@@ -875,8 +879,11 @@ class VaultMigrationManagerTest {
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
         // Should fail when decryption fails (fail-fast behavior)
-        assertTrue(result.isFailure)
-        assertEquals("Decryption failed", result.exceptionOrNull()?.message)
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertEquals(
+            "Decryption failed",
+            (result as MigratePersonalVaultResult.Failure).error?.message,
+        )
         coVerify(exactly = 0) { vaultRepository.migrateAttachments(any(), any()) }
         coVerify(exactly = 0) { vaultDiskSource.getSelectedCiphers(any(), any()) }
     }
@@ -923,8 +930,8 @@ class VaultMigrationManagerTest {
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-        assertTrue(result.isFailure)
-        assertEquals(encryptionError, result.exceptionOrNull())
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertEquals(encryptionError, (result as MigratePersonalVaultResult.Failure).error)
     }
 
     @Test
@@ -982,8 +989,8 @@ class VaultMigrationManagerTest {
         val vaultMigrationManager = createVaultMigrationManager()
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-        assertTrue(result.isFailure)
-        assertEquals(shareError, result.exceptionOrNull())
+        assertTrue(result is MigratePersonalVaultResult.Failure)
+        assertEquals(shareError, (result as MigratePersonalVaultResult.Failure).error)
     }
 
     @Test
@@ -1043,7 +1050,7 @@ class VaultMigrationManagerTest {
             val vaultMigrationManager = createVaultMigrationManager()
             val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
-            assertTrue(result.isSuccess)
+            assertTrue(result is MigratePersonalVaultResult.Success)
             // Verify saveCipher was not called since cipher wasn't found in map
             coVerify(exactly = 0) {
                 vaultDiskSource.saveCipher(any(), any())
@@ -1076,7 +1083,7 @@ class VaultMigrationManagerTest {
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
         // Should succeed with empty list (no ciphers to migrate)
-        assertTrue(result.isSuccess)
+        assertTrue(result is MigratePersonalVaultResult.Success)
         // Verify getCipher was never called since cipher had null ID
         coVerify(exactly = 0) {
             vaultRepository.getCipher(any())
@@ -1152,7 +1159,7 @@ class VaultMigrationManagerTest {
         val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
         // Should succeed, only migrating the second cipher
-        assertTrue(result.isSuccess)
+        assertTrue(result is MigratePersonalVaultResult.Success)
         coVerify(exactly = 1) {
             vaultRepository.migrateAttachments(userId, match { it.id == "mockId-2" })
         }

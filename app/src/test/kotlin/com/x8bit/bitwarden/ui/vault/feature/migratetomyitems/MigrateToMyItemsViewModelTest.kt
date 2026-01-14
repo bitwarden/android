@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,7 +42,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     private val mockVaultMigrationManager: VaultMigrationManager = mockk {
         coEvery {
             migratePersonalVault(any(), any())
-        } returns Result.success(Unit)
+        } returns MigratePersonalVaultResult.Success
     }
     private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
     private val mockAuthRepository: AuthRepository = mockk {
@@ -146,7 +147,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                        success = true,
+                        result = MigratePersonalVaultResult.Success,
                     ),
                 )
                 assertEquals(MigrateToMyItemsEvent.NavigateToVault, awaitItem())
@@ -170,7 +171,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = false,
+                    result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
 
@@ -218,7 +219,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             // First show an error dialog
             viewModel.trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = false,
+                    result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
             val errorState = awaitItem()
