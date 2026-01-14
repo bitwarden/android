@@ -281,7 +281,7 @@ jobs:
           keyAlias:"bitwardenauthenticator" \
           keyPassword:"$KEY_PASSWORD"
 
-      - name: Upload release Play Store .aab artifact
+      - name: Upload to GitHub Artifacts - prod.aab
         if: ${{ matrix.variant == 'aab' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -289,7 +289,7 @@ jobs:
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
           if-no-files-found: error
 
-      - name: Upload release .apk artifact
+      - name: Upload to GitHub Artifacts - prod.apk
         if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -309,7 +309,7 @@ jobs:
           sha256sum "authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk" \
             > ./authenticator-android-apk-sha256.txt
 
-      - name: Upload .apk SHA file for release
+      - name: Upload to GitHub Artifacts - prod.apk-sha256.txt
         if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -317,7 +317,7 @@ jobs:
           path: ./authenticator-android-apk-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .aab SHA file for release
+      - name: Upload to GitHub Artifacts - prod.aab-sha256.txt
         if: ${{ matrix.variant == 'aab' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
