@@ -412,7 +412,7 @@ jobs:
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release artifacts to Firebase
+      - name: Distribute to Firebase - prod.apk
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
@@ -421,7 +421,7 @@ jobs:
           actionUrl:$GITHUB_ACTION_RUN_URL \
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
-      - name: Publish beta artifacts to Firebase
+      - name: Distribute to Firebase - beta.apk
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
@@ -435,7 +435,7 @@ jobs:
         run: |
           bundle exec fastlane run validate_play_store_json_key
 
-      - name: Publish Play Store bundle
+      - name: Publish to Play Store - prod.aab
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane publishProdToPlayStore
@@ -619,7 +619,7 @@ jobs:
         if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release F-Droid artifacts to Firebase
+      - name: Distribute to Firebase - fdroid.apk
         if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json

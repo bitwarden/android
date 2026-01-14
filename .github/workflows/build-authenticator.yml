@@ -331,7 +331,7 @@ jobs:
         if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release bundle to Firebase
+      - name: Distribute to Firebase - prod.aab
         if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
@@ -339,7 +339,7 @@ jobs:
           bundle exec fastlane distributeAuthenticatorReleaseBundleToFirebase \
           serviceCredentialsFile:"$FIREBASE_CREDS_PATH"
 
-      - name: Publish release bundle to Google Play Store
+      - name: Publish to Play Store - prod.aab
         if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         env:
           PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
