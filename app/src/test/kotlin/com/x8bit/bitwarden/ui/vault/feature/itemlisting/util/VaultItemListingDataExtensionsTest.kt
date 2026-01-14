@@ -75,20 +75,50 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Vault.Login to true,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
             VaultItemListingState.ItemListingType.Vault.Archive to true,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
-            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to true,
-            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
                     itemListingType = type,
                 )
-                println("Type: $type")
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archived and deleted cipherView`() {
+        val cipherView = createMockCipherListView(
+            number = 1,
+            isArchived = true,
+            isDeleted = true,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
                 assertEquals(
                     expected,
                     result,
@@ -517,6 +547,7 @@ class VaultItemListingDataExtensionsTest {
                 failures = listOf(
                     createMockSdkCipher(number = 5).copy(
                         deletedDate = null,
+                        archivedDate = null,
                         folderId = "mockId-1",
                         favorite = true,
                     ),
@@ -526,6 +557,7 @@ class VaultItemListingDataExtensionsTest {
                     ),
                     createMockSdkCipher(number = 7).copy(
                         deletedDate = null,
+                        archivedDate = null,
                         folderId = "mockId-1",
                     ),
                     createMockSdkCipher(number = 8).copy(

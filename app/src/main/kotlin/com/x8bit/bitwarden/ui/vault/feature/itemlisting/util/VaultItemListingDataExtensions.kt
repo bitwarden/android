@@ -50,31 +50,33 @@ fun CipherListView.determineListingPredicate(
 ): Boolean =
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Vault.Card -> {
-            type is CipherListViewType.Card && deletedDate == null
+            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
-            itemListingType.collectionId in this.collectionIds && deletedDate == null
+            itemListingType.collectionId in this.collectionIds &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Folder -> {
-            folderId == itemListingType.folderId && deletedDate == null
+            folderId == itemListingType.folderId && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> {
-            type is CipherListViewType.Identity && deletedDate == null
+            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> {
-            type is CipherListViewType.Login && deletedDate == null
+            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-            type is CipherListViewType.SecureNote && deletedDate == null
+            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SshKey -> {
-            type is CipherListViewType.SshKey && deletedDate == null
+            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Trash -> {

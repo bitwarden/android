@@ -55,11 +55,18 @@ class VaultDataExtensionsTest {
         val mockCipher = createMockSdkCipher(number = 2).copy(
             folderId = null,
             favorite = true,
+            archivedDate = null,
             deletedDate = null,
+        )
+        val mockArchivedCipher = createMockCipherListView(
+            number = 3,
+            folderId = null,
+            isDeleted = false,
+            isArchived = true,
         )
         val vaultData = VaultData(
             decryptCipherListResult = DecryptCipherListResult(
-                successes = listOf(createMockCipherListView(number = 1)),
+                successes = listOf(createMockCipherListView(number = 1), mockArchivedCipher),
                 failures = listOf(mockCipher),
             ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
