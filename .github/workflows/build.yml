@@ -186,7 +186,7 @@ jobs:
           --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
       - name: Download Firebase credentials
-        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile

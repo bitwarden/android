@@ -198,7 +198,7 @@ jobs:
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Verify Play Store credentials
-        if: ${{ inputs.publish-to-play-store }}
+        if: ${{ env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane run validate_play_store_json_key \
           json_key:"${{ github.workspace }}/secrets/authenticator_play_store-creds.json"
