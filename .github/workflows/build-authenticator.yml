@@ -32,6 +32,8 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 21
+  DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+  PUBLISH_TO_PLAY_STORE: ${{ inputs.publish-to-play-store || github.event_name == 'push' }}
 
 permissions:
   contents: read
@@ -337,10 +339,8 @@ jobs:
           bundle exec fastlane distributeAuthenticatorReleaseBundleToFirebase \
           serviceCredentialsFile:"$FIREBASE_CREDS_PATH"
 
-      # Only publish bundles to Play Store when `publish-to-play-store` is true while building
-      # bundles
       - name: Publish release bundle to Google Play Store
-        if: ${{ inputs.publish-to-play-store && matrix.variant == 'aab' }}
+        if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         env:
           PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
         run: |
