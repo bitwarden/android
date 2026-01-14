@@ -103,8 +103,6 @@ class VaultMigrationManagerTest {
     private val ciphersService: com.bitwarden.network.service.CiphersService =
         mockk(relaxed = true)
 
-    private val cipherManager: CipherManager = mockk(relaxed = true)
-
     private fun createVaultMigrationManager(): VaultMigrationManager =
         VaultMigrationManagerImpl(
             authDiskSource = fakeAuthDiskSource,
@@ -112,7 +110,6 @@ class VaultMigrationManagerTest {
             vaultRepository = vaultRepository,
             vaultSdkSource = vaultSdkSource,
             ciphersService = ciphersService,
-            cipherManager = cipherManager,
             settingsDiskSource = settingsDiskSource,
             vaultLockManager = vaultLockManager,
             policyManager = policyManager,
@@ -694,7 +691,7 @@ class VaultMigrationManagerTest {
                 createMockCipher(number = 1, organizationId = null),
             )
             coEvery {
-                cipherManager.migrateAttachments(any(), any())
+                vaultRepository.migrateAttachments(any(), any())
             } returns Result.success(
                 createMockCipherView(number = 1),
             )
@@ -721,7 +718,7 @@ class VaultMigrationManagerTest {
             val result = vaultMigrationManager.migratePersonalVault(userId, organizationId)
 
             assertTrue(result.isSuccess)
-            coVerify(exactly = 1) { cipherManager.migrateAttachments(userId, any()) }
+            coVerify(exactly = 1) { vaultRepository.migrateAttachments(userId, any()) }
             coVerify(exactly = 1) { vaultDiskSource.saveCipher(userId, any()) }
         }
 
@@ -753,7 +750,7 @@ class VaultMigrationManagerTest {
 
         val attachmentError = IllegalStateException("Attachment migration failed")
         coEvery {
-            cipherManager.migrateAttachments(any(), any())
+            vaultRepository.migrateAttachments(any(), any())
         } returns Result.failure(attachmentError)
 
         val vaultMigrationManager = createVaultMigrationManager()
@@ -761,7 +758,7 @@ class VaultMigrationManagerTest {
 
         assertTrue(result.isFailure)
         assertEquals(attachmentError, result.exceptionOrNull())
-        coVerify { cipherManager.migrateAttachments(userId, any()) }
+        coVerify { vaultRepository.migrateAttachments(userId, any()) }
         coVerify(exactly = 0) {
             vaultSdkSource.bulkMoveToOrganization(
                 userId = any(),
@@ -837,7 +834,7 @@ class VaultMigrationManagerTest {
 
             assertTrue(result.isSuccess)
             coVerify(exactly = 0) {
-                cipherManager.migrateAttachments(
+                vaultRepository.migrateAttachments(
                     userId = any(),
                     cipherView = any(),
                 )
@@ -879,7 +876,7 @@ class VaultMigrationManagerTest {
         // Should fail when decryption fails (fail-fast behavior)
         assertTrue(result.isFailure)
         assertEquals("Decryption failed", result.exceptionOrNull()?.message)
-        coVerify(exactly = 0) { cipherManager.migrateAttachments(any(), any()) }
+        coVerify(exactly = 0) { vaultRepository.migrateAttachments(any(), any()) }
         coVerify(exactly = 0) { vaultDiskSource.getSelectedCiphers(any(), any()) }
     }
 
@@ -907,7 +904,7 @@ class VaultMigrationManagerTest {
             createMockCipher(number = 1, organizationId = null),
         )
         coEvery {
-            cipherManager.migrateAttachments(any(), any())
+            vaultRepository.migrateAttachments(any(), any())
         } returns Result.success(
             value = createMockCipherView(number = 1),
         )
@@ -953,7 +950,7 @@ class VaultMigrationManagerTest {
             createMockCipher(number = 1, organizationId = null),
         )
         coEvery {
-            cipherManager.migrateAttachments(
+            vaultRepository.migrateAttachments(
                 userId = any(),
                 cipherView = any(),
             )

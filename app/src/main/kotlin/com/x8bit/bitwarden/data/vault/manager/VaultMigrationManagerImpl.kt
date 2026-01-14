@@ -6,6 +6,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -53,7 +54,6 @@ class VaultMigrationManagerImpl(
     private val vaultRepository: VaultRepository,
     private val vaultSdkSource: VaultSdkSource,
     private val ciphersService: CiphersService,
-    private val cipherManager: CipherManager,
     private val settingsDiskSource: SettingsDiskSource,
     private val policyManager: PolicyManager,
     private val featureFlagManager: FeatureFlagManager,
@@ -181,14 +181,14 @@ class VaultMigrationManagerImpl(
             ?: return IllegalStateException("Vault data not available").asFailure()
 
         val defaultUserCollection = getDefaultUserCollection(vaultData, organizationId)
-            .getOrElse { return Result.failure(it) }
+            .getOrElse { return it.asFailure() }
 
         val personalCiphers = getPersonalCipherViews(vaultData)
-            .getOrElse { return Result.failure(it) }
+            .getOrElse { return it.asFailure() }
 
         if (personalCiphers.isEmpty()) {
             mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
-            return Result.success(Unit)
+            return Unit.asSuccess()
         }
 
         val cipherIds = personalCiphers.mapNotNull { it.id }
@@ -199,18 +199,20 @@ class VaultMigrationManagerImpl(
         val encryptedCiphersMap = encryptedCiphers.associateBy { it.id }
 
         val processedCipherViews = migrateAttachments(userId, personalCiphers)
-            .getOrElse { return Result.failure(it) }
+            .getOrElse { return it.asFailure() }
 
-        encryptAndShareCiphers(
-            userId = userId,
-            organizationId = organizationId,
-            processedCipherViews = processedCipherViews,
-            encryptedCiphersMap = encryptedCiphersMap,
-            collectionIds = listOfNotNull(defaultUserCollection.id),
-        ).getOrElse { return Result.failure(it) }
+        this
+            .encryptAndShareCiphers(
+                userId = userId,
+                organizationId = organizationId,
+                processedCipherViews = processedCipherViews,
+                encryptedCiphersMap = encryptedCiphersMap,
+                collectionIds = listOfNotNull(defaultUserCollection.id),
+            )
+            .getOrElse { return it.asFailure() }
 
         mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
-        Result.success(Unit)
+        Unit.asSuccess()
     }
 
     private fun getDefaultUserCollection(
@@ -236,7 +238,7 @@ class VaultMigrationManagerImpl(
                         .getCipher(cipherId = cipherId)
                         .toCipherViewOrFailure()
                         ?.getOrElse { error ->
-                            return Result.failure(error)
+                            return error.asFailure()
                         }
                 }
             }
@@ -247,10 +249,10 @@ class VaultMigrationManagerImpl(
         personalCiphers: List<CipherView>,
     ): Result<List<CipherView>> = runCatching {
         personalCiphers.map { cipherView ->
-            cipherManager
+            vaultRepository
                 .migrateAttachments(userId = userId, cipherView = cipherView)
                 .getOrElse { error ->
-                    return Result.failure(error)
+                    return error.asFailure()
                 }
         }
     }
@@ -262,46 +264,43 @@ class VaultMigrationManagerImpl(
         encryptedCiphersMap: Map<String, SyncResponseJson.Cipher>,
         collectionIds: List<String>,
     ): Result<Unit> {
-        val encryptionResult = vaultSdkSource.bulkMoveToOrganization(
-            userId = userId,
-            organizationId = organizationId,
-            cipherViews = processedCipherViews,
-            collectionIds = collectionIds,
-        )
-
-        return encryptionResult.fold(
-            onSuccess = { encryptionContexts ->
-                val cipherRequests = encryptionContexts.mapNotNull { context ->
-                    val cipherId = context.cipher.id ?: return@mapNotNull null
-                    context.toEncryptedNetworkCipher().toCipherWithIdJsonRequest(id = cipherId)
+        return vaultSdkSource
+            .bulkMoveToOrganization(
+                userId = userId,
+                organizationId = organizationId,
+                cipherViews = processedCipherViews,
+                collectionIds = collectionIds,
+            )
+            .map { encryptionContexts ->
+                encryptionContexts.mapNotNull { context ->
+                    context.cipher.id?.let { cipherId ->
+                        context
+                            .toEncryptedNetworkCipher()
+                            .toCipherWithIdJsonRequest(id = cipherId)
+                    }
                 }
-
-                val shareResult = ciphersService.bulkShareCiphers(
+            }
+            .flatMap { cipherRequests ->
+                ciphersService.bulkShareCiphers(
                     body = BulkShareCiphersJsonRequest(
                         ciphers = cipherRequests,
                         collectionIds = collectionIds,
                     ),
                 )
-
-                shareResult.onSuccess { bulkShareResponse ->
-                    bulkShareResponse.cipherMiniResponse.forEach { miniResponse ->
-                        val existingCipher = encryptedCiphersMap[miniResponse.id]
-                        if (existingCipher != null) {
-                            vaultDiskSource.saveCipher(
-                                userId = userId,
-                                cipher = existingCipher.updateFromMiniResponse(
-                                    miniResponse = miniResponse,
-                                    collectionIds = collectionIds,
-                                ),
-                            )
-                        }
+            }
+            .map { bulkShareResponse ->
+                bulkShareResponse.cipherMiniResponse.forEach { miniResponse ->
+                    encryptedCiphersMap[miniResponse.id]?.let {
+                        vaultDiskSource.saveCipher(
+                            userId = userId,
+                            cipher = it.updateFromMiniResponse(
+                                miniResponse = miniResponse,
+                                collectionIds = collectionIds,
+                            ),
+                        )
                     }
-                }.map { }
-            },
-            onFailure = { error ->
-                Result.failure(error)
-            },
-        )
+                }
+            }
     }
 
     private fun GetCipherResult.toCipherViewOrFailure(): Result<CipherView>? =
@@ -313,9 +312,9 @@ class VaultMigrationManagerImpl(
 
             is GetCipherResult.Failure -> {
                 Timber.e(this.error, "Failed to decrypt cipher for vault migration.")
-                Result.failure(this.error)
+                this.error.asFailure()
             }
 
-            is GetCipherResult.Success -> Result.success(this.cipherView)
+            is GetCipherResult.Success -> this.cipherView.asSuccess()
         }
 }

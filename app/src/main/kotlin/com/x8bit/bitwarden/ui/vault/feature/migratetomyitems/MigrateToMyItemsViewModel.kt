@@ -234,7 +234,6 @@ sealed class MigrateToMyItemsAction {
          * The result of the migration has been received.
          */
         data class MigrateToMyItemsResultReceived(
-            // TODO: Replace `success` with actual migration result (PM-28444).
             val success: Boolean,
         ) : Internal()
     }
