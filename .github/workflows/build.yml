@@ -33,6 +33,8 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 21
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+  PUBLISH_TO_PLAY_STORE: ${{ inputs.publish-to-play-store || github.event_name == 'push' }}
 
 permissions:
   contents: read
@@ -407,11 +409,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release artifacts to Firebase
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -420,7 +422,7 @@ jobs:
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Publish beta artifacts to Firebase
-        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -429,12 +431,12 @@ jobs:
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Verify Play Store credentials
-        if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
+        if: ${{ matrix.variant == 'prod' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane run validate_play_store_json_key
 
       - name: Publish Play Store bundle
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
@@ -488,7 +490,7 @@ jobs:
           --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
 
       - name: Download Firebase credentials
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -614,11 +616,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release F-Droid artifacts to Firebase
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
