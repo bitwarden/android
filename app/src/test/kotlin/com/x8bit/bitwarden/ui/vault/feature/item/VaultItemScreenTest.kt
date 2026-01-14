@@ -252,6 +252,35 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `archived icon should be displayed according to state`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = false,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Archived")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = true,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Archived")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `favorite icon should be displayed according to state`() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
@@ -3222,6 +3251,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        archived = false,
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
@@ -3308,6 +3338,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        archived = false,
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
