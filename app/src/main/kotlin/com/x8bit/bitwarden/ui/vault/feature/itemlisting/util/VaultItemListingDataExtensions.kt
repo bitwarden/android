@@ -242,7 +242,7 @@ fun VaultData.toViewState(
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Archive -> {
-                        BitwardenString.no_archives
+                        BitwardenString.no_archives_message
                     }
                 }
                     .asText()
@@ -258,6 +258,23 @@ fun VaultData.toViewState(
                 ?.let {
                     BitwardenString.no_items_for_vault
                         .asText(it.issuer ?: it.accountName ?: "--")
+                }
+                ?: run {
+                    when (itemListingType) {
+                        is VaultItemListingState.ItemListingType.Vault.Folder,
+                        is VaultItemListingState.ItemListingType.Vault.Collection,
+                        VaultItemListingState.ItemListingType.Vault.Trash,
+                        VaultItemListingState.ItemListingType.Vault.Card,
+                        VaultItemListingState.ItemListingType.Vault.Identity,
+                        VaultItemListingState.ItemListingType.Vault.Login,
+                        VaultItemListingState.ItemListingType.Vault.SecureNote,
+                        VaultItemListingState.ItemListingType.Vault.SshKey,
+                            -> null
+
+                        VaultItemListingState.ItemListingType.Vault.Archive -> {
+                            BitwardenString.no_archives_title.asText()
+                        }
+                    }
                 },
             message = message,
             shouldShowAddButton = shouldShowAddButton,
@@ -290,7 +307,24 @@ fun VaultData.toViewState(
                         .asText()
                 },
             vectorRes = totpData
-                ?.let { BitwardenDrawable.ill_folder_question },
+                ?.let { BitwardenDrawable.ill_folder_question }
+                ?: run {
+                    when (itemListingType) {
+                        is VaultItemListingState.ItemListingType.Vault.Folder,
+                        is VaultItemListingState.ItemListingType.Vault.Collection,
+                        VaultItemListingState.ItemListingType.Vault.Trash,
+                        VaultItemListingState.ItemListingType.Vault.Card,
+                        VaultItemListingState.ItemListingType.Vault.Identity,
+                        VaultItemListingState.ItemListingType.Vault.Login,
+                        VaultItemListingState.ItemListingType.Vault.SecureNote,
+                        VaultItemListingState.ItemListingType.Vault.SshKey,
+                            -> null
+
+                        VaultItemListingState.ItemListingType.Vault.Archive -> {
+                            BitwardenDrawable.ill_open_source
+                        }
+                    }
+                },
         )
     }
 }
