@@ -219,6 +219,8 @@ class VaultItemListingViewModel @Inject constructor(
 
         snackbarRelayManager
             .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_ARCHIVED,
+                SnackbarRelay.CIPHER_UNARCHIVED,
                 SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_DELETED_SOFT,

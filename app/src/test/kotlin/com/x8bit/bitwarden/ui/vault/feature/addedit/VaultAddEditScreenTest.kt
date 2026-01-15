@@ -254,6 +254,37 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
     fun `fido2 master password prompt dialog should display based on state`() {
         val dialogTitle = "Master password confirmation"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -4145,7 +4176,17 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `on NavigateToLearnMore should call launchUri`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToLearnMore)
-        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        verify(exactly = 1) {
+            intentManager.launchUri(uri = "https://bitwarden.com/help/uri-match-detection/".toUri())
+        }
+    }
+
+    @Test
+    fun `on NavigateToPremium should call launchUri`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToPremium(uri = "uri"))
+        verify(exactly = 1) {
+            intentManager.launchUri(uri = "uri".toUri())
+        }
     }
 
     //region Helper functions
@@ -4329,6 +4370,78 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `Archive option menu should be visible if cipher in edit mode with un-archived cipher`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(number = 1, isArchived = false),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+        }
+    }
+
+    @Test
+    fun `Unarchive option menu should be visible if cipher in edit mode with archived cipher`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(number = 1, isArchived = true),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Unarchive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Unarchive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+        }
+    }
+
     //endregion Helper functions
 
     companion object {
@@ -4344,6 +4457,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4358,6 +4473,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4372,6 +4489,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4386,6 +4505,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4410,6 +4531,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4424,6 +4547,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4438,6 +4563,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

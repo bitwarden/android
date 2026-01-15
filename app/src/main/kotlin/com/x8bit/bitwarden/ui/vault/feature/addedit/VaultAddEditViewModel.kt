@@ -5,9 +5,11 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -32,6 +34,7 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -44,16 +47,19 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -113,6 +119,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass", "LongParameterList", "LongMethod")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
@@ -128,6 +135,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -169,6 +177,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
+                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -205,6 +214,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
+                hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
             )
         },
 ) {
@@ -263,6 +273,12 @@ class VaultAddEditViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
             .map { VaultAddEditAction.Internal.SnackbarDataReceived(it) }
@@ -303,6 +319,9 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultAddEditAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
             is VaultAddEditAction.Common.CollectionsClick -> handleCollectionsClick()
+            is VaultAddEditAction.Common.ArchiveClick -> handleArchiveClick()
+            is VaultAddEditAction.Common.UnarchiveClick -> handleUnarchiveClick()
+            VaultAddEditAction.Common.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is VaultAddEditAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
@@ -544,6 +563,73 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleCollectionsClick() {
         onEdit { sendEvent(VaultAddEditEvent.NavigateToCollections(it.vaultItemId)) }
+    }
+
+    private fun handleArchiveClick() {
+        if (!state.hasPremium) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium)
+            }
+            return
+        }
+        onEdit {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Loading(
+                        label = BitwardenString.archiving.asText(),
+                    ),
+                )
+            }
+        }
+        onContent { content ->
+            content.common.originalCipher?.id?.let {
+                viewModelScope.launch {
+                    trySendAction(
+                        VaultAddEditAction.Internal.ArchiveCipherReceive(
+                            result = vaultRepository.archiveCipher(
+                                cipherId = it,
+                                cipherView = content.common.originalCipher,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick() {
+        onEdit {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Loading(
+                        label = BitwardenString.unarchiving.asText(),
+                    ),
+                )
+            }
+        }
+        onContent { content ->
+            content.common.originalCipher?.id?.let {
+                viewModelScope.launch {
+                    trySendAction(
+                        VaultAddEditAction.Internal.UnarchiveCipherReceive(
+                            result = vaultRepository.unarchiveCipher(
+                                cipherId = it,
+                                cipherView = content.common.originalCipher,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        sendEvent(
+            VaultAddEditEvent.NavigateToPremium(
+                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+            ),
+        )
     }
 
     private fun handleConfirmDeleteClick() {
@@ -1543,6 +1629,18 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUpdateCipherResultReceive(action)
             }
 
+            is VaultAddEditAction.Internal.ArchiveCipherReceive -> {
+                handleArchiveCipherReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.UnarchiveCipherReceive -> {
+                handleUnarchiveCipherReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
+
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
@@ -1702,6 +1800,60 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handleArchiveCipherReceive(
+        action: VaultAddEditAction.Internal.ArchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is ArchiveCipherResult.Error -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = BitwardenString.unable_to_archive_selected_item.asText(),
+                        error = result.error,
+                    ),
+                )
+            }
+
+            ArchiveCipherResult.Success -> {
+                clearDialogState()
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_archived.asText()),
+                    relay = SnackbarRelay.CIPHER_ARCHIVED,
+                )
+                sendEvent(VaultAddEditEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(
+        action: VaultAddEditAction.Internal.UnarchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                        error = result.error,
+                    ),
+                )
+            }
+
+            UnarchiveCipherResult.Success -> {
+                clearDialogState()
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_unarchived.asText()),
+                    relay = SnackbarRelay.CIPHER_UNARCHIVED,
+                )
+                sendEvent(VaultAddEditEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
@@ -2242,12 +2394,14 @@ data class VaultAddEditState(
     val bottomSheetState: BottomSheetState?,
     val shouldShowCloseButton: Boolean = true,
     // Internal
+    val hasPremium: Boolean,
     val shouldExitOnSave: Boolean = false,
     val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
     val createCredentialRequest: CreateCredentialRequest? = null,
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
+    private val isArchiveEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -2291,9 +2445,36 @@ data class VaultAddEditState(
     val isAddItemMode: Boolean get() = vaultAddEditType is VaultAddEditType.AddItem
 
     /**
+     * Helper to determine if the UI should display the content in edit item mode.
+     */
+    val isEditItemMode: Boolean get() = vaultAddEditType is VaultAddEditType.EditItem
+
+    /**
      * Helper to determine if the UI should display the content in clone mode.
      */
     val isCloneMode: Boolean get() = vaultAddEditType is VaultAddEditType.CloneItem
+
+    /**
+     * Helper to determine if the UI should display the archive button.
+     */
+    val displayArchiveButton: Boolean
+        get() = isArchiveEnabled &&
+            isEditItemMode &&
+            (viewState as? ViewState.Content)
+                ?.common
+                ?.originalCipher
+                ?.archivedDate == null
+
+    /**
+     * Helper to determine if the UI should display the unarchive button.
+     */
+    val displayUnarchiveButton: Boolean
+        get() = isArchiveEnabled &&
+            isEditItemMode &&
+            (viewState as? ViewState.Content)
+                ?.common
+                ?.originalCipher
+                ?.archivedDate != null
 
     /**
      * Helper to determine if the UI should allow deletion of this item.
@@ -2735,6 +2916,11 @@ data class VaultAddEditState(
     sealed class DialogState : Parcelable {
 
         /**
+         * Displays a dialog to the user indicating they archiving requires a premium account.
+         */
+        data object ArchiveRequiresPremium : DialogState()
+
+        /**
          * Displays a generic dialog to the user.
          */
         @Parcelize
@@ -2862,6 +3048,13 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
+     * Navigates to the upgrade-to-premium url.
+     */
+    data class NavigateToPremium(
+        val uri: String,
+    ) : VaultAddEditEvent()
+
+    /**
      * Navigates to the collections screen.
      */
     data class NavigateToCollections(
@@ -2968,6 +3161,21 @@ sealed class VaultAddEditAction {
          * The user has clicked the collections overflow option.
          */
         data object CollectionsClick : Common()
+
+        /**
+         * The user has clicked the archive overflow option.
+         */
+        data object ArchiveClick : Common()
+
+        /**
+         * The user has clicked the unarchive overflow option.
+         */
+        data object UnarchiveClick : Common()
+
+        /**
+         * The user has clicked the upgrade to premium dialog.
+         */
+        data object UpgradeToPremiumClick : Common()
 
         /**
          * The user has confirmed to deleted the cipher.
@@ -3536,6 +3744,20 @@ sealed class VaultAddEditAction {
         ) : Internal()
 
         /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
+        ) : Internal()
+
+        /**
          * Indicates that the delete cipher result has been received.
          */
         data class DeleteCipherReceive(
@@ -3584,6 +3806,13 @@ sealed class VaultAddEditAction {
          */
         data class AvailableFoldersReceive(
             val folderData: DataState<List<FolderView>>,
+        ) : Internal()
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }
