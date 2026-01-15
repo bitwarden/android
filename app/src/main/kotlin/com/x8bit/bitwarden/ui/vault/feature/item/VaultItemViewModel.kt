@@ -1421,6 +1421,7 @@ data class VaultItemState(
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
                 val favorite: Boolean,
+                val archived: Boolean,
                 val passwordHistoryCount: Int?,
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,

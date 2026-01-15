@@ -108,6 +108,7 @@ fun CipherView.toViewState(
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,
+            archived = this.archivedDate != null,
             passwordHistoryCount = passwordHistory?.count(),
             iconData = this.toIconData(
                 baseIconUrl = baseIconUrl,
