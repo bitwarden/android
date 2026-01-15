@@ -129,7 +129,8 @@
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
-    <string name="no_archives">No items in archive.</string>
+    <string name="no_archives_title">Archive is empty</string>
+    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">New text Send</string>
     <string name="new_file_send">New file Send</string>
     <string name="no_username">No Username</string>

@@ -962,6 +962,29 @@ class VaultItemListingDataExtensionsTest {
             ),
         )
 
+        // Archive Type
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                header = BitwardenString.no_archives_title.asText(),
+                message = BitwardenString.no_archives_message.asText(),
+                vectorRes = BitwardenDrawable.ill_open_source,
+                shouldShowAddButton = false,
+                buttonText = BitwardenString.new_item.asText(),
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                createCredentialRequestData = null,
+                totpData = null,
+                isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
+            ),
+        )
+
         // Autofill
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
