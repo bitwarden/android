@@ -88,6 +88,7 @@ private fun MigrateToMyItemsDialogs(
             BitwardenBasicDialog(
                 title = dialog.title(),
                 message = dialog.message(),
+                throwable = dialog.throwable,
                 onDismissRequest = onDismissRequest,
             )
         }

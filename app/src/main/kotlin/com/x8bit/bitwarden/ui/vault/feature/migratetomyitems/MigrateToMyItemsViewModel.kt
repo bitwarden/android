@@ -149,6 +149,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
                             message = BitwardenString.failed_to_migrate_items_to_x.asText(
                                 it.organizationName,
                             ),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -189,6 +190,7 @@ data class MigrateToMyItemsState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable?,
         ) : DialogState()
     }
 }

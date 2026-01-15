@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -105,27 +106,27 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     fun `AcceptClicked should show error dialog when userId is null`() = runTest {
         mutableUserStateFlow.value = null
         val viewModel = createViewModel()
+        viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
 
-        viewModel.stateFlow.test {
-            assertEquals(null, awaitItem().dialog)
+        val dialog = viewModel.stateFlow.value.dialog as MigrateToMyItemsState.DialogState.Error
+        val throwableReference = dialog.throwable
 
-            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
+        assert(throwableReference is MissingPropertyException)
+        assertEquals(
+            "Missing the required UserId property",
+            throwableReference?.message,
+        )
 
-            val loadingState = awaitItem()
-            assert(loadingState.dialog is MigrateToMyItemsState.DialogState.Loading)
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialog = MigrateToMyItemsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                            ORGANIZATION_NAME,
-                        ),
-                    ),
+        assertEquals(
+            MigrateToMyItemsState.DialogState.Error(
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                    ORGANIZATION_NAME,
                 ),
-                awaitItem(),
-            )
-        }
+                throwable = throwableReference,
+            ),
+            viewModel.stateFlow.value.dialog,
+        )
 
         coVerify(exactly = 0) {
             mockVaultMigrationManager.migratePersonalVault(any(), any())
