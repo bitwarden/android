@@ -1,7 +1,7 @@
 ---
 name: reviewing-changes
 version: 3.0.0
-description: Android-specific code review workflow additions for Bitwarden Android. Provides change type refinements, checklist loading, and reference material organization. Complements bitwarden-code-reviewer agent's base review standards.
+description: Guides Android code reviews with type-specific checklists and MVVM/Compose pattern validation. Use when reviewing Android PRs, pull requests, diffs, or local changes involving Kotlin, ViewModel, Composable, Repository, or Gradle files. Triggered by "review PR", "review changes", "check this code", "Android review", or code review requests mentioning bitwarden/android. Loads specialized checklists for feature additions, bug fixes, UI refinements, refactoring, dependency updates, and infrastructure changes.
 ---
 
 # Reviewing Changes - Android Additions
