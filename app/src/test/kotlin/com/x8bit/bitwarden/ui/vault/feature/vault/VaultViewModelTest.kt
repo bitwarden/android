@@ -1650,6 +1650,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 deletedDate = null,
                             ),
                             createMockSdkCipher(number = 2).copy(
+                                archivedDate = null,
                                 deletedDate = null,
                             ),
                         ),
@@ -1664,7 +1665,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createMockVaultState(
                     viewState = VaultState.ViewState.Content(
-                        loginItemsCount = 2,
+                        loginItemsCount = 1,
                         cardItemsCount = 0,
                         identityItemsCount = 0,
                         secureNoteItemsCount = 0,
@@ -1676,7 +1677,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 0,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
-                        archivedItemsCount = 2,
+                        archivedItemsCount = 1,
                         archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
@@ -1708,9 +1709,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         .copy(
                             failures = listOf(
                                 createMockSdkCipher(number = 1).copy(
+                                    archivedDate = null,
                                     deletedDate = null,
                                 ),
                                 createMockSdkCipher(number = 2).copy(
+                                    archivedDate = null,
                                     deletedDate = null,
                                 ),
                             ),
@@ -1747,7 +1750,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
-                        archivedItemsCount = 2,
+                        archivedItemsCount = 0,
                         archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,

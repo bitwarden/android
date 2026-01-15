@@ -108,26 +108,46 @@ private fun CipherListView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> deletedDate == null
+        SearchTypeData.Vault.All -> deletedDate == null && archivedDate == null
         SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
-        is SearchTypeData.Vault.Cards -> type is CipherListViewType.Card && deletedDate == null
+        is SearchTypeData.Vault.Cards -> {
+            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Collection -> {
-            searchTypeData.collectionId in this.collectionIds && deletedDate == null
+            searchTypeData.collectionId in this.collectionIds &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
-        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
-        SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
+        is SearchTypeData.Vault.Folder -> {
+            folderId == searchTypeData.folderId && deletedDate == null && archivedDate == null
+        }
+
+        SearchTypeData.Vault.NoFolder -> {
+            folderId == null && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Identities -> {
-            type is CipherListViewType.Identity && deletedDate == null
+            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
         }
 
-        is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && deletedDate == null
+        is SearchTypeData.Vault.Logins -> {
+            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.SecureNotes -> {
-            type is CipherListViewType.SecureNote && deletedDate == null
+            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
         }
 
-        is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
+        is SearchTypeData.Vault.SshKeys -> {
+            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.VerificationCodes -> {
+            login?.totp != null && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
