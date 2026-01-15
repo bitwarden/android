@@ -4371,6 +4371,43 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `archive callout should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        archiveCalloutText = null,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This item is archived.")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        archiveCalloutText = "This item is archived.".asText(),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This item is archived.")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `Archive option menu should be visible if cipher in edit mode with un-archived cipher`() {
         mutableStateFlow.update {
             it.copy(
