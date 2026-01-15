@@ -57,6 +57,7 @@ fun VaultItemCardContent(
         itemHeader(
             value = commonState.name,
             isFavorite = commonState.favorite,
+            isArchived = commonState.archived,
             iconData = cardState.paymentCardBrandIconData ?: commonState.iconData,
             relatedLocations = commonState.relatedLocations,
             iconTestTag = "CardItemNameIcon",

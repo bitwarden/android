@@ -71,6 +71,16 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return Archive when item type is Archive`() {
+        val expected = SearchType.Vault.Archive
+        val itemType = VaultItemListingState.ItemListingType.Vault.Archive
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toSearchType should return Trash when item type is Trash`() {
         val expected = SearchType.Vault.Trash
         val itemType = VaultItemListingState.ItemListingType.Vault.Trash
@@ -152,6 +162,9 @@ class VaultItemListingStateExtensionsTest {
 
     @Test
     fun `toVaultItemCipherType should throw an exception for unsupported ItemListingTypes`() {
+        assertThrows<IllegalStateException> {
+            VaultItemListingState.ItemListingType.Vault.Archive.toVaultItemCipherType()
+        }
         assertThrows<IllegalStateException> {
             VaultItemListingState.ItemListingType.Vault.Trash.toVaultItemCipherType()
         }

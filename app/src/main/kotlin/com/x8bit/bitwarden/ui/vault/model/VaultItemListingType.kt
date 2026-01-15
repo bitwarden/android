@@ -6,6 +6,11 @@ package com.x8bit.bitwarden.ui.vault.model
 sealed class VaultItemListingType {
 
     /**
+     * An Archive listing.
+     */
+    data object Archive : VaultItemListingType()
+
+    /**
      * A Login listing.
      */
     data object Login : VaultItemListingType()

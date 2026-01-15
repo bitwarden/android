@@ -12,6 +12,7 @@ class VaultItemListingTypeExtensionsTest {
     fun `toItemListingType should transform a VaultItemListingType into a VaultItemListingState ItemListingType`() {
         val itemListingTypeList = listOf(
             VaultItemListingType.Folder(folderId = "mock"),
+            VaultItemListingType.Archive,
             VaultItemListingType.Trash,
             VaultItemListingType.Collection(collectionId = "collectionId"),
             VaultItemListingType.SshKey,
@@ -28,6 +29,7 @@ class VaultItemListingTypeExtensionsTest {
         assertEquals(
             listOf(
                 VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mock"),
+                VaultItemListingState.ItemListingType.Vault.Archive,
                 VaultItemListingState.ItemListingType.Vault.Trash,
                 VaultItemListingState.ItemListingType.Vault.Collection(
                     collectionId = "collectionId",

@@ -51,6 +51,7 @@ fun VaultItemSecureNoteContent(
         itemHeader(
             value = commonState.name,
             isFavorite = commonState.favorite,
+            isArchived = commonState.archived,
             iconData = commonState.iconData,
             relatedLocations = commonState.relatedLocations,
             iconTestTag = "SecureNoteItemNameIcon",

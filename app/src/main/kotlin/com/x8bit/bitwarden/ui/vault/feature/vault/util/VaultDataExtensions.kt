@@ -44,6 +44,7 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
+    isArchiveEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -58,17 +59,19 @@ fun VaultData.toViewState(
             .applyFilters(
                 vaultFilterType = vaultFilterType,
                 restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                excludeArchived = false,
                 excludeDeleted = false,
             )
 
     val activeCipherViews = allCipherViews
-        .filter { it.deletedDate == null }
+        .filter { it.deletedDate == null && it.archivedDate == null }
 
     val activeDecryptedCipherViews = decryptCipherListResult
         .successes
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeArchived = true,
             excludeDeleted = true,
         )
 
@@ -80,6 +83,7 @@ fun VaultData.toViewState(
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeArchived = true,
             excludeDeleted = true,
         )
 
@@ -206,9 +210,16 @@ fun VaultData.toViewState(
                             },
                     )
                 },
-            trashItemsCount = allCipherViews.count {
-                it.deletedDate != null
-            },
+            trashItemsCount = allCipherViews.count { it.deletedDate != null },
+            archivedItemsCount = allCipherViews
+                .count { it.archivedDate != null && it.deletedDate == null }
+                .takeIf { isPremium },
+            archiveEnabled = isArchiveEnabled,
+            archiveEndIcon = BitwardenDrawable.ic_locked.takeUnless { isPremium },
+            archiveSubText = BitwardenString
+                .premium_subscription_required
+                .asText()
+                .takeUnless { isPremium },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
         )
     }
@@ -443,8 +454,16 @@ fun List<CipherListView>.applyRestrictItemTypesPolicy(
 private fun List<CipherListView>.applyFilters(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
+    excludeArchived: Boolean,
     excludeDeleted: Boolean,
 ): List<CipherListView> = this
+    .let {
+        if (excludeArchived) {
+            it.filter { cipher -> cipher.archivedDate == null }
+        } else {
+            it
+        }
+    }
     .let {
         if (excludeDeleted) {
             it.filter { cipher -> cipher.deletedDate == null }

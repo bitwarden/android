@@ -1731,6 +1731,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Sends.Files -> SearchType.Sends.Files
                     SearchTypeData.Sends.Texts -> SearchType.Sends.Texts
                     SearchTypeData.Vault.All -> SearchType.Vault.All
+                    SearchTypeData.Vault.Archive -> SearchType.Vault.Archive
                     SearchTypeData.Vault.Cards -> SearchType.Vault.Cards
                     is SearchTypeData.Vault.Collection -> SearchType.Vault.Collection(
                         collectionId = searchType.collectionId,

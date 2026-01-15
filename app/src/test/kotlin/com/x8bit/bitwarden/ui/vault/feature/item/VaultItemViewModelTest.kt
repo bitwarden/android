@@ -2709,6 +2709,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canAssignToCollections = true,
                 canEdit = true,
                 favorite = false,
+                archived = false,
                 passwordHistoryCount = 1,
                 iconData = IconData.Local(BitwardenDrawable.ic_globe),
                 relatedLocations = persistentListOf(),

@@ -102,6 +102,7 @@ enum class ItemListingType {
     COLLECTION,
     SEND_FILE,
     SEND_TEXT,
+    ARCHIVE,
 }
 
 /**
@@ -118,6 +119,7 @@ fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
     val route = this.toRoute<VaultItemListingRoute>()
     return VaultItemListingArgs(
         vaultItemListingType = when (route.type) {
+            ItemListingType.ARCHIVE -> VaultItemListingType.Archive
             ItemListingType.LOGIN -> VaultItemListingType.Login
             ItemListingType.CARD -> VaultItemListingType.Card
             ItemListingType.IDENTITY -> VaultItemListingType.Identity
@@ -289,6 +291,7 @@ fun NavController.navigateToSendItemListing(
 
 private fun VaultItemListingType.toItemListingType(): ItemListingType {
     return when (this) {
+        is VaultItemListingType.Archive -> ItemListingType.ARCHIVE
         is VaultItemListingType.Card -> ItemListingType.CARD
         is VaultItemListingType.Collection -> ItemListingType.COLLECTION
         is VaultItemListingType.Folder -> ItemListingType.FOLDER
@@ -306,6 +309,7 @@ private fun VaultItemListingType.toIdOrNull(): String? =
     when (this) {
         is VaultItemListingType.Collection -> collectionId
         is VaultItemListingType.Folder -> folderId
+        is VaultItemListingType.Archive -> null
         is VaultItemListingType.Card -> null
         is VaultItemListingType.Identity -> null
         is VaultItemListingType.Login -> null

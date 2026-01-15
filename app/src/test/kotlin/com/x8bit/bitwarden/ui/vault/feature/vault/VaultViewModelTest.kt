@@ -205,10 +205,13 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val mutableArchiveItemsFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
         } returns mutableCxpExportFeatureFlagFlow
+        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow
+        every { getFeatureFlag(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow.value
     }
 
     @AfterEach
@@ -780,6 +783,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
             .copy(
@@ -805,6 +809,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
                     restrictItemTypesPolicyOrgIds = emptyList(),
+                    isArchiveEnabled = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -939,6 +944,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             ),
@@ -965,6 +974,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             )
@@ -1100,6 +1113,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             ),
@@ -1212,6 +1229,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.Error(
@@ -1321,6 +1342,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = null,
@@ -1407,6 +1432,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                 ),
@@ -1541,6 +1570,18 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ArchiveClick should emit NavigateToItemListing event with Archive type`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `TrashClick should emit NavigateToItemListing event with Trash type`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -1609,6 +1650,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 deletedDate = null,
                             ),
                             createMockSdkCipher(number = 2).copy(
+                                archivedDate = null,
                                 deletedDate = null,
                             ),
                         ),
@@ -1623,7 +1665,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createMockVaultState(
                     viewState = VaultState.ViewState.Content(
-                        loginItemsCount = 2,
+                        loginItemsCount = 1,
                         cardItemsCount = 0,
                         identityItemsCount = 0,
                         secureNoteItemsCount = 0,
@@ -1635,6 +1677,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 0,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 1,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
@@ -1663,9 +1709,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         .copy(
                             failures = listOf(
                                 createMockSdkCipher(number = 1).copy(
+                                    archivedDate = null,
                                     deletedDate = null,
                                 ),
                                 createMockSdkCipher(number = 2).copy(
+                                    archivedDate = null,
                                     deletedDate = null,
                                 ),
                             ),
@@ -1702,6 +1750,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = null,
@@ -2982,6 +3034,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 2,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
@@ -3040,6 +3096,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 2,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = null,
@@ -3238,4 +3298,5 @@ private fun createMockVaultState(
         cipherDecryptionFailureIds = persistentListOf(),
         hasShownDecryptionFailureAlert = false,
         restrictItemTypesPolicyOrgIds = emptyList(),
+        isArchiveEnabled = true,
     )

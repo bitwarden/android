@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
@@ -126,6 +127,7 @@ class VaultViewModel @Inject constructor(
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPremium = userState.activeAccount.isPremium,
+            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
@@ -220,6 +222,11 @@ class VaultViewModel @Inject constructor(
             .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { VaultAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
 
         viewModelScope.launch {
             delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
@@ -256,6 +263,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
+            is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
             is VaultAction.TryAgainClick -> handleTryAgainClick()
@@ -527,6 +535,10 @@ class VaultViewModel @Inject constructor(
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
         )
+    }
+
+    private fun handleArchiveClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
     }
 
     private fun handleTrashClick() {
@@ -808,6 +820,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
+
+            is VaultAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
         }
     }
 
@@ -858,6 +874,12 @@ class VaultViewModel @Inject constructor(
                 credentialExchangeRegistryManager.unregister()
             }
         }
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: VaultAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleDecryptionErrorReceive(action: VaultAction.Internal.DecryptionErrorReceive) {
@@ -1001,6 +1023,7 @@ class VaultViewModel @Inject constructor(
             errorMessage = BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+            isArchiveEnabled = state.isArchiveEnabled,
         )
     }
 
@@ -1064,6 +1087,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = state.isArchiveEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1108,6 +1132,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = state.isArchiveEnabled,
                 ),
             )
         }
@@ -1259,6 +1284,7 @@ data class VaultState(
     val flightRecorderSnackBar: BitwardenSnackbarData?,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
+    val isArchiveEnabled: Boolean,
     val isPremium: Boolean,
     val hasMasterPassword: Boolean,
     private val isPullToRefreshSettingEnabled: Boolean,
@@ -1346,6 +1372,11 @@ data class VaultState(
          * @property noFolderItems The list of non-folders to be displayed.
          * @property collectionItems The list of collections to be displayed.
          * @property trashItemsCount The number of items present in the trash.
+         * @property archivedItemsCount The number of items present in archive.
+         * @property archiveEnabled Is the archive feature enabled.
+         * @property archiveSubText The subtext to be displayed on the archive item.
+         * @property archiveEndIcon The end icon to be displayed on the archive item.
+         * @property showCardGroup Is the card group available for display.
          */
         @Parcelize
         data class Content(
@@ -1361,6 +1392,10 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
+            val archivedItemsCount: Int?,
+            val archiveEnabled: Boolean,
+            val archiveSubText: Text?,
+            @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
@@ -1897,6 +1932,11 @@ sealed class VaultAction {
     data object SshKeyGroupClick : VaultAction()
 
     /**
+     * User clicked the archive button.
+     */
+    data object ArchiveClick : VaultAction()
+
+    /**
      * User clicked the trash button.
      */
     data object TrashClick : VaultAction()
@@ -2058,6 +2098,13 @@ sealed class VaultAction {
         data class CredentialExchangeProtocolExportFlagUpdateReceive(
             val isCredentialExchangeProtocolExportEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
     }
 }
 
@@ -2073,6 +2120,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorMessage: Text,
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
+    isArchiveEnabled: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2084,6 +2132,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = isArchiveEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,
