@@ -439,6 +439,7 @@ class AuthRepositoryImpl(
             },
         )
 
+    @Suppress("LongMethod")
     override suspend fun createNewSsoUser(): NewSsoUserResult {
         val account = authDiskSource.userState?.activeAccount
             ?: return NewSsoUserResult.Failure(error = NoActiveUserException())
@@ -465,6 +466,13 @@ class AuthRepositoryImpl(
                                 publicKey = keys.publicKey,
                                 encryptedPrivateKey = keys.privateKey,
                             )
+                            .onSuccess { response ->
+                                authDiskSource
+                                    .storeAccountKeys(
+                                        userId = userId,
+                                        accountKeys = response.accountKeys,
+                                    )
+                            }
                             .map { keys }
                     }
                     .flatMap { keys ->

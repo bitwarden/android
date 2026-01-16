@@ -5,6 +5,7 @@ import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
 import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.model.CreateAccountKeysRequest
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
@@ -50,7 +51,7 @@ internal class AccountsServiceImpl(
     override suspend fun createAccountKeys(
         publicKey: String,
         encryptedPrivateKey: String,
-    ): Result<Unit> =
+    ): Result<CreateAccountKeysResponseJson> =
         authenticatedAccountsApi
             .createAccountKeys(
                 body = CreateAccountKeysRequest(
