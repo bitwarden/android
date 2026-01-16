@@ -5,8 +5,8 @@ import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
-import com.bitwarden.network.ssl.BitwardenX509ExtendedKeyManager
 import com.bitwarden.network.ssl.CertificateProvider
+import com.bitwarden.network.ssl.createSslContext
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -16,8 +16,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import timber.log.Timber
 import java.security.KeyStore
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
@@ -149,28 +147,18 @@ internal class RetrofitsImpl(
             )
             .build()
 
-    private fun createSslTrustManagers(): Array<TrustManager> =
-        TrustManagerFactory
+    private fun OkHttpClient.Builder.configureSsl(): OkHttpClient.Builder {
+        val sslContext = certificateProvider.createSslContext()
+        val trustManagers = TrustManagerFactory
             .getInstance(TrustManagerFactory.getDefaultAlgorithm())
             .apply { init(null as KeyStore?) }
             .trustManagers
 
-    private fun createSslContext(certificateProvider: CertificateProvider): SSLContext = SSLContext
-        .getInstance("TLS").apply {
-            init(
-                arrayOf(
-                    BitwardenX509ExtendedKeyManager(certificateProvider = certificateProvider),
-                ),
-                createSslTrustManagers(),
-                null,
-            )
-        }
-
-    private fun OkHttpClient.Builder.configureSsl(): OkHttpClient.Builder =
-        sslSocketFactory(
-            createSslContext(certificateProvider = certificateProvider).socketFactory,
-            createSslTrustManagers().first() as X509TrustManager,
+        return sslSocketFactory(
+            sslContext.socketFactory,
+            trustManagers.first() as X509TrustManager,
         )
+    }
 
     //endregion Helper properties and functions
 }
