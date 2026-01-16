@@ -2,6 +2,7 @@ package com.x8bit.bitwarden
 
 import android.app.ComponentCaller
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.util.isHorizonOS
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
@@ -85,6 +87,12 @@ class MainActivity : AppCompatActivity() {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
+
+        // Set landscape orientation for Horizon OS devices
+        if (isHorizonOS()) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         window.decorView.filterTouchesWhenObscured = true
         if (savedInstanceState == null) {
             mainViewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = intent))
