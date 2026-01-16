@@ -2506,7 +2506,11 @@ data class VaultAddEditState(
     val shouldShowMoveToOrganization: Boolean
         get() = !isAddItemMode &&
             !isCipherInCollection &&
-            hasOrganizations
+            hasOrganizations &&
+            (viewState as? ViewState.Content)
+                ?.common
+                ?.originalCipher
+                ?.archivedDate == null
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.

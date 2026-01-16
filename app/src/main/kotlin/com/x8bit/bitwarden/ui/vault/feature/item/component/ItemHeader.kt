@@ -145,12 +145,13 @@ fun LazyListScope.itemHeader(
                     .fillMaxWidth()
                     .animateItem()
                     .cardStyle(
-                        cardStyle = CardStyle.Middle(hasDivider = false),
+                        cardStyle = CardStyle.Bottom,
                         paddingVertical = 0.dp,
                         paddingHorizontal = 16.dp,
                     ),
             )
         }
+        return
     }
 
     // When the item does not belong to an Org and is not assigned to a collection or folder we
