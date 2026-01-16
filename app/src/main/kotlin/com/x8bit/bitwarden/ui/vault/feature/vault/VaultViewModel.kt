@@ -192,6 +192,7 @@ class VaultViewModel @Inject constructor(
                     delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
                 },
             snackbarRelayManager.getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_ARCHIVED,
                 SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_DELETED_SOFT,

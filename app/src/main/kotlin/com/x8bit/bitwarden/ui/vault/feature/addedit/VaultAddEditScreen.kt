@@ -190,6 +190,10 @@ fun VaultAddEditScreen(
             VaultAddEditEvent.NavigateToLearnMore -> {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
             }
+
+            is VaultAddEditEvent.NavigateToPremium -> {
+                intentManager.launchUri(uri = event.uri.toUri())
+            }
         }
     }
 
@@ -211,6 +215,14 @@ fun VaultAddEditScreen(
 
     val sshKeyItemTypeHandlers = remember(viewModel) {
         VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val archiveClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
+    }
+
+    val unarchiveClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick) }
     }
 
     val confirmDeleteClickAction = remember(viewModel) {
@@ -293,6 +305,9 @@ fun VaultAddEditScreen(
                     VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
                 )
             }
+        },
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
         },
     )
 
@@ -392,6 +407,16 @@ fun VaultAddEditScreen(
                                             !state.canAssociateToCollections
                                     },
                                 OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.archive_verb),
+                                    onClick = archiveClickAction,
+                                )
+                                    .takeIf { state.displayArchiveButton },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.unarchive),
+                                    onClick = unarchiveClickAction,
+                                )
+                                    .takeIf { state.displayUnarchiveButton },
+                                OverflowMenuItemData(
                                     text = stringResource(id = BitwardenString.delete),
                                     onClick = { pendingDeleteCipher = true },
                                 )
@@ -476,8 +501,21 @@ private fun VaultAddEditItemDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String) -> Unit,
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultAddEditState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialogState.label())
         }
