@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.appLinksScheme
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
@@ -23,6 +24,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForDuo
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -173,71 +175,15 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
-     * Navigates to the Duo webpage if appropriate, else processes the login.
+     * Navigates to the two-factor auth webpage if appropriate, else processes the login.
      */
-    @Suppress("LongMethod")
     private fun handleContinueButtonClick() {
         when (state.authMethod) {
             TwoFactorAuthMethod.DUO,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
-                -> {
-                val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
-                // The url should not be empty unless the environment is somehow not supported.
-                authUrl
-                    ?.let {
-                        sendEvent(
-                            event = TwoFactorLoginEvent.NavigateToDuo(
-                                uri = it.toUri(),
-                                scheme = "bitwarden",
-                            ),
-                        )
-                    }
-                    ?: mutableStateFlow.update {
-                        @Suppress("MaxLineLength")
-                        it.copy(
-                            dialogState = TwoFactorLoginState.DialogState.Error(
-                                title = BitwardenString.an_error_has_occurred.asText(),
-                                message = BitwardenString
-                                    .error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance
-                                    .asText(),
-                            ),
-                        )
-                    }
-            }
+                -> handleDuoContinueButtonClick()
 
-            TwoFactorAuthMethod.WEB_AUTH -> {
-                sendEvent(
-                    event = authRepository
-                        .twoFactorResponse
-                        ?.authMethodsData
-                        ?.get(TwoFactorAuthMethod.WEB_AUTH)
-                        ?.let {
-                            val uri = generateUriForWebAuth(
-                                baseUrl = environmentRepository
-                                    .environment
-                                    .environmentUrlData
-                                    .baseWebVaultUrlOrDefault,
-                                data = it,
-                                headerText = resourceManager.getString(
-                                    resId = BitwardenString.fido2_title,
-                                ),
-                                buttonText = resourceManager.getString(
-                                    resId = BitwardenString.fido2_authenticate_web_authn,
-                                ),
-                                returnButtonText = resourceManager.getString(
-                                    resId = BitwardenString.fido2_return_to_app,
-                                ),
-                            )
-                            TwoFactorLoginEvent.NavigateToWebAuth(uri = uri, scheme = "bitwarden")
-                        }
-                        ?: TwoFactorLoginEvent.ShowSnackbar(
-                            message = BitwardenString
-                                .there_was_an_error_starting_web_authn_two_factor_authentication
-                                .asText(),
-                        ),
-                )
-            }
-
+            TwoFactorAuthMethod.WEB_AUTH -> handleWebAuthnContinueButtonClick()
             TwoFactorAuthMethod.AUTHENTICATOR_APP,
             TwoFactorAuthMethod.EMAIL,
             TwoFactorAuthMethod.YUBI_KEY,
@@ -246,6 +192,73 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.RECOVERY_CODE,
                 -> initiateLogin()
         }
+    }
+
+    /**
+     * Navigates to the Duo webpage if appropriate, or displays the error dialog.
+     */
+    private fun handleDuoContinueButtonClick() {
+        // The url should not be empty unless the environment is somehow not supported.
+        authRepository
+            .twoFactorResponse
+            .twoFactorDuoAuthUrl
+            ?.let {
+                val environmentData = environmentRepository.environment.environmentUrlData
+                val appLinksScheme = environmentData.appLinksScheme
+                sendEvent(
+                    event = TwoFactorLoginEvent.NavigateToDuo(
+                        uri = generateUriForDuo(authUrl = it, appLinksScheme = appLinksScheme),
+                        scheme = appLinksScheme,
+                    ),
+                )
+            }
+            ?: mutableStateFlow.update {
+                @Suppress("MaxLineLength")
+                it.copy(
+                    dialogState = TwoFactorLoginState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance
+                            .asText(),
+                    ),
+                )
+            }
+    }
+
+    /**
+     * Navigates to the Web Authn webpage if appropriate, or displays the error snackbar.
+     */
+    private fun handleWebAuthnContinueButtonClick() {
+        sendEvent(
+            event = authRepository
+                .twoFactorResponse
+                ?.authMethodsData
+                ?.get(TwoFactorAuthMethod.WEB_AUTH)
+                ?.let {
+                    val environmentData = environmentRepository.environment.environmentUrlData
+                    val appLinksScheme = environmentData.appLinksScheme
+                    val uri = generateUriForWebAuth(
+                        baseUrl = environmentData.baseWebVaultUrlOrDefault,
+                        callbackScheme = appLinksScheme,
+                        data = it,
+                        headerText = resourceManager.getString(
+                            resId = BitwardenString.fido2_title,
+                        ),
+                        buttonText = resourceManager.getString(
+                            resId = BitwardenString.fido2_authenticate_web_authn,
+                        ),
+                        returnButtonText = resourceManager.getString(
+                            resId = BitwardenString.fido2_return_to_app,
+                        ),
+                    )
+                    TwoFactorLoginEvent.NavigateToWebAuth(uri = uri, scheme = appLinksScheme)
+                }
+                ?: TwoFactorLoginEvent.ShowSnackbar(
+                    message = BitwardenString
+                        .there_was_an_error_starting_web_authn_two_factor_authentication
+                        .asText(),
+                ),
+        )
     }
 
     /**

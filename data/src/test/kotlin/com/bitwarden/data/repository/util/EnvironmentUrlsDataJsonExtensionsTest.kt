@@ -336,6 +336,69 @@ class EnvironmentUrlsDataJsonExtensionsTest {
             DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.toBaseWebVaultImportUrl,
         )
     }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for US environment`() {
+        val expectedScheme = "https"
+
+        assertEquals(
+            expectedScheme,
+            EnvironmentUrlDataJson.DEFAULT_US.appLinksScheme,
+        )
+    }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for EU environment`() {
+        val expectedScheme = "https"
+
+        assertEquals(
+            expectedScheme,
+            EnvironmentUrlDataJson.DEFAULT_EU.appLinksScheme,
+        )
+    }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for custom environment`() {
+        val expectedScheme = "bitwarden"
+
+        assertEquals(
+            expectedScheme,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.appLinksScheme,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoAppLinksRedirectUrl should return the correct webauthn redirect url for US environment`() {
+        val expectedUrl = "https://bitwarden.com/sso-callback"
+
+        assertEquals(
+            expectedUrl,
+            EnvironmentUrlDataJson.DEFAULT_US.ssoAppLinksRedirectUrl,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoAppLinksRedirectUrl should return the correct webauthn redirect url for EU environment`() {
+        val expectedUrl = "https://bitwarden.eu/sso-callback"
+
+        assertEquals(
+            expectedUrl,
+            EnvironmentUrlDataJson.DEFAULT_EU.ssoAppLinksRedirectUrl,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoAppLinksRedirectUrl should return the correct webauthn redirect url for custom environment`() {
+        val expectedUrl = "bitwarden://sso-callback"
+
+        assertEquals(
+            expectedUrl,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.ssoAppLinksRedirectUrl,
+        )
+    }
 }
 
 private val DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA = EnvironmentUrlDataJson(
