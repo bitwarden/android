@@ -233,6 +233,8 @@ fun VaultItemSshKeyContent(
                     attachmentItem = attachmentItem,
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
+                    onAttachmentPreviewClick = vaultCommonItemTypeHandlers
+                        .onAttachmentPreviewClick,
                     cardStyle = attachments.toListItemCardStyle(index = index),
                 )
             }
