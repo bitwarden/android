@@ -48,6 +48,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.util.UUID
 
+@Suppress("LargeClass")
 class CipherViewExtensionsTest {
 
     private val resourceManager: ResourceManager = mockk {
@@ -72,6 +73,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -120,6 +122,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = true,
             totpData = null,
             resourceManager = resourceManager,
@@ -174,6 +177,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -235,6 +239,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = mockk { every { uri } returns totp },
             resourceManager = resourceManager,
@@ -293,6 +298,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = true,
             totpData = null,
             resourceManager = resourceManager,
@@ -330,6 +336,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -376,6 +383,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = true,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -399,6 +407,89 @@ class CipherViewExtensionsTest {
                     ),
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState with archived cipher should set archiveCalloutText`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(archivedDate = FIXED_CLOCK.instant())
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = true,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                    archiveCalloutText = BitwardenString.this_item_is_archived.asText(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState with archived cipher and no premium account should set archiveCalloutText`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(
+            deletedDate = FIXED_CLOCK.instant(),
+            archivedDate = FIXED_CLOCK.instant(),
+        )
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = false,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                    archiveCalloutText = BitwardenString
+                        .this_item_is_archived_saving_changes_will_restore_it_to_your_vault
+                        .asText(),
                 ),
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,

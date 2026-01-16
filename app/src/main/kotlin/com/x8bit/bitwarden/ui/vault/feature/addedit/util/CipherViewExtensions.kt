@@ -37,6 +37,7 @@ import java.util.UUID
 @Suppress("LongMethod", "LongParameterList")
 fun CipherView.toViewState(
     isClone: Boolean,
+    isPremium: Boolean,
     isIndividualVaultDisabled: Boolean,
     totpData: TotpData?,
     resourceManager: ResourceManager,
@@ -112,6 +113,15 @@ fun CipherView.toViewState(
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
+            archiveCalloutText = if (this.archivedDate != null && isPremium) {
+                BitwardenString.this_item_is_archived.asText()
+            } else if (this.archivedDate != null) {
+                BitwardenString
+                    .this_item_is_archived_saving_changes_will_restore_it_to_your_vault
+                    .asText()
+            } else {
+                null
+            },
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
