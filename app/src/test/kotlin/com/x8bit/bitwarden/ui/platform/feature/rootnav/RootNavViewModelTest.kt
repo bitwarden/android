@@ -1556,7 +1556,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.CredentialExchangeExport(
                 data = ImportCredentialsRequestData(
                     uri = mockk(),
-                    requestJson = "mockRequestJson",
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
                 ),
             )
         mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE)
@@ -1574,7 +1575,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.CredentialExchangeExport(
                 data = ImportCredentialsRequestData(
                     uri = mockk(),
-                    requestJson = "mockRequestJson",
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
                 ),
             )
         mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)

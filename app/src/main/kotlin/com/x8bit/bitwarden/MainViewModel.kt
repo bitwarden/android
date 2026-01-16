@@ -448,7 +448,8 @@ class MainViewModel @Inject constructor(
                     SpecialCircumstance.CredentialExchangeExport(
                         data = ImportCredentialsRequestData(
                             uri = importCredentialsRequest.uri,
-                            requestJson = importCredentialsRequest.request.requestJson,
+                            credentialTypes = importCredentialsRequest.request.credentialTypes,
+                            knownExtensions = importCredentialsRequest.request.knownExtensions,
                         ),
                     )
             }
