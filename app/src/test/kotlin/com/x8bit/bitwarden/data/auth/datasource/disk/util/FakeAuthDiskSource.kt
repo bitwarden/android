@@ -25,6 +25,9 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private val mutableShouldUseKeyConnectorFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableIsInMemoryPinEnvelopePresentFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean>>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
@@ -111,6 +114,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         userId: String,
     ): Flow<Boolean?> = getMutableShouldUseKeyConnectorFlow(userId = userId)
         .onSubscription { emit(getShouldUseKeyConnector(userId = userId)) }
+
+    override fun getIsInMemoryPinEnvelopePresentFlowMap(userId: String): Flow<Boolean> =
+        getMutableIsInMemoryPinEnvelopePresentFlowMap(userId)
+            .onSubscription {
+                emit(storedPinProtectedUserKeyEnvelopes[userId]?.first != null)
+            }
 
     override fun getShouldUseKeyConnector(
         userId: String,
@@ -363,6 +372,8 @@ class FakeAuthDiskSource : AuthDiskSource {
         inMemoryOnly: Boolean,
     ) {
         storedPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope to inMemoryOnly
+        getMutableIsInMemoryPinEnvelopePresentFlowMap(userId)
+            .tryEmit(pinProtectedUserKeyEnvelope != null)
         getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
     }
 
@@ -557,6 +568,20 @@ class FakeAuthDiskSource : AuthDiskSource {
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableShouldUseKeyConnectorFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableIsInMemoryPinEnvelopePresentFlowMap(
+        userId: String,
+    ): MutableSharedFlow<Boolean> =
+        mutableIsInMemoryPinEnvelopePresentFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableIsInMemoryPinEnvelopePresentFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean> =
+        mutableIsInMemoryPinEnvelopePresentFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 
