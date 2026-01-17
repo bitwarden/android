@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManagerImpl
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,6 +65,9 @@ object VaultManagerModule {
     fun provideVaultMigrationManager(
         authDiskSource: AuthDiskSource,
         vaultDiskSource: VaultDiskSource,
+        vaultRepository: VaultRepository,
+        vaultSdkSource: VaultSdkSource,
+        ciphersService: CiphersService,
         settingsDiskSource: SettingsDiskSource,
         vaultLockManager: VaultLockManager,
         policyManager: PolicyManager,
@@ -73,6 +77,9 @@ object VaultManagerModule {
     ): VaultMigrationManager = VaultMigrationManagerImpl(
         authDiskSource = authDiskSource,
         vaultDiskSource = vaultDiskSource,
+        vaultRepository = vaultRepository,
+        vaultSdkSource = vaultSdkSource,
+        ciphersService = ciphersService,
         settingsDiskSource = settingsDiskSource,
         vaultLockManager = vaultLockManager,
         policyManager = policyManager,

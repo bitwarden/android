@@ -2012,6 +2012,7 @@ class VaultAddEditViewModel @Inject constructor(
                     (cipherView
                         ?.toViewState(
                             isClone = isCloneMode,
+                            isPremium = currentAccount.isPremium,
                             isIndividualVaultDisabled = isIndividualVaultDisabled,
                             totpData = totpData,
                             resourceManager = resourceManager,
@@ -2591,6 +2592,7 @@ data class VaultAddEditState(
                 val hasOrganizations: Boolean = false,
                 val canDelete: Boolean = true,
                 val canAssignToCollections: Boolean = true,
+                val archiveCalloutText: Text? = null,
             ) : Parcelable {
 
                 /**

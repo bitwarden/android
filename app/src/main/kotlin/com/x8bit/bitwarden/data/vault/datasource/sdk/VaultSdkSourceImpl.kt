@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionId
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
@@ -449,6 +450,22 @@ class VaultSdkSourceImpl(
             .vault()
             .ciphers()
             .moveToOrganization(cipher = cipherView, organizationId = organizationId)
+    }
+
+    override suspend fun bulkMoveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherViews: List<CipherView>,
+        collectionIds: List<CollectionId>,
+    ): Result<List<EncryptionContext>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .vault()
+            .ciphers()
+            .prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
     }
 
     override suspend fun validatePassword(

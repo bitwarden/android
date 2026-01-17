@@ -143,6 +143,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = "An error has occurred".asText(),
                 message = "Failed to migrate items".asText(),
+                throwable = null,
             ),
         )
 
@@ -162,6 +163,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = "Failed to migrate items".asText(),
+                throwable = IllegalStateException("Missing property"),
             ),
         )
 

@@ -201,7 +201,7 @@ internal class CiphersServiceImpl(
 
     override suspend fun bulkShareCiphers(
         body: BulkShareCiphersJsonRequest,
-    ): Result<List<CipherMiniResponseJson>> =
+    ): Result<CipherMiniResponseJson> =
         ciphersApi
             .bulkShareCiphers(body = body)
             .toResult()

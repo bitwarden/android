@@ -1378,6 +1378,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1407,6 +1408,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1450,6 +1452,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1480,6 +1483,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1523,6 +1527,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1553,6 +1558,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1596,6 +1602,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1626,6 +1633,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1806,6 +1814,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1840,6 +1849,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             coVerify(exactly = 1) {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1877,6 +1887,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1945,6 +1956,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -2018,6 +2030,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -2088,6 +2101,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             cipherView.toViewState(
                 isClone = false,
+                isPremium = true,
                 isIndividualVaultDisabled = false,
                 totpData = null,
                 resourceManager = resourceManager,
@@ -2159,6 +2173,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,

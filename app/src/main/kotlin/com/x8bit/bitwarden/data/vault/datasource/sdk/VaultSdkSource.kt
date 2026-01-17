@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionId
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -388,6 +389,16 @@ interface VaultSdkSource {
         organizationId: String,
         cipherView: CipherView,
     ): Result<CipherView>
+
+    /**
+     * Re-encrypts the [cipherViews] with the organizations encryption key into the respective [collectionIds]
+     */
+    suspend fun bulkMoveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherViews: List<CipherView>,
+        collectionIds: List<CollectionId>,
+    ): Result<List<EncryptionContext>>
 
     /**
      * Validates that the given password matches the password hash.

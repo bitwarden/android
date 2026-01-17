@@ -99,7 +99,7 @@ internal interface CiphersApi {
     @PUT("ciphers/share")
     suspend fun bulkShareCiphers(
         @Body body: BulkShareCiphersJsonRequest,
-    ): NetworkResult<List<CipherMiniResponseJson>>
+    ): NetworkResult<CipherMiniResponseJson>
 
     /**
      * Shares an attachment.

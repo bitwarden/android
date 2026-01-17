@@ -3,20 +3,24 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -27,8 +31,10 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class MigrateToMyItemsViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
+    private val vaultMigrationManager: VaultMigrationManager,
     vaultSyncManager: VaultSyncManager,
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toMigrateToMyItemsArgs()
@@ -71,11 +77,28 @@ class MigrateToMyItemsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO: Replace `delay` with actual migration using `state.organizationId` (PM-28444).
-            delay(timeMillis = 100L)
+            val userId = authRepository.userStateFlow.value?.activeUserId
+            if (userId == null) {
+                trySendAction(
+                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                        result = MigratePersonalVaultResult.Failure(
+                            error = MissingPropertyException(
+                                propertyName = "UserId",
+                            ),
+                        ),
+                    ),
+                )
+                return@launch
+            }
+
+            val result = vaultMigrationManager.migratePersonalVault(
+                userId = userId,
+                organizationId = state.organizationId,
+            )
+
             trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = true,
+                    result = result,
                 ),
             )
         }
@@ -108,22 +131,28 @@ class MigrateToMyItemsViewModel @Inject constructor(
     private fun handleMigrateToMyItemsResultReceived(
         action: MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived,
     ) {
-        if (action.success) {
-            organizationEventManager.trackEvent(
-                event = OrganizationEvent.ItemOrganizationAccepted,
-            )
-            clearDialog()
-            sendEvent(MigrateToMyItemsEvent.NavigateToVault)
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = MigrateToMyItemsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                            it.organizationName,
-                        ),
-                    ),
+        when (val result = action.result) {
+            is MigratePersonalVaultResult.Success -> {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationAccepted,
                 )
+                clearDialog()
+                sendEvent(MigrateToMyItemsEvent.NavigateToVault)
+            }
+
+            is MigratePersonalVaultResult.Failure -> {
+                Timber.e(result.error, "Failed to migrate personal vault")
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = MigrateToMyItemsState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                                it.organizationName,
+                            ),
+                            throwable = result.error,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -161,6 +190,7 @@ data class MigrateToMyItemsState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable?,
         ) : DialogState()
     }
 }
@@ -218,8 +248,7 @@ sealed class MigrateToMyItemsAction {
          * The result of the migration has been received.
          */
         data class MigrateToMyItemsResultReceived(
-            // TODO: Replace `success` with actual migration result (PM-28444).
-            val success: Boolean,
+            val result: MigratePersonalVaultResult,
         ) : Internal()
     }
 }
