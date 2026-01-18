@@ -129,6 +129,8 @@
     <string name="no_text_sends">Não há Sends de texto no seu cofre.</string>
     <string name="no_file_sends">Não há Sends de arquivo no seu cofre.</string>
     <string name="no_ssh_keys">Não há chaves SSH no seu cofre.</string>
+    <string name="no_archives_title">O arquivo está vazio</string>
+    <string name="no_archives_message">Encha seu arquivo com itens que não quer ver nos resultados de buscas ou sugestões de preenchimento, mas que possa precisar algum dia.</string>
     <string name="new_text_send">Novo Send de texto</string>
     <string name="new_file_send">Novo Send de arquivo</string>
     <string name="no_username">Sem nome de usuário</string>
@@ -1172,4 +1174,21 @@ Quer trocar para esta conta?</string>
     <string name="why_am_i_seeing_this">Por que estou vendo isso?</string>
     <string name="migrating_items_to_x">Migrando itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
+    <string name="search_archive">Buscar no arquivo</string>
+    <string name="archive_noun">Arquivo</string>
+    <string name="archive_verb">Arquivo</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="archived">Arquivados</string>
+    <string name="hidden_items">Itens ocultos</string>
+    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
+    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
+    <string name="archiving">Archiving</string>
+    <string name="unarchiving">Unarchiving</string>
+    <string name="item_archived">Item archived</string>
+    <string name="item_unarchived">Item unarchived</string>
+    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
 </resources>
