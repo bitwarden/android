@@ -129,6 +129,8 @@
     <string name="no_text_sends">Não existem Sends de texto no seu cofre.</string>
     <string name="no_file_sends">Não existem Sends de ficheiro no seu cofre.</string>
     <string name="no_ssh_keys">Não existem chaves SSH no seu cofre.</string>
+    <string name="no_archives_title">O arquivo está vazio</string>
+    <string name="no_archives_message">Preencha o seu arquivo com itens que não pretende ver nos resultados de pesquisa nem nas sugestões de preenchimento automático, mas que poderá precisar no futuro.</string>
     <string name="new_text_send">Novo Send de texto</string>
     <string name="new_file_send">Novo Send de ficheiro</string>
     <string name="no_username">Sem nome de utilizador</string>
@@ -1172,4 +1174,21 @@ Pretende mudar para esta conta?</string>
     <string name="why_am_i_seeing_this">Porque é que estou a ver isto?</string>
     <string name="migrating_items_to_x">A migrar itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
+    <string name="search_archive">Procurar no arquivo</string>
+    <string name="archive_noun">Arquivo</string>
+    <string name="archive_verb">Arquivo</string>
+    <string name="unarchive">Desarquivar</string>
+    <string name="archived">Arquivado</string>
+    <string name="hidden_items">Itens ocultos</string>
+    <string name="unable_to_archive_selected_item">Não foi possível arquivar o item selecionado.</string>
+    <string name="unable_to_unarchive_selected_item">Não foi possível desarquivar o item selecionado.</string>
+    <string name="archiving">A arquivar</string>
+    <string name="unarchiving">A desarquivar</string>
+    <string name="item_archived">Item arquivado</string>
+    <string name="item_unarchived">Item desarquivado</string>
+    <string name="archive_unavailable">Arquivo indisponível</string>
+    <string name="archiving_items_is_a_premium_feature">O arquivo de itens é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
+    <string name="upgrade_to_premium">Atualizar para o Premium</string>
+    <string name="this_item_is_archived">Este item está arquivado.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Este item está arquivado. Guardar as alterações restaurá-lo-á no seu cofre.</string>
 </resources>

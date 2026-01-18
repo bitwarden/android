@@ -129,6 +129,8 @@
     <string name="no_text_sends">Er zijn geen Sends (tekst) in je kluis.</string>
     <string name="no_file_sends">Er zijn geen Sends (bestanden) in je kluis.</string>
     <string name="no_ssh_keys">Er zijn geen SSH-sleutels in je kluis.</string>
+    <string name="no_archives_title">Archief is leeg</string>
+    <string name="no_archives_message">Vul je archief in met items die je niet wilt zien in de zoekresultaten en suggesties voor automatisch invullen maar op een gegeven moment nodig kunt hebben.</string>
     <string name="new_text_send">Nieuwe Send (tekst)</string>
     <string name="new_file_send">Nieuwe Send (bestand)</string>
     <string name="no_username">Geen gebruikersnaam</string>
@@ -1172,4 +1174,21 @@ Wilt u naar dit account wisselen?</string>
     <string name="why_am_i_seeing_this">Waarom zie ik dit?</string>
     <string name="migrating_items_to_x">Items overdragen naar %s</string>
     <string name="failed_to_migrate_items_to_x">Overdracht naar %s mislukt</string>
+    <string name="search_archive">Search archive</string>
+    <string name="archive_noun">Archief</string>
+    <string name="archive_verb">Archief</string>
+    <string name="unarchive">Dearchiveren</string>
+    <string name="archived">Gearchiveerd</string>
+    <string name="hidden_items">Verborgen items</string>
+    <string name="unable_to_archive_selected_item">Kan het geselecteerde item niet archiveren.</string>
+    <string name="unable_to_unarchive_selected_item">Kan het geselecteerde item niet dearchiveren.</string>
+    <string name="archiving">Achiveren</string>
+    <string name="unarchiving">Dearchiveren</string>
+    <string name="item_archived">Item gearchiveerd</string>
+    <string name="item_unarchived">Item gedearchiveerd</string>
+    <string name="archive_unavailable">Archief niet beschikbaar</string>
+    <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
+    <string name="upgrade_to_premium">Naar Premium upgraden</string>
+    <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Dit item is gearchiveerd. Als je de wijzigingen opslaat, wordt het in je kluis hersteld.</string>
 </resources>
