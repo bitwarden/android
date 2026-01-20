@@ -1874,7 +1874,7 @@ data class VaultItemState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating they archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
