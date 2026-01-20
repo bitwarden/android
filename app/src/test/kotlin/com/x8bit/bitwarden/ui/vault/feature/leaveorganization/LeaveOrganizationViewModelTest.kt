@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.every
@@ -47,6 +48,10 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private val mockOrganizationEventManager: OrganizationEventManager = mockk {
         every { trackEvent(any()) } just runs
+    }
+
+    private val mockVaultMigrationManager: VaultMigrationManager = mockk {
+        every { clearMigrationState() } just runs
     }
 
     @BeforeEach
@@ -96,7 +101,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     @Test
     fun `LeaveOrganizationClick should show loading dialog`() = runTest {
         coEvery {
-            mockAuthRepository.leaveOrganization(any())
+            mockAuthRepository.revokeFromOrganization(any())
         } coAnswers {
             LeaveOrganizationResult.Success
         }
@@ -119,7 +124,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and navigate to vault`() =
         runTest {
             coEvery {
-                mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
+                mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
             } returns LeaveOrganizationResult.Success
 
             val viewModel = createViewModel()
@@ -129,6 +134,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             }
 
             verify {
+                mockVaultMigrationManager.clearMigrationState()
                 mockSnackbarRelayManager.sendSnackbarData(
                     relay = SnackbarRelay.LEFT_ORGANIZATION,
                     data = BitwardenSnackbarData(
@@ -145,7 +151,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     fun `LeaveOrganizationClick with Error should show error dialog`() = runTest {
         val error = Throwable("Test error")
         coEvery {
-            mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
+            mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
         } returns LeaveOrganizationResult.Error(error)
 
         val viewModel = createViewModel()
@@ -161,7 +167,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     @Test
     fun `DismissDialog should clear dialog state`() = runTest {
         coEvery {
-            mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
+            mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
         } returns LeaveOrganizationResult.Error(Throwable("Error"))
 
         val viewModel = createViewModel()
@@ -187,6 +193,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
             savedStateHandle = savedStateHandle,
         )
 
@@ -204,6 +211,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
             savedStateHandle = savedStateHandle,
         )
     }
