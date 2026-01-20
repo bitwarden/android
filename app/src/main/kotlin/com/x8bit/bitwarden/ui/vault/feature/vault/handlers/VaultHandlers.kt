@@ -50,6 +50,7 @@ data class VaultHandlers(
     val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
     val onEnabledThirdPartyAutofillClick: () -> Unit,
     val onDismissThirdPartyAutofillDialogClick: () -> Unit,
+    val upgradeToPremiumClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -142,6 +143,9 @@ data class VaultHandlers(
                 },
                 onKdfUpdatePasswordRepromptSubmit = {
                     viewModel.trySendAction(VaultAction.KdfUpdatePasswordRepromptSubmit(it))
+                },
+                upgradeToPremiumClick = {
+                    viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
                 },
             )
     }

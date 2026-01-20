@@ -863,6 +863,42 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Loading("Loading".asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText("Loading")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
     fun `syncing dialog should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()

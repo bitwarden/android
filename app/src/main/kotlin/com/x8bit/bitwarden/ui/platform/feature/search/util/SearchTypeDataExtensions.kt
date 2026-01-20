@@ -186,6 +186,7 @@ fun List<CipherListView>.toViewState(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -197,6 +198,7 @@ fun List<CipherListView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
+                    isArchiveEnabled = isArchiveEnabled,
                 )
                     .sortAlphabetically(),
             )
@@ -209,12 +211,14 @@ fun List<CipherListView>.toViewState(
         }
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -223,15 +227,18 @@ private fun List<CipherListView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isPremiumUser = isPremiumUser,
+            isArchiveEnabled = isArchiveEnabled,
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -247,6 +254,7 @@ private fun CipherListView.toDisplayItem(
         overflowOptions = toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
+            isArchiveEnabled = isArchiveEnabled,
         ),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,
