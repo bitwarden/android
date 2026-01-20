@@ -355,7 +355,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UnarchiveClick with UnarchiveCipherResult Success should emit send snackbar event and NavigateBack`() =
+        fun `UnarchiveClick with UnarchiveCipherResult Success should send snackbar event and NavigateBack`() =
             runTest {
                 val cipherView = createMockCipherView(number = 1, isArchived = true)
                 every {
