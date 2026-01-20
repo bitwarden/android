@@ -129,6 +129,8 @@
     <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
     <string name="no_file_sends">Du hast keine Datei-Sends in deinem Tresor.</string>
     <string name="no_ssh_keys">Es gibt keine SSH-Schlüssel in deinem Tresor.</string>
+    <string name="no_archives_title">Das Archiv ist leer</string>
+    <string name="no_archives_message">Fülle dein Archiv mit Einträgen, die du nicht in Suchergebnissen und Auto-Ausfüllen-Vorschlägen sehen möchtest, aber möglicherweise eines Tages benötigst.</string>
     <string name="new_text_send">Neues Text-Send</string>
     <string name="new_file_send">Neues Datei-Send</string>
     <string name="no_username">Kein Benutzername</string>
@@ -1171,4 +1173,21 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="why_am_i_seeing_this">Warum wird mir das angezeigt?</string>
     <string name="migrating_items_to_x">Einträge werden nach %s migriert</string>
     <string name="failed_to_migrate_items_to_x">Fehler beim Migrieren der Einträge zu %s</string>
+    <string name="search_archive">Archiv durchsuchen</string>
+    <string name="archive_noun">Archiv</string>
+    <string name="archive_verb">Archiv</string>
+    <string name="unarchive">Nicht mehr archivieren</string>
+    <string name="archived">Archiviert</string>
+    <string name="hidden_items">Versteckte Einträge</string>
+    <string name="unable_to_archive_selected_item">Der ausgewählte Eintrag konnte nicht archiviert werden.</string>
+    <string name="unable_to_unarchive_selected_item">Der ausgewählte Eintrag konnte nicht aus dem Archiv entfernt werden.</string>
+    <string name="archiving">Wird archiviert</string>
+    <string name="unarchiving">Wird aus dem Archiv entfernt</string>
+    <string name="item_archived">Eintrag archiviert</string>
+    <string name="item_unarchived">Eintrag nicht mehr archiviert</string>
+    <string name="archive_unavailable">Archiv nicht verfügbar</string>
+    <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
+    <string name="upgrade_to_premium">Auf Premium upgraden</string>
+    <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Dieser Eintrag ist archiviert. Wenn du Änderungen speicherst, wird er in deinem Tresor wiederhergestellt.</string>
 </resources>
