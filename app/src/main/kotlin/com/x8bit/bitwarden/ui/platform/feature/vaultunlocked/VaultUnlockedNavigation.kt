@@ -57,6 +57,8 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsS
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.leaveOrganizationDestination
+import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.navigateToLeaveOrganization
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsDestination
@@ -267,7 +269,17 @@ fun NavGraphBuilder.vaultUnlockedGraph(
 
         migrateToMyItemsDestination(
             onNavigateToVault = { navController.popBackStack() },
-            onNavigateToLeaveOrganization = { },
+            onNavigateToLeaveOrganization = { organizationId, organizationName ->
+                navController.navigateToLeaveOrganization(
+                    organizationId = organizationId,
+                    organizationName = organizationName,
+                )
+            },
+        )
+
+        leaveOrganizationDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVault = { navController.navigateUpToVaultUnlockedRoot() },
         )
     }
 }

@@ -192,7 +192,13 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked)
-            assertEquals(MigrateToMyItemsEvent.NavigateToLeaveOrganization, awaitItem())
+            assertEquals(
+                MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                    organizationId = ORGANIZATION_ID,
+                    organizationName = ORGANIZATION_NAME,
+                ),
+                awaitItem(),
+            )
         }
     }
 
