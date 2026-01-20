@@ -29,4 +29,10 @@ interface VaultMigrationManager {
         userId: String,
         organizationId: String,
     ): MigratePersonalVaultResult
+
+    /**
+     * Clears the migration state, setting it to [VaultMigrationData.NoMigrationRequired].
+     * This should be called when the user declines migration or leaves the organization.
+     */
+    fun clearMigrationState()
 }

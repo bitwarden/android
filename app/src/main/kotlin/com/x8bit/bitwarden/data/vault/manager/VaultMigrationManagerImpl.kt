@@ -212,8 +212,12 @@ class VaultMigrationManagerImpl(
             collectionIds = listOfNotNull(defaultUserCollection.id),
         ).getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
-        mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
+        clearMigrationState()
         return MigratePersonalVaultResult.Success
+    }
+
+    override fun clearMigrationState() {
+        mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
     }
 
     private fun getDefaultUserCollection(
