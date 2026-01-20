@@ -402,4 +402,11 @@ interface AuthRepository :
     suspend fun leaveOrganization(
         organizationId: String,
     ): LeaveOrganizationResult
+
+    /**
+     * Revokes self from the organization that matches the given [organizationId]
+     */
+    suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): LeaveOrganizationResult
 }

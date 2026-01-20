@@ -1393,6 +1393,12 @@ class AuthRepositoryImpl(
             onFailure = { LeaveOrganizationResult.Error(error = it) },
         )
 
+    override suspend fun revokeFromOrganization(organizationId: String): LeaveOrganizationResult =
+        organizationService.revokeFromOrganization(organizationId).fold(
+            onSuccess = { LeaveOrganizationResult.Success },
+            onFailure = { LeaveOrganizationResult.Error(error = it) },
+        )
+
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,
