@@ -105,7 +105,12 @@ class MigrateToMyItemsViewModel @Inject constructor(
     }
 
     private fun handleDeclineAndLeaveClicked() {
-        sendEvent(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
+        sendEvent(
+            MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                organizationId = state.organizationId,
+                organizationName = state.organizationName,
+            ),
+        )
     }
 
     private fun handleHelpLinkClicked() {
@@ -207,7 +212,10 @@ sealed class MigrateToMyItemsEvent {
     /**
      * Navigate to the leave organization flow after declining.
      */
-    data object NavigateToLeaveOrganization : MigrateToMyItemsEvent()
+    data class NavigateToLeaveOrganization(
+        val organizationId: String,
+        val organizationName: String,
+    ) : MigrateToMyItemsEvent()
 
     /**
      * Launch a URI in the browser or appropriate handler.

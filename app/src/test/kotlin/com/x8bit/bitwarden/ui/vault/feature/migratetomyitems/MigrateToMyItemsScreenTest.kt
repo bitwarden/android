@@ -48,7 +48,9 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
             MigrateToMyItemsScreen(
                 viewModel = viewModel,
                 onNavigateToVault = { onNavigateToVaultCalled = true },
-                onNavigateToLeaveOrganization = { onNavigateToLeaveOrganizationCalled = true },
+                onNavigateToLeaveOrganization = { _, _ ->
+                    onNavigateToLeaveOrganizationCalled = true
+                },
             )
         }
     }
@@ -107,7 +109,12 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToLeaveOrganization event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
+        mutableEventFlow.tryEmit(
+            MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                organizationId = "test-org-id",
+                organizationName = "Test Organization",
+            ),
+        )
         assertTrue(onNavigateToLeaveOrganizationCalled)
     }
 

@@ -71,7 +71,7 @@ fun NavController.navigateToMigrateToMyItems(
  */
 fun NavGraphBuilder.migrateToMyItemsDestination(
     onNavigateToVault: () -> Unit,
-    onNavigateToLeaveOrganization: () -> Unit,
+    onNavigateToLeaveOrganization: (organizationId: String, organizationName: String) -> Unit,
 ) {
     composableWithSlideTransitions<MigrateToMyItemsRoute> {
         MigrateToMyItemsScreen(

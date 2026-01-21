@@ -1164,6 +1164,26 @@ class VaultMigrationManagerTest {
             vaultRepository.migrateAttachments(userId, match { it.id == "mockId-2" })
         }
     }
+
+    @Test
+    fun `clearMigrationState should set migration state to NoMigrationRequired`() = runTest {
+        val vaultMigrationManager = createVaultMigrationManager()
+
+        // Initially state should be NoMigrationRequired
+        assertEquals(
+            VaultMigrationData.NoMigrationRequired,
+            vaultMigrationManager.vaultMigrationDataStateFlow.value,
+        )
+
+        // Call clearMigrationState (should remain NoMigrationRequired)
+        vaultMigrationManager.clearMigrationState()
+
+        // Verify state is still NoMigrationRequired
+        assertEquals(
+            VaultMigrationData.NoMigrationRequired,
+            vaultMigrationManager.vaultMigrationDataStateFlow.value,
+        )
+    }
 }
 
 private fun createVaultData(

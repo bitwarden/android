@@ -45,7 +45,7 @@ import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.handler.rememberMig
 @Composable
 fun MigrateToMyItemsScreen(
     onNavigateToVault: () -> Unit,
-    onNavigateToLeaveOrganization: () -> Unit,
+    onNavigateToLeaveOrganization: (organizationId: String, organizationName: String) -> Unit,
     viewModel: MigrateToMyItemsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -55,7 +55,9 @@ fun MigrateToMyItemsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             MigrateToMyItemsEvent.NavigateToVault -> onNavigateToVault()
-            MigrateToMyItemsEvent.NavigateToLeaveOrganization -> onNavigateToLeaveOrganization()
+            is MigrateToMyItemsEvent.NavigateToLeaveOrganization -> {
+                onNavigateToLeaveOrganization(event.organizationId, event.organizationName)
+            }
             is MigrateToMyItemsEvent.LaunchUri -> intentManager.launchUri(event.uri.toUri())
         }
     }

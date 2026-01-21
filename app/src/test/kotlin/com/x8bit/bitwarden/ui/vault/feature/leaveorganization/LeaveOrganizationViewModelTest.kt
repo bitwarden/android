@@ -11,13 +11,14 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.every
@@ -47,6 +48,10 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private val mockOrganizationEventManager: OrganizationEventManager = mockk {
         every { trackEvent(any()) } just runs
+    }
+
+    private val mockVaultMigrationManager: VaultMigrationManager = mockk {
+        every { clearMigrationState() } just runs
     }
 
     @BeforeEach
@@ -96,9 +101,9 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     @Test
     fun `LeaveOrganizationClick should show loading dialog`() = runTest {
         coEvery {
-            mockAuthRepository.leaveOrganization(any())
+            mockAuthRepository.revokeFromOrganization(any())
         } coAnswers {
-            LeaveOrganizationResult.Success
+            RevokeFromOrganizationResult.Success
         }
 
         val viewModel = createViewModel()
@@ -116,17 +121,14 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and navigate to vault`() =
+    fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and clear migration state`() =
         runTest {
             coEvery {
-                mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
-            } returns LeaveOrganizationResult.Success
+                mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+            } returns RevokeFromOrganizationResult.Success
 
             val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
-                assertEquals(LeaveOrganizationEvent.NavigateToVault, awaitItem())
-            }
+            viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
 
             verify {
                 mockSnackbarRelayManager.sendSnackbarData(
@@ -138,15 +140,18 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                 mockOrganizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationDeclined,
                 )
+                mockVaultMigrationManager.clearMigrationState()
             }
+
+            assertNull(viewModel.stateFlow.value.dialogState)
         }
 
     @Test
     fun `LeaveOrganizationClick with Error should show error dialog`() = runTest {
         val error = Throwable("Test error")
         coEvery {
-            mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
-        } returns LeaveOrganizationResult.Error(error)
+            mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+        } returns RevokeFromOrganizationResult.Error(error)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
@@ -161,8 +166,8 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     @Test
     fun `DismissDialog should clear dialog state`() = runTest {
         coEvery {
-            mockAuthRepository.leaveOrganization(ORGANIZATION_ID)
-        } returns LeaveOrganizationResult.Error(Throwable("Error"))
+            mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+        } returns RevokeFromOrganizationResult.Error(Throwable("Error"))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
@@ -187,6 +192,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
             savedStateHandle = savedStateHandle,
         )
 
@@ -204,6 +210,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
             savedStateHandle = savedStateHandle,
         )
     }

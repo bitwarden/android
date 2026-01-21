@@ -46,4 +46,11 @@ interface OrganizationService {
     suspend fun leaveOrganization(
         organizationId: String,
     ): Result<Unit>
+
+    /**
+     * Make a request to revoke self from the organization
+     */
+    suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): Result<Unit>
 }

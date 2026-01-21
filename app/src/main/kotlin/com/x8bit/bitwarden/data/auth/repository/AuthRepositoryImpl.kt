@@ -79,6 +79,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -1391,6 +1392,14 @@ class AuthRepositoryImpl(
         organizationService.leaveOrganization(organizationId).fold(
             onSuccess = { LeaveOrganizationResult.Success },
             onFailure = { LeaveOrganizationResult.Error(error = it) },
+        )
+
+    override suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): RevokeFromOrganizationResult =
+        organizationService.revokeFromOrganization(organizationId).fold(
+            onSuccess = { RevokeFromOrganizationResult.Success },
+            onFailure = { RevokeFromOrganizationResult.Error(error = it) },
         )
 
     @Suppress("CyclomaticComplexMethod")

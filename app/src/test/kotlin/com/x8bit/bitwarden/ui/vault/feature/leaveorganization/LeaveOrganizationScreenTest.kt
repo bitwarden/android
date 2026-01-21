@@ -24,7 +24,6 @@ import org.junit.Test
 class LeaveOrganizationScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToVaultCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<LeaveOrganizationEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -38,7 +37,6 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
         setContent {
             LeaveOrganizationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVault = { onNavigateToVaultCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -48,12 +46,6 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
     fun `NavigateBack event should call onNavigateBack`() {
         mutableEventFlow.tryEmit(LeaveOrganizationEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
-    }
-
-    @Test
-    fun `NavigateToVault event should call onNavigateToVault`() {
-        mutableEventFlow.tryEmit(LeaveOrganizationEvent.NavigateToVault)
-        assertTrue(onNavigateToVaultCalled)
     }
 
     @Test
