@@ -511,8 +511,8 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 isDeleted = false,
                 folderId = "mockId-1",
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
+                reprompt = CipherRepromptType.PASSWORD,
+            ),
             createMockCipherListView(
                 number = 2,
                 isDeleted = false,
@@ -579,6 +579,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -604,14 +605,14 @@ class VaultItemListingDataExtensionsTest {
                         number = 3,
                         cipherType = CipherType.SECURE_NOTE,
                         subtitle = "mockSubtitle-3",
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
                         subtitle = "mockSubtitle-4",
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                 ),
                 displayFolderList = emptyList(),
             ),
@@ -675,6 +676,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -761,6 +763,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -830,6 +833,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -853,6 +857,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -874,6 +879,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -896,6 +902,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -917,6 +924,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -938,6 +946,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -959,6 +968,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -982,6 +992,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -1007,6 +1018,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -1032,6 +1044,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -1058,6 +1071,7 @@ class VaultItemListingDataExtensionsTest {
                 },
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
     }
@@ -1312,6 +1326,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1359,6 +1374,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1438,6 +1454,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1487,6 +1504,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         // Card type

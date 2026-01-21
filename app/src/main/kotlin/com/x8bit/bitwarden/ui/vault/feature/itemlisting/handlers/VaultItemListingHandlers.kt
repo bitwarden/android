@@ -41,6 +41,7 @@ data class VaultItemListingHandlers(
     val vaultItemTypeSelected: (CreateVaultItemType) -> Unit,
     val trustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
     val shareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
+    val upgradeToPremiumClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -162,6 +163,9 @@ data class VaultItemListingHandlers(
                     viewModel.trySendAction(
                         VaultItemListingsAction.ShareCipherDecryptionErrorClick(it),
                     )
+                },
+                upgradeToPremiumClick = {
+                    viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
                 },
             )
     }

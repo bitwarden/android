@@ -77,6 +77,7 @@ fun VaultItemListingContent(
         is ListingItemOverflowAction.VaultAction.LaunchClick,
         is ListingItemOverflowAction.VaultAction.ViewClick,
         is ListingItemOverflowAction.VaultAction.CopyTotpClick,
+        is ListingItemOverflowAction.VaultAction.ArchiveClick,
         null,
             -> Unit
     }

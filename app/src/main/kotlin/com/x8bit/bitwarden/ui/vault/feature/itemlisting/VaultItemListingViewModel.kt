@@ -11,11 +11,13 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -56,6 +58,7 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -74,6 +77,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -147,6 +151,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -188,6 +193,7 @@ class VaultItemListingViewModel @Inject constructor(
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
+            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
         )
     },
 ) {
@@ -230,6 +236,12 @@ class VaultItemListingViewModel @Inject constructor(
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -351,6 +363,8 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
                 handleShareCipherDecryptionErrorClick(action)
             }
+
+            VaultItemListingsAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
         }
     }
 
@@ -650,6 +664,13 @@ class VaultItemListingViewModel @Inject constructor(
                 content = action.selectedCipherId,
             ),
         )
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        clearDialogState()
+        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+        sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -1342,6 +1363,34 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
+        if (!state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+            }
+            return
+        }
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = BitwardenString.archiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultItemListingsAction.Internal.ArchiveCipherReceive(
+                        result = vaultRepository.archiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleDismissDialogClick() {
         clearDialogState()
     }
@@ -1513,6 +1562,10 @@ class VaultItemListingViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ViewClick -> {
                 handleViewCipherClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
+                handleArchiveClick(overflowAction)
+            }
         }
     }
 
@@ -1599,6 +1652,14 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.CredentialOperationFailureReceive -> {
                 handleCredentialOperationFailureReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.ArchiveCipherReceive -> {
+                handleArchiveCipherReceive(action)
+            }
         }
     }
 
@@ -1610,6 +1671,37 @@ class VaultItemListingViewModel @Inject constructor(
             message = action.message,
             error = action.error,
         )
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+    }
+
+    private fun handleArchiveCipherReceive(
+        action: VaultItemListingsAction.Internal.ArchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is ArchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            ArchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                )
+            }
+        }
     }
 
     private fun handleDecryptCipherErrorReceive(
@@ -2483,6 +2575,7 @@ class VaultItemListingViewModel @Inject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                            isArchiveEnabled = state.isArchiveEnabled,
                         )
                     }
 
@@ -2690,6 +2783,7 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
+    val isArchiveEnabled: Boolean,
 ) {
     /**
      * Whether or not the add FAB should be shown.
@@ -2900,6 +2994,12 @@ data class VaultItemListingState(
             val message: Text,
             val selectedCipherId: String?,
         ) : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that archiving requires a premium account.
+         */
+        @Parcelize
+        data object ArchiveRequiresPremium : DialogState()
     }
 
     /**
@@ -3456,6 +3556,11 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
+     * Click the upgrade to premium button.
+     */
+    data object UpgradeToPremiumClick : VaultItemListingsAction()
+
+    /**
      * Click the refresh button.
      */
     data object SyncClick : VaultItemListingsAction()
@@ -3587,6 +3692,13 @@ sealed class VaultItemListingsAction {
         data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
 
         /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
          * Indicates a result for generating a verification code has been received.
          */
         data class GenerateTotpResultReceive(
@@ -3709,6 +3821,13 @@ sealed class VaultItemListingsAction {
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
         ) : Internal(), BackgroundEvent
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that an error occurred while decrypting a cipher.
