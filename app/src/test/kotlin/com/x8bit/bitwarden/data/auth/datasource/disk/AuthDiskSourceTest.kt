@@ -866,6 +866,31 @@ class AuthDiskSourceTest {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `storePinProtectedUserKeyEnvelope with inMemoryOnly true emits flow and stores only in memory`() =
+        runTest {
+            val userId = "mockUserId"
+            val envelope = "topSecretEnvelope"
+
+            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId).test {
+                assertNull(awaitItem())
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = userId,
+                    pinProtectedUserKeyEnvelope = envelope,
+                    inMemoryOnly = true,
+                )
+                assertEquals(envelope, awaitItem())
+                assertEquals(envelope, authDiskSource.getPinProtectedUserKeyEnvelope(userId))
+                assertNull(
+                    fakeSharedPreferences.getString(
+                        "pinKeyEncryptedUserKeyEnvelope_$userId",
+                        null,
+                    ),
+                )
+            }
+        }
+
+    @Test
     fun `getPinProtectedUserKeyEnvelope should pull from SharedPreferences`() {
         val pinProtectedUserKeyEnvelopeBaseKey =
             "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
