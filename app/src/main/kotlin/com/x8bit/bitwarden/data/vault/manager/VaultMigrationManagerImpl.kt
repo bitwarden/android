@@ -190,7 +190,7 @@ class VaultMigrationManagerImpl(
             .getOrElse { return MigratePersonalVaultResult.Failure(it) }
 
         if (personalCiphers.isEmpty()) {
-            mutableVaultMigrationDataStateFlow.update { VaultMigrationData.NoMigrationRequired }
+            clearMigrationState()
             return MigratePersonalVaultResult.Success
         }
 

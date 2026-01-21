@@ -10,7 +10,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
@@ -58,8 +58,8 @@ class LeaveOrganizationViewModel @Inject constructor(
             LeaveOrganizationAction.LeaveOrganizationClick -> handleLeaveOrganizationClick()
             LeaveOrganizationAction.HelpLinkClick -> handleHelpLinkClick()
             LeaveOrganizationAction.DismissDialog -> handleDismissDialog()
-            is LeaveOrganizationAction.Internal.LeaveOrganizationResultReceived -> {
-                handleLeaveOrganizationResultReceived(action)
+            is LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived -> {
+                handleRevokeFromOrganizationResultReceived(action)
             }
         }
     }
@@ -75,7 +75,7 @@ class LeaveOrganizationViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.revokeFromOrganization(state.organizationId)
             sendAction(
-                LeaveOrganizationAction.Internal.LeaveOrganizationResultReceived(result),
+                LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived(result),
             )
         }
     }
@@ -94,11 +94,11 @@ class LeaveOrganizationViewModel @Inject constructor(
         }
     }
 
-    private fun handleLeaveOrganizationResultReceived(
-        action: LeaveOrganizationAction.Internal.LeaveOrganizationResultReceived,
+    private fun handleRevokeFromOrganizationResultReceived(
+        action: LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived,
     ) {
         when (val result = action.result) {
-            is LeaveOrganizationResult.Success -> {
+            is RevokeFromOrganizationResult.Success -> {
                 vaultMigrationManager.clearMigrationState()
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationDeclined,
@@ -115,7 +115,7 @@ class LeaveOrganizationViewModel @Inject constructor(
                 sendEvent(LeaveOrganizationEvent.NavigateToVault)
             }
 
-            is LeaveOrganizationResult.Error -> {
+            is RevokeFromOrganizationResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LeaveOrganizationState.DialogState.Error(
@@ -209,10 +209,10 @@ sealed class LeaveOrganizationAction {
      */
     sealed class Internal : LeaveOrganizationAction() {
         /**
-         * Leave organization result received from repository.
+         * Revoke from organization result received from repository.
          */
-        data class LeaveOrganizationResultReceived(
-            val result: LeaveOrganizationResult,
+        data class RevokeFromOrganizationResultReceived(
+            val result: RevokeFromOrganizationResult,
         ) : Internal()
     }
 }

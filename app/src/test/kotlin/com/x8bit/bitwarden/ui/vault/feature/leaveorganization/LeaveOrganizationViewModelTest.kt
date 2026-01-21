@@ -11,8 +11,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
@@ -103,7 +103,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         coEvery {
             mockAuthRepository.revokeFromOrganization(any())
         } coAnswers {
-            LeaveOrganizationResult.Success
+            RevokeFromOrganizationResult.Success
         }
 
         val viewModel = createViewModel()
@@ -125,7 +125,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
-            } returns LeaveOrganizationResult.Success
+            } returns RevokeFromOrganizationResult.Success
 
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
@@ -152,7 +152,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         val error = Throwable("Test error")
         coEvery {
             mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
-        } returns LeaveOrganizationResult.Error(error)
+        } returns RevokeFromOrganizationResult.Error(error)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
@@ -168,7 +168,7 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     fun `DismissDialog should clear dialog state`() = runTest {
         coEvery {
             mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
-        } returns LeaveOrganizationResult.Error(Throwable("Error"))
+        } returns RevokeFromOrganizationResult.Error(Throwable("Error"))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
