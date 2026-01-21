@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -527,31 +526,19 @@ private val DEFAULT_USER_STATE = UserState(
                     number = 1,
                     id = "mockOrganizationId-1",
                     name = "mockOrganizationName-1",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
                 createMockOrganization(
                     number = 1,
                     id = "mockOrganizationId-2",
                     name = "mockOrganizationName-2",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
                 createMockOrganization(
                     number = 1,
                     id = "mockOrganizationId-3",
                     name = "mockOrganizationName-3",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             trustedDevice = null,

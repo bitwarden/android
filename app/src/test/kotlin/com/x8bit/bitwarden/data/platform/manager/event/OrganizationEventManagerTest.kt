@@ -6,11 +6,11 @@ import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
-import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.service.EventService
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
@@ -154,7 +154,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should do nothing if the active user has no organizations that use events`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-        val organization = createMockOrganizationNetwork(number = 1)
+        val organization = createMockOrganization(number = 1)
         every { authRepository.organizations } returns listOf(organization)
 
         organizationEventManager.trackEvent(
@@ -172,7 +172,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should do nothing if the cipher does not belong to an organization that uses events`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-        val organization = createMockOrganizationNetwork(number = 1, shouldUseEvents = true)
+        val organization = createMockOrganization(number = 1, shouldUseEvents = true)
         every { authRepository.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
@@ -191,7 +191,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should add the event to disk if the ciphers organization allows it`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-        val organization = createMockOrganizationNetwork(
+        val organization = createMockOrganization(
             number = 1,
             id = "mockOrganizationId-1",
             shouldUseEvents = true,

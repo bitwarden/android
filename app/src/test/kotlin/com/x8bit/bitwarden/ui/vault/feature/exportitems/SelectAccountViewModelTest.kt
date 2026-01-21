@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
@@ -170,11 +169,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                     number = 1,
                     id = organizationId,
                     name = "organizationName",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
         )
@@ -205,11 +200,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                         number = 1,
                         id = organizationId,
                         name = "organizationName",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
                 ),
             )

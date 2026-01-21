@@ -7,7 +7,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
@@ -344,11 +343,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 number = 1,
                                 id = "organiationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -434,11 +429,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 number = 1,
                                 id = "organizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -966,11 +957,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 number = 1,
                                 id = "testOrganizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),

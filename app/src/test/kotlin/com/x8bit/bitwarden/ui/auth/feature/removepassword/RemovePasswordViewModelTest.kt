@@ -291,13 +291,10 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     organizations = listOf(
         createMockOrganization(
             number = 1,
-            id = "mockId-1",
             name = ORGANIZATION_NAME,
-            shouldManageResetPassword = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
             keyConnectorUrl = KEY_CONNECTOR_URL,
-            userIsClaimedByOrganization = false,
         ),
     ),
     needsMasterPassword = false,

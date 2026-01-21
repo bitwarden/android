@@ -5,6 +5,7 @@ import com.bitwarden.network.model.OrganizationType
 /**
  * Creates a mock [Organization] with a given parameters.
  */
+@Suppress("LongParameterList")
 fun createMockOrganization(
     number: Int,
     id: String = "mockId-$number",
@@ -15,6 +16,7 @@ fun createMockOrganization(
     keyConnectorUrl: String? = "mockKeyConnectorUrl-$number",
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
+    shouldUseEvents: Boolean = false,
 ): Organization =
     Organization(
         id = id,
@@ -25,4 +27,5 @@ fun createMockOrganization(
         keyConnectorUrl = keyConnectorUrl,
         userIsClaimedByOrganization = userIsClaimedByOrganization,
         limitItemDeletion = limitItemDeletion,
+        shouldUseEvents = shouldUseEvents,
     )

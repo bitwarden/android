@@ -13,7 +13,6 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
@@ -5035,12 +5034,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             number = 1,
                             id = "organizationId",
                             name = "organizationName",
-                            shouldManageResetPassword = false,
-                            shouldUseKeyConnector = false,
-                            role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
-                            userIsClaimedByOrganization = false,
-                            limitItemDeletion = false,
                         ),
                     ),
                     isBiometricsEnabled = true,

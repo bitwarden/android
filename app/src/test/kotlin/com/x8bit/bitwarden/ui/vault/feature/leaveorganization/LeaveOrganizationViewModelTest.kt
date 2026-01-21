@@ -271,12 +271,8 @@ private val DEFAULT_ORGANIZATION = createMockOrganization(
     number = 1,
     id = ORGANIZATION_ID,
     name = ORGANIZATION_NAME,
-    shouldManageResetPassword = false,
-    shouldUseKeyConnector = false,
     role = OrganizationType.USER,
     keyConnectorUrl = null,
-    userIsClaimedByOrganization = false,
-    limitItemDeletion = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

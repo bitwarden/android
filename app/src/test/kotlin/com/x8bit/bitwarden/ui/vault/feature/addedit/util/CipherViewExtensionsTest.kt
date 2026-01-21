@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -706,11 +705,7 @@ class CipherViewExtensionsTest {
                     number = 1,
                     id = "mockOrganizationId-1",
                     name = "organizationName",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             isBiometricsEnabled = true,
