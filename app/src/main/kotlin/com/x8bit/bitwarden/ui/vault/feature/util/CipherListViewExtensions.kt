@@ -15,7 +15,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Creates the list of overflow actions to be displayed for a [CipherView].
  */
-@Suppress("LongMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 fun CipherListView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
@@ -90,6 +90,10 @@ fun CipherListView.toOverflowActions(
                 ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
                     .takeIf {
                         this.archivedDate == null && deletedDate == null && isArchiveEnabled
+                    },
+                ListingItemOverflowAction.VaultAction.UnarchiveClick(cipherId = cipherId)
+                    .takeIf {
+                        this.archivedDate != null && deletedDate == null && isArchiveEnabled
                     },
             )
         }

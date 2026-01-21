@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -674,6 +675,64 @@ class VaultViewModelTest : BaseViewModelTest() {
                 dialog = VaultState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenString.unable_to_archive_selected_item.asText(),
+                    error = error,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Success should emit a ShowSnackbar event`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+            } returns UnarchiveCipherResult.Success
+
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Failure should show generic error`() = runTest {
+        val cipherView = createMockCipherView(number = 1, clock = clock)
+
+        val viewModel = createViewModel()
+
+        val error = Throwable("Oh dang.")
+        coEvery {
+            vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+        } returns UnarchiveCipherResult.Error(error = error)
+
+        viewModel.trySendAction(
+            VaultAction.OverflowOptionClick(
+                overflowAction = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                    cipherId = "mockId-1",
+                ),
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.unable_to_unarchive_selected_item.asText(),
                     error = error,
                 ),
             ),

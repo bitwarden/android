@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -645,6 +646,10 @@ class VaultViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
                 handleArchiveClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
+            }
         }
     }
 
@@ -804,6 +809,28 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    private fun handleUnarchiveClick(action: ListingItemOverflowAction.VaultAction.UnarchiveClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepository.unarchiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun showCipherDecryptionErrorItemClick(itemId: String) {
         mutableStateFlow.update {
             it.copy(
@@ -872,6 +899,7 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
+            is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
         }
     }
 
@@ -947,6 +975,27 @@ class VaultViewModel @Inject constructor(
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_archived.asText()))
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(action: VaultAction.Internal.UnarchiveCipherReceive) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()))
             }
         }
     }
@@ -2197,6 +2246,13 @@ sealed class VaultAction {
          */
         data class ArchiveCipherReceive(
             val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
         ) : Internal()
     }
 }
