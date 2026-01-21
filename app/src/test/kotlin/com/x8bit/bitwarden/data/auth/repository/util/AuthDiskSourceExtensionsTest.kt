@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import app.cash.turbine.test
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -171,15 +171,15 @@ class AuthDiskSourceExtensionsTest {
             userState = userStateJson
             storeOrganizations(
                 userId = "userId1",
-                organizations = listOf(createMockOrganization(number = 1)),
+                organizations = listOf(createMockOrganizationNetwork(number = 1)),
             )
             storeOrganizations(
                 userId = "userId2",
-                organizations = listOf(createMockOrganization(number = 2)),
+                organizations = listOf(createMockOrganizationNetwork(number = 2)),
             )
             storeOrganizations(
                 userId = "userId3",
-                organizations = listOf(createMockOrganization(number = 3)),
+                organizations = listOf(createMockOrganizationNetwork(number = 3)),
             )
         }
 
@@ -355,7 +355,7 @@ class AuthDiskSourceExtensionsTest {
                 userState = userStateJson
                 storeOrganizations(
                     userId = "userId1",
-                    organizations = listOf(createMockOrganization(number = 1)),
+                    organizations = listOf(createMockOrganizationNetwork(number = 1)),
                 )
             }
 
@@ -390,7 +390,7 @@ class AuthDiskSourceExtensionsTest {
 
                 authDiskSource.storeOrganizations(
                     userId = "userId2",
-                    organizations = listOf(createMockOrganization(number = 2)),
+                    organizations = listOf(createMockOrganizationNetwork(number = 2)),
                 )
 
                 assertEquals(

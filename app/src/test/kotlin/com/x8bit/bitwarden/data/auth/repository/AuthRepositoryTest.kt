@@ -61,7 +61,7 @@ import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockAccountKeysJsonWithNullFields
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
@@ -7503,7 +7503,7 @@ class AuthRepositoryTest {
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val ORGANIZATION_IDENTIFIER = "organizationIdentifier"
-        private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
+        private val ORGANIZATIONS = listOf(createMockOrganizationNetwork(number = 0))
         private val ACCOUNT_KEYS = createMockAccountKeysJson(number = 1)
         private val ACCOUNT_KEYS_WITH_NULL_FIELDS =
             createMockAccountKeysJsonWithNullFields(number = 1)

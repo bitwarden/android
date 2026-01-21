@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -42,12 +42,12 @@ class PolicyManagerTest {
             val userStateJson = mockk<UserStateJson> {
                 every { activeUserId } returns USER_ID
             }
-            val organizationsOne = createMockOrganization(
+            val organizationsOne = createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = true,
             )
-            val organizationsTwo = createMockOrganization(
+            val organizationsTwo = createMockOrganizationNetwork(
                 number = 2,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -100,7 +100,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = true,
             ),
@@ -126,7 +126,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = false,
             ),
@@ -153,7 +153,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = false,
                 shouldUsePolicies = true,
@@ -177,7 +177,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -205,7 +205,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -252,7 +252,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -308,7 +308,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -338,7 +338,7 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -377,19 +377,19 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = true,
                 type = OrganizationType.USER,
             ),
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 2,
                 isEnabled = true,
                 shouldUsePolicies = true,
                 type = OrganizationType.USER,
             ),
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 3,
                 isEnabled = true,
                 shouldUsePolicies = true,
@@ -442,13 +442,13 @@ class PolicyManagerTest {
         every {
             authDiskSource.getOrganizations(USER_ID)
         } returns listOf(
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = false, // This org does NOT use policies
                 type = OrganizationType.USER,
             ),
-            createMockOrganization(
+            createMockOrganizationNetwork(
                 number = 2,
                 isEnabled = true,
                 shouldUsePolicies = true, // This org uses policies
