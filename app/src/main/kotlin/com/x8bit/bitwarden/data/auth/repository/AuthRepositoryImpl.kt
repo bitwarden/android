@@ -1394,8 +1394,9 @@ class AuthRepositoryImpl(
             onFailure = { LeaveOrganizationResult.Error(error = it) },
         )
 
-    @Suppress("MaxLineLength")
-    override suspend fun revokeFromOrganization(organizationId: String): RevokeFromOrganizationResult =
+    override suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): RevokeFromOrganizationResult =
         organizationService.revokeFromOrganization(organizationId).fold(
             onSuccess = { RevokeFromOrganizationResult.Success },
             onFailure = { RevokeFromOrganizationResult.Error(error = it) },
