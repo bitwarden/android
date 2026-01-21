@@ -1499,6 +1499,58 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `IntroducingArchive action card go to archive button click should send ArchiveClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Go to archive")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+        }
+    }
+
+    @Test
+    fun `IntroducingArchive action card dismiss button click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
@@ -2458,6 +2510,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
     isArchiveEnabled = true,
+    isIntroducingArchiveActionCardDismissed = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

@@ -163,6 +163,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private var mutableFlightRecorderDataFlow =
         MutableStateFlow(FlightRecorderDataSet(data = emptySet()))
+    private var mutableIntroducingArchiveActionCardDismissedFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
@@ -171,6 +172,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { flightRecorderDataFlow } returns mutableFlightRecorderDataFlow
         every { dismissFlightRecorderBanner() } just runs
         every { isAutofillEnabledStateFlow } returns MutableStateFlow(false)
+        every { dismissIntroducingArchiveActionCard() } just runs
+        every {
+            getIntroducingArchiveActionCardDismissedFlow()
+        } returns mutableIntroducingArchiveActionCardDismissedFlow
     }
 
     private val vaultRepository: VaultRepository =
@@ -233,6 +238,38 @@ class VaultViewModelTest : BaseViewModelTest() {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         }
     }
+
+    @Test
+    fun `IntroducingArchiveActionCardDismissedFlow updates should update the state accordingly`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableIntroducingArchiveActionCardDismissedFlow.value = true
+                assertEquals(
+                    DEFAULT_STATE.copy(isIntroducingArchiveActionCardDismissed = true),
+                    awaitItem(),
+                )
+                mutableIntroducingArchiveActionCardDismissedFlow.value = false
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissActionCardClick with IntroducingArchive should call dismissIntroducingArchiveActionCard`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
 
     @Test
     fun `UserState updates with a null value should do nothing`() {
@@ -3463,4 +3500,5 @@ private fun createMockVaultState(
         hasShownDecryptionFailureAlert = false,
         restrictItemTypesPolicyOrgIds = emptyList(),
         isArchiveEnabled = true,
+        isIntroducingArchiveActionCardDismissed = false,
     )
