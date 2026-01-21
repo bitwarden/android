@@ -121,20 +121,16 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and navigate to vault`() =
+    fun `LeaveOrganizationClick with Success should track ItemOrganizationDeclined event, send snackbar, and clear migration state`() =
         runTest {
             coEvery {
                 mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
             } returns RevokeFromOrganizationResult.Success
 
             val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
-                assertEquals(LeaveOrganizationEvent.NavigateToVault, awaitItem())
-            }
+            viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
 
             verify {
-                mockVaultMigrationManager.clearMigrationState()
                 mockSnackbarRelayManager.sendSnackbarData(
                     relay = SnackbarRelay.LEFT_ORGANIZATION,
                     data = BitwardenSnackbarData(
@@ -144,7 +140,10 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                 mockOrganizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationDeclined,
                 )
+                mockVaultMigrationManager.clearMigrationState()
             }
+
+            assertNull(viewModel.stateFlow.value.dialogState)
         }
 
     @Test

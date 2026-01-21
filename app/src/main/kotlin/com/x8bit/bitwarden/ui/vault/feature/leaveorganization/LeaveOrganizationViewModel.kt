@@ -99,20 +99,19 @@ class LeaveOrganizationViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is RevokeFromOrganizationResult.Success -> {
-                vaultMigrationManager.clearMigrationState()
-                organizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined,
-                )
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
                 snackbarRelayManager.sendSnackbarData(
                     relay = SnackbarRelay.LEFT_ORGANIZATION,
                     data = BitwardenSnackbarData(
                         message = BitwardenString.you_left_the_organization.asText(),
                     ),
                 )
-                sendEvent(LeaveOrganizationEvent.NavigateToVault)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationDeclined,
+                )
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
+                vaultMigrationManager.clearMigrationState()
             }
 
             is RevokeFromOrganizationResult.Error -> {
@@ -168,11 +167,6 @@ sealed class LeaveOrganizationEvent {
      * Navigate back to previous screen.
      */
     data object NavigateBack : LeaveOrganizationEvent()
-
-    /**
-     * Navigate to the Vault screen.
-     */
-    data object NavigateToVault : LeaveOrganizationEvent()
 
     /**
      * Launch external URI.

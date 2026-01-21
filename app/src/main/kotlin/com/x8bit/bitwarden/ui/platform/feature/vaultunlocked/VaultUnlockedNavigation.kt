@@ -279,7 +279,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
 
         leaveOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVault = { navController.navigateUpToVaultUnlockedRoot() },
         )
     }
 }

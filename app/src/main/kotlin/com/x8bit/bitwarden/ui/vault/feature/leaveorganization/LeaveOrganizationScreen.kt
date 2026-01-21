@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handlers.rememberL
 @Composable
 fun LeaveOrganizationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVault: () -> Unit,
     viewModel: LeaveOrganizationViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -60,7 +59,6 @@ fun LeaveOrganizationScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LeaveOrganizationEvent.NavigateBack -> onNavigateBack()
-            LeaveOrganizationEvent.NavigateToVault -> onNavigateToVault()
             is LeaveOrganizationEvent.LaunchUri -> {
                 intentManager.launchUri(event.uri.toUri())
             }
