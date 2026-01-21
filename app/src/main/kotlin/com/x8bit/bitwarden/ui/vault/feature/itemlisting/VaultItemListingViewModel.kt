@@ -81,6 +81,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -1391,6 +1392,30 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleUnarchiveClick(
+        action: ListingItemOverflowAction.VaultAction.UnarchiveClick,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultItemListingsAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepository.unarchiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleDismissDialogClick() {
         clearDialogState()
     }
@@ -1566,6 +1591,10 @@ class VaultItemListingViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
                 handleArchiveClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
+            }
         }
     }
 
@@ -1660,6 +1689,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.ArchiveCipherReceive -> {
                 handleArchiveCipherReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.UnarchiveCipherReceive -> {
+                handleUnarchiveCipherReceive(action)
+            }
         }
     }
 
@@ -1699,6 +1732,31 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     VaultItemListingEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(
+        action: VaultItemListingsAction.Internal.UnarchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
                 )
             }
         }
@@ -3696,6 +3754,13 @@ sealed class VaultItemListingsAction {
          */
         data class ArchiveCipherReceive(
             val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
         ) : Internal()
 
         /**

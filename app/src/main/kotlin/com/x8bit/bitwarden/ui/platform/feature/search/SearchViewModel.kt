@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -379,6 +380,10 @@ class SearchViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
                 handleArchiveClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
+            }
         }
     }
 
@@ -447,6 +452,28 @@ class SearchViewModel @Inject constructor(
                 sendAction(
                     SearchAction.Internal.ArchiveCipherReceive(
                         result = vaultRepo.archiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick(action: ListingItemOverflowAction.VaultAction.UnarchiveClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            decryptCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    SearchAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepo.unarchiveCipher(
                             cipherId = action.cipherId,
                             cipherView = it,
                         ),
@@ -616,6 +643,7 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
+            is SearchAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
         }
     }
 
@@ -656,6 +684,27 @@ class SearchViewModel @Inject constructor(
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_archived.asText()))
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(action: SearchAction.Internal.UnarchiveCipherReceive) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()))
             }
         }
     }
@@ -1424,6 +1473,13 @@ sealed class SearchAction {
          */
         data class ArchiveCipherReceive(
             val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
         ) : Internal()
 
         /**

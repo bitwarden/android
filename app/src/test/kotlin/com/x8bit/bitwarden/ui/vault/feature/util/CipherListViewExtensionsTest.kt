@@ -425,6 +425,33 @@ class CipherListViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return Unarchive action when cipher is archived and not deleted`() {
+        val loginListView = createMockLoginListView(
+            number = 1,
+            username = "",
+            uris = emptyList(),
+            totp = null,
+        )
+        val cipher = createMockCipherListView(
+            number = 1,
+            id = id,
+            isArchived = true,
+            isDeleted = false,
+            edit = true,
+            type = CipherListViewType.Login(loginListView),
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = true,
+            isPremiumUser = false,
+            isArchiveEnabled = true,
+        )
+
+        assertTrue(result.contains(ListingItemOverflowAction.VaultAction.UnarchiveClick(id)))
+    }
+
     @Test
     fun `toOverflowActions should not return Archive action when Archive is disabled`() {
         val loginListView = createMockLoginListView(
