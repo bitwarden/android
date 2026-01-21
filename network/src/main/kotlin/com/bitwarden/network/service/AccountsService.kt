@@ -1,5 +1,6 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
@@ -26,7 +27,10 @@ interface AccountsService {
     /**
      * Creates a new account's keys.
      */
-    suspend fun createAccountKeys(publicKey: String, encryptedPrivateKey: String): Result<Unit>
+    suspend fun createAccountKeys(
+        publicKey: String,
+        encryptedPrivateKey: String,
+    ): Result<CreateAccountKeysResponseJson>
 
     /**
      * Make delete account request.
