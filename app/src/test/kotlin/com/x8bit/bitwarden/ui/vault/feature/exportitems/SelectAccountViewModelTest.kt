@@ -13,8 +13,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -166,7 +166,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         val accountInOrg = DEFAULT_ACCOUNT.copy(
             isExportable = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = organizationId,
                     name = "organizationName",
                     shouldManageResetPassword = false,
@@ -200,7 +201,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             val organizationId = "mockOrganizationId-1"
             val accountInOrg = DEFAULT_ACCOUNT.copy(
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = organizationId,
                         name = "organizationName",
                         shouldManageResetPassword = false,

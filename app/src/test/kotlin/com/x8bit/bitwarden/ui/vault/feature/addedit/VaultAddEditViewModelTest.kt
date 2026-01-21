@@ -33,11 +33,11 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
@@ -5031,7 +5031,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isVaultUnlocked = false,
                     needsPasswordReset = false,
                     organizations = listOf(
-                        Organization(
+                        createMockOrganization(
+                            number = 1,
                             id = "organizationId",
                             name = "organizationName",
                             shouldManageResetPassword = false,

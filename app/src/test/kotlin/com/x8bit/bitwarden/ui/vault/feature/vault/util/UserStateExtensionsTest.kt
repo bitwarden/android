@@ -5,8 +5,8 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -76,7 +76,8 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -106,7 +107,8 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -140,7 +142,8 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -174,7 +177,8 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -223,7 +227,8 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId",
                         name = "organizationName",
                         shouldManageResetPassword = false,
@@ -270,7 +275,8 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId",
                         name = "organizationName",
                         shouldManageResetPassword = false,
@@ -321,7 +327,8 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -403,7 +410,8 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-B",
                         name = "Organization B",
                         shouldUseKeyConnector = false,
@@ -412,7 +420,8 @@ class UserStateExtensionsTest {
                         keyConnectorUrl = null,
                         userIsClaimedByOrganization = false,
                     ),
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-A",
                         name = "Organization A",
                         shouldManageResetPassword = false,
@@ -466,7 +475,8 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-B",
                         name = "Organization B",
                         shouldManageResetPassword = false,
@@ -475,7 +485,8 @@ class UserStateExtensionsTest {
                         keyConnectorUrl = null,
                         userIsClaimedByOrganization = false,
                     ),
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-A",
                         name = "Organization A",
                         shouldManageResetPassword = false,

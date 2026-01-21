@@ -5,8 +5,8 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -102,7 +102,8 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 needsMasterPassword = false,
                 organizations = if (hasOrganizations) {
                     listOf(
-                        Organization(
+                        createMockOrganization(
+                            number = 1,
                             id = "mockOrganizationId-1",
                             name = "mockOrganizationName-1",
                             shouldManageResetPassword = false,
@@ -111,7 +112,8 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             keyConnectorUrl = null,
                             userIsClaimedByOrganization = false,
                         ),
-                        Organization(
+                        createMockOrganization(
+                            number = 1,
                             id = "mockOrganizationId-2",
                             name = "mockOrganizationName-2",
                             shouldManageResetPassword = false,
@@ -120,7 +122,8 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             keyConnectorUrl = null,
                             userIsClaimedByOrganization = false,
                         ),
-                        Organization(
+                        createMockOrganization(
+                            number = 1,
                             id = "mockOrganizationId-3",
                             name = "mockOrganizationName-3",
                             shouldManageResetPassword = false,

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import app.cash.turbine.test
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -9,11 +8,11 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -188,43 +187,19 @@ class AuthDiskSourceExtensionsTest {
                 UserOrganizations(
                     userId = "userId1",
                     organizations = listOf(
-                        Organization(
-                            id = "mockId-1",
-                            name = "mockName-1",
-                            shouldManageResetPassword = false,
-                            shouldUseKeyConnector = false,
-                            role = OrganizationType.ADMIN,
-                            keyConnectorUrl = "mockKeyConnectorUrl-1",
-                            userIsClaimedByOrganization = false,
-                        ),
+                        createMockOrganization(number = 1),
                     ),
                 ),
                 UserOrganizations(
                     userId = "userId2",
                     organizations = listOf(
-                        Organization(
-                            id = "mockId-2",
-                            name = "mockName-2",
-                            shouldManageResetPassword = false,
-                            shouldUseKeyConnector = false,
-                            role = OrganizationType.ADMIN,
-                            keyConnectorUrl = "mockKeyConnectorUrl-2",
-                            userIsClaimedByOrganization = false,
-                        ),
+                        createMockOrganization(number = 2),
                     ),
                 ),
                 UserOrganizations(
                     userId = "userId3",
                     organizations = listOf(
-                        Organization(
-                            id = "mockId-3",
-                            name = "mockName-3",
-                            shouldManageResetPassword = false,
-                            shouldUseKeyConnector = false,
-                            role = OrganizationType.ADMIN,
-                            keyConnectorUrl = "mockKeyConnectorUrl-3",
-                            userIsClaimedByOrganization = false,
-                        ),
+                        createMockOrganization(number = 3),
                     ),
                 ),
             ),
@@ -365,15 +340,7 @@ class AuthDiskSourceExtensionsTest {
                         UserOrganizations(
                             userId = "userId1",
                             organizations = listOf(
-                                Organization(
-                                    id = "mockId-1",
-                                    name = "mockName-1",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
-                                    keyConnectorUrl = "mockKeyConnectorUrl-1",
-                                    userIsClaimedByOrganization = false,
-                                ),
+                                createMockOrganization(number = 1),
                             ),
                         ),
                         UserOrganizations(
@@ -398,29 +365,13 @@ class AuthDiskSourceExtensionsTest {
                         UserOrganizations(
                             userId = "userId1",
                             organizations = listOf(
-                                Organization(
-                                    id = "mockId-1",
-                                    name = "mockName-1",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
-                                    keyConnectorUrl = "mockKeyConnectorUrl-1",
-                                    userIsClaimedByOrganization = false,
-                                ),
+                                createMockOrganization(number = 1),
                             ),
                         ),
                         UserOrganizations(
                             userId = "userId2",
                             organizations = listOf(
-                                Organization(
-                                    id = "mockId-2",
-                                    name = "mockName-2",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
-                                    keyConnectorUrl = "mockKeyConnectorUrl-2",
-                                    userIsClaimedByOrganization = false,
-                                ),
+                                createMockOrganization(number = 2),
                             ),
                         ),
                         UserOrganizations(

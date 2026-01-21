@@ -19,9 +19,9 @@ import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -702,7 +702,8 @@ class CipherViewExtensionsTest {
             isVaultUnlocked = false,
             needsPasswordReset = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-1",
                     name = "organizationName",
                     shouldManageResetPassword = false,

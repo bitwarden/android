@@ -17,12 +17,12 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -373,7 +373,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -441,7 +442,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -488,7 +490,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -552,7 +555,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -600,7 +604,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -672,7 +677,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -720,7 +726,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -792,7 +799,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -840,7 +848,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -912,7 +921,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -959,7 +969,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 // Key part of the result #1, this is true or the role is owner or
@@ -1036,7 +1047,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = true,
@@ -1247,7 +1259,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 // Key part of the result #1, this is true or the role is owner or
@@ -1323,7 +1336,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -1371,7 +1385,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -1445,7 +1460,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -1493,7 +1509,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -1561,7 +1578,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
@@ -1617,7 +1635,8 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 shouldManageResetPassword = false,
@@ -1685,7 +1704,8 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = false,
