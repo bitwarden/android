@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -39,6 +40,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
+    actionCard: VaultItemListingState.ActionCardState?,
     policyDisablesSend: Boolean,
     showAddTotpBanner: Boolean,
     vaultItemListingHandlers: VaultItemListingHandlers,
@@ -99,14 +101,29 @@ fun VaultItemListingContent(
     LazyColumn(
         modifier = modifier,
     ) {
+        actionCard?.let {
+            item(key = "action_card") {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                ActionCard(
+                    actionCardState = it,
+                    vaultItemListingHandlers = vaultItemListingHandlers,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .animateItem(),
+                )
+                Spacer(modifier = Modifier.height(height = 12.dp))
+            }
+        }
+
         if (showAddTotpBanner) {
-            item {
+            item(key = "auth_key_callout") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
                     text = stringResource(
                         id = BitwardenString.add_this_authenticator_key_to_a_login,
                     ),
                     modifier = Modifier
+                        .animateItem()
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
@@ -114,11 +131,12 @@ fun VaultItemListingContent(
         }
 
         if (policyDisablesSend) {
-            item {
+            item(key = "sends_disabled_callout") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = BitwardenString.send_disabled_warning),
                     modifier = Modifier
+                        .animateItem()
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
@@ -126,12 +144,13 @@ fun VaultItemListingContent(
         }
 
         if (state.displayCollectionList.isNotEmpty()) {
-            item {
+            item(key = "collections_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.collections),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -139,7 +158,10 @@ fun VaultItemListingContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            itemsIndexed(state.displayCollectionList) { index, collection ->
+            itemsIndexed(
+                items = state.displayCollectionList,
+                key = { _, collection -> collection.id },
+            ) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
@@ -149,6 +171,7 @@ fun VaultItemListingContent(
                         .displayCollectionList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
@@ -156,12 +179,13 @@ fun VaultItemListingContent(
         }
 
         if (state.displayFolderList.isNotEmpty()) {
-            item {
+            item(key = "folders_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.folders),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -169,7 +193,10 @@ fun VaultItemListingContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            itemsIndexed(state.displayFolderList) { index, folder ->
+            itemsIndexed(
+                items = state.displayFolderList,
+                key = { _, folder -> folder.id },
+            ) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
                     label = folder.name,
@@ -179,6 +206,7 @@ fun VaultItemListingContent(
                         .displayFolderList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
@@ -186,19 +214,23 @@ fun VaultItemListingContent(
         }
 
         if (state.displayItemList.isNotEmpty()) {
-            item {
+            item(key = "items_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.items),
                     supportingLabel = state.displayItemList.size.toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            itemsIndexed(state.displayItemList) { index, it ->
+            itemsIndexed(
+                items = state.displayItemList,
+                key = { _, item -> item.id },
+            ) { index, it ->
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
@@ -260,15 +292,38 @@ fun VaultItemListingContent(
                         .displayItemList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
             }
         }
 
-        item {
+        item(key = "bottom_padding") {
             Spacer(modifier = Modifier.height(88.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+@Composable
+private fun ActionCard(
+    actionCardState: VaultItemListingState.ActionCardState,
+    vaultItemListingHandlers: VaultItemListingHandlers,
+    modifier: Modifier = Modifier,
+) {
+    when (actionCardState) {
+        VaultItemListingState.ActionCardState.PremiumSubscription -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.your_premium_subscription_ended),
+                cardSubtitle = stringResource(
+                    id = BitwardenString
+                        .to_regain_access_to_your_archive_restart_your_premium_subscription,
+                ),
+                actionText = stringResource(id = BitwardenString.restart_premium),
+                onActionClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                modifier = modifier,
+            )
         }
     }
 }
