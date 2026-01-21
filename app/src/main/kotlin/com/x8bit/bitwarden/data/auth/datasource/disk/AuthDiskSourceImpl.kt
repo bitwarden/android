@@ -373,7 +373,10 @@ class AuthDiskSourceImpl(
         inMemoryOnly: Boolean,
     ) {
         inMemoryPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope
-        if (inMemoryOnly) return
+        if (inMemoryOnly) {
+            getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
+            return
+        }
         putString(
             key = PIN_PROTECTED_USER_KEY_KEY_ENVELOPE.appendIdentifier(userId),
             value = pinProtectedUserKeyEnvelope,
