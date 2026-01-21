@@ -3,11 +3,11 @@ package com.bitwarden.network.model
 import java.time.ZonedDateTime
 
 /**
- * Create a mock [CipherMiniResponseJson] for testing.
+ * Create a mock [CipherMiniResponseJson.CipherMiniResponse] for testing.
  */
 fun createMockCipherMiniResponse(
     number: Int,
-): CipherMiniResponseJson = CipherMiniResponseJson(
+): CipherMiniResponseJson.CipherMiniResponse = CipherMiniResponseJson.CipherMiniResponse(
     id = "mockId-$number",
     organizationId = "mockOrgId-$number",
     type = CipherTypeJson.LOGIN,
@@ -20,4 +20,13 @@ fun createMockCipherMiniResponse(
     reprompt = CipherRepromptTypeJson.NONE,
     key = "mockKey-$number",
     archivedDate = null,
+)
+
+/**
+ * Create a mock [CipherMiniResponseJson] wrapper for testing.
+ */
+fun createMockCipherMiniResponseJson(
+    vararg numbers: Int,
+): CipherMiniResponseJson = CipherMiniResponseJson(
+    cipherMiniResponse = numbers.map { createMockCipherMiniResponse(it) },
 )

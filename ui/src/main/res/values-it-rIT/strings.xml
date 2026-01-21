@@ -129,6 +129,8 @@
     <string name="no_text_sends">Nessun testo Send nella cassaforte</string>
     <string name="no_file_sends">Nessun file Send nella cassaforte</string>
     <string name="no_ssh_keys">Nessuna chiave SSH nella cassaforte</string>
+    <string name="no_archives_title">Archive is empty</string>
+    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">Crea un testo Send</string>
     <string name="new_file_send">Crea un file Send</string>
     <string name="no_username">Nessun nome utente</string>
@@ -164,7 +166,7 @@
     <string name="no_items_for_vault">Nessun elemento corrispondente a \'%1$s\'</string>
     <string name="search_for_a_login_or_add_a_new_login">Cerca o crea un login</string>
     <string name="disabled">Disabilitato</string>
-    <string name="bitwarden_autofill_service_alert2">Puoi aggiungere facilmente nuove credenziali di login alla tua cassaforte dal servizio di riempimento automatico. Scopri di più sul riempimento automatico nel menu Impostazioni.</string>
+    <string name="bitwarden_autofill_service_alert2">Il modo più semplice per aggiungere nuove credenziali di accesso alla tua cassaforte è usare il servizio di riempimento automatico Bitwarden. Scopri di più su come usarlo nelle impostazioni.</string>
     <string name="autofill_noun">Riempimento automatico</string>
     <string name="autofill_verb">Riempimento automatico</string>
     <string name="autofill_or_view">Seleziona l\'azione</string>
@@ -885,13 +887,13 @@ Vuoi passare a questo account?</string>
     <string name="coachmark_3_of_3">3 di 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Devi aggiungere un indirizzo web per usare l\'auto-riempimento per accedere a questo account.</string>
     <string name="learn_about_new_logins">Scopri sui nuovi accessi</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ti guideremo attraverso le funzioni chiave per aggiungere un nuovo accesso.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ti guideremo attraverso le funzionalità chiave per aggiungere un nuovo login.</string>
     <string name="explore_the_generator">Esplora il generatore</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Scopri di più sulla generazione di credenziali di accesso sicure con un tour guidato.</string>
     <string name="import_client_certificate">Importa certificato client</string>
     <string name="enter_the_client_certificate_password_and_alias">Inserire la parola d\'accesso del certificato client, e l\'alias desiderato per questo certificato.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Usa il generatore per creare parole d\'accesso sicure, espressioni d\'accesso e nomi utente.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Usa il generatore per creare password sicure, frasi d\'accesso e nomi utente.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Le espressioni d\'accesso sono parole d\'accesso forti che sono spesso più facili da ricordare e digitare rispetto alle parole d\'accesso casuali. Sono utili per accedere ad account dove AutoFill non è disponibile, come un servizio di streaming sulla TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">I nomi utente unici aggiungono un ulteriore livello di sicurezza e possono aiutare a impedire agli hacker di trovare i tuoi account.</string>
     <string name="coachmark_1_of_6">1 DI 6</string>
@@ -900,8 +902,8 @@ Vuoi passare a questo account?</string>
     <string name="coachmark_4_of_6">4 DI 6</string>
     <string name="coachmark_5_of_6">5 DI 6</string>
     <string name="coachmark_6_of_6">6 DI 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per modificare la parola d\'accesso per soddisfare i requisiti del sito web del tuo account.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Dopo aver salvato la tua nuova parola d\'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua password ai requisiti del sito web del tuo account.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Dopo aver salvato la tua nuova password su Bitwarden, ricorda di aggiornarla sul sito web del tuo account.</string>
     <string name="verify_your_identity">Verifica la tua identità</string>
     <string name="error_loading_certificate">Errore caricamento certificato</string>
     <string name="certificate_alias">Alias del certificato</string>
@@ -1171,4 +1173,21 @@ Vuoi passare a questo account?</string>
     <string name="why_am_i_seeing_this">Perché vedo questo avviso?</string>
     <string name="migrating_items_to_x">Migrazione degli elementi in %s</string>
     <string name="failed_to_migrate_items_to_x">Migrazione degli elementi in %s non riuscita</string>
+    <string name="search_archive">Cerca nell\'archivio</string>
+    <string name="archive_noun">Archivio</string>
+    <string name="archive_verb">Archivio</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="archived">Archived</string>
+    <string name="hidden_items">Elementi nascosti</string>
+    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
+    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
+    <string name="archiving">Archiving</string>
+    <string name="unarchiving">Unarchiving</string>
+    <string name="item_archived">Item archived</string>
+    <string name="item_unarchived">Item unarchived</string>
+    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
 </resources>
