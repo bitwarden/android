@@ -111,6 +111,7 @@ class LeaveOrganizationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
+                // Navigation will be handled on RootNavViewModel by migration state change
                 vaultMigrationManager.clearMigrationState()
             }
 
