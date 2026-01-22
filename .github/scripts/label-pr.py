@@ -4,21 +4,22 @@
 Label pull requests based on changed file paths and PR title patterns (conventional commit format).
 
 Usage:
-    python label-pr.py <pr-number> [-a|--add|-r|--replace] [-d|--dry-run] [-c|--config CONFIG]
+    python label-pr.py <pr-number> <pr-labels> [-a|--add|-r|--replace] [-d|--dry-run] [-c|--config CONFIG]
 
 Arguments:
     pr-number: The pull request number
+    pr-labels: Current PR labels as JSON array string
     -a, --add: Add labels without removing existing ones (default)
     -r, --replace: Replace all existing labels
     -d, --dry-run: Run without actually applying labels
     -c, --config: Path to JSON config file (default: .github/label-pr.json)
 
 Examples:
-    python label-pr.py 1234
-    python label-pr.py 1234 -a
-    python label-pr.py 1234 --replace
-    python label-pr.py 1234 -r -d
-    python label-pr.py 1234 --config custom-config.json
+    python label-pr.py 1234 '[]'
+    python label-pr.py 1234 '[{"name":"label1"}]' -a
+    python label-pr.py 1234 '[{"name":"label1"}]' --replace
+    python label-pr.py 1234 '[{"name":"label1"}]' -r -d
+    python label-pr.py 1234 '[]' --config custom-config.json
 """
 
 import argparse
