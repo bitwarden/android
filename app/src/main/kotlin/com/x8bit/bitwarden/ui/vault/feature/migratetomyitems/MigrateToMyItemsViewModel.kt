@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.error.MissingPropertyException
+import com.bitwarden.network.util.isNoConnectionError
+import com.bitwarden.network.util.isTimeoutError
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -147,15 +149,24 @@ class MigrateToMyItemsViewModel @Inject constructor(
 
             is MigratePersonalVaultResult.Failure -> {
                 Timber.e(result.error, "Failed to migrate personal vault")
+                val isNetworkOrTimeoutError = result.error.isNoConnectionError() ||
+                    result.error.isTimeoutError()
+
                 mutableStateFlow.update {
                     it.copy(
                         dialog = MigrateToMyItemsState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                                it.organizationName,
-                            ),
+                            message = if (isNetworkOrTimeoutError) {
+                                BitwardenString.internet_connection_required_message.asText()
+                            } else {
+                                BitwardenString.failed_to_migrate_items_to_x.asText(
+                                    it.organizationName,
+                                )
+                            },
                             throwable = result.error,
                         ),
+                        // Clear migration state when user dismisses network error dialog
+                        shouldClearMigrationOnDismiss = isNetworkOrTimeoutError,
                     )
                 }
             }
@@ -163,7 +174,15 @@ class MigrateToMyItemsViewModel @Inject constructor(
     }
 
     private fun clearDialog() {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        if (state.shouldClearMigrationOnDismiss) {
+            vaultMigrationManager.clearMigrationState()
+        }
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+                shouldClearMigrationOnDismiss = false,
+            )
+        }
     }
 }
 
@@ -175,6 +194,7 @@ data class MigrateToMyItemsState(
     val organizationId: String,
     val organizationName: String,
     val dialog: DialogState?,
+    val shouldClearMigrationOnDismiss: Boolean = false,
 ) : Parcelable {
 
     /**

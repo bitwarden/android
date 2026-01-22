@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.network.util.isNoConnectionError
+import com.bitwarden.network.util.isTimeoutError
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -89,8 +91,14 @@ class LeaveOrganizationViewModel @Inject constructor(
     }
 
     private fun handleDismissDialog() {
+        if (state.shouldClearMigrationOnDismiss) {
+            vaultMigrationManager.clearMigrationState()
+        }
         mutableStateFlow.update {
-            it.copy(dialogState = null)
+            it.copy(
+                dialogState = null,
+                shouldClearMigrationOnDismiss = false,
+            )
         }
     }
 
@@ -116,12 +124,21 @@ class LeaveOrganizationViewModel @Inject constructor(
             }
 
             is RevokeFromOrganizationResult.Error -> {
+                val isNetworkError = result.error.isNoConnectionError() ||
+                    result.error.isTimeoutError()
+
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LeaveOrganizationState.DialogState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = if (isNetworkError) {
+                                BitwardenString.internet_connection_required_message.asText()
+                            } else {
+                                BitwardenString.generic_error_message.asText()
+                            },
                             error = result.error,
                         ),
+                        // Clear migration state when user dismisses network error dialog
+                        shouldClearMigrationOnDismiss = isNetworkError,
                     )
                 }
             }
@@ -137,6 +154,7 @@ data class LeaveOrganizationState(
     val organizationId: String,
     val organizationName: String,
     val dialogState: DialogState?,
+    val shouldClearMigrationOnDismiss: Boolean = false,
 ) : Parcelable {
 
     /**

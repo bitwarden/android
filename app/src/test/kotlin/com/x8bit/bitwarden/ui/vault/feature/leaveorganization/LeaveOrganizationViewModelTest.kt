@@ -33,8 +33,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.UnknownHostException
 
 class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
@@ -163,6 +165,29 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         assertEquals(error, dialogState.error)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LeaveOrganizationClick with network error should show internet connection required message and set shouldClearMigrationOnDismiss`() =
+        runTest {
+            val error = UnknownHostException("No network")
+            coEvery {
+                mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+            } returns RevokeFromOrganizationResult.Error(error)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
+
+            val state = viewModel.stateFlow.value
+            assert(state.dialogState is LeaveOrganizationState.DialogState.Error)
+            val dialogState = state.dialogState as LeaveOrganizationState.DialogState.Error
+            assertEquals(
+                BitwardenString.internet_connection_required_message.asText(),
+                dialogState.message,
+            )
+            assertEquals(error, dialogState.error)
+            assertTrue(state.shouldClearMigrationOnDismiss)
+        }
+
     @Test
     fun `DismissDialog should clear dialog state`() = runTest {
         coEvery {
@@ -178,6 +203,47 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
         assertNull(viewModel.stateFlow.value.dialogState)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissDialog should clear migration state when shouldClearMigrationOnDismiss is true`() =
+        runTest {
+            val error = UnknownHostException("No network")
+            coEvery {
+                mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+            } returns RevokeFromOrganizationResult.Error(error)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
+
+            assertTrue(viewModel.stateFlow.value.shouldClearMigrationOnDismiss)
+
+            viewModel.trySendAction(LeaveOrganizationAction.DismissDialog)
+
+            verify { mockVaultMigrationManager.clearMigrationState() }
+            assertNull(viewModel.stateFlow.value.dialogState)
+            assertEquals(false, viewModel.stateFlow.value.shouldClearMigrationOnDismiss)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissDialog should not clear migration state when shouldClearMigrationOnDismiss is false`() =
+        runTest {
+            val error = Throwable("Generic error")
+            coEvery {
+                mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
+            } returns RevokeFromOrganizationResult.Error(error)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
+
+            assertEquals(false, viewModel.stateFlow.value.shouldClearMigrationOnDismiss)
+
+            viewModel.trySendAction(LeaveOrganizationAction.DismissDialog)
+
+            verify(exactly = 0) { mockVaultMigrationManager.clearMigrationState() }
+            assertNull(viewModel.stateFlow.value.dialogState)
+        }
 
     @Test
     fun `state should be restored from SavedStateHandle`() {
