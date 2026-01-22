@@ -4,21 +4,22 @@
 Label pull requests based on changed file paths and PR title patterns (conventional commit format).
 
 Usage:
-    python label-pr.py <pr-number> [-a|--add|-r|--replace] [-d|--dry-run] [-c|--config CONFIG]
+    python label-pr.py <pr-number> <pr-labels> [-a|--add|-r|--replace] [-d|--dry-run] [-c|--config CONFIG]
 
 Arguments:
     pr-number: The pull request number
+    pr-labels: Current PR labels as JSON array string
     -a, --add: Add labels without removing existing ones (default)
     -r, --replace: Replace all existing labels
     -d, --dry-run: Run without actually applying labels
     -c, --config: Path to JSON config file (default: .github/label-pr.json)
 
 Examples:
-    python label-pr.py 1234
-    python label-pr.py 1234 -a
-    python label-pr.py 1234 --replace
-    python label-pr.py 1234 -r -d
-    python label-pr.py 1234 --config custom-config.json
+    python label-pr.py 1234 '[]'
+    python label-pr.py 1234 '[{"name":"label1"}]' -a
+    python label-pr.py 1234 '[{"name":"label1"}]' --replace
+    python label-pr.py 1234 '[{"name":"label1"}]' -r -d
+    python label-pr.py 1234 '[]' --config custom-config.json
 """
 
 import argparse
@@ -42,9 +43,6 @@ def load_config_json(config_file: str) -> dict:
             print(f"✅ Loaded config from: {config_file}")
 
             valid_config = True
-            if not config.get("catch_all_label"):
-                print("❌ Missing 'catch_all_label' in config file")
-                valid_config = False
             if not config.get("title_patterns"):
                 print("❌ Missing 'title_patterns' in config file")
                 valid_config = False
@@ -155,6 +153,27 @@ def label_title(pr_title: str, title_patterns: dict) -> list[str]:
 
     return list(labels_to_apply)
 
+def parse_pr_labels(pr_labels_str: str) -> list[str]:
+    """Parse PR labels from JSON array string."""
+    try:
+        labels = json.loads(pr_labels_str)
+        if not isinstance(labels, list):
+            print("::warning::Failed to parse PR labels: not a list")
+            return []
+        return [item.get("name") for item in labels if item.get("name")]
+    except (json.JSONDecodeError, TypeError) as e:
+        print(f"::error::Error parsing PR labels: {e}")
+        return []
+
+def get_preserved_labels(pr_labels_str: str) -> list[str]:
+    """Get existing PR labels that should be preserved (exclude app: and t: labels)."""
+    existing_labels = parse_pr_labels(pr_labels_str)
+    print(f"🔍 Parsed PR labels: {existing_labels}")
+    preserved_labels = [label for label in existing_labels if not (label.startswith("app:") or label.startswith("t:"))]
+    if preserved_labels:
+        print(f"🔍 Preserving existing labels: {', '.join(preserved_labels)}")
+    return preserved_labels
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -163,6 +182,11 @@ def parse_args():
     parser.add_argument(
         "pr_number",
         help="The pull request number"
+    )
+
+    parser.add_argument(
+        "pr_labels",
+        help="Current PR labels (JSON array)"
     )
 
     mode_group = parser.add_mutually_exclusive_group()
@@ -194,7 +218,6 @@ def parse_args():
 def main():
     args = parse_args()
     config = load_config_json(args.config)
-    CATCH_ALL_LABEL = config["catch_all_label"]
     LABEL_TITLE_PATTERNS = config["title_patterns"]
     LABEL_PATH_PATTERNS = config["path_patterns"]
 
@@ -216,16 +239,18 @@ def main():
     title_labels = label_title(pr_title, LABEL_TITLE_PATTERNS)
     all_labels = set(filepath_labels + title_labels)
 
-    if not any(label.startswith("t:") for label in all_labels):
-        all_labels.add(CATCH_ALL_LABEL)
-
     if all_labels:
+        print("--------------------------------")
         labels_str = ', '.join(sorted(all_labels))
         if mode == "add":
             print(f"::notice::🏷️ Adding labels: {labels_str}")
             if not args.dry_run:
                 gh_add_labels(pr_number, list(all_labels))
         else:
+            preserved_labels = get_preserved_labels(args.pr_labels)
+            if preserved_labels:
+                all_labels.update(preserved_labels)
+                labels_str = ', '.join(sorted(all_labels))
             print(f"::notice::🏷️ Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
