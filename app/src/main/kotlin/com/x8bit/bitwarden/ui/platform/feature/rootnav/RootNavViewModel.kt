@@ -117,22 +117,8 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-                specialCircumstance is SpecialCircumstance.AutofillSave -> {
-                RootNavState.VaultUnlockedForAutofillSave(
-                    autofillSaveItem = specialCircumstance.autofillSaveItem,
-                )
-            }
-
-            userState.activeAccount.isVaultUnlocked &&
-                specialCircumstance is SpecialCircumstance.AutofillSelection -> {
-                RootNavState.VaultUnlockedForAutofillSelection(
-                    activeUserId = userState.activeAccount.userId,
-                    type = specialCircumstance.autofillSelectionData.type,
-                )
-            }
-
-            userState.activeAccount.isVaultUnlocked &&
-                action.vaultMigrationData is VaultMigrationData.MigrationRequired -> {
+                action.vaultMigrationData is VaultMigrationData.MigrationRequired &&
+                shouldShowVaultMigration(specialCircumstance) -> {
                 RootNavState.MigrateToMyItems(
                     organizationId = action.vaultMigrationData.organizationId,
                     organizationName = action.vaultMigrationData.organizationName,
@@ -141,6 +127,19 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
+                    is SpecialCircumstance.AutofillSave -> {
+                        RootNavState.VaultUnlockedForAutofillSave(
+                            autofillSaveItem = specialCircumstance.autofillSaveItem,
+                        )
+                    }
+
+                    is SpecialCircumstance.AutofillSelection -> {
+                        RootNavState.VaultUnlockedForAutofillSelection(
+                            activeUserId = userState.activeAccount.userId,
+                            type = specialCircumstance.autofillSelectionData.type,
+                        )
+                    }
+
                     is SpecialCircumstance.AddTotpLoginItem -> {
                         RootNavState.VaultUnlockedForNewTotp(
                             activeUserId = userState.activeAccount.userId,
@@ -223,8 +222,6 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.CredentialExchangeExport,
                     is SpecialCircumstance.RegistrationEvent,
-                    is SpecialCircumstance.AutofillSave,
-                    is SpecialCircumstance.AutofillSelection,
                         -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
@@ -281,6 +278,21 @@ class RootNavViewModel @Inject constructor(
         val userIsNotUsingKeyConnector = !this.activeAccount.isUsingKeyConnector
         return isLoggedInUsingSso && usesKeyConnectorAndNotAdmin && userIsNotUsingKeyConnector
     }
+
+    /**
+     * Determines whether the vault migration screen should be shown based on the special
+     * circumstance. Returns true for circumstances that are shortcuts not blocking user from
+     * essential operations like autofill, passkeys or Credential Manager
+     */
+    private fun shouldShowVaultMigration(specialCircumstance: SpecialCircumstance?): Boolean =
+        specialCircumstance == null ||
+            specialCircumstance is SpecialCircumstance.ShareNewSend ||
+            specialCircumstance is SpecialCircumstance.SearchShortcut ||
+            specialCircumstance is SpecialCircumstance.SendShortcut ||
+            specialCircumstance is SpecialCircumstance.VerificationCodeShortcut ||
+            specialCircumstance is SpecialCircumstance.VaultShortcut ||
+            specialCircumstance is SpecialCircumstance.GeneratorShortcut ||
+            specialCircumstance is SpecialCircumstance.AccountSecurityShortcut
 }
 
 /**

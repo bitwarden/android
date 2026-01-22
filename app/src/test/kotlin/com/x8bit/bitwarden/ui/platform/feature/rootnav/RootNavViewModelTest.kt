@@ -1635,6 +1635,86 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with AutofillSave circumstance should prioritize AutofillSave over migration`() {
+        val autofillSaveItem: AutofillSaveItem = mockk()
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AutofillSave(autofillSaveItem = autofillSaveItem)
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForAutofillSave(autofillSaveItem = autofillSaveItem),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with AutofillSelection circumstance should prioritize AutofillSelection over migration`() {
+        val autofillSelectionData = AutofillSelectionData(
+            type = AutofillSelectionData.Type.LOGIN,
+            framework = AutofillSelectionData.Framework.AUTOFILL,
+            uri = "uri",
+        )
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = autofillSelectionData,
+                shouldFinishWhenComplete = true,
+            )
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForAutofillSelection(
+                activeUserId = "activeUserId",
+                type = AutofillSelectionData.Type.LOGIN,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with ShareNewSend shortcut should show migration screen`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.ShareNewSend(
+                data = mockk<ShareData.TextSend>(),
+                shouldFinishWhenComplete = true,
+            )
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems(
+                organizationId = "mockOrganizationId-1",
+                organizationName = "organizationName",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with VaultShortcut should show migration screen`() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems(
+                organizationId = "mockOrganizationId-1",
+                organizationName = "organizationName",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): RootNavViewModel =
         RootNavViewModel(
             authRepository = authRepository,
