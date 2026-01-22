@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.variant.impl.VariantOutputImpl
 import com.google.protobuf.gradle.proto
 import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -32,7 +32,9 @@ val ciProperties = Properties().apply {
 
 android {
     namespace = "com.bitwarden.authenticator"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     room {
         schemaDirectory("$projectDir/schemas")
@@ -40,8 +42,12 @@ android {
 
     defaultConfig {
         applicationId = "com.bitwarden.authenticator"
-        minSdk = libs.versions.minSdkBwa.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
+        targetSdk {
+            version = release(libs.versions.targetSdk.get().toInt())
+        }
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
@@ -109,30 +115,33 @@ android {
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
     }
-    applicationVariants.all {
+    androidComponents.onVariants { appVariant ->
         val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
-        outputs
-            .mapNotNull { it as? BaseVariantOutputImpl }
+        val applicationId = appVariant.applicationId.get()
+        val variantName = appVariant.name
+        val renameTaskName = "rename${variantName.capitalize()}AabFiles"
+        val buildType = appVariant.buildType
+        appVariant
+            .outputs
+            .mapNotNull { it as? VariantOutputImpl }
             .forEach { output ->
                 // Set the APK output filename.
-                output.outputFileName = "$applicationId.apk"
+                output.outputFileName.set("$applicationId.apk")
 
-                val variantName = name
-                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
                 tasks.register(renameTaskName) {
                     group = "build"
                     description = "Renames the bundle files for $variantName variant"
                     doLast {
                         renameFile(
-                            "$bundlesDir/$variantName/$namespace-${buildType.name}.aab",
+                            "$bundlesDir/$variantName/$namespace-$buildType.aab",
                             "$applicationId.aab",
                         )
                     }
                 }
                 // Force renaming task to execute after the variant is built.
                 tasks
-                    .getByName("bundle${variantName.capitalize()}")
-                    .finalizedBy(renameTaskName)
+                    .matching { it.name == "bundle${variantName.capitalize()}" }
+                    .forEach { it.finalizedBy(renameTaskName) }
             }
     }
     compileOptions {

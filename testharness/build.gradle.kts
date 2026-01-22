@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.variant.impl.VariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -13,13 +13,19 @@ plugins {
 
 android {
     namespace = "com.bitwarden.testharness"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
         applicationId = "com.bitwarden.testharness"
         // API 28 - CredentialManager with Play Services support
-        minSdk = libs.versions.minSdkBwa.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
+        targetSdk {
+            version = release(libs.versions.targetSdk.get().toInt())
+        }
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
@@ -40,12 +46,13 @@ android {
         }
     }
 
-    applicationVariants.all {
-        outputs
-            .mapNotNull { it as? BaseVariantOutputImpl }
+    androidComponents.onVariants { appVariant ->
+        appVariant
+            .outputs
+            .mapNotNull { it as? VariantOutputImpl }
             .forEach { output ->
                 // Set the APK output filename.
-                output.outputFileName = "$applicationId.apk"
+                output.outputFileName.set("${appVariant.applicationId.get()}.apk")
             }
     }
 
