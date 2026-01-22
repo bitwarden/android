@@ -42,9 +42,6 @@ def load_config_json(config_file: str) -> dict:
             print(f"✅ Loaded config from: {config_file}")
 
             valid_config = True
-            if not config.get("catch_all_label"):
-                print("❌ Missing 'catch_all_label' in config file")
-                valid_config = False
             if not config.get("title_patterns"):
                 print("❌ Missing 'title_patterns' in config file")
                 valid_config = False
@@ -220,7 +217,6 @@ def parse_args():
 def main():
     args = parse_args()
     config = load_config_json(args.config)
-    CATCH_ALL_LABEL = config["catch_all_label"]
     LABEL_TITLE_PATTERNS = config["title_patterns"]
     LABEL_PATH_PATTERNS = config["path_patterns"]
 
@@ -241,9 +237,6 @@ def main():
     filepath_labels = label_filepaths(changed_files, LABEL_PATH_PATTERNS)
     title_labels = label_title(pr_title, LABEL_TITLE_PATTERNS)
     all_labels = set(filepath_labels + title_labels)
-
-    if not any(label.startswith("t:") for label in all_labels):
-        all_labels.add(CATCH_ALL_LABEL)
 
     if all_labels:
         print("--------------------------------")
