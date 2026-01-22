@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -13,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -48,6 +51,10 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
     private val mockAuthRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+
+    private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -156,6 +163,13 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
             assertNull(viewModel.stateFlow.value.dialog)
 
+            mockSnackbarRelayManager.sendSnackbarData(
+                relay = SnackbarRelay.LEFT_ORGANIZATION,
+                data = BitwardenSnackbarData(
+                    message = BitwardenString.you_left_the_organization.asText(),
+                ),
+            )
+
             verify {
                 mockOrganizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationAccepted,
@@ -247,6 +261,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             vaultMigrationManager = mockVaultMigrationManager,
             vaultSyncManager = mockVaultSyncManager,
             authRepository = mockAuthRepository,
+            snackbarRelayManager = mockSnackbarRelayManager,
             savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
     }

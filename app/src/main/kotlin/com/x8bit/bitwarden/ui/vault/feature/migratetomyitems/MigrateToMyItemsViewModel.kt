@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -14,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -35,6 +38,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
     vaultSyncManager: VaultSyncManager,
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toMigrateToMyItemsArgs()
@@ -138,6 +142,12 @@ class MigrateToMyItemsViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is MigratePersonalVaultResult.Success -> {
+                snackbarRelayManager.sendSnackbarData(
+                    relay = SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.items_transferred.asText(),
+                    ),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.ItemOrganizationAccepted,
                 )
