@@ -155,6 +155,27 @@ def label_title(pr_title: str, title_patterns: dict) -> list[str]:
 
     return list(labels_to_apply)
 
+def parse_pr_labels(pr_labels_str: str) -> list[str]:
+    """Parse PR labels from JSON array string."""
+    try:
+        labels = json.loads(pr_labels_str)
+        if not isinstance(labels, list):
+            print("::warning::Failed to parse PR labels: not a list")
+            return []
+        return [item.get("name") for item in labels if item.get("name")]
+    except (json.JSONDecodeError, TypeError) as e:
+        print(f"::error::Error parsing PR labels: {e}")
+        return []
+
+def get_preserved_labels(pr_labels_str: str) -> list[str]:
+    """Get existing PR labels that should be preserved (exclude app: and t: labels)."""
+    existing_labels = parse_pr_labels(pr_labels_str)
+    print(f"🔍 Parsed PR labels: {existing_labels}")
+    preserved_labels = [label for label in existing_labels if not (label.startswith("app:") or label.startswith("t:"))]
+    if preserved_labels:
+        print(f"🔍 Preserving existing labels: {', '.join(preserved_labels)}")
+    return preserved_labels
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -163,6 +184,11 @@ def parse_args():
     parser.add_argument(
         "pr_number",
         help="The pull request number"
+    )
+
+    parser.add_argument(
+        "pr_labels",
+        help="Current PR labels (JSON array)"
     )
 
     mode_group = parser.add_mutually_exclusive_group()
@@ -220,12 +246,17 @@ def main():
         all_labels.add(CATCH_ALL_LABEL)
 
     if all_labels:
+        print("--------------------------------")
         labels_str = ', '.join(sorted(all_labels))
         if mode == "add":
             print(f"::notice::🏷️ Adding labels: {labels_str}")
             if not args.dry_run:
                 gh_add_labels(pr_number, list(all_labels))
         else:
+            preserved_labels = get_preserved_labels(args.pr_labels)
+            if preserved_labels:
+                all_labels.update(preserved_labels)
+                labels_str = ', '.join(sorted(all_labels))
             print(f"::notice::🏷️ Replacing labels with: {labels_str}")
             if not args.dry_run:
                 gh_replace_labels(pr_number, list(all_labels))
