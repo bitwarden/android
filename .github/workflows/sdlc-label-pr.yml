@@ -63,7 +63,7 @@ jobs:
             exit 0
           fi
 
-          if [ "$_PR_USER" = "renovate[bot]" ] || [ "$_PR_USER" = "bw-ghapp[bot]" ]; then
+          if [[ "$_PR_USER" == app/* || "$_PR_USER" == *\[bot\] ]]; then
             echo "➡️ Bot PR ($_PR_USER). Label mode: --add"
             echo "label_mode=--add" >> "$GITHUB_OUTPUT"
             exit 0
