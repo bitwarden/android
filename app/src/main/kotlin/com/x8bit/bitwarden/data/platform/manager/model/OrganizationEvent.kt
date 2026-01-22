@@ -17,6 +17,12 @@ sealed class OrganizationEvent {
     abstract val cipherId: String?
 
     /**
+     * The optional organization ID.
+     */
+    open val organizationId: String?
+        get() = null
+
+    /**
      * Tracks when a value is successfully auto-filled
      */
     data class CipherClientAutoFilled(
@@ -119,7 +125,9 @@ sealed class OrganizationEvent {
      * Tracks when a user's personal ciphers have been migrated to their organization's My Items
      * folder as required by the organization's personal vault ownership policy.
      */
-    data object ItemOrganizationAccepted : OrganizationEvent() {
+    data class ItemOrganizationAccepted(
+        override val organizationId: String,
+    ) : OrganizationEvent() {
         override val cipherId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED
@@ -129,7 +137,9 @@ sealed class OrganizationEvent {
      * Tracks when a user chooses to leave an organization instead of migrating their personal
      * ciphers to their organization's My Items folder.
      */
-    data object ItemOrganizationDeclined : OrganizationEvent() {
+    data class ItemOrganizationDeclined(
+        override val organizationId: String,
+    ) : OrganizationEvent() {
         override val cipherId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_DECLINED

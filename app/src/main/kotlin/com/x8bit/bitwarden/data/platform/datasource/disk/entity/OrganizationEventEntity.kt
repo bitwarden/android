@@ -25,4 +25,7 @@ data class OrganizationEventEntity(
 
     @ColumnInfo(name = "date")
     val date: ZonedDateTime,
+
+    @ColumnInfo(name = "organization_id")
+    val organizationId: String?,
 )

@@ -74,6 +74,7 @@ class OrganizationEventManagerTest {
                 type = OrganizationEventType.CIPHER_UPDATED,
                 cipherId = CIPHER_ID,
                 date = ZonedDateTime.now(fixedClock),
+                organizationId = null,
             )
             val events = listOf(organizationEvent)
             coEvery { eventDiskSource.getOrganizationEvents(userId = USER_ID) } returns events
@@ -105,6 +106,7 @@ class OrganizationEventManagerTest {
             type = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
             date = ZonedDateTime.now(fixedClock),
+            organizationId = null,
         )
         val events = listOf(organizationEvent)
         coEvery { eventDiskSource.getOrganizationEvents(userId = USER_ID) } returns events
@@ -209,6 +211,7 @@ class OrganizationEventManagerTest {
                     type = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED,
                     cipherId = CIPHER_ID,
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             )
         }
