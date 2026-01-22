@@ -1,5 +1,5 @@
-name: SDLC / Label PR by Files
-
+name: SDLC / Label PR
+run-name: Label PR ${{ github.event.pull_request.number || inputs.pr-number }}${{ github.event_name == 'workflow_dispatch' && format(' / mode "{0}" dry-run "{1}"', inputs.mode, inputs.dry-run) || '' }}
 on:
   pull_request:
     types: [opened, synchronize]
