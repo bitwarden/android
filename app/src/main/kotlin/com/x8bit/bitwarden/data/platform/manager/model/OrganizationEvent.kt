@@ -19,14 +19,14 @@ sealed class OrganizationEvent {
     /**
      * The optional organization ID.
      */
-    open val organizationId: String?
-        get() = null
+    abstract val organizationId: String?
 
     /**
      * Tracks when a value is successfully auto-filled
      */
     data class CipherClientAutoFilled(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED
@@ -37,6 +37,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientCopiedCardCode(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_COPIED_CARD_CODE
@@ -47,6 +48,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientCopiedHiddenField(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_COPIED_HIDDEN_FIELD
@@ -57,6 +59,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientCopiedPassword(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_COPIED_PASSWORD
@@ -67,6 +70,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientToggledCardCodeVisible(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_TOGGLED_CARD_CODE_VISIBLE
@@ -77,6 +81,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientToggledCardNumberVisible(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_TOGGLED_CARD_NUMBER_VISIBLE
@@ -87,6 +92,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientToggledHiddenFieldVisible(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_TOGGLED_HIDDEN_FIELD_VISIBLE
@@ -97,6 +103,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientToggledPasswordVisible(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_TOGGLED_PASSWORD_VISIBLE
@@ -107,6 +114,7 @@ sealed class OrganizationEvent {
      */
     data class CipherClientViewed(
         override val cipherId: String,
+        override val organizationId: String? = null,
     ) : OrganizationEvent() {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_VIEWED
@@ -117,6 +125,7 @@ sealed class OrganizationEvent {
      */
     data object UserClientExportedVault : OrganizationEvent() {
         override val cipherId: String? = null
+        override val organizationId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.USER_CLIENT_EXPORTED_VAULT
     }
@@ -126,9 +135,9 @@ sealed class OrganizationEvent {
      * folder as required by the organization's personal vault ownership policy.
      */
     data class ItemOrganizationAccepted(
+        override val cipherId: String? = null,
         override val organizationId: String,
     ) : OrganizationEvent() {
-        override val cipherId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED
     }
@@ -138,9 +147,9 @@ sealed class OrganizationEvent {
      * ciphers to their organization's My Items folder.
      */
     data class ItemOrganizationDeclined(
+        override val cipherId: String? = null,
         override val organizationId: String,
     ) : OrganizationEvent() {
-        override val cipherId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_DECLINED
     }
