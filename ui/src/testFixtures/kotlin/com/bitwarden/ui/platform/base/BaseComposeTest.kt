@@ -3,7 +3,6 @@ package com.bitwarden.ui.platform.base
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createComposeRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -17,7 +16,6 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
     @OptIn(ExperimentalCoroutinesApi::class)
     protected val dispatcher = UnconfinedTestDispatcher()
 
-    @OptIn(ExperimentalTestApi::class)
     @get:Rule
     val composeTestRule = createComposeRule(effectContext = dispatcher)
 
