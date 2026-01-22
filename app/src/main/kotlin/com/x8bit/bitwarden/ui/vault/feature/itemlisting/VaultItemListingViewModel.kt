@@ -1731,7 +1731,9 @@ class VaultItemListingViewModel @Inject constructor(
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
-                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_archived.asText(),
+                    ),
                 )
             }
         }
@@ -1756,7 +1758,9 @@ class VaultItemListingViewModel @Inject constructor(
             UnarchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
-                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_vault.asText(),
+                    ),
                 )
             }
         }
