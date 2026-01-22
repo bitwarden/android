@@ -266,6 +266,20 @@ class SearchTypeDataExtensionsTest {
     }
 
     @Test
+    fun `CipherViews filterAndOrganize should exclude archived items from non-archive searches`() {
+        val match1 = createMockCipherListView(number = 1, isArchived = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isArchived = true, name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Logins,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match2), result)
+    }
+
+    @Test
     fun `CipherViews filterAndOrganize should return empty list when search term is blank`() {
         val ciphers = listOf(createMockCipherListView(number = 1))
         val result = ciphers.filterAndOrganize(
@@ -292,8 +306,8 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews filterAndOrganize should return list organized by priority when search term is not blank`() {
-        val match1 = createMockCipherListView(number = 1).copy(name = "match1")
-        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
+        val match1 = createMockCipherListView(number = 1, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
         val ciphers = listOf(
             createMockCipherListView(number = 0),
             match2,
@@ -308,9 +322,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list without deleted items`() {
-        val match1 = createMockCipherListView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherListView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true, name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
@@ -321,9 +335,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list with only archived items`() {
-        val match1 = createMockCipherListView(number = 1, isArchived = true).copy(name = "match1")
-        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherListView(number = 3, isArchived = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isArchived = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isArchived = true, name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Archive,
@@ -334,9 +348,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list with only deleted items`() {
-        val match1 = createMockCipherListView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherListView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true, name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Trash,
@@ -361,6 +375,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -386,6 +401,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -428,6 +444,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -478,6 +495,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -512,6 +530,7 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isAutofill = false,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -558,8 +577,8 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `SendViews filterAndOrganize should return list organized by priority when search term is not blank`() {
-        val match1 = createMockSendView(number = 1).copy(name = "match1")
-        val match2 = createMockSendView(number = 2).copy(name = "match2")
+        val match1 = createMockSendView(number = 1, name = "match1")
+        val match2 = createMockSendView(number = 2, name = "match2")
         val ciphers = listOf(
             createMockSendView(number = 0),
             match2,

@@ -2,12 +2,19 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -15,6 +22,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,7 +35,20 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     private val mockOrganizationEventManager: OrganizationEventManager = mockk {
         every { trackEvent(any()) } just runs
     }
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(
+        mockk {
+            every { activeUserId } returns "test-user-id"
+        },
+    )
+    private val mockVaultMigrationManager: VaultMigrationManager = mockk {
+        coEvery {
+            migratePersonalVault(any(), any())
+        } returns MigratePersonalVaultResult.Success
+    }
     private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
+    private val mockAuthRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -43,6 +64,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     fun `initial state should be set from organization data`() {
         val viewModel = createViewModel()
         assertEquals(ORGANIZATION_NAME, viewModel.stateFlow.value.organizationName)
+        assertEquals(ORGANIZATION_ID, viewModel.stateFlow.value.organizationId)
         assertNull(viewModel.stateFlow.value.dialog)
     }
 
@@ -50,15 +72,23 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     fun `AcceptClicked should show loading dialog and trigger migration`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
-            assertEquals(null, awaitItem().dialog)
+            assertEquals(DEFAULT_STATE, awaitItem())
 
             viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
 
-            val loadingState = awaitItem()
-            assert(loadingState.dialog is MigrateToMyItemsState.DialogState.Loading)
             assertEquals(
-                BitwardenString.migrating_items_to_x.asText(ORGANIZATION_NAME),
-                (loadingState.dialog as MigrateToMyItemsState.DialogState.Loading).message,
+                DEFAULT_STATE.copy(
+                    dialog = MigrateToMyItemsState.DialogState.Loading(
+                        message = BitwardenString.migrating_items_to_x.asText(ORGANIZATION_NAME),
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            // Migration completes successfully and clears the dialog
+            assertEquals(
+                DEFAULT_STATE,
+                awaitItem(),
             )
         }
     }
@@ -72,19 +102,53 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `AcceptClicked should show error dialog when userId is null`() = runTest {
+        mutableUserStateFlow.value = null
+        val viewModel = createViewModel()
+        viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
+
+        val dialog = viewModel.stateFlow.value.dialog as MigrateToMyItemsState.DialogState.Error
+        val throwableReference = dialog.throwable
+
+        assert(throwableReference is MissingPropertyException)
+        assertEquals(
+            "Missing the required UserId property",
+            throwableReference?.message,
+        )
+
+        assertEquals(
+            MigrateToMyItemsState.DialogState.Error(
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                    ORGANIZATION_NAME,
+                ),
+                throwable = throwableReference,
+            ),
+            viewModel.stateFlow.value.dialog,
+        )
+
+        coVerify(exactly = 0) {
+            mockVaultMigrationManager.migratePersonalVault(any(), any())
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `MigrateToMyItemsResultReceived with success should track ItemOrganizationAccepted event, clear dialog, and navigate to vault`() =
         runTest {
             val viewModel = createViewModel()
 
-            // First show the loading dialog
-            viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
-
             viewModel.eventFlow.test {
+                // First show the loading dialog
+                viewModel.trySendAction(MigrateToMyItemsAction.AcceptClicked)
+
+                // Migration completes and sends NavigateToVault event
+                assertEquals(MigrateToMyItemsEvent.NavigateToVault, awaitItem())
+
                 viewModel.trySendAction(
                     MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                        success = true,
+                        result = MigratePersonalVaultResult.Success,
                     ),
                 )
                 assertEquals(MigrateToMyItemsEvent.NavigateToVault, awaitItem())
@@ -108,7 +172,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = false,
+                    result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
 
@@ -128,7 +192,13 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(MigrateToMyItemsAction.DeclineAndLeaveClicked)
-            assertEquals(MigrateToMyItemsEvent.NavigateToLeaveOrganization, awaitItem())
+            assertEquals(
+                MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                    organizationId = ORGANIZATION_ID,
+                    organizationName = ORGANIZATION_NAME,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -156,7 +226,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             // First show an error dialog
             viewModel.trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = false,
+                    result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
             val errorState = awaitItem()
@@ -170,19 +240,23 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        savedStateHandle: SavedStateHandle = SavedStateHandle(),
+        state: MigrateToMyItemsState = DEFAULT_STATE,
     ): MigrateToMyItemsViewModel {
-        every { savedStateHandle.toMigrateToMyItemsArgs() } returns MigrateToMyItemsArgs(
-            organizationId = ORGANIZATION_ID,
-            organizationName = ORGANIZATION_NAME,
-        )
         return MigrateToMyItemsViewModel(
             organizationEventManager = mockOrganizationEventManager,
+            vaultMigrationManager = mockVaultMigrationManager,
             vaultSyncManager = mockVaultSyncManager,
-            savedStateHandle = savedStateHandle,
+            authRepository = mockAuthRepository,
+            savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
     }
 }
 
 private const val ORGANIZATION_ID = "test-organization-id"
 private const val ORGANIZATION_NAME = "Test Organization"
+
+private val DEFAULT_STATE = MigrateToMyItemsState(
+    organizationId = "test-organization-id",
+    organizationName = "Test Organization",
+    dialog = null,
+)

@@ -51,12 +51,10 @@ fun SavedStateHandle.toLeaveOrganizationArgs(): LeaveOrganizationArgs {
  */
 fun NavGraphBuilder.leaveOrganizationDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToVault: () -> Unit,
 ) {
     composableWithPushTransitions<LeaveOrganizationRoute> {
         LeaveOrganizationScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToVault = onNavigateToVault,
         )
     }
 }

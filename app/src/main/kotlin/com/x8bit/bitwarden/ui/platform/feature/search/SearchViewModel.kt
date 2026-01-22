@@ -4,9 +4,11 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -28,6 +30,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -40,9 +43,11 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -95,10 +100,11 @@ class SearchViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
-    environmentRepo: EnvironmentRepository,
+    private val environmentRepo: EnvironmentRepository,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SearchState, SearchEvent, SearchAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -134,6 +140,7 @@ class SearchViewModel @Inject constructor(
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
                 isPremium = userState.activeAccount.isPremium,
                 restrictItemTypesPolicyOrgIds = persistentListOf(),
+                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             )
         },
 ) {
@@ -159,6 +166,8 @@ class SearchViewModel @Inject constructor(
 
         snackbarRelayManager
             .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_ARCHIVED,
+                SnackbarRelay.CIPHER_UNARCHIVED,
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
@@ -167,6 +176,12 @@ class SearchViewModel @Inject constructor(
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { SearchAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { SearchAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -185,6 +200,7 @@ class SearchViewModel @Inject constructor(
             is SearchAction.SearchTermChange -> handleSearchTermChange(action)
             is SearchAction.VaultFilterSelect -> handleVaultFilterSelect(action)
             is SearchAction.OverflowOptionClick -> handleOverflowItemClick(action)
+            SearchAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is SearchAction.Internal -> handleInternalAction(action)
         }
     }
@@ -298,6 +314,13 @@ class SearchViewModel @Inject constructor(
         recalculateViewState()
     }
 
+    private fun handleUpgradeToPremiumClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        val baseUrl = environmentRepo.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+        sendEvent(SearchEvent.NavigateToUrl(url = url))
+    }
+
     private fun handleOverflowItemClick(action: SearchAction.OverflowOptionClick) {
         when (val overflowAction = action.overflowAction) {
             is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
@@ -353,6 +376,14 @@ class SearchViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.CopyTotpClick -> {
                 handleCopyTotpClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
+                handleArchiveClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
+            }
         }
     }
 
@@ -399,6 +430,56 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             val result = vaultRepo.generateTotp(action.cipherId, clock.instant())
             sendAction(SearchAction.Internal.GenerateTotpResultReceive(result))
+        }
+    }
+
+    private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
+        if (!state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialogState = SearchState.DialogState.ArchiveRequiresPremium)
+            }
+            return
+        }
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Loading(
+                    message = BitwardenString.archiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            decryptCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    SearchAction.Internal.ArchiveCipherReceive(
+                        result = vaultRepo.archiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick(action: ListingItemOverflowAction.VaultAction.UnarchiveClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            decryptCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    SearchAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepo.unarchiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
         }
     }
 
@@ -556,6 +637,13 @@ class SearchViewModel @Inject constructor(
             is SearchAction.Internal.DecryptCipherErrorReceive -> {
                 handleDecryptCipherErrorReceive(action)
             }
+
+            is SearchAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
+
+            is SearchAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
+            is SearchAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
         }
     }
 
@@ -570,6 +658,54 @@ class SearchViewModel @Inject constructor(
                     throwable = action.error,
                 ),
             )
+        }
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: SearchAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+    }
+
+    private fun handleArchiveCipherReceive(action: SearchAction.Internal.ArchiveCipherReceive) {
+        when (val result = action.result) {
+            is ArchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            ArchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_archived.asText()))
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(action: SearchAction.Internal.UnarchiveCipherReceive) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()))
+            }
         }
     }
 
@@ -877,6 +1013,7 @@ class SearchViewModel @Inject constructor(
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
                                 isPremiumUser = state.isPremium,
+                                isArchiveEnabled = state.isArchiveEnabled,
                             )
                     }
 
@@ -943,6 +1080,7 @@ data class SearchState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
+    val isArchiveEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -1025,6 +1163,12 @@ data class SearchState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that archiving requires a premium account.
+         */
+        @Parcelize
+        data object ArchiveRequiresPremium : DialogState()
     }
 
     /**
@@ -1295,6 +1439,11 @@ sealed class SearchAction {
     ) : SearchAction()
 
     /**
+     * User clicked the upgrade to premium button.
+     */
+    data object UpgradeToPremiumClick : SearchAction()
+
+    /**
      * Models actions that the [SearchViewModel] itself might send.
      */
     sealed class Internal : SearchAction() {
@@ -1317,6 +1466,20 @@ sealed class SearchAction {
          */
         data class GenerateTotpResultReceive(
             val result: GenerateTotpResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
         ) : Internal()
 
         /**
@@ -1369,6 +1532,13 @@ sealed class SearchAction {
          */
         data class DecryptCipherErrorReceive(
             val error: Throwable?,
+        ) : Internal()
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }

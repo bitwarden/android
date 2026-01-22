@@ -47,4 +47,12 @@ internal interface AuthenticatedOrganizationApi {
     suspend fun leaveOrganization(
         @Path("id") organizationId: String,
     ): NetworkResult<Unit>
+
+    /**
+     * Revokes self from organization
+     */
+    @PUT("/organizations/{orgId}/users/revoke-self")
+    suspend fun revokeFromOrganization(
+        @Path("orgId") organizationId: String,
+    ): NetworkResult<Unit>
 }

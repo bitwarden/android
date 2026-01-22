@@ -232,6 +232,111 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
+    fun `Archive option menu should be visible if cipher is un-archived`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = false,
+                        currentCipher = createMockCipherView(
+                            number = 1,
+                            isArchived = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.ArchiveClick)
+        }
+    }
+
+    @Test
+    fun `Unarchive option menu should be visible if cipher is archived`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = true,
+                        currentCipher = createMockCipherView(
+                            number = 1,
+                            isArchived = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Unarchive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Unarchive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.UnarchiveClick)
+        }
+    }
+
+    @Test
     fun `name should be displayed according to state`() {
         EMPTY_VIEW_STATES
             .forEach { typeState ->
@@ -249,6 +354,35 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     .onNodeWithText("Test Name")
                     .assertIsDisplayed()
             }
+    }
+
+    @Test
+    fun `archived icon should be displayed according to state`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = false,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Archived")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = true,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Archived")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -3178,6 +3312,8 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     dialog = null,
     baseIconUrl = "https://example.com/",
     isIconLoadingDisabled = true,
+    hasPremium = false,
+    isArchiveEnabled = true,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
@@ -3222,6 +3358,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        archived = false,
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
@@ -3308,6 +3445,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        archived = false,
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),

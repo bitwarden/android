@@ -46,7 +46,6 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -61,7 +60,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
-import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
@@ -223,114 +221,13 @@ fun VaultItemListingScreen(
         }
     }
 
-    VaultItemListingDialogs(
-        dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
-        },
-        onDismissCredentialManagerErrorDialog = remember(viewModel) {
-            { errorMessage ->
-                viewModel.trySendAction(
-                    VaultItemListingsAction
-                        .DismissCredentialManagerErrorDialogClick(
-                            message = errorMessage,
-                        ),
-                )
-            }
-        },
-        onConfirmOverwriteExistingPasskey = remember(viewModel) {
-            { cipherId ->
-                viewModel.trySendAction(
-                    VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
-                        cipherViewId = cipherId,
-                    ),
-                )
-            }
-        },
-        onSubmitMasterPasswordCredentialVerification = remember(viewModel) {
-            { password, cipherId ->
-                viewModel.trySendAction(
-                    VaultItemListingsAction.MasterPasswordUserVerificationSubmit(
-                        password = password,
-                        selectedCipherId = cipherId,
-                    ),
-                )
-            }
-        },
-        onRetryGetCredentialPasswordVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.RetryUserVerificationPasswordVerificationClick(it),
-                )
-            }
-        },
-        onSubmitPinCredentialVerification = remember(viewModel) {
-            { pin, cipherId ->
-                viewModel.trySendAction(
-                    VaultItemListingsAction.PinUserVerificationSubmit(
-                        pin = pin,
-                        selectedCipherId = cipherId,
-                    ),
-                )
-            }
-        },
-        onRetryPinCredentialVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.RetryUserVerificationPinVerificationClick(it),
-                )
-            }
-        },
-        onSubmitPinSetUpCredentialVerification = remember(viewModel) {
-            { pin, cipherId ->
-                viewModel.trySendAction(
-                    VaultItemListingsAction.UserVerificationPinSetUpSubmit(
-                        pin = pin,
-                        selectedCipherId = cipherId,
-                    ),
-                )
-            }
-        },
-        onRetryPinSetUpCredentialVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.UserVerificationPinSetUpRetryClick(it),
-                )
-            }
-        },
-        onDismissUserVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.DismissUserVerificationDialogClick,
-                )
-            }
-        },
-        onVaultItemTypeSelected = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.ItemTypeToAddSelected(itemType = it),
-                )
-            }
-        },
-        onTrustPrivilegedAppClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.TrustPrivilegedAppClick(it),
-                )
-            }
-        },
-        onShareCipherDecryptionErrorClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.ShareCipherDecryptionErrorClick(it),
-                )
-            }
-        },
-    )
-
     val vaultItemListingHandlers = remember(viewModel) {
         VaultItemListingHandlers.create(viewModel)
     }
+    VaultItemListingDialogs(
+        dialogState = state.dialogState,
+        vaultItemListingHandlers = vaultItemListingHandlers,
+    )
 
     BackHandler(onBack = vaultItemListingHandlers.backClick)
     VaultItemListingScaffold(
@@ -345,25 +242,13 @@ fun VaultItemListingScreen(
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
-    onDismissRequest: () -> Unit,
-    onDismissCredentialManagerErrorDialog: (Text) -> Unit,
-    onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
-    onSubmitMasterPasswordCredentialVerification: (password: String, cipherId: String) -> Unit,
-    onRetryGetCredentialPasswordVerification: (cipherId: String) -> Unit,
-    onSubmitPinCredentialVerification: (pin: String, cipherId: String) -> Unit,
-    onRetryPinCredentialVerification: (cipherViewId: String) -> Unit,
-    onSubmitPinSetUpCredentialVerification: (pin: String, cipherId: String) -> Unit,
-    onRetryPinSetUpCredentialVerification: (cipherId: String) -> Unit,
-    onDismissUserVerification: () -> Unit,
-    onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
-    onTrustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
-    onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
+    vaultItemListingHandlers: VaultItemListingHandlers,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             throwable = dialogState.throwable,
         )
 
@@ -378,17 +263,21 @@ private fun VaultItemListingDialogs(
                 confirmButtonText = stringResource(BitwardenString.copy_error_report),
                 dismissButtonText = stringResource(BitwardenString.close),
                 onConfirmClick = {
-                    onShareCipherDecryptionErrorClick(dialogState.selectedCipherId)
+                    vaultItemListingHandlers.shareCipherDecryptionErrorClick(
+                        dialogState.selectedCipherId,
+                    )
                 },
-                onDismissClick = onDismissRequest,
-                onDismissRequest = onDismissRequest,
+                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             )
         }
 
         is VaultItemListingState.DialogState.CredentialManagerOperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
-            onDismissRequest = { onDismissCredentialManagerErrorDialog(dialogState.message) },
+            onDismissRequest = {
+                vaultItemListingHandlers.dismissCredentialManagerErrorDialog(dialogState.message)
+            },
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
@@ -399,20 +288,24 @@ private fun VaultItemListingDialogs(
                     id = BitwardenString
                         .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
                 ),
-                onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
-                onDismissRequest = onDismissRequest,
+                onConfirmClick = {
+                    vaultItemListingHandlers.confirmOverwriteExistingPasskey(
+                        dialogState.cipherViewId,
+                    )
+                },
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             )
         }
 
         is VaultItemListingState.DialogState.UserVerificationMasterPasswordPrompt -> {
             BitwardenMasterPasswordDialog(
                 onConfirmClick = { password ->
-                    onSubmitMasterPasswordCredentialVerification(
+                    vaultItemListingHandlers.submitMasterPasswordCredentialVerification(
                         password,
                         dialogState.selectedCipherId,
                     )
                 },
-                onDismissRequest = onDismissUserVerification,
+                onDismissRequest = vaultItemListingHandlers.dismissUserVerification,
             )
         }
 
@@ -421,7 +314,9 @@ private fun VaultItemListingDialogs(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
                 onDismissRequest = {
-                    onRetryGetCredentialPasswordVerification(dialogState.selectedCipherId)
+                    vaultItemListingHandlers.retryGetCredentialPasswordVerification(
+                        dialogState.selectedCipherId,
+                    )
                 },
             )
         }
@@ -429,12 +324,12 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.UserVerificationPinPrompt -> {
             BitwardenPinDialog(
                 onConfirmClick = { pin ->
-                    onSubmitPinCredentialVerification(
+                    vaultItemListingHandlers.submitPinCredentialVerification(
                         pin,
                         dialogState.selectedCipherId,
                     )
                 },
-                onDismissRequest = onDismissUserVerification,
+                onDismissRequest = vaultItemListingHandlers.dismissUserVerification,
             )
         }
 
@@ -443,18 +338,23 @@ private fun VaultItemListingDialogs(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
                 onDismissRequest = {
-                    onRetryPinCredentialVerification(dialogState.selectedCipherId)
+                    vaultItemListingHandlers.retryPinCredentialVerification(
+                        dialogState.selectedCipherId,
+                    )
                 },
             )
         }
 
         is VaultItemListingState.DialogState.UserVerificationPinSetUpPrompt -> {
             PinInputDialog(
-                onCancelClick = onDismissUserVerification,
+                onCancelClick = vaultItemListingHandlers.dismissUserVerification,
                 onSubmitClick = { pin ->
-                    onSubmitPinSetUpCredentialVerification(pin, dialogState.selectedCipherId)
+                    vaultItemListingHandlers.submitPinSetUpCredentialVerification(
+                        pin,
+                        dialogState.selectedCipherId,
+                    )
                 },
-                onDismissRequest = onDismissUserVerification,
+                onDismissRequest = vaultItemListingHandlers.dismissUserVerification,
             )
         }
 
@@ -463,15 +363,17 @@ private fun VaultItemListingDialogs(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
                 onDismissRequest = {
-                    onRetryPinSetUpCredentialVerification(dialogState.selectedCipherId)
+                    vaultItemListingHandlers.retryPinSetUpCredentialVerification(
+                        dialogState.selectedCipherId,
+                    )
                 },
             )
         }
 
         is VaultItemListingState.DialogState.VaultItemTypeSelection -> {
             VaultItemSelectionDialog(
-                onDismissRequest = onDismissRequest,
-                onOptionSelected = onVaultItemTypeSelected,
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
+                onOptionSelected = vaultItemListingHandlers.vaultItemTypeSelected,
                 excludedOptions = dialogState.excludedOptions,
             )
         }
@@ -483,20 +385,34 @@ private fun VaultItemListingDialogs(
                 confirmButtonText = stringResource(BitwardenString.trust),
                 dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = {
-                    onTrustPrivilegedAppClick(dialogState.selectedCipherId)
+                    vaultItemListingHandlers.trustPrivilegedAppClick(dialogState.selectedCipherId)
                 },
                 onDismissClick = {
-                    onDismissCredentialManagerErrorDialog(
-                        BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
+                    vaultItemListingHandlers.dismissCredentialManagerErrorDialog(
+                        BitwardenString
+                            .passkey_operation_failed_because_the_browser_is_not_trusted
                             .asText(),
                     )
                 },
                 onDismissRequest = {
-                    onDismissCredentialManagerErrorDialog(
-                        BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
+                    vaultItemListingHandlers.dismissCredentialManagerErrorDialog(
+                        BitwardenString
+                            .passkey_operation_failed_because_the_browser_is_not_trusted
                             .asText(),
                     )
                 },
+            )
+        }
+
+        is VaultItemListingState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             )
         }
 
@@ -595,12 +511,7 @@ private fun VaultItemListingScaffold(
                     showAddTotpBanner = state.isTotp,
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
-                    vaultItemClick = vaultItemListingHandlers.itemClick,
-                    collectionClick = vaultItemListingHandlers.collectionClick,
-                    folderClick = vaultItemListingHandlers.folderClick,
-                    masterPasswordRepromptSubmit = vaultItemListingHandlers
-                        .masterPasswordRepromptSubmit,
-                    onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
+                    vaultItemListingHandlers = vaultItemListingHandlers,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

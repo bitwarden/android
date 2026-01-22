@@ -68,6 +68,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.LaunchClick(
                         url = "www.mockuri$number.com",
                     ),
+                    ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
                 ),
                 overflowTestTag = "CipherOptionsButton",
                 totpCode = "mockTotp-$number",
@@ -160,6 +161,7 @@ fun createMockDisplayItemForCipher(
                         cipherType = CipherType.CARD,
                         requiresPasswordReprompt = true,
                     ),
+                    ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
                 ),
                 overflowTestTag = "CipherOptionsButton",
                 totpCode = null,

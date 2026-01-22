@@ -24,6 +24,7 @@ import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -85,7 +86,21 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     text = stringResource(BitwardenString.personal_ownership_policy_in_effect),
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .testTag("PersonalOwnershipPolicyLabel")
+                        .testTag(tag = "PersonalOwnershipPolicyLabel")
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
+        }
+
+        state.common.archiveCalloutText?.let {
+            item {
+                BitwardenInfoCalloutCard(
+                    text = it(),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive_small),
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .testTag(tag = "ArchivedPolicyLabel")
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))
@@ -118,11 +133,11 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
         }
 
         item {
-            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.item_name_required),
                 value = state.common.name,

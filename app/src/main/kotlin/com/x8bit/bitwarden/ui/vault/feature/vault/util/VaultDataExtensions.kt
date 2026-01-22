@@ -59,17 +59,19 @@ fun VaultData.toViewState(
             .applyFilters(
                 vaultFilterType = vaultFilterType,
                 restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                excludeArchived = false,
                 excludeDeleted = false,
             )
 
     val activeCipherViews = allCipherViews
-        .filter { it.deletedDate == null }
+        .filter { it.deletedDate == null && it.archivedDate == null }
 
     val activeDecryptedCipherViews = decryptCipherListResult
         .successes
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeArchived = true,
             excludeDeleted = true,
         )
 
@@ -81,6 +83,7 @@ fun VaultData.toViewState(
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeArchived = true,
             excludeDeleted = true,
         )
 
@@ -108,6 +111,7 @@ fun VaultData.toViewState(
                     baseIconUrl = baseIconUrl,
                     isPremiumUser = isPremium,
                     hasDecryptionError = false,
+                    isArchiveEnabled = isArchiveEnabled,
                 )
             }
             .plus(
@@ -120,6 +124,7 @@ fun VaultData.toViewState(
                             baseIconUrl = baseIconUrl,
                             isPremiumUser = isPremium,
                             hasDecryptionError = true,
+                            isArchiveEnabled = isArchiveEnabled,
                         )
                     },
             )
@@ -151,6 +156,7 @@ fun VaultData.toViewState(
                         baseIconUrl = baseIconUrl,
                         isPremiumUser = isPremium,
                         hasDecryptionError = false,
+                        isArchiveEnabled = isArchiveEnabled,
                     )
                 }
                 .plus(
@@ -163,6 +169,7 @@ fun VaultData.toViewState(
                                 baseIconUrl = baseIconUrl,
                                 isPremiumUser = isPremium,
                                 hasDecryptionError = true,
+                                isArchiveEnabled = isArchiveEnabled,
                             )
                         },
                 ),
@@ -209,7 +216,7 @@ fun VaultData.toViewState(
                 },
             trashItemsCount = allCipherViews.count { it.deletedDate != null },
             archivedItemsCount = allCipherViews
-                .count { it.archivedDate != null }
+                .count { it.archivedDate != null && it.deletedDate == null }
                 .takeIf { isPremium },
             archiveEnabled = isArchiveEnabled,
             archiveEndIcon = BitwardenDrawable.ic_locked.takeUnless { isPremium },
@@ -271,13 +278,14 @@ fun List<LoginUriView>?.toLoginIconData(
 /**
  * Transforms a [CipherListView] into a [VaultState.ViewState.VaultItem].
  */
-@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "LongParameterList")
 private fun CipherListView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     isPremiumUser: Boolean,
     hasDecryptionError: Boolean,
+    isArchiveEnabled: Boolean,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
@@ -300,6 +308,7 @@ private fun CipherListView.toVaultItemOrNull(
                 toOverflowActions(
                     hasMasterPassword = hasMasterPassword,
                     isPremiumUser = isPremiumUser,
+                    isArchiveEnabled = isArchiveEnabled,
                 )
             },
             extraIconList = toLabelIcons(),
@@ -314,6 +323,7 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -329,6 +339,7 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -343,6 +354,7 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -357,6 +369,7 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
             ),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
@@ -451,8 +464,16 @@ fun List<CipherListView>.applyRestrictItemTypesPolicy(
 private fun List<CipherListView>.applyFilters(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
+    excludeArchived: Boolean,
     excludeDeleted: Boolean,
 ): List<CipherListView> = this
+    .let {
+        if (excludeArchived) {
+            it.filter { cipher -> cipher.archivedDate == null }
+        } else {
+            it
+        }
+    }
     .let {
         if (excludeDeleted) {
             it.filter { cipher -> cipher.deletedDate == null }

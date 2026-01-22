@@ -75,20 +75,50 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Vault.Login to true,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
             VaultItemListingState.ItemListingType.Vault.Card to false,
             VaultItemListingState.ItemListingType.Vault.SecureNote to false,
             VaultItemListingState.ItemListingType.Vault.Identity to false,
             VaultItemListingState.ItemListingType.Vault.Archive to true,
             VaultItemListingState.ItemListingType.Vault.Trash to false,
-            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to true,
-            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
                     itemListingType = type,
                 )
-                println("Type: $type")
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archived and deleted cipherView`() {
+        val cipherView = createMockCipherListView(
+            number = 1,
+            isArchived = true,
+            isDeleted = true,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder("mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection("mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
                 assertEquals(
                     expected,
                     result,
@@ -481,8 +511,8 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 isDeleted = false,
                 folderId = "mockId-1",
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
+                reprompt = CipherRepromptType.PASSWORD,
+            ),
             createMockCipherListView(
                 number = 2,
                 isDeleted = false,
@@ -517,6 +547,7 @@ class VaultItemListingDataExtensionsTest {
                 failures = listOf(
                     createMockSdkCipher(number = 5).copy(
                         deletedDate = null,
+                        archivedDate = null,
                         folderId = "mockId-1",
                         favorite = true,
                     ),
@@ -526,6 +557,7 @@ class VaultItemListingDataExtensionsTest {
                     ),
                     createMockSdkCipher(number = 7).copy(
                         deletedDate = null,
+                        archivedDate = null,
                         folderId = "mockId-1",
                     ),
                     createMockSdkCipher(number = 8).copy(
@@ -547,6 +579,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -572,14 +605,14 @@ class VaultItemListingDataExtensionsTest {
                         number = 3,
                         cipherType = CipherType.SECURE_NOTE,
                         subtitle = "mockSubtitle-3",
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
                         subtitle = "mockSubtitle-4",
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                 ),
                 displayFolderList = emptyList(),
             ),
@@ -643,6 +676,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -729,6 +763,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -798,6 +833,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -821,6 +857,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -842,6 +879,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -864,6 +902,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -885,6 +924,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -906,6 +946,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -927,6 +968,31 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
+            ),
+        )
+
+        // Archive Type
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                header = BitwardenString.no_archives_title.asText(),
+                message = BitwardenString.no_archives_message.asText(),
+                vectorRes = BitwardenDrawable.ill_open_source,
+                shouldShowAddButton = false,
+                buttonText = BitwardenString.new_item.asText(),
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                createCredentialRequestData = null,
+                totpData = null,
+                isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -952,6 +1018,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -977,6 +1044,7 @@ class VaultItemListingDataExtensionsTest {
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
 
@@ -1003,6 +1071,7 @@ class VaultItemListingDataExtensionsTest {
                 },
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
     }
@@ -1257,6 +1326,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1304,6 +1374,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1383,6 +1454,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -1432,6 +1504,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isArchiveEnabled = true,
         )
 
         // Card type

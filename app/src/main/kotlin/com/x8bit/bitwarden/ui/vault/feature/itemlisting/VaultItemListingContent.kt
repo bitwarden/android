@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -40,11 +41,7 @@ fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     policyDisablesSend: Boolean,
     showAddTotpBanner: Boolean,
-    collectionClick: (id: String) -> Unit,
-    folderClick: (id: String) -> Unit,
-    vaultItemClick: (id: String, type: VaultItemListingState.DisplayItem.ItemType) -> Unit,
-    masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
-    onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
+    vaultItemListingHandlers: VaultItemListingHandlers,
     modifier: Modifier = Modifier,
 ) {
     var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
@@ -59,7 +56,7 @@ fun VaultItemListingContent(
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = {
                     showConfirmationDialog = null
-                    onOverflowItemClick(option)
+                    vaultItemListingHandlers.overflowItemClick(option)
                 },
                 onDismissClick = { showConfirmationDialog = null },
                 onDismissRequest = { showConfirmationDialog = null },
@@ -80,6 +77,8 @@ fun VaultItemListingContent(
         is ListingItemOverflowAction.VaultAction.LaunchClick,
         is ListingItemOverflowAction.VaultAction.ViewClick,
         is ListingItemOverflowAction.VaultAction.CopyTotpClick,
+        is ListingItemOverflowAction.VaultAction.ArchiveClick,
+        is ListingItemOverflowAction.VaultAction.UnarchiveClick,
         null,
             -> Unit
     }
@@ -89,7 +88,7 @@ fun VaultItemListingContent(
         BitwardenMasterPasswordDialog(
             onConfirmClick = { password ->
                 masterPasswordRepromptData = null
-                masterPasswordRepromptSubmit(password, data)
+                vaultItemListingHandlers.masterPasswordRepromptSubmit(password, data)
             },
             onDismissRequest = {
                 masterPasswordRepromptData = null
@@ -145,7 +144,7 @@ fun VaultItemListingContent(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
-                    onClick = { collectionClick(collection.id) },
+                    onClick = { vaultItemListingHandlers.collectionClick(collection.id) },
                     cardStyle = state
                         .displayCollectionList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -175,7 +174,7 @@ fun VaultItemListingContent(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
                     label = folder.name,
                     supportingLabel = folder.count.toString(),
-                    onClick = { folderClick(folder.id) },
+                    onClick = { vaultItemListingHandlers.folderClick(folder.id) },
                     cardStyle = state
                         .displayFolderList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
@@ -221,7 +220,7 @@ fun VaultItemListingContent(
                                 itemType = it.itemType,
                             )
                         } else {
-                            vaultItemClick(it.id, it.itemType)
+                            vaultItemListingHandlers.itemClick(it.id, it.itemType)
                         }
                     },
                     trailingLabelIcons = it.extraIconList,
@@ -245,11 +244,11 @@ fun VaultItemListingContent(
                                                         action = option,
                                                     )
                                             } else {
-                                                onOverflowItemClick(option)
+                                                vaultItemListingHandlers.overflowItemClick(option)
                                             }
                                         }
 
-                                        else -> onOverflowItemClick(option)
+                                        else -> vaultItemListingHandlers.overflowItemClick(option)
                                     }
                                 },
                             )
