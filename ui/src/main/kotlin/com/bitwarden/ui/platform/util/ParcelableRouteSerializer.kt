@@ -5,8 +5,6 @@ import android.os.Parcelable
 import android.util.Base64
 import androidx.core.os.ParcelCompat
 import com.bitwarden.annotation.OmitFromCoverage
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
@@ -85,7 +83,6 @@ import kotlin.reflect.KClass
  * The latter is useful in cases where the same `ViewModel` is used to handle these routes.
  */
 @OmitFromCoverage
-@OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 open class ParcelableRouteSerializer<T : Parcelable>(
     private val kClass: KClass<T>,
 ) : KSerializer<T> {

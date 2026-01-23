@@ -149,7 +149,6 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -389,7 +388,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    @OptIn(ExperimentalSerializationApi::class)
     @Suppress("MaxLineLength")
     fun `loading the policies should emit masterPasswordPolicyFlow if the password fails any checks`() =
         runTest {
