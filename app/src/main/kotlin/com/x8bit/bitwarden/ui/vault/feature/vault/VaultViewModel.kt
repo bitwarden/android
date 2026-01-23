@@ -144,6 +144,9 @@ class VaultViewModel @Inject constructor(
             restrictItemTypesPolicyOrgIds = emptyList(),
             cipherDecryptionFailureIds = persistentListOf(),
             hasShownDecryptionFailureAlert = false,
+            isIntroducingArchiveActionCardDismissed = settingsRepository
+                .getIntroducingArchiveActionCardDismissedFlow()
+                .value,
         )
     },
 ) {
@@ -215,6 +218,11 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .flightRecorderDataFlow
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .getIntroducingArchiveActionCardDismissedFlow()
+            .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -310,6 +318,7 @@ class VaultViewModel @Inject constructor(
             }
 
             VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
+            is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
         }
     }
 
@@ -357,6 +366,14 @@ class VaultViewModel @Inject constructor(
         val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
         val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
         sendEvent(VaultEvent.NavigateToUrl(url = url))
+    }
+
+    private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
+        when (action.actionCard) {
+            VaultState.ActionCardState.IntroducingArchive -> {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
     }
 
     private fun handleSelectAddItemType() {
@@ -901,6 +918,9 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
+            is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
+                handleIntroducingArchiveActionCardDismissedFlowReceive(action)
+            }
         }
     }
 
@@ -998,6 +1018,14 @@ class VaultViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()))
             }
+        }
+    }
+
+    private fun handleIntroducingArchiveActionCardDismissedFlowReceive(
+        action: VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
         }
     }
 
@@ -1412,7 +1440,18 @@ data class VaultState(
     val cipherDecryptionFailureIds: ImmutableList<String>,
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
+    val isIntroducingArchiveActionCardDismissed: Boolean,
 ) : Parcelable {
+
+    /**
+     * Indicates what action card to display.
+     */
+    val actionCard: ActionCardState?
+        get() = (viewState as? ViewState.Content)?.let {
+            ActionCardState.IntroducingArchive.takeIf {
+                isPremium && !isIntroducingArchiveActionCardDismissed && isArchiveEnabled
+            }
+        }
 
     /**
      * The [Color] of the avatar.
@@ -1723,6 +1762,16 @@ data class VaultState(
                 override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
         }
+    }
+
+    /**
+     * Represents an action card to be displayed.
+     */
+    sealed class ActionCardState {
+        /**
+         * Indicates that the archive feature is ready for use.
+         */
+        data object IntroducingArchive : ActionCardState()
     }
 
     /**
@@ -2133,6 +2182,13 @@ sealed class VaultAction {
     data object UpgradeToPremiumClick : VaultAction()
 
     /**
+     * User clicked the dismiss button on an action card.
+     */
+    data class DismissActionCardClick(
+        val actionCard: VaultState.ActionCardState,
+    ) : VaultAction()
+
+    /**
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
@@ -2254,6 +2310,13 @@ sealed class VaultAction {
          */
         data class UnarchiveCipherReceive(
             val result: UnarchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the archive action card dismissed state has been updated.
+         */
+        data class IntroducingArchiveActionCardDismissedFlowReceive(
+            val isDismissed: Boolean,
         ) : Internal()
     }
 }

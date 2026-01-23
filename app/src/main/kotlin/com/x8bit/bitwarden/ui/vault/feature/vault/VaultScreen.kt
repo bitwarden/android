@@ -326,6 +326,7 @@ private fun VaultScreenScaffold(
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
+                    actionCardState = state.actionCard,
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier.fillMaxSize(),
                 )

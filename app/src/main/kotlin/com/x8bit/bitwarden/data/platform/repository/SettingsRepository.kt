@@ -243,6 +243,16 @@ interface SettingsRepository : FlightRecorderManager {
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
 
     /**
+     * Gets updates for whether the introducing archive action card is dismissed.
+     */
+    fun getIntroducingArchiveActionCardDismissedFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores that the introducing archive action card has been dismissed for the active user.
+     */
+    fun dismissIntroducingArchiveActionCard()
+
+    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
