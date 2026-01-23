@@ -286,17 +286,27 @@ class RootNavViewModel @Inject constructor(
      */
     private fun shouldShowVaultMigration(specialCircumstance: SpecialCircumstance?): Boolean =
         when (specialCircumstance) {
-            is SpecialCircumstance.ShareNewSend,
+            is SpecialCircumstance.AccountSecurityShortcut,
+            is SpecialCircumstance.GeneratorShortcut,
             is SpecialCircumstance.SearchShortcut,
             is SpecialCircumstance.SendShortcut,
+            is SpecialCircumstance.ShareNewSend,
             is SpecialCircumstance.VerificationCodeShortcut,
             is SpecialCircumstance.VaultShortcut,
-            is SpecialCircumstance.GeneratorShortcut,
-            is SpecialCircumstance.AccountSecurityShortcut,
             null,
                 -> true
 
-            else -> false
+            is SpecialCircumstance.AddTotpLoginItem,
+            is SpecialCircumstance.AutofillSave,
+            is SpecialCircumstance.AutofillSelection,
+            is SpecialCircumstance.CredentialExchangeExport,
+            is SpecialCircumstance.Fido2Assertion,
+            is SpecialCircumstance.PasswordlessRequest,
+            is SpecialCircumstance.ProviderGetCredentials,
+            is SpecialCircumstance.ProviderGetPasswordRequest,
+            is SpecialCircumstance.ProviderCreateCredential,
+            is SpecialCircumstance.RegistrationEvent,
+                -> false
         }
 }
 
