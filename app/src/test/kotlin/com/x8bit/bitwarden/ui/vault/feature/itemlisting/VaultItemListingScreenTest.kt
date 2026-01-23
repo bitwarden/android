@@ -198,6 +198,53 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium action card restart premium button click should send UpgradeToPremiumClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Restart Premium")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
     fun `account icon should update according to state`() {
         composeTestRule
             .onNodeWithText("AU")

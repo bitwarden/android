@@ -1191,4 +1191,7 @@ Do you want to switch to this account?</string>
     <string name="upgrade_to_premium">Upgrade to premium</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
+    <string name="restart_premium">Restart Premium</string>
 </resources>
