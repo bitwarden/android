@@ -976,7 +976,7 @@ class VaultViewModel @Inject constructor(
 
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_archived.asText()))
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()))
             }
         }
     }
@@ -997,7 +997,7 @@ class VaultViewModel @Inject constructor(
 
             UnarchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()))
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()))
             }
         }
     }

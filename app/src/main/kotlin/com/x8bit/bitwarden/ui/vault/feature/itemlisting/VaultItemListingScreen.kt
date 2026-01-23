@@ -508,6 +508,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Content -> {
                 VaultItemListingContent(
                     state = state.viewState,
+                    actionCard = state.actionCard,
                     showAddTotpBanner = state.isTotp,
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
