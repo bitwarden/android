@@ -128,18 +128,17 @@ class LeaveOrganizationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = if (isNetworkError) {
-
                             LeaveOrganizationState.DialogState.NoNetwork(
                                 title = BitwardenString.internet_connection_required_title.asText(),
-                                message =
-                                    BitwardenString.internet_connection_required_message.asText(),
+                                message = BitwardenString
+                                    .internet_connection_required_message
+                                    .asText(),
                                 error = result.error,
                             )
                         } else {
                             LeaveOrganizationState.DialogState.Error(
                                 title = BitwardenString.an_error_has_occurred.asText(),
-                                message =
-                                    BitwardenString.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                                 error = result.error,
                             )
                         },
