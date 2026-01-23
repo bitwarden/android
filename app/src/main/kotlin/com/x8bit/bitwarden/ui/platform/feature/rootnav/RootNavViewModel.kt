@@ -285,14 +285,19 @@ class RootNavViewModel @Inject constructor(
      * essential operations like autofill, passkeys or Credential Manager
      */
     private fun shouldShowVaultMigration(specialCircumstance: SpecialCircumstance?): Boolean =
-        specialCircumstance == null ||
-            specialCircumstance is SpecialCircumstance.ShareNewSend ||
-            specialCircumstance is SpecialCircumstance.SearchShortcut ||
-            specialCircumstance is SpecialCircumstance.SendShortcut ||
-            specialCircumstance is SpecialCircumstance.VerificationCodeShortcut ||
-            specialCircumstance is SpecialCircumstance.VaultShortcut ||
-            specialCircumstance is SpecialCircumstance.GeneratorShortcut ||
-            specialCircumstance is SpecialCircumstance.AccountSecurityShortcut
+        when (specialCircumstance) {
+            is SpecialCircumstance.ShareNewSend,
+            is SpecialCircumstance.SearchShortcut,
+            is SpecialCircumstance.SendShortcut,
+            is SpecialCircumstance.VerificationCodeShortcut,
+            is SpecialCircumstance.VaultShortcut,
+            is SpecialCircumstance.GeneratorShortcut,
+            is SpecialCircumstance.AccountSecurityShortcut,
+            null,
+                -> true
+
+            else -> false
+        }
 }
 
 /**
