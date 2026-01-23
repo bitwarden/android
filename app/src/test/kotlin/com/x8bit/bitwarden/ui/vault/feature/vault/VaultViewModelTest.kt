@@ -645,7 +645,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()),
                     awaitItem(),
                 )
             }
@@ -703,7 +703,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()),
                     awaitItem(),
                 )
             }

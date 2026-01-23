@@ -1184,8 +1184,8 @@ Do you want to switch to this account?</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Archiving</string>
     <string name="unarchiving">Unarchiving</string>
-    <string name="item_archived">Item archived</string>
-    <string name="item_unarchived">Item unarchived</string>
+    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to premium</string>
