@@ -209,6 +209,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
                 SnackbarRelay.LEFT_ORGANIZATION,
+                SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
             ),
         )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }

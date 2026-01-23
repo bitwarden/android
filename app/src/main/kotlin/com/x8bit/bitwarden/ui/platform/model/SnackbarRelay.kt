@@ -27,4 +27,5 @@ enum class SnackbarRelay {
     SEND_DELETED,
     SEND_UPDATED,
     LEFT_ORGANIZATION,
+    VAULT_MIGRATED_TO_MY_ITEMS,
 }
