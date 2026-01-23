@@ -106,7 +106,9 @@ class LeaveOrganizationViewModel @Inject constructor(
                     ),
                 )
                 organizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined,
+                    event = OrganizationEvent.ItemOrganizationDeclined(
+                        organizationId = state.organizationId,
+                    ),
                 )
                 mutableStateFlow.update {
                     it.copy(dialogState = null)

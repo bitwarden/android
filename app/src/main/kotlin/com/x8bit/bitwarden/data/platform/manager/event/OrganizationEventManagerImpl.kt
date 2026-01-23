@@ -79,6 +79,7 @@ class OrganizationEventManagerImpl(
                     type = event.type,
                     cipherId = event.cipherId,
                     date = ZonedDateTime.now(clock),
+                    organizationId = event.organizationId,
                 ),
             )
         }

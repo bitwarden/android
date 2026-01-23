@@ -138,7 +138,9 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 mockOrganizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined,
+                    event = OrganizationEvent.ItemOrganizationDeclined(
+                        organizationId = ORGANIZATION_ID,
+                    ),
                 )
                 mockVaultMigrationManager.clearMigrationState()
             }

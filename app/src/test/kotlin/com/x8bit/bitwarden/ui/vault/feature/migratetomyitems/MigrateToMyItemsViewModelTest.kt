@@ -158,7 +158,9 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
             verify {
                 mockOrganizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationAccepted,
+                    event = OrganizationEvent.ItemOrganizationAccepted(
+                        organizationId = ORGANIZATION_ID,
+                    ),
                 )
             }
         }

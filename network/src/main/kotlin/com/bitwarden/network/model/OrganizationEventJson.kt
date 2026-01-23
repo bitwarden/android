@@ -13,4 +13,5 @@ data class OrganizationEventJson(
     @SerialName("type") val type: OrganizationEventType,
     @SerialName("cipherId") val cipherId: String?,
     @SerialName("date") @Contextual val date: ZonedDateTime,
+    @SerialName("organizationId") val organizationId: String?,
 )

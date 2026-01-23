@@ -139,7 +139,9 @@ class MigrateToMyItemsViewModel @Inject constructor(
         when (val result = action.result) {
             is MigratePersonalVaultResult.Success -> {
                 organizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationAccepted,
+                    event = OrganizationEvent.ItemOrganizationAccepted(
+                        organizationId = state.organizationId,
+                    ),
                 )
                 clearDialog()
                 sendEvent(MigrateToMyItemsEvent.NavigateToVault)
