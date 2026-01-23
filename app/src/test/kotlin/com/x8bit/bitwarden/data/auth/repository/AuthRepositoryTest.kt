@@ -26,6 +26,7 @@ import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -1137,7 +1138,12 @@ class AuthRepositoryTest {
                 publicKey = userPublicKey,
                 encryptedPrivateKey = userPrivateKey,
             )
-        } returns Unit.asSuccess()
+        } returns CreateAccountKeysResponseJson(
+            key = null,
+            publicKey = userPublicKey,
+            privateKey = userPrivateKey,
+            accountKeys = null,
+        ).asSuccess()
         coEvery {
             organizationService.organizationResetPasswordEnroll(
                 organizationId = orgId,
@@ -1222,7 +1228,12 @@ class AuthRepositoryTest {
                     publicKey = userPublicKey,
                     encryptedPrivateKey = userPrivateKey,
                 )
-            } returns Unit.asSuccess()
+            } returns CreateAccountKeysResponseJson(
+                key = null,
+                publicKey = userPublicKey,
+                privateKey = userPrivateKey,
+                accountKeys = ACCOUNT_KEYS,
+            ).asSuccess()
             coEvery {
                 organizationService.organizationResetPasswordEnroll(
                     organizationId = orgId,
@@ -1236,6 +1247,7 @@ class AuthRepositoryTest {
             val result = repository.createNewSsoUser()
 
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = userPrivateKey)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             assertEquals(NewSsoUserResult.Success, result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
@@ -1310,7 +1322,12 @@ class AuthRepositoryTest {
                     publicKey = userPublicKey,
                     encryptedPrivateKey = userPrivateKey,
                 )
-            } returns Unit.asSuccess()
+            } returns CreateAccountKeysResponseJson(
+                key = null,
+                publicKey = userPublicKey,
+                privateKey = userPrivateKey,
+                accountKeys = ACCOUNT_KEYS,
+            ).asSuccess()
             coEvery {
                 organizationService.organizationResetPasswordEnroll(
                     organizationId = orgId,
@@ -1330,6 +1347,7 @@ class AuthRepositoryTest {
             val result = repository.createNewSsoUser()
 
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = userPrivateKey)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             assertEquals(NewSsoUserResult.Success, result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
@@ -14,6 +15,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -459,48 +461,69 @@ class AuthRepositoryImpl(
                                 .getShouldTrustDevice(userId = userId) == true,
                         )
                     }
-                    .flatMap { keys ->
+                    .flatMap { registerTdeKeyResponse ->
                         accountsService
                             .createAccountKeys(
-                                publicKey = keys.publicKey,
-                                encryptedPrivateKey = keys.privateKey,
+                                publicKey = registerTdeKeyResponse.publicKey,
+                                encryptedPrivateKey = registerTdeKeyResponse.privateKey,
                             )
-                            .map { keys }
+                            .map { createAccountKeysResponse ->
+                                registerTdeKeyResponse to createAccountKeysResponse
+                            }
                     }
-                    .flatMap { keys ->
+                    .flatMap { (registerTdeKeyResponse, createAccountKeysResponse) ->
                         organizationService
                             .organizationResetPasswordEnroll(
                                 organizationId = orgAutoEnrollStatus.organizationId,
                                 userId = userId,
                                 passwordHash = null,
-                                resetPasswordKey = keys.adminReset,
+                                resetPasswordKey = registerTdeKeyResponse.adminReset,
                             )
-                            .map { keys }
+                            .map { registerTdeKeyResponse to createAccountKeysResponse }
                     }
-                    .onSuccess { keys ->
-                        // TDE and SSO user creation still uses crypto-v1. These users are not
-                        // expected to have the AEAD keys so we only store the private key for now.
-                        // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
-                        // for more details.
-                        authDiskSource.storePrivateKey(
+                    .onSuccess { (registerTdeKeyResponse, createAccountKeysResponse) ->
+                        createNewSsoUserSuccess(
                             userId = userId,
-                            privateKey = keys.privateKey,
+                            createAccountKeysResponse = createAccountKeysResponse,
+                            registerTdeKeyResponse = registerTdeKeyResponse,
                         )
-                        // Order matters here, we need to make sure that the vault is unlocked
-                        // before we trust the device, to avoid state-base navigation issues.
-                        vaultRepository.syncVaultState(userId = userId)
-                        keys.deviceKey?.let { trustDeviceResponse ->
-                            trustedDeviceManager.trustThisDevice(
-                                userId = userId,
-                                trustDeviceResponse = trustDeviceResponse,
-                            )
-                        }
                     }
             }
             .fold(
                 onSuccess = { NewSsoUserResult.Success },
                 onFailure = { NewSsoUserResult.Failure(error = it) },
             )
+    }
+
+    /**
+     * Stores all the relevant data from a successful creation of an SSO user. The data is stored
+     * while in an [UserStateManager.userStateTransaction] to ensure the `UserState` is only
+     * updated once after data stored.
+     */
+    private suspend fun createNewSsoUserSuccess(
+        userId: String,
+        createAccountKeysResponse: CreateAccountKeysResponseJson,
+        registerTdeKeyResponse: RegisterTdeKeyResponse,
+    ): Unit = userStateManager.userStateTransaction {
+        authDiskSource.storeAccountKeys(
+            userId = userId,
+            accountKeys = createAccountKeysResponse.accountKeys,
+        )
+        // TDE and SSO user creation still uses crypto-v1. These users are not
+        // expected to have the AEAD keys so we only store the private key for now.
+        // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
+        // for more details.
+        authDiskSource.storePrivateKey(
+            userId = userId,
+            privateKey = registerTdeKeyResponse.privateKey,
+        )
+        vaultRepository.syncVaultState(userId = userId)
+        registerTdeKeyResponse.deviceKey?.let { trustDeviceResponse ->
+            trustedDeviceManager.trustThisDevice(
+                userId = userId,
+                trustDeviceResponse = trustDeviceResponse,
+            )
+        }
     }
 
     override suspend fun completeTdeLogin(

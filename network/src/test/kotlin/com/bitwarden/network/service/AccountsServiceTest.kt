@@ -53,11 +53,10 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `createAccountKeys with empty response is success`() = runTest {
+    fun `createAccountKeys success response should return Success`() = runTest {
         val publicKey = "publicKey"
         val encryptedPrivateKey = "encryptedPrivateKey"
-        val json = ""
-        val response = MockResponse().setBody(json)
+        val response = MockResponse().setBody(CREATE_ACCOUNT_KEYS_REQUEST_RESPONSE)
         server.enqueue(response)
 
         val result = service.createAccountKeys(
@@ -368,3 +367,22 @@ private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
         salt = "mockSalt",
     ),
 )
+private val CREATE_ACCOUNT_KEYS_REQUEST_RESPONSE = """
+{
+  "key": null,
+  "publicKey": "mockPublicKey-1",
+  "privateKey": "mockPrivateKey-1",
+  "accountKeys": {
+    "signatureKeyPair": null,
+    "publicKeyEncryptionKeyPair": {
+      "wrappedPrivateKey": "mockWrappedPrivateKey-1",
+      "publicKey": "mockPublicKey-1",
+      "signedPublicKey": null,
+      "object": "publicKeyEncryptionKeyPair"
+    },
+    "securityState": null,
+    "object": "privateKeys"
+  },
+  "object": "keys"
+}
+""".trimIndent()
