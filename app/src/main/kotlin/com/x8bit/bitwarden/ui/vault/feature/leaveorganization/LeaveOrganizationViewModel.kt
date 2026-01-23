@@ -60,6 +60,7 @@ class LeaveOrganizationViewModel @Inject constructor(
             LeaveOrganizationAction.LeaveOrganizationClick -> handleLeaveOrganizationClick()
             LeaveOrganizationAction.HelpLinkClick -> handleHelpLinkClick()
             LeaveOrganizationAction.DismissDialog -> handleDismissDialog()
+            LeaveOrganizationAction.DismissNoNetworkDialog -> handleDismissNoNetworkDialog()
             is LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived -> {
                 handleRevokeFromOrganizationResultReceived(action)
             }
@@ -91,15 +92,12 @@ class LeaveOrganizationViewModel @Inject constructor(
     }
 
     private fun handleDismissDialog() {
-        if (state.shouldClearMigrationOnDismiss) {
-            vaultMigrationManager.clearMigrationState()
-        }
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = null,
-                shouldClearMigrationOnDismiss = false,
-            )
-        }
+        clearDialog()
+    }
+
+    private fun handleDismissNoNetworkDialog() {
+        vaultMigrationManager.clearMigrationState()
+        clearDialog()
     }
 
     private fun handleRevokeFromOrganizationResultReceived(
@@ -129,19 +127,33 @@ class LeaveOrganizationViewModel @Inject constructor(
 
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = LeaveOrganizationState.DialogState.Error(
-                            message = if (isNetworkError) {
-                                BitwardenString.internet_connection_required_message.asText()
-                            } else {
-                                BitwardenString.generic_error_message.asText()
-                            },
-                            error = result.error,
-                        ),
-                        // Clear migration state when user dismisses network error dialog
-                        shouldClearMigrationOnDismiss = isNetworkError,
+                        dialogState = if (isNetworkError) {
+
+                            LeaveOrganizationState.DialogState.NoNetwork(
+                                title = BitwardenString.internet_connection_required_title.asText(),
+                                message =
+                                    BitwardenString.internet_connection_required_message.asText(),
+                                error = result.error,
+                            )
+                        } else {
+                            LeaveOrganizationState.DialogState.Error(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message =
+                                    BitwardenString.generic_error_message.asText(),
+                                error = result.error,
+                            )
+                        },
                     )
                 }
             }
+        }
+    }
+
+    private fun clearDialog() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = null,
+            )
         }
     }
 }
@@ -154,7 +166,6 @@ data class LeaveOrganizationState(
     val organizationId: String,
     val organizationName: String,
     val dialogState: DialogState?,
-    val shouldClearMigrationOnDismiss: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -172,6 +183,17 @@ data class LeaveOrganizationState(
          */
         @Parcelize
         data class Error(
+            val title: Text,
+            val message: Text,
+            val error: Throwable? = null,
+        ) : DialogState()
+
+        /**
+         * No network connection dialog when leave operation fails due to network issues.
+         */
+        @Parcelize
+        data class NoNetwork(
+            val title: Text,
             val message: Text,
             val error: Throwable? = null,
         ) : DialogState()
@@ -216,6 +238,11 @@ sealed class LeaveOrganizationAction {
      * User dismissed a dialog.
      */
     data object DismissDialog : LeaveOrganizationAction()
+
+    /**
+     * User dismissed the NoNetwork dialog.
+     */
+    data object DismissNoNetworkDialog : LeaveOrganizationAction()
 
     /**
      * Internal actions for ViewModel processing.

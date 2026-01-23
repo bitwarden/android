@@ -65,6 +65,7 @@ fun MigrateToMyItemsScreen(
     MigrateToMyItemsDialogs(
         dialog = state.dialog,
         onDismissRequest = handlers.onDismissDialog,
+        onDismissNoNetworkRequest = handlers.onDismissNoNetworkDialog,
     )
 
     BitwardenScaffold {
@@ -84,6 +85,7 @@ fun MigrateToMyItemsScreen(
 private fun MigrateToMyItemsDialogs(
     dialog: MigrateToMyItemsState.DialogState?,
     onDismissRequest: () -> Unit,
+    onDismissNoNetworkRequest: () -> Unit,
 ) {
     when (dialog) {
         is MigrateToMyItemsState.DialogState.Error -> {
@@ -97,6 +99,15 @@ private fun MigrateToMyItemsDialogs(
 
         is MigrateToMyItemsState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialog.message())
+        }
+
+        is MigrateToMyItemsState.DialogState.NoNetwork -> {
+            BitwardenBasicDialog(
+                title = dialog.title(),
+                message = dialog.message(),
+                throwable = dialog.throwable,
+                onDismissRequest = onDismissNoNetworkRequest,
+            )
         }
 
         null -> Unit

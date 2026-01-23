@@ -27,7 +27,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.SocketTimeoutException
@@ -192,7 +191,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `MigrateToMyItemsResultReceived with timeout error should show internet connection required message and set shouldClearMigrationOnDismiss`() =
+    fun `MigrateToMyItemsResultReceived with timeout error should show DialogState NoNetwork`() =
         runTest {
             val error = SocketTimeoutException("Timeout")
             val viewModel = createViewModel()
@@ -206,16 +205,15 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                val errorState = awaitItem()
-                assert(errorState.dialog is MigrateToMyItemsState.DialogState.Error)
-                val errorDialog = errorState.dialog as MigrateToMyItemsState.DialogState.Error
-                assertEquals(BitwardenString.an_error_has_occurred.asText(), errorDialog.title)
                 assertEquals(
-                    BitwardenString.internet_connection_required_message.asText(),
-                    errorDialog.message,
+                    DEFAULT_STATE.copy(
+                        dialog = MigrateToMyItemsState.DialogState.NoNetwork(
+                            title = BitwardenString.internet_connection_required_title.asText(),
+                            message = BitwardenString.internet_connection_required_message.asText(),
+                            throwable = error,
+                        ),
+                    ), awaitItem(),
                 )
-                assertEquals(error, errorDialog.throwable)
-                assertTrue(errorState.shouldClearMigrationOnDismiss)
             }
         }
 
@@ -261,72 +259,61 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
                     result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
-            val errorState = awaitItem()
-            assert(errorState.dialog is MigrateToMyItemsState.DialogState.Error)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = MigrateToMyItemsState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                            ORGANIZATION_NAME,
+                        ),
+                        throwable = null,
+                    ),
+                ), awaitItem(),
+            )
 
             // Dismiss the dialog
             viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
-            val clearedState = awaitItem()
-            assertNull(clearedState.dialog)
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `DismissDialogClicked should clear migration state when shouldClearMigrationOnDismiss is true`() =
-        runTest {
-            val error = SocketTimeoutException("Timeout")
-            val viewModel = createViewModel()
+    fun `NoNetworkDismissDialogClicked should clear dialog and clear migration state`() = runTest {
+        val viewModel = createViewModel()
+        val error = SocketTimeoutException("Timeout")
 
-            viewModel.stateFlow.test {
-                awaitItem() // Initial state
+        viewModel.stateFlow.test {
+            awaitItem() // Initial state
 
-                // Show timeout error dialog
-                viewModel.trySendAction(
-                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                        result = MigratePersonalVaultResult.Failure(error),
+            // First show an error dialog
+            viewModel.trySendAction(
+                MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                    result = MigratePersonalVaultResult.Failure(error = error),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = MigrateToMyItemsState.DialogState.NoNetwork(
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
+                        throwable = error,
                     ),
-                )
-                val errorState = awaitItem()
-                assertTrue(errorState.shouldClearMigrationOnDismiss)
+                ), awaitItem(),
+            )
 
-                // Dismiss the dialog
-                viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
-                val clearedState = awaitItem()
-
-                verify { mockVaultMigrationManager.clearMigrationState() }
-                assertNull(clearedState.dialog)
-                assertEquals(false, clearedState.shouldClearMigrationOnDismiss)
-            }
+            // Dismiss the dialog
+            viewModel.trySendAction(MigrateToMyItemsAction.NoNetworkDismissDialogClicked)
+            verify { mockVaultMigrationManager.clearMigrationState() }
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
         }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `DismissDialogClicked should not clear migration state when shouldClearMigrationOnDismiss is false`() =
-        runTest {
-            val error = Throwable("Generic error")
-            val viewModel = createViewModel()
-
-            viewModel.stateFlow.test {
-                awaitItem() // Initial state
-
-                // Show generic error dialog
-                viewModel.trySendAction(
-                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                        result = MigratePersonalVaultResult.Failure(error),
-                    ),
-                )
-                val errorState = awaitItem()
-                assertEquals(false, errorState.shouldClearMigrationOnDismiss)
-
-                // Dismiss the dialog
-                viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
-                val clearedState = awaitItem()
-
-                verify(exactly = 0) { mockVaultMigrationManager.clearMigrationState() }
-                assertNull(clearedState.dialog)
-            }
-        }
+    }
 
     private fun createViewModel(
         state: MigrateToMyItemsState = DEFAULT_STATE,
