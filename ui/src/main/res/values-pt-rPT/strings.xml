@@ -12,7 +12,7 @@
     <string name="copy_username">Copiar nome de utilizador</string>
     <string name="delete">Eliminar</string>
     <string name="deleting">A eliminar…</string>
-    <string name="do_you_really_want_to_delete">Pretende mesmo eliminar? Esta ação não pode ser anulada.</string>
+    <string name="do_you_really_want_to_delete">Pretende realmente eliminar? Esta ação não pode ser anulada.</string>
     <string name="edit">Editar</string>
     <string name="edit_folder">Editar pasta</string>
     <string name="email">E-mail</string>
@@ -406,9 +406,9 @@ A leitura será efetuada automaticamente.</string>
     <string name="restoring">A restaurar…</string>
     <string name="item_restored">Item restaurado</string>
     <string name="trash">Lixo</string>
-    <string name="do_you_really_want_to_permanently_delete_cipher">Pretende mesmo eliminar permanentemente? Esta ação não pode ser anulada.</string>
-    <string name="do_you_really_want_to_restore_cipher">Pretende mesmo restaurar este item?</string>
-    <string name="do_you_really_want_to_soft_delete_cipher">Pretende mesmo mover para o lixo?</string>
+    <string name="do_you_really_want_to_permanently_delete_cipher">Pretende realmente eliminar permanentemente? Esta ação não pode ser anulada.</string>
+    <string name="do_you_really_want_to_restore_cipher">Pretende realmente restaurar este item?</string>
+    <string name="do_you_really_want_to_soft_delete_cipher">Pretende realmente mover este item para o lixo?</string>
     <string name="account_biometric_invalidated">O desbloqueio biométrico desta conta está desativado enquanto se aguarda a verificação da palavra-passe mestra.</string>
     <string name="enable_sync_on_refresh">Permitir a sincronização ao atualizar</string>
     <string name="enable_sync_on_refresh_description">Sincronizar o cofre com o gesto de deslizar para baixo.</string>
@@ -964,9 +964,9 @@ Pretende mudar para esta conta?</string>
     <string name="please_try_again_or_select_a_different_log">Por favor, tente novamente ou selecione um registo diferente.</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">O ficheiro de registo que está a tentar partilhar foi removido.</string>
     <string name="delete_log">Eliminar registo</string>
-    <string name="do_you_really_want_to_delete_this_log">Quer mesmo eliminar este registo?</string>
+    <string name="do_you_really_want_to_delete_this_log">Pretende realmente eliminar este registo?</string>
     <string name="delete_logs">Eliminar registos</string>
-    <string name="do_you_really_want_to_delete_all_recorded_logs">Quer mesmo eliminar todos os registos gravados?</string>
+    <string name="do_you_really_want_to_delete_all_recorded_logs">Pretende realmente eliminar todos os registos gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar o domínio do Key Connector</string>
     <string name="key_connector_domain">Domínio do Key Connector:</string>
     <string name="key_connector_organization">Organização:</string>
@@ -1044,7 +1044,7 @@ Pretende mudar para esta conta?</string>
     <string name="help">Ajuda</string>
     <string name="launch_tutorial">Iniciar tutorial</string>
     <string name="delete_item">Eliminar item</string>
-    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Pretende mesmo eliminar permanentemente? Esta ação não pode ser anulada.</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Pretende realmente eliminar permanentemente? Esta ação não pode ser anulada.</string>
     <string name="data">Dados</string>
     <string name="export">Exportar</string>
     <string name="export_confirmation_title">Confirmar a exportação</string>
@@ -1184,11 +1184,18 @@ Pretende mudar para esta conta?</string>
     <string name="unable_to_unarchive_selected_item">Não foi possível desarquivar o item selecionado.</string>
     <string name="archiving">A arquivar</string>
     <string name="unarchiving">A desarquivar</string>
-    <string name="item_archived">Item arquivado</string>
-    <string name="item_unarchived">Item desarquivado</string>
+    <string name="item_moved_to_archived">Item movido para o arquivo</string>
+    <string name="item_moved_to_vault">Item movido para o cofre</string>
     <string name="archive_unavailable">Arquivo indisponível</string>
     <string name="archiving_items_is_a_premium_feature">O arquivo de itens é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="upgrade_to_premium">Atualizar para o Premium</string>
     <string name="this_item_is_archived">Este item está arquivado.</string>
+    <string name="introducing_archive">Apresentamos o arquivo</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Mantenha os itens de que não precisa de momento seguros, mas fora de vista.</string>
+    <string name="go_to_archive">Ir para o arquivo</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Este item está arquivado. Guardar as alterações restaurá-lo-á no seu cofre.</string>
+    <string name="your_premium_subscription_ended">A sua subscrição Premium terminou</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Para recuperar o acesso ao seu arquivo, reinicie a sua subscrição Premium. Se editar os detalhes de um item arquivado antes de reiniciar, ele será movido de volta para o seu cofre.</string>
+    <string name="restart_premium">Reiniciar o Premium</string>
+    <string name="items_transferred">Itens transferidos</string>
 </resources>

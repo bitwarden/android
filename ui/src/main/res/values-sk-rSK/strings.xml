@@ -1200,11 +1200,18 @@ Chcete prepnúť na tento účet?</string>
     <string name="unable_to_unarchive_selected_item">Nie je možné zrušiť archiváciu vybranej položky.</string>
     <string name="archiving">Archivuje sa</string>
     <string name="unarchiving">Ruší sa archivácia</string>
-    <string name="item_archived">Položka bola archivovaná</string>
-    <string name="item_unarchived">Položka bola odobraná z archívu</string>
+    <string name="item_moved_to_archived">Položka bola presunutá do archívu</string>
+    <string name="item_moved_to_vault">Položka bola presunutá do trezoru</string>
     <string name="archive_unavailable">Archív je nedostupný</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
     <string name="this_item_is_archived">Táto položka je archivovaná.</string>
+    <string name="introducing_archive">Predstavujeme archív</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Položky, ktoré momentálne nepotrebujete, uchovávajte na bezpečnom mieste, ale mimo dohľadu.</string>
+    <string name="go_to_archive">Prejsť do archívu</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Táto položka je archivovaná. Uloženie zmien ju obnoví do trezoru.</string>
+    <string name="your_premium_subscription_ended">Vaše predplatné Prémium skončilo</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ak chcete obnoviť prístup k svojmu archívu, reštartujte predplatné Prémium. Ak pred reštartom upravíte podrobnosti archivovanej položky, bude presunutá späť do trezoru.</string>
+    <string name="restart_premium">Reštartovať Prémium</string>
+    <string name="items_transferred">Items transferred</string>
 </resources>
