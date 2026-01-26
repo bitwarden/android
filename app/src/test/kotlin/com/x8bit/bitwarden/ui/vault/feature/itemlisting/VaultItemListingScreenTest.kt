@@ -2574,7 +2574,6 @@ private val DEFAULT_STATE = VaultItemListingState(
     isPremium = false,
     isRefreshing = false,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
