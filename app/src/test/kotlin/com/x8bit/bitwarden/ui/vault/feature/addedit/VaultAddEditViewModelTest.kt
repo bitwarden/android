@@ -8,7 +8,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -44,7 +43,6 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -223,11 +221,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { show(message = any(), duration = any()) } just runs
     }
     private val environmentRepository = FakeEnvironmentRepository()
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
-    }
 
     @BeforeEach
     fun setup() {
@@ -268,7 +261,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
-            isArchiveEnabled = true,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -357,7 +349,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
-                isArchiveEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -5153,7 +5144,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
-            isArchiveEnabled = true,
         )
 
     @Suppress("LongParameterList")
@@ -5236,7 +5226,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
-            featureFlagManager = featureFlagManager,
             authRepository = authRepository,
             clipboardManager = bitwardenClipboardManager,
             policyManager = policyManager,
