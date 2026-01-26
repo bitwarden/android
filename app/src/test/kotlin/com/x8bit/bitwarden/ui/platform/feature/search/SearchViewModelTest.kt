@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -26,7 +25,6 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -34,7 +32,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -165,11 +163,6 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
-    }
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
     }
 
     @BeforeEach
@@ -1482,7 +1475,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1594,7 +1586,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1713,7 +1704,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1835,7 +1825,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -2034,7 +2023,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         organizationEventManager = organizationEventManager,
         premiumStateManager = premiumStateManager,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
     )
 
     /**
@@ -2070,7 +2058,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -2115,7 +2102,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(

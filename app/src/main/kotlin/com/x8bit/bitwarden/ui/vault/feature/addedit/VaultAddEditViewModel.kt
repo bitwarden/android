@@ -184,7 +184,6 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
-                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
                 isCardScannerEnabled = featureFlagManager.getFeatureFlag(FlagKey.CardScanner),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
@@ -278,12 +277,6 @@ class VaultAddEditViewModel @Inject constructor(
                     shouldShowCoachMarkTour = shouldShowTour,
                 )
             }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1706,10 +1699,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUnarchiveCipherReceive(action)
             }
 
-            is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultAddEditAction.Internal.CardScannerFlagUpdateReceive -> {
                 handleCardScannerFlagUpdateReceive(action)
             }
@@ -1927,12 +1916,6 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleCardScannerFlagUpdateReceive(
@@ -2544,7 +2527,6 @@ data class VaultAddEditState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
-    private val isArchiveEnabled: Boolean,
     val isCardScannerEnabled: Boolean,
 ) : Parcelable {
 
@@ -2602,8 +2584,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the archive button.
      */
     val displayArchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -2613,8 +2594,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the unarchive button.
      */
     val displayUnarchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -3990,13 +3970,6 @@ sealed class VaultAddEditAction {
          */
         data class AvailableFoldersReceive(
             val folderData: DataState<List<FolderView>>,
-        ) : Internal()
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

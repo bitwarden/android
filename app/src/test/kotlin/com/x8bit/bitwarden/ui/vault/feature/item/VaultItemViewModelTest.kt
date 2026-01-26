@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.manager.file.FileManager
@@ -26,11 +25,10 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -135,11 +133,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
-    }
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
     }
 
     @BeforeEach
@@ -2988,7 +2981,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         snackbarRelayManager = snackbarRelayManager,
         premiumStateManager = premiumStateManager,
-        featureFlagManager = featureFlagManager,
     )
 
     private fun createViewState(
@@ -3027,7 +3019,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
             hasPremium = true,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_USER_ACCOUNT = UserState.Account(

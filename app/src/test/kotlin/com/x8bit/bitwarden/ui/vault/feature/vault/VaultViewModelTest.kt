@@ -226,13 +226,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
-    private val mutableArchiveItemsFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
         } returns mutableCxpExportFeatureFlagFlow
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow
-        every { getFeatureFlag(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow.value
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
@@ -465,7 +462,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         val state = createMockVaultState(viewState = contentViewState).copy(
             isPremiumUpgradeBannerEligible = false,
             isPremium = true,
-            isArchiveEnabled = true,
             isIntroducingArchiveActionCardDismissed = false,
         )
 
@@ -481,7 +477,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         val state = createMockVaultState(viewState = contentViewState).copy(
             isPremiumUpgradeBannerEligible = false,
             isPremium = false,
-            isArchiveEnabled = true,
             isIntroducingArchiveActionCardDismissed = false,
         )
 
@@ -1289,7 +1284,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
-                isArchiveEnabled = true,
             ),
         )
             .copy(
@@ -1315,7 +1309,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
                     restrictItemTypesPolicyOrgIds = emptyList(),
-                    isArchiveEnabled = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1451,7 +1444,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                     archivedItemsCount = 0,
-                    archiveEnabled = true,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
@@ -1481,7 +1473,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
-                    archiveEnabled = true,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
@@ -1620,7 +1611,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
-                    archiveEnabled = true,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
@@ -1761,7 +1751,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -1829,7 +1818,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -1945,7 +1933,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -2035,7 +2022,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -2271,7 +2257,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = null,
-                        archiveEnabled = true,
                         archiveSubText = BitwardenString.premium_subscription_required.asText(),
                         archiveEndIcon = BitwardenDrawable.ic_locked,
                         showCardGroup = true,
@@ -2378,7 +2363,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 1,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -2451,7 +2435,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -3751,7 +3734,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -3813,7 +3795,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
-                        archiveEnabled = true,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
@@ -4047,7 +4028,6 @@ private fun createMockVaultState(
         cipherDecryptionFailureIds = persistentListOf(),
         hasShownDecryptionFailureAlert = false,
         restrictItemTypesPolicyOrgIds = emptyList(),
-        isArchiveEnabled = true,
         isIntroducingArchiveActionCardDismissed = false,
         isPremiumUpgradeBannerEligible = false,
     )
@@ -4066,7 +4046,6 @@ private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
     collectionItems = emptyList(),
     trashItemsCount = 0,
     archivedItemsCount = null,
-    archiveEnabled = false,
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
