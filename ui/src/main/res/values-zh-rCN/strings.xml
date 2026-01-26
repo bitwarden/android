@@ -1099,7 +1099,7 @@
     <string name="copy_error_report">复制错误报告</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="other">Bitwarden 无法解密 %1$d 个密码库项目。复制此错误报告并将其分享给客户成功团队，以避免额外的数据丢失。</item>
+        <item quantity="other">Bitwarden 无法解密 %1$d 个密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</item>
     </plurals>
     <string name="select_a_card_for_x">为 %s 选择一个支付卡</string>
     <string name="advanced_options">高级选项</string>
@@ -1177,11 +1177,18 @@
     <string name="unable_to_unarchive_selected_item">无法取消归档所选项目。</string>
     <string name="archiving">正在归档</string>
     <string name="unarchiving">正在取消存档</string>
-    <string name="item_archived">已归档的项目</string>
-    <string name="item_unarchived">已取消归档的项目</string>
+    <string name="item_moved_to_archived">项目已移动到归档</string>
+    <string name="item_moved_to_vault">项目已移动到密码库</string>
     <string name="archive_unavailable">归档不可用</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是一项高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
-    <string name="this_item_is_archived">此项目已存档。</string>
+    <string name="this_item_is_archived">此项目已归档。</string>
+    <string name="introducing_archive">归档介绍</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">将您暂时不需要的项目安全地存放，同时不再显示。</string>
+    <string name="go_to_archive">前往归档</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">此项目已归档。保存更改会将其恢复到您的密码库。</string>
+    <string name="your_premium_subscription_ended">您的高级版订阅已结束</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">要重新获取归档内容的访问权限，请重启您的高级版订阅。如果您在重启前编辑了某个已归档项目的详细信息，它将被移回您的密码库中。</string>
+    <string name="restart_premium">重启高级版</string>
+    <string name="items_transferred">项目已转移</string>
 </resources>

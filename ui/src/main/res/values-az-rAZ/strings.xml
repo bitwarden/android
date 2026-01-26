@@ -3,7 +3,7 @@
     <string name="about">Haqqında</string>
     <string name="add_folder">Qovluq əlavə et</string>
     <string name="add_item">Maddə əlavə edin</string>
-    <string name="an_error_has_occurred">Bir xəta baş verdi.</string>
+    <string name="an_error_has_occurred">Bir xəta baş verdi</string>
     <string name="apply">Tətbiq et</string>
     <string name="back">Geri</string>
     <string name="cancel">Ləğv et</string>
@@ -17,7 +17,7 @@
     <string name="edit_folder">Qovluğa düzəliş et</string>
     <string name="email">E-poçt</string>
     <string name="email_address">E-poçt ünvanı</string>
-    <string name="enter_pin">PIN kodunuzu daxil edin.</string>
+    <string name="enter_pin">PIN kodunuzu daxil edin</string>
     <string name="favorites">Sevimlilər</string>
     <string name="folder">Qovluq</string>
     <string name="folder_created">Yeni qovluq yaradıldı.</string>
@@ -129,8 +129,8 @@
     <string name="no_text_sends">Seyfinizdə heç bir mətn Send-i yoxdur.</string>
     <string name="no_file_sends">Seyfinizdə heç bir fayl Send-i yoxdur.</string>
     <string name="no_ssh_keys">Seyfinizdə heç bir SSH açarı yoxdur.</string>
-    <string name="no_archives_title">Archive is empty</string>
-    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
+    <string name="no_archives_title">Arxiv boşdur</string>
+    <string name="no_archives_message">Axtarış nəticələrində və avto-doldurma təkliflərində görmək istəmədiyiniz, ancaq bir gün ehtiyacınız olacaq elementləri arxivinizə əlavə edin.</string>
     <string name="new_text_send">Yeni mətn Send-i</string>
     <string name="new_file_send">Yeni fayl Send-i</string>
     <string name="no_username">İstifadəçi adı yoxdur</string>
@@ -271,7 +271,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="expiration">Bitmə vaxtı</string>
     <string name="show_website_icons">Veb sayt ikonlarını göstər</string>
     <string name="show_website_icons_help">Veb sayt ikonları üçün köməyi göstər</string>
-    <string name="show_website_icons_description">Hər girişin yanında tanına bilən təsvir göstər.</string>
+    <string name="show_website_icons_description">Hər girişin yanında tanına bilən təsvir göstər</string>
     <string name="icons_url">İkon server URL-si</string>
     <string name="vault_is_locked">Seyf kilidlənib</string>
     <string name="go_to_my_vault">Seyfimə get</string>
@@ -292,7 +292,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="new_uri">Yeni URI</string>
     <string name="add_website">Veb sayt əlavə et</string>
     <string name="base_domain">Baza domeni</string>
-    <string name="default_text">İlkin  (%1$s)</string>
+    <string name="default_text">İlkin (%1$s)</string>
     <string name="exact">Tam</string>
     <string name="host">Host</string>
     <string name="reg_ex">Müntəzəm ifadə</string>
@@ -351,7 +351,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="pin">PIN</string>
     <string name="unlock">Kilidi aç</string>
     <string name="thirty_minutes">30 dəqiqə</string>
-    <string name="set_pin_description">Bitwarden-in kilidini açmaq üçün PIN kodunuzu ayarlayın. Tətbiqdən tam çıxış etdikdə PIN ayarlarınız sıfırlanacaq.</string>
+    <string name="set_pin_description">PIN-iniz ən azı 4 xarakterdən ibarət olmalıdır. Bitwarden tətbiqindən manual olaraq çıxış etsəniz, PIN ayarlarınız sıfırlanacaq.</string>
     <string name="logged_in_as_on">%2$s üzərində %1$s kimi giriş edildi.</string>
     <string name="vault_locked_master_password">Seyfiniz kilidlənib. Davam etmək üçün ana parolunuzu doğrulayın.</string>
     <string name="vault_locked_pin">Seyfiniz kilidlənib. Davam etmək üçün PIN kodunuzu doğrulayın.</string>
@@ -367,7 +367,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="default_uri_match_detection">İlkin URI uyuşma aşkarlaması</string>
     <string name="default_uri_match_detection_description">URI uyuşma aşkarlaması, Bitwarden-in avto-doldurma təkliflərini necə müəyyən etdiyini göstərir.</string>
     <string name="theme">Tema</string>
-    <string name="theme_description">Tətbiqin rəng temasını dəyişdir.</string>
+    <string name="theme_description">Tətbiqin rəng temasını dəyişdir</string>
     <string name="copy_notes">Qeydləri kopyala</string>
     <string name="require_master_password_on_app_restart">Tətbiq yenidən başladılanda ana parol tələb edilsin?</string>
     <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
@@ -551,7 +551,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="verification_codes">Doğrulama kodları</string>
     <string name="premium_subscription_required">Premium abunəlik tələb olunur</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Kimlik doğrulayıcı açarını əlavə edilə bilmirsiniz? <annotation link="scanQrCode">QR kodu skan edin</annotation></string>
-    <string name="scan_qr_code">QR kodu skane et</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">QR kodu skan et</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">QR kodu skan edə bilmirsiniz? <annotation link="enterKeyManually">Açarı əllə daxil edin</annotation></string>
     <string name="authenticator_key_scanner">Kimlik doğrulayıcı açarı</string>
     <string name="authenticator_key_help">Kimlik doğrulayıcı açarı üçün kömək</string>
@@ -718,13 +718,13 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="user_verification_direction">İstifadəçi doğrulama</string>
     <string name="create_account_on">Hesab yarat</string>
     <string name="create_account_on_with_colon">Hesab yarat:</string>
-    <string name="we_sent_an_email_to">%1$s ünvanına bir e-poçt göndərdik.</string>
+    <string name="we_sent_an_email_to">E-poçt göndərdik: <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Davam edərək, <annotation link="termsOfService">Xidmət Şərtləri</annotation> və <annotation link="privacyPolicy">Məxfilik Siyasəti</annotation> ilə razılaşırsınız</string>
     <string name="unsubscribe">Abunəlikdən çıx</string>
     <string name="check_your_email">E-poçtunuzu yoxlayın</string>
     <string name="open_email_app">E-poçt tətbiqini aç</string>
     <string name="email_verified">E-poçt doğrulandı</string>
-    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
+    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın. İstənilən vaxt <annotation link="unsubscribe">abunəlikdən çıxa bilərsiniz</annotation>.</string>
     <string name="security_prioritized">Təhlükəsizlik, prioritet</string>
     <string name="welcome_message_1">Girişləri, kart və kimlik məlumatlarınızı güvənli seyfinizdə saxlayın. Bitwarden, sizin üçün mühüm olanları qorumaq üçün zero-knowledge və ucdan-uca şifrələmə istifadə edir.</string>
     <string name="welcome_message_2">Tək bir hərf yazmadan hesablarınıza giriş etmək üçün biometrik kilid açma və avto-doldurma seçimlərini qurun.</string>
@@ -811,23 +811,23 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="give_your_vault_a_head_start">Seyfinizə üstünlük verin</string>
     <string name="class_3_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazdakı bütün biometrik seçimlərlə uyumlu olmaya bilər.</string>
     <string name="class_2_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazdakı əlçatan biometrik seçimlərlə uyumlu deyil.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Kompüterinizdə hazırkı brauzerinizə və ya parol menecerinizə giriş edin.</string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Parollarınızı xaricə köçürün. Bu seçim adətən ayarlarınızda tapılır.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Veb tətbiqdə \"Veriləri daxilə köçür\"ü seçin, sonra sinxronlaşdırmanı bitirmək üçün \"Hazırdır\"a toxunun.</string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Kompüterinizdə <annotation emphasis="bold">hazırkı brauzerinizə və ya parol menecerinizə giriş edin</annotation>.</string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Parollarınızı xaricə köçürün.</annotation> Bu seçim adətən ayarlarınızda tapılır.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Veb tətbiqdə <annotation emphasis="bold">\"Veriləri daxilə köçür\"ü</annotation> seçin, sonra sinxronlaşdırmanı bitirmək üçün \"Hazırdır\"a toxunun.</string>
     <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Saxlanılmış girişlərinizi xaricə köçürün</string>
     <string name="delete_this_file_after_import_is_complete">Daxilə köçürmə tamamlandıqdan sonra bu faylı siləcəksiniz.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Kompüterinizdə yeni bir brauzer vərəqi açın və bura gedin: vault.bitwarden.com</string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Kompüterinizdə yeni bir brauzer vərəqi açın və <annotation emphasis="bold">bura gedin: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Bitwarden veb tətbiqində giriş edin.</string>
     <string name="step_2_of_3">Addım 2/3</string>
     <string name="log_in_to_bitwarden">Bitwarden-ə giriş edin</string>
     <string name="step_3_of_3">Addım 3/3</string>
     <string name="import_logins_to_bitwarden">Girişləri Bitwarden-ə köçür</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwarden naviqasiyasında Alətlər seçimini tapın və \"Veriləri daxilə köçür\"ü seçin.</string>
-    <string name="fill_out_the_form_and_import_your_saved_password_file">Formu doldurun və saxlanılmış parol faylınızı daxilə köçürün.</string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Təhlükəsizliyiniz üçün saxlanılmış parol faylınızı sildiyinizə əmin olun.</string>
-    <string name="need_help_check_out_import_help">Kömək lazımdır? Daxilə köçürmə üzrə kömək səhifəmizə baxın.</string>
-    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwarden naviqasiyasında <annotation emphasis="bold">Alətlər seçimini tapın</annotation> və <annotation emphasis="bold">Veriləri daxilə köçür\"ü</annotation> seçin.</string>
+    <string name="fill_out_the_form_and_import_your_saved_password_file">Formu doldurun və <annotation emphasis="bold">saxlanılmış parol faylınızı daxilə köçürün.</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Təhlükəsizliyiniz üçün saxlanılmış <annotation emphasis="bold">parol faylınızı sildiyinizə əmin olun.</annotation></string>
+    <string name="need_help_check_out_import_help">Kömək lazımdır? <annotation link="importHelp">Daxilə köçürmə üzrə kömək səhifəmizə baxın.</annotation></string>
+    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</annotation></string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu, bilinən Bitwarden serveri deyil. Provayderinizi yoxlamağınız və ya serverinizi güncəlləməyiniz lazım gələ bilər.</string>
     <string name="syncing_logins_loading_message">Girişlər sinxronlaşdırılır…</string>
     <string name="download_the_browser_extension">Brauzer uzantısını endir</string>
@@ -869,11 +869,11 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="cxp_import">CXP daxilə köçürmə</string>
     <string name="cxp_export">CXP xaricə köçürmə</string>
     <string name="choose_three_or_four_random_words">Üç və ya dörd təsadüfi söz seçin</string>
-    <string name="pick_three_or_four_random_unrelated_words">Asanlıqla xatırlaya biləcəyiniz üç və ya dörd təsadüfi və əlaqəsiz söz seçin. Bəyəndiniz obyektləri, məkanları və ya şeyləri düşünün.</string>
+    <string name="pick_three_or_four_random_unrelated_words">Asanlıqla xatırlaya biləcəyiniz üç və ya dörd təsadüfi və əlaqəsiz söz seçin. Bəyəndiniz <annotation emphasis="bold">obyektləri, məkanları və ya şeyləri</annotation> düşünün.</string>
     <string name="combine_those_words_together">Bu sözləri birləşdirin</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Keçid ifadənizi yaratmaq üçün sözləri istənilən sırada bir araya gətirin. Tire, boşluq istifadə edin və ya bunları tək bir uzun söz kimi saxlayın—seçim sizindir!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Keçid ifadənizi yaratmaq üçün sözləri istənilən sırada bir araya gətirin. <annotation emphasis="bold">Tire, boşluq istifadə edin və ya bunları tək bir uzun söz kimi saxlayın</annotation>—seçim sizindir!</string>
     <string name="make_it_yours">Özəlləşdirin</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger">Daha da güclü etmək üçün rəqəm və ya simvol əlavə edin. Artıq unikal, güvənli və yaddaqalan bir keçid ifadəniz var!</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger">Daha da güclü etmək üçün <annotation emphasis="bold">rəqəm və ya simvol</annotation> əlavə edin. Artıq unikal, güvənli və yaddaqalan bir keçid ifadəniz var!</string>
     <string name="need_some_inspiration">Dəstək lazımdır?</string>
     <string name="check_out_the_passphrase_generator">Parol yaradıcıya nəzər salın</string>
     <string name="we_couldnt_verify_the_servers_certificate">Serverin sertifikatını doğrulaya bilmədik. Cihazınızda və ya Bitwarden serverinizdə sertifikat zənciri və ya proksi ayarları düzgün qurulmamış ola bilər.</string>
@@ -917,7 +917,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistem sertifikatını istifadə etmək, sertifikatı Bitwarden ilə saxlamaqdan daha az güvənlidir. Davam etsəniz, artıq quraşdırılmış bir sistem sertifikatı varsa, mövcud sistem sertifikatlarının bir siyahısı göstəriləcək.</string>
     <string name="link">Keçid</string>
     <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Sorğuda host URL təqdim olunmadığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
-    <string name="passkey_operation_failed_because_app_signature_is_invalid">Tətbiq imzası yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu</string>
+    <string name="passkey_operation_failed_because_app_signature_is_invalid">Tətbiq imzası yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="passkey_registration_failed_due_to_an_internal_error">Daxili bir xətaya görə keçid açarı qeydiyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Güvənilən tərəf müəyyən edilə bilmədiyi üçün keçid açarı əəməliyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">Sorğu yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu.</string>
@@ -1090,15 +1090,15 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="choose_save_location_message">Bu kimlik doğrulayıcı açarı burada saxlayın, ya da onu Bitwarden tətbiqində bir girişə əlavə edin.</string>
     <string name="save_option_as_default">Seçimi ilkin olaraq saxla</string>
     <string name="account_synced_from_bitwarden_app">Hesab, Bitwarden tətbiqindən sinxronlaşdırıldı</string>
-    <string name="local_codes">Daxili kodlar (%1$d)</string>
+    <string name="local_codes">Lokal kodlar (%1$d)</string>
     <string name="required_information_missing">Tələb olunan məlumat əskikdir</string>
     <string name="required_information_missing_message">Tələb olunan məlumatlar əskikdir (məs. \'xidmətlər\' və ya \'sirr\'). Faylınızı yoxlayıb yenidən sınayın. Dəstək üçün bitwarden.com/help ünvanını ziyarət edin</string>
     <string name="file_could_not_be_processed">Fayl emal oluna bilmədi</string>
     <string name="file_could_not_be_processed_message">Fayl emal edilə bilmədi. Bunun yararlı JSON faylı olduğuna əmin olub yenidən sınayın. Kömək lazımdır? bitwarden.com/help ünvanını ziyarət edin</string>
     <string name="get_help">Kömək al</string>
     <string name="expand_advanced_options">Qabaqcıl seçimləri genişləndir</string>
-    <string name="local_items_are_expanded_click_to_collapse">Daxili elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Daxili elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
+    <string name="local_items_are_expanded_click_to_collapse">Lokal elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Lokal elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="items_expanded_click_to_collapse">Elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
     <string name="items_are_collapsed_click_to_expand">Elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="error_cannot_decrypt">[xəta: şifrə açıla bilmir]</string>
@@ -1175,21 +1175,28 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="why_am_i_seeing_this">Bunu niyə görürəm?</string>
     <string name="migrating_items_to_x">Elementlər daşınır: %s</string>
     <string name="failed_to_migrate_items_to_x">Elementlər daşınmadı: %s</string>
-    <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
-    <string name="archiving">Archiving</string>
-    <string name="unarchiving">Unarchiving</string>
-    <string name="item_archived">Item archived</string>
-    <string name="item_unarchived">Item unarchived</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
-    <string name="this_item_is_archived">This item is archived.</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="search_archive">Arxivdə axtar</string>
+    <string name="archive_noun">Arxiv</string>
+    <string name="archive_verb">Arxiv</string>
+    <string name="unarchive">Arxivdən çıxart</string>
+    <string name="archived">Arxivləndi</string>
+    <string name="hidden_items">Gizli elementlər</string>
+    <string name="unable_to_archive_selected_item">Seçilmiş element arxivlənə bilmir.</string>
+    <string name="unable_to_unarchive_selected_item">Seçilmiş element arxivdən çıxarıla bilmir.</string>
+    <string name="archiving">Arxivlənir</string>
+    <string name="unarchiving">Arxivdən çıxarılır</string>
+    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="archive_unavailable">Arxiv əlçatmazdır</string>
+    <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
+    <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
+    <string name="this_item_is_archived">Bu element arxivləndi.</string>
+    <string name="introducing_archive">Introducing archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
+    <string name="go_to_archive">Go to archive</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Bu element arxivləndi. Dəyişiklikləri saxlamaq, onu seyfinizə bərpa edəcək.</string>
+    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
+    <string name="restart_premium">Restart Premium</string>
+    <string name="items_transferred">Items transferred</string>
 </resources>

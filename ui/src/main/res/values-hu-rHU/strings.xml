@@ -1183,11 +1183,18 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="unable_to_unarchive_selected_item">Nem lehet az archivumból visszavenni a kiválasztott elemet.</string>
     <string name="archiving">Archiválás</string>
     <string name="unarchiving">Visszavétel archivumból</string>
-    <string name="item_archived">Az elem archiválásra került.</string>
-    <string name="item_unarchived">Az elem visszavételre került az archivumból.</string>
+    <string name="item_moved_to_archived">Az elem bekerült az archívumba.</string>
+    <string name="item_moved_to_vault">Az elem átkerült a széfbe.</string>
     <string name="archive_unavailable">Az archívum nem elérhető.</string>
     <string name="archiving_items_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="upgrade_to_premium">Áttérés Prémium csomagra</string>
     <string name="this_item_is_archived">Ez az elem archiválva van.</string>
+    <string name="introducing_archive">Archívum bemutatása</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Tartsuk biztonságban azokat az elemeket, amelyekre jelenleg nincs szükség, de ne lássuk azokat.</string>
+    <string name="go_to_archive">Ugrás az archívumhoz</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Ez az elem archiválva van. A változtatások mentése visszahelyezi a széfbe.</string>
+    <string name="your_premium_subscription_ended">A Prémium előfizetés véget ért.</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Az archívumhoz hozzáférés visszaszerzéséhez indítsuk újra a Prémium előfizetést. Ha az újraindítás előtt szerkesztjük egy archivált elem adatait, akkor az visszakerül a széfbe.</string>
+    <string name="restart_premium">Prémium előfizetés újraindítása</string>
+    <string name="items_transferred">Az elemek átvitelre kerültek.</string>
 </resources>
