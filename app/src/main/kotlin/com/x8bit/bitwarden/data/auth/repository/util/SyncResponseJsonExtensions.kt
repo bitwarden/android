@@ -13,26 +13,30 @@ private val JSON = Json {
 }
 
 /**
- * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization].
+ * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization] or `null` if the
+ * [SyncResponseJson.Profile.Organization.name] is not present.
  */
-fun SyncResponseJson.Profile.Organization.toOrganization(): Organization =
-    Organization(
-        id = this.id,
-        name = this.name,
-        shouldUseKeyConnector = this.shouldUseKeyConnector,
-        role = this.type,
-        shouldManageResetPassword = this.permissions.shouldManageResetPassword,
-        keyConnectorUrl = this.keyConnectorUrl,
-        userIsClaimedByOrganization = this.userIsClaimedByOrganization,
-        limitItemDeletion = this.limitItemDeletion,
-    )
+fun SyncResponseJson.Profile.Organization.toOrganization(): Organization? =
+    this.name?.let {
+        Organization(
+            id = this.id,
+            name = it,
+            shouldUseKeyConnector = this.shouldUseKeyConnector,
+            role = this.type,
+            shouldManageResetPassword = this.permissions.shouldManageResetPassword,
+            keyConnectorUrl = this.keyConnectorUrl,
+            userIsClaimedByOrganization = this.userIsClaimedByOrganization,
+            limitItemDeletion = this.limitItemDeletion,
+            shouldUseEvents = this.shouldUseEvents,
+        )
+    }
 
 /**
  * Maps the given list of [SyncResponseJson.Profile.Organization] to a list of
  * [Organization]s.
  */
 fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organization> =
-    this.map { it.toOrganization() }
+    this.mapNotNull { it.toOrganization() }
 
 /**
  * Convert the JSON data of the [SyncResponseJson.Policy] object into [PolicyInformation] data.

@@ -17,8 +17,8 @@ import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -443,14 +443,12 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-1",
                     name = "Organization User",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.USER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             needsMasterPassword = false,

@@ -72,6 +72,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -96,6 +97,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -288,8 +290,11 @@ class AuthRepositoryImpl(
             ?.profile
             ?.forcePasswordResetReason
 
-    override val organizations: List<SyncResponseJson.Profile.Organization>
-        get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
+    override val organizations: List<Organization>
+        get() = activeUserId
+            ?.let { authDiskSource.getOrganizations(it) }
+            .orEmpty()
+            .toOrganizations()
 
     override val showWelcomeCarousel: Boolean
         get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
@@ -975,8 +980,8 @@ class AuthRepositoryImpl(
         val keyConnectorUrl = organizations
             .find {
                 it.shouldUseKeyConnector &&
-                    it.type != OrganizationType.OWNER &&
-                    it.type != OrganizationType.ADMIN
+                    it.role != OrganizationType.OWNER &&
+                    it.role != OrganizationType.ADMIN
             }
             ?.keyConnectorUrl
             ?: return RemovePasswordResult.Error(

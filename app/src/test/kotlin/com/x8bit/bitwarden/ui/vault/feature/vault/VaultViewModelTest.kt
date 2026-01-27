@@ -7,7 +7,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
@@ -23,11 +22,11 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -340,14 +339,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organiationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -429,14 +425,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -960,14 +953,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_STATE.accounts[0].copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "testOrganizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),

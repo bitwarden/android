@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 fun createMockProfile(
     number: Int,
     providerOrganizations: List<SyncResponseJson.Profile.Organization>? = listOf(
-        createMockOrganization(number = number),
+        createMockOrganizationNetwork(number = number),
     ),
     isPremiumFromOrganization: Boolean = false,
     shouldForcePasswordReset: Boolean = false,
@@ -23,7 +23,7 @@ fun createMockProfile(
     culture: String? = "mockCulture-$number",
     name: String? = "mockName-$number",
     organizations: List<SyncResponseJson.Profile.Organization>? = listOf(
-        createMockOrganization(number = number),
+        createMockOrganizationNetwork(number = number),
     ),
     shouldUseKeyConnector: Boolean = false,
     id: String = "mockId-$number",
@@ -62,7 +62,7 @@ fun createMockProfile(
 /**
  * Create a mock [SyncResponseJson.Profile.Organization] with a given [number].
  */
-fun createMockOrganization(
+fun createMockOrganizationNetwork(
     number: Int,
     shouldUsePolicies: Boolean = false,
     shouldUseKeyConnector: Boolean = false,
@@ -137,7 +137,9 @@ fun createMockOrganization(
  */
 fun createMockOrganizationKeys(
     number: Int,
-    organization: SyncResponseJson.Profile.Organization = createMockOrganization(number = number),
+    organization: SyncResponseJson.Profile.Organization = createMockOrganizationNetwork(
+        number = number,
+    ),
 ): Map<String, String> =
     mapOf(organization.id to requireNotNull(organization.key))
 
