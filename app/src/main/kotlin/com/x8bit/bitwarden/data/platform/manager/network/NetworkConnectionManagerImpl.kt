@@ -49,10 +49,14 @@ class NetworkConnectionManagerImpl(
     }
 
     override val isNetworkConnected: Boolean
-        get() = connectivityManager
-            .getNetworkCapabilities(connectivityManager.activeNetwork)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            ?: false
+        get() {
+            // Try activeNetwork first, but fall back to cached network from callbacks
+            // if activeNetwork returns null (which can happen during initialization)
+            val activeNet = connectivityManager.activeNetwork
+                ?: networkChangeCallback.getCachedActiveNetwork()
+            val caps = connectivityManager.getNetworkCapabilities(activeNet)
+            return caps?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        }
 
     override val isNetworkConnectedFlow: StateFlow<Boolean> =
         networkChangeCallback
@@ -66,9 +70,14 @@ class NetworkConnectionManagerImpl(
             )
 
     override val networkConnection: NetworkConnection
-        get() = connectivityManager
-            .getNetworkCapabilities(connectivityManager.activeNetwork)
-            .networkConnection
+        get() {
+            // Try activeNetwork first, but fall back to cached network from callbacks
+            val activeNet = connectivityManager.activeNetwork
+                ?: networkChangeCallback.getCachedActiveNetwork()
+            return connectivityManager
+                .getNetworkCapabilities(activeNet)
+                .networkConnection
+        }
 
     override val networkConnectionFlow: StateFlow<NetworkConnection> = networkChangeCallback
         .connectionChangeFlow
@@ -88,30 +97,51 @@ class NetworkConnectionManagerImpl(
         private val mutableConnectionState: MutableSharedFlow<Unit> = bufferedMutableSharedFlow()
 
         /**
+         * Cache the most recently available network. This is necessary because
+         * ConnectivityManager.activeNetwork can return null during initialization even when
+         * a network is available, but the callbacks receive the actual Network object.
+         */
+        @Volatile
+        private var cachedActiveNetwork: Network? = null
+
+        /**
          * A [StateFlow] that emits when the connection state to a network changes.
          */
         val connectionChangeFlow: SharedFlow<Unit> = mutableConnectionState.asSharedFlow()
+
+        /**
+         * Get the cached active network. Returns the most recently available network
+         * from callbacks, or null if no network has been seen yet.
+         */
+        fun getCachedActiveNetwork(): Network? = cachedActiveNetwork
 
         override fun onCapabilitiesChanged(
             network: Network,
             networkCapabilities: NetworkCapabilities,
         ) {
             super.onCapabilitiesChanged(network, networkCapabilities)
+            cachedActiveNetwork = network
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
             super.onLinkPropertiesChanged(network, linkProperties)
+            cachedActiveNetwork = network
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
+            cachedActiveNetwork = network
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
+            // Only clear cache if the lost network was the cached one
+            if (cachedActiveNetwork == network) {
+                cachedActiveNetwork = null
+            }
             mutableConnectionState.tryEmit(Unit)
         }
     }
