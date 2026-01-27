@@ -64,11 +64,14 @@ dependencies {
     testImplementation(libs.mockk.mockk)
 }
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        maxHeapSize = "2g"
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
-    }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    @Suppress("MagicNumber")
+    forkEvery = 100
+    maxHeapSize = "2g"
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+    jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+        // Explicitly setting the user Country and Language because tests assume en-US
+        "-Duser.country=US" +
+        "-Duser.language=en"
 }
