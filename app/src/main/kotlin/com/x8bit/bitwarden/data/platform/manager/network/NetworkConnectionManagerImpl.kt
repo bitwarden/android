@@ -7,6 +7,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.SIGNAL_STRENGTH_UNSPECIFIED
 import android.net.NetworkRequest
+import android.util.Log
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
@@ -38,6 +39,7 @@ class NetworkConnectionManagerImpl(
         .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     init {
+        Log.d("NetworkConnectionManager", "init called")
         connectivityManager.registerNetworkCallback(
             NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -96,22 +98,26 @@ class NetworkConnectionManagerImpl(
             network: Network,
             networkCapabilities: NetworkCapabilities,
         ) {
+            Log.d("NetworkConnectionManager", "onCapabilitiesChanged called")
             super.onCapabilitiesChanged(network, networkCapabilities)
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
             super.onLinkPropertiesChanged(network, linkProperties)
+            Log.d("NetworkConnectionManager", "onLinkPropertiesChanged called")
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
+            Log.d("NetworkConnectionManager", "onAvailable called")
             mutableConnectionState.tryEmit(Unit)
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
+            Log.d("NetworkConnectionManager", "onLost called")
             mutableConnectionState.tryEmit(Unit)
         }
     }
