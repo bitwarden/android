@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.detekt) apply true
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlinx.kover) apply true
