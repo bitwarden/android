@@ -179,6 +179,12 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
         }
 }
 
+subprojects {
+    tasks.withType<JavaCompile>().configureEach {
+        options.isFork = true
+    }
+}
+
 afterEvaluate {
     tasks.withType(Detekt::class.java).configureEach {
         val typeResolutionEnabled = !classpath.isEmpty
