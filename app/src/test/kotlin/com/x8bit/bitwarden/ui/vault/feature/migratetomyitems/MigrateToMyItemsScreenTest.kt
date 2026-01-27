@@ -20,7 +20,6 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
 class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
-    private var onNavigateToVaultCalled = false
     private var onNavigateToLeaveOrganizationCalled = false
 
     private val intentManager: IntentManager = mockk {
@@ -47,7 +46,6 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
         setContent(intentManager = intentManager) {
             MigrateToMyItemsScreen(
                 viewModel = viewModel,
-                onNavigateToVault = { onNavigateToVaultCalled = true },
                 onNavigateToLeaveOrganization = { _, _ ->
                     onNavigateToLeaveOrganizationCalled = true
                 },
@@ -99,12 +97,6 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked)
         }
-    }
-
-    @Test
-    fun `NavigateToVault event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToVault)
-        assertTrue(onNavigateToVaultCalled)
     }
 
     @Test
