@@ -21,6 +21,8 @@ import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.core.data.manager.UuidManager
+import com.bitwarden.core.data.manager.UuidManagerImpl
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManagerImpl
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
@@ -93,11 +95,19 @@ object PlatformManagerModule {
     @Singleton
     fun provideImportManager(
         authenticatorDiskSource: AuthenticatorDiskSource,
-    ): ImportManager = ImportManagerImpl(authenticatorDiskSource)
+        uuidManager: UuidManager,
+    ): ImportManager = ImportManagerImpl(
+        authenticatorDiskSource = authenticatorDiskSource,
+        uuidManager = uuidManager,
+    )
 
     @Provides
     @Singleton
     fun provideEncodingManager(): BitwardenEncodingManager = BitwardenEncodingManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideUuidManager(): UuidManager = UuidManagerImpl()
 
     @Provides
     @Singleton
