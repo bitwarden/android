@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.network.util.isTimeoutError
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -13,6 +12,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
@@ -91,9 +91,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
                 trySendAction(
                     MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
                         result = MigratePersonalVaultResult.Failure(
-                            error = MissingPropertyException(
-                                propertyName = "UserId",
-                            ),
+                            error = NoActiveUserException(),
                         ),
                     ),
                 )
@@ -164,7 +162,7 @@ class MigrateToMyItemsViewModel @Inject constructor(
                     ),
                 )
                 clearDialog()
-                sendEvent(MigrateToMyItemsEvent.NavigateToVault)
+                // Navigation to vault is handled by state-based navigation.
             }
 
             is MigratePersonalVaultResult.Failure -> {
@@ -174,26 +172,23 @@ class MigrateToMyItemsViewModel @Inject constructor(
 
                 mutableStateFlow.update {
                     it.copy(
-                        dialog =
-                            if (isNetworkOrTimeoutError) {
-                                MigrateToMyItemsState.DialogState.NoNetwork(
-                                    title = BitwardenString
-                                        .internet_connection_required_title
-                                        .asText(),
-                                    message = BitwardenString
-                                        .internet_connection_required_message
-                                        .asText(),
-                                    throwable = result.error,
-                                )
-                            } else {
-                                MigrateToMyItemsState.DialogState.Error(
-                                    title = BitwardenString.an_error_has_occurred.asText(),
-                                    message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                                        it.organizationName,
-                                    ),
-                                    throwable = result.error,
-                                )
-                            },
+                        dialog = if (isNetworkOrTimeoutError) {
+                            MigrateToMyItemsState.DialogState.NoNetwork(
+                                title = BitwardenString.internet_connection_required_title.asText(),
+                                message = BitwardenString
+                                    .internet_connection_required_message
+                                    .asText(),
+                                throwable = result.error,
+                            )
+                        } else {
+                            MigrateToMyItemsState.DialogState.Error(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                                    it.organizationName,
+                                ),
+                                throwable = result.error,
+                            )
+                        },
                     )
                 }
             }
@@ -256,11 +251,6 @@ data class MigrateToMyItemsState(
  * Models the events that can be sent from the [MigrateToMyItemsViewModel].
  */
 sealed class MigrateToMyItemsEvent {
-    /**
-     * Navigate to the vault screen after accepting migration.
-     */
-    data object NavigateToVault : MigrateToMyItemsEvent()
-
     /**
      * Navigate to the leave organization flow after declining.
      */
