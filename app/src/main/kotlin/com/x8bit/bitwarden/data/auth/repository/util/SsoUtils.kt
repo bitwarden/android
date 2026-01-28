@@ -17,25 +17,26 @@ private const val APP_LINK_SCHEME: String = "https"
 private const val DEEPLINK_SCHEME: String = "bitwarden"
 private const val CALLBACK: String = "sso-callback"
 
-const val SSO_URI: String = "bitwarden://$CALLBACK"
-
 /**
  * Generates a URI for the SSO custom tab.
  *
  * @param identityBaseUrl The base URl for the identity service.
+ * @param redirectUrl The redirect URI used in the SSO request.
  * @param organizationIdentifier The SSO organization identifier.
  * @param token The prevalidated SSO token.
  * @param state Random state used to verify the validity of the response.
  * @param codeVerifier A random string used to generate the code challenge.
  */
+@Suppress("LongParameterList")
 fun generateUriForSso(
     identityBaseUrl: String,
+    redirectUrl: String,
     organizationIdentifier: String,
     token: String,
     state: String,
     codeVerifier: String,
 ): Uri {
-    val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
+    val redirectUri = URLEncoder.encode(redirectUrl, "UTF-8")
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
 

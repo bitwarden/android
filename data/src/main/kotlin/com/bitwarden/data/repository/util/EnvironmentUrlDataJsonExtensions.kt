@@ -32,6 +32,34 @@ val EnvironmentUrlDataJson.baseApiUrl: String
     }
 
 /**
+ * Returns the scheme used for app-links within the app.
+ */
+val EnvironmentUrlDataJson.appLinksScheme: String
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES,
+        EnvironmentRegion.EUROPEAN_UNION,
+            -> "https"
+
+        EnvironmentRegion.SELF_HOSTED -> "bitwarden"
+    }
+
+/**
+ * Returns the sso app-link URI for the current environment.
+ */
+val EnvironmentUrlDataJson.ssoAppLinksRedirectUrl: String
+    get() = appLinksRedirectUrl(kind = "sso")
+
+/**
+ * Returns the app-link URI for the current environment and [kind].
+ */
+private fun EnvironmentUrlDataJson.appLinksRedirectUrl(kind: String): String =
+    when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> "https://bitwarden.com/$kind-callback"
+        EnvironmentRegion.EUROPEAN_UNION -> "https://bitwarden.eu/$kind-callback"
+        EnvironmentRegion.SELF_HOSTED -> "bitwarden://$kind-callback"
+    }
+
+/**
  * Returns the base events URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseEventsUrl: String

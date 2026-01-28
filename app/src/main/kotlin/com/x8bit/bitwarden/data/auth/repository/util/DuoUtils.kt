@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import android.content.Intent
 import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 
 private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
@@ -77,6 +78,14 @@ private fun Uri?.getDuoCallbackTokenResult(): DuoCallbackTokenResult {
         DuoCallbackTokenResult.MissingToken
     }
 }
+
+/**
+ * Generates a [Uri] to display a duo challenge for Bitwarden authentication.
+ */
+fun generateUriForDuo(
+    authUrl: String,
+    appLinksScheme: String,
+): Uri = "$authUrl&deeplinkScheme=$appLinksScheme".toUri()
 
 /**
  * Sealed class representing the result of Duo callback token extraction.
