@@ -5,6 +5,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.core.data.manager.UuidManager
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,7 +30,10 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            message = BitwardenString.import_2fas_password_protected_not_supported.asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -81,8 +86,10 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        // HOTP causes exception which is caught and converted to Error
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            message = "Unsupported OTP type: HOTP.".asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -504,7 +511,11 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            title = BitwardenString.file_could_not_be_processed.asText(),
+            message = BitwardenString.file_could_not_be_processed_message.asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -513,7 +524,12 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            title = BitwardenString.required_information_missing.asText(),
+            message = BitwardenString.required_information_missing_message.asText(),
+        )
+
+        assertEquals(expected, result)
     }
 
     @Test
