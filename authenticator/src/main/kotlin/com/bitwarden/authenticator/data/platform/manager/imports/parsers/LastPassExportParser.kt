@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
-import com.bitwarden.authenticator.data.platform.manager.UuidManager
+import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.LastPassJsonExport
 import kotlinx.serialization.ExperimentalSerializationApi

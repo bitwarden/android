@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.manager
+package com.bitwarden.core.data.manager
 
 import com.bitwarden.annotation.OmitFromCoverage
 import java.util.UUID

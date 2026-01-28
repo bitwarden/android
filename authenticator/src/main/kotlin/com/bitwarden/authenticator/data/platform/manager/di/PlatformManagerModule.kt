@@ -15,14 +15,14 @@ import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManagerImpl
-import com.bitwarden.authenticator.data.platform.manager.UuidManager
-import com.bitwarden.authenticator.data.platform.manager.UuidManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.core.data.manager.UuidManager
+import com.bitwarden.core.data.manager.UuidManagerImpl
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManagerImpl
 import com.bitwarden.core.data.manager.realtime.RealtimeManager

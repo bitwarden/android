@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.manager
+package com.bitwarden.core.data.manager
 
 /**
  * Manager for generating unique identifiers.
