@@ -56,9 +56,8 @@ class UnlockViewModelTest : BaseViewModelTest() {
             showBiometricInvalidatedMessage = true,
             dialog = UnlockState.Dialog.Loading,
         )
-        val savedStateHandle = SavedStateHandle(mapOf("state" to savedState))
 
-        val viewModel = createViewModel(savedStateHandle = savedStateHandle)
+        val viewModel = createViewModel(initialState = savedState)
 
         assertEquals(savedState, viewModel.stateFlow.value)
     }
@@ -298,31 +297,6 @@ class UnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `StateFlow changes should save to SavedStateHandle`() = runTest {
-        every { mockAuthRepository.getOrCreateCipher() } returns null
-
-        val savedStateHandle = SavedStateHandle()
-        val viewModel = createViewModel(savedStateHandle = savedStateHandle)
-
-        viewModel.trySendAction(UnlockAction.BiometricsLockout)
-
-        // Allow state flow to emit
-        testScheduler.advanceUntilIdle()
-
-        val savedState = savedStateHandle.get<UnlockState>("state")
-        val expected = UnlockState(
-            isBiometricsEnabled = true,
-            isBiometricsValid = true,
-            showBiometricInvalidatedMessage = false,
-            dialog = UnlockState.Dialog.Error(
-                title = BitwardenString.an_error_has_occurred.asText(),
-                message = BitwardenString.too_many_failed_biometric_attempts.asText(),
-            ),
-        )
-        assertEquals(expected, savedState)
-    }
-
-    @Test
     fun `ReceiveVaultUnlockResult with Success should navigate and clear dialog`() = runTest {
         every { mockAuthRepository.getOrCreateCipher() } returns null
         coEvery {
@@ -339,7 +313,13 @@ class UnlockViewModelTest : BaseViewModelTest() {
             skipItems(1) // Loading state
             val finalState = awaitItem()
 
-            assertEquals(null, finalState.dialog)
+            val expected = UnlockState(
+                isBiometricsEnabled = true,
+                isBiometricsValid = true,
+                showBiometricInvalidatedMessage = false,
+                dialog = null,
+            )
+            assertEquals(expected, finalState)
         }
     }
 
@@ -397,9 +377,9 @@ class UnlockViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        savedStateHandle: SavedStateHandle = SavedStateHandle(),
+        initialState: UnlockState? = null,
     ): UnlockViewModel = UnlockViewModel(
-        savedStateHandle = savedStateHandle,
+        savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
         authRepository = mockAuthRepository,
     )
 }

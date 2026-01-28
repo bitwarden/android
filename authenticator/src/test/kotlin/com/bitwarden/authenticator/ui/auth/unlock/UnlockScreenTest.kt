@@ -17,6 +17,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import javax.crypto.Cipher
@@ -80,7 +81,7 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
     fun `NavigateToItemListing event should call onUnlocked callback`() {
         mutableEventFlow.tryEmit(UnlockEvent.NavigateToItemListing)
 
-        assert(onUnlockedCalled)
+        assertTrue(onUnlockedCalled)
     }
 
     @Test
