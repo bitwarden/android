@@ -268,7 +268,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
 
         migrateToMyItemsDestination(
-            onNavigateToVault = { navController.popBackStack() },
             onNavigateToLeaveOrganization = { organizationId, organizationName ->
                 navController.navigateToLeaveOrganization(
                     organizationId = organizationId,
