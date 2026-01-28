@@ -105,6 +105,7 @@ class VaultAddItemStateExtensionsTest {
                 revisionDate = FIXED_CLOCK.instant(),
                 archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -287,6 +288,7 @@ class VaultAddItemStateExtensionsTest {
                 revisionDate = FIXED_CLOCK.instant(),
                 archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -417,6 +419,7 @@ class VaultAddItemStateExtensionsTest {
                 revisionDate = FIXED_CLOCK.instant(),
                 archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -601,6 +604,7 @@ class VaultAddItemStateExtensionsTest {
                 revisionDate = FIXED_CLOCK.instant(),
                 archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -745,6 +749,7 @@ class VaultAddItemStateExtensionsTest {
                     privateKey = "mockPrivateKey-1",
                     fingerprint = "mockFingerprint-1",
                 ),
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -975,6 +980,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     revisionDate = FIXED_CLOCK.instant(),
     archivedDate = null,
     sshKey = null,
+    attachmentDecryptionFailures = null,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

@@ -101,6 +101,7 @@ fun createMockCipherView(
         organizationUseTotp = false,
         viewPassword = true,
         localData = null,
+        attachmentDecryptionFailures = null,
     )
 
 /**
