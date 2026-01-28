@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.data.authenticator.manager.FileManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem

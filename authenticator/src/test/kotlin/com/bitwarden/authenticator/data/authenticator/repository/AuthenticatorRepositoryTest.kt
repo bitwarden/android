@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
-import com.bitwarden.authenticator.data.authenticator.manager.FileManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
