@@ -21,20 +21,6 @@
       ]
     },
     {
-      "groupName": "gradle minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "gradle"
-      ],
-      "excludePackageNames": [
-        "com.github.bumptech.glide:compose",
-        "com.bitwarden:sdk-android"
-      ]
-    },
-    {
       "groupName": "kotlin",
       "description": "Kotlin and Compose dependencies that must be updated together to maintain compatibility.",
       "matchManagers": [
