@@ -227,7 +227,9 @@ private fun ViewNodeTraversalData.updateForMissingUsernameFields(): ViewNodeTrav
         this.autofillViews.none { it is AutofillView.Login.Username }
     ) {
         this.copyAndMapAutofillViews { index, autofillView ->
-            if (autofillView is AutofillView.Unused && passwordPositions.contains(index + 1)) {
+            if ((autofillView is AutofillView.Unused || autofillView is AutofillView.Login.Custom) &&
+                passwordPositions.contains(index + 1)
+            ) {
                 AutofillView.Login.Username(data = autofillView.data)
             } else {
                 autofillView
@@ -336,5 +338,6 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Custom -> this.copy(data = this.data.copy(website = site))
     }
 }

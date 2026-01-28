@@ -67,8 +67,19 @@ sealed class AutofillCipher {
         val password: String,
         val username: String,
         val website: String,
+        val customFields: List<AutofillField> = emptyList(),
+        val isStrictMatch: Boolean = false,
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_globe
     }
 }
+
+/**
+ * A field on a cipher that can be autofilled.
+ */
+data class AutofillField(
+    val name: String,
+    val value: String,
+    val type: com.bitwarden.vault.FieldType,
+)
