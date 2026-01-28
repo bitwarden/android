@@ -5,6 +5,7 @@ import android.net.Uri
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 /**
  * The buffer size to be used when reading from an input stream.
@@ -19,21 +20,21 @@ class FileManagerImpl(
     private val dispatcherManager: DispatcherManager,
 ) : FileManager {
 
-    override suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean {
-        @Suppress("TooGenericExceptionCaught")
-        return try {
-            withContext(dispatcherManager.io) {
-                context
-                    .contentResolver
-                    .openOutputStream(fileUri)
-                    ?.use { outputStream ->
-                        outputStream.write(dataString.toByteArray())
+    override suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean = try {
+        withContext(dispatcherManager.io) {
+            context
+                .contentResolver
+                .openOutputStream(fileUri)
+                ?.let { outputStream ->
+                    outputStream.writer().use {
+                        it.write(dataString)
                     }
-            }
-            true
-        } catch (exception: RuntimeException) {
-            false
+                    true
+                }
+                ?: false
         }
+    } catch (_: IOException) {
+        false
     }
 
     override suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray> =
