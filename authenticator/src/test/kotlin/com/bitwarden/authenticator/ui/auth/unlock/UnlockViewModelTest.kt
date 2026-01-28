@@ -16,6 +16,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -281,7 +282,7 @@ class UnlockViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             val stateWithDialog = awaitItem()
-            assertTrue(stateWithDialog.dialog != null)
+            assertNotNull(stateWithDialog.dialog)
 
             viewModel.trySendAction(UnlockAction.DismissDialog)
 
