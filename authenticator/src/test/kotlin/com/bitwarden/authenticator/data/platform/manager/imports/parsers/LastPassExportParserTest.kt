@@ -1,15 +1,13 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,36 +28,77 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
-
-        val item = items.first()
-        assertEquals("JBSWY3DPEHPK3PXP", item.key)
-        assertEquals(AuthenticatorItemType.TOTP, item.type)
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
-        assertEquals(30, item.period)
-        assertEquals(6, item.digits)
-        assertEquals("Test Issuer", item.issuer)
-        assertEquals("test@example.com", item.accountName)
-        assertFalse(item.favorite)
-        assertNull(item.userId)
-        assertNotNull(item.id)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer",
+                    accountName = "test@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
     fun `parseForResult with multiple accounts should return all items`() {
+        every { mockUuidManager.generateUuid() } returnsMany listOf(
+            "00000000-0000-0000-0000-000000000001",
+            "00000000-0000-0000-0000-000000000002",
+            "00000000-0000-0000-0000-000000000003",
+        )
         val json = VALID_MULTIPLE_ACCOUNTS_JSON
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(3, items.size)
-
-        assertEquals("Issuer 1", items[0].issuer)
-        assertEquals("Issuer 2", items[1].issuer)
-        assertEquals("Issuer 3", items[2].issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Issuer 1",
+                    accountName = "user1@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Issuer 2",
+                    accountName = "user2@example.com",
+                    favorite = true,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Issuer 3",
+                    accountName = "user3@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -68,9 +107,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemType.TOTP, item.type)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer",
+                    accountName = "test@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -79,9 +132,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -90,9 +157,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA256, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -101,9 +182,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA512, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -113,8 +208,6 @@ class LastPassExportParserTest {
         val result = parser.parseForResult(json.toByteArray())
 
         assertTrue(result is ExportParseResult.Error)
-        val error = result as ExportParseResult.Error
-        assertNotNull(error.message)
     }
 
     @Test
@@ -123,9 +216,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("GitHub", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -134,9 +241,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("user@github.com", item.accountName)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@github.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -145,9 +266,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(60, item.period)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 60,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -156,9 +291,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(8, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 8,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -167,9 +316,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertTrue(item.favorite)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = true,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -178,9 +341,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertFalse(item.favorite)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -207,9 +384,8 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertTrue(items.isEmpty())
+        val expected = ExportParseResult.Success(items = emptyList())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -223,10 +399,47 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        val ids = items.map { it.id }.toSet()
-        assertEquals(items.size, ids.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Issuer 1",
+                    accountName = "user1@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Issuer 2",
+                    accountName = "user2@example.com",
+                    favorite = true,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Issuer 3",
+                    accountName = "user3@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -235,9 +448,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -246,9 +473,23 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -257,13 +498,27 @@ class LastPassExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("MYSECRETKEY123", item.key)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "MYSECRETKEY123",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
+}
 
-    companion object {
-        private const val VALID_SINGLE_ACCOUNT_JSON = """
+private const val VALID_SINGLE_ACCOUNT_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -292,7 +547,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_MULTIPLE_ACCOUNTS_JSON = """
+private const val VALID_MULTIPLE_ACCOUNTS_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -353,7 +608,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_SHA1_ALGORITHM_JSON = """
+private const val VALID_SHA1_ALGORITHM_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -382,7 +637,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_SHA256_ALGORITHM_JSON = """
+private const val VALID_SHA256_ALGORITHM_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -411,7 +666,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_SHA512_ALGORITHM_JSON = """
+private const val VALID_SHA512_ALGORITHM_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -440,7 +695,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val INVALID_ALGORITHM_JSON = """
+private const val INVALID_ALGORITHM_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -469,7 +724,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_ORIGINAL_ISSUER_NAME_JSON = """
+private const val VALID_ORIGINAL_ISSUER_NAME_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -498,7 +753,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_ORIGINAL_USER_NAME_JSON = """
+private const val VALID_ORIGINAL_USER_NAME_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -527,7 +782,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_CUSTOM_TIME_STEP_JSON = """
+private const val VALID_CUSTOM_TIME_STEP_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -556,7 +811,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_CUSTOM_DIGITS_JSON = """
+private const val VALID_CUSTOM_DIGITS_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -585,7 +840,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_FAVORITE_TRUE_JSON = """
+private const val VALID_FAVORITE_TRUE_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -614,7 +869,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_FAVORITE_FALSE_JSON = """
+private const val VALID_FAVORITE_FALSE_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -643,14 +898,14 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val MALFORMED_JSON = """
+private const val MALFORMED_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456"
   "localDeviceId": "local-789"
 """
 
-        private const val MISSING_ACCOUNTS_FIELD_JSON = """
+private const val MISSING_ACCOUNTS_FIELD_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -661,7 +916,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_EMPTY_ACCOUNTS_JSON = """
+private const val VALID_EMPTY_ACCOUNTS_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -673,7 +928,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_NULL_FOLDER_DATA_JSON = """
+private const val VALID_NULL_FOLDER_DATA_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -702,7 +957,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_NULL_BACKUP_INFO_JSON = """
+private const val VALID_NULL_BACKUP_INFO_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -731,7 +986,7 @@ class LastPassExportParserTest {
 }
 """
 
-        private const val VALID_SECRET_FIELD_JSON = """
+private const val VALID_SECRET_FIELD_JSON = """
 {
   "deviceId": "device-123",
   "deviceSecret": "secret-456",
@@ -759,5 +1014,3 @@ class LastPassExportParserTest {
   "folders": []
 }
 """
-    }
-}

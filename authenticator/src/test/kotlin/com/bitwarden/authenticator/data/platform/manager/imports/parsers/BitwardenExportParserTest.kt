@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -11,13 +12,12 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class BitwardenExportParserTest {
 
     @BeforeEach
@@ -63,9 +63,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-item-id-123",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -75,9 +89,8 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertTrue(items.isEmpty())
+        val expected = ExportParseResult.Success(items = emptyList())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -99,15 +112,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemType.TOTP, item.type)
-        assertEquals("JBSWY3DPEHPK3PXP", item.key)
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
-        assertEquals(30, item.period)
-        assertEquals(6, item.digits)
-        assertEquals("GitHub", item.issuer)
-        assertEquals("user", item.accountName)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -122,12 +143,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemType.STEAM, item.type)
-        assertEquals("STEAMSECRETKEY", item.key)
-        assertEquals(5, item.digits)
-        assertNull(item.accountName)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "steam-id",
+                    key = "STEAMSECRETKEY",
+                    type = AuthenticatorItemType.STEAM,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 5,
+                    issuer = "Steam",
+                    accountName = null,
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -148,10 +180,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemType.TOTP, item.type)
-        assertEquals("PLAINSECRET", item.key)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "plain-id",
+                    key = "PLAINSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -191,9 +236,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("EXTRACTEDSECRET", item.key)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "EXTRACTEDSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -214,9 +273,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA256, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -237,9 +310,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(60, item.period)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 60,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -260,9 +347,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(8, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 8,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -283,9 +384,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("Microsoft", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Microsoft",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -306,9 +421,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -329,9 +458,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(30, item.period)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -352,9 +495,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(6, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -369,9 +526,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(5, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "steam-id",
+                    key = "STEAMSECRETKEY",
+                    type = AuthenticatorItemType.STEAM,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 5,
+                    issuer = "Steam",
+                    accountName = null,
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -392,9 +563,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("username", item.accountName)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "username",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -409,9 +594,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertNull(item.accountName)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "steam-id",
+                    key = "STEAMSECRETKEY",
+                    type = AuthenticatorItemType.STEAM,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 5,
+                    issuer = "Steam",
+                    accountName = null,
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -433,9 +632,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("test-item-id-123", item.id)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-item-id-123",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -456,9 +669,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertTrue(item.favorite)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "fav-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "Test",
+                    favorite = true,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -479,9 +706,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertFalse(item.favorite)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "not-fav-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "Test",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -522,9 +763,23 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("TestName", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "test-id",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestName",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Suppress("LongParameterList")
@@ -564,9 +819,9 @@ class BitwardenExportParserTest {
         every { mockUri.getQueryParameter(any()) } returns null
         every { mockUri.pathSegments } returns emptyList()
     }
+}
 
-    companion object {
-        private const val VALID_BITWARDEN_JSON = """
+private const val VALID_BITWARDEN_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -587,7 +842,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val ITEMS_WITHOUT_TOTP_JSON = """
+private const val ITEMS_WITHOUT_TOTP_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -619,7 +874,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val OTPAUTH_TOTP_URI_JSON = """
+private const val OTPAUTH_TOTP_URI_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -640,7 +895,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val STEAM_URI_JSON = """
+private const val STEAM_URI_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -661,7 +916,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val PLAIN_SECRET_JSON = """
+private const val PLAIN_SECRET_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -682,7 +937,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val FAVORITE_TRUE_JSON = """
+private const val FAVORITE_TRUE_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -703,7 +958,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val FAVORITE_FALSE_JSON = """
+private const val FAVORITE_FALSE_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -724,19 +979,19 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val MALFORMED_JSON = """
+private const val MALFORMED_JSON = """
 {
   "encrypted": false
   "items": [
 """
 
-        private const val MISSING_ENCRYPTED_FIELD_JSON = """
+private const val MISSING_ENCRYPTED_FIELD_JSON = """
 {
   "items": []
 }
 """
 
-        private const val NO_ALGORITHM_PARAM_JSON = """
+private const val NO_ALGORITHM_PARAM_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -757,7 +1012,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val NO_PERIOD_PARAM_JSON = """
+private const val NO_PERIOD_PARAM_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -778,7 +1033,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val NO_DIGITS_PARAM_JSON = """
+private const val NO_DIGITS_PARAM_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -799,7 +1054,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val NO_ISSUER_PARAM_JSON = """
+private const val NO_ISSUER_PARAM_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -820,7 +1075,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val ALGORITHM_SHA256_JSON = """
+private const val ALGORITHM_SHA256_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -841,7 +1096,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val PERIOD_60_JSON = """
+private const val PERIOD_60_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -862,7 +1117,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val DIGITS_8_JSON = """
+private const val DIGITS_8_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -883,7 +1138,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val ISSUER_MICROSOFT_JSON = """
+private const val ISSUER_MICROSOFT_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -904,7 +1159,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val LABEL_IN_PATH_JSON = """
+private const val LABEL_IN_PATH_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -925,7 +1180,7 @@ class BitwardenExportParserTest {
 }
 """
 
-        private const val SECRET_EXTRACTEDSECRET_JSON = """
+private const val SECRET_EXTRACTEDSECRET_JSON = """
 {
   "encrypted": false,
   "items": [
@@ -945,5 +1200,3 @@ class BitwardenExportParserTest {
   ]
 }
 """
-    }
-}

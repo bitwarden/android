@@ -1,15 +1,14 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,9 +40,8 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertTrue(items.isEmpty())
+        val expected = ExportParseResult.Success(items = emptyList())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -52,7 +50,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -80,21 +94,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
-
-        val item = items.first()
-        assertEquals("JBSWY3DPEHPK3PXP", item.key)
-        assertEquals(AuthenticatorItemType.TOTP, item.type)
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
-        assertEquals(30, item.period)
-        assertEquals(6, item.digits)
-        assertEquals("GitHub", item.issuer)
-        assertEquals("user@example.com", item.accountName)
-        assertFalse(item.favorite)
-        assertNull(item.userId)
-        assertNotNull(item.id)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -112,9 +128,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -123,9 +153,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA256, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -134,9 +178,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA512, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -145,9 +203,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA256, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -156,9 +228,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(AuthenticatorItemAlgorithm.SHA1, item.algorithm)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -167,9 +253,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(30, item.period)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -178,9 +278,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(60, item.period)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 60,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -189,9 +303,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(6, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -200,9 +328,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals(8, item.digits)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 8,
+                    issuer = "Test",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -211,9 +353,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("Microsoft", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Microsoft",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -222,9 +378,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("ServiceName", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "ServiceName",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -233,9 +403,23 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertEquals("ServiceName", item.issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "ServiceName",
+                    accountName = "user",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -244,23 +428,77 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val item = (result as ExportParseResult.Success).items.first()
-        assertFalse(item.favorite)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
     fun `parseForResult with multiple services should return all TOTP items`() {
+        every { mockUuidManager.generateUuid() } returnsMany listOf(
+            "00000000-0000-0000-0000-000000000001",
+            "00000000-0000-0000-0000-000000000002",
+            "00000000-0000-0000-0000-000000000003",
+        )
         val json = MULTIPLE_SERVICES_JSON
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(3, items.size)
-        assertEquals("Service 1", items[0].issuer)
-        assertEquals("Service 2", items[1].issuer)
-        assertEquals("Service 3", items[2].issuer)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Service 1",
+                    accountName = "user1",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Service 2",
+                    accountName = "user2",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Service 3",
+                    accountName = "user3",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -287,9 +525,8 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertTrue(items.isEmpty())
+        val expected = ExportParseResult.Success(items = emptyList())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -303,15 +540,51 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        val ids = items.map { it.id }.toSet()
-        assertEquals(items.size, ids.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Service 1",
+                    accountName = "user1",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Service 2",
+                    accountName = "user2",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Service 3",
+                    accountName = "user3",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
     }
+}
 
-    @Suppress("LargeClass")
-    companion object {
-        private const val ENCRYPTED_SERVICES_JSON = """
+private const val ENCRYPTED_SERVICES_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -322,7 +595,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val ENCRYPTED_SERVICES_EMPTY_JSON = """
+private const val ENCRYPTED_SERVICES_EMPTY_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -333,7 +606,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val VALID_SINGLE_SERVICE_JSON = """
+private const val VALID_SINGLE_SERVICE_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -367,7 +640,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val HOTP_SERVICE_JSON = """
+private const val HOTP_SERVICE_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -399,7 +672,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val MIXED_TOTP_HOTP_JSON = """
+private const val MIXED_TOTP_HOTP_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -471,7 +744,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val UNSUPPORTED_TOKEN_TYPE_JSON = """
+private const val UNSUPPORTED_TOKEN_TYPE_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -503,7 +776,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val VALID_SHA1_ALGORITHM_JSON = """
+private const val VALID_SHA1_ALGORITHM_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -535,7 +808,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val VALID_SHA256_ALGORITHM_JSON = """
+private const val VALID_SHA256_ALGORITHM_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -567,7 +840,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val VALID_SHA512_ALGORITHM_JSON = """
+private const val VALID_SHA512_ALGORITHM_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -599,7 +872,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val CASE_INSENSITIVE_ALGORITHM_JSON = """
+private const val CASE_INSENSITIVE_ALGORITHM_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -631,7 +904,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val NULL_ALGORITHM_JSON = """
+private const val NULL_ALGORITHM_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -663,7 +936,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val NULL_PERIOD_JSON = """
+private const val NULL_PERIOD_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -695,7 +968,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val CUSTOM_PERIOD_JSON = """
+private const val CUSTOM_PERIOD_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -727,7 +1000,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val NULL_DIGITS_JSON = """
+private const val NULL_DIGITS_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -759,7 +1032,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val CUSTOM_DIGITS_JSON = """
+private const val CUSTOM_DIGITS_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -791,7 +1064,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val VALID_WITH_ISSUER_JSON = """
+private const val VALID_WITH_ISSUER_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -823,7 +1096,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val NULL_ISSUER_JSON = """
+private const val NULL_ISSUER_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -855,7 +1128,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val EMPTY_ISSUER_JSON = """
+private const val EMPTY_ISSUER_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -887,7 +1160,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val MULTIPLE_SERVICES_JSON = """
+private const val MULTIPLE_SERVICES_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -959,14 +1232,14 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val MALFORMED_JSON = """
+private const val MALFORMED_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303
   "appOrigin": "android"
 """
 
-        private const val MISSING_SERVICES_FIELD_JSON = """
+private const val MISSING_SERVICES_FIELD_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -976,7 +1249,7 @@ class TwoFasExportParserTest {
 }
 """
 
-        private const val EMPTY_SERVICES_JSON = """
+private const val EMPTY_SERVICES_JSON = """
 {
   "schemaVersion": 2,
   "appVersionCode": 4020303,
@@ -986,5 +1259,3 @@ class TwoFasExportParserTest {
   "groups": []
 }
 """
-    }
-}

@@ -28,23 +28,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(1, items.size)
-
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "JBSWY3DPEHPK3PXP",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "Test Issuer",
-            accountName = "test@example.com",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "JBSWY3DPEHPK3PXP",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer",
+                    accountName = "test@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -58,49 +58,47 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertEquals(3, items.size)
-
-        val expected = listOf(
-            AuthenticatorItemEntity(
-                id = "00000000-0000-0000-0000-000000000001",
-                key = "SECRET1",
-                type = AuthenticatorItemType.TOTP,
-                algorithm = AuthenticatorItemAlgorithm.SHA1,
-                period = 30,
-                digits = 6,
-                issuer = "Test Issuer 1",
-                accountName = "user1@example.com",
-                favorite = false,
-                userId = null,
-            ),
-            AuthenticatorItemEntity(
-                id = "00000000-0000-0000-0000-000000000002",
-                key = "SECRET2",
-                type = AuthenticatorItemType.TOTP,
-                algorithm = AuthenticatorItemAlgorithm.SHA256,
-                period = 30,
-                digits = 6,
-                issuer = "Test Issuer 2",
-                accountName = "user2@example.com",
-                favorite = true,
-                userId = null,
-            ),
-            AuthenticatorItemEntity(
-                id = "00000000-0000-0000-0000-000000000003",
-                key = "SECRET3",
-                type = AuthenticatorItemType.TOTP,
-                algorithm = AuthenticatorItemAlgorithm.SHA512,
-                period = 60,
-                digits = 8,
-                issuer = "Test Issuer 3",
-                accountName = "user3@example.com",
-                favorite = false,
-                userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer 1",
+                    accountName = "user1@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer 2",
+                    accountName = "user2@example.com",
+                    favorite = true,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Test Issuer 3",
+                    accountName = "user3@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
             ),
         )
-        assertEquals(expected, items)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -109,20 +107,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -131,20 +132,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -153,20 +157,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA256,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -175,20 +182,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA512,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -206,20 +216,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "GitHub",
-            accountName = "user@example.com",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -228,20 +241,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "GitHub",
-            accountName = "user@example.com",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "GitHub",
+                    accountName = "user@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -250,20 +266,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "Microsoft",
-            accountName = "user@outlook.com",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Microsoft",
+                    accountName = "user@outlook.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -272,20 +291,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "SingleName",
-            accountName = null,
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "SingleName",
+                    accountName = null,
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -294,20 +316,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = true,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = true,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -316,20 +341,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -338,20 +366,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 60,
-            digits = 6,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 60,
+                    digits = 6,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -360,20 +391,23 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val expected = AuthenticatorItemEntity(
-            id = "00000000-0000-0000-0000-000000000001",
-            key = "TESTSECRET",
-            type = AuthenticatorItemType.TOTP,
-            algorithm = AuthenticatorItemAlgorithm.SHA1,
-            period = 30,
-            digits = 8,
-            issuer = "TestIssuer",
-            accountName = "TestName",
-            favorite = false,
-            userId = null,
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "TESTSECRET",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 8,
+                    issuer = "TestIssuer",
+                    accountName = "TestName",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
         )
-        assertEquals(expected, (result as ExportParseResult.Success).items.first())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -400,9 +434,8 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        assertTrue(items.isEmpty())
+        val expected = ExportParseResult.Success(items = emptyList())
+        assertEquals(expected, result)
     }
 
     @Test
@@ -425,10 +458,50 @@ class AegisExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Success)
-        val items = (result as ExportParseResult.Success).items
-        val ids = items.map { it.id }.toSet()
-        assertEquals(items.size, ids.size)
+        val expected = ExportParseResult.Success(
+            items = listOf(
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000001",
+                    key = "SECRET1",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA1,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer 1",
+                    accountName = "user1@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000002",
+                    key = "SECRET2",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA256,
+                    period = 30,
+                    digits = 6,
+                    issuer = "Test Issuer 2",
+                    accountName = "user2@example.com",
+                    favorite = true,
+                    userId = null,
+                ),
+                AuthenticatorItemEntity(
+                    id = "00000000-0000-0000-0000-000000000003",
+                    key = "SECRET3",
+                    type = AuthenticatorItemType.TOTP,
+                    algorithm = AuthenticatorItemAlgorithm.SHA512,
+                    period = 60,
+                    digits = 8,
+                    issuer = "Test Issuer 3",
+                    accountName = "user3@example.com",
+                    favorite = false,
+                    userId = null,
+                ),
+            ),
+        )
+        assertEquals(expected, result)
+        // Additionally verify UUID uniqueness
+        val ids = (result as ExportParseResult.Success).items.map { it.id }.toSet()
+        assertEquals(expected.items.size, ids.size)
     }
 }
 
