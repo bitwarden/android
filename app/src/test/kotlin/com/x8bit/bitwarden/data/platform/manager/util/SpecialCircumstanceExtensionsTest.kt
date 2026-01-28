@@ -354,7 +354,8 @@ class SpecialCircumstanceExtensionsTest {
     fun `toImportCredentialsRequestDataOrNull should return a non-null value for ImportCredentials`() {
         val importCredentialsRequestData = ImportCredentialsRequestData(
             uri = mockk(),
-            requestJson = "",
+            credentialTypes = setOf("mockCredentialType-1"),
+            knownExtensions = setOf(),
         )
         assertEquals(
             importCredentialsRequestData,
