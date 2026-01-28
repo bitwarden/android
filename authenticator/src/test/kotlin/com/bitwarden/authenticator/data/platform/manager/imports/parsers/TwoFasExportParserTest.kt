@@ -10,7 +10,6 @@ import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -76,8 +75,10 @@ class TwoFasExportParserTest {
         val json = HOTP_SERVICE_JSON
 
         val result = parser.parseForResult(json.toByteArray())
-
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            message = "Unsupported OTP type: HOTP.".asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -123,7 +124,10 @@ class TwoFasExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            message = "Unsupported OTP type: UNKNOWN.".asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
