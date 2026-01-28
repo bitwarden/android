@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.data.platform.manager.imports
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
-import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -10,6 +9,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.parsers.Bitward
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.ExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.LastPassExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.TwoFasExportParser
+import com.bitwarden.core.data.manager.UuidManager
 
 /**
  * Default implementation of [ImportManager] for managing importing files exported by various

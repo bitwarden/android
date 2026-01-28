@@ -3,9 +3,9 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
-import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.TwoFasJsonExport
+import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -76,7 +76,7 @@ class TwoFasExportParser(
                         entry.name.equals(other = algorithm, ignoreCase = true)
                     }
             }
-            // Default to SHA1 if not specified
+        // Default to SHA1 if not specified
             ?: AuthenticatorItemAlgorithm.SHA1
 
         return AuthenticatorItemEntity(

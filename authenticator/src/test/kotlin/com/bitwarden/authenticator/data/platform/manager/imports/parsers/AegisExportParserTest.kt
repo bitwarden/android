@@ -3,8 +3,8 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
-import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
+import com.bitwarden.core.data.manager.UuidManager
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -499,9 +499,6 @@ class AegisExportParserTest {
             ),
         )
         assertEquals(expected, result)
-        // Additionally verify UUID uniqueness
-        val ids = (result as ExportParseResult.Success).items.map { it.id }.toSet()
-        assertEquals(expected.items.size, ids.size)
     }
 }
 

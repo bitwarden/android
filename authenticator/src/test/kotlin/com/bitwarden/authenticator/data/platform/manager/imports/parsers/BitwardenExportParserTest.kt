@@ -6,13 +6,14 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -36,7 +37,10 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            title = BitwardenString.import_bitwarden_unsupported_format.asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -210,7 +214,10 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            message = "Unsupported OTP type.".asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -727,7 +734,11 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            title = BitwardenString.file_could_not_be_processed.asText(),
+            message = BitwardenString.file_could_not_be_processed_message.asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -737,7 +748,11 @@ class BitwardenExportParserTest {
 
         val result = parser.parseForResult(json.toByteArray())
 
-        assertTrue(result is ExportParseResult.Error)
+        val expected = ExportParseResult.Error(
+            title = BitwardenString.required_information_missing.asText(),
+            message = BitwardenString.required_information_missing_message.asText(),
+        )
+        assertEquals(expected, result)
     }
 
     @Test
