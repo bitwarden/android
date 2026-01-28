@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
@@ -36,6 +37,8 @@ fun AddEditSendState.ViewState.Content.toSendView(
             // we just update it to match the deletion date.
             common.deletionDate.toInstant()
         },
+        emails = emptyList(),
+        authType = AuthType.NONE,
     )
 
 private fun AddEditSendState.ViewState.Content.SendType.toSendType(): SendType =

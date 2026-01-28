@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
@@ -49,6 +50,8 @@ fun createMockSendView(
         revisionDate = revisionDate,
         deletionDate = deletionDate,
         expirationDate = expirationDate,
+        emails = emptyList(),
+        authType = AuthType.NONE,
     )
 
 /**
