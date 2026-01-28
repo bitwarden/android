@@ -3,18 +3,20 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.AegisJsonExport
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.util.UUID
 
 /**
  * Implementation of [ExportParser] responsible for parsing exports from the Aegis application.
  */
-class AegisExportParser : ExportParser() {
+class AegisExportParser(
+    private val uuidManager: UuidManager,
+) : ExportParser() {
     @OptIn(ExperimentalSerializationApi::class)
     override fun parse(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
@@ -49,7 +51,7 @@ class AegisExportParser : ExportParser() {
 
         val issuer = issuer
             .takeUnless { it.isEmpty() }
-        // If issuer is not provided we fallback to the account name.
+        // If issuer is not provided we fall back to the account name.
             ?: name
                 .split(":")
                 .first()
@@ -60,7 +62,7 @@ class AegisExportParser : ExportParser() {
             .takeUnless { it == issuer }
 
         return AuthenticatorItemEntity(
-            id = UUID.randomUUID().toString(),
+            id = uuidManager.generateUuid(),
             key = info.secret,
             type = type,
             algorithm = algorithmEnum,

@@ -3,6 +3,7 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.TwoFasJsonExport
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -11,7 +12,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.util.UUID
 
 private const val TOKEN_TYPE_HOTP = "HOTP"
 
@@ -19,7 +19,9 @@ private const val TOKEN_TYPE_HOTP = "HOTP"
  * An [ExportParser] responsible for transforming 2FAS export files into Bitwarden Authenticator
  * items.
  */
-class TwoFasExportParser : ExportParser() {
+class TwoFasExportParser(
+    private val uuidManager: UuidManager,
+) : ExportParser() {
     override fun parse(byteArray: ByteArray): ExportParseResult {
         return import2fasJson(byteArray)
     }
@@ -78,7 +80,7 @@ class TwoFasExportParser : ExportParser() {
             ?: AuthenticatorItemAlgorithm.SHA1
 
         return AuthenticatorItemEntity(
-            id = UUID.randomUUID().toString(),
+            id = uuidManager.generateUuid(),
             key = secret,
             type = type,
             algorithm = algorithm,

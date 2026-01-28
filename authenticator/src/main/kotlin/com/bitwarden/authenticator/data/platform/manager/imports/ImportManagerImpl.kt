@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.imports
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -16,6 +17,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.parsers.TwoFasE
  */
 class ImportManagerImpl(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
+    private val uuidManager: UuidManager,
 ) : ImportManager {
     override suspend fun import(
         importFileFormat: ImportFileFormat,
@@ -29,9 +31,9 @@ class ImportManagerImpl(
         importFileFormat: ImportFileFormat,
     ): ExportParser = when (importFileFormat) {
         ImportFileFormat.BITWARDEN_JSON -> BitwardenExportParser(importFileFormat)
-        ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser()
-        ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser()
-        ImportFileFormat.AEGIS -> AegisExportParser()
+        ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser(uuidManager)
+        ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser(uuidManager)
+        ImportFileFormat.AEGIS -> AegisExportParser(uuidManager)
     }
 
     private suspend fun processParseResult(

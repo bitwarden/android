@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.manager.imports
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.bitwarden.authenticator.data.platform.manager.UuidManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -23,14 +24,17 @@ import org.junit.jupiter.api.Test
 
 class ImportManagerTest {
     private val mockAuthenticatorDiskSource = mockk<AuthenticatorDiskSource>()
+    private val mockUuidManager = mockk<UuidManager>()
 
     private val manager = ImportManagerImpl(
         authenticatorDiskSource = mockAuthenticatorDiskSource,
+        uuidManager = mockUuidManager,
     )
 
     @BeforeEach
     fun setup() {
         mockkConstructor(BitwardenExportParser::class)
+        every { mockUuidManager.generateUuid() } returns "test-uuid-1"
     }
 
     @AfterEach
