@@ -114,7 +114,7 @@ internal class FileManagerImpl(
             context
                 .contentResolver
                 .openOutputStream(fileUri)
-                ?.let { outputStream ->
+                ?.use { outputStream ->
                     outputStream.writer().use {
                         it.write(dataString)
                     }
