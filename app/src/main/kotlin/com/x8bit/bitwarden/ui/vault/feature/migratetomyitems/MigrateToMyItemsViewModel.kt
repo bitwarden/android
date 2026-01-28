@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,10 +44,12 @@ class MigrateToMyItemsViewModel @Inject constructor(
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toMigrateToMyItemsArgs()
+        // This must be true or we would have never navigated here.
+        val migrationData = (vaultMigrationManager.vaultMigrationDataStateFlow.value
+            as VaultMigrationData.MigrationRequired)
         MigrateToMyItemsState(
-            organizationId = args.organizationId,
-            organizationName = args.organizationName,
+            organizationId = migrationData.organizationId,
+            organizationName = migrationData.organizationName,
             dialog = null,
         )
     },

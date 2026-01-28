@@ -1586,7 +1586,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when vaultMigrationDataStateFlow emits true the nav state should be MigrateToMyItems`() {
         mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
@@ -1594,10 +1593,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         assertEquals(
-            RootNavState.MigrateToMyItems(
-                organizationId = "mockOrganizationId-1",
-                organizationName = "organizationName",
-            ),
+            RootNavState.MigrateToMyItems,
             viewModel.stateFlow.value,
         )
     }
@@ -1676,28 +1672,22 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when migration required with ShareNewSend shortcut should show migration screen`() {
-        specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.ShareNewSend(
-                data = mockk<ShareData.TextSend>(),
-                shouldFinishWhenComplete = true,
-            )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.ShareNewSend(
+            data = mockk<ShareData.TextSend>(),
+            shouldFinishWhenComplete = true,
+        )
         mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
         mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
         val viewModel = createViewModel()
 
         assertEquals(
-            RootNavState.MigrateToMyItems(
-                organizationId = "mockOrganizationId-1",
-                organizationName = "organizationName",
-            ),
+            RootNavState.MigrateToMyItems,
             viewModel.stateFlow.value,
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when migration required with VaultShortcut should show migration screen`() {
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
@@ -1706,10 +1696,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         assertEquals(
-            RootNavState.MigrateToMyItems(
-                organizationId = "mockOrganizationId-1",
-                organizationName = "organizationName",
-            ),
+            RootNavState.MigrateToMyItems,
             viewModel.stateFlow.value,
         )
     }

@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
@@ -22,10 +23,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkConstructor
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -45,10 +44,15 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             every { activeUserId } returns "test-user-id"
         },
     )
+    private val mutableVaultMigrationDataStateFlow = MutableStateFlow<VaultMigrationData>(
+        VaultMigrationData.MigrationRequired(
+            organizationId = ORGANIZATION_ID,
+            organizationName = ORGANIZATION_NAME,
+        ),
+    )
     private val mockVaultMigrationManager: VaultMigrationManager = mockk {
-        coEvery {
-            migratePersonalVault(any(), any())
-        } returns MigratePersonalVaultResult.Success
+        coEvery { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
+        coEvery { migratePersonalVault(any(), any()) } returns MigratePersonalVaultResult.Success
         every { clearMigrationState() } just runs
     }
     private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
@@ -62,7 +66,6 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(SavedStateHandle::toMigrateToMyItemsArgs)
         mockkConstructor(NoActiveUserException::class)
         every {
             anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
@@ -71,7 +74,6 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(SavedStateHandle::toMigrateToMyItemsArgs)
         unmockkConstructor(NoActiveUserException::class)
     }
 

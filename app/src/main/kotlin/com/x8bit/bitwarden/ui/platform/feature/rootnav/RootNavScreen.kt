@@ -70,8 +70,9 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
-import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsRoute
-import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.navigateToMigrateToMyItems
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraphRoute
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsGraph
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.navigateToMigrateToMyItemsGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -119,6 +120,7 @@ fun RootNavScreen(
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
         exportItemsGraph(navController)
+        migrateToMyItemsGraph(navController)
     }
 
     val targetRoute = when (state) {
@@ -155,13 +157,7 @@ fun RootNavScreen(
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
         RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
-        is RootNavState.MigrateToMyItems -> {
-            val migrateState = state as RootNavState.MigrateToMyItems
-            MigrateToMyItemsRoute(
-                organizationId = migrateState.organizationId,
-                organizationName = migrateState.organizationName,
-            )
-        }
+        is RootNavState.MigrateToMyItems -> MigrateToMyItemsGraphRoute
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -214,11 +210,7 @@ fun RootNavScreen(
             }
 
             is RootNavState.MigrateToMyItems -> {
-                navController.navigateToMigrateToMyItems(
-                    organizationName = currentState.organizationName,
-                    organizationId = currentState.organizationId,
-                    navOptions = rootNavOptions,
-                )
+                navController.navigateToMigrateToMyItemsGraph(rootNavOptions)
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
@@ -354,31 +346,57 @@ private fun NavDestination?.rootLevelRoute(): String? {
  * Define the enter transition for each route.
  */
 @Suppress("MaxLineLength")
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(): NonNullEnterTransitionProvider =
-    when (targetState.destination.rootLevelRoute()) {
-        ResetPasswordRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.slideUp
-        else -> when (initialState.destination.rootLevelRoute()) {
-            // Disable transitions when coming from the splash screen
-            SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
-            // The RESET_PASSWORD_ROUTE animation should be stay but due to an issue when combining
-            // certain animations, we are just using a fadeIn instead.
-            ResetPasswordRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.fadeIn
-            else -> RootTransitionProviders.Enter.fadeIn
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(): NonNullEnterTransitionProvider {
+    val initialRoute = initialState.destination.rootLevelRoute()
+    val targetRoute = targetState.destination.rootLevelRoute()
+    return if (initialRoute == targetRoute) {
+        RootTransitionProviders.Enter.none
+    } else {
+        when (targetState.destination.rootLevelRoute()) {
+            MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
+            ResetPasswordRoute.toObjectNavigationRoute(),
+                -> RootTransitionProviders.Enter.slideUp
+
+            else -> when (initialState.destination.rootLevelRoute()) {
+                // Disable transitions when coming from the splash screen
+                SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
+                // The MigrateToMyItemsGraphRoute and ResetPasswordRoute animation should be stay
+                // but due to an issue when combining certain animations, we are just using a
+                // fadeIn instead.
+                MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
+                ResetPasswordRoute.toObjectNavigationRoute(),
+                    -> RootTransitionProviders.Enter.fadeIn
+
+                else -> RootTransitionProviders.Enter.fadeIn
+            }
         }
     }
+}
 
 /**
  * Define the exit transition for each route.
  */
 @Suppress("MaxLineLength")
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition(): NonNullExitTransitionProvider {
-    return when (initialState.destination.rootLevelRoute()) {
-        // Disable transitions when coming from the splash screen
-        SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.none
-        ResetPasswordRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.slideDown
-        else -> when (targetState.destination.rootLevelRoute()) {
-            ResetPasswordRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.stay
-            else -> RootTransitionProviders.Exit.fadeOut
+    val initialRoute = initialState.destination.rootLevelRoute()
+    val targetRoute = targetState.destination.rootLevelRoute()
+    return if (initialRoute == targetRoute) {
+        RootTransitionProviders.Exit.none
+    } else {
+        when (initialRoute) {
+            // Disable transitions when coming from the splash screen
+            SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.none
+            MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
+            ResetPasswordRoute.toObjectNavigationRoute(),
+                -> RootTransitionProviders.Exit.slideDown
+
+            else -> when (targetRoute) {
+                MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
+                ResetPasswordRoute.toObjectNavigationRoute(),
+                    -> RootTransitionProviders.Exit.stay
+
+                else -> RootTransitionProviders.Exit.fadeOut
+            }
         }
     }
 }
