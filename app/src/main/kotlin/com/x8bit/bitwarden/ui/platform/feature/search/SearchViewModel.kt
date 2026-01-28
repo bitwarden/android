@@ -683,7 +683,7 @@ class SearchViewModel @Inject constructor(
 
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_archived.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()))
             }
         }
     }
@@ -704,7 +704,7 @@ class SearchViewModel @Inject constructor(
 
             UnarchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()))
             }
         }
     }

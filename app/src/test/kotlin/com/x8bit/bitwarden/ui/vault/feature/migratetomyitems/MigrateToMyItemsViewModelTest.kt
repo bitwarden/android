@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -13,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -29,6 +32,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.SocketTimeoutException
 
 class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
@@ -44,10 +48,15 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
         coEvery {
             migratePersonalVault(any(), any())
         } returns MigratePersonalVaultResult.Success
+        every { clearMigrationState() } just runs
     }
     private val mockVaultSyncManager: VaultSyncManager = mockk(relaxed = true)
     private val mockAuthRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+
+    private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -156,9 +165,18 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
 
             assertNull(viewModel.stateFlow.value.dialog)
 
+            mockSnackbarRelayManager.sendSnackbarData(
+                relay = SnackbarRelay.LEFT_ORGANIZATION,
+                data = BitwardenSnackbarData(
+                    message = BitwardenString.you_left_the_organization.asText(),
+                ),
+            )
+
             verify {
                 mockOrganizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationAccepted,
+                    event = OrganizationEvent.ItemOrganizationAccepted(
+                        organizationId = ORGANIZATION_ID,
+                    ),
                 )
             }
         }
@@ -186,6 +204,34 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MigrateToMyItemsResultReceived with timeout error should show DialogState NoNetwork`() =
+        runTest {
+            val error = SocketTimeoutException("Timeout")
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                awaitItem() // Initial state
+
+                viewModel.trySendAction(
+                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                        result = MigratePersonalVaultResult.Failure(error),
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = MigrateToMyItemsState.DialogState.NoNetwork(
+                            title = BitwardenString.internet_connection_required_title.asText(),
+                            message = BitwardenString.internet_connection_required_message.asText(),
+                            throwable = error,
+                        ),
+                    ), awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DeclineAndLeaveClicked sends NavigateToLeaveOrganization event`() = runTest {
@@ -229,13 +275,59 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
                     result = MigratePersonalVaultResult.Failure(null),
                 ),
             )
-            val errorState = awaitItem()
-            assert(errorState.dialog is MigrateToMyItemsState.DialogState.Error)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = MigrateToMyItemsState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                            ORGANIZATION_NAME,
+                        ),
+                        throwable = null,
+                    ),
+                ), awaitItem(),
+            )
 
             // Dismiss the dialog
             viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
-            val clearedState = awaitItem()
-            assertNull(clearedState.dialog)
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `NoNetworkDismissDialogClicked should clear dialog and clear migration state`() = runTest {
+        val viewModel = createViewModel()
+        val error = SocketTimeoutException("Timeout")
+
+        viewModel.stateFlow.test {
+            awaitItem() // Initial state
+
+            // First show an error dialog
+            viewModel.trySendAction(
+                MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                    result = MigratePersonalVaultResult.Failure(error = error),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = MigrateToMyItemsState.DialogState.NoNetwork(
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
+                        throwable = error,
+                    ),
+                ), awaitItem(),
+            )
+
+            // Dismiss the dialog
+            viewModel.trySendAction(MigrateToMyItemsAction.NoNetworkDismissDialogClicked)
+            verify { mockVaultMigrationManager.clearMigrationState() }
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
         }
     }
 
@@ -247,6 +339,7 @@ class MigrateToMyItemsViewModelTest : BaseViewModelTest() {
             vaultMigrationManager = mockVaultMigrationManager,
             vaultSyncManager = mockVaultSyncManager,
             authRepository = mockAuthRepository,
+            snackbarRelayManager = mockSnackbarRelayManager,
             savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
     }

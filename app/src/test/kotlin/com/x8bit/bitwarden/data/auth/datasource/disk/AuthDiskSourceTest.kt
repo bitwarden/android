@@ -11,7 +11,7 @@ import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.createMockAccountKeysJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -296,7 +296,7 @@ class AuthDiskSourceTest {
         )
         authDiskSource.storeOrganizations(
             userId = userId,
-            organizations = listOf(createMockOrganization(1)),
+            organizations = listOf(createMockOrganizationNetwork(number = 1)),
         )
         authDiskSource.storePolicies(
             userId = userId,
@@ -1048,8 +1048,8 @@ class AuthDiskSourceTest {
         val organizationsBaseKey = "bwPreferencesStorage:organizations"
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         fakeSharedPreferences
@@ -1070,8 +1070,8 @@ class AuthDiskSourceTest {
     fun `getOrganizationsFlow should react to changes in getOrganizations`() = runTest {
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         authDiskSource.getOrganizationsFlow(userId = mockUserId).test {
             // The initial values of the Flow and the property are in sync
@@ -1092,8 +1092,8 @@ class AuthDiskSourceTest {
         val organizationsBaseKey = "bwPreferencesStorage:organizations"
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         authDiskSource.storeOrganizations(

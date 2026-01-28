@@ -1,5 +1,4 @@
 {
-  "catch_all_label": "t:misc",
   "title_patterns": {
     "t:feature-app": ["feat", "feature"],
     "t:feature-tool": ["tool"],

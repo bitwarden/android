@@ -39,6 +39,7 @@ class EventDiskSourceTest {
             type = OrganizationEventType.CIPHER_DELETED,
             cipherId = "cipherId-1",
             date = ZonedDateTime.now(fixedClock),
+            organizationId = null,
         )
 
         eventDiskSource.addOrganizationEvent(
@@ -54,6 +55,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
             fakeOrganizationEventDao.storedEvents,
@@ -73,6 +75,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
                 OrganizationEventEntity(
                     id = 2,
@@ -80,6 +83,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
         )
@@ -94,6 +98,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
             fakeOrganizationEventDao.storedEvents,
@@ -113,6 +118,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
                 OrganizationEventEntity(
                     id = 2,
@@ -120,6 +126,7 @@ class EventDiskSourceTest {
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
         )
@@ -132,6 +139,7 @@ class EventDiskSourceTest {
                     type = OrganizationEventType.CIPHER_DELETED,
                     cipherId = "cipherId-1",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
             result,

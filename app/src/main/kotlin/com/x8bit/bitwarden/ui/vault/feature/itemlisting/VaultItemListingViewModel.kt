@@ -1731,7 +1731,9 @@ class VaultItemListingViewModel @Inject constructor(
             ArchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
-                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_archived.asText(),
+                    ),
                 )
             }
         }
@@ -1756,7 +1758,9 @@ class VaultItemListingViewModel @Inject constructor(
             UnarchiveCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
-                    VaultItemListingEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_vault.asText(),
+                    ),
                 )
             }
         }
@@ -2844,6 +2848,34 @@ data class VaultItemListingState(
     val isArchiveEnabled: Boolean,
 ) {
     /**
+     * Indicates what action card to display.
+     */
+    val actionCard: ActionCardState?
+        get() = when (itemListingType) {
+            ItemListingType.Vault.Archive -> {
+                (viewState as? ViewState.Content)?.let {
+                    if (!isPremium && it.displayItemList.isNotEmpty()) {
+                        ActionCardState.PremiumSubscription
+                    } else {
+                        null
+                    }
+                }
+            }
+
+            ItemListingType.Vault.Card,
+            is ItemListingType.Vault.Collection,
+            is ItemListingType.Vault.Folder,
+            ItemListingType.Vault.Identity,
+            ItemListingType.Vault.Login,
+            ItemListingType.Vault.SecureNote,
+            ItemListingType.Vault.SshKey,
+            ItemListingType.Vault.Trash,
+            ItemListingType.Send.SendFile,
+            ItemListingType.Send.SendText,
+                -> null
+        }
+
+    /**
      * Whether or not the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
@@ -3058,6 +3090,16 @@ data class VaultItemListingState(
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
+    }
+
+    /**
+     * Represents the specific action cards that can be displayed on the [VaultItemListingScreen].
+     */
+    sealed class ActionCardState {
+        /**
+         * Indicates that your premium subscription has lapsed.
+         */
+        data object PremiumSubscription : ActionCardState()
     }
 
     /**

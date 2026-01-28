@@ -27,8 +27,8 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
@@ -303,7 +303,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
                 verify(exactly = 1) {
                     snackbarRelayManager.sendSnackbarData(
-                        data = BitwardenSnackbarData(BitwardenString.item_archived.asText()),
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.item_moved_to_archived.asText(),
+                        ),
                         relay = SnackbarRelay.CIPHER_ARCHIVED,
                     )
                 }
@@ -394,7 +396,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
                 verify(exactly = 1) {
                     snackbarRelayManager.sendSnackbarData(
-                        data = BitwardenSnackbarData(BitwardenString.item_unarchived.asText()),
+                        data = BitwardenSnackbarData(BitwardenString.item_moved_to_vault.asText()),
                         relay = SnackbarRelay.CIPHER_UNARCHIVED,
                     )
                 }
@@ -2401,11 +2403,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_ACCOUNT.copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "mockOrganizationId",
                                 name = "mockOrganizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
                                 keyConnectorUrl = null,
                                 userIsClaimedByOrganization = true,
@@ -2464,11 +2465,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_ACCOUNT.copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "mockOrganizationId",
                                 name = "mockOrganizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
                                 keyConnectorUrl = null,
                                 userIsClaimedByOrganization = true,
@@ -2526,14 +2526,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_ACCOUNT.copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "mockOrganizationId",
                                 name = "mockOrganizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),
@@ -2801,14 +2799,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organiationId",
                     name = "Test Organization",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             needsMasterPassword = false,

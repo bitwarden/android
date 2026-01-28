@@ -1818,7 +1818,7 @@ class VaultAddEditViewModel @Inject constructor(
             ArchiveCipherResult.Success -> {
                 clearDialogState()
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.item_archived.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.item_moved_to_archived.asText()),
                     relay = SnackbarRelay.CIPHER_ARCHIVED,
                 )
                 sendEvent(VaultAddEditEvent.NavigateBack)
@@ -1842,7 +1842,7 @@ class VaultAddEditViewModel @Inject constructor(
             UnarchiveCipherResult.Success -> {
                 clearDialogState()
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.item_unarchived.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.item_moved_to_vault.asText()),
                     relay = SnackbarRelay.CIPHER_UNARCHIVED,
                 )
                 sendEvent(VaultAddEditEvent.NavigateBack)

@@ -1167,9 +1167,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="loading_vault_data">Kasa verileri yükleniyor…</string>
     <string name="resending">Yeniden gönderiliyor</string>
     <string name="you_left_the_organization">Kuruluştan ayrıldınız</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
-    <string name="decline_and_leave">Decline and leave</string>
+    <string name="transfer_items_to_org">Kayıtları %1$s kuruluşuna taşı</string>
+    <string name="transfer_items_description">%1$s, güvenlik ve mevzuata uyum amacıyla tüm kayıtların kuruluşa ait olmasını zorunlu kılıyor. Kayıtlarınızın sahipliğini devretmek için \"Kabul et\"e tıklayın.</string>
+    <string name="decline_and_leave">Reddet ve ayrıl</string>
     <string name="why_am_i_seeing_this">Bunu neden görüyorum?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
@@ -1183,11 +1183,18 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Arşivleniyor</string>
     <string name="unarchiving">Arşivden çıkarılıyor</string>
-    <string name="item_archived">Kayıt arşivlendi</string>
-    <string name="item_unarchived">Kayıt arşivden çıkarıldı</string>
+    <string name="item_moved_to_archived">Kayıt arşive taşındı</string>
+    <string name="item_moved_to_vault">Kayıt kasaya taşındı</string>
     <string name="archive_unavailable">Arşiv kullanılamıyor</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
     <string name="this_item_is_archived">This item is archived.</string>
+    <string name="introducing_archive">Arşiv özelliğiyle tanışın</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Şu anda ihtiyacınız olmayan kayıtlara gözden uzak, güvenli bir yerde saklayın.</string>
+    <string name="go_to_archive">Arşive git</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="your_premium_subscription_ended">Premium aboneliğiniz sona erdi</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arşivinize yeniden erişebilmek için Premium aboneliğinizi yeniden başlatın. Yeniden başlatmadan önce arşivlenmiş bir kaydın ayrıntılarını düzenlerseniz kayıt tekrar kasanıza taşınır.</string>
+    <string name="restart_premium">Premium’u yeniden başlat</string>
+    <string name="items_transferred">Kayıtlar aktarıldı</string>
 </resources>

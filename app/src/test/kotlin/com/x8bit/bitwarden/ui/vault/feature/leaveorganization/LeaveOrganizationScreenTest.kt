@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
@@ -135,6 +136,7 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = LeaveOrganizationState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = errorMessage.asText(),
                     error = Throwable("Test error"),
                 ),
@@ -157,6 +159,7 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = LeaveOrganizationState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = "Error message".asText(),
                 ),
             )

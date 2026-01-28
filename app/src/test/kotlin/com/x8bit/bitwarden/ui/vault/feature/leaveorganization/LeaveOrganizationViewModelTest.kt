@@ -11,10 +11,10 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.UnknownHostException
 
 class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
@@ -138,7 +139,9 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 mockOrganizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined,
+                    event = OrganizationEvent.ItemOrganizationDeclined(
+                        organizationId = ORGANIZATION_ID,
+                    ),
                 )
                 mockVaultMigrationManager.clearMigrationState()
             }
@@ -147,20 +150,69 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `LeaveOrganizationClick with Error should show error dialog`() = runTest {
-        val error = Throwable("Test error")
-        coEvery {
-            mockAuthRepository.revokeFromOrganization(ORGANIZATION_ID)
-        } returns RevokeFromOrganizationResult.Error(error)
-
+    fun `DismissDialogClicked should clear dialog and clear migration state`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(LeaveOrganizationAction.LeaveOrganizationClick)
 
-        val state = viewModel.stateFlow.value
-        assert(state.dialogState is LeaveOrganizationState.DialogState.Error)
-        val dialogState = state.dialogState as LeaveOrganizationState.DialogState.Error
-        assertEquals(BitwardenString.generic_error_message.asText(), dialogState.message)
-        assertEquals(error, dialogState.error)
+        viewModel.stateFlow.test {
+            awaitItem()
+
+            viewModel.trySendAction(
+                LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived(
+                    result = RevokeFromOrganizationResult.Error(null),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = LeaveOrganizationState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ), awaitItem(),
+            )
+
+            // Dismiss the dialog
+            viewModel.trySendAction(LeaveOrganizationAction.DismissDialog)
+            verify(exactly = 0) { mockVaultMigrationManager.clearMigrationState() }
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `DismissNoNetworkDialogClicked should clear dialog and clear migration state`() = runTest {
+        val viewModel = createViewModel()
+        val error = UnknownHostException("No network")
+        viewModel.stateFlow.test {
+            awaitItem()
+
+            viewModel.trySendAction(
+                LeaveOrganizationAction.Internal.RevokeFromOrganizationResultReceived(
+                    result = RevokeFromOrganizationResult.Error(
+                        error = error,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = LeaveOrganizationState.DialogState.NoNetwork(
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
+                        error = error,
+                    ),
+                ), awaitItem(),
+            )
+
+            // Dismiss the dialog and clear migration
+            viewModel.trySendAction(LeaveOrganizationAction.DismissNoNetworkDialog)
+            verify(exactly = 1) { mockVaultMigrationManager.clearMigrationState() }
+            assertEquals(
+                DEFAULT_STATE, awaitItem(),
+            )
+        }
     }
 
     @Test
@@ -200,18 +252,14 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        savedStateHandle: SavedStateHandle = SavedStateHandle(),
+        state: LeaveOrganizationState = DEFAULT_STATE,
     ): LeaveOrganizationViewModel {
-        every { savedStateHandle.toLeaveOrganizationArgs() } returns LeaveOrganizationArgs(
-            organizationId = ORGANIZATION_ID,
-            organizationName = ORGANIZATION_NAME,
-        )
         return LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             organizationEventManager = mockOrganizationEventManager,
             vaultMigrationManager = mockVaultMigrationManager,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
     }
 }
@@ -219,15 +267,12 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 private const val ORGANIZATION_ID = "organization-id-1"
 private const val ORGANIZATION_NAME = "Test Organization"
 
-private val DEFAULT_ORGANIZATION = Organization(
+private val DEFAULT_ORGANIZATION = createMockOrganization(
+    number = 1,
     id = ORGANIZATION_ID,
     name = ORGANIZATION_NAME,
-    shouldManageResetPassword = false,
-    shouldUseKeyConnector = false,
     role = OrganizationType.USER,
     keyConnectorUrl = null,
-    userIsClaimedByOrganization = false,
-    limitItemDeletion = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(
@@ -255,4 +300,10 @@ private val DEFAULT_USER_STATE = UserState(
             isExportable = true,
         ),
     ),
+)
+
+private val DEFAULT_STATE = LeaveOrganizationState(
+    organizationId = ORGANIZATION_ID,
+    organizationName = ORGANIZATION_NAME,
+    dialogState = null,
 )

@@ -1,5 +1,5 @@
-name: SDLC / Label PR by Files
-
+name: SDLC / Label PR
+run-name: Label PR ${{ github.event.pull_request.number || inputs.pr-number }}${{ github.event_name == 'workflow_dispatch' && format(' / mode "{0}" dry-run "{1}"', inputs.mode, inputs.dry-run) || '' }}
 on:
   pull_request:
     types: [opened, synchronize]
@@ -63,7 +63,7 @@ jobs:
             exit 0
           fi
 
-          if [ "$_PR_USER" = "renovate[bot]" ] || [ "$_PR_USER" = "bw-ghapp[bot]" ]; then
+          if [[ "$_PR_USER" == app/* || "$_PR_USER" == *\[bot\] ]]; then
             echo "➡️ Bot PR ($_PR_USER). Label mode: --add"
             echo "label_mode=--add" >> "$GITHUB_OUTPUT"
             exit 0
@@ -77,7 +77,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           _LABEL_MODE: ${{ inputs.mode && format('--{0}', inputs.mode) || steps.label-mode.outputs.label_mode }}
           _DRY_RUN: ${{ inputs.dry-run == true && '--dry-run' || '' }}
+          _PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
         run: |
-          echo "🔍 Labeling PR #$_PR_NUMBER with mode: $_LABEL_MODE and dry-run: $_DRY_RUN"
-          python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_LABEL_MODE" "$_DRY_RUN"
+          if [ -z "$_PR_LABELS" ] || [ "$_PR_LABELS" = "null" ] || [ "$_PR_LABELS" = "[]" ]; then
+            echo "🔍 No current PR labels found, retrieving PR data for PR #$_PR_NUMBER..."
+            _PR_LABELS=$(gh pr view "$_PR_NUMBER" --json labels --jq '.labels')
+          fi
+          echo "🔍 Labeling PR #$_PR_NUMBER with mode: \"$_LABEL_MODE\" and dry-run: \"$_DRY_RUN\" and current PR labels: \"$_PR_LABELS\"..."
+          echo "🐍 Running label-pr.py script..."
+          echo ""
+          python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_PR_LABELS" "$_LABEL_MODE" "$_DRY_RUN"
 

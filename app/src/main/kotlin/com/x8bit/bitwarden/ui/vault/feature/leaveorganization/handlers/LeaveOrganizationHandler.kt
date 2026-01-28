@@ -13,6 +13,7 @@ data class LeaveOrganizationHandler(
     val onLeaveClick: () -> Unit,
     val onHelpClick: () -> Unit,
     val onDismissDialog: () -> Unit,
+    val onDismissNoNetworkDialog: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -33,6 +34,9 @@ data class LeaveOrganizationHandler(
                 },
                 onDismissDialog = {
                     viewModel.trySendAction(LeaveOrganizationAction.DismissDialog)
+                },
+                onDismissNoNetworkDialog = {
+                    viewModel.trySendAction(LeaveOrganizationAction.DismissNoNetworkDialog)
                 },
             )
     }

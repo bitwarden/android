@@ -7,7 +7,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
@@ -23,11 +22,11 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -163,6 +162,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private var mutableFlightRecorderDataFlow =
         MutableStateFlow(FlightRecorderDataSet(data = emptySet()))
+    private var mutableIntroducingArchiveActionCardDismissedFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
@@ -171,6 +171,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { flightRecorderDataFlow } returns mutableFlightRecorderDataFlow
         every { dismissFlightRecorderBanner() } just runs
         every { isAutofillEnabledStateFlow } returns MutableStateFlow(false)
+        every { dismissIntroducingArchiveActionCard() } just runs
+        every {
+            getIntroducingArchiveActionCardDismissedFlow()
+        } returns mutableIntroducingArchiveActionCardDismissedFlow
     }
 
     private val vaultRepository: VaultRepository =
@@ -233,6 +237,38 @@ class VaultViewModelTest : BaseViewModelTest() {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         }
     }
+
+    @Test
+    fun `IntroducingArchiveActionCardDismissedFlow updates should update the state accordingly`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableIntroducingArchiveActionCardDismissedFlow.value = true
+                assertEquals(
+                    DEFAULT_STATE.copy(isIntroducingArchiveActionCardDismissed = true),
+                    awaitItem(),
+                )
+                mutableIntroducingArchiveActionCardDismissedFlow.value = false
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissActionCardClick with IntroducingArchive should call dismissIntroducingArchiveActionCard`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
 
     @Test
     fun `UserState updates with a null value should do nothing`() {
@@ -303,14 +339,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organiationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -392,14 +425,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -645,7 +675,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultEvent.ShowSnackbar(BitwardenString.item_archived.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()),
                     awaitItem(),
                 )
             }
@@ -703,7 +733,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultEvent.ShowSnackbar(BitwardenString.item_unarchived.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()),
                     awaitItem(),
                 )
             }
@@ -923,14 +953,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_STATE.accounts[0].copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "testOrganizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),
@@ -3463,4 +3490,5 @@ private fun createMockVaultState(
         hasShownDecryptionFailureAlert = false,
         restrictItemTypesPolicyOrgIds = emptyList(),
         isArchiveEnabled = true,
+        isIntroducingArchiveActionCardDismissed = false,
     )

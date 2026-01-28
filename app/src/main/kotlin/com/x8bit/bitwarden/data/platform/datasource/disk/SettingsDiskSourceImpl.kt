@@ -49,6 +49,8 @@ private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMa
 private const val RESUME_SCREEN = "resumeScreen"
 private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
 private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
+private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
+    "introducingArchiveActionCardDismissed"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -85,6 +87,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowImportLoginsSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableIntroducingArchiveActionCardDismissedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -240,7 +245,28 @@ class SettingsDiskSourceImpl(
         // - show unlock setting badge
         // - should show add login coach mark
         // - should show generator coach mark
+        // - should show introducing archive action card dismissed
     }
+
+    override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
+        getBoolean(
+            key = INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED.appendIdentifier(identifier = userId),
+        )
+
+    override fun storeIntroducingArchiveActionCardDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    ) {
+        putBoolean(
+            key = INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED.appendIdentifier(identifier = userId),
+            value = isDismissed,
+        )
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
+    override fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?> =
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId)
+            .onSubscription { emit(getIntroducingArchiveActionCardDismissed(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -578,6 +604,13 @@ class SettingsDiskSourceImpl(
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? =
         getString(RESUME_SCREEN.appendIdentifier(userId))?.let { json.decodeFromStringOrNull(it) }
+
+    private fun getMutableIntroducingArchiveActionCardDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableIntroducingArchiveActionCardDismissedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableLastSyncFlow(
         userId: String,
