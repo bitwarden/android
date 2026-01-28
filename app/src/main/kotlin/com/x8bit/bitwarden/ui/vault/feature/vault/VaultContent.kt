@@ -142,7 +142,7 @@ fun VaultContent(
 
             itemsIndexed(
                 items = state.favoriteItems,
-                key = { _, favorite -> favorite.id },
+                key = { _, favorite -> "favorite_${favorite.id}" },
             ) { index, favoriteItem ->
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
@@ -307,7 +307,7 @@ fun VaultContent(
 
             itemsIndexed(
                 items = state.folderItems,
-                key = { _, folder -> folder.id ?: "no_folder_group" },
+                key = { _, folder -> "folder_${folder.id}" },
             ) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
@@ -344,7 +344,7 @@ fun VaultContent(
             }
             itemsIndexed(
                 items = state.noFolderItems,
-                key = { _, noFolderItem -> noFolderItem.id },
+                key = { _, noFolderItem -> "no_folder_${noFolderItem.id}" },
             ) { index, noFolderItem ->
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
@@ -400,7 +400,7 @@ fun VaultContent(
 
             itemsIndexed(
                 items = state.collectionItems,
-                key = { _, collection -> collection.id },
+                key = { _, collection -> "collection_${collection.id}" },
             ) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
