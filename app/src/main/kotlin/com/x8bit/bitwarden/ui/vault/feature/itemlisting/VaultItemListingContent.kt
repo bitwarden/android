@@ -160,7 +160,7 @@ fun VaultItemListingContent(
 
             itemsIndexed(
                 items = state.displayCollectionList,
-                key = { _, collection -> collection.id },
+                key = { _, collection -> "collection_${collection.id}" },
             ) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
@@ -195,7 +195,7 @@ fun VaultItemListingContent(
 
             itemsIndexed(
                 items = state.displayFolderList,
-                key = { _, folder -> folder.id },
+                key = { _, folder -> "folder_${folder.id}" },
             ) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
@@ -229,7 +229,7 @@ fun VaultItemListingContent(
             }
             itemsIndexed(
                 items = state.displayItemList,
-                key = { _, item -> item.id },
+                key = { _, item -> "item_${item.id}" },
             ) { index, it ->
                 BitwardenListItem(
                     startIcon = it.iconData,
