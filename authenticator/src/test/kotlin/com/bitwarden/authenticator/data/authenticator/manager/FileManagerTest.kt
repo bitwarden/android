@@ -9,8 +9,10 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.InputStream
@@ -100,9 +102,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
-        assertEquals(String(testData), String(result.getOrNull()!!))
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
     }
 
     @Test
@@ -113,7 +117,10 @@ class FileManagerTest {
             val result = fileManager.uriToByteArray(mockUri)
 
             assertTrue(result.isFailure)
-            assertEquals("Stream has crashed", result.exceptionOrNull()?.message)
+            val exception = result.exceptionOrNull()
+            assertNotNull(exception)
+            assertEquals(IllegalStateException::class.java, exception!!.javaClass)
+            assertEquals("Stream has crashed", exception.message)
         }
 
     @Test
@@ -124,7 +131,10 @@ class FileManagerTest {
         val result = fileManager.uriToByteArray(mockUri)
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is RuntimeException)
+        val exception = result.exceptionOrNull()
+        assertNotNull(exception)
+        assertEquals(RuntimeException::class.java, exception!!.javaClass)
+        assertEquals("Read failed", exception.message)
     }
 
     @Test
@@ -159,8 +169,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
         assertEquals(1024, maxBufferSize)
     }
 
@@ -172,9 +185,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
-        assertEquals(0, result.getOrNull()?.size)
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
     }
 
     @Test
@@ -185,9 +200,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
-        assertEquals(String(testData), String(result.getOrNull()!!))
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
     }
 
     @Test
@@ -198,10 +215,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
-        assertEquals(testData.size, result.getOrNull()?.size)
-        assertEquals(String(testData), String(result.getOrNull()!!))
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
     }
 
     @Test
@@ -235,9 +253,11 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
+        val expected = Result.success(testData)
 
         assertTrue(result.isSuccess)
-        assertEquals(String(testData), String(result.getOrNull()!!))
+        assertTrue(expected.isSuccess)
+        assertArrayEquals(expected.getOrNull(), result.getOrNull())
         assertTrue(readCallCount > testData.size / 5) // Multiple small reads
     }
 
