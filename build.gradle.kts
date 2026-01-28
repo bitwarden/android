@@ -183,6 +183,17 @@ subprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.isFork = true
     }
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        @Suppress("MagicNumber")
+        forkEvery = 500
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        @Suppress("UselessCallOnNotNull")
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+            // Explicitly setting the user Country and Language because tests assume en-US
+            "-Duser.country=US" +
+            "-Duser.language=en"
+    }
 }
 
 afterEvaluate {
