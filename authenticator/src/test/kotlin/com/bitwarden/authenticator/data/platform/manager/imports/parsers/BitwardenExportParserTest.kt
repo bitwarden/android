@@ -12,7 +12,6 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,13 +22,11 @@ class BitwardenExportParserTest {
     @BeforeEach
     fun setup() {
         mockkStatic(Uri::class)
-        mockkStatic("androidx.core.net.UriKt")
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class)
-        unmockkStatic("androidx.core.net.UriKt")
     }
 
     @Test
@@ -40,8 +37,6 @@ class BitwardenExportParserTest {
         val result = parser.parseForResult(json.toByteArray())
 
         assertTrue(result is ExportParseResult.Error)
-        val error = result as ExportParseResult.Error
-        assertNotNull(error.title)
     }
 
     @Test
