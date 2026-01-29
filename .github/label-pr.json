@@ -7,7 +7,8 @@
     "t:ci": ["ci", "build", "chore(ci)"],
     "t:deps": ["deps"],
     "t:breaking-change": ["breaking", "breaking-change"],
-    "t:misc": ["misc"]
+    "t:misc": ["misc"],
+    "t:llm": ["llm"]
   },
   "path_patterns": {
     "app:shared": [
@@ -41,7 +42,6 @@
       "scripts/",
       "fastlane/",
       ".gradle/",
-      ".claude/",
       "detekt-config.yml"
     ],
     "t:docs": [
@@ -52,6 +52,9 @@
     ],
     "t:misc": [
       "keystore/"
+    ],
+    "t:llm": [
+      ".claude/"
     ]
   }
 }
