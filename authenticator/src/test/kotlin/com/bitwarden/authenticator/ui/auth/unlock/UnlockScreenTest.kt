@@ -1,6 +1,9 @@
 package com.bitwarden.authenticator.ui.auth.unlock
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -46,7 +49,6 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
         ) {
             UnlockScreen(
                 viewModel = mockViewModel,
-                biometricsManager = mockBiometricsManager,
                 onUnlocked = { onUnlockedCalled = true },
             )
         }
@@ -173,10 +175,12 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
 
         composeTestRule
             .onNodeWithText("Error Title")
+            .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Error Message")
+            .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 
@@ -191,6 +195,7 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
 
         composeTestRule
             .onNodeWithTag("AcceptAlertButton")
+            .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
         verify {
@@ -206,6 +211,7 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
 
         composeTestRule
             .onNodeWithText("Loading")
+            .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 
