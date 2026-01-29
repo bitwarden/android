@@ -96,6 +96,15 @@ class FileManagerTest {
         assertEquals(testString, String(capturedBytes.toByteArray()))
     }
 
+    @Test
+    fun `stringToUri with null OutputStream should return false`() = runTest {
+        every { mockContentResolver.openOutputStream(mockUri) } returns null
+
+        val result = fileManager.stringToUri(mockUri, "Test data")
+
+        assertFalse(result)
+    }
+
     //endregion
 
     //region uriToByteArray Tests
