@@ -32,13 +32,6 @@ class ExampleViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns MutableStateFlow(null)
     }
 
-    // Default state for assertions - always define complete expected states
-    private val defaultState = ExampleState(
-        isLoading = false,
-        data = null,
-        errorMessage = null,
-    )
-
     /**
      * StateFlow has replay=1, so first awaitItem() returns current state
      */
@@ -47,7 +40,7 @@ class ExampleViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            assertEquals(defaultState, awaitItem())
+            assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
 
@@ -62,12 +55,12 @@ class ExampleViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            assertEquals(defaultState, awaitItem())
+            assertEquals(DEFAULT_STATE, awaitItem())
 
             viewModel.trySendAction(ExampleAction.LoadData)
 
-            assertEquals(defaultState.copy(isLoading = true), awaitItem())
-            assertEquals(defaultState.copy(isLoading = false, data = expectedData), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(isLoading = true), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(isLoading = false, data = expectedData), awaitItem())
         }
 
         coVerify { mockRepository.fetchData(any()) }
@@ -99,13 +92,13 @@ class ExampleViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            assertEquals(defaultState, stateFlow.awaitItem())
+            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
             eventFlow.expectNoEvents()
 
             viewModel.trySendAction(ExampleAction.ComplexAction)
 
-            assertEquals(defaultState.copy(isLoading = true), stateFlow.awaitItem())
-            assertEquals(defaultState.copy(data = "result"), stateFlow.awaitItem())
+            assertEquals(DEFAULT_STATE.copy(isLoading = true), stateFlow.awaitItem())
+            assertEquals(DEFAULT_STATE.copy(data = "result"), stateFlow.awaitItem())
             assertEquals(ExampleEvent.ShowToast("Success!"), eventFlow.awaitItem())
         }
     }
@@ -142,6 +135,12 @@ class ExampleViewModelTest : BaseViewModelTest() {
         authDiskSource = mockAuthDiskSource,
     )
 }
+
+private val DEFAULT_STATE = ExampleState(
+    isLoading = false,
+    data = null,
+    errorMessage = null,
+)
 
 // Example types (normally in separate files)
 data class ExampleState(

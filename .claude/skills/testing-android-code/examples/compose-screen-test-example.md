@@ -152,16 +152,14 @@ class ExampleScreenTest : BitwardenComposeTest() {
 
         verify { viewModel.trySendAction(ExampleAction.ItemClick(itemId)) }
     }
-
-    companion object {
-        private val DEFAULT_STATE = ExampleState(
-            isLoading = false,
-            data = null,
-            errorMessage = null,
-            items = emptyList(),
-        )
-    }
 }
+
+private val DEFAULT_STATE = ExampleState(
+    isLoading = false,
+    data = null,
+    errorMessage = null,
+    items = emptyList(),
+)
 
 // Example types (normally in separate files)
 data class ExampleState(
