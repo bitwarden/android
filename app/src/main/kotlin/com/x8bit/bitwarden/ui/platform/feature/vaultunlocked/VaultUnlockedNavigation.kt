@@ -217,6 +217,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
+            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },

@@ -26,12 +26,15 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
@@ -41,6 +44,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -62,11 +66,12 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 /**
  * View model for the add/edit send screen.
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 @HiltViewModel
 class AddEditSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepo: AuthRepository,
+    generatorRepository: GeneratorRepository,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
@@ -151,6 +156,18 @@ class AddEditSendViewModel @Inject constructor(
                     .launchIn(viewModelScope)
             }
         }
+
+        generatorRepository
+            .generatorResultFlow
+            .map { result ->
+                // Wait until we have a Content screen to update
+                mutableStateFlow.first {
+                    it.viewState is AddEditSendState.ViewState.Content
+                }
+                AddEditSendAction.Internal.GeneratorResultReceive(generatorResult = result)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AddEditSendAction): Unit = when (action) {
@@ -173,6 +190,10 @@ class AddEditSendViewModel @Inject constructor(
         is AddEditSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
         is AddEditSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
         is AddEditSendAction.Internal -> handleInternalAction(action)
+        is AddEditSendAction.OpenPasswordGeneratorClick -> handleAddEditOpenPasswordGeneratorClick()
+        is AddEditSendAction.PasswordCopyClick -> {
+            handleCopyClick(password = action.password)
+        }
     }
 
     private fun handleInternalAction(action: AddEditSendAction.Internal): Unit = when (action) {
@@ -193,6 +214,17 @@ class AddEditSendViewModel @Inject constructor(
         }
 
         is AddEditSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
+
+        is AddEditSendAction.Internal.GeneratorResultReceive -> {
+            handleGeneratorResultReceive(action)
+        }
+    }
+
+    private fun handleCopyClick(password: String) {
+        clipboardManager.setText(
+            text = password,
+            toastDescriptorOverride = BitwardenString.password.asText(),
+        )
     }
 
     private fun handleCreateSendResultReceive(
@@ -315,6 +347,16 @@ class AddEditSendViewModel @Inject constructor(
                         ),
                     ),
                 )
+            }
+        }
+    }
+
+    private fun handleGeneratorResultReceive(
+        action: AddEditSendAction.Internal.GeneratorResultReceive,
+    ) {
+        (action.generatorResult as? GeneratorResult.Password)?.let { passwordData ->
+            updateCommonContent {
+                it.copy(passwordInput = passwordData.password)
             }
         }
     }
@@ -619,6 +661,10 @@ class AddEditSendViewModel @Inject constructor(
         }
     }
 
+    private fun handleAddEditOpenPasswordGeneratorClick() {
+        sendEvent(event = AddEditSendEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Password))
+    }
+
     private fun navigateBack(isDeleted: Boolean = false) {
         specialCircumstanceManager.specialCircumstance = null
         sendEvent(
@@ -857,6 +903,13 @@ sealed class AddEditSendEvent {
     data object NavigateBack : AddEditSendEvent()
 
     /**
+     * Navigate to the generator modal.
+     */
+    data class NavigateToGeneratorModal(
+        val generatorMode: GeneratorMode.Modal,
+    ) : AddEditSendEvent()
+
+    /**
      * Navigate up to the search screen or the root screen depending where you came from.
      */
     data object NavigateUpToSearchOrRoot : AddEditSendEvent()
@@ -887,6 +940,11 @@ sealed class AddEditSendEvent {
 sealed class AddEditSendAction {
 
     /**
+     * Represents the action to open the password generator.
+     */
+    data object OpenPasswordGeneratorClick : AddEditSendAction()
+
+    /**
      * User has chosen a file to be part of the send.
      */
     data class FileChoose(val fileData: FileData) : AddEditSendAction()
@@ -900,6 +958,13 @@ sealed class AddEditSendAction {
      * User clicked the copy link button.
      */
     data object CopyLinkClick : AddEditSendAction()
+
+    /**
+     * Represents the action triggered when a password copy button is clicked.
+     *
+     * @param password The [String] to be copied.
+     */
+    data class PasswordCopyClick(val password: String) : AddEditSendAction()
 
     /**
      * User clicked the share link button.
@@ -986,6 +1051,13 @@ sealed class AddEditSendAction {
          * Indicates a result for creating a send has been received.
          */
         data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+
+        /**
+         * Indicates that the vault totp code result has been received.
+         */
+        data class GeneratorResultReceive(
+            val generatorResult: GeneratorResult,
+        ) : Internal()
 
         /**
          * Indicates a result for updating a send has been received.
