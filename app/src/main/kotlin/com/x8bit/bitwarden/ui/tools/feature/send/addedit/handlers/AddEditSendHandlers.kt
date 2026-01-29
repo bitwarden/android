@@ -22,6 +22,8 @@ data class AddEditSendHandlers(
     val onDeactivateSendToggle: (Boolean) -> Unit,
     val onDeletionDateChange: (ZonedDateTime) -> Unit,
     val onDeleteClick: () -> Unit,
+    val onOpenPasswordGeneratorClick: () -> Unit,
+    val onPasswordCopyClick: (String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -59,6 +61,16 @@ data class AddEditSendHandlers(
                     viewModel.trySendAction(AddEditSendAction.DeletionDateChange(it))
                 },
                 onDeleteClick = { viewModel.trySendAction(AddEditSendAction.DeleteClick) },
+                onOpenPasswordGeneratorClick = {
+                    viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+                },
+                onPasswordCopyClick = {
+                    viewModel.trySendAction(
+                        AddEditSendAction.PasswordCopyClick(
+                            password = it,
+                        ),
+                    )
+                },
             )
     }
 }

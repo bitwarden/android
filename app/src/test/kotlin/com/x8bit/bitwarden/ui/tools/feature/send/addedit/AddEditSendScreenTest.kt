@@ -15,6 +15,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -29,6 +30,7 @@ import com.bitwarden.ui.util.isEditableText
 import com.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
@@ -42,11 +44,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AddEditSendScreenTest : BitwardenComposeTest() {
 
+    private var navgatedGeneratorMode: GeneratorMode.Modal? = null
     private var onNavigateBackCalled = false
     private var onNavigateUpToSearchOrRootCalled = false
 
@@ -75,6 +79,9 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateUpToSearchOrRoot = { onNavigateUpToSearchOrRootCalled = true },
+                onNavigateToGeneratorModal = { mode ->
+                    navgatedGeneratorMode = mode
+                },
             )
         }
     }
@@ -89,6 +96,17 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     fun `on NavigateUpToSearchOrRoot should call onNavigateUpToSearchOrRootCalled`() {
         mutableEventFlow.tryEmit(AddEditSendEvent.NavigateUpToSearchOrRoot)
         assertTrue(onNavigateUpToSearchOrRootCalled)
+    }
+
+    @Test
+    fun `on NavigateToGeneratorModal event should call onNavigateToGeneratorModal`() {
+        val mode = GeneratorMode.Modal.Password
+
+        mutableEventFlow.tryEmit(
+            AddEditSendEvent.NavigateToGeneratorModal(mode),
+        )
+
+        assertEquals(mode, navgatedGeneratorMode)
     }
 
     @Test
@@ -173,6 +191,104 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Save")
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.SaveClick) }
+    }
+
+    @Test
+    fun `on copyPassword click should send PasswordCopyClick when passwordInput is not empty`() {
+        // Expand options section:
+        composeTestRule
+            .onNodeWithText("Additional options")
+            .performScrollTo()
+            .performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "somePass"),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag(testTag = "CopyPasswordButton")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AddEditSendAction.PasswordCopyClick(
+                    "somePass",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on copyPassword click should not send PasswordCopyClick when passwordInput is empty`() {
+        // Expand options section:
+        composeTestRule
+            .onNodeWithText("Additional options")
+            .performScrollTo()
+            .performClick()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(passwordInput = ""),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag(testTag = "CopyPasswordButton")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                AddEditSendAction.PasswordCopyClick(password = ""),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on generatePassword click should send OpenPasswordGeneratorClick when passwordInput is empty`() {
+        // Expand options section:
+        composeTestRule
+            .onNodeWithText("Additional options")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithTag(testTag = "RegeneratePasswordButton")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                AddEditSendAction.OpenPasswordGeneratorClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on generatePassword click should show Password Overwrite dialog when passwordInput is not empty`() {
+        // Expand options section:
+        composeTestRule
+            .onNodeWithText("Additional options")
+            .performScrollTo()
+            .performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "somePass"),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag(testTag = "RegeneratePasswordButton")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Are you sure you want to overwrite the current password?")
+            .assertIsDisplayed()
     }
 
     @Test
