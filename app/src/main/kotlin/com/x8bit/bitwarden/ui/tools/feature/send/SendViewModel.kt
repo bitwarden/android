@@ -90,6 +90,11 @@ class SendViewModel @Inject constructor(
             .map { SendAction.Internal.SendDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        vaultRepo
+            .sendDataStateFlow
+            .map { SendAction.Internal.SendDataReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         authRepo
             .userStateFlow
             .map { SendAction.Internal.UserStateReceive(it) }
