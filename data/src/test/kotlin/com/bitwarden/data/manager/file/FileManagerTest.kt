@@ -1,9 +1,11 @@
-package com.bitwarden.authenticator.data.authenticator.manager
+package com.bitwarden.data.manager.file
 
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.service.DownloadService
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -12,9 +14,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertInstanceOf
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -25,6 +28,7 @@ class FileManagerTest {
 
     private val fakeDispatcherManager = FakeDispatcherManager()
     private val mockContentResolver = mockk<ContentResolver>()
+    private val downloadService = mockk<DownloadService>()
     private val mockContext = mockk<Context> {
         every { contentResolver } returns mockContentResolver
     }
@@ -33,6 +37,7 @@ class FileManagerTest {
     private val fileManager = FileManagerImpl(
         context = mockContext,
         dispatcherManager = fakeDispatcherManager,
+        downloadService = downloadService,
     )
 
     //region stringToUri Tests
@@ -42,6 +47,7 @@ class FileManagerTest {
         val testString = "Test data"
         val mockOutputStream = createMockOutputStream()
 
+        every { mockOutputStream.write(testString.toByteArray()) }
         every { mockContentResolver.openOutputStream(mockUri) } returns mockOutputStream
 
         val result = fileManager.stringToUri(mockUri, testString)
@@ -55,7 +61,7 @@ class FileManagerTest {
 
         every {
             mockContentResolver.openOutputStream(mockUri)
-        } throws RuntimeException("Write failed")
+        } throws IOException("Write failed")
 
         val result = fileManager.stringToUri(mockUri, testString)
 
@@ -102,7 +108,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -115,11 +121,9 @@ class FileManagerTest {
             every { mockContentResolver.openInputStream(mockUri) } returns null
 
             val result = fileManager.uriToByteArray(mockUri)
-
             assertTrue(result.isFailure)
             val exception = result.exceptionOrNull()
-            assertNotNull(exception)
-            assertEquals(IllegalStateException::class.java, exception!!.javaClass)
+            assertInstanceOf<IllegalStateException>(exception)
             assertEquals("Stream has crashed", exception.message)
         }
 
@@ -132,8 +136,7 @@ class FileManagerTest {
 
         assertTrue(result.isFailure)
         val exception = result.exceptionOrNull()
-        assertNotNull(exception)
-        assertEquals(RuntimeException::class.java, exception!!.javaClass)
+        assertInstanceOf<RuntimeException>(exception)
         assertEquals("Read failed", exception.message)
     }
 
@@ -169,7 +172,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -185,7 +188,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -200,7 +203,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -215,7 +218,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -253,7 +256,7 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = Result.success(testData)
+        val expected = testData.asSuccess()
 
         assertTrue(result.isSuccess)
         assertTrue(expected.isSuccess)
@@ -274,7 +277,14 @@ class FileManagerTest {
         every { write(any<ByteArray>()) } answers {
             capturedBytes.addAll(firstArg<ByteArray>().toList())
         }
+        every { write(any<ByteArray>(), any(), any()) } answers {
+            val buffer = firstArg<ByteArray>()
+            val offset = secondArg<Int>()
+            val length = thirdArg<Int>()
+            capturedBytes.addAll(buffer.slice(offset until offset + length))
+        }
         every { close() } just runs
+        every { flush() } just runs
     }
 
     /**
