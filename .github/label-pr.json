@@ -34,7 +34,8 @@
       "testharness/"
     ],
     "t:tech-debt": [
-      "gradle.properties"
+      "gradle.properties",
+      "keystore/"
     ],
     "t:ci": [
       ".checkmarx/",
@@ -49,9 +50,6 @@
     ],
     "t:deps": [
       "gradle/"
-    ],
-    "t:misc": [
-      "keystore/"
     ],
     "t:llm": [
       ".claude/"
