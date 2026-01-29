@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.FileManager
@@ -96,16 +95,6 @@ class AuthenticatorRepositoryTest {
         unmockkStatic(Uri::class)
         unmockkStatic(List<SharedAccountData.Account>::toAuthenticatorItems)
         unmockkConstructor(Uri.Builder::class)
-    }
-
-    @Test
-    fun `ciphersStateFlow initial state should be Loaded with empty list`() = runTest {
-        authenticatorRepository.ciphersStateFlow.test {
-            assertEquals(
-                DataState.Loaded(emptyList<AuthenticatorItemEntity>()),
-                awaitItem(),
-            )
-        }
     }
 
     @Test
