@@ -1,7 +1,6 @@
 {
   "title_patterns": {
-    "t:feature-app": ["feat", "feature"],
-    "t:feature-tool": ["tool"],
+    "t:feature": ["feat", "feature", "tool"],
     "t:bug": ["fix", "bug", "bugfix"],
     "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
     "t:docs": ["docs"],
@@ -28,12 +27,13 @@
     "app:authenticator": [
       "authenticator/"
     ],
-    "t:feature-tool": [
+    "t:feature": [
+      "app/src/main/assets/fido2_privileged_community.json",
+      "app/src/main/assets/fido2_privileged_google.json",
       "testharness/"
     ],
-    "t:feature-app": [
-      "app/src/main/assets/fido2_privileged_community.json",
-      "app/src/main/assets/fido2_privileged_google.json"
+    "t:tech-debt": [
+      "gradle.properties"
     ],
     "t:ci": [
       ".checkmarx/",
