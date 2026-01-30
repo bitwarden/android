@@ -247,13 +247,13 @@ Typically you'll extend `BitwardenComposeTest` which extends this class. Use `Ba
 | Repository tests | None (manual setup) | Testing repository logic with mocked dependencies |
 | Utility/helper tests | None (manual setup) | Testing pure functions or utilities |
 
-## Reference Implementations
+## Complete Examples
 
 **ViewModel Test:**
-`app/src/test/kotlin/com/x8bit/bitwarden/ui/tools/feature/generator/GeneratorViewModelTest.kt`
+`../examples/viewmodel-test-example.md`
 
 **Compose Screen Test:**
-`app/src/test/kotlin/com/x8bit/bitwarden/ui/platform/feature/settings/appearance/AppearanceScreenTest.kt`
+`../examples/compose-screen-test-example.md`
 
-**Service Test:**
-`network/src/test/kotlin/com/bitwarden/network/service/ConfigServiceTest.kt`
+**Repository Test:**
+`../examples/repository-test-example.md`
