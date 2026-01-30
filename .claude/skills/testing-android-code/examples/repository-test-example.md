@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -91,7 +92,7 @@ class ExampleRepositoryTest {
 
         assertEquals(exception, result.exceptionOrNull())
         // Fake was not updated
-        assertEquals(null, fakeDiskSource.storedData)
+        assertNull(fakeDiskSource.storedData)
     }
 
     /**
@@ -104,7 +105,7 @@ class ExampleRepositoryTest {
 
         repository.dataFlow.test {
             // Initial null value from Fake
-            assertEquals(null, awaitItem())
+            assertNull(awaitItem())
 
             // Update via Fake property setter (triggers emission)
             fakeDiskSource.storedData = data1
@@ -141,7 +142,7 @@ class ExampleRepositoryTest {
 
         repository.deleteData()
 
-        assertEquals(null, fakeDiskSource.storedData)
+        assertNull(fakeDiskSource.storedData)
     }
 
     /**
@@ -177,7 +178,7 @@ class ExampleRepositoryTest {
 
         assertEquals(exception, result.exceptionOrNull())
         // Fake state unchanged on failure
-        assertEquals(null, fakeDiskSource.storedData)
+        assertNull(fakeDiskSource.storedData)
     }
 
     @Test
