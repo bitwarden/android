@@ -2,12 +2,12 @@
  * Complete Repository Test Example
  *
  * Key patterns demonstrated:
- * - Fake vs Mock strategy: Fakes for happy paths, Mocks for error paths
+ * - Fake for disk sources, Mock for network services
  * - Using FakeDispatcherManager for deterministic coroutines
  * - Using fixed Clock for deterministic time
  * - Testing Result types with .asSuccess() / .asFailure()
+ * - Asserting actual objects (not isSuccess/isFailure) for better diagnostics
  * - Testing Flow emissions with Turbine
- * - Isolated mock instances for error path testing
  */
 package com.bitwarden.example.data.repository
 
@@ -18,10 +18,8 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -76,8 +74,7 @@ class ExampleRepositoryTest {
 
         val result = repository.fetchData()
 
-        assertTrue(result.isSuccess)
-        assertEquals(expectedData, result.getOrNull())
+        assertEquals(expectedData, result.getOrThrow())
         // Fake automatically stores the data - verify it's there
         assertEquals(expectedData, fakeDiskSource.storedData)
     }
@@ -92,7 +89,6 @@ class ExampleRepositoryTest {
 
         val result = repository.fetchData()
 
-        assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
         // Fake was not updated
         assertEquals(null, fakeDiskSource.storedData)
@@ -110,12 +106,12 @@ class ExampleRepositoryTest {
             // Initial null value from Fake
             assertEquals(null, awaitItem())
 
-            // Update via Fake
-            fakeDiskSource.emitData(data1)
+            // Update via Fake property setter (triggers emission)
+            fakeDiskSource.storedData = data1
             assertEquals(data1, awaitItem())
 
             // Another update
-            fakeDiskSource.emitData(data2)
+            fakeDiskSource.storedData = data2
             assertEquals(data2, awaitItem())
         }
     }
@@ -130,7 +126,7 @@ class ExampleRepositoryTest {
 
         val result = repository.refresh()
 
-        assertTrue(result.isSuccess)
+        assertEquals(Unit, result.getOrThrow())
         coVerify { mockService.getData() }
         assertEquals(newData, fakeDiskSource.storedData)
     }
@@ -166,51 +162,38 @@ class ExampleRepositoryTest {
         coVerify(exactly = 0) { mockService.getData() }
     }
 
-    // ==================== ERROR PATH TESTS (use isolated Mock) ====================
+    // ==================== ERROR PATH TESTS ====================
 
     /**
-     * PATTERN: For error paths that require exceptions, create isolated
-     * repository instances with mocked dependencies.
+     * PATTERN: For error paths, reconfigure the class-level mock per-test.
+     * Use coEvery to change mock behavior for each specific test case.
      */
     @Test
-    fun `saveData should return Error when disk source throws exception`() = runTest {
-        // Create isolated mock that throws
-        val mockDiskSource = mockk<ExampleDiskSource> {
-            every { dataFlow } returns MutableStateFlow(null)
-            every { saveData(any()) } throws RuntimeException("Disk full")
-        }
+    fun `fetchData should return failure when service returns error`() = runTest {
+        val exception = Exception("Server unavailable")
+        coEvery { mockService.getData() } returns exception.asFailure()
 
-        // Create isolated repository with the throwing mock
-        val repository = ExampleRepositoryImpl(
-            clock = fixedClock,
-            service = mockService,
-            diskSource = mockDiskSource,
-            dispatcherManager = dispatcherManager,
-        )
+        val result = repository.fetchData()
 
-        val testData = ExampleData(id = "1", name = "Test", updatedAt = fixedClock.instant())
-        val result = repository.saveData(testData)
-
-        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
+        // Fake state unchanged on failure
+        assertEquals(null, fakeDiskSource.storedData)
     }
 
     @Test
-    fun `getCachedData should return null when disk source throws exception`() = runTest {
-        val mockDiskSource = mockk<ExampleDiskSource> {
-            every { dataFlow } returns MutableStateFlow(null)
-            every { getData() } throws RuntimeException("Database corrupted")
-        }
+    fun `refresh should return failure and preserve cached data when service fails`() = runTest {
+        // Pre-populate cache via Fake
+        val cachedData = ExampleData(id = "cached", name = "Old", updatedAt = fixedClock.instant())
+        fakeDiskSource.storedData = cachedData
 
-        val repository = ExampleRepositoryImpl(
-            clock = fixedClock,
-            service = mockService,
-            diskSource = mockDiskSource,
-            dispatcherManager = dispatcherManager,
-        )
+        // Reconfigure mock to return failure
+        coEvery { mockService.getData() } returns Exception("Network error").asFailure()
 
-        val result = repository.getCachedData()
+        val result = repository.refresh()
 
-        assertEquals(null, result)
+        assertTrue(result.isFailure)
+        // Cached data preserved on failure
+        assertEquals(cachedData, fakeDiskSource.storedData)
     }
 }
 
@@ -236,15 +219,25 @@ interface ExampleDiskSource {
  * PATTERN: Fake implementation for happy path testing.
  *
  * Key characteristics:
- * - Uses bufferedMutableSharedFlow() for proper replay behavior
+ * - Uses bufferedMutableSharedFlow(replay = 1) for proper replay behavior
  * - Uses .onSubscription { emit(state) } for immediate state emission
- * - Exposes internal state for test assertions
+ * - Private storage with override property setter that emits to flow
+ * - Test assertions done via the override property getter
  */
 class FakeExampleDiskSource : ExampleDiskSource {
-    private val mutableDataFlow = bufferedMutableSharedFlow<ExampleData?>()
+    private var storedDataValue: ExampleData? = null
+    private val mutableDataFlow = bufferedMutableSharedFlow<ExampleData?>(replay = 1)
 
-    // Expose for test assertions
-    var storedData: ExampleData? = null
+    /**
+     * Override property with getter/setter. Setter emits to flow automatically.
+     * Tests can read this property for assertions and write to trigger emissions.
+     */
+    var storedData: ExampleData?
+        get() = storedDataValue
+        set(value) {
+            storedDataValue = value
+            mutableDataFlow.tryEmit(value)
+        }
 
     override val dataFlow: Flow<ExampleData?>
         get() = mutableDataFlow.onSubscription { emit(storedData) }
@@ -253,17 +246,9 @@ class FakeExampleDiskSource : ExampleDiskSource {
 
     override fun saveData(data: ExampleData) {
         storedData = data
-        mutableDataFlow.tryEmit(data)
     }
 
     override fun clearData() {
         storedData = null
-        mutableDataFlow.tryEmit(null)
-    }
-
-    // Test helper to emit data without saving
-    fun emitData(data: ExampleData?) {
-        storedData = data
-        mutableDataFlow.tryEmit(data)
     }
 }

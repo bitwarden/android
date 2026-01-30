@@ -252,12 +252,12 @@ Common testing mistakes in Bitwarden. **For complete details and examples:** See
 - **FakeDispatcherManager** - Always use instead of real `DispatcherManagerImpl`
 - **Coroutine test wrapper** - Use `runTest { }` for all Flow/coroutine tests
 
-**Assertion Patterns (from PR reviews #6423, #6426):**
+**Assertion Patterns:**
 - **Complete state assertions** - Assert entire state objects, not individual fields
 - **JUnit over Kotlin** - Use `assertTrue()`, not Kotlin's `assert()`
 - **Use Result extensions** - Use `asSuccess()` and `asFailure()` for Result type assertions
 
-**Test Design (from PR reviews #6424, #6425):**
+**Test Design:**
 - **Fake vs Mock strategy** - Use Fakes for happy paths, Mocks for error paths
 - **DI over static mocking** - Extract interfaces (like UuidManager) instead of mockkStatic
 - **Null stream testing** - Test null returns from ContentResolver operations
