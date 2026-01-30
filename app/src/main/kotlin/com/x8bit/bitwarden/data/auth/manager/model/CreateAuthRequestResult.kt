@@ -21,7 +21,7 @@ sealed class CreateAuthRequestResult {
     ) : CreateAuthRequestResult()
 
     /**
-     * There was a generic error getting the user's auth requests.
+     * There was a generic error creating the auth request.
      */
     data class Error(
         val error: Throwable,
