@@ -12,7 +12,7 @@ sealed class CreateAuthRequestResult {
     ) : CreateAuthRequestResult()
 
     /**
-     * Models the data returned when a auth request has been approved.
+     * Models the data returned when an auth request has been approved.
      */
     data class Success(
         val authRequest: AuthRequest,
