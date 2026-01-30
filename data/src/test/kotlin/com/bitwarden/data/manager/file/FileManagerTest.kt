@@ -117,11 +117,8 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = testData.asSuccess()
 
-        assertTrue(result.isSuccess)
-        assertTrue(expected.isSuccess)
-        assertArrayEquals(expected.getOrNull(), result.getOrNull())
+        assertArrayEquals(testData, result.getOrThrow())
     }
 
     @Test
@@ -207,11 +204,8 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = testData.asSuccess()
 
-        assertTrue(result.isSuccess)
-        assertTrue(expected.isSuccess)
-        assertArrayEquals(expected.getOrNull(), result.getOrNull())
+        assertArrayEquals(testData, result.getOrThrow())
     }
 
     @Test
@@ -222,11 +216,8 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = testData.asSuccess()
 
-        assertTrue(result.isSuccess)
-        assertTrue(expected.isSuccess)
-        assertArrayEquals(expected.getOrNull(), result.getOrNull())
+        assertArrayEquals(testData, result.getOrThrow())
     }
 
     @Test
@@ -260,11 +251,8 @@ class FileManagerTest {
         every { mockContentResolver.openInputStream(mockUri) } returns mockInputStream
 
         val result = fileManager.uriToByteArray(mockUri)
-        val expected = testData.asSuccess()
 
-        assertTrue(result.isSuccess)
-        assertTrue(expected.isSuccess)
-        assertArrayEquals(expected.getOrNull(), result.getOrNull())
+        assertArrayEquals(testData, result.getOrThrow())
         assertTrue(readCallCount > testData.size / 5) // Multiple small reads
     }
 
