@@ -1,14 +1,14 @@
 {
   "title_patterns": {
-    "t:feature-app": ["feat", "feature"],
-    "t:feature-tool": ["tool"],
+    "t:feature": ["feat", "feature", "tool"],
     "t:bug": ["fix", "bug", "bugfix"],
     "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
     "t:docs": ["docs"],
     "t:ci": ["ci", "build", "chore(ci)"],
     "t:deps": ["deps"],
     "t:breaking-change": ["breaking", "breaking-change"],
-    "t:misc": ["misc"]
+    "t:misc": ["misc"],
+    "t:llm": ["llm"]
   },
   "path_patterns": {
     "app:shared": [
@@ -28,12 +28,14 @@
     "app:authenticator": [
       "authenticator/"
     ],
-    "t:feature-tool": [
+    "t:feature": [
+      "app/src/main/assets/fido2_privileged_community.json",
+      "app/src/main/assets/fido2_privileged_google.json",
       "testharness/"
     ],
-    "t:feature-app": [
-      "app/src/main/assets/fido2_privileged_community.json",
-      "app/src/main/assets/fido2_privileged_google.json"
+    "t:tech-debt": [
+      "gradle.properties",
+      "keystore/"
     ],
     "t:ci": [
       ".checkmarx/",
@@ -41,7 +43,6 @@
       "scripts/",
       "fastlane/",
       ".gradle/",
-      ".claude/",
       "detekt-config.yml"
     ],
     "t:docs": [
@@ -50,8 +51,8 @@
     "t:deps": [
       "gradle/"
     ],
-    "t:misc": [
-      "keystore/"
+    "t:llm": [
+      ".claude/"
     ]
   }
 }
