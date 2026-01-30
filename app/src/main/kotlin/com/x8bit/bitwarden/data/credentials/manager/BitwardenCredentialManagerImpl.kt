@@ -50,6 +50,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 
+private const val DAL_ROUTE = ".well-known/assetlinks.json"
+
 /**
  * Primary implementation of [BitwardenCredentialManager].
  */
@@ -123,7 +125,7 @@ class BitwardenCredentialManagerImpl(
                         .getSignatureFingerprintAsHexString()
                         .orEmpty(),
                     host = hostUrl,
-                    assetLinkUrl = hostUrl,
+                    assetLinkUrl = hostUrl.toDigitalAssetLinkUrl(),
                 ),
             )
         }
@@ -316,7 +318,7 @@ class BitwardenCredentialManagerImpl(
                 packageName = callingAppInfo.packageName,
                 sha256CertFingerprint = signatureFingerprint,
                 host = host,
-                assetLinkUrl = host,
+                assetLinkUrl = host.toDigitalAssetLinkUrl(),
             ),
         )
 
@@ -428,6 +430,13 @@ class BitwardenCredentialManagerImpl(
             ?.relyingParty
             ?.id
             ?.prefixHttpsIfNecessaryOrNull()
+
+    private fun String.toDigitalAssetLinkUrl(): String =
+        when {
+            this.endsWith(DAL_ROUTE) -> this
+            this.endsWith("/") -> "$this$DAL_ROUTE"
+            else -> "$this/$DAL_ROUTE"
+        }
 }
 
 private const val MAX_AUTHENTICATION_ATTEMPTS = 5
