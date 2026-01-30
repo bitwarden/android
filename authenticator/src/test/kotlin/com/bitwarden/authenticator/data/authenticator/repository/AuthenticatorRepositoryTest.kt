@@ -43,7 +43,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -230,16 +229,14 @@ class AuthenticatorRepositoryTest {
         fakeAuthenticatorDiskSource.saveItem(mockItem)
 
         authenticatorRepository.getItemStateFlow("invalid-id").test {
-            val loadedState = awaitItem() as DataState.Loaded
-            assertNull(loadedState.data)
+            assertEquals(DataState.Loaded(null), awaitItem())
         }
     }
 
     @Test
     fun `getItemStateFlow should emit Loaded with null for non-existent item`() = runTest {
         authenticatorRepository.getItemStateFlow("any-id").test {
-            val loadedState = awaitItem() as DataState.Loaded
-            assertNull(loadedState.data)
+            assertEquals(DataState.Loaded(null), awaitItem())
         }
     }
 
