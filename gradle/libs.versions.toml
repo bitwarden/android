@@ -34,7 +34,8 @@ bitwardenSdk = "2.0.0-4818-c1e4bb66"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
 firebaseBom = "34.8.0"
-glide = "1.0.0-beta01"
+glide = "5.0.5"
+glideCompose = "1.0.0-beta01"
 googleGuava = "33.5.0-jre"
 googleProtoBufJava = "4.33.4"
 googleProtoBufPlugin = "0.9.6"
@@ -98,7 +99,9 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
-bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
+bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
+bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
+bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
