@@ -16,7 +16,6 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -108,18 +107,27 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1)
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockClick)
 
-            val updatedState = awaitItem()
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = false,
-                showBiometricInvalidatedMessage = true,
-                dialog = null,
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = false,
+                    showBiometricInvalidatedMessage = true,
+                    dialog = null,
+                ),
+                awaitItem(),
             )
-            assertEquals(expected, updatedState)
         }
     }
 
@@ -133,15 +141,37 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1) // Initial state
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(mockCipher))
 
-            val loadingState = awaitItem()
-            assertEquals(UnlockState.Dialog.Loading, loadingState.dialog)
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Loading,
+                ),
+                awaitItem(),
+            )
 
-            // Consume final state update (dialog cleared after success)
-            awaitItem()
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -191,23 +221,40 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1) // Initial state
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(mockCipher))
 
-            skipItems(1) // Loading state
-
-            val errorState = awaitItem()
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = false,
-                showBiometricInvalidatedMessage = false,
-                dialog = UnlockState.Dialog.Error(
-                    title = BitwardenString.biometrics_failed.asText(),
-                    message = BitwardenString.biometrics_decoding_failure.asText(),
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Loading,
                 ),
+                awaitItem(),
             )
-            assertEquals(expected, errorState)
+
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = false,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Error(
+                        title = BitwardenString.biometrics_failed.asText(),
+                        message = BitwardenString.biometrics_decoding_failure.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
         }
 
         verify { mockAuthRepository.clearBiometrics() }
@@ -224,24 +271,41 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1) // Initial state
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(mockCipher))
 
-            skipItems(1) // Loading state
-
-            val errorState = awaitItem()
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = true,
-                showBiometricInvalidatedMessage = false,
-                dialog = UnlockState.Dialog.Error(
-                    title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.generic_error_message.asText(),
-                    throwable = testError,
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Loading,
                 ),
+                awaitItem(),
             )
-            assertEquals(expected, errorState)
+
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        throwable = testError,
+                    ),
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -252,21 +316,30 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1) // Initial state
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsLockout)
 
-            val errorState = awaitItem()
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = true,
-                showBiometricInvalidatedMessage = false,
-                dialog = UnlockState.Dialog.Error(
-                    title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.too_many_failed_biometric_attempts.asText(),
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.too_many_failed_biometric_attempts.asText(),
+                    ),
                 ),
+                awaitItem(),
             )
-            assertEquals(expected, errorState)
         }
     }
 
@@ -280,19 +353,30 @@ class UnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(UnlockAction.BiometricsLockout)
 
         viewModel.stateFlow.test {
-            val stateWithDialog = awaitItem()
-            assertNotNull(stateWithDialog.dialog)
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.too_many_failed_biometric_attempts.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.DismissDialog)
 
-            val stateWithoutDialog = awaitItem()
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = true,
-                showBiometricInvalidatedMessage = false,
-                dialog = null,
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
             )
-            assertEquals(expected, stateWithoutDialog)
         }
     }
 
@@ -306,20 +390,37 @@ class UnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            skipItems(1) // Initial state
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(mockCipher))
 
-            skipItems(1) // Loading state
-            val finalState = awaitItem()
-
-            val expected = UnlockState(
-                isBiometricsEnabled = true,
-                isBiometricsValid = true,
-                showBiometricInvalidatedMessage = false,
-                dialog = null,
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = UnlockState.Dialog.Loading,
+                ),
+                awaitItem(),
             )
-            assertEquals(expected, finalState)
+
+            assertEquals(
+                UnlockState(
+                    isBiometricsEnabled = true,
+                    isBiometricsValid = true,
+                    showBiometricInvalidatedMessage = false,
+                    dialog = null,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -336,17 +437,18 @@ class UnlockViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        val state = viewModel.stateFlow.value
-        val expected = UnlockState(
-            isBiometricsEnabled = true,
-            isBiometricsValid = false,
-            showBiometricInvalidatedMessage = false,
-            dialog = UnlockState.Dialog.Error(
-                title = BitwardenString.biometrics_failed.asText(),
-                message = BitwardenString.biometrics_decoding_failure.asText(),
+        assertEquals(
+            UnlockState(
+                isBiometricsEnabled = true,
+                isBiometricsValid = false,
+                showBiometricInvalidatedMessage = false,
+                dialog = UnlockState.Dialog.Error(
+                    title = BitwardenString.biometrics_failed.asText(),
+                    message = BitwardenString.biometrics_decoding_failure.asText(),
+                ),
             ),
+            viewModel.stateFlow.value,
         )
-        assertEquals(expected, state)
     }
 
     @Test
@@ -362,18 +464,19 @@ class UnlockViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        val state = viewModel.stateFlow.value
-        val expected = UnlockState(
-            isBiometricsEnabled = true,
-            isBiometricsValid = true,
-            showBiometricInvalidatedMessage = false,
-            dialog = UnlockState.Dialog.Error(
-                title = BitwardenString.an_error_has_occurred.asText(),
-                message = BitwardenString.generic_error_message.asText(),
-                throwable = testError,
+        assertEquals(
+            UnlockState(
+                isBiometricsEnabled = true,
+                isBiometricsValid = true,
+                showBiometricInvalidatedMessage = false,
+                dialog = UnlockState.Dialog.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
+                    throwable = testError,
+                ),
             ),
+            viewModel.stateFlow.value,
         )
-        assertEquals(expected, state)
     }
 
     private fun createViewModel(
