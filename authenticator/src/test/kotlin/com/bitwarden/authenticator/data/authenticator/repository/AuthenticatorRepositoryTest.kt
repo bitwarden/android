@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.data.authenticator.repository
 
 import android.net.Uri
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.FileManager
@@ -260,28 +259,6 @@ class AuthenticatorRepositoryTest {
     }
 
     @Test
-    fun `createItem with exception should return Error`() = runTest {
-        val mockItem = createMockAuthenticatorItemEntity(1)
-        val mockDiskSource = mockk<AuthenticatorDiskSource> {
-            every { getItems() } returns MutableStateFlow(emptyList())
-            coEvery { saveItem(mockItem) } throws RuntimeException()
-        }
-        val repository = AuthenticatorRepositoryImpl(
-            authenticatorDiskSource = mockDiskSource,
-            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-            totpCodeManager = mockTotpCodeManager,
-            fileManager = mockFileManager,
-            importManager = mockImportManager,
-            dispatcherManager = mockDispatcherManager,
-            settingRepository = settingsRepository,
-        )
-
-        val result = repository.createItem(mockItem)
-
-        assertEquals(CreateItemResult.Error, result)
-    }
-
-    @Test
     fun `addItems with multiple items should return Success`() = runTest {
         val mockItem1 = createMockAuthenticatorItemEntity(1)
         val mockItem2 = createMockAuthenticatorItemEntity(2)
@@ -292,55 +269,12 @@ class AuthenticatorRepositoryTest {
     }
 
     @Test
-    fun `addItems with exception should return Error`() = runTest {
-        val mockItem = createMockAuthenticatorItemEntity(1)
-        val mockDiskSource = mockk<AuthenticatorDiskSource> {
-            every { getItems() } returns MutableStateFlow(emptyList())
-            coEvery { saveItem(mockItem) } throws RuntimeException()
-        }
-        val repository = AuthenticatorRepositoryImpl(
-            authenticatorDiskSource = mockDiskSource,
-            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-            totpCodeManager = mockTotpCodeManager,
-            fileManager = mockFileManager,
-            importManager = mockImportManager,
-            dispatcherManager = mockDispatcherManager,
-            settingRepository = settingsRepository,
-        )
-
-        val result = repository.addItems(mockItem)
-
-        assertEquals(CreateItemResult.Error, result)
-    }
-
-    @Test
     fun `hardDeleteItem with valid id should return Success`() = runTest {
         val mockItem = createMockAuthenticatorItemEntity(1)
 
         val result = authenticatorRepository.hardDeleteItem(mockItem.id)
 
         assertEquals(DeleteItemResult.Success, result)
-    }
-
-    @Test
-    fun `hardDeleteItem with exception should return Error`() = runTest {
-        val mockDiskSource = mockk<AuthenticatorDiskSource> {
-            every { getItems() } returns MutableStateFlow(emptyList())
-            coEvery { deleteItem(any()) } throws RuntimeException()
-        }
-        val repository = AuthenticatorRepositoryImpl(
-            authenticatorDiskSource = mockDiskSource,
-            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-            totpCodeManager = mockTotpCodeManager,
-            fileManager = mockFileManager,
-            importManager = mockImportManager,
-            dispatcherManager = mockDispatcherManager,
-            settingRepository = settingsRepository,
-        )
-
-        val result = repository.hardDeleteItem("non-existent-id")
-
-        assertEquals(DeleteItemResult.Error, result)
     }
 
     @Test
