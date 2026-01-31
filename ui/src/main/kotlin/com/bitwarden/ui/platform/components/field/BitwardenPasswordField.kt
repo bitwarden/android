@@ -60,6 +60,7 @@ import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformat
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.withForcedLtrDirection
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -155,7 +156,7 @@ fun BitwardenPasswordField(
             var focused by remember { mutableStateOf(value = false) }
             TextField(
                 colors = bitwardenTextFieldColors(),
-                textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+                textStyle = BitwardenTheme.typography.sensitiveInfoSmall.withForcedLtrDirection(),
                 label = label?.let {
                     {
                         Row(verticalAlignment = Alignment.CenterVertically) {
