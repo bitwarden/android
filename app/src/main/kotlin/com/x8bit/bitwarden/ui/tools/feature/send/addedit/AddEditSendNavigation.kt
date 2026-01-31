@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import kotlinx.serialization.Serializable
@@ -57,11 +58,13 @@ fun SavedStateHandle.toAddEditSendArgs(): AddEditSendArgs {
 fun NavGraphBuilder.addEditSendDestination(
     onNavigateBack: () -> Unit,
     onNavigateUpToSearchOrRoot: () -> Unit,
+    onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
 ) {
     composableWithSlideTransitions<AddEditSendRoute> {
         AddEditSendScreen(
             onNavigateBack = onNavigateBack,
             onNavigateUpToSearchOrRoot = onNavigateUpToSearchOrRoot,
+            onNavigateToGeneratorModal = onNavigateToGeneratorModal,
         )
     }
 }
