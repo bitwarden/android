@@ -10,12 +10,16 @@ plugins {
 
 android {
     namespace = "com.bitwarden.core"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
         // Set the minimum SDK version to the SDK version used by Authenticator, which is the lowest
         // universally supported SDK version.
-        minSdk = libs.versions.minSdkBwa.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

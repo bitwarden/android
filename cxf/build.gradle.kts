@@ -10,10 +10,14 @@ plugins {
 
 android {
     namespace = "com.bitwarden.cxf"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
-        minSdk = libs.versions.minSdkBwa.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
