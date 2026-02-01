@@ -1011,7 +1011,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Weet je zeker dat je wilt stoppen met %s vertrouwen?</string>
     <string name="installed_apps">Geïnstalleerde apps</string>
     <string name="delete_x">%s verwijderen</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Codering decoderen mislukt. Neem contact op met support.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Codering ontsleutelen mislukt. Neem contact op met support.</string>
     <string name="decryption_error">Ontsleutelingsfout</string>
     <string name="scan_a_qr_code">Scan een QR-code</string>
     <string name="cannot_add_authenticator_key">Kun je de authenticatiesleutel niet toevoegen?</string>
@@ -1104,8 +1104,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="copy_error_report">Foutrapportage kopiëren</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kon het onderstaande kluisitem niet ontsleutelen. Kopieer deze foutenrapporte en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden kon één kluisitem niet ontsleutelen. Kopieer deze foutenrapporte en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
-        <item quantity="other">Bitwarden kon %1$d kluisitems niet ontsleutelen. Kopieer deze foutenrapportage en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
+        <item quantity="one">Bitwarden kon%1$d kluisitem niet ontsleutelen. Kopieer dit foutenrapport en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
+        <item quantity="other">Bitwarden kon%1$d kluisitems niet ontsleutelen. Kopieer dit foutenrapport en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
     </plurals>
     <string name="select_a_card_for_x">Kies een kaart voor %s</string>
     <string name="advanced_options">Geavanceerde opties</string>

@@ -150,7 +150,7 @@
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">同期が完了しました。</string>
     <string name="two_step_login">2段階認証</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">生体認証でロック解除</string>
     <string name="unlock_with_pin">PIN コードでロック解除</string>
     <string name="verification_code">認証コード</string>
     <string name="view_login">ログイン情報を表示</string>
