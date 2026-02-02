@@ -9,7 +9,7 @@ data class UserAccountTokens(
     val refreshToken: String?,
 ) {
     /**
-     * Returns `true` if the user is logged in, `false otherwise.
+     * Returns `true` if the user is logged in, `false` otherwise.
      */
     val isLoggedIn: Boolean get() = accessToken != null
 }
