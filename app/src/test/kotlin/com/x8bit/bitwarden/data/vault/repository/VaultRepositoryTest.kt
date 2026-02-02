@@ -201,8 +201,9 @@ class VaultRepositoryTest {
             val biometricsKey = "asdf1234"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val initVector = byteArrayOf(2, 2)
+            val error = BadPaddingException()
             val cipher = mockk<Cipher> {
-                every { doFinal(any()) } throws BadPaddingException()
+                every { doFinal(any()) } throws error
             }
             fakeAuthDiskSource.apply {
                 storeUserBiometricInitVector(userId = userId, iv = initVector)
@@ -213,9 +214,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(
-                VaultUnlockResult.BiometricDecodingError(
-                    error = MissingPropertyException("Foo"),
-                ),
+                VaultUnlockResult.BiometricDecodingError(error = error),
                 result,
             )
         }
@@ -499,30 +498,10 @@ class VaultRepositoryTest {
             )
         }
 
-    @Test
-    fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError`() =
-        runTest {
-            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = null,
-            )
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            assertEquals(
-                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
-                result,
-            )
-        }
-
     @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError`() =
         runTest {
-            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
                 userId = "mockId-1",
                 userKey = "mockKey-1",
@@ -532,6 +511,9 @@ class VaultRepositoryTest {
                 privateKey = null,
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
+
             assertEquals(
                 VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
@@ -741,7 +723,6 @@ class VaultRepositoryTest {
     @Test
     fun `unlockVaultWithPin with missing pin-protected user key should return InvalidStateError`() =
         runTest {
-            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
             fakeAuthDiskSource.storePinProtectedUserKey(
                 userId = "mockId-1",
                 pinProtectedUserKey = null,
@@ -755,6 +736,9 @@ class VaultRepositoryTest {
                 privateKey = "mockPrivateKey-1",
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
+
             assertEquals(
                 VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
@@ -763,7 +747,6 @@ class VaultRepositoryTest {
 
     @Test
     fun `unlockVaultWithPin with missing private key should return InvalidStateError`() = runTest {
-        val result = vaultRepository.unlockVaultWithPin(pin = "1234")
         fakeAuthDiskSource.storePinProtectedUserKey(
             userId = "mockId-1",
             pinProtectedUserKey = "mockKey-1",
@@ -777,6 +760,9 @@ class VaultRepositoryTest {
             privateKey = null,
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.unlockVaultWithPin(pin = "1234")
+
         assertEquals(
             VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
             result,
