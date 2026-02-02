@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Provides an API for observing an modifying authentication state.
+ * Provides an API for observing and modifying authentication state.
  */
 @Suppress("TooManyFunctions")
 interface AuthRepository :
