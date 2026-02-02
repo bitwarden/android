@@ -283,7 +283,7 @@ interface AuthRepository :
     ): PasswordHintResult
 
     /**
-     * Removes the users password from the account. This used used when migrating from master
+     * Removes the users password from the account. This is used when migrating from master
      * password login to key connector login.
      */
     suspend fun removePassword(masterPassword: String): RemovePasswordResult
