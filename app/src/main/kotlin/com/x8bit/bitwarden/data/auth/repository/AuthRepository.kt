@@ -385,7 +385,7 @@ interface AuthRepository :
     ): SendVerificationEmailResult
 
     /**
-     * Validates the given [token] for the given [email]. Part of th new account registration flow.
+     * Validates the given [token] for the given [email]. Part of the new account registration flow.
      */
     suspend fun validateEmailToken(
         email: String,
