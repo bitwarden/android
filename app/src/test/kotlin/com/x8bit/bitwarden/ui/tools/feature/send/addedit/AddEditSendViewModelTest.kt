@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
@@ -25,6 +26,8 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -32,6 +35,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
@@ -70,9 +74,13 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
+    private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+    private val generatorRepository = mockk<GeneratorRepository> (relaxed = true) {
+        every { generatorResultFlow } returns mutableGeneratorResultFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -484,6 +492,35 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `RegeneratePassword updates password in viewState`() = runTest {
+        val generatedPassword = "some-password"
+
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(passwordInput = ""),
+            ),
+        )
+
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.trySendAction(
+            AddEditSendAction.Internal.GeneratorResultReceive(
+                GeneratorResult.Password(password = generatedPassword),
+            ),
+        )
+
+        val expectedState = initialState.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    passwordInput = generatedPassword,
+                ),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `CopyLinkClick with nonnull sendUrl should copy to clipboard`() {
         val sendUrl = "www.test.com/send-stuff"
         val viewState = DEFAULT_VIEW_STATE.copy(
@@ -512,6 +549,20 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             clipboardManager.setText(
                 text = sendUrl,
                 toastDescriptorOverride = BitwardenString.send_link.asText(),
+            )
+        }
+    }
+
+    @Test
+    fun `OpenPasswordGeneratorClick should emit NavigateToGeneratorModal`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+            assertEquals(
+                AddEditSendEvent.NavigateToGeneratorModal(
+                    GeneratorMode.Modal.Password,
+                ),
+                awaitItem(),
             )
         }
     }
@@ -993,6 +1044,21 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `PasswordCopyClick copies password to clipboard`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            AddEditSendAction.PasswordCopyClick("some-password"),
+        )
+
+        verify(exactly = 1) {
+            clipboardManager.setText(
+                text = "some-password",
+                toastDescriptorOverride = BitwardenString.password.asText(),
+            )
+        }
+    }
+
     private fun createViewModel(
         state: AddEditSendState? = null,
         addEditSendType: AddEditSendType = AddEditSendType.AddItem,
@@ -1015,6 +1081,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         policyManager = policyManager,
         networkConnectionManager = networkConnectionManager,
         snackbarRelayManager = snackbarRelayManager,
+        generatorRepository = generatorRepository,
     )
 }
 
