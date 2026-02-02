@@ -201,7 +201,7 @@ See `network/src/testFixtures/kotlin/com/bitwarden/network/model/` for full list
 
 **Locations:**
 - `.asSuccess()`, `.asFailure()`: `core/src/main/kotlin/com/bitwarden/core/data/util/ResultExtensions.kt`
-- `assertCoroutineThrows`: `app/src/test/kotlin/com/x8bit/bitwarden/data/util/TestHelpers.kt`
+- `assertCoroutineThrows`: `core/src/testFixtures/kotlin/com/bitwarden/core/data/util/TestHelpers.kt`
 
 ```kotlin
 // Create results
