@@ -43,7 +43,6 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setUp() {
-        onUnlockedCalled = false
         setContent(
             biometricsManager = mockBiometricsManager,
         ) {
