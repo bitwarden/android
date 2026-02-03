@@ -13,6 +13,7 @@ import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -68,6 +69,7 @@ import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -284,6 +286,9 @@ class AuthRepositoryTest {
             updateKdfToMinimumsIfNeeded(password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = any()) } just runs
+    }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
@@ -311,6 +316,7 @@ class AuthRepositoryTest {
         logsManager = logsManager,
         userStateManager = userStateManager,
         kdfManager = kdfManager,
+        toastManager = toastManager,
     )
 
     @BeforeEach
@@ -5501,7 +5507,8 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             passwordHash = newPasswordHash,
         )
-        verify {
+        verify(exactly = 1) {
+            toastManager.show(messageId = BitwardenString.updated_master_password)
             userLogoutManager.logout(
                 userId = ACCOUNT_1.profile.userId,
                 reason = LogoutReason.PasswordReset,

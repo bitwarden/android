@@ -1191,8 +1191,8 @@ Vill du byta till detta konto?</string>
     <string name="upgrade_to_premium">Uppgradera till premium</string>
     <string name="this_item_is_archived">Detta objekt är arkiverat.</string>
     <string name="introducing_archive">Introducerar arkiv</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Håll objekt som du inte behöver just nu är säkra, men utom synhåll.</string>
+    <string name="go_to_archive">Gå till arkivet</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Detta objekt är arkiverat. Spara ändringar kommer att återställa det till ditt valv.</string>
     <string name="your_premium_subscription_ended">Ditt Premium-abonnemang avslutades</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">För att återfå åtkomst till ditt arkiv, starta om Premium-abonnemanget. Om du redigerar detaljer för ett arkiverat objekt innan du startar om kommer det att flyttas tillbaka till ditt valv.</string>

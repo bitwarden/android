@@ -54,7 +54,7 @@ val CipherView.isActiveWithFido2Credentials: Boolean
     get() = deletedDate == null && !(login?.fido2Credentials.isNullOrEmpty())
 
 /**
- * Returns true when the cipher is not deleted and contains at least one Pasword credential.
+ * Returns true when the cipher is not deleted and contains at least one Password credential.
  */
 val CipherView.isActiveWithPasswordCredentials: Boolean
     get() = deletedDate == null && !(login?.password.isNullOrEmpty())

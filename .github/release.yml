@@ -6,14 +6,13 @@ changelog:
     - title: '✨ Community Highlight'
       labels:
         - community-pr
-    - title: '🚀 New Features & Enhancements'
+    - title: ':shipit: Feature Development'
       labels:
+        - t:feature
         - t:feature-app
+        - t:feature-tool
         - t:new-feature
         - t:enhancement
-    - title: ':shipit: Tools'
-      labels:
-        - t:feature-tool
     - title: '❗ Breaking Changes'
       labels:
         - t:breaking-change

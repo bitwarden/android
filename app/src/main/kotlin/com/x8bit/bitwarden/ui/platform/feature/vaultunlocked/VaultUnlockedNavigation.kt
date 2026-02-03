@@ -57,11 +57,8 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsS
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.leaveOrganizationDestination
-import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.navigateToLeaveOrganization
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
-import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsDestination
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMoveToOrganization
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
@@ -220,6 +217,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
+            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -264,19 +262,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
         importLoginsScreenDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-
-        migrateToMyItemsDestination(
-            onNavigateToLeaveOrganization = { organizationId, organizationName ->
-                navController.navigateToLeaveOrganization(
-                    organizationId = organizationId,
-                    organizationName = organizationName,
-                )
-            },
-        )
-
-        leaveOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }

@@ -5,6 +5,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -47,6 +48,7 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -172,6 +174,7 @@ class AuthRepositoryImpl(
     private val policyManager: PolicyManager,
     private val userStateManager: UserStateManager,
     private val kdfManager: KdfManager,
+    private val toastManager: ToastManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
@@ -1043,9 +1046,10 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         }
+        val userId = activeAccount.profile.userId
         return vaultSdkSource
             .updatePassword(
-                userId = activeAccount.profile.userId,
+                userId = userId,
                 newPassword = newPassword,
             )
             .flatMap { updatePasswordResponse ->
@@ -1071,14 +1075,15 @@ class AuthRepositoryImpl(
                         )
                         .onSuccess { passwordHash ->
                             authDiskSource.storeMasterPasswordHash(
-                                userId = activeAccount.profile.userId,
+                                userId = userId,
                                 passwordHash = passwordHash,
                             )
                         }
 
+                    toastManager.show(BitwardenString.updated_master_password)
                     // Log out the user after successful password reset.
                     // This clears all user state including forcePasswordResetReason.
-                    logout(reason = LogoutReason.PasswordReset)
+                    logout(reason = LogoutReason.PasswordReset, userId = userId)
 
                     // Return the success.
                     ResetPasswordResult.Success

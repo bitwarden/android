@@ -55,7 +55,7 @@ class RootNavViewModel @Inject constructor(
                 vaultMigrationData = vaultMigrationData,
             )
         }
-            .onEach(::handleAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -118,12 +118,7 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked &&
                 action.vaultMigrationData is VaultMigrationData.MigrationRequired &&
-                shouldShowVaultMigration(specialCircumstance) -> {
-                RootNavState.MigrateToMyItems(
-                    organizationId = action.vaultMigrationData.organizationId,
-                    organizationName = action.vaultMigrationData.organizationName,
-                )
-            }
+                shouldShowVaultMigration(specialCircumstance) -> RootNavState.MigrateToMyItems
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
@@ -363,13 +358,10 @@ sealed class RootNavState : Parcelable {
     data object VaultLocked : RootNavState()
 
     /**
-     * App should show MigrateToMyItems screen.
+     * App should show MigrateToMyItems graph.
      */
     @Parcelize
-    data class MigrateToMyItems(
-        val organizationId: String,
-        val organizationName: String,
-    ) : RootNavState()
+    data object MigrateToMyItems : RootNavState()
 
     /**
      * App should show vault unlocked nav graph for the given [activeUserId].
