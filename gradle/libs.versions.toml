@@ -3,7 +3,7 @@
 
 # App version
 appVersionCode = "1"
-appVersionName = "2025.11.1"
+appVersionName = "2026.2.0"
 
 # SDK Versions
 compileSdk = "36"
@@ -13,48 +13,49 @@ minSdkBwa = "28"
 
 # Dependency Versions
 androidGradlePlugin = "8.13.2"
-androidxActivity = "1.12.2"
+androidxActivity = "1.12.3"
 androidxAppCompat = "1.7.1"
 androdixAutofill = "1.3.0"
 androidxBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.9.0"
-androidxCamera = "1.5.2"
-androidxComposeBom = "2025.12.01"
+androidxCamera = "1.5.3"
+androidxComposeBom = "2026.01.01"
 androidxCore = "1.17.0"
 androidxCredentials = "1.6.0-beta03"
 androidxCredentialsProviderEvents = "1.0.0-alpha03"
 androidxHiltNavigationCompose = "1.3.0"
 androidxLifecycle = "2.10.0"
-androidxNavigation = "2.9.6"
+androidxNavigation = "2.9.7"
 androidxRoom = "2.8.4"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
-androidxWork = "2.11.0"
-bitwardenSdk = "2.0.0-4524-513f18bf"
+androidxWork = "2.11.1"
+bitwardenSdk = "2.0.0-4835-5285d3fc"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
-firebaseBom = "34.7.0"
-glide = "1.0.0-beta01"
+firebaseBom = "34.8.0"
+glide = "5.0.5"
+glideCompose = "1.0.0-beta01"
 googleGuava = "33.5.0-jre"
-googleProtoBufJava = "4.33.2"
+googleProtoBufJava = "4.33.4"
 googleProtoBufPlugin = "0.9.6"
 googleServices = "4.4.4"
 googleReview = "2.0.2"
-hilt = "2.57.2"
-junit = "6.0.1"
+hilt = "2.58"
+junit = "6.0.2"
 jvmTarget = "21"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
-kotlinxSerialization = "1.9.0"
+kotlinxSerialization = "1.10.0"
 kotlinxKover = "0.9.4"
-ksp = "2.3.3"
+ksp = "2.3.4"
 mockk = "1.14.7"
 okhttp = "5.3.2"
 retrofitBom = "3.0.0"
-robolectric = "4.16"
-sonarqube = "7.1.0.6387"
-testng = "7.11.0"
+robolectric = "4.16.1"
+sonarqube = "7.2.2.6593"
+testng = "7.12.0"
 timber = "5.0.1"
 turbine = "1.2.1"
 zxing = "3.5.4"
@@ -98,7 +99,9 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
-bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
+bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
+bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
+bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

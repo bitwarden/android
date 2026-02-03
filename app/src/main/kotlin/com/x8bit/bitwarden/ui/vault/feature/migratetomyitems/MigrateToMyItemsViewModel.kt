@@ -3,20 +3,30 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.network.util.isNoConnectionError
+import com.bitwarden.network.util.isTimeoutError
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
+import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -27,14 +37,19 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class MigrateToMyItemsViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
+    private val vaultMigrationManager: VaultMigrationManager,
     vaultSyncManager: VaultSyncManager,
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<MigrateToMyItemsState, MigrateToMyItemsEvent, MigrateToMyItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toMigrateToMyItemsArgs()
+        // This must be true or we would have never navigated here.
+        val migrationData = (vaultMigrationManager.vaultMigrationDataStateFlow.value
+            as VaultMigrationData.MigrationRequired)
         MigrateToMyItemsState(
-            organizationId = args.organizationId,
-            organizationName = args.organizationName,
+            organizationId = migrationData.organizationId,
+            organizationName = migrationData.organizationName,
             dialog = null,
         )
     },
@@ -55,6 +70,9 @@ class MigrateToMyItemsViewModel @Inject constructor(
             MigrateToMyItemsAction.DeclineAndLeaveClicked -> handleDeclineAndLeaveClicked()
             MigrateToMyItemsAction.HelpLinkClicked -> handleHelpLinkClicked()
             MigrateToMyItemsAction.DismissDialogClicked -> handleDismissDialogClicked()
+            MigrateToMyItemsAction.NoNetworkDismissDialogClicked ->
+                handleNoNetworkDismissDialogClicked()
+
             is MigrateToMyItemsAction.Internal -> handleInternalAction(action)
         }
     }
@@ -71,18 +89,38 @@ class MigrateToMyItemsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO: Replace `delay` with actual migration using `state.organizationId` (PM-28444).
-            delay(timeMillis = 100L)
+            val userId = authRepository.userStateFlow.value?.activeUserId
+            if (userId == null) {
+                trySendAction(
+                    MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
+                        result = MigratePersonalVaultResult.Failure(
+                            error = NoActiveUserException(),
+                        ),
+                    ),
+                )
+                return@launch
+            }
+
+            val result = vaultMigrationManager.migratePersonalVault(
+                userId = userId,
+                organizationId = state.organizationId,
+            )
+
             trySendAction(
                 MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived(
-                    success = true,
+                    result = result,
                 ),
             )
         }
     }
 
     private fun handleDeclineAndLeaveClicked() {
-        sendEvent(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
+        sendEvent(
+            MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                organizationId = state.organizationId,
+                organizationName = state.organizationName,
+            ),
+        )
     }
 
     private fun handleHelpLinkClicked() {
@@ -97,6 +135,11 @@ class MigrateToMyItemsViewModel @Inject constructor(
         clearDialog()
     }
 
+    private fun handleNoNetworkDismissDialogClicked() {
+        vaultMigrationManager.clearMigrationState()
+        clearDialog()
+    }
+
     private fun handleInternalAction(action: MigrateToMyItemsAction.Internal) {
         when (action) {
             is MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived -> {
@@ -108,28 +151,59 @@ class MigrateToMyItemsViewModel @Inject constructor(
     private fun handleMigrateToMyItemsResultReceived(
         action: MigrateToMyItemsAction.Internal.MigrateToMyItemsResultReceived,
     ) {
-        if (action.success) {
-            organizationEventManager.trackEvent(
-                event = OrganizationEvent.ItemOrganizationAccepted,
-            )
-            clearDialog()
-            sendEvent(MigrateToMyItemsEvent.NavigateToVault)
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = MigrateToMyItemsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.failed_to_migrate_items_to_x.asText(
-                            it.organizationName,
-                        ),
+        when (val result = action.result) {
+            is MigratePersonalVaultResult.Success -> {
+                snackbarRelayManager.sendSnackbarData(
+                    relay = SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.items_transferred.asText(),
                     ),
                 )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.ItemOrganizationAccepted(
+                        organizationId = state.organizationId,
+                    ),
+                )
+                clearDialog()
+                // Navigation to vault is handled by state-based navigation.
+            }
+
+            is MigratePersonalVaultResult.Failure -> {
+                Timber.e(result.error, "Failed to migrate personal vault")
+                val isNetworkOrTimeoutError = result.error.isNoConnectionError() ||
+                    result.error.isTimeoutError()
+
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = if (isNetworkOrTimeoutError) {
+                            MigrateToMyItemsState.DialogState.NoNetwork(
+                                title = BitwardenString.internet_connection_required_title.asText(),
+                                message = BitwardenString
+                                    .internet_connection_required_message
+                                    .asText(),
+                                throwable = result.error,
+                            )
+                        } else {
+                            MigrateToMyItemsState.DialogState.Error(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.failed_to_migrate_items_to_x.asText(
+                                    it.organizationName,
+                                ),
+                                throwable = result.error,
+                            )
+                        },
+                    )
+                }
             }
         }
     }
 
     private fun clearDialog() {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+            )
+        }
     }
 }
 
@@ -161,6 +235,17 @@ data class MigrateToMyItemsState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable?,
+        ) : DialogState()
+
+        /**
+         * No network connection dialog when migration operation fails due to network issues.
+         */
+        @Parcelize
+        data class NoNetwork(
+            val title: Text,
+            val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
     }
 }
@@ -170,14 +255,12 @@ data class MigrateToMyItemsState(
  */
 sealed class MigrateToMyItemsEvent {
     /**
-     * Navigate to the vault screen after accepting migration.
-     */
-    data object NavigateToVault : MigrateToMyItemsEvent()
-
-    /**
      * Navigate to the leave organization flow after declining.
      */
-    data object NavigateToLeaveOrganization : MigrateToMyItemsEvent()
+    data class NavigateToLeaveOrganization(
+        val organizationId: String,
+        val organizationName: String,
+    ) : MigrateToMyItemsEvent()
 
     /**
      * Launch a URI in the browser or appropriate handler.
@@ -210,6 +293,11 @@ sealed class MigrateToMyItemsAction {
     data object DismissDialogClicked : MigrateToMyItemsAction()
 
     /**
+     * User dismissed the NoNetwork dialog.
+     */
+    data object NoNetworkDismissDialogClicked : MigrateToMyItemsAction()
+
+    /**
      * Models internal actions that the [MigrateToMyItemsViewModel] itself may send.
      */
     sealed class Internal : MigrateToMyItemsAction() {
@@ -218,8 +306,7 @@ sealed class MigrateToMyItemsAction {
          * The result of the migration has been received.
          */
         data class MigrateToMyItemsResultReceived(
-            // TODO: Replace `success` with actual migration result (PM-28444).
-            val success: Boolean,
+            val result: MigratePersonalVaultResult,
         ) : Internal()
     }
 }

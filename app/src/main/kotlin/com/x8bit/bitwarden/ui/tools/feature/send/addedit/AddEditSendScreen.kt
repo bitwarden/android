@@ -38,6 +38,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
 
 /**
@@ -53,6 +54,7 @@ fun AddEditSendScreen(
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
     onNavigateUpToSearchOrRoot: () -> Unit,
+    onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val addSendHandlers = remember(viewModel) { AddEditSendHandlers.create(viewModel) }
@@ -88,6 +90,10 @@ fun AddEditSendScreen(
             }
 
             is AddEditSendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+
+            is AddEditSendEvent.NavigateToGeneratorModal -> {
+                onNavigateToGeneratorModal(event.generatorMode)
+            }
         }
     }
 

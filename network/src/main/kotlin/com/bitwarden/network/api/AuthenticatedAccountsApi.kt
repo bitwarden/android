@@ -1,6 +1,7 @@
 package com.bitwarden.network.api
 
 import com.bitwarden.network.model.CreateAccountKeysRequest
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.ResetPasswordRequestJson
@@ -26,7 +27,9 @@ internal interface AuthenticatedAccountsApi {
      * Creates the keys for the current account.
      */
     @POST("/accounts/keys")
-    suspend fun createAccountKeys(@Body body: CreateAccountKeysRequest): NetworkResult<Unit>
+    suspend fun createAccountKeys(
+        @Body body: CreateAccountKeysRequest,
+    ): NetworkResult<CreateAccountKeysResponseJson>
 
     /**
      * Deletes the current account.

@@ -37,6 +37,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -367,6 +368,7 @@ private fun AddEditSendOptions(
     addSendHandlers: AddEditSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenExpandingHeader(
         isExpanded = isExpanded,
         onClick = { isExpanded = !isExpanded },
@@ -437,7 +439,47 @@ private fun AddEditSendOptions(
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
-            )
+            ) {
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_generate,
+                    contentDescription = stringResource(id = BitwardenString.generate_password),
+                    onClick = {
+                        if (state.common.passwordInput.isEmpty()) {
+                            addSendHandlers.onOpenPasswordGeneratorClick()
+                        } else {
+                            shouldShowDialog = true
+                        }
+                    },
+                    modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                )
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_copy,
+                    contentDescription = stringResource(id = BitwardenString.copy_password),
+                    isEnabled = state.common.passwordInput.isNotEmpty(),
+                    onClick = {
+                        addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
+                    },
+                    modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                )
+            }
+            if (shouldShowDialog) {
+                BitwardenTwoButtonDialog(
+                    title = stringResource(id = BitwardenString.password),
+                    message = stringResource(id = BitwardenString.password_override_alert),
+                    confirmButtonText = stringResource(id = BitwardenString.yes),
+                    dismissButtonText = stringResource(id = BitwardenString.no),
+                    onConfirmClick = {
+                        shouldShowDialog = false
+                        addSendHandlers.onOpenPasswordGeneratorClick()
+                    },
+                    onDismissClick = {
+                        shouldShowDialog = false
+                    },
+                    onDismissRequest = {
+                        shouldShowDialog = false
+                    },
+                )
+            }
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 modifier = Modifier

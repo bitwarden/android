@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.util.UUID
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -108,21 +109,21 @@ internal class FileManagerImpl(
         }
     }
 
-    override suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean {
-        @Suppress("TooGenericExceptionCaught")
-        return try {
-            withContext(dispatcherManager.io) {
-                context
-                    .contentResolver
-                    .openOutputStream(fileUri)
-                    ?.use { outputStream ->
-                        outputStream.write(dataString.toByteArray())
+    override suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean = try {
+        withContext(dispatcherManager.io) {
+            context
+                .contentResolver
+                .openOutputStream(fileUri)
+                ?.use { outputStream ->
+                    outputStream.writer().use {
+                        it.write(dataString)
                     }
-            }
-            true
-        } catch (_: RuntimeException) {
-            false
+                    true
+                }
+                ?: false
         }
+    } catch (_: IOException) {
+        false
     }
 
     override suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray> =

@@ -685,7 +685,7 @@ class CipherManagerImpl(
                 }
             }
 
-    private suspend fun migrateAttachments(
+    override suspend fun migrateAttachments(
         userId: String,
         cipherView: CipherView,
     ): Result<CipherView> {

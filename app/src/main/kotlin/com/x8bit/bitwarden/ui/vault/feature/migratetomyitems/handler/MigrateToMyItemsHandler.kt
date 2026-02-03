@@ -19,6 +19,7 @@ class MigrateToMyItemsHandler(
     val onDeclineClick: () -> Unit,
     val onHelpClick: () -> Unit,
     val onDismissDialog: () -> Unit,
+    val onDismissNoNetworkDialog: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -39,6 +40,9 @@ class MigrateToMyItemsHandler(
             },
             onDismissDialog = {
                 viewModel.trySendAction(MigrateToMyItemsAction.DismissDialogClicked)
+            },
+            onDismissNoNetworkDialog = {
+                viewModel.trySendAction(MigrateToMyItemsAction.NoNetworkDismissDialogClicked)
             },
         )
     }

@@ -36,15 +36,14 @@ abstract class ExportParser {
      * @param byteArray The input data to be parsed as a [ByteArray].
      * @return [ExportParseResult] indicating success or a specific error result.
      */
-    @OptIn(ExperimentalSerializationApi::class)
     fun parseForResult(byteArray: ByteArray): ExportParseResult = try {
         parse(byteArray = byteArray)
-    } catch (error: MissingFieldException) {
+    } catch (@OptIn(ExperimentalSerializationApi::class) _: MissingFieldException) {
         ExportParseResult.Error(
             title = BitwardenString.required_information_missing.asText(),
             message = BitwardenString.required_information_missing_message.asText(),
         )
-    } catch (error: SerializationException) {
+    } catch (_: SerializationException) {
         ExportParseResult.Error(
             title = BitwardenString.file_could_not_be_processed.asText(),
             message = BitwardenString.file_could_not_be_processed_message.asText(),

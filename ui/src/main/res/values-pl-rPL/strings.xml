@@ -131,6 +131,8 @@
     <string name="no_text_sends">Brak wysyłek tekstowych w sejfie.</string>
     <string name="no_file_sends">Brak wysyłek plików w sejfie.</string>
     <string name="no_ssh_keys">Brak kluczy SSH w sejfie.</string>
+    <string name="no_archives_title">Archiwum jest puste</string>
+    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">Nowa wysyłka tekstu</string>
     <string name="new_file_send">Nowa wysyłka pliku</string>
     <string name="no_username">Brak nazwy użytkownika</string>
@@ -503,7 +505,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację %1$s?</string>
     <string name="leave_organization_button">Opuść organizację %1$s</string>
     <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="how_to_manage_my_vault">Jak zarządzać sejfem</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
@@ -665,8 +667,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="invalid_uri">URI jest nieprawidłowy</string>
     <string name="the_urix_is_already_blocked">URI %1$s jest już zablokowany</string>
     <string name="login_approved">Logowanie zostało potwierdzone</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Potrzebujesz innej opcji? <annotation link="viewAll">Pokaż wszystkie metody logowania</annotation></string>
     <string name="log_in_with_device">Zaloguj się za pomocą urządzenia</string>
     <string name="logging_in_on">Serwer</string>
     <string name="logging_in_on_with_colon">Serwer:</string>
@@ -1179,7 +1181,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="lock_app">Blokada aplikacji</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Użyj blokady urządzenia, aby odblokować aplikację</string>
     <string name="loading_vault_data">Ładowanie danych sejfu…</string>
-    <string name="resending">Resending</string>
+    <string name="resending">Ponowne wysyłanie</string>
     <string name="you_left_the_organization">You left the organization</string>
     <string name="transfer_items_to_org">Przenieś elementy do %1$s</string>
     <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
@@ -1187,4 +1189,28 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="why_am_i_seeing_this">Dlaczego to widzę?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
+    <string name="search_archive">Szukaj w archiwum</string>
+    <string name="archive_noun">Archiwum</string>
+    <string name="archive_verb">Archiwum</string>
+    <string name="unarchive">Usuń z archiwum</string>
+    <string name="archived">Archived</string>
+    <string name="hidden_items">Ukryte elementy</string>
+    <string name="unable_to_archive_selected_item">Nie można zarchiwizować elementu.</string>
+    <string name="unable_to_unarchive_selected_item">Nie można usunąć z archiwum elementu.</string>
+    <string name="archiving">Archiwizowanie</string>
+    <string name="unarchiving">Unarchiving</string>
+    <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
+    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
+    <string name="introducing_archive">Introducing archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Zachowaj elementy, których teraz nie potrzebujesz.</string>
+    <string name="go_to_archive">Przejdź do archiwum</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Element jest zarchiwizowany. Zapisanie zmian spowoduje przywrócenie go do sejfu.</string>
+    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
+    <string name="restart_premium">Restart Premium</string>
+    <string name="items_transferred">Items transferred</string>
 </resources>

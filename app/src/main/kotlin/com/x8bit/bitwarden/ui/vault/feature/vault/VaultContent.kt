@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,11 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -40,6 +44,7 @@ private const val TRASH_TYPES_COUNT: Int = 1
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultContent(
     state: VaultState.ViewState.Content,
+    actionCardState: VaultState.ActionCardState?,
     vaultHandlers: VaultHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -72,15 +77,31 @@ fun VaultContent(
     LazyColumn(
         modifier = modifier,
     ) {
-        item {
+        item(key = "top_spacer") {
             Spacer(modifier = Modifier.height(height = 12.dp))
         }
+
+        actionCardState?.let {
+            item(key = "action_card") {
+                ActionCard(
+                    actionCardState = it,
+                    vaultHandlers = vaultHandlers,
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(height = 24.dp))
+            }
+        }
+
         if (state.totpItemsCount > 0) {
-            item {
+            item(key = "totp_header") {
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.totp),
                     supportingLabel = TOTP_TYPES_COUNT.toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -88,7 +109,7 @@ fun VaultContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            item {
+            item(key = "verification_codes_group") {
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_clock),
                     label = stringResource(id = BitwardenString.verification_codes),
@@ -96,6 +117,7 @@ fun VaultContent(
                     onClick = vaultHandlers.verificationCodesClick,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("VerificationCodesFilter")
                         .standardHorizontalMargin(),
@@ -105,11 +127,12 @@ fun VaultContent(
         }
 
         if (state.favoriteItems.isNotEmpty()) {
-            item {
+            item(key = "favorites_header") {
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.favorites),
                     supportingLabel = state.favoriteItems.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -117,7 +140,10 @@ fun VaultContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            itemsIndexed(state.favoriteItems) { index, favoriteItem ->
+            itemsIndexed(
+                items = state.favoriteItems,
+                key = { _, favorite -> "favorite_${favorite.id}" },
+            ) { index, favoriteItem ->
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
                     startIconTestTag = favoriteItem.startIconTestTag,
@@ -145,21 +171,23 @@ fun VaultContent(
                         .favoriteItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("CipherCell")
                         .standardHorizontalMargin(),
                 )
             }
-            item {
+            item(key = "favorites_spacer") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
-        item {
+        item(key = "types_header") {
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.types),
                 supportingLabel = state.itemTypesCount.toString(),
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
@@ -167,7 +195,7 @@ fun VaultContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        item {
+        item(key = "logins_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
                     iconRes = BitwardenDrawable.ic_globe,
@@ -178,6 +206,7 @@ fun VaultContent(
                 onClick = vaultHandlers.loginGroupClick,
                 cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .testTag("LoginFilter")
                     .standardHorizontalMargin(),
@@ -185,7 +214,7 @@ fun VaultContent(
         }
 
         if (state.showCardGroup) {
-            item {
+            item(key = "cards_group") {
                 BitwardenGroupItem(
                     startIcon = IconData.Local(
                         iconRes = BitwardenDrawable.ic_payment_card,
@@ -196,6 +225,7 @@ fun VaultContent(
                     onClick = vaultHandlers.cardGroupClick,
                     cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("CardFilter")
                         .standardHorizontalMargin(),
@@ -203,7 +233,7 @@ fun VaultContent(
             }
         }
 
-        item {
+        item(key = "identities_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
                     iconRes = BitwardenDrawable.ic_id_card,
@@ -214,13 +244,14 @@ fun VaultContent(
                 onClick = vaultHandlers.identityGroupClick,
                 cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .testTag("IdentityFilter")
                     .standardHorizontalMargin(),
             )
         }
 
-        item {
+        item(key = "notes_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
                     iconRes = BitwardenDrawable.ic_note,
@@ -231,13 +262,14 @@ fun VaultContent(
                 onClick = vaultHandlers.secureNoteGroupClick,
                 cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .testTag("SecureNoteFilter")
                     .standardHorizontalMargin(),
             )
         }
 
-        item {
+        item(key = "ssh_keys_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
                     iconRes = BitwardenDrawable.ic_ssh_key,
@@ -248,22 +280,24 @@ fun VaultContent(
                 onClick = vaultHandlers.sshKeyGroupClick,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .testTag("SshKeyFilter")
                     .standardHorizontalMargin(),
             )
         }
 
-        item {
+        item(key = "types_spacer") {
             Spacer(modifier = Modifier.height(height = 16.dp))
         }
 
         if (state.folderItems.isNotEmpty()) {
-            item {
+            item(key = "folders_header") {
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -271,7 +305,10 @@ fun VaultContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            itemsIndexed(state.folderItems) { index, folder ->
+            itemsIndexed(
+                items = state.folderItems,
+                key = { _, folder -> "folder_${folder.id}" },
+            ) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_folder),
                     label = folder.name(),
@@ -281,29 +318,34 @@ fun VaultContent(
                         .folderItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("FolderFilter")
                         .standardHorizontalMargin(),
                 )
             }
-            item {
+            item(key = "folders_spacer") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
         if (state.noFolderItems.isNotEmpty()) {
-            item {
+            item(key = "no_folders_header") {
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.folder_none),
                     supportingLabel = state.noFolderItems.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            itemsIndexed(state.noFolderItems) { index, noFolderItem ->
+            itemsIndexed(
+                items = state.noFolderItems,
+                key = { _, noFolderItem -> "no_folder_${noFolderItem.id}" },
+            ) { index, noFolderItem ->
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
                     startIconTestTag = noFolderItem.startIconTestTag,
@@ -331,22 +373,24 @@ fun VaultContent(
                         .noFolderItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("CipherCell")
                         .standardHorizontalMargin(),
                 )
             }
-            item {
+            item(key = "no_folders_spacer") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
         if (state.collectionItems.isNotEmpty()) {
-            item {
+            item(key = "collection_header") {
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.collections),
                     supportingLabel = state.collectionItems.count().toString(),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
@@ -354,7 +398,10 @@ fun VaultContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            itemsIndexed(state.collectionItems) { index, collection ->
+            itemsIndexed(
+                items = state.collectionItems,
+                key = { _, collection -> "collection_${collection.id}" },
+            ) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
@@ -364,17 +411,18 @@ fun VaultContent(
                         .collectionItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag("CollectionFilter")
                         .standardHorizontalMargin(),
                 )
             }
-            item {
+            item(key = "collections_spacer") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
-        item {
+        item(key = "hidden_items_header") {
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.hidden_items),
                 supportingLabel = if (state.archiveEnabled) {
@@ -383,6 +431,7 @@ fun VaultContent(
                     TRASH_TYPES_COUNT.toString()
                 },
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
@@ -391,7 +440,7 @@ fun VaultContent(
         }
 
         if (state.archiveEnabled) {
-            item {
+            item(key = "archive_group") {
                 BitwardenGroupItem(
                     startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
                     endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
@@ -401,6 +450,7 @@ fun VaultContent(
                     onClick = vaultHandlers.archiveClick,
                     cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .testTag(tag = "ArchiveFilter")
                         .standardHorizontalMargin(),
@@ -408,7 +458,7 @@ fun VaultContent(
             }
         }
 
-        item {
+        item(key = "trash_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_trash),
                 label = stringResource(id = BitwardenString.trash),
@@ -416,15 +466,45 @@ fun VaultContent(
                 onClick = vaultHandlers.trashClick,
                 cardStyle = if (state.archiveEnabled) CardStyle.Bottom else CardStyle.Full,
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
                     .testTag("TrashFilter")
                     .standardHorizontalMargin(),
             )
         }
 
-        item {
+        item(key = "bottom_padding") {
             Spacer(modifier = Modifier.height(height = 88.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+@Composable
+private fun ActionCard(
+    actionCardState: VaultState.ActionCardState,
+    vaultHandlers: VaultHandlers,
+    modifier: Modifier = Modifier,
+) {
+    when (actionCardState) {
+        VaultState.ActionCardState.IntroducingArchive -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.introducing_archive),
+                cardSubtitle = stringResource(
+                    id = BitwardenString.keep_items_you_dont_need_right_now_safe_but_out_sight,
+                ),
+                actionText = stringResource(id = BitwardenString.go_to_archive),
+                leadingContent = {
+                    Icon(
+                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_archive),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
+                    )
+                },
+                onActionClick = vaultHandlers.archiveClick,
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
         }
     }
 }

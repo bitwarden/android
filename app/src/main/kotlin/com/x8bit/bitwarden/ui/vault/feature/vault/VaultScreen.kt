@@ -326,6 +326,7 @@ private fun VaultScreenScaffold(
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
+                    actionCardState = state.actionCard,
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier.fillMaxSize(),
                 )
@@ -388,6 +389,22 @@ private fun VaultDialogs(
     vaultHandlers: VaultHandlers,
 ) {
     when (dialogState) {
+        VaultState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = vaultHandlers.upgradeToPremiumClick,
+                onDismissClick = vaultHandlers.dialogDismiss,
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.Loading -> {
+            BitwardenLoadingDialog(text = dialogState.message())
+        }
+
         is VaultState.DialogState.Syncing -> BitwardenLoadingDialog(
             text = stringResource(id = BitwardenString.syncing),
         )

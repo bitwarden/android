@@ -74,6 +74,8 @@ fun SearchContent(
         is ListingItemOverflowAction.VaultAction.EditClick,
         is ListingItemOverflowAction.VaultAction.LaunchClick,
         is ListingItemOverflowAction.VaultAction.ViewClick,
+        is ListingItemOverflowAction.VaultAction.ArchiveClick,
+        is ListingItemOverflowAction.VaultAction.UnarchiveClick,
         null,
             -> Unit
     }

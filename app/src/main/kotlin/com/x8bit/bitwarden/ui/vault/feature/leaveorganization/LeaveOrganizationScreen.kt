@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handlers.rememberL
 @Composable
 fun LeaveOrganizationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVault: () -> Unit,
     viewModel: LeaveOrganizationViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -60,7 +59,6 @@ fun LeaveOrganizationScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LeaveOrganizationEvent.NavigateBack -> onNavigateBack()
-            LeaveOrganizationEvent.NavigateToVault -> onNavigateToVault()
             is LeaveOrganizationEvent.LaunchUri -> {
                 intentManager.launchUri(event.uri.toUri())
             }
@@ -70,6 +68,7 @@ fun LeaveOrganizationScreen(
     LeaveOrganizationDialogs(
         dialogState = state.dialogState,
         onDismissRequest = handlers.onDismissDialog,
+        onDismissNoNetworkRequest = handlers.onDismissNoNetworkDialog,
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -100,6 +99,7 @@ fun LeaveOrganizationScreen(
 private fun LeaveOrganizationDialogs(
     dialogState: LeaveOrganizationState.DialogState?,
     onDismissRequest: () -> Unit,
+    onDismissNoNetworkRequest: () -> Unit,
 ) {
     when (dialogState) {
         LeaveOrganizationState.DialogState.Loading -> {
@@ -110,10 +110,19 @@ private fun LeaveOrganizationDialogs(
 
         is LeaveOrganizationState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = BitwardenString.an_error_has_occurred),
+                title = dialogState.title(),
                 message = dialogState.message(),
                 throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is LeaveOrganizationState.DialogState.NoNetwork -> {
+            BitwardenBasicDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                throwable = dialogState.error,
+                onDismissRequest = onDismissNoNetworkRequest,
             )
         }
 

@@ -52,6 +52,7 @@ import kotlinx.collections.immutable.persistentListOf
  *
  * @param value The name of the cipher.
  * @param isFavorite Whether the cipher is a favorite.
+ * @param isArchived Whether the cipher is archived.
  * @param relatedLocations The locations the cipher is assigned to.
  * @param iconData The icon to be displayed.
  * @param isExpanded Whether the related locations are expanded.
@@ -64,6 +65,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun LazyListScope.itemHeader(
     value: String,
     isFavorite: Boolean,
+    isArchived: Boolean,
     relatedLocations: ImmutableList<VaultItemLocation>,
     iconData: IconData,
     isExpanded: Boolean,
@@ -132,6 +134,25 @@ fun LazyListScope.itemHeader(
         }
     }
 
+    if (isArchived) {
+        item(key = "archiveItem") {
+            ItemLocationListItem(
+                vectorPainter = rememberVectorPainter(id = BitwardenDrawable.ic_archive),
+                text = stringResource(id = BitwardenString.archived),
+                iconTestTag = "ArchiveIcon",
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth()
+                    .animateItem()
+                    .cardStyle(
+                        cardStyle = CardStyle.Middle(hasDivider = false),
+                        paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
+                    ),
+            )
+        }
+    }
+
     // When the item does not belong to an Org and is not assigned to a collection or folder we
     // display the "No Folder" indicator.
     if (relatedLocations.isEmpty()) {
@@ -183,7 +204,7 @@ fun LazyListScope.itemHeader(
     if (collectionLocations.size == 1 && folderLocations.size == 1) {
         itemsIndexed(
             items = collectionLocations + folderLocations,
-            key = { index, location -> "locations_$index" },
+            key = { index, _ -> "locations_$index" },
         ) { index, location ->
             ItemLocationListItem(
                 vectorPainter = rememberVectorPainter(location.icon),
@@ -263,7 +284,7 @@ fun LazyListScope.itemHeader(
         itemsIndexed(
             key = { index, _ -> "expandableLocations_$index" },
             items = collectionLocations.drop(1) + folderLocations,
-        ) { index, location ->
+        ) { _, location ->
             ItemLocationListItem(
                 vectorPainter = rememberVectorPainter(location.icon),
                 text = location.name,
@@ -364,7 +385,7 @@ private fun LazyItemScope.ItemLocationListItem(
         Text(
             text = text,
             style = BitwardenTheme.typography.bodyLarge,
-            color = BitwardenTheme.colorScheme.text.primary,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
                 .padding(start = 16.dp)
                 .testTag("ItemLocationText"),
@@ -382,6 +403,7 @@ private fun ItemHeaderWithLocalIcon_Preview() {
             itemHeader(
                 value = "Login without favicon",
                 isFavorite = true,
+                isArchived = false,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_globe,
                 ),
@@ -403,6 +425,7 @@ private fun ItemHeaderWithNetworkIcon_Preview() {
             itemHeader(
                 value = "Login with favicon",
                 isFavorite = true,
+                isArchived = false,
                 iconData = IconData.Network(
                     uri = "mockuri",
                     fallbackIconRes = BitwardenDrawable.ic_globe,
@@ -425,6 +448,7 @@ private fun ItemHeaderWithOrganization_Preview() {
             itemHeader(
                 value = "Login without favicon",
                 isFavorite = true,
+                isArchived = true,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_globe,
                 ),
@@ -448,6 +472,7 @@ private fun ItemHeaderWithOrgAndSingleCollection_Preview() {
             itemHeader(
                 value = "Login without favicon",
                 isFavorite = true,
+                isArchived = false,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_globe,
                 ),
@@ -472,6 +497,7 @@ private fun ItemHeaderWithOrgAndMultiCollection_Preview() {
             itemHeader(
                 value = "Login without favicon",
                 isFavorite = true,
+                isArchived = false,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_payment_card_brand_visa,
                 ),
@@ -497,6 +523,7 @@ private fun ItemHeaderWithOrgSingleCollectionAndFolder_Preview() {
             itemHeader(
                 value = "Note without favicon",
                 isFavorite = true,
+                isArchived = true,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_note,
                 ),
@@ -522,6 +549,7 @@ private fun ItemHeaderFolderOnly_Preview() {
             itemHeader(
                 value = "SSH key in a folder",
                 isFavorite = true,
+                isArchived = true,
                 iconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_ssh_key,
                 ),

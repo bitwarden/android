@@ -20,7 +20,6 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
 class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
-    private var onNavigateToVaultCalled = false
     private var onNavigateToLeaveOrganizationCalled = false
 
     private val intentManager: IntentManager = mockk {
@@ -47,8 +46,9 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
         setContent(intentManager = intentManager) {
             MigrateToMyItemsScreen(
                 viewModel = viewModel,
-                onNavigateToVault = { onNavigateToVaultCalled = true },
-                onNavigateToLeaveOrganization = { onNavigateToLeaveOrganizationCalled = true },
+                onNavigateToLeaveOrganization = { _, _ ->
+                    onNavigateToLeaveOrganizationCalled = true
+                },
             )
         }
     }
@@ -100,14 +100,13 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToVault event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToVault)
-        assertTrue(onNavigateToVaultCalled)
-    }
-
-    @Test
     fun `NavigateToLeaveOrganization event should trigger navigation callback`() {
-        mutableEventFlow.tryEmit(MigrateToMyItemsEvent.NavigateToLeaveOrganization)
+        mutableEventFlow.tryEmit(
+            MigrateToMyItemsEvent.NavigateToLeaveOrganization(
+                organizationId = "test-org-id",
+                organizationName = "Test Organization",
+            ),
+        )
         assertTrue(onNavigateToLeaveOrganizationCalled)
     }
 
@@ -143,6 +142,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = "An error has occurred".asText(),
                 message = "Failed to migrate items".asText(),
+                throwable = null,
             ),
         )
 
@@ -162,6 +162,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = "Failed to migrate items".asText(),
+                throwable = IllegalStateException("Missing property"),
             ),
         )
 

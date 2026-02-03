@@ -131,6 +131,8 @@
     <string name="no_text_sends">V trezore sa nenachádzajú žiadne textové Sendy.</string>
     <string name="no_file_sends">Vo vašom trezore nie sú žiadne súborové Sendy.</string>
     <string name="no_ssh_keys">V trezore sa nenachádzajú žiadne kľúče SSH.</string>
+    <string name="no_archives_title">Archív je prázdny</string>
+    <string name="no_archives_message">Naplňte svoj archív položkami, ktoré nechcete vidieť vo výsledkoch vyhľadávania a automatických návrhoch, ale ktoré budete možno niekedy potrebovať.</string>
     <string name="new_text_send">Nový textový Send</string>
     <string name="new_file_send">Nový súborový Send</string>
     <string name="no_username">Žiadne používateľské meno</string>
@@ -1188,4 +1190,28 @@ Chcete prepnúť na tento účet?</string>
     <string name="why_am_i_seeing_this">Prečo to vidím?</string>
     <string name="migrating_items_to_x">Presúvanie položiek do %s</string>
     <string name="failed_to_migrate_items_to_x">Nepodarilo sa presunúť položky do %s</string>
+    <string name="search_archive">Prehľadať archív</string>
+    <string name="archive_noun">Archív</string>
+    <string name="archive_verb">Archív</string>
+    <string name="unarchive">Zrušiť archiváciu</string>
+    <string name="archived">Archivované</string>
+    <string name="hidden_items">Skryté položky</string>
+    <string name="unable_to_archive_selected_item">Vybranú položku nie je možné archivovať.</string>
+    <string name="unable_to_unarchive_selected_item">Nie je možné zrušiť archiváciu vybranej položky.</string>
+    <string name="archiving">Archivuje sa</string>
+    <string name="unarchiving">Ruší sa archivácia</string>
+    <string name="item_moved_to_archived">Položka bola presunutá do archívu</string>
+    <string name="item_moved_to_vault">Položka bola presunutá do trezoru</string>
+    <string name="archive_unavailable">Archív je nedostupný</string>
+    <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
+    <string name="upgrade_to_premium">Upgradovať na Prémium</string>
+    <string name="this_item_is_archived">Táto položka je archivovaná.</string>
+    <string name="introducing_archive">Predstavujeme archív</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Položky, ktoré momentálne nepotrebujete, uchovávajte na bezpečnom mieste, ale mimo dohľadu.</string>
+    <string name="go_to_archive">Prejsť do archívu</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Táto položka je archivovaná. Uloženie zmien ju obnoví do trezoru.</string>
+    <string name="your_premium_subscription_ended">Vaše predplatné Prémium skončilo</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ak chcete obnoviť prístup k svojmu archívu, reštartujte predplatné Prémium. Ak pred reštartom upravíte podrobnosti archivovanej položky, bude presunutá späť do trezoru.</string>
+    <string name="restart_premium">Reštartovať Prémium</string>
+    <string name="items_transferred">Items transferred</string>
 </resources>

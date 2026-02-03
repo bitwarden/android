@@ -131,6 +131,8 @@
     <string name="no_text_sends">Žádné textové Sends ve Vašem trezoru.</string>
     <string name="no_file_sends">Žádné Sends se soubory ve Vašem trezoru.</string>
     <string name="no_ssh_keys">Žádné SSH klíče ve Vašem trezoru.</string>
+    <string name="no_archives_title">Archiv je prázdný</string>
+    <string name="no_archives_message">Naplňte archiv položkami, které nechcete vidět ve výsledcích vyhledávání a v návrzích automatického vyplňování, ale možná je jednou budete potřebovat.</string>
     <string name="new_text_send">Odeslat textový Send</string>
     <string name="new_file_send">Odeslat Send se soubory</string>
     <string name="no_username">Žádné uživatelské jméno</string>
@@ -1189,4 +1191,28 @@ při opakování problémů.</string>
     <string name="why_am_i_seeing_this">Proč se mi toto zobrazuje?</string>
     <string name="migrating_items_to_x">Přesouvání položek do %s</string>
     <string name="failed_to_migrate_items_to_x">Nepodařilo se přesunout položky do %s</string>
+    <string name="search_archive">Hledat v archivu</string>
+    <string name="archive_noun">Archiv</string>
+    <string name="archive_verb">Archiv</string>
+    <string name="unarchive">Odebrat z archivu</string>
+    <string name="archived">Archivováno</string>
+    <string name="hidden_items">Skryté položky</string>
+    <string name="unable_to_archive_selected_item">Nelze archivovat vybranou položku.</string>
+    <string name="unable_to_unarchive_selected_item">Nelze odebrat z archivu vybranou položku.</string>
+    <string name="archiving">Archivování</string>
+    <string name="unarchiving">Odebírání z archivu</string>
+    <string name="item_moved_to_archived">Položka byla přesunuta do archivu</string>
+    <string name="item_moved_to_vault">Položka byla přesunuta do trezoru</string>
+    <string name="archive_unavailable">Archiv je nedostupný</string>
+    <string name="archiving_items_is_a_premium_feature">Archivace položek je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
+    <string name="upgrade_to_premium">Aktualizovat na Premium</string>
+    <string name="this_item_is_archived">Tato položka je archivována.</string>
+    <string name="introducing_archive">Představujeme Archiv</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Uchovávejte položky, které momentálně nepotřebujete. V bezpečí, nepozorovaně.</string>
+    <string name="go_to_archive">Přejít do archivu</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Tato položka je archivována. Uložení změn ji obnoví do Vašeho trezoru.</string>
+    <string name="your_premium_subscription_ended">Vaše předplatné Premium skončilo</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Chcete-li získat přístup k Vašemu archivu, restartujte předplatné Premium. Pokud upravíte detaily archivované položky před restartováním, bude přesunuta zpět do Vašeho trezoru.</string>
+    <string name="restart_premium">Restartovat Premium</string>
+    <string name="items_transferred">Převedené položky</string>
 </resources>

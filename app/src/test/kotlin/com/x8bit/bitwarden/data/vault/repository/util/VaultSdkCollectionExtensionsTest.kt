@@ -4,7 +4,7 @@ import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -147,8 +147,8 @@ class VaultSdkCollectionExtensionsTest {
             expected,
             list.sortAlphabeticallyByTypeAndOrganization(
                 userOrganizations = listOf(
-                    createMockOrganization(number = 1),
-                    createMockOrganization(number = 2),
+                    createMockOrganizationNetwork(number = 1),
+                    createMockOrganizationNetwork(number = 2),
                 ),
             ),
         )

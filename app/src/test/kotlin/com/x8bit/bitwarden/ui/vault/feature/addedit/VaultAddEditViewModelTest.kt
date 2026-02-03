@@ -8,11 +8,11 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
@@ -32,11 +32,11 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionView
@@ -70,10 +72,12 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -218,6 +222,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { show(messageId = any(), duration = any()) } just runs
         every { show(message = any(), duration = any()) } just runs
     }
+    private val environmentRepository = FakeEnvironmentRepository()
+    private val mutableArchiveItemsFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
+        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -257,6 +267,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = true,
+            isArchiveEnabled = true,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -344,6 +356,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 bottomSheetState = null,
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
+                hasPremium = true,
+                isArchiveEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -521,6 +535,22 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.CloseClick)
             assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToPremium`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+            assertEquals(
+                VaultAddEditEvent.NavigateToPremium(
+                    uri = "https://vault.bitwarden.com/#/" +
+                        "settings/subscription/premium" +
+                        "?callToAction=upgradeToPremium",
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -1347,6 +1377,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1376,6 +1407,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1419,6 +1451,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1449,6 +1482,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1492,6 +1526,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1522,6 +1557,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1565,6 +1601,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1595,6 +1632,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1775,6 +1813,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1809,6 +1848,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             coVerify(exactly = 1) {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1846,6 +1886,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1914,6 +1955,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -1987,6 +2029,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -2057,6 +2100,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             cipherView.toViewState(
                 isClone = false,
+                isPremium = true,
                 isIndividualVaultDisabled = false,
                 totpData = null,
                 resourceManager = resourceManager,
@@ -2128,6 +2172,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isPremium = true,
                     isIndividualVaultDisabled = false,
                     totpData = null,
                     resourceManager = resourceManager,
@@ -2257,6 +2302,291 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+        val cipherListView = createMockCipherListView(number = 1, isArchived = false)
+        val cipherView = createMockCipherView(number = 1, isArchived = false)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
+        )
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(cipherListView = cipherListView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+        )
+
+        viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+
+        assertEquals(
+            createVaultAddItemState(
+                hasPremium = false,
+                vaultAddEditType = vaultAddEditType,
+                dialogState = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = createMockCipherView(number = 1),
+                    notes = "mockNotes-1",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                ),
+                typeContentViewState = createLoginTypeContentViewState(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    uri = listOf(
+                        UriItem(
+                            id = "testId",
+                            uri = "www.mockuri1.com",
+                            match = UriMatchType.HOST,
+                            checksum = "mockUriChecksum-1",
+                        ),
+                    ),
+                    totpCode = "mockTotp-1",
+                    canViewPassword = true,
+                    fido2CredentialCreationDateTime = null,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult Success should emit send snackbar event and NavigateBack`() =
+        runTest {
+            val cipherListView = createMockCipherListView(number = 1, isArchived = false)
+            val cipherView = createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.archiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+            } returns ArchiveCipherResult.Success
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+
+            viewModel.eventFlow.test {
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_moved_to_archived.asText()),
+                    relay = SnackbarRelay.CIPHER_ARCHIVED,
+                )
+            }
+        }
+
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult Failure should show generic error`() = runTest {
+        mutableUserStateFlow.update {
+            it?.copy(accounts = it.accounts.map { account -> account.copy(isPremium = true) })
+        }
+        val cipherListView = createMockCipherListView(number = 1, isArchived = false)
+        val cipherView = createMockCipherView(number = 1, isArchived = false)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
+            hasPremium = true,
+        )
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(cipherListView = cipherListView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+        )
+
+        val error = Throwable("Oh dang.")
+        coEvery {
+            vaultRepository.archiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+        } returns ArchiveCipherResult.Error(error = error)
+
+        viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+
+        assertEquals(
+            createVaultAddItemState(
+                hasPremium = true,
+                vaultAddEditType = vaultAddEditType,
+                dialogState = VaultAddEditState.DialogState.Generic(
+                    message = BitwardenString.unable_to_archive_selected_item.asText(),
+                    error = error,
+                ),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = createMockCipherView(number = 1),
+                    notes = "mockNotes-1",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                ),
+                typeContentViewState = createLoginTypeContentViewState(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    uri = listOf(
+                        UriItem(
+                            id = "testId",
+                            uri = "www.mockuri1.com",
+                            match = UriMatchType.HOST,
+                            checksum = "mockUriChecksum-1",
+                        ),
+                    ),
+                    totpCode = "mockTotp-1",
+                    canViewPassword = true,
+                    fido2CredentialCreationDateTime = null,
+                )
+                    .copy(totp = "mockTotp-1"),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Success should send snackbar event and NavigateBack`() =
+        runTest {
+            val cipherListView = createMockCipherListView(number = 1, isArchived = false)
+            val cipherView = createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+            } returns UnarchiveCipherResult.Success
+
+            viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+
+            viewModel.eventFlow.test {
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_moved_to_vault.asText()),
+                    relay = SnackbarRelay.CIPHER_UNARCHIVED,
+                )
+            }
+        }
+
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Failure should show generic error`() = runTest {
+        mutableUserStateFlow.update {
+            it?.copy(accounts = it.accounts.map { account -> account.copy(isPremium = true) })
+        }
+        val cipherListView = createMockCipherListView(number = 1, isArchived = false)
+        val cipherView = createMockCipherView(number = 1, isArchived = false)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
+            hasPremium = true,
+        )
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(cipherListView = cipherListView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+        )
+
+        val error = Throwable("Oh dang.")
+        coEvery {
+            vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+        } returns UnarchiveCipherResult.Error(error = error)
+
+        viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+
+        assertEquals(
+            createVaultAddItemState(
+                hasPremium = true,
+                vaultAddEditType = vaultAddEditType,
+                dialogState = VaultAddEditState.DialogState.Generic(
+                    message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                    error = error,
+                ),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = createMockCipherView(number = 1),
+                    notes = "mockNotes-1",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                ),
+                typeContentViewState = createLoginTypeContentViewState(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    uri = listOf(
+                        UriItem(
+                            id = "testId",
+                            uri = "www.mockuri1.com",
+                            match = UriMatchType.HOST,
+                            checksum = "mockUriChecksum-1",
+                        ),
+                    ),
+                    totpCode = "mockTotp-1",
+                    canViewPassword = true,
+                    fido2CredentialCreationDateTime = null,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
@@ -3265,23 +3595,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultAddEditType = VaultAddEditType.AddItem,
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             )
-            viewModel = VaultAddEditViewModel(
+            viewModel = createAddVaultItemViewModel(
                 savedStateHandle = secureNotesInitialSavedStateHandle,
-                authRepository = authRepository,
-                clipboardManager = clipboardManager,
-                policyManager = policyManager,
-                vaultRepository = vaultRepository,
-                bitwardenCredentialManager = bitwardenCredentialManager,
-                generatorRepository = generatorRepository,
-                settingsRepository = settingsRepository,
-                snackbarRelayManager = snackbarRelayManager,
-                toastManager = toastManager,
-                specialCircumstanceManager = specialCircumstanceManager,
-                resourceManager = resourceManager,
-                clock = fixedClock,
-                organizationEventManager = organizationEventManager,
-                networkConnectionManager = networkConnectionManager,
-                firstTimeActionManager = firstTimeActionManager,
             )
         }
 
@@ -3974,6 +4289,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         isIndividualVaultDisabled = true,
                         type = createLoginTypeContentViewState(),
                     ),
+                    hasPremium = true,
                 )
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
@@ -4562,6 +4878,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         totpData: TotpData? = null,
         shouldClearSpecialCircumstance: Boolean = true,
         createCredentialRequest: CreateCredentialRequest? = null,
+        hasPremium: Boolean = false,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -4579,6 +4896,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = hasPremium,
+            isArchiveEnabled = true,
         )
 
     @Suppress("LongParameterList")
@@ -4661,6 +4980,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
+            featureFlagManager = featureFlagManager,
             authRepository = authRepository,
             clipboardManager = bitwardenClipboardManager,
             policyManager = policyManager,
@@ -4676,6 +4996,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
+            environmentRepository = environmentRepository,
         )
 
     private fun createVaultData(
@@ -4709,15 +5030,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isVaultUnlocked = false,
                     needsPasswordReset = false,
                     organizations = listOf(
-                        Organization(
+                        createMockOrganization(
+                            number = 1,
                             id = "organizationId",
                             name = "organizationName",
-                            shouldManageResetPassword = false,
-                            shouldUseKeyConnector = false,
-                            role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
-                            userIsClaimedByOrganization = false,
-                            limitItemDeletion = false,
                         ),
                     ),
                     isBiometricsEnabled = true,

@@ -106,6 +106,24 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun clearData(userId: String)
 
     /**
+     * Retrieves the stored value of whether the introducing archive action card has been dismissed.
+     */
+    fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean?
+
+    /**
+     * Stores whether the introducing archive action card has been dismissed.
+     */
+    fun storeIntroducingArchiveActionCardDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getIntroducingArchiveActionCardDismissed] for the given [userId].
+     */
+    fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

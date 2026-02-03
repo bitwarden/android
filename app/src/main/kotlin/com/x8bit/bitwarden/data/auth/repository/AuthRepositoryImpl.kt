@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -14,6 +16,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -45,6 +48,7 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -70,6 +74,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -79,6 +84,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -93,6 +99,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -167,6 +174,7 @@ class AuthRepositoryImpl(
     private val policyManager: PolicyManager,
     private val userStateManager: UserStateManager,
     private val kdfManager: KdfManager,
+    private val toastManager: ToastManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
@@ -285,8 +293,11 @@ class AuthRepositoryImpl(
             ?.profile
             ?.forcePasswordResetReason
 
-    override val organizations: List<SyncResponseJson.Profile.Organization>
-        get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
+    override val organizations: List<Organization>
+        get() = activeUserId
+            ?.let { authDiskSource.getOrganizations(it) }
+            .orEmpty()
+            .toOrganizations()
 
     override val showWelcomeCarousel: Boolean
         get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
@@ -459,48 +470,69 @@ class AuthRepositoryImpl(
                                 .getShouldTrustDevice(userId = userId) == true,
                         )
                     }
-                    .flatMap { keys ->
+                    .flatMap { registerTdeKeyResponse ->
                         accountsService
                             .createAccountKeys(
-                                publicKey = keys.publicKey,
-                                encryptedPrivateKey = keys.privateKey,
+                                publicKey = registerTdeKeyResponse.publicKey,
+                                encryptedPrivateKey = registerTdeKeyResponse.privateKey,
                             )
-                            .map { keys }
+                            .map { createAccountKeysResponse ->
+                                registerTdeKeyResponse to createAccountKeysResponse
+                            }
                     }
-                    .flatMap { keys ->
+                    .flatMap { (registerTdeKeyResponse, createAccountKeysResponse) ->
                         organizationService
                             .organizationResetPasswordEnroll(
                                 organizationId = orgAutoEnrollStatus.organizationId,
                                 userId = userId,
                                 passwordHash = null,
-                                resetPasswordKey = keys.adminReset,
+                                resetPasswordKey = registerTdeKeyResponse.adminReset,
                             )
-                            .map { keys }
+                            .map { registerTdeKeyResponse to createAccountKeysResponse }
                     }
-                    .onSuccess { keys ->
-                        // TDE and SSO user creation still uses crypto-v1. These users are not
-                        // expected to have the AEAD keys so we only store the private key for now.
-                        // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
-                        // for more details.
-                        authDiskSource.storePrivateKey(
+                    .onSuccess { (registerTdeKeyResponse, createAccountKeysResponse) ->
+                        createNewSsoUserSuccess(
                             userId = userId,
-                            privateKey = keys.privateKey,
+                            createAccountKeysResponse = createAccountKeysResponse,
+                            registerTdeKeyResponse = registerTdeKeyResponse,
                         )
-                        // Order matters here, we need to make sure that the vault is unlocked
-                        // before we trust the device, to avoid state-base navigation issues.
-                        vaultRepository.syncVaultState(userId = userId)
-                        keys.deviceKey?.let { trustDeviceResponse ->
-                            trustedDeviceManager.trustThisDevice(
-                                userId = userId,
-                                trustDeviceResponse = trustDeviceResponse,
-                            )
-                        }
                     }
             }
             .fold(
                 onSuccess = { NewSsoUserResult.Success },
                 onFailure = { NewSsoUserResult.Failure(error = it) },
             )
+    }
+
+    /**
+     * Stores all the relevant data from a successful creation of an SSO user. The data is stored
+     * while in an [UserStateManager.userStateTransaction] to ensure the `UserState` is only
+     * updated once after data stored.
+     */
+    private suspend fun createNewSsoUserSuccess(
+        userId: String,
+        createAccountKeysResponse: CreateAccountKeysResponseJson,
+        registerTdeKeyResponse: RegisterTdeKeyResponse,
+    ): Unit = userStateManager.userStateTransaction {
+        authDiskSource.storeAccountKeys(
+            userId = userId,
+            accountKeys = createAccountKeysResponse.accountKeys,
+        )
+        // TDE and SSO user creation still uses crypto-v1. These users are not
+        // expected to have the AEAD keys so we only store the private key for now.
+        // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
+        // for more details.
+        authDiskSource.storePrivateKey(
+            userId = userId,
+            privateKey = registerTdeKeyResponse.privateKey,
+        )
+        vaultRepository.syncVaultState(userId = userId)
+        registerTdeKeyResponse.deviceKey?.let { trustDeviceResponse ->
+            trustedDeviceManager.trustThisDevice(
+                userId = userId,
+                trustDeviceResponse = trustDeviceResponse,
+            )
+        }
     }
 
     override suspend fun completeTdeLogin(
@@ -951,8 +983,8 @@ class AuthRepositoryImpl(
         val keyConnectorUrl = organizations
             .find {
                 it.shouldUseKeyConnector &&
-                    it.type != OrganizationType.OWNER &&
-                    it.type != OrganizationType.ADMIN
+                    it.role != OrganizationType.OWNER &&
+                    it.role != OrganizationType.ADMIN
             }
             ?.keyConnectorUrl
             ?: return RemovePasswordResult.Error(
@@ -1014,9 +1046,10 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         }
+        val userId = activeAccount.profile.userId
         return vaultSdkSource
             .updatePassword(
-                userId = activeAccount.profile.userId,
+                userId = userId,
                 newPassword = newPassword,
             )
             .flatMap { updatePasswordResponse ->
@@ -1042,14 +1075,15 @@ class AuthRepositoryImpl(
                         )
                         .onSuccess { passwordHash ->
                             authDiskSource.storeMasterPasswordHash(
-                                userId = activeAccount.profile.userId,
+                                userId = userId,
                                 passwordHash = passwordHash,
                             )
                         }
 
+                    toastManager.show(BitwardenString.updated_master_password)
                     // Log out the user after successful password reset.
                     // This clears all user state including forcePasswordResetReason.
-                    logout(reason = LogoutReason.PasswordReset)
+                    logout(reason = LogoutReason.PasswordReset, userId = userId)
 
                     // Return the success.
                     ResetPasswordResult.Success
@@ -1391,6 +1425,14 @@ class AuthRepositoryImpl(
         organizationService.leaveOrganization(organizationId).fold(
             onSuccess = { LeaveOrganizationResult.Success },
             onFailure = { LeaveOrganizationResult.Error(error = it) },
+        )
+
+    override suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): RevokeFromOrganizationResult =
+        organizationService.revokeFromOrganization(organizationId).fold(
+            onSuccess = { RevokeFromOrganizationResult.Success },
+            onFailure = { RevokeFromOrganizationResult.Error(error = it) },
         )
 
     @Suppress("CyclomaticComplexMethod")

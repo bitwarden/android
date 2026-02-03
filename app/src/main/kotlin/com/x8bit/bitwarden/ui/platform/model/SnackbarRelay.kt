@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class SnackbarRelay {
+    CIPHER_ARCHIVED,
+    CIPHER_UNARCHIVED,
     CIPHER_CREATED,
     CIPHER_DELETED,
     CIPHER_DELETED_SOFT,
@@ -25,4 +27,5 @@ enum class SnackbarRelay {
     SEND_DELETED,
     SEND_UPDATED,
     LEFT_ORGANIZATION,
+    VAULT_MIGRATED_TO_MY_ITEMS,
 }

@@ -131,6 +131,8 @@
     <string name="no_text_sends">В вашем хранилище нет текстовых Send.</string>
     <string name="no_file_sends">В вашем хранилище нет файловых Send.</string>
     <string name="no_ssh_keys">В вашем хранилище нет ключей SSH.</string>
+    <string name="no_archives_title">Архив пуст</string>
+    <string name="no_archives_message">Заполните архив элементами, которые вы не хотите видеть в результатах поиска и автозаполнения, но которые когда-нибудь могут понадобиться.</string>
     <string name="new_text_send">Новая текстовая Send</string>
     <string name="new_file_send">Новая файловая Send</string>
     <string name="no_username">Нет имени пользователя</string>
@@ -1188,4 +1190,28 @@
     <string name="why_am_i_seeing_this">Почему я это вижу?</string>
     <string name="migrating_items_to_x">Перенос элементов в %s</string>
     <string name="failed_to_migrate_items_to_x">Не удалось перенести элементы в %s</string>
+    <string name="search_archive">Поиск в архиве</string>
+    <string name="archive_noun">Архив</string>
+    <string name="archive_verb">Архив</string>
+    <string name="unarchive">Разархивировать</string>
+    <string name="archived">Архивирован</string>
+    <string name="hidden_items">Скрытые элементы</string>
+    <string name="unable_to_archive_selected_item">Не удается архивировать выбранный элемент.</string>
+    <string name="unable_to_unarchive_selected_item">Невозможно разархивировать выбранный элемент.</string>
+    <string name="archiving">Архивирование</string>
+    <string name="unarchiving">Разархивирование</string>
+    <string name="item_moved_to_archived">Элемент перемещен в архив</string>
+    <string name="item_moved_to_vault">Элемент перемещен в хранилище</string>
+    <string name="archive_unavailable">Архив недоступен</string>
+    <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
+    <string name="upgrade_to_premium">Обновить до Премиум</string>
+    <string name="this_item_is_archived">Этот элемент архивирован.</string>
+    <string name="introducing_archive">Представляем архив</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Храните элементы, которые вам сейчас не нужны, в безопасности, но вне поля зрения.</string>
+    <string name="go_to_archive">Перейти в архив</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Этот элемент архивирован. Сохранение изменений восстановит его в ваше хранилище.</string>
+    <string name="your_premium_subscription_ended">Ваша подписка Премиум закончилась</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Чтобы восстановить доступ к своему архиву, подключите подписку Премиум повторно. Если вы измените сведения об архивированном элементе перед переподключением, он будет перемещен обратно в ваше хранилище.</string>
+    <string name="restart_premium">Переподключить Премиум</string>
+    <string name="items_transferred">Элементы переданы</string>
 </resources>

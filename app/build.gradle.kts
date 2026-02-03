@@ -260,6 +260,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
+    implementation(libs.bumptech.glide.okhttp)
+    ksp(libs.bumptech.glide.compiler)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)
@@ -299,16 +301,16 @@ dependencies {
     testImplementation(libs.square.turbine)
 }
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        maxHeapSize = "2g"
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
-            // Explicitly setting the user Country and Language because tests assume en-US
-            "-Duser.country=US" +
-            "-Duser.language=en"
-    }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    @Suppress("MagicNumber")
+    forkEvery = 100
+    maxHeapSize = "2g"
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+    jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+        // Explicitly setting the user Country and Language because tests assume en-US
+        "-Duser.country=US" +
+        "-Duser.language=en"
 }
 
 afterEvaluate {

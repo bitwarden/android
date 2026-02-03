@@ -7,7 +7,7 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -301,7 +301,7 @@ private val FIRST_TIME_STATE = FirstTimeState(
     showImportLoginsCard = true,
 )
 
-private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
+private val ORGANIZATIONS = listOf(createMockOrganizationNetwork(number = 0))
 private val USER_ORGANIZATIONS = listOf(
     UserOrganizations(
         userId = USER_ID_1,

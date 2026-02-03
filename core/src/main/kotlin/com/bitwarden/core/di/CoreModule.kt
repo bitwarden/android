@@ -5,7 +5,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
@@ -38,7 +37,6 @@ object CoreModule {
         coerceInputValues = true
 
         // Allow trailing commas in JSON objects and arrays.
-        @OptIn(ExperimentalSerializationApi::class)
         allowTrailingComma = true
     }
 

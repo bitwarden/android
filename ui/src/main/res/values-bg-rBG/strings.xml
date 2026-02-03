@@ -129,6 +129,8 @@
     <string name="no_text_sends">Няма текстови Изпращания в трезора.</string>
     <string name="no_file_sends">Няма файлови Изпращания в трезора.</string>
     <string name="no_ssh_keys">Няма SSH ключове в трезора.</string>
+    <string name="no_archives_title">Архивът е празен</string>
+    <string name="no_archives_message">Попълнете архива си с елементи, които не искате да виждате в резултатите от търсене и в предложенията за автоматично попълване, но може все пак да Ви потрябват в бъдеще.</string>
     <string name="new_text_send">Ново текстово Изпращане</string>
     <string name="new_file_send">Ново файлово Изпращане</string>
     <string name="no_username">Няма потребителско име</string>
@@ -1174,4 +1176,28 @@
     <string name="why_am_i_seeing_this">Защо виждам това?</string>
     <string name="migrating_items_to_x">Преместване на елементите в %s</string>
     <string name="failed_to_migrate_items_to_x">Елементите не успяха да бъдат преместени в %s</string>
+    <string name="search_archive">Търсене в архива</string>
+    <string name="archive_noun">Архив</string>
+    <string name="archive_verb">Архив</string>
+    <string name="unarchive">Изваждане от архива</string>
+    <string name="archived">Архивирано</string>
+    <string name="hidden_items">Скрити елементи</string>
+    <string name="unable_to_archive_selected_item">Избраният елемент не може да бъде преместен в архива.</string>
+    <string name="unable_to_unarchive_selected_item">Избраният елемент не може да бъде изваден от архива.</string>
+    <string name="archiving">Преместване в архива</string>
+    <string name="unarchiving">Изваждане от архива</string>
+    <string name="item_moved_to_archived">Елементът е преместен в архива</string>
+    <string name="item_moved_to_vault">Елементът е преместен в трезора</string>
+    <string name="archive_unavailable">Архивирането не е налично</string>
+    <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
+    <string name="upgrade_to_premium">Надградете до Платения план</string>
+    <string name="this_item_is_archived">Този елемент е архивиран.</string>
+    <string name="introducing_archive">Представяме архива</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Съхранявайте елементите, които не Ви трябват точно в момента, на сигурно, но незабележимо място.</string>
+    <string name="go_to_archive">Към архива</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Този елемент е в архива. Запазването на промени по него ще го извади от там и ще го върне в трезора.</string>
+    <string name="your_premium_subscription_ended">Вашият абонамент за платения план е приключил</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ако искате отново да получите достъп до архива си, трябва да подновите платения си абонамент. Ако редактирате данните за архивиран елемент преди подновяването, той ще бъде върнат в трезора.</string>
+    <string name="restart_premium">Подновяване на платения абонамент</string>
+    <string name="items_transferred">Елементите са прехвърлени</string>
 </resources>

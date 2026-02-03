@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.network.model.GetTokenResponseJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -17,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -43,7 +44,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Provides an API for observing an modifying authentication state.
+ * Provides an API for observing and modifying authentication state.
  */
 @Suppress("TooManyFunctions")
 interface AuthRepository :
@@ -125,7 +126,7 @@ interface AuthRepository :
     /**
      * The organization for the active user.
      */
-    val organizations: List<SyncResponseJson.Profile.Organization>
+    val organizations: List<Organization>
 
     /**
      * Whether or not the welcome carousel should be displayed, based on the feature flag and
@@ -282,7 +283,7 @@ interface AuthRepository :
     ): PasswordHintResult
 
     /**
-     * Removes the users password from the account. This used used when migrating from master
+     * Removes the users password from the account. This is used when migrating from master
      * password login to key connector login.
      */
     suspend fun removePassword(masterPassword: String): RemovePasswordResult
@@ -384,7 +385,7 @@ interface AuthRepository :
     ): SendVerificationEmailResult
 
     /**
-     * Validates the given [token] for the given [email]. Part of th new account registration flow.
+     * Validates the given [token] for the given [email]. Part of the new account registration flow.
      */
     suspend fun validateEmailToken(
         email: String,
@@ -402,4 +403,11 @@ interface AuthRepository :
     suspend fun leaveOrganization(
         organizationId: String,
     ): LeaveOrganizationResult
+
+    /**
+     * Revokes self from the organization that matches the given [organizationId]
+     */
+    suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): RevokeFromOrganizationResult
 }

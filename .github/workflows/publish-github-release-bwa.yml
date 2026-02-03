@@ -18,6 +18,7 @@ jobs:
       workflow_name: "publish-github-release-bwa.yml"
       credentials_filename: "authenticator_play_store-creds.json"
       project_type: android
+      make_latest: false
       check_release_command: >
         bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production
     secrets: inherit

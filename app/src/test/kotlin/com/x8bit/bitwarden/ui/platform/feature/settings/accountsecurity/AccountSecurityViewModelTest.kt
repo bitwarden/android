@@ -16,10 +16,10 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -914,41 +914,32 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationUser",
                     name = "Organization User",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.USER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationAdmin",
                     name = "Organization Admin",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationOwner",
                     name = "Organization Owner",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.OWNER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationCustom",
                     name = "Organization Owner",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.CUSTOM,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             needsMasterPassword = false,

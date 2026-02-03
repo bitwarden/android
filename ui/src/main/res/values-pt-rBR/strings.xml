@@ -129,6 +129,8 @@
     <string name="no_text_sends">Não há Sends de texto no seu cofre.</string>
     <string name="no_file_sends">Não há Sends de arquivo no seu cofre.</string>
     <string name="no_ssh_keys">Não há chaves SSH no seu cofre.</string>
+    <string name="no_archives_title">O arquivo está vazio</string>
+    <string name="no_archives_message">Encha seu arquivo com itens que não quer ver nos resultados de buscas ou sugestões de preenchimento, mas que possa precisar algum dia.</string>
     <string name="new_text_send">Novo Send de texto</string>
     <string name="new_file_send">Novo Send de arquivo</string>
     <string name="no_username">Sem nome de usuário</string>
@@ -1172,4 +1174,28 @@ Quer trocar para esta conta?</string>
     <string name="why_am_i_seeing_this">Por que estou vendo isso?</string>
     <string name="migrating_items_to_x">Migrando itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
+    <string name="search_archive">Buscar no arquivo</string>
+    <string name="archive_noun">Arquivo</string>
+    <string name="archive_verb">Arquivo</string>
+    <string name="unarchive">Desarquivar</string>
+    <string name="archived">Arquivados</string>
+    <string name="hidden_items">Itens ocultos</string>
+    <string name="unable_to_archive_selected_item">Não é possível arquivar o item selecionado.</string>
+    <string name="unable_to_unarchive_selected_item">Não é possível desarquivar o item selecionado.</string>
+    <string name="archiving">Arquivando</string>
+    <string name="unarchiving">Desarquivando</string>
+    <string name="item_moved_to_archived">Item movido para o arquivo</string>
+    <string name="item_moved_to_vault">Item movido para o cofre</string>
+    <string name="archive_unavailable">Arquivo indisponível</string>
+    <string name="archiving_items_is_a_premium_feature">O arquivamento de itens é um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
+    <string name="upgrade_to_premium">Fazer upgrade pro Premium</string>
+    <string name="this_item_is_archived">Este item está arquivado.</string>
+    <string name="introducing_archive">Apresentando o arquivo</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Mantenha itens que não precisa no momento em segurança, mas escondidos.</string>
+    <string name="go_to_archive">Ir ao arquivo</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Este item está arquivado. Salvar alterações irá restaurá-lo para o seu cofre.</string>
+    <string name="your_premium_subscription_ended">Sua assinatura Premium terminou</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Para recuperar o seu acesso ao seu arquivo, retoma sua assinatura Premium. Se editar detalhes de um item arquivado antes de retomar, ele será movido de volta para o seu cofre.</string>
+    <string name="restart_premium">Retomar Premium</string>
+    <string name="items_transferred">Itens transferidos</string>
 </resources>
