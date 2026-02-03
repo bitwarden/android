@@ -40,6 +40,7 @@
     <string name="avoid_logout_on_kdf_change">Avoid logout on KDF change</string>
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
     <string name="archive_items">Archive Items</string>
+    <string name="send_email_verification">Send Email Verification</string>
 
     <!-- endregion Debug Menu -->
 </resources>

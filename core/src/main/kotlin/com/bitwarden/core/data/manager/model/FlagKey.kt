@@ -37,6 +37,7 @@ sealed class FlagKey<out T : Any> {
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 ArchiveItems,
+                SendEmailVerification,
             )
         }
     }
@@ -104,6 +105,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object ArchiveItems : FlagKey<Boolean>() {
         override val keyName: String = "pm-19148-innovation-archive"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Send Email Verification feature.
+     */
+    data object SendEmailVerification : FlagKey<Boolean>() {
+        override val keyName: String = "pm-19051-send-email-verification"
         override val defaultValue: Boolean = false
     }
 
