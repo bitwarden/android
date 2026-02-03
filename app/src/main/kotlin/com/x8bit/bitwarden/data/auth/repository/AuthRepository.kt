@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Provides an API for observing an modifying authentication state.
+ * Provides an API for observing and modifying authentication state.
  */
 @Suppress("TooManyFunctions")
 interface AuthRepository :
@@ -283,7 +283,7 @@ interface AuthRepository :
     ): PasswordHintResult
 
     /**
-     * Removes the users password from the account. This used used when migrating from master
+     * Removes the users password from the account. This is used when migrating from master
      * password login to key connector login.
      */
     suspend fun removePassword(masterPassword: String): RemovePasswordResult
@@ -385,7 +385,7 @@ interface AuthRepository :
     ): SendVerificationEmailResult
 
     /**
-     * Validates the given [token] for the given [email]. Part of th new account registration flow.
+     * Validates the given [token] for the given [email]. Part of the new account registration flow.
      */
     suspend fun validateEmailToken(
         email: String,
