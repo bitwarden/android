@@ -191,6 +191,10 @@ class CipherManagerImpl(
                     userId = userId,
                     cipher = it.toEncryptedNetworkCipherResponse(),
                 )
+                settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                    userId = userId,
+                    isDismissed = true,
+                )
             }
             .fold(
                 onSuccess = { ArchiveCipherResult.Success },

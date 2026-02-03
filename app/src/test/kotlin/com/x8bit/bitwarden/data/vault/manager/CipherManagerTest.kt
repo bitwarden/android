@@ -744,6 +744,10 @@ class CipherManagerTest {
                 cipher = createMockSdkCipher(number = 1, clock = clock),
             )
             val cipherView = createMockCipherView(number = 1)
+            fakeSettingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                userId = userId,
+                isDismissed = null,
+            )
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
             } returns encryptionContext.asSuccess()
@@ -770,6 +774,10 @@ class CipherManagerTest {
                 cipherView = cipherView,
             )
 
+            fakeSettingsDiskSource.assertIntroducingArchiveActionCardDismissed(
+                userId = userId,
+                expected = true,
+            )
             assertEquals(ArchiveCipherResult.Success, result)
         }
 

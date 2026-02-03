@@ -492,6 +492,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored introducing archive action card dismissed matches the [expected] one.
+     */
+    fun assertIntroducingArchiveActionCardDismissed(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedIntroducingArchiveActionCardDismissed[userId])
+    }
+
+    /**
      * Asserts that the stored last sync time matches the [expected] one.
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
