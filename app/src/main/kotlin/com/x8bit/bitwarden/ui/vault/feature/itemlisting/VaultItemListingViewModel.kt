@@ -2265,6 +2265,11 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
+                // Reset verification state to ensure the next credential operation requires
+                // fresh user verification. Without this reset, the stale isUserVerified = true
+                // from this registration would cause subsequent login attempts to skip
+                // biometric verification.
+                bitwardenCredentialManager.isUserVerified = false
                 // This must be a toast because we are finishing the activity and we want the
                 // user to have time to see the message.
                 toastManager.show(messageId = BitwardenString.item_updated)
