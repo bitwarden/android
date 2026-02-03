@@ -36,6 +36,10 @@ class FlagKeyTest {
             FlagKey.ArchiveItems.keyName,
             "pm-19148-innovation-archive",
         )
+        assertEquals(
+            FlagKey.SendEmailVerification.keyName,
+            "pm-19051-send-email-verification",
+        )
     }
 
     @Test
@@ -49,6 +53,7 @@ class FlagKeyTest {
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.ArchiveItems,
+                FlagKey.SendEmailVerification,
             ).all {
                 !it.defaultValue
             },
