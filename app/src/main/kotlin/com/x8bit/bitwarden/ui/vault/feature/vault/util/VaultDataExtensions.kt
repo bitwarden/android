@@ -132,6 +132,9 @@ fun VaultData.toViewState(
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
         val totpItems = activeCipherViews.filter { it.login?.totp != null }
         val cardCount = activeCipherViews.count { it.type is CipherListViewType.Card }
+        val archiveCount = allCipherViews.count {
+            it.archivedDate != null && it.deletedDate == null
+        }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -215,15 +218,13 @@ fun VaultData.toViewState(
                     )
                 },
             trashItemsCount = allCipherViews.count { it.deletedDate != null },
-            archivedItemsCount = allCipherViews
-                .count { it.archivedDate != null && it.deletedDate == null }
-                .takeIf { isPremium },
+            archivedItemsCount = archiveCount.takeIf { isPremium || archiveCount > 0 },
             archiveEnabled = isArchiveEnabled,
-            archiveEndIcon = BitwardenDrawable.ic_locked.takeUnless { isPremium },
+            archiveEndIcon = BitwardenDrawable.ic_locked.takeIf { !isPremium && archiveCount == 0 },
             archiveSubText = BitwardenString
                 .premium_subscription_required
                 .asText()
-                .takeUnless { isPremium },
+                .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
         )
     }

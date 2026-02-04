@@ -1527,7 +1527,11 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(VaultAction.ArchiveClick)
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.IntroducingArchive,
+                ),
+            )
         }
     }
 

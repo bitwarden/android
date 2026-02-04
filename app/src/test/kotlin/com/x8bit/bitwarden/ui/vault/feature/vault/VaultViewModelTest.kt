@@ -14,6 +14,7 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -177,18 +178,17 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns mutableIntroducingArchiveActionCardDismissedFlow
     }
 
-    private val vaultRepository: VaultRepository =
-        mockk {
-            every { vaultFilterType = any() } just runs
-            every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-            every { sync(forced = any()) } just runs
-            every { syncIfNecessary() } just runs
-            every { lockVaultForCurrentUser(any()) } just runs
-            every { lockVault(any(), any()) } just runs
-            coEvery {
-                getCipher(any())
-            } returns GetCipherResult.Success(createMockCipherView(number = 1))
-        }
+    private val vaultRepository: VaultRepository = mockk {
+        every { vaultFilterType = any() } just runs
+        every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        every { sync(forced = any()) } just runs
+        every { syncIfNecessary() } just runs
+        every { lockVaultForCurrentUser(any()) } just runs
+        every { lockVault(any(), any()) } just runs
+        coEvery {
+            getCipher(any())
+        } returns GetCipherResult.Success(createMockCipherView(number = 1))
+    }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
@@ -252,6 +252,27 @@ class VaultViewModelTest : BaseViewModelTest() {
                 )
                 mutableIntroducingArchiveActionCardDismissedFlow.value = false
                 assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ActionCardClick with IntroducingArchive should call dismissIntroducingArchiveActionCard and emit NavigateTo`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+
+            verify(exactly = 1) {
+                settingsRepository.dismissIntroducingArchiveActionCard()
             }
         }
 
@@ -1760,16 +1781,114 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ArchiveClick should emit NavigateToItemListing event with Archive type`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+    fun `ArchiveClick with premium should emit NavigateToItemListing event with Archive type`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.ArchiveClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick without premium and with archived ciphers should emit NavigateToItemListing event with Archive type`() =
+        runTest {
+            mutableUserStateFlow.update {
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = false),
+                        DEFAULT_INACTIVE_ACCOUNT,
+                    ),
+                )
+            }
+            mutableVaultDataStateFlow.update {
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1, isArchived = true),
+                            ),
+                            failures = emptyList(),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                )
+            }
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.ArchiveClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick without premium and archived ciphers should display the ArchiveRequiresPremium dialog`() =
+        runTest {
+            mutableUserStateFlow.update {
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = false),
+                        DEFAULT_INACTIVE_ACCOUNT,
+                    ),
+                )
+            }
+            mutableVaultDataStateFlow.update {
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1, isArchived = false),
+                            ),
+                            failures = emptyList(),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                )
+            }
+            val viewModel = createViewModel()
+
             viewModel.trySendAction(VaultAction.ArchiveClick)
             assertEquals(
-                VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
-                awaitItem(),
+                DEFAULT_STATE.copy(
+                    isPremium = false,
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 0,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = null,
+                        archiveEnabled = true,
+                        archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                        archiveEndIcon = BitwardenDrawable.ic_locked,
+                        showCardGroup = true,
+                    ),
+                ),
+                viewModel.stateFlow.value,
             )
         }
-    }
 
     @Test
     fun `TrashClick should emit NavigateToItemListing event with Trash type`() = runTest {
@@ -3399,49 +3518,53 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
     showImportLoginsCard = true,
 )
 
+private val DEFAULT_ACTIVE_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    avatarColorHex = "#aa00aa",
+    environment = Environment.Us,
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = DEFAULT_FIRST_TIME_STATE,
+    isExportable = true,
+)
+
+private val DEFAULT_INACTIVE_ACCOUNT = UserState.Account(
+    userId = "lockedUserId",
+    name = "Locked User",
+    email = "locked@bitwarden.com",
+    avatarColorHex = "#00aaaa",
+    environment = Environment.Us,
+    isPremium = false,
+    isLoggedIn = true,
+    isVaultUnlocked = false,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = DEFAULT_FIRST_TIME_STATE,
+    isExportable = true,
+)
+
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(
-        UserState.Account(
-            userId = "activeUserId",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            avatarColorHex = "#aa00aa",
-            environment = Environment.Us,
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = DEFAULT_FIRST_TIME_STATE,
-            isExportable = true,
-        ),
-        UserState.Account(
-            userId = "lockedUserId",
-            name = "Locked User",
-            email = "locked@bitwarden.com",
-            avatarColorHex = "#00aaaa",
-            environment = Environment.Us,
-            isPremium = false,
-            isLoggedIn = true,
-            isVaultUnlocked = false,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = DEFAULT_FIRST_TIME_STATE,
-            isExportable = true,
-        ),
+        DEFAULT_ACTIVE_ACCOUNT,
+        DEFAULT_INACTIVE_ACCOUNT,
     ),
 )
 
