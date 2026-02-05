@@ -68,6 +68,7 @@ fun Cipher.toEncryptedNetworkCipher(
         card = card?.toEncryptedNetworkCard(),
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        archivedDate = archivedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
         encryptedFor = encryptedFor,
     )
 
