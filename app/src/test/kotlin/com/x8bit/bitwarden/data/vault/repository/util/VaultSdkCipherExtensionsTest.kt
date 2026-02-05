@@ -83,6 +83,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
             ),
             syncCipher,
         )
@@ -363,6 +364,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
             ),
             encryptionContext.toEncryptedNetworkCipher(),
         )
