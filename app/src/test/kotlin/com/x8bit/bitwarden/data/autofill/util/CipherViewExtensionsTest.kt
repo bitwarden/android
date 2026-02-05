@@ -142,13 +142,20 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() {
+    fun `isActiveWithFido2Credentials should return true when type is login, deleted and archived date is null, and fido2 credentials are not null`() {
         assertTrue(
             createMockCipherView(
                 number = 1,
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
                 .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when archive date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isArchived = true).isActiveWithFido2Credentials,
         )
     }
 
@@ -187,13 +194,20 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isActiveWithPasswordCredentials should return true when type is login, deleted date is null, and password credentials are not empty`() {
+    fun `isActiveWithPasswordCredentials should return true when type is login, deleted and archived date is null, and password credentials are not empty`() {
         assertTrue(
             createMockCipherView(
                 number = 1,
                 login = createMockLoginView(number = 1),
             )
                 .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when archive date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isArchived = true).isActiveWithPasswordCredentials,
         )
     }
 
