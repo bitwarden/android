@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import java.time.Clock
 import java.time.ZonedDateTime
@@ -14,6 +15,7 @@ fun SendView.toViewState(
     clock: Clock,
     baseWebSendUrl: String,
     isHideEmailAddressEnabled: Boolean,
+    isSendEmailVerificationEnabled: Boolean,
 ): AddEditSendState.ViewState.Content =
     AddEditSendState.ViewState.Content(
         common = AddEditSendState.ViewState.Content.Common(
@@ -32,6 +34,13 @@ fun SendView.toViewState(
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
             isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+            authEmails = this.emails,
+            isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
+            authType = when {
+                hasPassword -> SendAuthType.PASSWORD
+                emails.isNotEmpty() -> SendAuthType.EMAIL
+                else -> SendAuthType.NONE
+            },
         ),
         selectedType = when (type) {
             SendType.TEXT -> {

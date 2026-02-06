@@ -182,6 +182,7 @@ fun AddEditSendScreen(
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,
                 permissionsManager = permissionsManager,
+                isPremium = state.isPremium,
                 modifier = modifier,
             )
 

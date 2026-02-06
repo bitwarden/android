@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -83,6 +85,56 @@ class AddEditSendStateExtensionsTest {
 
         assertEquals(sendView, result)
     }
+
+    @Test
+    fun `toSendView should create an appropriate SendView with Auth type NONE`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
+            id = null,
+            accessId = null,
+            key = null,
+            accessCount = 0U,
+            hasPassword = false,
+            newPassword = null,
+            authType = AuthType.NONE,
+        )
+
+        val result = DEFAULT_VIEW_STATE
+            .copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    passwordInput = "",
+                    authType = SendAuthType.NONE,
+                ),
+            )
+            .toSendView(FIXED_CLOCK)
+
+        assertEquals(sendView, result)
+    }
+
+    @Test
+    fun `toSendView should create an appropriate SendView with Auth type EMAIL`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
+            id = null,
+            accessId = null,
+            key = null,
+            accessCount = 0U,
+            hasPassword = false,
+            newPassword = null,
+            emails = listOf("email@email.com"),
+            authType = AuthType.EMAIL,
+        )
+
+        val result = DEFAULT_VIEW_STATE
+            .copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    passwordInput = "",
+                    authEmails = listOf("email@email.com"),
+                    authType = SendAuthType.EMAIL,
+                ),
+            )
+            .toSendView(FIXED_CLOCK)
+
+        assertEquals(sendView, result)
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -103,6 +155,9 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
+    authEmails = emptyList(),
+    isSendEmailVerificationEnabled = false,
+    authType = SendAuthType.PASSWORD,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

@@ -7,6 +7,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import java.time.Clock
 
 /**
@@ -21,7 +22,11 @@ fun AddEditSendState.ViewState.Content.toSendView(
         name = common.name,
         notes = common.noteInput.orNullIfBlank(),
         key = common.originalSendView?.key,
-        newPassword = common.passwordInput.orNullIfBlank(),
+        newPassword = common
+            .passwordInput
+            .takeIf {
+                common.authType == SendAuthType.PASSWORD
+            }.orNullIfBlank(),
         hasPassword = false,
         type = selectedType.toSendType(),
         file = toSendFileView(),
@@ -37,8 +42,12 @@ fun AddEditSendState.ViewState.Content.toSendView(
             // we just update it to match the deletion date.
             common.deletionDate.toInstant()
         },
-        emails = emptyList(),
-        authType = AuthType.NONE,
+        emails = common.authEmails.takeIf { common.authType == SendAuthType.EMAIL }.orEmpty(),
+        authType = when (common.authType) {
+            SendAuthType.PASSWORD -> AuthType.PASSWORD
+            SendAuthType.EMAIL -> AuthType.EMAIL
+            SendAuthType.NONE -> AuthType.NONE
+        },
     )
 
 private fun AddEditSendState.ViewState.Content.SendType.toSendType(): SendType =

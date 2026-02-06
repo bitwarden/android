@@ -52,6 +52,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendAuthTypeChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
@@ -69,6 +70,7 @@ fun AddEditSendContent(
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
+    isPremium: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -155,6 +157,26 @@ fun AddEditSendContent(
                 onDateSelect = addSendHandlers.onDeletionDateChange,
                 modifier = Modifier
                     .testTag("SendCustomDeletionDatePicker")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
+        if (state.common.isSendEmailVerificationEnabled) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            AddEditSendAuthTypeChooser(
+                onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
+                onPasswordChange = addSendHandlers.onAuthPasswordChange,
+                onEmailValueChange = addSendHandlers.onEmailValueChange,
+                onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
+                onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
+                password = state.common.passwordInput,
+                emails = state.common.authEmails,
+                isEnabled = !policyDisablesSend,
+                isPremium = isPremium,
+                hasPassword = state.common.hasPassword,
+                modifier = Modifier
+                    .testTag("SendAuthTypeChooser")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
@@ -427,40 +449,43 @@ private fun AddEditSendOptions(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenPasswordField(
-                label = stringResource(id = BitwardenString.new_password),
-                supportingText = stringResource(id = BitwardenString.password_info),
-                readOnly = sendRestrictionPolicy,
-                value = state.common.passwordInput,
-                onValueChange = addSendHandlers.onPasswordChange,
-                passwordFieldTestTag = "SendNewPasswordEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            ) {
-                BitwardenStandardIconButton(
-                    vectorIconRes = BitwardenDrawable.ic_generate,
-                    contentDescription = stringResource(id = BitwardenString.generate_password),
-                    onClick = {
-                        if (state.common.passwordInput.isEmpty()) {
-                            addSendHandlers.onOpenPasswordGeneratorClick()
-                        } else {
-                            shouldShowDialog = true
-                        }
-                    },
-                    modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-                )
-                BitwardenStandardIconButton(
-                    vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = BitwardenString.copy_password),
-                    isEnabled = state.common.passwordInput.isNotEmpty(),
-                    onClick = {
-                        addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
-                    },
-                    modifier = Modifier.testTag(tag = "CopyPasswordButton"),
-                )
+
+            if (!state.common.isSendEmailVerificationEnabled) {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenPasswordField(
+                    label = stringResource(id = BitwardenString.new_password),
+                    supportingText = stringResource(id = BitwardenString.password_info),
+                    readOnly = sendRestrictionPolicy,
+                    value = state.common.passwordInput,
+                    onValueChange = addSendHandlers.onPasswordChange,
+                    passwordFieldTestTag = "SendNewPasswordEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (state.common.passwordInput.isEmpty()) {
+                                addSendHandlers.onOpenPasswordGeneratorClick()
+                            } else {
+                                shouldShowDialog = true
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = state.common.passwordInput.isNotEmpty(),
+                        onClick = {
+                            addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
             }
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(

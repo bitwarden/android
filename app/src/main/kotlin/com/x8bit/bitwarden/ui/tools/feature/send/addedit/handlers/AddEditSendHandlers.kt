@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers
 import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import java.time.ZonedDateTime
 
 /**
@@ -24,6 +25,11 @@ data class AddEditSendHandlers(
     val onDeleteClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onPasswordCopyClick: (String) -> Unit,
+    val onAuthTypeSelect: (SendAuthType) -> Unit,
+    val onAuthPasswordChange: (String) -> Unit,
+    val onEmailValueChange: (String, Int) -> Unit,
+    val onAddNewEmailClick: () -> Unit,
+    val onEmailsRemoveClick: (Int) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -70,6 +76,26 @@ data class AddEditSendHandlers(
                             password = it,
                         ),
                     )
+                },
+                onAuthTypeSelect = {
+                    viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(it))
+                },
+                onAuthPasswordChange = {
+                    viewModel.trySendAction(AddEditSendAction.AuthPasswordChange(it))
+                },
+                onAddNewEmailClick = {
+                    viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
+                },
+                onEmailValueChange = { email, index ->
+                    viewModel.trySendAction(
+                        AddEditSendAction.AuthEmailChange(
+                            email = email,
+                            index = index,
+                        ),
+                    )
+                },
+                onEmailsRemoveClick = {
+                    viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(index = it))
                 },
             )
     }
