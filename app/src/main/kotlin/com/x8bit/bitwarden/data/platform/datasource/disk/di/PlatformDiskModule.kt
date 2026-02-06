@@ -8,6 +8,8 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -154,5 +156,15 @@ object PlatformDiskModule {
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
     ): FeatureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
         sharedPreferences = sharedPreferences,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCookieDiskSource(
+        @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+        json: Json,
+    ): CookieDiskSource = CookieDiskSourceImpl(
+        encryptedSharedPreferences = encryptedSharedPreferences,
+        json = json,
     )
 }
