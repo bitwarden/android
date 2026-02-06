@@ -119,6 +119,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -6128,6 +6129,19 @@ class AuthRepositoryTest {
             )
             assertEquals(
                 SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `setCookieCallbackResult should change the value of cookieCallbackResultFlow`() = runTest {
+        repository.cookieCallbackResultFlow.test {
+            repository.setCookieCallbackResult(
+                CookieCallbackResult.Success(cookies = mapOf("test_cookie" to "test_value")),
+            )
+            assertEquals(
+                CookieCallbackResult.Success(cookies = mapOf("test_cookie" to "test_value")),
                 awaitItem(),
             )
         }
