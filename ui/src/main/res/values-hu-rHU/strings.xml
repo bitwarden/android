@@ -1197,4 +1197,5 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Az archívumhoz hozzáférés visszaszerzéséhez indítsuk újra a Prémium előfizetést. Ha az újraindítás előtt szerkesztjük egy archivált elem adatait, akkor az visszakerül a széfbe.</string>
     <string name="restart_premium">Prémium előfizetés újraindítása</string>
     <string name="items_transferred">Az elemek átvitelre kerültek.</string>
+    <string name="updated_master_password">A mesterjelszó frisstésre került.</string>
 </resources>

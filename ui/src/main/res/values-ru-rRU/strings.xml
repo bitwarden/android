@@ -1214,4 +1214,5 @@
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Чтобы восстановить доступ к своему архиву, подключите подписку Премиум повторно. Если вы измените сведения об архивированном элементе перед переподключением, он будет перемещен обратно в ваше хранилище.</string>
     <string name="restart_premium">Переподключить Премиум</string>
     <string name="items_transferred">Элементы переданы</string>
+    <string name="updated_master_password">Мастер-пароль обновлен</string>
 </resources>
