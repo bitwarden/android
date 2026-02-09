@@ -856,6 +856,38 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `dismissIntroducingArchiveActionCard should properly update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.dismissIntroducingArchiveActionCard()
+        assertEquals(
+            true,
+            fakeSettingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = USER_ID),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIntroducingArchiveActionCardDismissedFlow should react to changes in SettingsDiskSource`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository
+                .getIntroducingArchiveActionCardDismissedFlow()
+                .test {
+                    assertFalse(awaitItem())
+                    fakeSettingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                        userId = USER_ID,
+                        isDismissed = true,
+                    )
+                    assertTrue(awaitItem())
+                    fakeSettingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                        userId = USER_ID,
+                        isDismissed = false,
+                    )
+                    assertFalse(awaitItem())
+                }
+        }
+
+    @Test
     fun `storePullToRefreshEnabled should properly update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository.storePullToRefreshEnabled(true)

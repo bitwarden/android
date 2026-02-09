@@ -681,7 +681,8 @@ class BitwardenCredentialManagerTest {
                         DEFAULT_PACKAGE_NAME,
                         DEFAULT_CERT_FINGERPRINT,
                         "https://${mockAssertionOptions.relyingPartyId!!}",
-                        "https://${mockAssertionOptions.relyingPartyId}",
+                        @Suppress("MaxLineLength")
+                        "https://${mockAssertionOptions.relyingPartyId}/.well-known/assetlinks.json",
                     ),
                 ),
                 requestCaptureSlot.captured.origin,
@@ -1499,7 +1500,7 @@ private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
         packageName = DEFAULT_PACKAGE_NAME,
         sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
         host = "https://$DEFAULT_HOST",
-        assetLinkUrl = "https://$DEFAULT_HOST",
+        assetLinkUrl = "https://$DEFAULT_HOST/.well-known/assetlinks.json",
     ),
 )
 private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")

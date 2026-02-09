@@ -35,6 +35,7 @@ class EventServiceTest : BaseServiceTest() {
                     type = OrganizationEventType.CIPHER_CREATED,
                     cipherId = "cipher-id",
                     date = ZonedDateTime.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
         )

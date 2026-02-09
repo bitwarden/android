@@ -69,6 +69,8 @@ class AutofillCipherProviderImpl(
                         it.type is CipherListViewType.Card &&
                             // Must not be deleted.
                             it.deletedDate == null &&
+                            // Must not be archived.
+                            it.archivedDate == null &&
                             // Must not require a reprompt.
                             it.reprompt == CipherRepromptType.NONE &&
                             // Must not be restricted by organization.
@@ -107,6 +109,8 @@ class AutofillCipherProviderImpl(
                 it.type is CipherListViewType.Login &&
                     // Must not be deleted.
                     it.deletedDate == null &&
+                    // Must not be archived.
+                    it.archivedDate == null &&
                     // Must not require a reprompt.
                     it.reprompt == CipherRepromptType.NONE
             }

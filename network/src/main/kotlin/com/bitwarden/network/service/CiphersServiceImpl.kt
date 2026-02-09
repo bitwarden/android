@@ -39,6 +39,18 @@ internal class CiphersServiceImpl(
     private val json: Json,
     private val clock: Clock,
 ) : CiphersService {
+    override suspend fun archiveCipher(
+        cipherId: String,
+    ): Result<Unit> = ciphersApi
+        .archiveCipher(cipherId = cipherId)
+        .toResult()
+
+    override suspend fun unarchiveCipher(
+        cipherId: String,
+    ): Result<Unit> = ciphersApi
+        .unarchiveCipher(cipherId = cipherId)
+        .toResult()
+
     override suspend fun createCipher(
         body: CipherJsonRequest,
     ): Result<CreateCipherResponseJson> =
@@ -189,7 +201,7 @@ internal class CiphersServiceImpl(
 
     override suspend fun bulkShareCiphers(
         body: BulkShareCiphersJsonRequest,
-    ): Result<List<CipherMiniResponseJson>> =
+    ): Result<CipherMiniResponseJson> =
         ciphersApi
             .bulkShareCiphers(body = body)
             .toResult()

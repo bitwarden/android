@@ -30,6 +30,7 @@ class EventDiskSourceImpl(
                 },
                 cipherId = event.cipherId,
                 date = event.date,
+                organizationId = event.organizationId,
             ),
         )
     }
@@ -48,6 +49,7 @@ class EventDiskSourceImpl(
                     },
                     cipherId = it.cipherId,
                     date = it.date,
+                    organizationId = it.organizationId,
                 )
             }
 }

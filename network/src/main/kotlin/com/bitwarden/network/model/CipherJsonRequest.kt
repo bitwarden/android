@@ -23,6 +23,7 @@ import java.time.ZonedDateTime
  * @property isFavorite If the cipher is a favorite.
  * @property card The card of the cipher.
  * @property key The key of the cipher (nullable).
+ * @property archivedDate The archived date of the cipher (nullable).
  * @property encryptedFor ID of the user who the cipher is encrypted by.
  */
 @Serializable
@@ -78,6 +79,10 @@ data class CipherJsonRequest(
 
     @SerialName("key")
     val key: String?,
+
+    @SerialName("archivedDate")
+    @Contextual
+    val archivedDate: ZonedDateTime?,
 
     @SerialName("encryptedFor")
     val encryptedFor: String?,

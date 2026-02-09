@@ -31,6 +31,7 @@ data class VaultHandlers(
     val identityGroupClick: () -> Unit,
     val secureNoteGroupClick: () -> Unit,
     val sshKeyGroupClick: () -> Unit,
+    val archiveClick: () -> Unit,
     val trashClick: () -> Unit,
     val tryAgainClick: () -> Unit,
     val dialogDismiss: () -> Unit,
@@ -49,6 +50,9 @@ data class VaultHandlers(
     val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
     val onEnabledThirdPartyAutofillClick: () -> Unit,
     val onDismissThirdPartyAutofillDialogClick: () -> Unit,
+    val upgradeToPremiumClick: () -> Unit,
+    val dismissActionCardClick: (VaultState.ActionCardState) -> Unit,
+    val actionCardClick: (VaultState.ActionCardState) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -92,6 +96,7 @@ data class VaultHandlers(
                     viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
                 },
                 sshKeyGroupClick = { viewModel.trySendAction(VaultAction.SshKeyGroupClick) },
+                archiveClick = { viewModel.trySendAction(VaultAction.ArchiveClick) },
                 trashClick = { viewModel.trySendAction(VaultAction.TrashClick) },
                 tryAgainClick = { viewModel.trySendAction(VaultAction.TryAgainClick) },
                 dialogDismiss = { viewModel.trySendAction(VaultAction.DialogDismiss) },
@@ -141,6 +146,13 @@ data class VaultHandlers(
                 onKdfUpdatePasswordRepromptSubmit = {
                     viewModel.trySendAction(VaultAction.KdfUpdatePasswordRepromptSubmit(it))
                 },
+                upgradeToPremiumClick = {
+                    viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
+                },
+                dismissActionCardClick = {
+                    viewModel.trySendAction(VaultAction.DismissActionCardClick(it))
+                },
+                actionCardClick = { viewModel.trySendAction(VaultAction.ActionCardClick(it)) },
             )
     }
 }

@@ -5,7 +5,6 @@ val version = "1.0.2"
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -74,10 +73,4 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.square.turbine)
-}
-
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
 }

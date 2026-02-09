@@ -49,8 +49,8 @@
     <string name="send_name_required">Send name (required)</string>
     <string name="no">Na</string>
     <string name="notes">Nodiadau</string>
-    <string name="private_notes">Private notes</string>
-    <string name="okay">Okay</string>
+    <string name="private_notes">Nodiadau preifat</string>
+    <string name="okay">Iawn</string>
     <string name="password">Cyfrinair</string>
     <string name="save">Cadw</string>
     <string name="move">Symud</string>
@@ -71,7 +71,7 @@
     <string name="view">Gweld</string>
     <string name="yes">Ydw</string>
     <string name="account">Cyfrif</string>
-    <string name="account_created_success">Your new account has been created!</string>
+    <string name="account_created_success">Mae eich cyfrif newydd wedi cael ei greu!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
     <string name="avoid_ambiguous_characters">Osgoi nodau amwys</string>
     <string name="bitwarden_autofill_service">Gwasanaeth llenwi awtomatig Bitwarden</string>
@@ -79,7 +79,7 @@
     <string name="close">Cau</string>
     <string name="continue_text">Parhau</string>
     <string name="create_account">Crëwch gyfrif</string>
-    <string name="create_an_account">Create an account</string>
+    <string name="create_an_account">Creu cyfrif</string>
     <string name="edit_item">Golygu\'r eitem</string>
     <string name="edit_login">Edit login</string>
     <string name="edit_card">Edit card</string>
@@ -133,6 +133,8 @@
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+    <string name="no_archives_title">Archive is empty</string>
+    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">New text Send</string>
     <string name="new_file_send">New file Send</string>
     <string name="no_username">No Username</string>
@@ -313,8 +315,8 @@ Scanning will happen automatically.</string>
     <string name="identification">Identification</string>
     <string name="logins">Manylion mewngofnodi</string>
     <string name="secure_notes">Nodiadau diogel</string>
-    <string name="personal_details">Personal Details</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="personal_details">Manylion personol</string>
+    <string name="contact_info">Gwybodaeth gysylltu</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
     <plurals name="password_exposed">
         <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
@@ -735,7 +737,7 @@ Do you want to switch to this account?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="unsubscribe">Unsubscribe</string>
+    <string name="unsubscribe">Dad-danysgrifio</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
     <string name="email_verified">Email verified</string>
@@ -900,10 +902,10 @@ Do you want to switch to this account?</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-    <string name="coachmark_1_of_3">1 OF 3</string>
-    <string name="coachmark_2_of_3">2 OF 3</string>
+    <string name="coachmark_1_of_3">1 O 3</string>
+    <string name="coachmark_2_of_3">2 O 3</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-    <string name="coachmark_3_of_3">3 OF 3</string>
+    <string name="coachmark_3_of_3">3 O 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
@@ -1041,7 +1043,7 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Verification code added</string>
     <string name="refresh_period">Refresh period</string>
     <string name="algorithm">Algorithm</string>
-    <string name="advanced">Advanced</string>
+    <string name="advanced">Uwch</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
     <plurals name="refresh_period_seconds">
@@ -1062,8 +1064,8 @@ Do you want to switch to this account?</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
     <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you’ll enter your username and password and a code generated in this app.</string>
-    <string name="skip">Skip</string>
-    <string name="help">Help</string>
+    <string name="skip">Hepgor</string>
+    <string name="help">Cymorth</string>
     <string name="launch_tutorial">Launch tutorial</string>
     <string name="delete_item">Dileu\'r eitem</string>
     <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Ydych chi wir eisiau dileu\'r eitem hon? Allwch chi ddim dadwneud hyn.</string>
@@ -1082,7 +1084,7 @@ Do you want to switch to this account?</string>
     <string name="key_is_required">Key is required.</string>
     <string name="name_is_required">Mae angen enw.</string>
     <string name="import_vault_failure">There was a problem importing your vault.</string>
-    <string name="import_vault">Import</string>
+    <string name="import_vault">Mewnforio</string>
     <string name="import_success">Vault import successful</string>
     <string name="key_is_invalid">Key is invalid.</string>
     <string name="backup">Backup</string>
@@ -1169,7 +1171,7 @@ Do you want to switch to this account?</string>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
     <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
-    <string name="not_now">Not now</string>
+    <string name="not_now">Nid nawr</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
     <string name="no_accounts_available">No accounts available</string>
@@ -1179,7 +1181,7 @@ Do you want to switch to this account?</string>
     <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
     <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
-    <string name="items_to_import">Items to import</string>
+    <string name="items_to_import">Eitemau i\'w mewnforio</string>
     <string name="exporting_items">Exporting items…</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
@@ -1201,7 +1203,32 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
     <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
     <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="why_am_i_seeing_this">Pam rydw i\'n gweld hyn?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
+    <string name="search_archive">Search archive</string>
+    <string name="archive_noun">Archive</string>
+    <string name="archive_verb">Archive</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="archived">Archived</string>
+    <string name="hidden_items">Hidden items</string>
+    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
+    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
+    <string name="archiving">Archiving</string>
+    <string name="unarchiving">Unarchiving</string>
+    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="introducing_archive">Introducing archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
+    <string name="go_to_archive">Go to archive</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
+    <string name="restart_premium">Restart Premium</string>
+    <string name="items_transferred">Items transferred</string>
+    <string name="updated_master_password">Diweddarwyd y prif gyfrinair</string>
 </resources>

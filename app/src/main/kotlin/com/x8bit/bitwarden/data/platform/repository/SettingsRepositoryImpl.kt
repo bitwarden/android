@@ -500,6 +500,29 @@ class SettingsRepositoryImpl(
         }
     }
 
+    override fun getIntroducingArchiveActionCardDismissedFlow(): StateFlow<Boolean> {
+        val userId = activeUserId ?: return MutableStateFlow(value = false)
+        return settingsDiskSource
+            .getIntroducingArchiveActionCardDismissedFlow(userId = userId)
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .getIntroducingArchiveActionCardDismissed(userId = userId)
+                    ?: false,
+            )
+    }
+
+    override fun dismissIntroducingArchiveActionCard() {
+        activeUserId?.let {
+            settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                userId = it,
+                isDismissed = true,
+            )
+        }
+    }
+
     override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
         val userId = activeUserId
             ?: return BiometricsKeyResult.Error(error = NoActiveUserException())

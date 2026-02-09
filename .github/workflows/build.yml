@@ -33,6 +33,8 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 21
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+  PUBLISH_TO_PLAY_STORE: ${{ inputs.publish-to-play-store || github.event_name == 'push' }}
 
 permissions:
   contents: read
@@ -184,7 +186,7 @@ jobs:
           --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
       - name: Download Firebase credentials
-        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -295,7 +297,7 @@ jobs:
         run: |
           bundle exec fastlane assembleDebugApks
 
-      - name: Upload release Play Store .aab artifact
+      - name: Upload to GitHub Artifacts - prod.aab
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -303,7 +305,7 @@ jobs:
           path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab
           if-no-files-found: error
 
-      - name: Upload beta Play Store .aab artifact
+      - name: Upload to GitHub Artifacts - beta.aab
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -311,7 +313,7 @@ jobs:
           path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab
           if-no-files-found: error
 
-      - name: Upload release .apk artifact
+      - name: Upload to GitHub Artifacts - prod.apk
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -319,7 +321,7 @@ jobs:
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
           if-no-files-found: error
 
-      - name: Upload beta .apk artifact
+      - name: Upload to GitHub Artifacts - beta.apk
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -328,7 +330,7 @@ jobs:
           if-no-files-found: error
 
       # When building variants other than 'prod'
-      - name: Upload debug .apk artifact
+      - name: Upload to GitHub Artifacts - dev.apk
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -366,7 +368,7 @@ jobs:
           sha256sum "app/build/outputs/apk/standard/debug/com.x8bit.bitwarden.dev.apk" \
            > ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
 
-      - name: Upload .apk SHA file for release
+      - name: Upload to GitHub Artifacts - prod.apk-sha256.txt
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -374,7 +376,7 @@ jobs:
           path: ./com.x8bit.bitwarden.apk-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .apk SHA file for beta
+      - name: Upload to GitHub Artifacts - beta.apk-sha256.txt
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -382,7 +384,7 @@ jobs:
           path: ./com.x8bit.bitwarden.beta.apk-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .aab SHA file for release
+      - name: Upload to GitHub Artifacts - prod.aab-sha256.txt
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -390,7 +392,7 @@ jobs:
           path: ./com.x8bit.bitwarden.aab-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .aab SHA file for beta
+      - name: Upload to GitHub Artifacts - beta.aab-sha256.txt
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -398,7 +400,7 @@ jobs:
           path: ./com.x8bit.bitwarden.beta.aab-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .apk SHA file for debug
+      - name: Upload to GitHub Artifacts - debug.apk-sha256.txt
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -407,11 +409,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release artifacts to Firebase
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+      - name: Distribute to Firebase - prod.apk
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -419,8 +421,8 @@ jobs:
           actionUrl:$GITHUB_ACTION_RUN_URL \
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
-      - name: Publish beta artifacts to Firebase
-        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+      - name: Distribute to Firebase - beta.apk
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -429,12 +431,12 @@ jobs:
           service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Verify Play Store credentials
-        if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane run validate_play_store_json_key
 
-      - name: Publish Play Store bundle
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.event_name == 'push') }}
+      - name: Publish to Play Store - prod.aab
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
@@ -488,7 +490,7 @@ jobs:
           --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
 
       - name: Download Firebase credentials
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -575,7 +577,7 @@ jobs:
           keyAlias:bitwarden-beta \
           keyPassword:$FDROID_BETA_KEY_PASSWORD
 
-      - name: Upload F-Droid .apk artifact
+      - name: Upload to GitHub Artifacts - fdroid.apk
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.x8bit.bitwarden-fdroid.apk
@@ -587,14 +589,14 @@ jobs:
           sha256sum "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk" \
           > ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
 
-      - name: Upload F-Droid SHA file
+      - name: Upload to GitHub Artifacts - fdroid.apk-sha256.txt
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.x8bit.bitwarden-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
           if-no-files-found: error
 
-      - name: Upload F-Droid Beta .apk artifact
+      - name: Upload to GitHub Artifacts - beta.fdroid.apk
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk
@@ -606,7 +608,7 @@ jobs:
           sha256sum "app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden.beta-fdroid.apk" \
           > ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
 
-      - name: Upload F-Droid Beta SHA file
+      - name: Upload to GitHub Artifacts - beta.fdroid.apk-sha256.txt
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
@@ -614,11 +616,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release F-Droid artifacts to Firebase
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+      - name: Distribute to Firebase - fdroid.apk
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |

@@ -198,6 +198,53 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium action card restart premium button click should send UpgradeToPremiumClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Restart Premium")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
     fun `account icon should update according to state`() {
         composeTestRule
             .onNodeWithText("AU")
@@ -2432,6 +2479,27 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
     }
+
+    @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -2484,6 +2552,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     isPremium = false,
     isRefreshing = false,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
+    isArchiveEnabled = true,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(

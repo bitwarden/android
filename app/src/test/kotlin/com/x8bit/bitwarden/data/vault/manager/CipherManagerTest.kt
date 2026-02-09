@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionC
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -52,6 +53,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
@@ -692,6 +694,297 @@ class CipherManagerTest {
             vaultSdkSource.decryptCipher(userId = "mockId-1", cipher = sdkCipher)
         }
     }
+
+    @Test
+    fun `archiveCipher with no active user should return ArchiveCipherResult Error`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = cipherManager.archiveCipher(
+            cipherId = "cipherId",
+            cipherView = mockk(),
+        )
+
+        assertEquals(ArchiveCipherResult.Error(error = NoActiveUserException()), result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `archiveCipher with ciphersService archiveCipher failure should return ArchiveCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val encryptionContext = createMockEncryptionContext(number = 1)
+            val error = Throwable("Fail")
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                ciphersService.archiveCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.archiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(ArchiveCipherResult.Error(error = error), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `archiveCipher with ciphersService archiveCipher success should return ArchiveCipherResult success`() =
+        runTest {
+            val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
+            val cipherView = createMockCipherView(number = 1)
+            fakeSettingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                userId = userId,
+                isDismissed = null,
+            )
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(archivedDate = fixedInstant),
+                )
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = encryptionContext.cipher)
+            } returns cipherView.asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.archiveCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
+                )
+            } just runs
+
+            val result = cipherManager.archiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            fakeSettingsDiskSource.assertIntroducingArchiveActionCardDismissed(
+                userId = userId,
+                expected = true,
+            )
+            assertEquals(ArchiveCipherResult.Success, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `archiveCipher with cipher migration success should return ArchiveCipherResult success`() =
+        runTest {
+            val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
+            val cipherView = createMockCipherView(number = 1).copy(key = null)
+            val networkCipher = createMockCipher(number = 1).copy(key = null)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = encryptionContext.toEncryptedNetworkCipher(),
+                )
+            } returns UpdateCipherResponseJson.Success(networkCipher).asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = networkCipher.toEncryptedSdkCipher(),
+                )
+            } returns cipherView.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(archivedDate = fixedInstant),
+                )
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = encryptionContext.cipher)
+            } returns cipherView.asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.archiveCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
+                )
+            } just runs
+
+            val result = cipherManager.archiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(ArchiveCipherResult.Success, result)
+            coVerify(exactly = 1) {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = encryptionContext.toEncryptedNetworkCipher(),
+                )
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            }
+        }
+
+    @Test
+    fun `unarchiveCipher with no active user should return UnarchiveCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = cipherManager.unarchiveCipher(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+            )
+
+            assertEquals(UnarchiveCipherResult.Error(error = NoActiveUserException()), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unarchiveCipher with ciphersService unarchiveCipher failure should return UnarchiveCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val encryptionContext = createMockEncryptionContext(number = 1)
+            val error = Throwable("Fail")
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                ciphersService.unarchiveCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.unarchiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(UnarchiveCipherResult.Error(error = error), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unarchiveCipher with ciphersService unarchiveCipher success should return UnarchiveCipherResult success`() =
+        runTest {
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
+            val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(archivedDate = null),
+                )
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = encryptionContext.cipher)
+            } returns cipherView.asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.unarchiveCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
+                )
+            } just runs
+
+            val result = cipherManager.unarchiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(UnarchiveCipherResult.Success, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unarchiveCipher with cipher migration success should return UnarchiveCipherResult success`() =
+        runTest {
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
+            val cipherView = createMockCipherView(number = 1).copy(key = null)
+            val networkCipher = createMockCipher(number = 1).copy(key = null)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = encryptionContext.toEncryptedNetworkCipher(),
+                )
+            } returns UpdateCipherResponseJson.Success(networkCipher).asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = networkCipher.toEncryptedSdkCipher(),
+                )
+            } returns cipherView.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(archivedDate = null),
+                )
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = encryptionContext.cipher)
+            } returns cipherView.asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.unarchiveCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
+                )
+            } just runs
+
+            val result = cipherManager.unarchiveCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(UnarchiveCipherResult.Success, result)
+            coVerify(exactly = 1) {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = encryptionContext.toEncryptedNetworkCipher(),
+                )
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            }
+        }
 
     @Test
     fun `hardDeleteCipher with no active user should return DeleteCipherResult Error`() = runTest {

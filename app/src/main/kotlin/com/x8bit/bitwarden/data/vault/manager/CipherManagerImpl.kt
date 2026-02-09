@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -35,6 +36,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
@@ -158,6 +160,80 @@ class CipherManagerImpl(
                     reviewPromptManager.registerAddCipherAction()
                     it
                 },
+            )
+    }
+
+    override suspend fun archiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): ArchiveCipherResult {
+        val userId = activeUserId ?: return ArchiveCipherResult.Error(NoActiveUserException())
+        return cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
+            .flatMap { encryptionContext ->
+                ciphersService
+                    .archiveCipher(cipherId = cipherId)
+                    .flatMap {
+                        vaultSdkSource.decryptCipher(
+                            userId = userId,
+                            cipher = encryptionContext.cipher,
+                        )
+                    }
+            }
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = it.copy(archivedDate = clock.instant()),
+                )
+            }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.toEncryptedNetworkCipherResponse(),
+                )
+                settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                    userId = userId,
+                    isDismissed = true,
+                )
+            }
+            .fold(
+                onSuccess = { ArchiveCipherResult.Success },
+                onFailure = { ArchiveCipherResult.Error(error = it) },
+            )
+    }
+
+    override suspend fun unarchiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UnarchiveCipherResult {
+        val userId = activeUserId ?: return UnarchiveCipherResult.Error(NoActiveUserException())
+        return cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
+            .flatMap { encryptionContext ->
+                ciphersService
+                    .unarchiveCipher(cipherId = cipherId)
+                    .flatMap {
+                        vaultSdkSource.decryptCipher(
+                            userId = userId,
+                            cipher = encryptionContext.cipher,
+                        )
+                    }
+            }
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = it.copy(archivedDate = null),
+                )
+            }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.toEncryptedNetworkCipherResponse(),
+                )
+            }
+            .fold(
+                onSuccess = { UnarchiveCipherResult.Success },
+                onFailure = { UnarchiveCipherResult.Error(error = it) },
             )
     }
 
@@ -613,7 +689,7 @@ class CipherManagerImpl(
                 }
             }
 
-    private suspend fun migrateAttachments(
+    override suspend fun migrateAttachments(
         userId: String,
         cipherView: CipherView,
     ): Result<CipherView> {

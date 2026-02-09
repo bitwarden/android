@@ -4,6 +4,7 @@ import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparat
 import com.bitwarden.network.model.SendJsonRequest
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
@@ -92,6 +93,9 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         revisionDate = revisionDate.toInstant(),
         deletionDate = deletionDate.toInstant(),
         expirationDate = expirationDate?.toInstant(),
+        emails = null,
+        emailHashes = null,
+        authType = AuthType.NONE,
     )
 
 /**

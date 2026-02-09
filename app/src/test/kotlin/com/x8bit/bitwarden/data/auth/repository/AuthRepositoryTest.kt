@@ -13,6 +13,7 @@ import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -26,6 +27,7 @@ import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -60,13 +62,14 @@ import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockAccountKeysJsonWithNullFields
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -98,6 +101,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -114,6 +118,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -148,7 +153,6 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -282,6 +286,9 @@ class AuthRepositoryTest {
             updateKdfToMinimumsIfNeeded(password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = any()) } just runs
+    }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
@@ -309,6 +316,7 @@ class AuthRepositoryTest {
         logsManager = logsManager,
         userStateManager = userStateManager,
         kdfManager = kdfManager,
+        toastManager = toastManager,
     )
 
     @BeforeEach
@@ -388,7 +396,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    @OptIn(ExperimentalSerializationApi::class)
     @Suppress("MaxLineLength")
     fun `loading the policies should emit masterPasswordPolicyFlow if the password fails any checks`() =
         runTest {
@@ -611,7 +618,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `organizations should return an empty list when there is no active user`() = runTest {
-        assertEquals(emptyList<SyncResponseJson.Profile.Organization>(), repository.organizations)
+        assertEquals(emptyList<Organization>(), repository.organizations)
     }
 
     @Test
@@ -619,9 +626,9 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storeOrganizations(
             userId = USER_ID_1,
-            organizations = ORGANIZATIONS,
+            organizations = listOf(createMockOrganizationNetwork(number = 0)),
         )
-        assertEquals(ORGANIZATIONS, repository.organizations)
+        assertEquals(listOf(createMockOrganization(number = 0)), repository.organizations)
     }
 
     @Test
@@ -1137,7 +1144,12 @@ class AuthRepositoryTest {
                 publicKey = userPublicKey,
                 encryptedPrivateKey = userPrivateKey,
             )
-        } returns Unit.asSuccess()
+        } returns CreateAccountKeysResponseJson(
+            key = null,
+            publicKey = userPublicKey,
+            privateKey = userPrivateKey,
+            accountKeys = null,
+        ).asSuccess()
         coEvery {
             organizationService.organizationResetPasswordEnroll(
                 organizationId = orgId,
@@ -1222,7 +1234,12 @@ class AuthRepositoryTest {
                     publicKey = userPublicKey,
                     encryptedPrivateKey = userPrivateKey,
                 )
-            } returns Unit.asSuccess()
+            } returns CreateAccountKeysResponseJson(
+                key = null,
+                publicKey = userPublicKey,
+                privateKey = userPrivateKey,
+                accountKeys = ACCOUNT_KEYS,
+            ).asSuccess()
             coEvery {
                 organizationService.organizationResetPasswordEnroll(
                     organizationId = orgId,
@@ -1236,6 +1253,7 @@ class AuthRepositoryTest {
             val result = repository.createNewSsoUser()
 
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = userPrivateKey)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             assertEquals(NewSsoUserResult.Success, result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
@@ -1310,7 +1328,12 @@ class AuthRepositoryTest {
                     publicKey = userPublicKey,
                     encryptedPrivateKey = userPrivateKey,
                 )
-            } returns Unit.asSuccess()
+            } returns CreateAccountKeysResponseJson(
+                key = null,
+                publicKey = userPublicKey,
+                privateKey = userPrivateKey,
+                accountKeys = ACCOUNT_KEYS,
+            ).asSuccess()
             coEvery {
                 organizationService.organizationResetPasswordEnroll(
                     organizationId = orgId,
@@ -1330,6 +1353,7 @@ class AuthRepositoryTest {
             val result = repository.createNewSsoUser()
 
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = userPrivateKey)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             assertEquals(NewSsoUserResult.Success, result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
@@ -5241,18 +5265,12 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
         val organizations = listOf(
-            mockk<SyncResponseJson.Profile.Organization> {
-                every { id } returns "orgId"
-                every { name } returns "orgName"
-                every { permissions } returns mockk {
-                    every { shouldManageResetPassword } returns false
-                }
-                every { shouldUseKeyConnector } returns true
-                every { type } returns OrganizationType.USER
-                every { keyConnectorUrl } returns null
-                every { userIsClaimedByOrganization } returns false
-                every { limitItemDeletion } returns false
-            },
+            createMockOrganizationNetwork(
+                number = 1,
+                shouldUseKeyConnector = true,
+                type = OrganizationType.USER,
+                keyConnectorUrl = null,
+            ),
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
 
@@ -5272,18 +5290,12 @@ class AuthRepositoryTest {
             val url = "www.example.com"
             val error = Throwable("Fail!")
             val organizations = listOf(
-                mockk<SyncResponseJson.Profile.Organization> {
-                    every { id } returns "orgId"
-                    every { name } returns "orgName"
-                    every { permissions } returns mockk {
-                        every { shouldManageResetPassword } returns false
-                    }
-                    every { shouldUseKeyConnector } returns true
-                    every { type } returns OrganizationType.USER
-                    every { keyConnectorUrl } returns url
-                    every { userIsClaimedByOrganization } returns false
-                    every { limitItemDeletion } returns false
-                },
+                createMockOrganizationNetwork(
+                    number = 1,
+                    shouldUseKeyConnector = true,
+                    type = OrganizationType.USER,
+                    keyConnectorUrl = url,
+                ),
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
             coEvery {
@@ -5311,18 +5323,12 @@ class AuthRepositoryTest {
             val error = Throwable("Fail!")
             val expectedResult = MigrateExistingUserToKeyConnectorResult.Error(error)
             val organizations = listOf(
-                mockk<SyncResponseJson.Profile.Organization> {
-                    every { id } returns "orgId"
-                    every { name } returns "orgName"
-                    every { permissions } returns mockk {
-                        every { shouldManageResetPassword } returns false
-                    }
-                    every { shouldUseKeyConnector } returns true
-                    every { type } returns OrganizationType.USER
-                    every { keyConnectorUrl } returns url
-                    every { userIsClaimedByOrganization } returns false
-                    every { limitItemDeletion } returns false
-                },
+                createMockOrganizationNetwork(
+                    number = 1,
+                    shouldUseKeyConnector = true,
+                    type = OrganizationType.USER,
+                    keyConnectorUrl = url,
+                ),
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
             coEvery {
@@ -5353,18 +5359,12 @@ class AuthRepositoryTest {
             val url = "www.example.com"
             val expectedResult = MigrateExistingUserToKeyConnectorResult.WrongPasswordError
             val organizations = listOf(
-                mockk<SyncResponseJson.Profile.Organization> {
-                    every { id } returns "orgId"
-                    every { name } returns "orgName"
-                    every { permissions } returns mockk {
-                        every { shouldManageResetPassword } returns false
-                    }
-                    every { shouldUseKeyConnector } returns true
-                    every { type } returns OrganizationType.USER
-                    every { keyConnectorUrl } returns url
-                    every { userIsClaimedByOrganization } returns false
-                    every { limitItemDeletion } returns false
-                },
+                createMockOrganizationNetwork(
+                    number = 1,
+                    shouldUseKeyConnector = true,
+                    type = OrganizationType.USER,
+                    keyConnectorUrl = url,
+                ),
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
             coEvery {
@@ -5394,18 +5394,12 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val organizations = listOf(
-                mockk<SyncResponseJson.Profile.Organization> {
-                    every { id } returns "orgId"
-                    every { name } returns "orgName"
-                    every { permissions } returns mockk {
-                        every { shouldManageResetPassword } returns false
-                    }
-                    every { shouldUseKeyConnector } returns true
-                    every { type } returns OrganizationType.USER
-                    every { keyConnectorUrl } returns url
-                    every { userIsClaimedByOrganization } returns false
-                    every { limitItemDeletion } returns false
-                },
+                createMockOrganizationNetwork(
+                    number = 1,
+                    shouldUseKeyConnector = true,
+                    type = OrganizationType.USER,
+                    keyConnectorUrl = url,
+                ),
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
             coEvery {
@@ -5513,7 +5507,8 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             passwordHash = newPasswordHash,
         )
-        verify {
+        verify(exactly = 1) {
+            toastManager.show(messageId = BitwardenString.updated_master_password)
             userLogoutManager.logout(
                 userId = ACCOUNT_1.profile.userId,
                 reason = LogoutReason.PasswordReset,
@@ -7485,7 +7480,6 @@ class AuthRepositoryTest {
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val ORGANIZATION_IDENTIFIER = "organizationIdentifier"
-        private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val ACCOUNT_KEYS = createMockAccountKeysJson(number = 1)
         private val ACCOUNT_KEYS_WITH_NULL_FIELDS =
             createMockAccountKeysJsonWithNullFields(number = 1)

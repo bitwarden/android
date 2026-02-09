@@ -863,6 +863,42 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Loading("Loading".asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText("Loading")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
     fun `syncing dialog should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
@@ -1463,6 +1499,62 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `IntroducingArchive action card go to archive button click should send ArchiveClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Go to archive")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.IntroducingArchive,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `IntroducingArchive action card dismiss button click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
@@ -1986,6 +2078,50 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `archive count should update according to state`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, 0.toString())
+
+        val archiveCount = 7
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE.copy(archivedItemsCount = archiveCount))
+        }
+
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, archiveCount.toString())
+    }
+
+    @Test
+    fun `clicking archive item should send ArchiveClick action`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onAllNodes(hasText(rowText)).filterToOne(hasClickAction()).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+        }
+    }
+
+    @Test
     fun `trash count should update according to state`() {
         val rowText = "Trash"
         mutableStateFlow.update {
@@ -1993,7 +2129,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2011,7 +2147,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2377,6 +2513,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     cipherDecryptionFailureIds = persistentListOf(),
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
+    isArchiveEnabled = true,
+    isIntroducingArchiveActionCardDismissed = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -2392,5 +2530,9 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    archivedItemsCount = 0,
+    archiveEnabled = true,
+    archiveSubText = null,
+    archiveEndIcon = null,
     showCardGroup = true,
 )

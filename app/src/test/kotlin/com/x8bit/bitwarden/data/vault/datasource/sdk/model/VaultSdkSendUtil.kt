@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
@@ -30,6 +31,9 @@ fun createMockSdkSend(
         revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
         deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
         expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
+        emails = null,
+        emailHashes = null,
+        authType = AuthType.NONE,
     )
 
 /**

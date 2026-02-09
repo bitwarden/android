@@ -66,6 +66,7 @@ class FakeSettingsDiskSource(
     private val storedDisableAutoTotpCopy = mutableMapOf<String, Boolean?>()
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
+    private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
@@ -107,6 +108,9 @@ class FakeSettingsDiskSource(
 
     private val mutableVaultRegisteredForExportFlow =
         bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableIntroducingArchiveActionCardDismissedFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = storedAppLanguage
@@ -325,6 +329,18 @@ class FakeSettingsDiskSource(
         getMutablePullToRefreshEnabledFlow(userId = userId).tryEmit(isPullToRefreshEnabled)
     }
 
+    override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
+        storedIntroducingArchiveActionCardDismissed[userId]
+
+    override fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?> =
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId)
+            .onSubscription { emit(getIntroducingArchiveActionCardDismissed(userId = userId)) }
+
+    override fun storeIntroducingArchiveActionCardDismissed(userId: String, isDismissed: Boolean?) {
+        storedIntroducingArchiveActionCardDismissed[userId] = isDismissed
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
 
@@ -476,6 +492,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored introducing archive action card dismissed matches the [expected] one.
+     */
+    fun assertIntroducingArchiveActionCardDismissed(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedIntroducingArchiveActionCardDismissed[userId])
+    }
+
+    /**
      * Asserts that the stored last sync time matches the [expected] one.
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
@@ -529,6 +552,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableIntroducingArchiveActionCardDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableIntroducingArchiveActionCardDismissedFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

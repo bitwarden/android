@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManagerImpl
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManagerImpl
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
@@ -145,4 +147,9 @@ object CredentialProviderModule {
     @Singleton
     fun providePasskeyAttestationOptionsSanitizer(): PasskeyAttestationOptionsSanitizer =
         PasskeyAttestationOptionsSanitizerImpl
+
+    @Provides
+    @Singleton
+    fun provideCredentialProviderRequestManager(): CredentialProviderRequestManager =
+        CredentialProviderRequestManagerImpl()
 }

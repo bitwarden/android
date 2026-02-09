@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -19,9 +18,9 @@ import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -48,6 +47,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.util.UUID
 
+@Suppress("LargeClass")
 class CipherViewExtensionsTest {
 
     private val resourceManager: ResourceManager = mockk {
@@ -72,6 +72,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -120,6 +121,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = true,
             totpData = null,
             resourceManager = resourceManager,
@@ -174,6 +176,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -235,6 +238,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = mockk { every { uri } returns totp },
             resourceManager = resourceManager,
@@ -293,6 +297,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = true,
             totpData = null,
             resourceManager = resourceManager,
@@ -330,6 +335,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -376,6 +382,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = true,
+            isPremium = false,
             isIndividualVaultDisabled = false,
             totpData = null,
             resourceManager = resourceManager,
@@ -399,6 +406,89 @@ class CipherViewExtensionsTest {
                     ),
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState with archived cipher should set archiveCalloutText`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(archivedDate = FIXED_CLOCK.instant())
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = true,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                    archiveCalloutText = BitwardenString.this_item_is_archived.asText(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState with archived cipher and no premium account should set archiveCalloutText`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(
+            deletedDate = FIXED_CLOCK.instant(),
+            archivedDate = FIXED_CLOCK.instant(),
+        )
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = false,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                    archiveCalloutText = BitwardenString
+                        .this_item_is_archived_saving_changes_will_restore_it_to_your_vault
+                        .asText(),
                 ),
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
@@ -611,14 +701,11 @@ class CipherViewExtensionsTest {
             isVaultUnlocked = false,
             needsPasswordReset = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-1",
                     name = "organizationName",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             isBiometricsEnabled = true,
@@ -696,6 +783,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     revisionDate = FIXED_CLOCK.instant(),
     archivedDate = null,
     sshKey = null,
+    attachmentDecryptionFailures = null,
 )
 
 private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

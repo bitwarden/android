@@ -183,5 +183,23 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.launch.asText()
             override val requiresPasswordReprompt: Boolean get() = false
         }
+
+        /**
+         * Click on the archive overflow option.
+         */
+        @Parcelize
+        data class ArchiveClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = BitwardenString.archive_verb.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
+        }
+
+        /**
+         * Click on the unarchive overflow option.
+         */
+        @Parcelize
+        data class UnarchiveClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = BitwardenString.unarchive.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
+        }
     }
 }

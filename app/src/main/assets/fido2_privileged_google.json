@@ -815,6 +815,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.zoho.primeum.stable",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "A9:D6:D0:A2:AF:DB:15:84:9B:8C:D3:1D:51:FE:73:B8:E1:B1:70:BA:A5:70:C2:F8:F2:A3:F8:65:28:29:CB:BD"
+          }
+        ]
+      }
     }
   ]
 }

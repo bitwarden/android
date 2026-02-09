@@ -12,9 +12,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.auth.AuthTabIntent
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -120,6 +122,8 @@ class MainActivity : AppCompatActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = RootNavigationRoute,
+                        modifier = Modifier
+                            .background(color = BitwardenTheme.colorScheme.background.primary),
                     ) {
                         // Both root navigation and debug menu exist at this top level.
                         // The debug menu can appear on top of the rest of the app without

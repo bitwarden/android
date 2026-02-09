@@ -27,6 +27,22 @@ import retrofit2.http.Query
 internal interface CiphersApi {
 
     /**
+     * Archive a cipher.
+     */
+    @PUT("ciphers/{cipherId}/archive")
+    suspend fun archiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<Unit>
+
+    /**
+     * Unarchive a cipher.
+     */
+    @PUT("ciphers/{cipherId}/unarchive")
+    suspend fun unarchiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<Unit>
+
+    /**
      * Create a cipher.
      */
     @POST("ciphers")
@@ -83,7 +99,7 @@ internal interface CiphersApi {
     @PUT("ciphers/share")
     suspend fun bulkShareCiphers(
         @Body body: BulkShareCiphersJsonRequest,
-    ): NetworkResult<List<CipherMiniResponseJson>>
+    ): NetworkResult<CipherMiniResponseJson>
 
     /**
      * Shares an attachment.

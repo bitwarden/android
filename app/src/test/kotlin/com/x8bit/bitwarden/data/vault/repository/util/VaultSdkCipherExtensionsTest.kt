@@ -9,6 +9,7 @@ import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockCard
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockCipherMiniResponse
 import com.bitwarden.network.model.createMockField
 import com.bitwarden.network.model.createMockIdentity
 import com.bitwarden.network.model.createMockLogin
@@ -82,6 +83,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
             ),
             syncCipher,
         )
@@ -362,6 +364,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
             ),
             encryptionContext.toEncryptedNetworkCipher(),
         )
@@ -436,5 +439,55 @@ class VaultSdkCipherExtensionsTest {
 
         val loginType = result.type as CipherListViewType.Card
         assertNull(loginType.v1.brand)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should update cipher with mini response data`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            organizationId = null,
+            collectionIds = emptyList(),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = listOf("collection-1"),
+        )
+
+        assertEquals(miniResponse.organizationId, result.organizationId)
+        assertEquals(listOf("collection-1"), result.collectionIds)
+        assertEquals(miniResponse.revisionDate, result.revisionDate)
+        assertEquals(miniResponse.key, result.key)
+        assertEquals(miniResponse.attachments, result.attachments)
+        assertEquals(miniResponse.archivedDate, result.archivedDate)
+        assertEquals(miniResponse.deletedDate, result.deletedDate)
+        assertEquals(miniResponse.reprompt, result.reprompt)
+        assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
+        // Verify unchanged fields remain the same
+        assertEquals(originalCipher.name, result.name)
+        assertEquals(originalCipher.notes, result.notes)
+        assertEquals(originalCipher.id, result.id)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should preserve existing collectionIds when not provided`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = null,
+        )
+
+        assertEquals(
+            listOf("original-collection-1", "original-collection-2"),
+            result.collectionIds,
+        )
     }
 }

@@ -21,17 +21,19 @@ on:
       distribute-to-firebase:
         description: "Optional. Distribute artifacts to Firebase."
         required: false
-        default: false
+        default: true
         type: boolean
       publish-to-play-store:
         description: "Optional. Deploy bundle artifact to Google Play Store"
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 21
+  DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+  PUBLISH_TO_PLAY_STORE: ${{ inputs.publish-to-play-store || github.event_name == 'push' }}
 
 permissions:
   contents: read
@@ -171,7 +173,7 @@ jobs:
           --name com.bitwarden.authenticator.dev-google-services.json --file ${{ github.workspace }}/authenticator/src/debug/google-services.json --output none
 
       - name: Download Firebase credentials
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -182,7 +184,7 @@ jobs:
           --name authenticator_play_firebase-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json --output none
 
       - name: Download Play Store credentials
-        if: ${{ inputs.publish-to-play-store }}
+        if: ${{ env.PUBLISH_TO_PLAY_STORE }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -196,7 +198,7 @@ jobs:
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Verify Play Store credentials
-        if: ${{ inputs.publish-to-play-store }}
+        if: ${{ env.PUBLISH_TO_PLAY_STORE }}
         run: |
           bundle exec fastlane run validate_play_store_json_key \
           json_key:"${{ github.workspace }}/secrets/authenticator_play_store-creds.json"
@@ -281,7 +283,7 @@ jobs:
           keyAlias:"bitwardenauthenticator" \
           keyPassword:"$KEY_PASSWORD"
 
-      - name: Upload release Play Store .aab artifact
+      - name: Upload to GitHub Artifacts - prod.aab
         if: ${{ matrix.variant == 'aab' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -289,7 +291,7 @@ jobs:
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
           if-no-files-found: error
 
-      - name: Upload release .apk artifact
+      - name: Upload to GitHub Artifacts - prod.apk
         if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -309,7 +311,7 @@ jobs:
           sha256sum "authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk" \
             > ./authenticator-android-apk-sha256.txt
 
-      - name: Upload .apk SHA file for release
+      - name: Upload to GitHub Artifacts - prod.apk-sha256.txt
         if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -317,7 +319,7 @@ jobs:
           path: ./authenticator-android-apk-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .aab SHA file for release
+      - name: Upload to GitHub Artifacts - prod.aab-sha256.txt
         if: ${{ matrix.variant == 'aab' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
@@ -326,21 +328,19 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release bundle to Firebase
-        if: ${{ matrix.variant == 'aab' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+      - name: Distribute to Firebase - prod.aab
+        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
           bundle exec fastlane distributeAuthenticatorReleaseBundleToFirebase \
           serviceCredentialsFile:"$FIREBASE_CREDS_PATH"
 
-      # Only publish bundles to Play Store when `publish-to-play-store` is true while building
-      # bundles
-      - name: Publish release bundle to Google Play Store
-        if: ${{ inputs.publish-to-play-store && matrix.variant == 'aab' }}
+      - name: Publish to Play Store - prod.aab
+        if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
         env:
           PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
         run: |

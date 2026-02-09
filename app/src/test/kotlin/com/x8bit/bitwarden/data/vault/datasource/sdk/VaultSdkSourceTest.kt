@@ -1089,6 +1089,66 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `bulkMoveToOrganization should call SDK and return Result with correct data`() = runTest {
+        val userId = "userId"
+        val organizationId = "organizationId"
+        val cipherViews = listOf(mockk<CipherView>(), mockk<CipherView>())
+        val collectionIds = listOf("collectionId-1", "collectionId-2")
+        val expectedResult = listOf(mockk<EncryptionContext>(), mockk<EncryptionContext>())
+
+        coEvery {
+            ciphersClient.prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
+        } returns expectedResult
+
+        val result = vaultSdkSource.bulkMoveToOrganization(
+            userId = userId,
+            organizationId = organizationId,
+            cipherViews = cipherViews,
+            collectionIds = collectionIds,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify(exactly = 1) {
+            ciphersClient.prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
+        }
+    }
+
+    @Test
+    fun `bulkMoveToOrganization should return Failure when BitwardenException is thrown`() =
+        runTest {
+            val userId = "userId"
+            val organizationId = "organizationId"
+            val cipherViews = listOf(mockk<CipherView>())
+            val collectionIds = listOf("collectionId-1")
+            val error = BitwardenException.Decrypt(mockk<DecryptException>("mockException"))
+
+            coEvery {
+                ciphersClient.prepareCiphersForBulkShare(
+                    organizationId = organizationId,
+                    ciphers = cipherViews,
+                    collectionIds = collectionIds,
+                )
+            } throws error
+
+            val result = vaultSdkSource.bulkMoveToOrganization(
+                userId = userId,
+                organizationId = organizationId,
+                cipherViews = cipherViews,
+                collectionIds = collectionIds,
+            )
+
+            assertEquals(error.asFailure(), result)
+        }
+
+    @Test
     fun `validatePassword should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val password = "password"

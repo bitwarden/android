@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.di
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
@@ -71,6 +72,7 @@ object AuthRepositoryModule {
         logsManager: LogsManager,
         userStateManager: UserStateManager,
         kdfManager: KdfManager,
+        toastManager: ToastManager,
     ): AuthRepository = AuthRepositoryImpl(
         clock = clock,
         accountsService = accountsService,
@@ -97,6 +99,7 @@ object AuthRepositoryModule {
         logsManager = logsManager,
         userStateManager = userStateManager,
         kdfManager = kdfManager,
+        toastManager = toastManager,
     )
 
     @Provides

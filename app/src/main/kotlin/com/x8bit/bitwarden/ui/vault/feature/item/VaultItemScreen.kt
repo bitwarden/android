@@ -134,6 +134,9 @@ fun VaultItemScreen(
         onConfirmRestoreAction = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
         },
+        onUpgradeToPremiumClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick) }
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -213,6 +216,24 @@ fun VaultItemScreen(
                                         state.canAssignToCollections
                                 },
                             OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.archive_verb),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(VaultItemAction.Common.ArchiveClick) }
+                                },
+                            )
+                                .takeIf { state.displayArchiveButton },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.unarchive),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.UnarchiveClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeIf { state.displayUnarchiveButton },
+                            OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.delete),
                                 onClick = remember(viewModel) {
                                     {
@@ -280,8 +301,21 @@ private fun VaultItemDialogs(
     onConfirmDeleteClick: () -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialog) {
+        is VaultItemState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
             title = null,
             message = dialog.message(),

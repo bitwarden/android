@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
@@ -8,6 +9,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -42,10 +44,13 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -93,6 +98,7 @@ private const val BROWSER_AUTOFILL_DIALOG_DELAY: Long = 550L
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val organizationEventManager: OrganizationEventManager,
     private val clock: Clock,
@@ -126,6 +132,7 @@ class VaultViewModel @Inject constructor(
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPremium = userState.activeAccount.isPremium,
+            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
@@ -137,6 +144,9 @@ class VaultViewModel @Inject constructor(
             restrictItemTypesPolicyOrgIds = emptyList(),
             cipherDecryptionFailureIds = persistentListOf(),
             hasShownDecryptionFailureAlert = false,
+            isIntroducingArchiveActionCardDismissed = settingsRepository
+                .getIntroducingArchiveActionCardDismissedFlow()
+                .value,
         )
     },
 ) {
@@ -190,6 +200,7 @@ class VaultViewModel @Inject constructor(
                     delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
                 },
             snackbarRelayManager.getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_ARCHIVED,
                 SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_DELETED_SOFT,
@@ -197,6 +208,8 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
+                SnackbarRelay.LEFT_ORGANIZATION,
+                SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
             ),
         )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
@@ -206,6 +219,11 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .flightRecorderDataFlow
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .getIntroducingArchiveActionCardDismissedFlow()
+            .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -218,6 +236,11 @@ class VaultViewModel @Inject constructor(
 
         featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
             .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { VaultAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -256,6 +279,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
+            is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
             is VaultAction.TryAgainClick -> handleTryAgainClick()
@@ -293,6 +317,10 @@ class VaultViewModel @Inject constructor(
             VaultAction.DismissThirdPartyAutofillDialogClick -> {
                 handleDismissThirdPartyAutofillDialogClick()
             }
+
+            VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
+            is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
+            is VaultAction.ActionCardClick -> handleActionCardClick(action)
         }
     }
 
@@ -333,6 +361,30 @@ class VaultViewModel @Inject constructor(
     private fun handleDismissThirdPartyAutofillDialogClick() {
         browserAutofillDialogManager.delayDialog()
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+        sendEvent(VaultEvent.NavigateToUrl(url = url))
+    }
+
+    private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
+        when (action.actionCard) {
+            VaultState.ActionCardState.IntroducingArchive -> {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
+    }
+
+    private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
+        when (action.actionCard) {
+            VaultState.ActionCardState.IntroducingArchive -> {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+                sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
+            }
+        }
     }
 
     private fun handleSelectAddItemType() {
@@ -529,6 +581,21 @@ class VaultViewModel @Inject constructor(
         )
     }
 
+    private fun handleArchiveClick() {
+        val archivedItemsCount = (state.viewState as? VaultState.ViewState.Content)
+            ?.archivedItemsCount
+            ?: 0
+        if (state.isPremium || archivedItemsCount > 0) {
+            // We still navigate even if the user does not have premium, since they have previously
+            // archived ciphers to view.
+            sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
+        } else {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+            }
+        }
+    }
+
     private fun handleTrashClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
     }
@@ -614,6 +681,14 @@ class VaultViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.ViewClick -> {
                 handleViewClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
+                handleArchiveClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
             }
         }
     }
@@ -746,6 +821,56 @@ class VaultViewModel @Inject constructor(
         )
     }
 
+    private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
+        if (!state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+            }
+            return
+        }
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Loading(
+                    message = BitwardenString.archiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultAction.Internal.ArchiveCipherReceive(
+                        result = vaultRepository.archiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick(action: ListingItemOverflowAction.VaultAction.UnarchiveClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepository.unarchiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun showCipherDecryptionErrorItemClick(itemId: String) {
         mutableStateFlow.update {
             it.copy(
@@ -808,6 +933,16 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
+
+            is VaultAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
+
+            is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
+            is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
+            is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
+                handleIntroducingArchiveActionCardDismissedFlowReceive(action)
+            }
         }
     }
 
@@ -857,6 +992,62 @@ class VaultViewModel @Inject constructor(
             } else {
                 credentialExchangeRegistryManager.unregister()
             }
+        }
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: VaultAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+    }
+
+    private fun handleArchiveCipherReceive(action: VaultAction.Internal.ArchiveCipherReceive) {
+        when (val result = action.result) {
+            is ArchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            ArchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()))
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(action: VaultAction.Internal.UnarchiveCipherReceive) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()))
+            }
+        }
+    }
+
+    private fun handleIntroducingArchiveActionCardDismissedFlowReceive(
+        action: VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
         }
     }
 
@@ -1001,6 +1192,7 @@ class VaultViewModel @Inject constructor(
             errorMessage = BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+            isArchiveEnabled = state.isArchiveEnabled,
         )
     }
 
@@ -1064,6 +1256,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = state.isArchiveEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1108,6 +1301,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = state.isArchiveEnabled,
                 ),
             )
         }
@@ -1259,6 +1453,7 @@ data class VaultState(
     val flightRecorderSnackBar: BitwardenSnackbarData?,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
+    val isArchiveEnabled: Boolean,
     val isPremium: Boolean,
     val hasMasterPassword: Boolean,
     private val isPullToRefreshSettingEnabled: Boolean,
@@ -1267,7 +1462,18 @@ data class VaultState(
     val cipherDecryptionFailureIds: ImmutableList<String>,
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
+    val isIntroducingArchiveActionCardDismissed: Boolean,
 ) : Parcelable {
+
+    /**
+     * Indicates what action card to display.
+     */
+    val actionCard: ActionCardState?
+        get() = (viewState as? ViewState.Content)?.let {
+            ActionCardState.IntroducingArchive.takeIf {
+                isPremium && !isIntroducingArchiveActionCardDismissed && isArchiveEnabled
+            }
+        }
 
     /**
      * The [Color] of the avatar.
@@ -1346,6 +1552,11 @@ data class VaultState(
          * @property noFolderItems The list of non-folders to be displayed.
          * @property collectionItems The list of collections to be displayed.
          * @property trashItemsCount The number of items present in the trash.
+         * @property archivedItemsCount The number of items present in archive.
+         * @property archiveEnabled Is the archive feature enabled.
+         * @property archiveSubText The subtext to be displayed on the archive item.
+         * @property archiveEndIcon The end icon to be displayed on the archive item.
+         * @property showCardGroup Is the card group available for display.
          */
         @Parcelize
         data class Content(
@@ -1361,6 +1572,10 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
+            val archivedItemsCount: Int?,
+            val archiveEnabled: Boolean,
+            val archiveSubText: Text?,
+            @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
@@ -1572,9 +1787,31 @@ data class VaultState(
     }
 
     /**
+     * Represents an action card to be displayed.
+     */
+    sealed class ActionCardState {
+        /**
+         * Indicates that the archive feature is ready for use.
+         */
+        data object IntroducingArchive : ActionCardState()
+    }
+
+    /**
      * Information about a dialog to display.
      */
     sealed class DialogState : Parcelable {
+
+        /**
+         * Displays a dialog to the user indicating that archiving requires a premium account.
+         */
+        @Parcelize
+        data object ArchiveRequiresPremium : DialogState()
+
+        /**
+         * Displays a dialog with a loading indicator.
+         */
+        @Parcelize
+        data class Loading(val message: Text) : DialogState()
 
         /**
          * Represents a dialog indication and ongoing manual sync.
@@ -1897,6 +2134,11 @@ sealed class VaultAction {
     data object SshKeyGroupClick : VaultAction()
 
     /**
+     * User clicked the archive button.
+     */
+    data object ArchiveClick : VaultAction()
+
+    /**
      * User clicked the trash button.
      */
     data object TrashClick : VaultAction()
@@ -1955,6 +2197,25 @@ sealed class VaultAction {
      * User has clicked button to bring up the add item selection dialog.
      */
     data object SelectAddItemType : VaultAction()
+
+    /**
+     * User clicked the upgrade to premium button.
+     */
+    data object UpgradeToPremiumClick : VaultAction()
+
+    /**
+     * User clicked the dismiss button on an action card.
+     */
+    data class DismissActionCardClick(
+        val actionCard: VaultState.ActionCardState,
+    ) : VaultAction()
+
+    /**
+     * User clicked the primary button on an action card.
+     */
+    data class ActionCardClick(
+        val actionCard: VaultState.ActionCardState,
+    ) : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.
@@ -2058,6 +2319,34 @@ sealed class VaultAction {
         data class CredentialExchangeProtocolExportFlagUpdateReceive(
             val isCredentialExchangeProtocolExportEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the archive action card dismissed state has been updated.
+         */
+        data class IntroducingArchiveActionCardDismissedFlowReceive(
+            val isDismissed: Boolean,
+        ) : Internal()
     }
 }
 
@@ -2073,6 +2362,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorMessage: Text,
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
+    isArchiveEnabled: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2084,6 +2374,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                    isArchiveEnabled = isArchiveEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

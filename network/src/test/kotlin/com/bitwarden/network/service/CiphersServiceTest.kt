@@ -6,7 +6,6 @@ import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.BulkShareCiphersJsonRequest
-import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
@@ -21,13 +20,13 @@ import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
-import com.bitwarden.network.model.createMockCipherMiniResponse
+import com.bitwarden.network.model.createMockCipherMiniResponseJson
+import com.bitwarden.network.model.toCipherWithIdJsonRequest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -63,6 +62,22 @@ class CiphersServiceTest : BaseServiceTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class)
+    }
+
+    @Test
+    fun `archiveCipher should execute the archiveCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.archiveCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `unarchiveCipher should execute the unarchiveCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.unarchiveCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
     }
 
     @Test
@@ -110,7 +125,9 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `createCipherInOrganization should return Invalid with correct data`() =
         runTest {
-            server.enqueue(MockResponse().setResponseCode(400).setBody(CREATE_CIPHER_INVALID_JSON))
+            server.enqueue(
+                response = MockResponse().setResponseCode(400).setBody(CREATE_CIPHER_INVALID_JSON),
+            )
             val result = ciphersService.createCipherInOrganization(
                 body = CreateCipherInOrganizationJsonRequest(
                     cipher = createMockCipherJsonRequest(number = 1),
@@ -143,7 +160,9 @@ class CiphersServiceTest : BaseServiceTest() {
     fun `createAttachment with invalid response should return an Invalid with the correct data`() =
         runTest {
             server.enqueue(
-                MockResponse().setResponseCode(400).setBody(CREATE_ATTACHMENT_INVALID_JSON),
+                MockResponse()
+                    .setResponseCode(400)
+                    .setBody(CREATE_ATTACHMENT_INVALID_JSON),
             )
             val result = ciphersService.createAttachment(
                 cipherId = "mockId-1",
@@ -196,7 +215,9 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `updateCipher with success response should return a Success with the correct cipher`() =
         runTest {
-            server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
+            server.enqueue(
+                response = MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON),
+            )
             val result = ciphersService.updateCipher(
                 cipherId = "cipher-id-1",
                 body = createMockCipherJsonRequest(number = 1),
@@ -212,7 +233,9 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `updateCipher with an invalid response should return an Invalid with the correct data`() =
         runTest {
-            server.enqueue(MockResponse().setResponseCode(400).setBody(UPDATE_CIPHER_INVALID_JSON))
+            server.enqueue(
+                response = MockResponse().setResponseCode(400).setBody(UPDATE_CIPHER_INVALID_JSON),
+            )
             val result = ciphersService.updateCipher(
                 cipherId = "cipher-id-1",
                 body = createMockCipherJsonRequest(number = 1),
@@ -295,27 +318,26 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `bulkShareCiphers with success response should return Success`() = runTest {
-        val expectedCiphers = listOf(
-            createMockCipherMiniResponse(number = 1),
-            createMockCipherMiniResponse(number = 2),
-        )
+        val expectedResponse = createMockCipherMiniResponseJson(1, 2)
         server.enqueue(
             MockResponse()
                 .setResponseCode(200)
-                .setBody(json.encodeToString<List<CipherMiniResponseJson>>(expectedCiphers)),
+                .setBody(json.encodeToString(expectedResponse)),
         )
 
         val result = ciphersService.bulkShareCiphers(
             body = BulkShareCiphersJsonRequest(
                 ciphers = listOf(
-                    createMockCipherJsonRequest(number = 1),
-                    createMockCipherJsonRequest(number = 2),
+                    createMockCipherJsonRequest(number = 1)
+                        .toCipherWithIdJsonRequest(id = "mockId-1"),
+                    createMockCipherJsonRequest(number = 2)
+                        .toCipherWithIdJsonRequest(id = "mockId-2"),
                 ),
                 collectionIds = listOf("mockId-1"),
             ),
         )
 
-        assertEquals(expectedCiphers, result.getOrThrow())
+        assertEquals(expectedResponse, result.getOrThrow())
     }
 
     @Test
@@ -328,7 +350,11 @@ class CiphersServiceTest : BaseServiceTest() {
 
         val result = ciphersService.bulkShareCiphers(
             body = BulkShareCiphersJsonRequest(
-                ciphers = listOf(createMockCipherJsonRequest(number = 1)),
+                ciphers = listOf(
+                    createMockCipherJsonRequest(number = 1).toCipherWithIdJsonRequest(
+                        id = "mockId-1",
+                    ),
+                ),
                 collectionIds = listOf("mockId-1"),
             ),
         )

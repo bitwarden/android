@@ -58,6 +58,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Sends.Files -> this
         SearchTypeData.Sends.Texts -> this
         SearchTypeData.Vault.All -> this
+        SearchTypeData.Vault.Archive -> this
         SearchTypeData.Vault.Cards -> this
         SearchTypeData.Vault.Identities -> this
         SearchTypeData.Vault.Logins -> this
@@ -107,25 +108,46 @@ private fun CipherListView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> deletedDate == null
-        is SearchTypeData.Vault.Cards -> type is CipherListViewType.Card && deletedDate == null
+        SearchTypeData.Vault.All -> deletedDate == null && archivedDate == null
+        SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
+        is SearchTypeData.Vault.Cards -> {
+            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Collection -> {
-            searchTypeData.collectionId in this.collectionIds && deletedDate == null
+            searchTypeData.collectionId in this.collectionIds &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
-        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
-        SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
+        is SearchTypeData.Vault.Folder -> {
+            folderId == searchTypeData.folderId && deletedDate == null && archivedDate == null
+        }
+
+        SearchTypeData.Vault.NoFolder -> {
+            folderId == null && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Identities -> {
-            type is CipherListViewType.Identity && deletedDate == null
+            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
         }
 
-        is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && deletedDate == null
+        is SearchTypeData.Vault.Logins -> {
+            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.SecureNotes -> {
-            type is CipherListViewType.SecureNote && deletedDate == null
+            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
         }
 
-        is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
+        is SearchTypeData.Vault.SshKeys -> {
+            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.VerificationCodes -> {
+            login?.totp != null && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
@@ -164,6 +186,7 @@ fun List<CipherListView>.toViewState(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -175,6 +198,7 @@ fun List<CipherListView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
+                    isArchiveEnabled = isArchiveEnabled,
                 )
                     .sortAlphabetically(),
             )
@@ -187,12 +211,14 @@ fun List<CipherListView>.toViewState(
         }
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -201,15 +227,18 @@ private fun List<CipherListView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isPremiumUser = isPremiumUser,
+            isArchiveEnabled = isArchiveEnabled,
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -225,6 +254,7 @@ private fun CipherListView.toDisplayItem(
         overflowOptions = toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
+            isArchiveEnabled = isArchiveEnabled,
         ),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,

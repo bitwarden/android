@@ -3,13 +3,19 @@ package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,8 +50,7 @@ import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.handler.rememberMig
  */
 @Composable
 fun MigrateToMyItemsScreen(
-    onNavigateToVault: () -> Unit,
-    onNavigateToLeaveOrganization: () -> Unit,
+    onNavigateToLeaveOrganization: (organizationId: String, organizationName: String) -> Unit,
     viewModel: MigrateToMyItemsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -54,8 +59,10 @@ fun MigrateToMyItemsScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            MigrateToMyItemsEvent.NavigateToVault -> onNavigateToVault()
-            MigrateToMyItemsEvent.NavigateToLeaveOrganization -> onNavigateToLeaveOrganization()
+            is MigrateToMyItemsEvent.NavigateToLeaveOrganization -> {
+                onNavigateToLeaveOrganization(event.organizationId, event.organizationName)
+            }
+
             is MigrateToMyItemsEvent.LaunchUri -> intentManager.launchUri(event.uri.toUri())
         }
     }
@@ -63,9 +70,15 @@ fun MigrateToMyItemsScreen(
     MigrateToMyItemsDialogs(
         dialog = state.dialog,
         onDismissRequest = handlers.onDismissDialog,
+        onDismissNoNetworkRequest = handlers.onDismissNoNetworkDialog,
     )
 
-    BitwardenScaffold {
+    BitwardenScaffold(
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .union(WindowInsets.displayCutout)
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+    ) {
         MigrateToMyItemsContent(
             state = state,
             onAcceptClick = handlers.onAcceptClick,
@@ -82,18 +95,29 @@ fun MigrateToMyItemsScreen(
 private fun MigrateToMyItemsDialogs(
     dialog: MigrateToMyItemsState.DialogState?,
     onDismissRequest: () -> Unit,
+    onDismissNoNetworkRequest: () -> Unit,
 ) {
     when (dialog) {
         is MigrateToMyItemsState.DialogState.Error -> {
             BitwardenBasicDialog(
                 title = dialog.title(),
                 message = dialog.message(),
+                throwable = dialog.throwable,
                 onDismissRequest = onDismissRequest,
             )
         }
 
         is MigrateToMyItemsState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialog.message())
+        }
+
+        is MigrateToMyItemsState.DialogState.NoNetwork -> {
+            BitwardenBasicDialog(
+                title = dialog.title(),
+                message = dialog.message(),
+                throwable = dialog.throwable,
+                onDismissRequest = onDismissNoNetworkRequest,
+            )
         }
 
         null -> Unit

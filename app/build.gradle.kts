@@ -15,7 +15,6 @@ plugins {
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
@@ -260,6 +259,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
+    implementation(libs.bumptech.glide.okhttp)
+    ksp(libs.bumptech.glide.compiler)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)
@@ -297,18 +298,6 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
-}
-
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        maxHeapSize = "2g"
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
-            // Explicitly setting the user Country and Language because tests assume en-US
-            "-Duser.country=US" +
-            "-Duser.language=en"
-    }
 }
 
 afterEvaluate {

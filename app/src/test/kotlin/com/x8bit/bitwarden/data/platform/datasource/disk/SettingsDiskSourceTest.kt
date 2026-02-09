@@ -138,6 +138,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isPullToRefreshEnabled = true,
         )
+        settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+            userId = userId,
+            isDismissed = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -168,6 +172,9 @@ class SettingsDiskSourceTest {
         assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = userId) ?: false)
         assertTrue(settingsDiskSource.getShowBrowserAutofillSettingBadge(userId = userId) ?: false)
         assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = userId) ?: false)
+        assertTrue(
+            settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = userId) ?: false,
+        )
 
         // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
@@ -777,6 +784,44 @@ class SettingsDiskSourceTest {
                 )
                 assertEquals(true, awaitItem())
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIntroducingArchiveActionCardDismissed when values are present should pull from SharedPreferences`() {
+        val introducingArchiveBaseKey = "bwPreferencesStorage:introducingArchiveActionCardDismissed"
+        val mockUserId = "mockUserId"
+        val introducingArchiveKey = "${introducingArchiveBaseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(introducingArchiveKey, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = mockUserId),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIntroducingArchiveActionCardDismissedFlow should react to changes in storeIntroducingArchiveActionCardDismissed`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getIntroducingArchiveActionCardDismissedFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(
+                        settingsDiskSource
+                            .getIntroducingArchiveActionCardDismissed(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                        userId = mockUserId,
+                        isDismissed = true,
+                    )
+                    assertEquals(true, awaitItem())
+                }
         }
 
     @Test
