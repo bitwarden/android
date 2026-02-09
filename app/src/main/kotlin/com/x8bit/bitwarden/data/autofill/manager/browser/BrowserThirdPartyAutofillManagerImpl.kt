@@ -27,6 +27,8 @@ class BrowserThirdPartyAutofillManagerImpl(
         get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
     override val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
         get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_BETA)
+    override val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
+        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.VIVALDI_STABLE)
 
     private fun getThirdPartyAutoFillStatusForChannel(
         releaseChannel: BrowserPackage,

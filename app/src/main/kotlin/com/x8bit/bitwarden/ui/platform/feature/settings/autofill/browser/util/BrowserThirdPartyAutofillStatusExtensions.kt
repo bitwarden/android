@@ -17,4 +17,7 @@ fun BrowserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions(): Immutabl
             .takeIf { this.chromeStableStatusData.isAvailable },
         BrowserAutofillSettingsOption.ChromeBeta(chromeBetaChannelStatusData.isThirdPartyEnabled)
             .takeIf { this.chromeBetaChannelStatusData.isAvailable },
+        BrowserAutofillSettingsOption
+            .VivaldiStable(vivaldiStableChannelStatusData.isThirdPartyEnabled)
+            .takeIf { this.vivaldiStableChannelStatusData.isAvailable },
     )
