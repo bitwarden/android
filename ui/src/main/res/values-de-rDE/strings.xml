@@ -1197,4 +1197,5 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Starte dein Premium-Abonnement neu, um den Zugriff auf dein Archiv wiederherzustellen. Wenn du die Details für einen archivierten Eintrag vor dem Neustart bearbeitest, wird er wieder zurück in deinen Tresor verschoben.</string>
     <string name="restart_premium">Premium neu starten</string>
     <string name="items_transferred">Einträge wurden übertragen</string>
+    <string name="updated_master_password">Master-Passwort aktualisiert</string>
 </resources>

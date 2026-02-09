@@ -1198,4 +1198,5 @@ Wilt u naar dit account wisselen?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Herstart je Premium-abonnement om toegang tot je archief te krijgen. Als je de details wijzigt voor een gearchiveerd item voor het opnieuw opstarten, zal het terug naar je kluis worden verplaatst.</string>
     <string name="restart_premium">Premium herstarten</string>
     <string name="items_transferred">Items overgedragen</string>
+    <string name="updated_master_password">Hoofdwachtwoord bijgewerkt</string>
 </resources>

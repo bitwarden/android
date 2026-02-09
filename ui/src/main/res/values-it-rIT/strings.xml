@@ -1184,17 +1184,18 @@ Vuoi passare a questo account?</string>
     <string name="archiving">Archiviazione</string>
     <string name="unarchiving">Rimozione dall\'archivio</string>
     <string name="item_moved_to_archived">Elemento spostato nell\'archivio</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="item_moved_to_vault">Elemento spostato nella cassaforte</string>
     <string name="archive_unavailable">Archivio non disponibile</string>
     <string name="archiving_items_is_a_premium_feature">L\'archiviazione è una funzionalità Premium. Il tuo piano attuale non include questa funzionalità.</string>
     <string name="upgrade_to_premium">Passa a Premium</string>
     <string name="this_item_is_archived">Questo elemento è archiviato.</string>
-    <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
+    <string name="introducing_archive">Introduzione all\'archivio</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Conserva al sicuro, ma non visualizzati, gli elementi che non ti servono di frequente.</string>
+    <string name="go_to_archive">Vai all\'archivio</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Questo elemento è archiviato. Salvare le modifiche lo ripristinerà nella tua cassaforte.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
+    <string name="your_premium_subscription_ended">Il tuo abbonamento Premium è terminato</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Per recuperare l\'accesso al tuo archivio, riavvia il tuo abbonamento Premium. Se modifichi i dettagli di un elemento archiviato prima del riavvio, sarà spostato nella tua cassaforte.</string>
+    <string name="restart_premium">Riavvia Premium</string>
     <string name="items_transferred">Elementi trasferiti</string>
+    <string name="updated_master_password">Password principale aggiornata</string>
 </resources>

@@ -1199,4 +1199,5 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin detallarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
     <string name="items_transferred">Items transferred</string>
+    <string name="updated_master_password">Güncəllənmiş ana parol</string>
 </resources>

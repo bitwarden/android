@@ -1214,4 +1214,5 @@ Chcete prepnúť na tento účet?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ak chcete obnoviť prístup k svojmu archívu, reštartujte predplatné Prémium. Ak pred reštartom upravíte podrobnosti archivovanej položky, bude presunutá späť do trezoru.</string>
     <string name="restart_premium">Reštartovať Prémium</string>
     <string name="items_transferred">Items transferred</string>
+    <string name="updated_master_password">Hlavné heslo bolo aktualizované</string>
 </resources>
