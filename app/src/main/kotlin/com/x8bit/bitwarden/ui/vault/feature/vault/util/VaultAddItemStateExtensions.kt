@@ -28,7 +28,10 @@ import java.time.Instant
 /**
  * Transforms [VaultAddEditState.ViewState.Content] into [CipherView].
  */
-fun VaultAddEditState.ViewState.Content.toCipherView(clock: Clock): CipherView =
+fun VaultAddEditState.ViewState.Content.toCipherView(
+    clock: Clock,
+    isPremiumUser: Boolean,
+): CipherView =
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = common.originalCipher?.id,
@@ -44,7 +47,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(clock: Clock): CipherView =
         creationDate = common.originalCipher?.creationDate ?: clock.instant(),
         deletedDate = common.originalCipher?.deletedDate,
         revisionDate = common.originalCipher?.revisionDate ?: clock.instant(),
-        archivedDate = common.originalCipher?.archivedDate,
+        archivedDate = common.originalCipher?.archivedDate?.takeIf { isPremiumUser },
         attachmentDecryptionFailures = common.originalCipher?.attachmentDecryptionFailures,
 
         // Type specific section

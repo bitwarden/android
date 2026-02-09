@@ -12,7 +12,7 @@ minSdk = "29"
 minSdkBwa = "28"
 
 # Dependency Versions
-androidGradlePlugin = "8.13.2"
+androidGradlePlugin = "9.0.0"
 androidxActivity = "1.12.3"
 androidxAppCompat = "1.7.1"
 androdixAutofill = "1.3.0"
@@ -41,7 +41,7 @@ googleProtoBufJava = "4.33.5"
 googleProtoBufPlugin = "0.9.6"
 googleServices = "4.4.4"
 googleReview = "2.0.2"
-hilt = "2.58"
+hilt = "2.59.1"
 junit = "6.0.2"
 jvmTarget = "21"
 kotlin = "2.3.0"
@@ -147,7 +147,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

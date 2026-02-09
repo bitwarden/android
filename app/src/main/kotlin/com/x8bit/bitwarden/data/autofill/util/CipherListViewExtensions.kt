@@ -7,16 +7,19 @@ import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.LoginListView
 
 /**
- * Returns true when the cipher is not deleted and contains at least one FIDO 2 credential.
+ * Returns true when the cipher is not archived, not deleted and contains at least one FIDO 2
+ * credential.
  */
 val CipherListView.isActiveWithFido2Credentials: Boolean
-    get() = deletedDate == null && login?.hasFido2 ?: false
+    get() = archivedDate == null && deletedDate == null && login?.hasFido2 ?: false
 
 /**
- * Returns true when the cipher type is not deleted and contains a copyable password.
+ * Returns true when the cipher type is not archived, not deleted and contains a copyable password.
  */
 val CipherListView.isActiveWithCopyablePassword: Boolean
-    get() = deletedDate == null && copyableFields.contains(CopyableCipherFields.LOGIN_PASSWORD)
+    get() = archivedDate == null &&
+        deletedDate == null &&
+        copyableFields.contains(CopyableCipherFields.LOGIN_PASSWORD)
 
 /**
  * Returns the [LoginListView] if the cipher is of type [CipherListViewType.Login], otherwise null.
