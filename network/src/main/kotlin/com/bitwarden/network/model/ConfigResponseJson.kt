@@ -13,6 +13,7 @@ import kotlinx.serialization.json.JsonPrimitive
  * @property server The server information (nullable).
  * @property environment The environment information containing URLs (vault, api, identity, etc.).
  * @property featureStates A map containing various feature states.
+ * @property communication The communication configuration for server bootstrap (nullable).
  */
 @Serializable
 data class ConfigResponseJson(
@@ -33,6 +34,9 @@ data class ConfigResponseJson(
 
     @SerialName("featureStates")
     val featureStates: Map<String, JsonPrimitive>?,
+
+    @SerialName("communication")
+    val communication: CommunicationJson?,
 ) {
     /**
      * Represents a server in the configuration response.
@@ -79,4 +83,38 @@ data class ConfigResponseJson(
         @SerialName("sso")
         val ssoUrl: String?,
     )
+
+    /**
+     * Represents the communication configuration in the configuration response.
+     *
+     * @param bootstrap The bootstrap configuration for server communication (nullable).
+     */
+    @Serializable
+    data class CommunicationJson(
+        @SerialName("bootstrap")
+        val bootstrap: BootstrapJson,
+    ) {
+        /**
+         * Represents the bootstrap configuration for SSO cookie vendor authentication.
+         *
+         * @param type The type of bootstrap configuration (e.g., "ssoCookieVendor").
+         * @param idpLoginUrl The URL of the identity provider login page.
+         * @param cookieName The name of the authentication cookie.
+         * @param cookieDomain The domain for which the cookie is valid.
+         */
+        @Serializable
+        data class BootstrapJson(
+            @SerialName("type")
+            val type: String,
+
+            @SerialName("idpLoginUrl")
+            val idpLoginUrl: String?,
+
+            @SerialName("cookieName")
+            val cookieName: String?,
+
+            @SerialName("cookieDomain")
+            val cookieDomain: String?,
+        )
+    }
 }
