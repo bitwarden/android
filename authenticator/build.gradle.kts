@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
