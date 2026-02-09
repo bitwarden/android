@@ -35,11 +35,15 @@ import kotlinx.collections.immutable.toImmutableList
  * (only relevant for [SendAuthType.PASSWORD]).
  * @param onEmailValueChange Callback invoked when the email list changes
  * (only relevant for [SendAuthType.EMAIL]).
+ * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
+ * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param password The current password value (only relevant for [SendAuthType.PASSWORD]).
  * @param emails The list of emails (only relevant for [SendAuthType.EMAIL]).
  * @param isEnabled Whether the chooser is enabled.
+ * @param sendRestrictionPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
+@Suppress("LongMethod")
 @Composable
 fun AddEditSendAuthTypeChooser(
     onAuthTypeSelect: (SendAuthType) -> Unit,
@@ -47,11 +51,15 @@ fun AddEditSendAuthTypeChooser(
     onEmailValueChange: (String, Int) -> Unit,
     onAddNewEmailClick: () -> Unit,
     onRemoveEmailClick: (Int) -> Unit,
+    onOpenPasswordGeneratorClick: () -> Unit,
+    onPasswordCopyClick: (String) -> Unit,
+    onShowDialog: () -> Unit,
     password: String,
     emails: List<String>,
     isEnabled: Boolean,
     isPremium: Boolean,
     hasPassword: Boolean,
+    sendRestrictionPolicy: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val options = SendAuthType.entries
@@ -85,7 +93,7 @@ fun AddEditSendAuthTypeChooser(
 
         when (selectedOption) {
             SendAuthType.EMAIL -> {
-                specificPeopleEmailContent(
+                SpecificPeopleEmailContent(
                     emails = emails,
                     onEmailValueChange = onEmailValueChange,
                     onAddNewEmailClick = onAddNewEmailClick,
@@ -99,8 +107,32 @@ fun AddEditSendAuthTypeChooser(
                     value = password,
                     onValueChange = onPasswordChange,
                     cardStyle = CardStyle.Bottom,
+                    passwordFieldTestTag = "SendPasswordEntry",
+                    readOnly = sendRestrictionPolicy,
                     modifier = Modifier.fillMaxWidth(),
-                )
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (password.isEmpty()) {
+                                onOpenPasswordGeneratorClick()
+                            } else {
+                                onShowDialog()
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = password.isNotEmpty(),
+                        onClick = {
+                            onPasswordCopyClick(password)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
             }
 
             else -> Unit
@@ -109,7 +141,7 @@ fun AddEditSendAuthTypeChooser(
 }
 
 @Composable
-private fun specificPeopleEmailContent(
+private fun SpecificPeopleEmailContent(
     emails: List<String>,
     onEmailValueChange: (String, Int) -> Unit,
     onAddNewEmailClick: () -> Unit,

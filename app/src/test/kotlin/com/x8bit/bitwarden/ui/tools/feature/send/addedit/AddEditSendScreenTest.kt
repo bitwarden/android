@@ -1028,7 +1028,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 AddEditSendAction.AuthTypeSelect(
-                    com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType.EMAIL,
+                    SendAuthType.EMAIL,
                 ),
             )
         }
@@ -1404,6 +1404,173 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     "their email with a code to view this Send",
             )
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking generate password with empty password should send OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+        }
+    }
+
+    @Test
+    fun `clicking generate password in auth section with existing password should show dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "Are you sure you want to overwrite the current password?",
+                substring = true,
+            )
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking Yes on password override dialog should send OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        // Open dialog
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        // Click Yes
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+        }
+    }
+
+    @Test
+    fun `clicking No on password override dialog should dismiss dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        // Open dialog
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule.onNode(isDialog()).assertExists()
+
+        // Click No
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `clicking copy password in auth section should send PasswordCopyClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "test-password",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Copy password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.PasswordCopyClick("test-password"))
+        }
+    }
+
+    @Test
+    fun `copy password button in auth section should be disabled when password is empty`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        authType = SendAuthType.PASSWORD,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Copy password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .assertIsNotEnabled()
     }
 
     //endregion Authentication UI Tests
