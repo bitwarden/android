@@ -4,9 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Before
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
 
 class CookieUtilsTest {
@@ -14,7 +14,7 @@ class CookieUtilsTest {
     private lateinit var mockUri: Uri
     private lateinit var mockIntent: Intent
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockUri = mockk(relaxed = true) {
             every { scheme } returns "bitwarden"
