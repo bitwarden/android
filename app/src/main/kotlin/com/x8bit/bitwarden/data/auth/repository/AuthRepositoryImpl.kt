@@ -95,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -268,6 +269,10 @@ class AuthRepositoryImpl(
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
     override val ssoCallbackResultFlow: Flow<SsoCallbackResult> =
         mutableSsoCallbackResultFlow.asSharedFlow()
+
+    private val mutableCookieCallbackResultFlow = bufferedMutableSharedFlow<CookieCallbackResult>()
+    override val cookieCallbackResultFlow: Flow<CookieCallbackResult> =
+        mutableCookieCallbackResultFlow.asSharedFlow()
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
@@ -1247,6 +1252,10 @@ class AuthRepositoryImpl(
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
         mutableSsoCallbackResultFlow.tryEmit(result)
+    }
+
+    override fun setCookieCallbackResult(result: CookieCallbackResult) {
+        mutableCookieCallbackResultFlow.tryEmit(result)
     }
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
