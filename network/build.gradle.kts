@@ -62,6 +62,7 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
+    testImplementation(platform(libs.square.okhttp.bom))
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 
@@ -71,9 +72,10 @@ dependencies {
     testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.serialization)
+    testFixturesImplementation(platform(libs.square.okhttp.bom))
     testFixturesImplementation(libs.square.okhttp)
+    testFixturesImplementation(libs.square.okhttp.mockwebserver)
     testFixturesImplementation(platform(libs.square.retrofit.bom))
     testFixturesImplementation(libs.square.retrofit)
     testFixturesImplementation(libs.square.retrofit.kotlinx.serialization)
-    testFixturesImplementation(libs.square.okhttp.mockwebserver)
 }
