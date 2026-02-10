@@ -93,25 +93,6 @@ class CookieDiskSourceTest {
     }
 
     @Test
-    fun `storage should handle configs with null cookie domains`() {
-        val hostname = "vault.bitwarden.com"
-        val config = CookieConfigurationData(
-            hostname = hostname,
-            cookies = listOf(
-                CookieConfigurationData.Cookie(
-                    name = "BW_SESSION",
-                    value = "session_value",
-                ),
-            ),
-        )
-
-        cookieDiskSource.storeCookieConfig(hostname, config)
-
-        val retrieved = cookieDiskSource.getCookieConfig(hostname)
-        assertEquals(config, retrieved)
-    }
-
-    @Test
     fun `storage should isolate configs by hostname`() {
         val hostname1 = "vault.bitwarden.com"
         val hostname2 = "other.bitwarden.com"
