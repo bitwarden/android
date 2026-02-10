@@ -1200,4 +1200,5 @@
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ако искате отново да получите достъп до архива си, трябва да подновите платения си абонамент. Ако редактирате данните за архивиран елемент преди подновяването, той ще бъде върнат в трезора.</string>
     <string name="restart_premium">Подновяване на платения абонамент</string>
     <string name="items_transferred">Елементите са прехвърлени</string>
+    <string name="updated_master_password">Главната парола е променена</string>
 </resources>

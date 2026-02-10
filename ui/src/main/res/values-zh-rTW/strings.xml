@@ -1191,4 +1191,5 @@
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">若要重新存取您的封存項目，請重新啟用進階版訂閱。若您在重新啟用前編輯封存項目的詳細資料，它將會被移回您的密碼庫。</string>
     <string name="restart_premium">重新啟用進階版</string>
     <string name="items_transferred">項目已轉移</string>
+    <string name="updated_master_password">已更新主密碼</string>
 </resources>

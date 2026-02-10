@@ -1198,4 +1198,5 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
+    <string name="updated_master_password">Mot de passe principal mis à jour</string>
 </resources>

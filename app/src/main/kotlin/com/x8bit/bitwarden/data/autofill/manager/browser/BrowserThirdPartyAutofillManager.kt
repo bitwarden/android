@@ -22,4 +22,9 @@ interface BrowserThirdPartyAutofillManager {
      * The data representing the status of the beta Chrome version
      */
     val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
+
+    /**
+     * The data representing the status of the Vivaldi version
+     */
+    val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
 }
