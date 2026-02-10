@@ -76,6 +76,10 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -104,6 +108,10 @@ class BrowserAutofillDialogManagerTest {
             chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
                 isAvailable = true,
                 isThirdPartyEnabled = true,
+            ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
             ),
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
@@ -135,6 +143,10 @@ class BrowserAutofillDialogManagerTest {
             ),
             chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
                 isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
         )
@@ -169,6 +181,10 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -200,6 +216,10 @@ class BrowserAutofillDialogManagerTest {
             ),
             chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
                 isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
         )

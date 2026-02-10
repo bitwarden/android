@@ -33,14 +33,21 @@ private val BLOCK_LISTED_URIS: List<String> = listOf(
  * A map of package ids and the known associated id entry for their url bar.
  */
 private val URL_BARS: Map<String, String> = mapOf(
+    // Edge Browser Variants
     "com.microsoft.emmx" to "url_bar",
     "com.microsoft.emmx.beta" to "url_bar",
     "com.microsoft.emmx.canary" to "url_bar",
     "com.microsoft.emmx.dev" to "url_bar",
+    // Samsung Internet Browser Variants
     "com.sec.android.app.sbrowser" to "location_bar_edit_text",
     "com.sec.android.app.sbrowser.beta" to "location_bar_edit_text",
+    // Opera Browser Variants
     "com.opera.browser" to "url_bar",
     "com.opera.browser.beta" to "url_bar",
+    // Brave Browser Variants
+    "com.brave.browser" to "url_bar",
+    "com.brave.browser_beta" to "url_bar",
+    "com.brave.browser_nightly" to "url_bar",
 )
 
 /**

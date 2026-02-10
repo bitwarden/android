@@ -1215,4 +1215,5 @@ při opakování problémů.</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Chcete-li získat přístup k Vašemu archivu, restartujte předplatné Premium. Pokud upravíte detaily archivované položky před restartováním, bude přesunuta zpět do Vašeho trezoru.</string>
     <string name="restart_premium">Restartovat Premium</string>
     <string name="items_transferred">Převedené položky</string>
+    <string name="updated_master_password">Hlavní heslo bylo aktualizováno</string>
 </resources>

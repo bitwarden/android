@@ -24,6 +24,10 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
                 isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
         )
 
         val result = browserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions()
@@ -47,6 +51,10 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
         )
 
         val result = browserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions()
@@ -56,6 +64,7 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
                 BrowserAutofillSettingsOption.BraveStable(enabled = false),
                 BrowserAutofillSettingsOption.ChromeStable(enabled = true),
                 BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
+                BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
             ),
             result,
         )

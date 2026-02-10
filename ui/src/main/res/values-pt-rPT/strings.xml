@@ -1198,4 +1198,5 @@ Pretende mudar para esta conta?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Para recuperar o acesso ao seu arquivo, reinicie a sua subscrição Premium. Se editar os detalhes de um item arquivado antes de reiniciar, ele será movido de volta para o seu cofre.</string>
     <string name="restart_premium">Reiniciar o Premium</string>
     <string name="items_transferred">Itens transferidos</string>
+    <string name="updated_master_password">Palavra-passe mestra atualizada</string>
 </resources>

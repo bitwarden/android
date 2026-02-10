@@ -70,6 +70,7 @@ class SetupBrowserAutofillViewModelTest {
                         BrowserAutofillSettingsOption.BraveStable(enabled = true),
                         BrowserAutofillSettingsOption.ChromeStable(enabled = false),
                         BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
+                        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
                     ),
                 ),
                 awaitItem(),
@@ -85,6 +86,7 @@ class SetupBrowserAutofillViewModelTest {
                     browserAutofillSettingsOptions = persistentListOf(
                         BrowserAutofillSettingsOption.ChromeStable(enabled = false),
                         BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
+                        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
                     ),
                 ),
                 awaitItem(),
@@ -233,6 +235,10 @@ private val DEFAULT_BROWSER_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
         isAvailable = true,
         isThirdPartyEnabled = false,
     ),
+    vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+        isAvailable = true,
+        isThirdPartyEnabled = false,
+    ),
 )
 
 private val DEFAULT_STATE = SetupBrowserAutofillState(
@@ -242,5 +248,6 @@ private val DEFAULT_STATE = SetupBrowserAutofillState(
         BrowserAutofillSettingsOption.BraveStable(enabled = false),
         BrowserAutofillSettingsOption.ChromeStable(enabled = false),
         BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
+        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
     ),
 )
