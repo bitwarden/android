@@ -6,7 +6,7 @@ import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import kotlinx.serialization.json.Json
 
-private const val CONFIG_PREFIX = "elb_cookie_config_"
+private const val CONFIG_PREFIX = "elb_cookie_config"
 
 /**
  * Implementation of [CookieDiskSource] using encrypted SharedPreferences.
@@ -24,13 +24,13 @@ class CookieDiskSourceImpl(
     ) {
 
     override fun getCookieConfig(hostname: String): CookieConfigurationData? {
-        val key = "$CONFIG_PREFIX$hostname"
+        val key = CONFIG_PREFIX.appendIdentifier(hostname)
         return getEncryptedString(key)
             ?.let { json.decodeFromStringOrNull<CookieConfigurationData>(it) }
     }
 
     override fun storeCookieConfig(hostname: String, config: CookieConfigurationData) {
-        val key = "$CONFIG_PREFIX$hostname"
+        val key = CONFIG_PREFIX.appendIdentifier(hostname)
         putEncryptedString(key, json.encodeToString(config))
     }
 }
