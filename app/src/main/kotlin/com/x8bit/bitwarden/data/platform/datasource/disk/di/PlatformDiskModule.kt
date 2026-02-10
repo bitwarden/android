@@ -161,9 +161,11 @@ object PlatformDiskModule {
     @Provides
     @Singleton
     fun provideCookieDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
         @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
         json: Json,
     ): CookieDiskSource = CookieDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
         encryptedSharedPreferences = encryptedSharedPreferences,
         json = json,
     )

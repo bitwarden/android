@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.bitwarden.core.data.util.decodeFromStringOrNull
+import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import kotlinx.serialization.json.Json
 
@@ -14,20 +14,23 @@ private const val CONFIG_PREFIX = "elb_cookie_config_"
  * Simple storage layer for cookies.
  */
 class CookieDiskSourceImpl(
-    private val encryptedSharedPreferences: SharedPreferences,
+    sharedPreferences: SharedPreferences,
+    encryptedSharedPreferences: SharedPreferences,
     private val json: Json,
-) : CookieDiskSource {
+) : CookieDiskSource,
+    BaseEncryptedDiskSource(
+        sharedPreferences = sharedPreferences,
+        encryptedSharedPreferences = encryptedSharedPreferences,
+    ) {
 
     override fun getCookieConfig(hostname: String): CookieConfigurationData? {
         val key = "$CONFIG_PREFIX$hostname"
-        return encryptedSharedPreferences.getString(key, null)
+        return getEncryptedString(key)
             ?.let { json.decodeFromStringOrNull<CookieConfigurationData>(it) }
     }
 
     override fun storeCookieConfig(hostname: String, config: CookieConfigurationData) {
         val key = "$CONFIG_PREFIX$hostname"
-        encryptedSharedPreferences.edit {
-            putString(key, json.encodeToString(config))
-        }
+        putEncryptedString(key, json.encodeToString(config))
     }
 }

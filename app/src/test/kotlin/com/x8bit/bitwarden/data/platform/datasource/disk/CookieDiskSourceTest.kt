@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class CookieDiskSourceTest {
+    private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val json = CoreModule.providesJson()
 
     private val cookieDiskSource: CookieDiskSource = CookieDiskSourceImpl(
-        encryptedSharedPreferences = fakeSharedPreferences,
+        sharedPreferences = fakeSharedPreferences,
+        encryptedSharedPreferences = fakeEncryptedSharedPreferences,
         json = json,
     )
 
