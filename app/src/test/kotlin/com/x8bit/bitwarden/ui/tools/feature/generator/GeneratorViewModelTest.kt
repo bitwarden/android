@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -2364,6 +2365,30 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+            }
+        }
+
+    @Test
+    fun `WordSeparatorTextChange action with null separator falls back to empty string`() =
+        runTest {
+            val defaultNumWords = 3
+
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSPHRASE),
+                )
+
+                val action = GeneratorAction.MainType.Passphrase.WordSeparatorTextChange(null)
+                viewModel.trySendAction(action)
+                fakeGeneratorRepository.assertEqualsStoredRequest(
+                    PassphraseGeneratorRequest(
+                        numWords = defaultNumWords.toUByte(),
+                        wordSeparator = "",
+                        capitalize = false,
+                        includeNumber = false,
+                    ),
+                )
             }
         }
     //region Helper Functions

@@ -41,6 +41,8 @@ class FakeGeneratorRepository : GeneratorRepository {
 
     private var passwordGeneratorRequest: PasswordGeneratorRequest? = null
 
+    private var passphraseGeneratorRequest: PassphraseGeneratorRequest? = null
+
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
 
@@ -89,6 +91,7 @@ class FakeGeneratorRepository : GeneratorRepository {
     override suspend fun generatePassphrase(
         passphraseGeneratorRequest: PassphraseGeneratorRequest,
     ): GeneratedPassphraseResult {
+        this.passphraseGeneratorRequest = passphraseGeneratorRequest
         return generatePassphraseResult
     }
 
@@ -197,5 +200,12 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun assertEqualsStoredRequest(request: PasswordGeneratorRequest) {
         assertEquals(request, passwordGeneratorRequest)
+    }
+
+    /**
+     * Asserts that the passed in request matches the stored request.
+     */
+    fun assertEqualsStoredRequest(request: PassphraseGeneratorRequest) {
+        assertEquals(request, passphraseGeneratorRequest)
     }
 }
