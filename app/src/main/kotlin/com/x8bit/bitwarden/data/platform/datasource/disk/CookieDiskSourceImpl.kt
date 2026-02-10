@@ -33,4 +33,9 @@ class CookieDiskSourceImpl(
         val key = CONFIG_PREFIX.appendIdentifier(hostname)
         putEncryptedString(key, json.encodeToString(config))
     }
+
+    override fun deleteCookieConfig(hostname: String) {
+        val key = CONFIG_PREFIX.appendIdentifier(hostname)
+        putEncryptedString(key, null)
+    }
 }

@@ -95,6 +95,50 @@ class CookieDiskSourceTest {
     }
 
     @Test
+    fun `deleteCookieConfig should remove stored config`() {
+        val hostname = "vault.bitwarden.com"
+        val config = CookieConfigurationData(
+            hostname = hostname,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(
+                    name = "SESSION",
+                    value = "value",
+                ),
+            ),
+        )
+
+        cookieDiskSource.storeCookieConfig(hostname, config)
+        cookieDiskSource.deleteCookieConfig(hostname)
+
+        assertNull(cookieDiskSource.getCookieConfig(hostname))
+    }
+
+    @Test
+    fun `deleteCookieConfig should not affect other hostnames`() {
+        val hostname1 = "vault.bitwarden.com"
+        val hostname2 = "other.bitwarden.com"
+        val config1 = CookieConfigurationData(
+            hostname = hostname1,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(name = "A", value = "1"),
+            ),
+        )
+        val config2 = CookieConfigurationData(
+            hostname = hostname2,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(name = "B", value = "2"),
+            ),
+        )
+
+        cookieDiskSource.storeCookieConfig(hostname1, config1)
+        cookieDiskSource.storeCookieConfig(hostname2, config2)
+        cookieDiskSource.deleteCookieConfig(hostname1)
+
+        assertNull(cookieDiskSource.getCookieConfig(hostname1))
+        assertEquals(config2, cookieDiskSource.getCookieConfig(hostname2))
+    }
+
+    @Test
     fun `storage should isolate configs by hostname`() {
         val hostname1 = "vault.bitwarden.com"
         val hostname2 = "other.bitwarden.com"

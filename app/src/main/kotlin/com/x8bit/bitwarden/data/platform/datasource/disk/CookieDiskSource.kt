@@ -22,4 +22,11 @@ interface CookieDiskSource {
      * @param config The [CookieConfigurationData] to persist.
      */
     fun storeCookieConfig(hostname: String, config: CookieConfigurationData)
+
+    /**
+     * Deletes cookie configuration for the given [hostname].
+     *
+     * @param hostname The server hostname to delete configuration for.
+     */
+    fun deleteCookieConfig(hostname: String)
 }
