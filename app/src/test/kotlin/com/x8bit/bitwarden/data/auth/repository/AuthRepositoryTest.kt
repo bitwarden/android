@@ -7710,6 +7710,7 @@ class AuthRepositoryTest {
                     ssoUrl = "mockSsoUrl",
                 ),
                 featureStates = emptyMap(),
+                communication = null,
             ),
         )
 
