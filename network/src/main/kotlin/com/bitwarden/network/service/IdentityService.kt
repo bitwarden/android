@@ -33,6 +33,7 @@ interface IdentityService {
      * Make request to get an access token.
      *
      * @param uniqueAppId applications unique identifier.
+     * @param deeplinkScheme deeplink scheme to use for duo two-factor logins.
      * @param email user's email address.
      * @param authModel information necessary to authenticate with any
      * of the available login methods.
@@ -41,6 +42,7 @@ interface IdentityService {
     @Suppress("LongParameterList")
     suspend fun getToken(
         uniqueAppId: String,
+        deeplinkScheme: String,
         email: String,
         authModel: IdentityTokenAuthModel,
         twoFactorData: TwoFactorDataModel? = null,

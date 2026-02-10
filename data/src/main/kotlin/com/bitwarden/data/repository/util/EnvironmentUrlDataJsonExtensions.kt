@@ -24,11 +24,29 @@ val EnvironmentUrlDataJson.baseApiUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_API_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_API_URL
-        EnvironmentRegion.SELF_HOSTED -> {
+        EnvironmentRegion.INTERNAL,
+        EnvironmentRegion.SELF_HOSTED,
+            -> {
             this.api.sanitizeUrl
                 ?: this.base.sanitizeUrl?.let { "$it/api" }
                 ?: DEFAULT_US_API_URL
         }
+    }
+
+/**
+ * Returns the scheme used for app-links within the app.
+ */
+val EnvironmentUrlDataJson.appLinksScheme: String
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES,
+        EnvironmentRegion.EUROPEAN_UNION,
+        EnvironmentRegion.INTERNAL,
+            -> {
+            // TODO: PM-26577 Update this to use "https"
+            "bitwarden"
+        }
+
+        EnvironmentRegion.SELF_HOSTED -> "bitwarden"
     }
 
 /**
@@ -38,7 +56,9 @@ val EnvironmentUrlDataJson.baseEventsUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_EVENTS_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_EVENTS_URL
-        EnvironmentRegion.SELF_HOSTED -> {
+        EnvironmentRegion.INTERNAL,
+        EnvironmentRegion.SELF_HOSTED,
+            -> {
             this.events.sanitizeUrl
                 ?: this.base.sanitizeUrl?.let { "$it/events" }
                 ?: DEFAULT_US_EVENTS_URL
@@ -52,7 +72,9 @@ val EnvironmentUrlDataJson.baseIdentityUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_IDENTITY_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_IDENTITY_URL
-        EnvironmentRegion.SELF_HOSTED -> {
+        EnvironmentRegion.INTERNAL,
+        EnvironmentRegion.SELF_HOSTED,
+            -> {
             this.identity.sanitizeUrl
                 ?: this.base.sanitizeUrl?.let { "$it/identity" }
                 ?: DEFAULT_US_IDENTITY_URL
@@ -68,7 +90,9 @@ val EnvironmentUrlDataJson.baseWebVaultUrlOrNull: String?
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_VAULT_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_WEB_VAULT_URL
-        EnvironmentRegion.SELF_HOSTED -> this.webVault.sanitizeUrl ?: this.base.sanitizeUrl
+        EnvironmentRegion.INTERNAL,
+        EnvironmentRegion.SELF_HOSTED,
+            -> this.webVault.sanitizeUrl ?: this.base.sanitizeUrl
     }
 
 /**
@@ -86,6 +110,7 @@ val EnvironmentUrlDataJson.baseWebSendUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_SEND_URL
         EnvironmentRegion.EUROPEAN_UNION,
+        EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> this.baseWebVaultUrlOrNull?.let { "$it/#/send/" } ?: DEFAULT_US_WEB_SEND_URL
     }
@@ -106,7 +131,9 @@ val EnvironmentUrlDataJson.baseIconUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_ICON_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_ICON_URL
-        EnvironmentRegion.SELF_HOSTED -> {
+        EnvironmentRegion.INTERNAL,
+        EnvironmentRegion.SELF_HOSTED,
+            -> {
             this.icon.sanitizeUrl
                 ?: this.base.sanitizeUrl?.let { "$it/icons" }
                 ?: DEFAULT_US_ICON_URL

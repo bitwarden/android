@@ -2,20 +2,20 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
-import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.serialization.json.JsonObject
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-class WebAuthUtilsTest : BitwardenComposeTest() {
+class WebAuthUtilsTest {
 
     @Test
     fun `generateUriForWebAuth should return valid Uri`() {
         val baseUrl = "https://vault.bitwarden.com"
         val actualUri = generateUriForWebAuth(
             baseUrl = baseUrl,
+            callbackScheme = "https",
             data = JsonObject(emptyMap()),
             headerText = "header",
             buttonText = "button",
@@ -23,11 +23,12 @@ class WebAuthUtilsTest : BitwardenComposeTest() {
         )
         val expectedUrl = baseUrl +
             "/webauthn-mobile-connector.html" +
-            "?data=eyJjYWxsYmFja1VyaSI6ImJpdHdhcmRlbjovL3dlYmF1dGhuLWNhbGxiYWNrIiwiZ" +
-            "GF0YSI6Int9IiwiaGVhZGVyVGV4dCI6ImhlYWRlciIsImJ0blRleHQiOiJidXR0b24iLCJi" +
-            "dG5SZXR1cm5UZXh0IjoicmV0dXJuQnV0dG9uIn0=" +
-            "&parent=bitwarden%3A%2F%2Fwebauthn-callback" +
-            "&v=2"
+            "?data=eyJkYXRhIjoie30iLCJoZWFkZXJUZXh0IjoiaGVh" +
+            "ZGVyIiwiYnRuVGV4dCI6ImJ1dHRvbiIsImJ0blJldHVybl" +
+            "RleHQiOiJyZXR1cm5CdXR0b24iLCJtb2JpbGUiOnRydWV9" +
+            "&client=mobile" +
+            "&v=2" +
+            "&deeplinkScheme=https"
         val expectedUri = Uri.parse(expectedUrl)
         assertEquals(expectedUri, actualUri)
     }

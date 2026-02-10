@@ -49,11 +49,22 @@ data class EnvironmentUrlDataJson(
         get() = when (base) {
             DEFAULT_US.base -> EnvironmentRegion.UNITED_STATES
             DEFAULT_EU.base -> EnvironmentRegion.EUROPEAN_UNION
-            else -> EnvironmentRegion.SELF_HOSTED
+            else -> {
+                if (base.contains(BITWARDEN_INTERNAL_DOMAIN)) {
+                    EnvironmentRegion.INTERNAL
+                } else {
+                    EnvironmentRegion.SELF_HOSTED
+                }
+            }
         }
 
     @Suppress("UndocumentedPublicClass")
     companion object {
+        /**
+         * The domain used for internal Bitwarden environments.
+         */
+        private const val BITWARDEN_INTERNAL_DOMAIN: String = "bitwarden.pw"
+
         /**
          * Default [EnvironmentUrlDataJson] for the US region.
          */
