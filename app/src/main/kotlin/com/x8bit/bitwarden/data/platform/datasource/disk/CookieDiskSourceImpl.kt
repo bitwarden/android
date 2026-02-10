@@ -29,13 +29,8 @@ class CookieDiskSourceImpl(
             ?.let { json.decodeFromStringOrNull<CookieConfigurationData>(it) }
     }
 
-    override fun storeCookieConfig(hostname: String, config: CookieConfigurationData) {
+    override fun storeCookieConfig(hostname: String, config: CookieConfigurationData?) {
         val key = CONFIG_PREFIX.appendIdentifier(hostname)
-        putEncryptedString(key, json.encodeToString(config))
-    }
-
-    override fun deleteCookieConfig(hostname: String) {
-        val key = CONFIG_PREFIX.appendIdentifier(hostname)
-        putEncryptedString(key, null)
+        putEncryptedString(key, config?.let { json.encodeToString(it) })
     }
 }

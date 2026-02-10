@@ -95,7 +95,7 @@ class CookieDiskSourceTest {
     }
 
     @Test
-    fun `deleteCookieConfig should remove stored config`() {
+    fun `storeCookieConfig with null should remove stored config`() {
         val hostname = "vault.bitwarden.com"
         val config = CookieConfigurationData(
             hostname = hostname,
@@ -108,13 +108,13 @@ class CookieDiskSourceTest {
         )
 
         cookieDiskSource.storeCookieConfig(hostname, config)
-        cookieDiskSource.deleteCookieConfig(hostname)
+        cookieDiskSource.storeCookieConfig(hostname, null)
 
         assertNull(cookieDiskSource.getCookieConfig(hostname))
     }
 
     @Test
-    fun `deleteCookieConfig should not affect other hostnames`() {
+    fun `storeCookieConfig with null should not affect other hostnames`() {
         val hostname1 = "vault.bitwarden.com"
         val hostname2 = "other.bitwarden.com"
         val config1 = CookieConfigurationData(
@@ -132,7 +132,7 @@ class CookieDiskSourceTest {
 
         cookieDiskSource.storeCookieConfig(hostname1, config1)
         cookieDiskSource.storeCookieConfig(hostname2, config2)
-        cookieDiskSource.deleteCookieConfig(hostname1)
+        cookieDiskSource.storeCookieConfig(hostname1, null)
 
         assertNull(cookieDiskSource.getCookieConfig(hostname1))
         assertEquals(config2, cookieDiskSource.getCookieConfig(hostname2))

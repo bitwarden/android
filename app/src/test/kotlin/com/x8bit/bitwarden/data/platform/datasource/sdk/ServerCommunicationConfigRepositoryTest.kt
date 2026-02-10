@@ -162,16 +162,16 @@ class ServerCommunicationConfigRepositoryTest {
         }
 
     @Test
-    fun `save deletes cookie config when bootstrap type is Direct`() =
+    fun `save clears cookie config when bootstrap type is Direct`() =
         runTest {
             val hostname = "vault.bitwarden.com"
             val config = ServerCommunicationConfig(bootstrap = BootstrapConfig.Direct)
-            every { cookieDiskSource.deleteCookieConfig(any()) } just runs
+            every { cookieDiskSource.storeCookieConfig(any(), null) } just runs
 
             repository.save(hostname, config)
 
             coVerify {
-                cookieDiskSource.deleteCookieConfig(hostname)
+                cookieDiskSource.storeCookieConfig(hostname, null)
             }
         }
 

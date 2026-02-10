@@ -70,7 +70,7 @@ class ServerCommunicationConfigRepositoryImpl(
             BootstrapConfig.Direct -> {
                 // Clear any existing cookie configuration now that the communication config
                 // has been updated.
-                cookieDiskSource.deleteCookieConfig(hostname)
+                cookieDiskSource.storeCookieConfig(hostname = hostname, config = null)
             }
         }
 }
