@@ -244,7 +244,7 @@ appVersionCode = "1"
 appVersionName = "2025.11.1"
 ```
 
-Follow semantic versioning pattern: `YEAR.RELEASE.PATCH`
+Follow semantic versioning pattern: `YEAR.MONTH.PATCH`
 
 ### Publishing
 
