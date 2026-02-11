@@ -18,7 +18,7 @@ data class BrowserThirdPartyAutofillStatus(
     val chromeStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeBetaChannelStatusData: BrowserThirdPartyAutoFillData,
     val vivaldiStableChannelStatusData: BrowserThirdPartyAutoFillData,
-    val defaultBrowserPackageName: String? = null,
+    val defaultBrowserPackageName: String?,
 ) {
     /**
      * The total number of available browsers.
@@ -45,9 +45,11 @@ data class BrowserThirdPartyAutofillStatus(
      */
     val isDefaultBrowserAvailableAndDisabled: Boolean
         get() {
-            val browserPackage = defaultBrowserPackageName?.let { packageName ->
-                BrowserPackage.entries.firstOrNull { it.packageName == packageName }
-            } ?: return false
+            val browserPackage = defaultBrowserPackageName
+                ?.let { packageName ->
+                    BrowserPackage.entries.firstOrNull { it.packageName == packageName }
+                }
+                ?: return false
             return when (browserPackage) {
                 BrowserPackage.BRAVE_RELEASE -> braveStableStatusData.isAvailableButDisabled
                 BrowserPackage.CHROME_STABLE -> chromeStableStatusData.isAvailableButDisabled

@@ -80,6 +80,7 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
+            defaultBrowserPackageName = null,
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {

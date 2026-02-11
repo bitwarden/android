@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
@@ -34,7 +35,7 @@ class BrowserThirdPartyAutofillManagerImpl(
 
     override val defaultBrowserPackageName: String?
         get() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
+            val intent = Intent(Intent.ACTION_VIEW, "https://example.com".toUri())
             return context
                 .packageManager
                 .resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
