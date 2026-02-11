@@ -24,9 +24,8 @@ fun AddEditSendState.ViewState.Content.toSendView(
         key = common.originalSendView?.key,
         newPassword = common
             .passwordInput
-            .takeIf {
-                common.authType == SendAuthType.PASSWORD
-            }.orNullIfBlank(),
+            .takeIf { common.authType == SendAuthType.PASSWORD }
+            .orNullIfBlank(),
         hasPassword = false,
         type = selectedType.toSendType(),
         file = toSendFileView(),

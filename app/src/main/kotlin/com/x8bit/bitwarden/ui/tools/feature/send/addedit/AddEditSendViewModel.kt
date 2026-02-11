@@ -1130,8 +1130,7 @@ sealed class AddEditSendAction {
     /**
      * The user selected an authentication type.
      */
-    data class AuthTypeSelect(val authType: SendAuthType) :
-        AddEditSendAction()
+    data class AuthTypeSelect(val authType: SendAuthType) : AddEditSendAction()
 
     /**
      * The user changed the authentication password.

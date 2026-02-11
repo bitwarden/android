@@ -56,6 +56,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendA
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Content view for the [AddEditSendScreen].
@@ -70,7 +71,6 @@ fun AddEditSendContent(
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
-    isPremium: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -165,16 +165,15 @@ fun AddEditSendContent(
         if (state.common.isSendEmailVerificationEnabled) {
             Spacer(modifier = Modifier.height(height = 8.dp))
             AddEditSendAuthTypeChooser(
+                selectedAuthType = state.common.authType,
                 onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
                 onPasswordChange = addSendHandlers.onAuthPasswordChange,
                 onEmailValueChange = addSendHandlers.onEmailValueChange,
                 onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
                 onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
                 password = state.common.passwordInput,
-                emails = state.common.authEmails,
+                emails = state.common.authEmails.toImmutableList(),
                 isEnabled = !policyDisablesSend,
-                isPremium = isPremium,
-                hasPassword = state.common.hasPassword,
                 modifier = Modifier
                     .testTag("SendAuthTypeChooser")
                     .fillMaxWidth()
