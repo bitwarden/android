@@ -4,15 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Test
 
 class SsoUtilsTest {
 
     @Test
     fun `generateUriForSso should generate the correct URI`() {
         val identityBaseUrl = "https://identity.bitwarden.com"
+        val redirectUrl = "https://bitwarden.com/sso-callback"
         val organizationIdentifier = "Test Organization"
         val token = "Test Token"
         val state = "test_state"
@@ -31,6 +32,7 @@ class SsoUtilsTest {
 
         val uri = generateUriForSso(
             identityBaseUrl = identityBaseUrl,
+            redirectUrl = redirectUrl,
             organizationIdentifier = organizationIdentifier,
             token = token,
             state = state,

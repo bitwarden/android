@@ -5,8 +5,7 @@ import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import com.bitwarden.annotation.OmitFromCoverage
 
-private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
-private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
 private const val APP_LINK_SCHEME: String = "https"
 private const val DEEPLINK_SCHEME: String = "bitwarden"
 private const val CALLBACK: String = "duo-callback"
@@ -34,9 +33,7 @@ fun Intent.getDuoCallbackTokenResult(): DuoCallbackTokenResult? {
         }
 
         APP_LINK_SCHEME -> {
-            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
-                localData.path == "/$CALLBACK"
-            ) {
+            if (localData.host in BITWARDEN_HOSTS && localData.path == "/$CALLBACK") {
                 localData.getDuoCallbackTokenResult()
             } else {
                 null
