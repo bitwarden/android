@@ -32,7 +32,6 @@ fun createMockSdkSend(
         deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
         expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
         emails = null,
-        emailHashes = null,
         authType = AuthType.NONE,
     )
 
