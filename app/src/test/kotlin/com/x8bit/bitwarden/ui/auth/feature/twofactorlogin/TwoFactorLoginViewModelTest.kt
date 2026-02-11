@@ -6,11 +6,13 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.appLinksScheme
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -28,7 +30,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
@@ -418,21 +419,24 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
             every { authRepository.twoFactorResponse } returns response
             val mockkUri = mockk<Uri>()
+            every { "bitwarden.com".toUri() } returns mockkUri
             val viewModel = createViewModel(
                 state = DEFAULT_STATE.copy(
                     authMethod = TwoFactorAuthMethod.DUO,
                 ),
             )
-            every { Uri.parse("bitwarden.com") } returns mockkUri
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToDuo(uri = mockkUri, scheme = "bitwarden"),
+                    TwoFactorLoginEvent.NavigateToDuo(
+                        uri = mockkUri,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = "bitwarden://duo-callback",
+                            callbackScheme = "bitwarden",
+                        ),
+                    ),
                     awaitItem(),
                 )
-            }
-            verify {
-                Uri.parse("bitwarden.com")
             }
         }
 
@@ -500,6 +504,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             every {
                 generateUriForWebAuth(
                     baseUrl = Environment.Us.environmentUrlData.baseWebVaultUrlOrDefault,
+                    callbackScheme = Environment.Us.environmentUrlData.appLinksScheme,
                     data = data,
                     headerText = headerText,
                     buttonText = buttonText,
@@ -512,7 +517,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToWebAuth(uri = mockkUri, scheme = "bitwarden"),
+                    TwoFactorLoginEvent.NavigateToWebAuth(
+                        uri = mockkUri,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = "bitwarden://webauthn-callback",
+                            callbackScheme = "bitwarden",
+                        ),
+                    ),
                     awaitItem(),
                 )
             }

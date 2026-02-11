@@ -433,7 +433,10 @@ class VaultAddEditViewModel @Inject constructor(
                     handleCreatePublicKeyCredentialRequest(
                         request = createPublicKeyCredentialRequest,
                         callingAppInfo = this.callingAppInfo,
-                        cipherView = content.toCipherView(clock = clock),
+                        cipherView = content.toCipherView(
+                            clock = clock,
+                            isPremiumUser = state.hasPremium,
+                        ),
                     )
                     return@onContent
                 }
@@ -449,7 +452,10 @@ class VaultAddEditViewModel @Inject constructor(
                 is VaultAddEditType.EditItem -> {
                     val result = vaultRepository.updateCipher(
                         cipherId = vaultAddEditType.vaultItemId,
-                        cipherView = content.toCipherView(clock = clock),
+                        cipherView = content.toCipherView(
+                            clock = clock,
+                            isPremiumUser = state.hasPremium,
+                        ),
                     )
                     sendAction(VaultAddEditAction.Internal.UpdateCipherResultReceive(result))
                 }
@@ -695,7 +701,10 @@ class VaultAddEditViewModel @Inject constructor(
                             handleCreatePublicKeyCredentialRequest(
                                 request = createPublicKeyCredentialRequest,
                                 callingAppInfo = request.callingAppInfo,
-                                cipherView = content.toCipherView(clock = clock),
+                                cipherView = content.toCipherView(
+                                    clock = clock,
+                                    isPremiumUser = state.hasPremium,
+                                ),
                             )
                         }
                     }
@@ -726,7 +735,10 @@ class VaultAddEditViewModel @Inject constructor(
                             handleCreatePublicKeyCredentialRequest(
                                 request = createPublicKeyCredentialRequest,
                                 callingAppInfo = request.callingAppInfo,
-                                cipherView = content.toCipherView(clock = clock),
+                                cipherView = content.toCipherView(
+                                    clock = clock,
+                                    isPremiumUser = state.hasPremium,
+                                ),
                             )
                         }
                     }
@@ -2133,6 +2145,11 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
+                // Reset verification state to ensure the next credential operation requires
+                // fresh user verification. Without this reset, the stale isUserVerified = true
+                // from this registration would cause subsequent login attempts to skip
+                // biometric verification.
+                bitwardenCredentialManager.isUserVerified = false
                 // Use toast here because we are closing the activity.
                 toastManager.show(BitwardenString.item_updated)
                 sendEvent(
@@ -2343,11 +2360,16 @@ class VaultAddEditViewModel @Inject constructor(
             ?.map { it.id }
             ?.let {
                 vaultRepository.createCipherInOrganization(
-                    cipherView = toCipherView(clock = clock),
+                    cipherView = toCipherView(
+                        clock = clock,
+                        isPremiumUser = state.hasPremium,
+                    ),
                     collectionIds = it,
                 )
             }
-            ?: vaultRepository.createCipher(cipherView = toCipherView(clock = clock))
+            ?: vaultRepository.createCipher(
+                cipherView = toCipherView(clock = clock, isPremiumUser = state.hasPremium),
+            )
     }
 
     private fun List<VaultAddEditState.Owner>.toUpdatedOwners(

@@ -267,5 +267,6 @@ private val SERVER_CONFIG = ServerConfig(
             "dummy-boolean" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
+        communication = null,
     ),
 )

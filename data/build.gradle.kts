@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -54,6 +53,7 @@ dependencies {
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.serialization)
+    implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
     implementation(libs.timber)
 
@@ -72,16 +72,4 @@ dependencies {
     testFixturesImplementation(platform(libs.junit.bom))
     testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    @Suppress("MagicNumber")
-    forkEvery = 100
-    maxHeapSize = "2g"
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-    jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
-        // Explicitly setting the user Country and Language because tests assume en-US
-        "-Duser.country=US" +
-        "-Duser.language=en"
 }

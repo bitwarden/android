@@ -1197,4 +1197,5 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arşivinize yeniden erişebilmek için Premium aboneliğinizi yeniden başlatın. Yeniden başlatmadan önce arşivlenmiş bir kaydın ayrıntılarını düzenlerseniz kayıt tekrar kasanıza taşınır.</string>
     <string name="restart_premium">Premium’u yeniden başlat</string>
     <string name="items_transferred">Kayıtlar aktarıldı</string>
+    <string name="updated_master_password">Ana parola güncellendi</string>
 </resources>

@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
  */
 class ZonedDateTimeSerializer : KSerializer<ZonedDateTime> {
     private val dateTimeFormatterDeserialization = DateTimeFormatter
-        .ofPattern("yyyy-MM-dd'T'HH:mm:ss[.][:][SSSSSSS][SSSSSS][SSSSS][SSSS][SSS][SS][S]X")
+        .ofPattern("yyyy-MM-dd'T'HH:mm:ss[.][:][SSSSSSS][SSSSSS][SSSSS][SSSS][SSS][SS][S]XXX")
 
     private val dateTimeFormatterSerialization =
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")

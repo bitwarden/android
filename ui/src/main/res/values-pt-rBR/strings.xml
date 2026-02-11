@@ -1198,4 +1198,5 @@ Quer trocar para esta conta?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Para recuperar o seu acesso ao seu arquivo, retoma sua assinatura Premium. Se editar detalhes de um item arquivado antes de retomar, ele será movido de volta para o seu cofre.</string>
     <string name="restart_premium">Retomar Premium</string>
     <string name="items_transferred">Itens transferidos</string>
+    <string name="updated_master_password">Senha principal atualizada</string>
 </resources>

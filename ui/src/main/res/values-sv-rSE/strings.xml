@@ -1198,4 +1198,5 @@ Vill du byta till detta konto?</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">För att återfå åtkomst till ditt arkiv, starta om Premium-abonnemanget. Om du redigerar detaljer för ett arkiverat objekt innan du startar om kommer det att flyttas tillbaka till ditt valv.</string>
     <string name="restart_premium">Starta om Premium</string>
     <string name="items_transferred">Objekt överförda</string>
+    <string name="updated_master_password">Huvudlösenord uppdaterades</string>
 </resources>

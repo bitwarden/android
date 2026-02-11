@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.detekt) apply true
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlinx.kover) apply true
@@ -182,6 +181,18 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
 subprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.isFork = true
+    }
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        @Suppress("MagicNumber")
+        forkEvery = 500
+        maxHeapSize = "2g"
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        @Suppress("UselessCallOnNotNull")
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+            // Explicitly setting the user Country and Language because tests assume en-US
+            "-Duser.country=US" +
+            "-Duser.language=en"
     }
 }
 

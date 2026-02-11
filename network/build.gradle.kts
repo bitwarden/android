@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -63,6 +62,7 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
+    testImplementation(platform(libs.square.okhttp.bom))
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 
@@ -72,21 +72,10 @@ dependencies {
     testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.serialization)
+    testFixturesImplementation(platform(libs.square.okhttp.bom))
     testFixturesImplementation(libs.square.okhttp)
+    testFixturesImplementation(libs.square.okhttp.mockwebserver)
     testFixturesImplementation(platform(libs.square.retrofit.bom))
     testFixturesImplementation(libs.square.retrofit)
     testFixturesImplementation(libs.square.retrofit.kotlinx.serialization)
-    testFixturesImplementation(libs.square.okhttp.mockwebserver)
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    @Suppress("MagicNumber")
-    forkEvery = 100
-    maxHeapSize = "2g"
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-    jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
-        // Explicitly setting the user Country and Language because tests assume en-US
-        "-Duser.country=US" +
-        "-Duser.language=en"
 }

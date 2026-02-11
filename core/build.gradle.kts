@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -67,16 +66,4 @@ kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    @Suppress("MagicNumber")
-    forkEvery = 100
-    maxHeapSize = "2g"
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-    jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
-        // Explicitly setting the user Country and Language because tests assume en-US
-        "-Duser.country=US" +
-        "-Duser.language=en"
 }

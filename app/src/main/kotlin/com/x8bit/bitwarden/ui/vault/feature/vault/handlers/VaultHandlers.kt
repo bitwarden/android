@@ -52,6 +52,7 @@ data class VaultHandlers(
     val onDismissThirdPartyAutofillDialogClick: () -> Unit,
     val upgradeToPremiumClick: () -> Unit,
     val dismissActionCardClick: (VaultState.ActionCardState) -> Unit,
+    val actionCardClick: (VaultState.ActionCardState) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -151,6 +152,7 @@ data class VaultHandlers(
                 dismissActionCardClick = {
                     viewModel.trySendAction(VaultAction.DismissActionCardClick(it))
                 },
+                actionCardClick = { viewModel.trySendAction(VaultAction.ActionCardClick(it)) },
             )
     }
 }

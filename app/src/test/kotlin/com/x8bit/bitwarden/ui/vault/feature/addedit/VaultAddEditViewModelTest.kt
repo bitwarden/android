@@ -4844,6 +4844,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 }
                 verify(exactly = 1) {
                     toastManager.show(messageId = BitwardenString.item_updated)
+                    // Verify that isUserVerified is reset to false after successful registration
+                    // to ensure subsequent credential operations require fresh user verification
+                    bitwardenCredentialManager.isUserVerified = false
                 }
             }
     }

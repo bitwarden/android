@@ -501,7 +501,7 @@ private fun ActionCard(
                         tint = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
-                onActionClick = vaultHandlers.archiveClick,
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
             )

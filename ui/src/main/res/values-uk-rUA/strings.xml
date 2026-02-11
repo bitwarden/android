@@ -1216,4 +1216,5 @@
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Щоб відновити доступ до архіву, поновіть передплату Premium. Якщо ви редагуєте архівований запис перед поновленням, його буде повернуто назад у ваше сховище.</string>
     <string name="restart_premium">Поновити Premium</string>
     <string name="items_transferred">Записи переміщено</string>
+    <string name="updated_master_password">Головний пароль оновлено</string>
 </resources>
