@@ -63,7 +63,7 @@ fun AddEditSendAuthTypeChooser(
                 val newAuthType = options.entries.first { it.value == selected }.key
                 onAuthTypeSelect(newAuthType)
             },
-            supportingText = selectedAuthType.supportingTextRes?.let { stringResource(id = it) },
+            supportingText = selectedAuthType.supportingText?.invoke(),
             insets = PaddingValues(top = 6.dp, bottom = 4.dp),
             cardStyle = if (selectedAuthType == SendAuthType.NONE) {
                 CardStyle.Full

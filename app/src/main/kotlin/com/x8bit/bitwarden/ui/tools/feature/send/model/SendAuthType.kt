@@ -8,18 +8,18 @@ import com.bitwarden.ui.util.asText
  * Enum representing the authentication types for a send.
  *
  * @param text The display text for the authentication type.
- * @param supportingTextRes The string resource ID for the supporting text.
+ * @param supportingText The display text for the supporting component.
  */
 enum class SendAuthType(
     val text: Text,
-    val supportingTextRes: Int?,
+    val supportingText: Text?,
 ) {
     /**
      * Anyone with the link can view the send.
      */
     NONE(
         text = BitwardenString.anyone_with_the_link.asText(),
-        supportingTextRes = BitwardenString.anyone_with_link_can_view_send,
+        supportingText = BitwardenString.anyone_with_link_can_view_send.asText(),
     ),
 
     /**
@@ -27,7 +27,7 @@ enum class SendAuthType(
      */
     EMAIL(
         text = BitwardenString.specific_people.asText(),
-        supportingTextRes = BitwardenString.specific_people_verification_info,
+        supportingText = BitwardenString.specific_people_verification_info.asText(),
     ),
 
     /**
@@ -35,6 +35,6 @@ enum class SendAuthType(
      */
     PASSWORD(
         text = BitwardenString.anyone_with_password.asText(),
-        supportingTextRes = null, // Not used, password field shown instead
+        supportingText = null, // Not used, password field shown instead
     ),
 }
