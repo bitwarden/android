@@ -74,59 +74,11 @@ android/
 
 ### Core Patterns
 
-#### BaseViewModel Pattern
+- **BaseViewModel**: Enforces UDF with State/Action/Event pattern. See `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt` and `docs/ARCHITECTURE.md` for full templates and usage examples.
+- **Repository Result Pattern**: Type-safe error handling using custom sealed classes for discrete operations and `DataState<T>` wrapper for streaming data. See `docs/ARCHITECTURE.md` for implementation details.
+- **Common Patterns**: Flow collection via `Internal` actions, error handling via `when` branches, `DataState` streaming with `.map { }` and `.stateIn()`.
 
-**Purpose**: Enforces unidirectional data flow with State, Actions, and Events
-
-**Implementation** (see `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt`):
-```kotlin
-abstract class BaseViewModel<S, E, A>(initialState: S) : ViewModel() {
-    protected val mutableStateFlow: MutableStateFlow<S>
-    val stateFlow: StateFlow<S>      // UI reads state
-    val eventFlow: Flow<E>           // One-shot events (navigation)
-
-    protected abstract fun handleAction(action: A)
-    fun trySendAction(action: A)     // UI sends actions
-}
-```
-
-**Usage**:
-```kotlin
-@HiltViewModel
-class MyViewModel @Inject constructor(
-    private val repository: MyRepository,
-    savedStateHandle: SavedStateHandle,
-) : BaseViewModel<MyState, MyEvent, MyAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: MyState()
-) {
-    override fun handleAction(action: MyAction) {
-        when (action) {
-            is MyAction.ButtonClick -> handleButtonClick()
-            is MyAction.Internal.DataReceived -> handleDataReceived(action)
-        }
-    }
-}
-```
-
-#### Repository Result Pattern
-
-**Purpose**: Type-safe error handling without exceptions
-
-**Implementation**:
-```kotlin
-// For discrete operations - use custom sealed classes
-sealed class CreateCipherResult {
-    data class Success(val cipher: CipherView) : CreateCipherResult()
-    data class Error(val errorMessage: String?, val error: Throwable?) : CreateCipherResult()
-}
-
-// For streaming data - use DataState wrapper
-sealed class DataState<out T> {
-    data object Loading : DataState<Nothing>()
-    data class Loaded<T>(override val data: T) : DataState<T>()
-    data class Error<T>(val error: Throwable, override val data: T?) : DataState<T>()
-}
-```
+> For complete architecture patterns, code templates, and examples, see `docs/ARCHITECTURE.md`.
 
 ---
 
@@ -134,240 +86,29 @@ sealed class DataState<out T> {
 
 ### Adding New Feature Screen
 
-**1. Define State/Event/Action** (`app/src/main/kotlin/.../ui/feature/MyFeatureViewModel.kt`)
-```kotlin
-@Parcelize
-data class MyFeatureState(
-    val data: String = "",
-    val dialogState: DialogState? = null,
-) : Parcelable {
-    sealed class DialogState : Parcelable {
-        @Parcelize data object Loading : DialogState()
-    }
-}
+Follow these steps (see `docs/ARCHITECTURE.md` for full templates and patterns):
 
-sealed class MyFeatureEvent {
-    data class NavigateToNext(val id: String) : MyFeatureEvent()
-}
+1. **Define State/Event/Action** - `@Parcelize` state, sealed event/action classes with `Internal` subclass
+2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`, map Flow results to internal actions
+3. **Implement Screen** - Stateless `@Composable`, use `EventsEffect` for navigation, `remember(viewModel)` for action lambdas
+4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder` extension with `composableWithSlideTransitions`, `NavController` extension
+5. **Write Tests** - Use the `testing-android-code` skill for comprehensive test patterns and templates
 
-sealed class MyFeatureAction {
-    data object BackClick : MyFeatureAction()
-    data class ItemClick(val id: String) : MyFeatureAction()
-    sealed class Internal : MyFeatureAction() {
-        data class DataReceived(val data: String) : Internal()
-    }
-}
-```
+### Code Reviews
 
-**2. Implement ViewModel** (`app/src/main/kotlin/.../ui/feature/MyFeatureViewModel.kt`)
-```kotlin
-private const val KEY_STATE = "state"
-
-@HiltViewModel
-class MyFeatureViewModel @Inject constructor(
-    private val repository: MyRepository,
-    private val savedStateHandle: SavedStateHandle,
-) : BaseViewModel<MyFeatureState, MyFeatureEvent, MyFeatureAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: MyFeatureState()
-) {
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-
-        repository.dataFlow
-            .map { MyFeatureAction.Internal.DataReceived(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-    }
-
-    override fun handleAction(action: MyFeatureAction) {
-        when (action) {
-            is MyFeatureAction.BackClick -> sendEvent(MyFeatureEvent.NavigateBack)
-            is MyFeatureAction.ItemClick -> handleItemClick(action)
-            is MyFeatureAction.Internal -> handleInternalAction(action)
-        }
-    }
-}
-```
-
-**3. Implement Screen** (`app/src/main/kotlin/.../ui/feature/MyFeatureScreen.kt`)
-```kotlin
-@Composable
-fun MyFeatureScreen(
-    onNavigateBack: () -> Unit,
-    onNavigateToNext: (String) -> Unit,
-    viewModel: MyFeatureViewModel = hiltViewModel(),
-) {
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-
-    EventsEffect(viewModel = viewModel) { event ->
-        when (event) {
-            is MyFeatureEvent.NavigateBack -> onNavigateBack()
-            is MyFeatureEvent.NavigateToNext -> onNavigateToNext(event.id)
-        }
-    }
-
-    // Render UI based on state
-    BitwardenScaffold(
-        topBar = {
-            BitwardenTopAppBar(
-                title = stringResource(R.string.my_feature),
-                navigationIcon = NavigationIcon.Back(
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(MyFeatureAction.BackClick) }
-                    }
-                ),
-            )
-        }
-    ) {
-        // Content
-    }
-}
-```
-
-**4. Define Navigation** (`app/src/main/kotlin/.../ui/feature/MyFeatureNavigation.kt`)
-```kotlin
-@Serializable
-data class MyFeatureRoute(val itemId: String)
-
-data class MyFeatureArgs(val itemId: String)
-
-fun SavedStateHandle.toMyFeatureArgs(): MyFeatureArgs {
-    val route = this.toRoute<MyFeatureRoute>()
-    return MyFeatureArgs(itemId = route.itemId)
-}
-
-fun NavGraphBuilder.myFeatureDestination(
-    onNavigateBack: () -> Unit,
-    onNavigateToNext: (String) -> Unit,
-) {
-    composableWithSlideTransitions<MyFeatureRoute> {
-        MyFeatureScreen(
-            onNavigateBack = onNavigateBack,
-            onNavigateToNext = onNavigateToNext,
-        )
-    }
-}
-
-fun NavController.navigateToMyFeature(itemId: String, navOptions: NavOptions? = null) {
-    this.navigate(route = MyFeatureRoute(itemId = itemId), navOptions = navOptions)
-}
-```
-
-**5. Write Tests** (`app/src/test/kotlin/.../ui/feature/MyFeatureViewModelTest.kt`)
-```kotlin
-class MyFeatureViewModelTest : BaseViewModelTest() {
-    private val repository = mockk<MyRepository> {
-        every { dataFlow } returns MutableStateFlow("initial")
-    }
-
-    @Test
-    fun `ItemClick sends NavigateToNext event`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            viewModel.trySendAction(MyFeatureAction.ItemClick("123"))
-
-            assertEquals(
-                MyFeatureEvent.NavigateToNext("123"),
-                eventFlow.awaitItem(),
-            )
-        }
-    }
-
-    private fun createViewModel() = MyFeatureViewModel(
-        repository = repository,
-        savedStateHandle = SavedStateHandle(),
-    )
-}
-```
-
-### Common Patterns
-
-#### Flow Collection in ViewModel
-```kotlin
-// Always map async results to internal actions
-repository.dataStateFlow
-    .map { MyAction.Internal.DataReceived(it) }
-    .onEach(::sendAction)
-    .launchIn(viewModelScope)
-
-// Never update state directly in coroutines
-viewModelScope.launch {
-    val result = repository.fetchData()
-    sendAction(MyAction.Internal.FetchComplete(result))
-}
-```
-
-#### Error Handling
-```kotlin
-// Repository returns sealed result
-when (val result = repository.createCipher(cipher)) {
-    is CreateCipherResult.Success -> handleSuccess(result.cipher)
-    is CreateCipherResult.Error -> mutableStateFlow.update {
-        it.copy(dialogState = DialogState.Error(result.errorMessage))
-    }
-}
-```
-
-#### Response Formatting
-```kotlin
-// DataState for streaming data
-val ciphersStateFlow: StateFlow<DataState<List<CipherView>>> =
-    vaultRepository.ciphersStateFlow
-        .map { dataState -> dataState.map { /* transform */ } }
-        .stateIn(viewModelScope, SharingStarted.Lazily, DataState.Loading)
-```
+Use the `reviewing-changes` skill for structured code review checklists covering MVVM/Compose patterns, security validation, and type-specific review guidance.
 
 ---
 
 ## Data Models
 
-### Core Types
+Key types used throughout the codebase (see source files and `docs/ARCHITECTURE.md` for full definitions):
 
-```kotlin
-// User authentication state
-data class UserState(
-    val activeUserId: String,
-    val accounts: List<Account>,
-    val hasPendingAccountAddition: Boolean,
-)
-
-// Vault unlock data
-data class VaultUnlockData(
-    val userId: String,
-    val status: VaultUnlockStatus,
-)
-
-// DataState wrapper for async data
-sealed class DataState<out T> {
-    abstract val data: T?
-    data object Loading : DataState<Nothing>()
-    data class Loaded<T>(override val data: T) : DataState<T>()
-    data class Pending<T>(override val data: T) : DataState<T>()
-    data class Error<T>(val error: Throwable, override val data: T?) : DataState<T>()
-    data class NoNetwork<T>(override val data: T?) : DataState<T>()
-}
-```
-
-### Network Result Types
-
-```kotlin
-// NetworkResult for HTTP operations
-sealed class NetworkResult<out T> {
-    data class Success<T>(val value: T) : NetworkResult<T>()
-    data class Failure(val throwable: Throwable) : NetworkResult<Nothing>()
-}
-
-// BitwardenError for error classification
-sealed class BitwardenError {
-    abstract val throwable: Throwable
-    data class Http(override val throwable: HttpException) : BitwardenError()
-    data class Network(override val throwable: IOException) : BitwardenError()
-    data class Other(override val throwable: Throwable) : BitwardenError()
-}
-```
+- **`UserState`** (`data/auth/`) - Active user ID, accounts list, pending account state
+- **`VaultUnlockData`** (`data/vault/`) - User ID and vault unlock status
+- **`DataState<T>`** (`data/`) - Async data wrapper: Loading, Loaded, Pending, Error, NoNetwork
+- **`NetworkResult<T>`** (`network/`) - HTTP operation result: Success or Failure
+- **`BitwardenError`** (`network/`) - Error classification: Http, Network, Other
 
 ---
 
@@ -426,49 +167,6 @@ network/src/testFixtures/        # Network test utilities (BaseServiceTest)
 ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseComposeTest)
 ```
 
-### Writing Tests
-
-**ViewModel Test Template** (using Turbine):
-```kotlin
-class MyViewModelTest : BaseViewModelTest() {
-    private val repository = mockk<MyRepository> {
-        every { dataFlow } returns MutableStateFlow(initialData)
-    }
-
-    @Test
-    fun `action updates state correctly`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            // Initial state
-            assertEquals(expectedInitialState, stateFlow.awaitItem())
-
-            // Send action
-            viewModel.trySendAction(MyAction.SomeAction)
-
-            // Verify state update
-            assertEquals(expectedUpdatedState, stateFlow.awaitItem())
-        }
-    }
-}
-```
-
-**Screen/Compose Test Template**:
-```kotlin
-class MyScreenTest : BaseComposeTest() {
-    @Test
-    fun `displays loading state`() {
-        composeTestRule.setTestContent {
-            MyScreen(state = MyState(isLoading = true), onAction = {})
-        }
-
-        composeTestRule
-            .onNodeWithTag("LoadingIndicator")
-            .assertIsDisplayed()
-    }
-}
-```
-
 ### Running Tests
 
 ```bash
@@ -478,48 +176,30 @@ class MyScreenTest : BaseComposeTest() {
 ./fastlane check                  # Run full validation (detekt, lint, tests, coverage)
 ```
 
-### Test Environment
+### Test Quick Reference
 
-- **Dispatcher Control**: Use `FakeDispatcherManager` from `:core:testFixtures`
-- **MockK Patterns**: `mockk<T> { every { } returns }`, `coEvery { }` for suspend
+- **Dispatcher Control**: `FakeDispatcherManager` from `:core:testFixtures`
+- **MockK**: `mockk<T> { every { } returns }`, `coEvery { }` for suspend
 - **Flow Testing**: Turbine with `stateEventFlow()` helper from `BaseViewModelTest`
 - **Time Control**: Inject `Clock` for deterministic time testing
+
+> For comprehensive test templates (ViewModel, Screen, Repository, DataSource, Network), use the `testing-android-code` skill.
 
 ---
 
 ## Code Style & Standards
 
-### Formatting
-- **Tool**: Android Studio formatter with `bitwarden-style.xml`
-- **Line Limit**: 100 characters (enforced)
-- **Detekt**: Enabled with auto-correction
+- **Formatter**: Android Studio with `bitwarden-style.xml` | **Line Limit**: 100 chars | **Detekt**: Enabled
+- **Naming**: `camelCase` (vars/fns), `PascalCase` (classes), `SCREAMING_SNAKE_CASE` (constants), `...Impl` (implementations)
+- **KDoc**: Required for all public APIs
 
-### Naming Conventions
-- `camelCase`: Variables, functions, parameters
-- `PascalCase`: Classes, interfaces, sealed classes, type aliases
-- `SCREAMING_SNAKE_CASE`: Constants, enum values
-- `...Impl`: Implementation classes (e.g., `AuthRepositoryImpl`)
-
-### Imports
-- Ordered by: Android, third-party, project
-- No wildcard imports
-- Group related imports together
-
-### Documentation
-- **KDoc**: Required for all public classes, functions, properties
-- **@property**: Document constructor properties (3+ properties)
-- **Inline comments**: Imperative voice, capitalize first word
-
-### Pre-commit Hooks
-- Detekt runs on staged files
-- Lint checks via Fastlane
+> For complete style rules (imports, formatting, documentation, Compose conventions), see `docs/STYLE_AND_BEST_PRACTICES.md`.
 
 ---
 
 ## Anti-Patterns
 
 ### DO
-
 - Use `Result<T>` or sealed classes for operations that can fail
 - Hoist state to ViewModel when it affects business logic
 - Use `remember(viewModel)` for lambdas passed to composables
@@ -529,11 +209,9 @@ class MyScreenTest : BaseComposeTest() {
 - Return early to reduce nesting
 
 ### DON'T
-
 - Throw exceptions from data layer functions
 - Update state directly inside coroutines (use internal actions)
 - Use `any` types or suppress null safety
-- Store static data (use DI singletons instead)
 - Catch generic `Exception` (catch specific types)
 - Use `e.printStackTrace()` (use Timber logging)
 - Create new patterns when established ones exist
@@ -628,8 +306,14 @@ Follow semantic versioning pattern: `YEAR.RELEASE.PATCH`
 ## References
 
 ### Internal Documentation
-- `docs/ARCHITECTURE.md` - Complete architecture patterns and principles
-- `docs/STYLE_AND_BEST_PRACTICES.md` - Kotlin and Compose code style
+- `docs/ARCHITECTURE.md` - Complete architecture patterns, BaseViewModel, Repository Result, DataState
+- `docs/STYLE_AND_BEST_PRACTICES.md` - Kotlin and Compose code style, formatting, imports, documentation
+
+### Skills & Tools
+- `testing-android-code` - Comprehensive test templates and patterns (ViewModel, Screen, Repository, DataSource, Network)
+- `reviewing-changes` - Structured code review checklists with MVVM/Compose pattern validation
+- `bitwarden-code-review:code-review` - Automated GitHub PR review with inline comments
+- `bitwarden-code-review:code-review-local` - Local change review written to files
 
 ### External Documentation
 - [Bitwarden SDK](https://github.com/bitwarden/sdk) - Cryptographic SDK
