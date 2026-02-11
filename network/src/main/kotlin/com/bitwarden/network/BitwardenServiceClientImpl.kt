@@ -4,8 +4,10 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.serializer.ZonedDateTimeSerializer
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
+import com.bitwarden.network.interceptor.CookieInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
+import com.bitwarden.network.provider.CookieProvider
 import com.bitwarden.network.provider.RefreshTokenProvider
 import com.bitwarden.network.provider.TokenProvider
 import com.bitwarden.network.retrofit.Retrofits
@@ -57,6 +59,8 @@ internal class BitwardenServiceClientImpl(
         authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
     )
     override val tokenProvider: TokenProvider = authTokenManager
+
+    override val cookieProvider: CookieProvider = bitwardenServiceClientConfig.cookieProvider
     private val clientJson = Json {
 
         // If there are keys returned by the server not modeled by a serializable class,
@@ -78,6 +82,9 @@ internal class BitwardenServiceClientImpl(
             authTokenManager = authTokenManager,
             baseUrlInterceptors = BaseUrlInterceptors(
                 baseUrlsProvider = bitwardenServiceClientConfig.baseUrlsProvider,
+            ),
+            cookieInterceptor = CookieInterceptor(
+                cookieProvider = bitwardenServiceClientConfig.cookieProvider,
             ),
             headersInterceptor = HeadersInterceptor(
                 userAgent = bitwardenServiceClientConfig.clientData.userAgent,
