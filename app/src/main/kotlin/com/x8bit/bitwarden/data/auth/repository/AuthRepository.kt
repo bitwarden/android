@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -69,6 +70,12 @@ interface AuthRepository :
      * receive updates whenever [setSsoCallbackResult] is called.
      */
     val ssoCallbackResultFlow: Flow<SsoCallbackResult>
+
+    /**
+     * Flow of the current [CookieCallbackResult]. Subscribers should listen to the flow in order
+     * to receive updates whenever [setCookieCallbackResult] is called.
+     */
+    val cookieCallbackResultFlow: Flow<CookieCallbackResult>
 
     /**
      * Flow of the current [YubiKeyResult]. Subscribers should listen to the flow in order to
@@ -341,6 +348,11 @@ interface AuthRepository :
      * Set the value of [ssoCallbackResultFlow].
      */
     fun setSsoCallbackResult(result: SsoCallbackResult)
+
+    /**
+     * Set the value of [cookieCallbackResultFlow].
+     */
+    fun setCookieCallbackResult(result: CookieCallbackResult)
 
     /**
      * Get a [Boolean] indicating whether this is a known device.
