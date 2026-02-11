@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk
 
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.BitwardenServiceClient
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import io.mockk.every
 import io.mockk.mockk
@@ -10,12 +12,16 @@ import org.junit.jupiter.api.Test
 class SdkRepositoryFactoryTests {
 
     private val vaultDiskSource: VaultDiskSource = mockk()
+    private val cookieDiskSource: CookieDiskSource = mockk()
+    private val configDiskSource: ConfigDiskSource = mockk()
     private val bitwardenServiceClient: BitwardenServiceClient = mockk {
         every { tokenProvider } returns mockk()
     }
 
     private val sdkRepoFactory: SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
+        cookieDiskSource = cookieDiskSource,
+        configDiskSource = configDiskSource,
         bitwardenServiceClient = bitwardenServiceClient,
     )
 
@@ -47,5 +53,12 @@ class SdkRepositoryFactoryTests {
         val otherUserId = "otherUserId"
         val thirdClient = sdkRepoFactory.getClientManagedTokens(userId = otherUserId)
         assertNotEquals(firstClient, thirdClient)
+    }
+
+    @Test
+    fun `getServerCommunicationConfigRepository should create a new repository`() {
+        val firstRepo = sdkRepoFactory.getServerCommunicationConfigRepository()
+        val secondRepo = sdkRepoFactory.getServerCommunicationConfigRepository()
+        assertNotEquals(firstRepo, secondRepo)
     }
 }
