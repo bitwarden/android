@@ -99,7 +99,6 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         deletionDate = deletionDate.toInstant(),
         expirationDate = expirationDate?.toInstant(),
         emails = emails,
-        emailHashes = null,
         authType = authType?.toSdkAuthType() ?: AuthType.NONE,
     )
 
