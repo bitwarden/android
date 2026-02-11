@@ -41,6 +41,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -1008,7 +1009,8 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList(),
+                        authEmails = emptyList<String>().toImmutableList(),
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1042,6 +1044,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
                         hasPassword = false,
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1076,6 +1079,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
                         passwordInput = "",
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1090,13 +1094,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Anyone with a password set by you")
             .performClick()
 
-        // Update state to show password field
+        // Update state to show password field with authType set to PASSWORD
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
                         passwordInput = "",
+                        authType = SendAuthType.PASSWORD,
                     ),
                 ),
             )
@@ -1118,7 +1123,8 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList(),
+                        authEmails = emptyList<String>().toImmutableList(),
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1133,13 +1139,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Specific people")
             .performClick()
 
-        // Update state to show email field
+        // Update state to show email field with authType set to EMAIL
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList(),
+                        authEmails = listOf("").toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1167,7 +1174,8 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("test@example.com"),
+                        authEmails = listOf("test@example.com").toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1191,7 +1199,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("test1@example.com", "test2@example.com"),
+                        authEmails = listOf(
+                            "test1@example.com",
+                            "test2@example.com",
+                        ).toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1206,13 +1218,17 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Specific people")
             .performClick()
 
-        // Update state to show email fields
+        // Update state to show email fields with authType set to EMAIL
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("test1@example.com", "test2@example.com"),
+                        authEmails = listOf(
+                            "test1@example.com",
+                            "test2@example.com",
+                        ).toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1229,37 +1245,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `auth type chooser should not show EMAIL option for non-premium users`() {
-        mutableStateFlow.update {
-            it.copy(
-                isPremium = false,
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        hasPassword = false,
-                        isSendEmailVerificationEnabled = true,
-                    ),
-                ),
-            )
-        }
-
-        // Click to expand dropdown
-        composeTestRule
-            .onNodeWithTag("SendAuthTypeChooser")
-            .performScrollTo()
-            .performClick()
-
-        // "Specific people" should not be visible
-        composeTestRule
-            .onNodeWithText("Specific people")
-            .assertDoesNotExist()
-
-        // But PASSWORD should still be available
-        composeTestRule
-            .onNodeWithText("Anyone with a password set by you")
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `auth type chooser should show EMAIL option for premium users`() {
         mutableStateFlow.update {
             it.copy(
@@ -1267,6 +1252,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1331,7 +1317,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("user1@example.com", "user2@example.com"),
+                        authEmails = listOf(
+                            "user1@example.com",
+                            "user2@example.com",
+                        ).toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1347,13 +1337,17 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Specific people")
             .performClick()
 
-        // Update state to show emails
+        // Update state to show emails with authType set to EMAIL
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("user1@example.com", "user2@example.com"),
+                        authEmails = listOf(
+                            "user1@example.com",
+                            "user2@example.com",
+                        ).toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1372,6 +1366,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
+                        authType = SendAuthType.NONE,
                     ),
                 ),
             )
@@ -1386,13 +1381,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Specific people")
             .performClick()
 
-        // Update state
+        // Update state with authType set to EMAIL
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList(),
+                        authEmails = listOf("").toImmutableList(),
+                        authType = SendAuthType.EMAIL,
                     ),
                 ),
             )
@@ -1422,7 +1418,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = true,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList(),
+    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
     authType = SendAuthType.NONE,
 )

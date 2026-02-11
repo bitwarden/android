@@ -53,6 +53,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -1087,7 +1088,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `Changing AuthTypeSelect should not clear emails and password`() = runTest {
         val initialCommonState = DEFAULT_COMMON_STATE.copy(
-            authEmails = listOf("test@example.com"),
+            authEmails = listOf("test@example.com").toImmutableList(),
             passwordInput = "oldpassword",
             authType = SendAuthType.PASSWORD,
         )
@@ -1147,14 +1148,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test1@example.com", "test2@example.com"),
+                    authEmails = listOf("test1@example.com", "test2@example.com").toImmutableList(),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test1@example.com", "updated@example.com"),
+                authEmails = listOf("test1@example.com", "updated@example.com").toImmutableList(),
             ),
         )
 
@@ -1175,14 +1176,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test@example.com"),
+                    authEmails = listOf("test@example.com").toImmutableList(),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test@example.com", ""),
+                authEmails = listOf("test@example.com", "").toImmutableList(),
             ),
         )
 
@@ -1202,14 +1203,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                         "test1@example.com",
                         "test2@example.com",
                         "test3@example.com",
-                    ),
+                    ).toImmutableList(),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test1@example.com", "test3@example.com"),
+                authEmails = listOf("test1@example.com", "test3@example.com").toImmutableList(),
             ),
         )
 
@@ -1225,14 +1226,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test@example.com"),
+                    authEmails = listOf("test@example.com").toImmutableList(),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = emptyList(),
+                authEmails = emptyList<String>().toImmutableList(),
             ),
         )
 
@@ -1285,7 +1286,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList(),
+    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
     authType = SendAuthType.NONE,
 )

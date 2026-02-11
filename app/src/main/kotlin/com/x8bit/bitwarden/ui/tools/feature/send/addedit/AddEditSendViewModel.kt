@@ -47,6 +47,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -116,7 +118,7 @@ class AddEditSendViewModel @Inject constructor(
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
-                        authEmails = emptyList(),
+                        authEmails = emptyList<String>().toImmutableList(),
                         isSendEmailVerificationEnabled = featureFlagManager
                             .getFeatureFlag(key = FlagKey.SendEmailVerification),
                         authType = SendAuthType.NONE,
@@ -560,7 +562,8 @@ class AddEditSendViewModel @Inject constructor(
                 SendAuthType.EMAIL -> {
                     // Initialize with one empty email field if list is empty
                     commonContent.copy(
-                        authEmails = commonContent.authEmails.ifEmpty { listOf("") },
+                        authEmails = commonContent.authEmails.ifEmpty { listOf("") }
+                            .toImmutableList(),
                         authType = SendAuthType.EMAIL,
                     )
                 }
@@ -589,13 +592,13 @@ class AddEditSendViewModel @Inject constructor(
         updateCommonContent { commonContent ->
             val updatedEmails = commonContent.authEmails.toMutableList()
             updatedEmails[action.index] = action.email
-            commonContent.copy(authEmails = updatedEmails)
+            commonContent.copy(authEmails = updatedEmails.toImmutableList())
         }
     }
 
     private fun handleAuthEmailsAdd() {
         updateCommonContent { commonContent ->
-            commonContent.copy(authEmails = commonContent.authEmails.plus(""))
+            commonContent.copy(authEmails = commonContent.authEmails.plus("").toImmutableList())
         }
     }
 
@@ -603,7 +606,7 @@ class AddEditSendViewModel @Inject constructor(
         updateCommonContent { commonContent ->
             val updatedEmails = commonContent.authEmails.toMutableList()
             updatedEmails.removeAt(action.index)
-            commonContent.copy(authEmails = updatedEmails)
+            commonContent.copy(authEmails = updatedEmails.toImmutableList())
         }
     }
 
@@ -915,7 +918,7 @@ data class AddEditSendState(
                 val expirationDate: ZonedDateTime?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
-                val authEmails: List<String>,
+                val authEmails: ImmutableList<String>,
                 val isSendEmailVerificationEnabled: Boolean,
                 val authType: SendAuthType,
             ) : Parcelable

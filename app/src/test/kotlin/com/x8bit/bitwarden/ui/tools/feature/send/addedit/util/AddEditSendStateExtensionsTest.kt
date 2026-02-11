@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -127,7 +128,7 @@ class AddEditSendStateExtensionsTest {
             .copy(
                 common = DEFAULT_COMMON_STATE.copy(
                     passwordInput = "",
-                    authEmails = listOf("email@email.com"),
+                    authEmails = listOf("email@email.com").toImmutableList(),
                     authType = SendAuthType.EMAIL,
                 ),
             )
@@ -155,7 +156,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList(),
+    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
     authType = SendAuthType.PASSWORD,
 )
