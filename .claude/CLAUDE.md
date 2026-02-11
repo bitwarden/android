@@ -105,7 +105,7 @@ Use the `reviewing-changes` skill for structured code review checklists covering
 Key types used throughout the codebase (see source files and `docs/ARCHITECTURE.md` for full definitions):
 
 - **`UserState`** (`data/auth/`) - Active user ID, accounts list, pending account state
-- **`VaultUnlockData`** (`data/vault/`) - User ID and vault unlock status
+- **`VaultUnlockData`** (`data/vault/repository/model/`) - User ID and vault unlock status
 - **`DataState<T>`** (`data/`) - Async data wrapper: Loading, Loaded, Pending, Error, NoNetwork
 - **`NetworkResult<T>`** (`network/`) - HTTP operation result: Success or Failure
 - **`BitwardenError`** (`network/`) - Error classification: Http, Network, Other
