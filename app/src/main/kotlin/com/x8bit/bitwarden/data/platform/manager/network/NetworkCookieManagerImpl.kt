@@ -25,8 +25,8 @@ class NetworkCookieManagerImpl(
         ?.bootstrap
         ?.type
         ?.let { bootstrapType ->
-            when {
-                bootstrapType == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR -> {
+            when (bootstrapType) {
+                BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR -> {
                     // When the bootstrap type is SSO cookie vendor, but we do not yet have any
                     // cookies, the cookie manager needs to be bootstrapped. This includes the
                     // case where no cookie config exists for the hostname at all.
