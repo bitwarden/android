@@ -240,7 +240,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     val authTabData = environmentData.webAuthnAuthTabData
                     val uri = generateUriForWebAuth(
                         baseUrl = environmentData.baseWebVaultUrlOrDefault,
-                        callbackScheme = authTabData.callbackScheme,
+                        authTabData = authTabData,
                         data = it,
                         headerText = resourceManager.getString(
                             resId = BitwardenString.fido2_title,
