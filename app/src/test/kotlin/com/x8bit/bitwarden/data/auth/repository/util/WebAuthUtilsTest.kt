@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.serialization.json.JsonObject
@@ -15,7 +16,10 @@ class WebAuthUtilsTest {
         val baseUrl = "https://vault.bitwarden.com"
         val actualUri = generateUriForWebAuth(
             baseUrl = baseUrl,
-            callbackScheme = "https",
+            authTabData = AuthTabData.HttpsScheme(
+                host = "bitwarden.com",
+                path = "webauthn-callback",
+            ),
             data = JsonObject(emptyMap()),
             headerText = "header",
             buttonText = "button",
@@ -26,6 +30,7 @@ class WebAuthUtilsTest {
             "?data=eyJkYXRhIjoie30iLCJoZWFkZXJUZXh0IjoiaGVh" +
             "ZGVyIiwiYnRuVGV4dCI6ImJ1dHRvbiIsImJ0blJldHVybl" +
             "RleHQiOiJyZXR1cm5CdXR0b24iLCJtb2JpbGUiOnRydWV9" +
+            "&parent=https%3A%2F%2Fbitwarden.com%2Fwebauthn-callback" +
             "&client=mobile" +
             "&v=2" +
             "&deeplinkScheme=https"
