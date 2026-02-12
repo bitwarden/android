@@ -175,6 +175,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
+        assertTrue(isCookieInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -193,6 +194,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
+        assertTrue(isCookieInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertTrue(isEventsInterceptorCalled)
@@ -211,6 +213,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
+        assertTrue(isCookieInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -229,6 +232,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
+        assertTrue(isCookieInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -248,6 +252,7 @@ class RetrofitsTest {
 
             assertTrue(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
+            assertTrue(isCookieInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
@@ -267,6 +272,7 @@ class RetrofitsTest {
 
             assertFalse(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
+            assertTrue(isCookieInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
