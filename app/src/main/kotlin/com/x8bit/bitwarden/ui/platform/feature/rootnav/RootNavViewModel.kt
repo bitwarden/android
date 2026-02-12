@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -17,7 +18,9 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
@@ -36,6 +39,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     specialCircumstanceManager: SpecialCircumstanceManager,
     vaultMigrationManager: VaultMigrationManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
@@ -47,12 +51,20 @@ class RootNavViewModel @Inject constructor(
             authRepository.userStateFlow,
             specialCircumstanceManager.specialCircumstanceStateFlow,
             vaultMigrationManager.vaultMigrationDataStateFlow,
-        ) { authState, userState, specialCircumstance, vaultMigrationData ->
+            cookieAcquisitionRequestManager.cookieAcquisitionRequestFlow,
+        ) {
+                authState,
+                userState,
+                specialCircumstance,
+                vaultMigrationData,
+                cookieAcquisitionRequest,
+            ->
             RootNavAction.Internal.UserStateUpdateReceive(
                 authState = authState,
                 userState = userState,
                 specialCircumstance = specialCircumstance,
                 vaultMigrationData = vaultMigrationData,
+                cookieAcquisitionRequest = cookieAcquisitionRequest,
             )
         }
             .onEach(::sendAction)
@@ -114,6 +126,14 @@ class RootNavViewModel @Inject constructor(
             userState.activeAccount.isVaultUnlocked &&
                 userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE -> {
                 getOnboardingNavState(onboardingStatus = userState.activeAccount.onboardingStatus)
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                action.cookieAcquisitionRequest != null &&
+                action.cookieAcquisitionRequest.hostname ==
+                userState.activeAccount.environment.environmentUrlData
+                    .baseWebVaultUrlOrDefault -> {
+                RootNavState.VaultUnlockedForCookieAcquisition
             }
 
             userState.activeAccount.isVaultUnlocked &&
@@ -358,6 +378,12 @@ sealed class RootNavState : Parcelable {
     data object VaultLocked : RootNavState()
 
     /**
+     * App should show the cookie acquisition screen for an unlocked vault.
+     */
+    @Parcelize
+    data object VaultUnlockedForCookieAcquisition : RootNavState()
+
+    /**
      * App should show MigrateToMyItems graph.
      */
     @Parcelize
@@ -541,6 +567,7 @@ sealed class RootNavAction {
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
             val vaultMigrationData: VaultMigrationData,
+            val cookieAcquisitionRequest: CookieAcquisitionRequest?,
         ) : RootNavAction()
     }
 }

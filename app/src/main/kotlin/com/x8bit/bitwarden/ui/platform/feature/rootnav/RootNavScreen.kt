@@ -51,6 +51,9 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.CookieAcquisitionRoute
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.splash.SplashRoute
@@ -119,6 +122,7 @@ fun RootNavScreen(
         setupBrowserAutofillDestinationAsRoot()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
+        cookieAcquisitionDestination()
         exportItemsGraph(navController)
         migrateToMyItemsGraph(navController)
     }
@@ -157,6 +161,7 @@ fun RootNavScreen(
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
         RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
+        is RootNavState.VaultUnlockedForCookieAcquisition -> CookieAcquisitionRoute
         is RootNavState.MigrateToMyItems -> MigrateToMyItemsGraphRoute
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -209,6 +214,12 @@ fun RootNavScreen(
                 navController.navigateToExpiredRegistrationLinkScreen()
             }
 
+            RootNavState.VaultUnlockedForCookieAcquisition -> {
+                navController.navigateToCookieAcquisition(
+                    navOptions = navOptions { launchSingleTop = true },
+                )
+            }
+
             is RootNavState.MigrateToMyItems -> {
                 navController.navigateToMigrateToMyItemsGraph(rootNavOptions)
             }
@@ -222,9 +233,17 @@ fun RootNavScreen(
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
             RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
-            is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
-                navOptions = rootNavOptions,
-            )
+            is RootNavState.VaultUnlocked -> {
+                if (!navController.popBackStack(
+                        route = CookieAcquisitionRoute,
+                        inclusive = true,
+                    )
+                ) {
+                    navController.navigateToVaultUnlockedGraph(
+                        navOptions = rootNavOptions,
+                    )
+                }
+            }
 
             is RootNavState.VaultUnlockedForNewSend -> {
                 navController.navigateToVaultUnlock(rootNavOptions)
@@ -353,6 +372,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
         RootTransitionProviders.Enter.none
     } else {
         when (targetState.destination.rootLevelRoute()) {
+            CookieAcquisitionRoute.toObjectNavigationRoute(),
             MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
             ResetPasswordRoute.toObjectNavigationRoute(),
                 -> RootTransitionProviders.Enter.slideUp
@@ -360,9 +380,10 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
             else -> when (initialState.destination.rootLevelRoute()) {
                 // Disable transitions when coming from the splash screen
                 SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
-                // The MigrateToMyItemsGraphRoute and ResetPasswordRoute animation should be stay
-                // but due to an issue when combining certain animations, we are just using a
-                // fadeIn instead.
+                // The CookieAcquisitionRoute, MigrateToMyItemsGraphRoute and
+                // ResetPasswordRoute animation should stay but due to an issue when
+                // combining certain animations, we are just using a fadeIn instead.
+                CookieAcquisitionRoute.toObjectNavigationRoute(),
                 MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
                 ResetPasswordRoute.toObjectNavigationRoute(),
                     -> RootTransitionProviders.Enter.fadeIn
@@ -386,11 +407,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition()
         when (initialRoute) {
             // Disable transitions when coming from the splash screen
             SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.none
+            CookieAcquisitionRoute.toObjectNavigationRoute(),
             MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
             ResetPasswordRoute.toObjectNavigationRoute(),
                 -> RootTransitionProviders.Exit.slideDown
 
             else -> when (targetRoute) {
+                CookieAcquisitionRoute.toObjectNavigationRoute(),
                 MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
                 ResetPasswordRoute.toObjectNavigationRoute(),
                     -> RootTransitionProviders.Exit.stay

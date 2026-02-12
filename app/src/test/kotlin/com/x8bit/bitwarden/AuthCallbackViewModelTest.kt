@@ -3,9 +3,11 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.getCookieCallbackResultOrNull
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResultOrNull
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.Test
 
 class AuthCallbackViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
+        every { setCookieCallbackResult(any()) } just runs
         every { setSsoCallbackResult(any()) } just runs
         every { setDuoCallbackTokenResult(any()) } just runs
         every { setYubiKeyResult(any()) } just runs
@@ -33,6 +36,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         mockkStatic(
+            Intent::getCookieCallbackResultOrNull,
             Intent::getYubiKeyResultOrNull,
             Intent::getWebAuthResultOrNull,
             Intent::getDuoCallbackTokenResult,
@@ -43,6 +47,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
+            Intent::getCookieCallbackResultOrNull,
             Intent::getYubiKeyResultOrNull,
             Intent::getWebAuthResultOrNull,
             Intent::getDuoCallbackTokenResult,
@@ -59,6 +64,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getWebAuthResultOrNull() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
+        every { mockIntent.getCookieCallbackResultOrNull() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
@@ -78,6 +84,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getWebAuthResultOrNull() } returns null
         every { mockIntent.getDuoCallbackTokenResult() } returns null
+        every { mockIntent.getCookieCallbackResultOrNull() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
@@ -94,6 +101,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getWebAuthResultOrNull() } returns null
         every { mockIntent.getDuoCallbackTokenResult() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
+        every { mockIntent.getCookieCallbackResultOrNull() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
@@ -110,11 +118,31 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
             every { getYubiKeyResultOrNull() } returns null
             every { getDuoCallbackTokenResult() } returns null
             every { getSsoCallbackResult() } returns null
+            every { getCookieCallbackResultOrNull() } returns null
         }
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
             authRepository.setWebAuthResult(webAuthResult)
+        }
+    }
+
+    @Test
+    fun `on IntentReceive with cookie callback should call setCookieCallbackResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val cookieCallbackResult = CookieCallbackResult.Success(
+            cookies = mapOf("cookie" to "value"),
+        )
+        every { mockIntent.getCookieCallbackResultOrNull() } returns cookieCallbackResult
+        every { mockIntent.getYubiKeyResultOrNull() } returns null
+        every { mockIntent.getWebAuthResultOrNull() } returns null
+        every { mockIntent.getDuoCallbackTokenResult() } returns null
+        every { mockIntent.getSsoCallbackResult() } returns null
+
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
+        verify(exactly = 1) {
+            authRepository.setCookieCallbackResult(result = cookieCallbackResult)
         }
     }
 
