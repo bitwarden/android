@@ -306,7 +306,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         data = BitwardenSnackbarData(
                             message = BitwardenString.item_moved_to_archived.asText(),
                         ),
-                        relay = SnackbarRelay.CIPHER_ARCHIVED,
+                        relay = SnackbarRelay.CIPHER_ARCHIVED_VIEW,
                     )
                 }
             }
@@ -397,7 +397,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     snackbarRelayManager.sendSnackbarData(
                         data = BitwardenSnackbarData(BitwardenString.item_moved_to_vault.asText()),
-                        relay = SnackbarRelay.CIPHER_UNARCHIVED,
+                        relay = SnackbarRelay.CIPHER_UNARCHIVED_VIEW,
                     )
                 }
             }
