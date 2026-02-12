@@ -419,6 +419,58 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `SaveClick with EMAIL auth type and blank emails should show error dialog`() {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                name = "test",
+                authType = SendAuthType.EMAIL,
+                authEmails = listOf("", "  ").toImmutableList(),
+            ),
+        )
+        val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = viewState,
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.no_email_addresses_entered.asText(),
+                    message = BitwardenString
+                        .enter_at_least_one_valid_email_address_to_share_this_send
+                        .asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with EMAIL auth type and valid and invalid emails should show error dialog`() {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                name = "test",
+                authType = SendAuthType.EMAIL,
+                authEmails = listOf("valid@example.com", "invalid-email").toImmutableList(),
+            ),
+        )
+        val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = viewState,
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.invalid_email_addresses.asText(),
+                    message = BitwardenString.one_or_more_email_addresses_are_incorrect.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `SaveClick for file without premium show error dialog`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
