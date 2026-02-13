@@ -3,13 +3,14 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNotNull
 
 class BlockAutoFillViewModelTest : BaseViewModelTest() {
 
@@ -244,13 +245,18 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        // Should show error dialog, not update the list
-        val dialog = viewModel.stateFlow.value.dialog
-        assert(dialog is BlockAutoFillState.DialogState.AddEdit)
-        val addEditDialog = dialog as BlockAutoFillState.DialogState.AddEdit
-        assertEquals("http://b.com", addEditDialog.uri)
-        assertEquals("http://a.com", addEditDialog.originalUri)
-        assertNotNull(addEditDialog.errorMessage)
+        val expectedState = BlockAutoFillState(
+            dialog = BlockAutoFillState.DialogState.AddEdit(
+                uri = "http://b.com",
+                originalUri = "http://a.com",
+                errorMessage = BitwardenString.the_urix_is_already_blocked.asText("http://b.com"),
+            ),
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://a.com", "http://b.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     private fun createViewModel(
