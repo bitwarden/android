@@ -102,9 +102,12 @@ class BlockAutoFillViewModel @Inject constructor(
         val uriList = action.newUri.split(",").map { it.trim() }
 
         // When editing, exclude the original URI from duplicate validation
-        val existingUrisForValidation = action.originalUri?.let { original ->
-            settingsRepository.blockedAutofillUris.filter { it != original }
-        } ?: settingsRepository.blockedAutofillUris
+        val existingUrisForValidation = action
+            .originalUri
+            ?.let { original ->
+                settingsRepository.blockedAutofillUris.filter { it != original }
+            }
+            ?: settingsRepository.blockedAutofillUris
 
         val errorText = uriList
             .filter { uri ->
