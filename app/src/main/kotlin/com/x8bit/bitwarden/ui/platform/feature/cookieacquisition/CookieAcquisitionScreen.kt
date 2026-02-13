@@ -43,6 +43,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.CookieAcquisitionHandler
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememberCookieAcquisitionHandler
 
 /**
@@ -67,11 +68,11 @@ fun CookieAcquisitionScreen(
         }
     }
 
-    val handlers = rememberCookieAcquisitionHandler(viewModel = viewModel)
+    val handler = rememberCookieAcquisitionHandler(viewModel = viewModel)
 
     CookieAcquisitionDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = handlers.onDismissDialogClick,
+        onDismissRequest = handler.onDismissDialogClick,
     )
 
     BitwardenScaffold(
@@ -82,9 +83,7 @@ fun CookieAcquisitionScreen(
     ) {
         CookieAcquisitionContent(
             state = state,
-            onLaunchBrowserClick = handlers.onLaunchBrowserClick,
-            onContinueWithoutSyncingClick = handlers.onContinueWithoutSyncingClick,
-            onWhyAmISeeingThisClick = handlers.onWhyAmISeeingThisClick,
+            handler = handler,
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -112,9 +111,7 @@ private fun CookieAcquisitionDialogs(
 @Composable
 private fun CookieAcquisitionContent(
     state: CookieAcquisitionState,
-    onLaunchBrowserClick: () -> Unit,
-    onContinueWithoutSyncingClick: () -> Unit,
-    onWhyAmISeeingThisClick: () -> Unit,
+    handler: CookieAcquisitionHandler,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -165,7 +162,7 @@ private fun CookieAcquisitionContent(
 
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.launch_browser),
-            onClick = onLaunchBrowserClick,
+            onClick = handler.onLaunchBrowserClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,7 +173,7 @@ private fun CookieAcquisitionContent(
 
         BitwardenOutlinedButton(
             label = stringResource(id = BitwardenString.continue_without_syncing),
-            onClick = onContinueWithoutSyncingClick,
+            onClick = handler.onContinueWithoutSyncingClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -186,7 +183,7 @@ private fun CookieAcquisitionContent(
 
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.why_am_i_seeing_this),
-            onClick = onWhyAmISeeingThisClick,
+            onClick = handler.onWhyAmISeeingThisClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -206,9 +203,12 @@ private fun CookieAcquisitionScreen_preview() {
                     environmentUrl = "vault.bitwarden.com",
                     dialogState = null,
                 ),
-                onLaunchBrowserClick = {},
-                onContinueWithoutSyncingClick = {},
-                onWhyAmISeeingThisClick = {},
+                handler = CookieAcquisitionHandler(
+                    onLaunchBrowserClick = {},
+                    onContinueWithoutSyncingClick = {},
+                    onWhyAmISeeingThisClick = {},
+                    onDismissDialogClick = {},
+                ),
                 modifier = Modifier.fillMaxSize(),
             )
         }
@@ -225,9 +225,12 @@ private fun CookieAcquisitionScreen_darkPreview() {
                     environmentUrl = "vault.bitwarden.com",
                     dialogState = null,
                 ),
-                onLaunchBrowserClick = {},
-                onContinueWithoutSyncingClick = {},
-                onWhyAmISeeingThisClick = {},
+                handler = CookieAcquisitionHandler(
+                    onLaunchBrowserClick = {},
+                    onContinueWithoutSyncingClick = {},
+                    onWhyAmISeeingThisClick = {},
+                    onDismissDialogClick = {},
+                ),
                 modifier = Modifier.fillMaxSize(),
             )
         }

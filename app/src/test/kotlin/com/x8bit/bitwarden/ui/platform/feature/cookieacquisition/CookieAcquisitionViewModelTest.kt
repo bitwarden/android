@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+
 import org.junit.jupiter.api.Test
 
 class CookieAcquisitionViewModelTest : BaseViewModelTest() {
@@ -77,17 +77,16 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ContinueWithoutSyncingClick should clear pending acquisition`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.trySendAction(
-                CookieAcquisitionAction.ContinueWithoutSyncingClick,
-            )
-            verify {
-                mockCookieAcquisitionRequestManager
-                    .setPendingCookieAcquisition(data = null)
-            }
+    fun `ContinueWithoutSyncingClick should clear pending acquisition`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            CookieAcquisitionAction.ContinueWithoutSyncingClick,
+        )
+        verify {
+            mockCookieAcquisitionRequestManager
+                .setPendingCookieAcquisition(data = null)
         }
+    }
 
     @Test
     fun `WhyAmISeeingThisClick should emit NavigateToHelp event`() = runTest {
@@ -146,15 +145,28 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
     @Test
     fun `DismissDialogClick should clear dialog state`() = runTest {
         val viewModel = createViewModel()
-        // First trigger an error dialog
-        mutableCookieCallbackResultFlow.emit(CookieCallbackResult.MissingCookie)
 
         viewModel.stateFlow.test {
-            // Current state should have error dialog
-            assert(awaitItem().dialogState != null)
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            // First trigger an error dialog
+            mutableCookieCallbackResultFlow.emit(CookieCallbackResult.MissingCookie)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = CookieAcquisitionDialogState.Error(
+                        title = BitwardenString
+                            .an_error_has_occurred
+                            .asText(),
+                        message = BitwardenString
+                            .generic_error_message
+                            .asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
 
             viewModel.trySendAction(CookieAcquisitionAction.DismissDialogClick)
-            assertNull(awaitItem().dialogState)
+            assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
 
