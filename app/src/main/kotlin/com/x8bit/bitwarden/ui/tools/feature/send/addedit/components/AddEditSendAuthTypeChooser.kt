@@ -38,9 +38,13 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onAddNewEmailClick Callback invoked when adding a new email.
  * @param onRemoveEmailClick Callback invoked when removing an email.
  * @param password The current password value (only relevant for [SendAuth.Password]).
+ * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
+ * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param isEnabled Whether the chooser is enabled.
+ * @param sendRestrictionPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
+@Suppress("LongMethod")
 @Composable
 fun AddEditSendAuthTypeChooser(
     sendAuth: SendAuth,
@@ -49,8 +53,12 @@ fun AddEditSendAuthTypeChooser(
     onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
     onRemoveEmailClick: (AuthEmail) -> Unit,
+    onOpenPasswordGeneratorClick: () -> Unit,
+    onPasswordCopyClick: (String) -> Unit,
+    onShowDialog: () -> Unit,
     password: String,
     isEnabled: Boolean,
+    sendRestrictionPolicy: Boolean,
     modifier: Modifier = Modifier,
 ) {
     // Map option texts to their corresponding SendAuth factory functions
@@ -104,8 +112,32 @@ fun AddEditSendAuthTypeChooser(
                     value = password,
                     onValueChange = onPasswordChange,
                     cardStyle = CardStyle.Bottom,
+                    passwordFieldTestTag = "SendPasswordEntry",
+                    readOnly = sendRestrictionPolicy,
                     modifier = Modifier.fillMaxWidth(),
-                )
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (password.isEmpty()) {
+                                onOpenPasswordGeneratorClick()
+                            } else {
+                                onShowDialog()
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = password.isNotEmpty(),
+                        onClick = {
+                            onPasswordCopyClick(password)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
             }
 
             is SendAuth.None -> Unit
