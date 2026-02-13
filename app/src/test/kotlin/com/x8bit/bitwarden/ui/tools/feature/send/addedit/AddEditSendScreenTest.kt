@@ -1159,8 +1159,10 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 AddEditSendAction.AuthEmailChange(
-                    email = "test@example.com",
-                    id = "test-id",
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "test-id",
+                    ),
                 ),
             )
         }
@@ -1237,13 +1239,19 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithContentDescription("Delete")
-            .get(0)
+            .onAllNodesWithContentDescription("Delete")[0]
             .performScrollTo()
             .performClick()
 
         verify {
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(id = "id1"))
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test1@example.com",
+                        id = "id1",
+                    ),
+                ),
+            )
         }
     }
 

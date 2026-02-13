@@ -39,9 +39,12 @@ fun SendView.toViewState(
             isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
             sendAuth = when {
                 hasPassword -> SendAuth.Password
-                emails.isNotEmpty() -> SendAuth.Email(
-                    emails = this.emails.map { AuthEmail(value = it) }.toImmutableList(),
-                )
+                emails.isNotEmpty() -> {
+                    SendAuth.Email(
+                        emails = this.emails.map { AuthEmail(value = it) }.toImmutableList(),
+                    )
+                }
+
                 else -> SendAuth.None
             },
         ),

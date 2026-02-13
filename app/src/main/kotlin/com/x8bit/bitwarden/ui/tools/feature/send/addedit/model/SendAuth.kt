@@ -6,7 +6,6 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -28,11 +27,11 @@ sealed class SendAuth : Parcelable {
      */
     @Parcelize
     data object None : SendAuth() {
-        @IgnoredOnParcel
-        override val text: Text = BitwardenString.anyone_with_the_link.asText()
+        override val text: Text
+            get() = BitwardenString.anyone_with_the_link.asText()
 
-        @IgnoredOnParcel
-        override val supportingText: Text = BitwardenString.anyone_with_link_can_view_send.asText()
+        override val supportingText: Text
+            get() = BitwardenString.anyone_with_link_can_view_send.asText()
     }
 
     /**
@@ -44,13 +43,12 @@ sealed class SendAuth : Parcelable {
     data class Email(
         val emails: ImmutableList<AuthEmail> = persistentListOf(AuthEmail(value = "")),
     ) : SendAuth() {
-        @IgnoredOnParcel
-        override val text: Text = BitwardenString.specific_people.asText()
+        override val text: Text
+            get() = BitwardenString.specific_people.asText()
 
-        @IgnoredOnParcel
-        override val supportingText: Text = BitwardenString
-            .specific_people_verification_info
-            .asText()
+        override val supportingText: Text
+            get() = BitwardenString
+                .specific_people_verification_info.asText()
     }
 
     /**
@@ -59,10 +57,10 @@ sealed class SendAuth : Parcelable {
      */
     @Parcelize
     data object Password : SendAuth() {
-        @IgnoredOnParcel
-        override val text: Text = BitwardenString.anyone_with_password.asText()
+        override val text: Text
+            get() = BitwardenString.anyone_with_password.asText()
 
-        @IgnoredOnParcel
-        override val supportingText: Text? = null // Not used, password field shown instead
+        override val supportingText: Text?
+            get() = null // Not used, password field shown instead
     }
 }

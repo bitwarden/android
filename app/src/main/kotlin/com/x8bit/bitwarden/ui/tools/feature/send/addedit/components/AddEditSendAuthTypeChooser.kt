@@ -46,9 +46,9 @@ fun AddEditSendAuthTypeChooser(
     sendAuth: SendAuth,
     onAuthTypeSelect: (SendAuth) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onEmailValueChange: (String, String) -> Unit,
+    onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
-    onRemoveEmailClick: (String) -> Unit,
+    onRemoveEmailClick: (AuthEmail) -> Unit,
     password: String,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
@@ -116,15 +116,15 @@ fun AddEditSendAuthTypeChooser(
 @Composable
 private fun ColumnScope.SpecificPeopleEmailContent(
     emails: ImmutableList<AuthEmail>,
-    onEmailValueChange: (String, String) -> Unit,
+    onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
-    onRemoveEmailClick: (String) -> Unit,
+    onRemoveEmailClick: (AuthEmail) -> Unit,
 ) {
     emails.forEachIndexed { index, authEmail ->
         BitwardenTextField(
             label = stringResource(id = BitwardenString.email),
             value = authEmail.value,
-            onValueChange = { onEmailValueChange(it, authEmail.id) },
+            onValueChange = { onEmailValueChange(authEmail.copy(value = it)) },
             singleLine = false,
             keyboardType = KeyboardType.Email,
             actions = {
@@ -134,7 +134,7 @@ private fun ColumnScope.SpecificPeopleEmailContent(
                         contentDescription = stringResource(id = BitwardenString.delete),
                         contentColor = BitwardenTheme.colorScheme.status.error,
                         onClick = {
-                            onRemoveEmailClick(authEmail.id)
+                            onRemoveEmailClick(authEmail)
                         },
                     )
                 }

@@ -1174,8 +1174,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(initialState, awaitItem())
             viewModel.trySendAction(
                 AddEditSendAction.AuthEmailChange(
-                    email = "updated@example.com",
-                    id = "id2",
+                    AuthEmail(
+                        value = "updated@example.com",
+                        id = "id2",
+                    ),
                 ),
             )
             assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
@@ -1235,7 +1237,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(id = "id2"))
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id2",
+                    ),
+                ),
+            )
             assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -1256,7 +1265,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(id = "id1"))
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id1",
+                    ),
+                ),
+            )
             val newState = awaitItem()
             val actualEmails = (newState.viewState as AddEditSendState.ViewState.Content)
                 .common

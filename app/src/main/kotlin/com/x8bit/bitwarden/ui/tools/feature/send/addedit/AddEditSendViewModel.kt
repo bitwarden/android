@@ -586,8 +586,8 @@ class AddEditSendViewModel @Inject constructor(
                 ?: return@updateCommonContent commonContent
 
             val updatedEmails = currentAuth.emails.map { authEmail ->
-                if (authEmail.id == action.id) {
-                    authEmail.copy(value = action.email)
+                if (authEmail.id == action.authEmail.id) {
+                    authEmail.copy(value = action.authEmail.value)
                 } else {
                     authEmail
                 }
@@ -618,7 +618,7 @@ class AddEditSendViewModel @Inject constructor(
             val currentAuth = commonContent.sendAuth as? SendAuth.Email
                 ?: return@updateCommonContent commonContent
 
-            val updatedEmails = currentAuth.emails.filterNot { it.id == action.id }
+            val updatedEmails = currentAuth.emails.filterNot { it.id == action.authEmail.id }
             commonContent.copy(
                 sendAuth = currentAuth.copy(
                     emails = if (updatedEmails.isEmpty()) {
@@ -1163,7 +1163,7 @@ sealed class AddEditSendAction {
     /**
      * The user changed the authentication email.
      */
-    data class AuthEmailChange(val email: String, val id: String) : AddEditSendAction()
+    data class AuthEmailChange(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
      * The user added a new authentication email field.
@@ -1173,7 +1173,7 @@ sealed class AddEditSendAction {
     /**
      * The user removed an authentication email field.
      */
-    data class AuthEmailRemove(val id: String) : AddEditSendAction()
+    data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
      * Models actions that the [AddEditSendViewModel] itself might send.
