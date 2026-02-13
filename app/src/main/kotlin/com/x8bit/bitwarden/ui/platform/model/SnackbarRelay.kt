@@ -10,7 +10,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class SnackbarRelay {
     CIPHER_ARCHIVED,
+
+    /**
+     * A separate instance of the [CIPHER_ARCHIVED] relay to avoid the View Cipher screen being
+     * both a producer and consumer of it's own event.
+     */
+    CIPHER_ARCHIVED_VIEW,
     CIPHER_UNARCHIVED,
+
+    /**
+     * A separate instance of the [CIPHER_UNARCHIVED] relay to avoid the View Cipher screen being
+     * both a producer and consumer of it's own event.
+     */
+    CIPHER_UNARCHIVED_VIEW,
     CIPHER_CREATED,
     CIPHER_DELETED,
     CIPHER_DELETED_SOFT,

@@ -16,10 +16,10 @@ interface CookieDiskSource {
     fun getCookieConfig(hostname: String): CookieConfigurationData?
 
     /**
-     * Stores cookie [config] for the given [hostname].
+     * Stores cookie [config] for the given [hostname]. Pass `null` to delete the configuration.
      *
      * @param hostname The server hostname to associate with this configuration.
-     * @param config The [CookieConfigurationData] to persist.
+     * @param config The [CookieConfigurationData] to persist, or `null` to delete.
      */
-    fun storeCookieConfig(hostname: String, config: CookieConfigurationData)
+    fun storeCookieConfig(hostname: String, config: CookieConfigurationData?)
 }

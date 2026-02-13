@@ -5,9 +5,11 @@ import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import java.net.URLEncoder
 import java.util.Base64
 
 private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
@@ -76,7 +78,7 @@ private fun Uri?.getWebAuthResult(): WebAuthResult =
 @Suppress("LongParameterList")
 fun generateUriForWebAuth(
     baseUrl: String,
-    callbackScheme: String,
+    authTabData: AuthTabData,
     data: JsonObject,
     headerText: String,
     buttonText: String,
@@ -92,12 +94,14 @@ fun generateUriForWebAuth(
     val base64Data = Base64
         .getEncoder()
         .encodeToString(json.toString().toByteArray(Charsets.UTF_8))
+    val parentParam = URLEncoder.encode(authTabData.callbackUrl, "UTF-8")
     val url = baseUrl +
         "/webauthn-mobile-connector.html" +
         "?data=$base64Data" +
+        "&parent=$parentParam" +
         "&client=mobile" +
         "&v=2" +
-        "&deeplinkScheme=$callbackScheme"
+        "&deeplinkScheme=${authTabData.callbackScheme}"
     return url.toUri()
 }
 
