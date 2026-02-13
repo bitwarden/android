@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -13,6 +14,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -32,12 +34,15 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -956,6 +961,460 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text)
             .assertIsDisplayed()
     }
+
+    //region Authentication UI Tests
+
+    @Test
+    fun `auth type chooser should be displayed when feature flag is enabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Who can view")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `auth type chooser should not be displayed when feature flag is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `selecting EMAIL auth type should display email fields`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Click to expand dropdown
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // Select "Specific people"
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                match {
+                    it is AddEditSendAction.AuthTypeSelect &&
+                        it.sendAuth is SendAuth.Email
+                },
+            )
+        }
+    }
+
+    @Test
+    fun `selecting PASSWORD auth type should display password field`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        hasPassword = false,
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Click to expand dropdown
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // Select "Anyone with a password set by you"
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AddEditSendAction.AuthTypeSelect(
+                    SendAuth.Password,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `typing in auth password field should send AuthPasswordChange action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Switch to PASSWORD auth type first
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .performClick()
+
+        // Update state to show password field with authType set to PASSWORD
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .performTextInput("testpassword")
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.AuthPasswordChange("testpassword"))
+        }
+    }
+
+    @Test
+    fun `typing in email field should send AuthEmailChange action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Switch to EMAIL auth type first
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performClick()
+
+        // Update state to show email field with authType set to EMAIL
+        val testEmail = AuthEmail(id = "test-id", value = "")
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(testEmail)),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendEmailEntry")
+            .performTextInput("test@example.com")
+
+        verify {
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailChange(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "test-id",
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `clicking add email button should send AuthEmailAdd action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(
+                                AuthEmail(
+                                    id = "id1",
+                                    value = "test@example.com",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Add email")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
+        }
+    }
+
+    @Test
+    fun `clicking delete email button should send AuthEmailRemove action`() {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
+                    ),
+                ),
+            )
+        }
+
+        // Switch to EMAIL auth type
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performClick()
+
+        // Update state to show email fields with authType set to EMAIL
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(email1, email2),
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Delete")[0]
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test1@example.com",
+                        id = "id1",
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `auth type chooser should show EMAIL option for premium users`() {
+        mutableStateFlow.update {
+            it.copy(
+                isPremium = true,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Click to expand dropdown
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // "Specific people" should be visible
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `legacy password field should be hidden when auth chooser is displayed`() {
+        // Expand options section
+        composeTestRule
+            .onNodeWithText("Additional options")
+            .performScrollTo()
+            .performClick()
+
+        // With feature flag OFF, legacy password field should be visible
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("New password")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // With feature flag ON, legacy password field should be hidden
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("New password")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `email fields should display provided emails from state`() {
+        val email1 = AuthEmail(id = "id1", value = "user1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "user2@example.com")
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
+                    ),
+                ),
+            )
+        }
+
+        // Switch to EMAIL auth type
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performClick()
+
+        // Update state to show emails with authType set to EMAIL
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
+                    ),
+                ),
+            )
+        }
+
+        // Verify both email fields are present
+        composeTestRule
+            .onAllNodesWithText("Email")
+            .assertCountEquals(2)
+    }
+
+    @Test
+    fun `supporting text should display for EMAIL auth type`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.None,
+                    ),
+                ),
+            )
+        }
+
+        // Click to select EMAIL
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performClick()
+
+        // Update state with authType set to EMAIL
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(
+                                AuthEmail(
+                                    id = "id1",
+                                    value = "",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                "After sharing this Send link, individuals will need to verify " +
+                    "their email with a code to view this Send",
+            )
+            .assertIsDisplayed()
+    }
+
+    //endregion Authentication UI Tests
 }
 
 private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
@@ -971,6 +1430,8 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = true,
     isHideEmailAddressEnabled = true,
+    isSendEmailVerificationEnabled = false,
+    sendAuth = SendAuth.None,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

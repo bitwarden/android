@@ -51,7 +51,7 @@ fun createMockSendView(
         deletionDate = deletionDate,
         expirationDate = expirationDate,
         emails = emptyList(),
-        authType = AuthType.NONE,
+        authType = AuthType.PASSWORD,
     )
 
 /**

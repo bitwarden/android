@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -20,11 +21,15 @@ class SendViewExtensionsTest {
             clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
+            isSendEmailVerificationEnabled = false,
         )
 
         assertEquals(
             DEFAULT_STATE.copy(
-                common = DEFAULT_COMMON.copy(originalSendView = sendView),
+                common = DEFAULT_COMMON.copy(
+                    originalSendView = sendView,
+                    sendAuth = SendAuth.Password,
+                ),
             ),
             result,
         )
@@ -38,11 +43,15 @@ class SendViewExtensionsTest {
             clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
+            isSendEmailVerificationEnabled = false,
         )
 
         assertEquals(
             DEFAULT_STATE.copy(
-                common = DEFAULT_COMMON.copy(originalSendView = sendView),
+                common = DEFAULT_COMMON.copy(
+                    originalSendView = sendView,
+                    sendAuth = SendAuth.Password,
+                ),
                 selectedType = DEFAULT_TEXT_TYPE,
             ),
             result,
@@ -75,6 +84,8 @@ private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
         hasPassword = true,
         isHideEmailAddressEnabled = true,
+        isSendEmailVerificationEnabled = false,
+        sendAuth = SendAuth.None,
     )
 
 private val DEFAULT_TEXT_TYPE: AddEditSendState.ViewState.Content.SendType.Text =
