@@ -9,6 +9,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 
 class BlockAutoFillViewModelTest : BaseViewModelTest() {
 
@@ -249,7 +250,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val addEditDialog = dialog as BlockAutoFillState.DialogState.AddEdit
         assertEquals("http://b.com", addEditDialog.uri)
         assertEquals("http://a.com", addEditDialog.originalUri)
-        assert(addEditDialog.errorMessage != null)
+        assertNotNull(addEditDialog.errorMessage)
     }
 
     private fun createViewModel(
