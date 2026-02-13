@@ -372,12 +372,12 @@ object PlatformManagerModule {
         vaultDiskSource: VaultDiskSource,
         cookieDiskSource: CookieDiskSource,
         configDiskSource: ConfigDiskSource,
-        bitwardenServiceClient: BitwardenServiceClient,
+        authDiskSource: AuthDiskSource,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
         cookieDiskSource = cookieDiskSource,
         configDiskSource = configDiskSource,
-        bitwardenServiceClient = bitwardenServiceClient,
+        authDiskSource = authDiskSource,
     )
 
     @Provides
