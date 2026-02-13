@@ -21,6 +21,8 @@ fun createMockSendJsonRequest(
     password: String? = "mockPassword-$number",
     isDisabled: Boolean = false,
     shouldHideEmail: Boolean? = false,
+    authTypeJson: SendAuthTypeJson = SendAuthTypeJson.PASSWORD,
+    emails: String? = null,
 ): SendJsonRequest =
     SendJsonRequest(
         name = name,
@@ -36,4 +38,6 @@ fun createMockSendJsonRequest(
         password = password,
         isDisabled = isDisabled,
         shouldHideEmail = shouldHideEmail,
+        authType = authTypeJson,
+        emails = emails,
     )

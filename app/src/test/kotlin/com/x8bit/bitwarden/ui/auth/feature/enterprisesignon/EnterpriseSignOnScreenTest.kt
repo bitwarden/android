@@ -16,6 +16,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -45,7 +46,7 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     }
 
     private val intentManager: IntentManager = mockk {
-        every { startAuthTab(uri = any(), redirectScheme = any(), launcher = any()) } just runs
+        every { startAuthTab(uri = any(), authTabData = any(), launcher = any()) } just runs
     }
 
     @Before
@@ -114,12 +115,12 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToSsoLogin should call startCustomTabsActivity`() {
         val ssoUri = Uri.parse("https://identity.bitwarden.com/sso-test")
-        val scheme = "bitwarden"
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri, scheme))
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri, authTabData))
         verify(exactly = 1) {
             intentManager.startAuthTab(
                 uri = ssoUri,
-                redirectScheme = scheme,
+                authTabData = authTabData,
                 launcher = ssoLauncher,
             )
         }

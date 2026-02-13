@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.ZonedDateTime
 
@@ -34,12 +36,16 @@ fun SendView.toViewState(
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
             isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-            authEmails = this.emails,
             isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
-            authType = when {
-                hasPassword -> SendAuthType.PASSWORD
-                emails.isNotEmpty() -> SendAuthType.EMAIL
-                else -> SendAuthType.NONE
+            sendAuth = when {
+                hasPassword -> SendAuth.Password
+                emails.isNotEmpty() -> {
+                    SendAuth.Email(
+                        emails = this.emails.map { AuthEmail(value = it) }.toImmutableList(),
+                    )
+                }
+
+                else -> SendAuth.None
             },
         ),
         selectedType = when (type) {

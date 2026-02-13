@@ -45,6 +45,7 @@ internal interface UnauthenticatedIdentityApi {
         @Field(value = "twoFactorRemember") twoFactorRemember: String?,
         @Field(value = "authRequest") authRequestId: String?,
         @Field(value = "newDeviceOtp") newDeviceOtp: String?,
+        @Field(value = "deeplinkScheme") deeplinkScheme: String,
     ): NetworkResult<GetTokenResponseJson.Success>
 
     @GET("/sso/prevalidate")

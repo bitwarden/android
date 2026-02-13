@@ -7,7 +7,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import java.time.Clock
 
 /**
@@ -24,9 +24,8 @@ fun AddEditSendState.ViewState.Content.toSendView(
         key = common.originalSendView?.key,
         newPassword = common
             .passwordInput
-            .takeIf {
-                common.authType == SendAuthType.PASSWORD
-            }.orNullIfBlank(),
+            .takeIf { common.sendAuth is SendAuth.Password }
+            .orNullIfBlank(),
         hasPassword = false,
         type = selectedType.toSendType(),
         file = toSendFileView(),
@@ -42,11 +41,11 @@ fun AddEditSendState.ViewState.Content.toSendView(
             // we just update it to match the deletion date.
             common.deletionDate.toInstant()
         },
-        emails = common.authEmails.takeIf { common.authType == SendAuthType.EMAIL }.orEmpty(),
-        authType = when (common.authType) {
-            SendAuthType.PASSWORD -> AuthType.PASSWORD
-            SendAuthType.EMAIL -> AuthType.EMAIL
-            SendAuthType.NONE -> AuthType.NONE
+        emails = (common.sendAuth as? SendAuth.Email)?.emails?.map { it.value }.orEmpty(),
+        authType = when (common.sendAuth) {
+            is SendAuth.Password -> AuthType.PASSWORD
+            is SendAuth.Email -> AuthType.EMAIL
+            is SendAuth.None -> AuthType.NONE
         },
     )
 

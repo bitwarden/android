@@ -11,31 +11,31 @@ import java.net.URLEncoder
 import java.security.MessageDigest
 import java.util.Base64
 
-private const val BITWARDEN_EU_HOST: String = "bitwarden.eu"
-private const val BITWARDEN_US_HOST: String = "bitwarden.com"
+private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
 private const val APP_LINK_SCHEME: String = "https"
 private const val DEEPLINK_SCHEME: String = "bitwarden"
 private const val CALLBACK: String = "sso-callback"
-
-const val SSO_URI: String = "bitwarden://$CALLBACK"
 
 /**
  * Generates a URI for the SSO custom tab.
  *
  * @param identityBaseUrl The base URl for the identity service.
+ * @param redirectUrl The redirect URI used in the SSO request.
  * @param organizationIdentifier The SSO organization identifier.
  * @param token The prevalidated SSO token.
  * @param state Random state used to verify the validity of the response.
  * @param codeVerifier A random string used to generate the code challenge.
  */
+@Suppress("LongParameterList")
 fun generateUriForSso(
     identityBaseUrl: String,
+    redirectUrl: String,
     organizationIdentifier: String,
     token: String,
     state: String,
     codeVerifier: String,
 ): Uri {
-    val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
+    val redirectUri = URLEncoder.encode(redirectUrl, "UTF-8")
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
 
@@ -81,9 +81,7 @@ fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
         }
 
         APP_LINK_SCHEME -> {
-            if ((localData.host == BITWARDEN_US_HOST || localData.host == BITWARDEN_EU_HOST) &&
-                localData.path == "/$CALLBACK"
-            ) {
+            if (localData.host in BITWARDEN_HOSTS && localData.path == "/$CALLBACK") {
                 localData.getSsoCallbackResult()
             } else {
                 null

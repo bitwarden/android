@@ -1,6 +1,9 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.network.model.SendAuthTypeJson
 import com.bitwarden.network.model.SendJsonRequest
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -31,6 +34,8 @@ fun Send.toEncryptedNetworkSend(fileLength: Long? = null): SendJsonRequest =
         password = password,
         isDisabled = disabled,
         shouldHideEmail = hideEmail,
+        authType = authType.toNetworkSendAuthType(),
+        emails = emails,
     )
 
 /**
@@ -93,10 +98,30 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         revisionDate = revisionDate.toInstant(),
         deletionDate = deletionDate.toInstant(),
         expirationDate = expirationDate?.toInstant(),
-        emails = null,
-        emailHashes = null,
-        authType = AuthType.NONE,
+        emails = emails,
+        authType = authType?.toSdkAuthType() ?: AuthType.NONE,
     )
+
+/**
+ * Converts a Bitwarden SDK [AuthType] object to a corresponding [SendAuthTypeJson] object.
+ */
+private fun AuthType.toNetworkSendAuthType(): SendAuthTypeJson =
+    when (this) {
+        AuthType.EMAIL -> SendAuthTypeJson.EMAIL
+        AuthType.PASSWORD -> SendAuthTypeJson.PASSWORD
+        AuthType.NONE -> SendAuthTypeJson.NONE
+    }
+
+/**
+ * Converts a [SendAuthTypeJson] objects to a corresponding
+ * Bitwarden SDK [AuthType].
+ */
+private fun SendAuthTypeJson.toSdkAuthType(): AuthType =
+    when (this) {
+        SendAuthTypeJson.PASSWORD -> AuthType.PASSWORD
+        SendAuthTypeJson.EMAIL -> AuthType.EMAIL
+        SendAuthTypeJson.NONE -> AuthType.NONE
+    }
 
 /**
  * Converts a [SyncResponseJson.Send.Text] object to a corresponding

@@ -39,6 +39,8 @@ fun createMockSend(
     text: SyncResponseJson.Send.Text? = createMockText(number = number),
     key: String? = "mockKey-$number",
     expirationDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    authTypeJson: SendAuthTypeJson = SendAuthTypeJson.PASSWORD,
+    emails: String? = null,
 ): SyncResponseJson.Send =
     SyncResponseJson.Send(
         accessCount = accessCount,
@@ -57,6 +59,8 @@ fun createMockSend(
         text = text,
         key = key,
         expirationDate = expirationDate,
+        authType = authTypeJson,
+        emails = emails,
     )
 
 /**

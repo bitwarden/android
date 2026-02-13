@@ -70,7 +70,6 @@ fun AddEditSendContent(
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
-    isPremium: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -167,6 +166,7 @@ fun AddEditSendContent(
         if (state.common.isSendEmailVerificationEnabled) {
             Spacer(modifier = Modifier.height(height = 8.dp))
             AddEditSendAuthTypeChooser(
+                sendAuth = state.common.sendAuth,
                 onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
                 onPasswordChange = addSendHandlers.onAuthPasswordChange,
                 onEmailValueChange = addSendHandlers.onEmailValueChange,
@@ -176,10 +176,7 @@ fun AddEditSendContent(
                 onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
                 onShowDialog = { shouldShowDialog = true },
                 password = state.common.passwordInput,
-                emails = state.common.authEmails,
                 isEnabled = !policyDisablesSend,
-                isPremium = isPremium,
-                hasPassword = state.common.hasPassword,
                 sendRestrictionPolicy = policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendAuthTypeChooser")
