@@ -587,7 +587,7 @@ class AddEditSendViewModel @Inject constructor(
 
             val updatedEmails = currentAuth.emails.map { authEmail ->
                 if (authEmail.id == action.authEmail.id) {
-                    authEmail.copy(value = action.authEmail.value)
+                    action.authEmail
                 } else {
                     authEmail
                 }
