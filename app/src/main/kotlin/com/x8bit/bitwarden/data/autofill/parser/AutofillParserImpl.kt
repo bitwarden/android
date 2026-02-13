@@ -13,7 +13,6 @@ import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
-import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import timber.log.Timber
 
@@ -196,7 +195,7 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
         .mapNotNull { windowNode ->
             windowNode
                 .rootViewNode
-                ?.traverse(parentWebsite = null)
+                ?.traverse()
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
@@ -274,9 +273,7 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
  */
-private fun AssistStructure.ViewNode.traverse(
-    parentWebsite: String?,
-): ViewNodeTraversalData {
+private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
@@ -292,7 +289,7 @@ private fun AssistStructure.ViewNode.traverse(
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView(parentWebsite = parentWebsite)
+    toAutofillView()
         ?.run(mutableAutofillViewList::add)
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
 
@@ -300,7 +297,7 @@ private fun AssistStructure.ViewNode.traverse(
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
         getChildAt(i)
-            .traverse(parentWebsite = website)
+            .traverse()
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
