@@ -5,8 +5,9 @@ import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
-import kotlinx.collections.immutable.toImmutableList
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -103,7 +104,7 @@ class AddEditSendStateExtensionsTest {
             .copy(
                 common = DEFAULT_COMMON_STATE.copy(
                     passwordInput = "",
-                    authType = SendAuthType.NONE,
+                    sendAuth = SendAuth.None,
                 ),
             )
             .toSendView(FIXED_CLOCK)
@@ -128,8 +129,9 @@ class AddEditSendStateExtensionsTest {
             .copy(
                 common = DEFAULT_COMMON_STATE.copy(
                     passwordInput = "",
-                    authEmails = listOf("email@email.com").toImmutableList(),
-                    authType = SendAuthType.EMAIL,
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(AuthEmail(id = "id1", value = "email@email.com")),
+                    ),
                 ),
             )
             .toSendView(FIXED_CLOCK)
@@ -156,9 +158,8 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
-    authType = SendAuthType.PASSWORD,
+    sendAuth = SendAuth.Password,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

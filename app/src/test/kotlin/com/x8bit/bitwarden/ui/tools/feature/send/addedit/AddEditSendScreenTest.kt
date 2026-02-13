@@ -34,14 +34,15 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -1009,8 +1010,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList<String>().toImmutableList(),
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1029,9 +1029,10 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                AddEditSendAction.AuthTypeSelect(
-                    com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType.EMAIL,
-                ),
+                match {
+                    it is AddEditSendAction.AuthTypeSelect &&
+                        it.sendAuth is SendAuth.Email
+                },
             )
         }
     }
@@ -1044,7 +1045,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
                         hasPassword = false,
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1064,7 +1065,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 AddEditSendAction.AuthTypeSelect(
-                    com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType.PASSWORD,
+                    SendAuth.Password,
                 ),
             )
         }
@@ -1079,7 +1080,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
                         passwordInput = "",
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1101,7 +1102,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
                         passwordInput = "",
-                        authType = SendAuthType.PASSWORD,
+                        sendAuth = SendAuth.Password,
                     ),
                 ),
             )
@@ -1123,8 +1124,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = emptyList<String>().toImmutableList(),
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1140,13 +1140,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         // Update state to show email field with authType set to EMAIL
+        val testEmail = AuthEmail(id = "test-id", value = "")
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("").toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(testEmail)),
                     ),
                 ),
             )
@@ -1160,7 +1160,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 AddEditSendAction.AuthEmailChange(
                     email = "test@example.com",
-                    index = 0,
+                    id = "test-id",
                 ),
             )
         }
@@ -1174,8 +1174,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("test@example.com").toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(
+                                AuthEmail(
+                                    id = "id1",
+                                    value = "test@example.com",
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             )
@@ -1193,17 +1199,15 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `clicking delete email button should send AuthEmailRemove action`() {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf(
-                            "test1@example.com",
-                            "test2@example.com",
-                        ).toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
             )
@@ -1224,11 +1228,9 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf(
-                            "test1@example.com",
-                            "test2@example.com",
-                        ).toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(email1, email2),
+                        ),
                     ),
                 ),
             )
@@ -1237,10 +1239,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithContentDescription("Delete")
             .get(0)
+            .performScrollTo()
             .performClick()
 
         verify {
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(index = 0))
+            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(id = "id1"))
         }
     }
 
@@ -1252,7 +1255,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1312,16 +1315,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `email fields should display provided emails from state`() {
+        val email1 = AuthEmail(id = "id1", value = "user1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "user2@example.com")
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf(
-                            "user1@example.com",
-                            "user2@example.com",
-                        ).toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
             )
@@ -1343,11 +1344,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf(
-                            "user1@example.com",
-                            "user2@example.com",
-                        ).toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
             )
@@ -1366,7 +1363,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                 ),
             )
@@ -1377,6 +1374,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithTag("SendAuthTypeChooser")
             .performScrollTo()
             .performClick()
+
         composeTestRule
             .onNodeWithText("Specific people")
             .performClick()
@@ -1387,8 +1385,14 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         isSendEmailVerificationEnabled = true,
-                        authEmails = listOf("").toImmutableList(),
-                        authType = SendAuthType.EMAIL,
+                        sendAuth = SendAuth.Email(
+                            emails = persistentListOf(
+                                AuthEmail(
+                                    id = "id1",
+                                    value = "",
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             )
@@ -1418,9 +1422,8 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = true,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
-    authType = SendAuthType.NONE,
+    sendAuth = SendAuth.None,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(
