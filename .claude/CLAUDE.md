@@ -74,11 +74,11 @@ android/
 
 ### Core Patterns
 
-- **BaseViewModel**: Enforces UDF with State/Action/Event pattern. See `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt` and `docs/ARCHITECTURE.md` for full templates and usage examples.
-- **Repository Result Pattern**: Type-safe error handling using custom sealed classes for discrete operations and `DataState<T>` wrapper for streaming data. See `docs/ARCHITECTURE.md` for implementation details.
+- **BaseViewModel**: Enforces UDF with State/Action/Event pattern. See `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt`.
+- **Repository Result Pattern**: Type-safe error handling using custom sealed classes for discrete operations and `DataState<T>` wrapper for streaming data.
 - **Common Patterns**: Flow collection via `Internal` actions, error handling via `when` branches, `DataState` streaming with `.map { }` and `.stateIn()`.
 
-> For complete architecture patterns, code templates, and examples, see `docs/ARCHITECTURE.md`.
+> For complete architecture patterns and code templates, see `docs/ARCHITECTURE.md`.
 
 ---
 
@@ -86,7 +86,7 @@ android/
 
 ### Adding New Feature Screen
 
-Follow these steps (see `docs/ARCHITECTURE.md` for full templates and patterns):
+Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and copy-pasteable templates. Follow these steps:
 
 1. **Define State/Event/Action** - `@Parcelize` state, sealed event/action classes with `Internal` subclass
 2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`, map Flow results to internal actions
@@ -98,15 +98,42 @@ Follow these steps (see `docs/ARCHITECTURE.md` for full templates and patterns):
 
 Use the `reviewing-changes` skill for structured code review checklists covering MVVM/Compose patterns, security validation, and type-specific review guidance.
 
+### Codebase Discovery
+
+```bash
+# Find existing Bitwarden UI components
+find ui/src/main/kotlin/com/bitwarden/ui/platform/components/ -name "Bitwarden*.kt" | sort
+
+# Find all ViewModels
+grep -rl "BaseViewModel<" app/src/main/kotlin/ --include="*.kt"
+
+# Find all Navigation files with @Serializable routes
+find app/src/main/kotlin/ -name "*Navigation.kt" | sort
+
+# Find all Hilt modules
+find app/src/main/kotlin/ -name "*Module.kt" -path "*/di/*" | sort
+
+# Find all repository interfaces
+find app/src/main/kotlin/ -name "*Repository.kt" -not -name "*Impl.kt" -path "*/repository/*" | sort
+
+# Find encrypted disk source examples
+grep -rl "EncryptedPreferences" app/src/main/kotlin/ --include="*.kt"
+
+# Find Clock injection usage
+grep -rl "private val clock: Clock" app/src/main/kotlin/ --include="*.kt"
+
+# Search existing strings before adding new ones
+grep -n "search_term" ui/src/main/res/values/strings.xml
+```
+
 ---
 
 ## Data Models
 
-Key types used throughout the codebase (see source files and `docs/ARCHITECTURE.md` for full definitions):
+Key types used throughout the codebase:
 
 - **`UserState`** (`data/auth/`) - Active user ID, accounts list, pending account state
 - **`VaultUnlockData`** (`data/vault/repository/model/`) - User ID and vault unlock status
-- **`DataState<T>`** (`data/`) - Async data wrapper: Loading, Loaded, Pending, Error, NoNetwork
 - **`NetworkResult<T>`** (`network/`) - HTTP operation result: Success or Failure
 - **`BitwardenError`** (`network/`) - Error classification: Http, Network, Other
 
@@ -183,8 +210,6 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 - **Flow Testing**: Turbine with `stateEventFlow()` helper from `BaseViewModelTest`
 - **Time Control**: Inject `Clock` for deterministic time testing
 
-> For comprehensive test templates (ViewModel, Screen, Repository, DataSource, Network), use the `testing-android-code` skill.
-
 ---
 
 ## Code Style & Standards
@@ -192,6 +217,7 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 - **Formatter**: Android Studio with `bitwarden-style.xml` | **Line Limit**: 100 chars | **Detekt**: Enabled
 - **Naming**: `camelCase` (vars/fns), `PascalCase` (classes), `SCREAMING_SNAKE_CASE` (constants), `...Impl` (implementations)
 - **KDoc**: Required for all public APIs
+- **String Resources**: Add new strings to `:ui` module (`ui/src/main/res/values/strings.xml`). Use typographic quotes/apostrophes (`"` `"` `'`) not escaped ASCII (`\"` `\'`)
 
 > For complete style rules (imports, formatting, documentation, Compose conventions), see `docs/STYLE_AND_BEST_PRACTICES.md`.
 
@@ -199,17 +225,15 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 
 ## Anti-Patterns
 
+In addition to the Key Principles above, follow these rules:
+
 ### DO
-- Use `Result<T>` or sealed classes for operations that can fail
-- Hoist state to ViewModel when it affects business logic
 - Use `remember(viewModel)` for lambdas passed to composables
 - Map async results to internal actions before updating state
-- Use interface-based DI with Hilt
 - Inject `Clock` for time-dependent operations
 - Return early to reduce nesting
 
 ### DON'T
-- Throw exceptions from data layer functions
 - Update state directly inside coroutines (use internal actions)
 - Use `any` types or suppress null safety
 - Catch generic `Exception` (catch specific types)
@@ -305,25 +329,6 @@ Follow semantic versioning pattern: `YEAR.MONTH.PATCH`
 
 ## References
 
-### Internal Documentation
-- `docs/ARCHITECTURE.md` - Complete architecture patterns, BaseViewModel, Repository Result, DataState
-- `docs/STYLE_AND_BEST_PRACTICES.md` - Kotlin and Compose code style, formatting, imports, documentation
-
-### Skills & Tools
-- `testing-android-code` - Comprehensive test templates and patterns (ViewModel, Screen, Repository, DataSource, Network)
-- `reviewing-changes` - Structured code review checklists with MVVM/Compose pattern validation
-- `bitwarden-code-review:code-review` - Automated GitHub PR review with inline comments
-- `bitwarden-code-review:code-review-local` - Local change review written to files
-
-### External Documentation
-- [Bitwarden SDK](https://github.com/bitwarden/sdk) - Cryptographic SDK
-- [Jetpack Compose](https://developer.android.com/jetpack/compose) - UI framework
-- [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) - Async programming
-- [Hilt DI](https://dagger.dev/hilt/) - Dependency injection
-- [Turbine](https://github.com/cashapp/turbine) - Flow testing
-
-### Tools & Libraries
-- [MockK](https://mockk.io/) - Kotlin mocking library
-- [Retrofit](https://square.github.io/retrofit/) - HTTP client
-- [Room](https://developer.android.com/training/data-storage/room) - Database
-- [Detekt](https://detekt.dev/) - Static analysis
+- `docs/ARCHITECTURE.md` - Architecture patterns, templates, examples
+- `docs/STYLE_AND_BEST_PRACTICES.md` - Code style, formatting, Compose conventions
+- [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/) | [Turbine](https://github.com/cashapp/turbine) | [MockK](https://mockk.io/)
