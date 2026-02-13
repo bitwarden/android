@@ -244,8 +244,14 @@ sealed class BlockAutoFillAction {
 
     /**
      * User click to save or edit a URI.
+     *
+     * @property newUri The new URI to save.
+     * @property originalUri The original URI being edited, or null if adding a new URI.
      */
-    data class SaveUri(val newUri: String) : BlockAutoFillAction()
+    data class SaveUri(
+        val newUri: String,
+        val originalUri: String? = null,
+    ) : BlockAutoFillAction()
 
     /**
      * User click to remove URI.
