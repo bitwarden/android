@@ -27,10 +27,6 @@ jobs:
           fi
           echo "✅ No banned labels found."
 
-      - name: Allow labeler to run on opened PRs
-        if: github.event.action == 'opened' || github.event.action == 'reopened'
-        run: sleep 15
-
       - name: Enforce exactly one Change Type (t:*) label
         env:
           _PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
