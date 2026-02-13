@@ -3,7 +3,7 @@ run-name: Enforce labels for PR ${{ github.event.pull_request.number }}
 
 on:
   pull_request:
-    types: [labeled, unlabeled, opened, edited, synchronize]
+    types: [labeled, unlabeled, opened, reopened, edited, synchronize]
 
 permissions: {}
 
@@ -26,6 +26,10 @@ jobs:
             exit 1
           fi
           echo "✅ No banned labels found."
+
+      - name: Allow labeler to run on opened PRs
+        if: github.event.action == 'opened' || github.event.action == 'reopened'
+        run: sleep 15
 
       - name: Enforce exactly one Change Type (t:*) label
         env:
