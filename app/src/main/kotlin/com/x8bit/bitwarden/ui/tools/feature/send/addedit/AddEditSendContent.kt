@@ -56,7 +56,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendA
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Content view for the [AddEditSendScreen].
@@ -165,14 +164,13 @@ fun AddEditSendContent(
         if (state.common.isSendEmailVerificationEnabled) {
             Spacer(modifier = Modifier.height(height = 8.dp))
             AddEditSendAuthTypeChooser(
-                selectedAuthType = state.common.authType,
+                sendAuth = state.common.sendAuth,
                 onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
                 onPasswordChange = addSendHandlers.onAuthPasswordChange,
                 onEmailValueChange = addSendHandlers.onEmailValueChange,
                 onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
                 onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
                 password = state.common.passwordInput,
-                emails = state.common.authEmails.toImmutableList(),
                 isEnabled = !policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendAuthTypeChooser")

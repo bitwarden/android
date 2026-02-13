@@ -3,7 +3,8 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers
 import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import java.time.ZonedDateTime
 
 /**
@@ -25,11 +26,11 @@ data class AddEditSendHandlers(
     val onDeleteClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onPasswordCopyClick: (String) -> Unit,
-    val onAuthTypeSelect: (SendAuthType) -> Unit,
+    val onAuthTypeSelect: (SendAuth) -> Unit,
     val onAuthPasswordChange: (String) -> Unit,
-    val onEmailValueChange: (String, Int) -> Unit,
+    val onEmailValueChange: (AuthEmail) -> Unit,
     val onAddNewEmailClick: () -> Unit,
-    val onEmailsRemoveClick: (Int) -> Unit,
+    val onEmailsRemoveClick: (AuthEmail) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -86,16 +87,13 @@ data class AddEditSendHandlers(
                 onAddNewEmailClick = {
                     viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
                 },
-                onEmailValueChange = { email, index ->
+                onEmailValueChange = { authEmail ->
                     viewModel.trySendAction(
-                        AddEditSendAction.AuthEmailChange(
-                            email = email,
-                            index = index,
-                        ),
+                        AddEditSendAction.AuthEmailChange(authEmail = authEmail),
                     )
                 },
                 onEmailsRemoveClick = {
-                    viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(index = it))
+                    viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(it))
                 },
             )
     }

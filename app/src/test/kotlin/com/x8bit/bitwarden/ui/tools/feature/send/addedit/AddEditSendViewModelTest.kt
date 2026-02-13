@@ -39,9 +39,10 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import io.mockk.coEvery
@@ -53,7 +54,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -1041,7 +1042,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
                 passwordInput = "input",
-                authType = SendAuthType.PASSWORD,
+                sendAuth = SendAuth.Password,
             ),
         )
 
@@ -1139,10 +1140,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Changing AuthTypeSelect should not clear emails and password`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test@example.com")
         val initialCommonState = DEFAULT_COMMON_STATE.copy(
-            authEmails = listOf("test@example.com").toImmutableList(),
             passwordInput = "oldpassword",
-            authType = SendAuthType.PASSWORD,
+            sendAuth = SendAuth.Password,
         )
 
         val initialState = DEFAULT_STATE.copy(
@@ -1153,12 +1154,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(initialState)
         val expectedNoneViewState = DEFAULT_VIEW_STATE.copy(
             common = initialCommonState.copy(
-                authType = SendAuthType.NONE,
-            ),
-        )
-        val expectedEmailViewState = DEFAULT_VIEW_STATE.copy(
-            common = initialCommonState.copy(
-                authType = SendAuthType.EMAIL,
+                sendAuth = SendAuth.None,
             ),
         )
 
@@ -1166,18 +1162,24 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(initialState, awaitItem())
             viewModel.trySendAction(
                 AddEditSendAction.AuthTypeSelect(
-                    SendAuthType.NONE,
+                    SendAuth.None,
                 ),
             )
             assertEquals(initialState.copy(viewState = expectedNoneViewState), awaitItem())
 
             viewModel.trySendAction(
                 AddEditSendAction.AuthTypeSelect(
-                    SendAuthType.EMAIL,
+                    SendAuth.Email(),
                 ),
             )
 
-            assertEquals(initialState.copy(viewState = expectedEmailViewState), awaitItem())
+            // Check the structure rather than exact equality due to random UUIDs
+            val emailState = awaitItem()
+            val sendAuth = (emailState.viewState as AddEditSendState.ViewState.Content)
+                .common
+                .sendAuth as SendAuth.Email
+            assertEquals(1, sendAuth.emails.size)
+            assertEquals("", sendAuth.emails[0].value)
         }
     }
 
@@ -1197,17 +1199,26 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AuthEmailChange should update email at specified index`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test1@example.com", "test2@example.com").toImmutableList(),
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1, email2),
+                    ),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test1@example.com", "updated@example.com").toImmutableList(),
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        email1,
+                        email2.copy(value = "updated@example.com"),
+                    ),
+                ),
             ),
         )
 
@@ -1215,8 +1226,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(initialState, awaitItem())
             viewModel.trySendAction(
                 AddEditSendAction.AuthEmailChange(
-                    email = "updated@example.com",
-                    index = 1,
+                    AuthEmail(
+                        value = "updated@example.com",
+                        id = "id2",
+                    ),
                 ),
             )
             assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
@@ -1225,74 +1238,100 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AuthEmailAdd should add empty email to list`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test@example.com").toImmutableList(),
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1),
+                    ),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
-        val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test@example.com", "").toImmutableList(),
-            ),
-        )
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
             viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
-            assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
+            val newState = awaitItem()
+            val actualEmails = (newState.viewState as AddEditSendState.ViewState.Content)
+                .common
+                .sendAuth as SendAuth.Email
+            // Verify we have 2 emails, the first unchanged and the second empty
+            assertEquals(2, actualEmails.emails.size)
+            assertEquals(email1, actualEmails.emails[0])
+            assertEquals("", actualEmails.emails[1].value)
         }
     }
 
     @Test
     fun `AuthEmailRemove should remove email at specified index`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
+        val email3 = AuthEmail(id = "id3", value = "test3@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf(
-                        "test1@example.com",
-                        "test2@example.com",
-                        "test3@example.com",
-                    ).toImmutableList(),
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1, email2, email3),
+                    ),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
-                authEmails = listOf("test1@example.com", "test3@example.com").toImmutableList(),
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(email1, email3),
+                ),
             ),
         )
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(index = 1))
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id2",
+                    ),
+                ),
+            )
             assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
         }
     }
 
     @Test
-    fun `AuthEmailRemove with last email should result in empty list`() = runTest {
+    fun `AuthEmailRemove with last email should result in single empty AuthEmail`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    authEmails = listOf("test@example.com").toImmutableList(),
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1),
+                    ),
                 ),
             ),
         )
         val viewModel = createViewModel(initialState)
-        val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            common = DEFAULT_COMMON_STATE.copy(
-                authEmails = emptyList<String>().toImmutableList(),
-            ),
-        )
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(index = 0))
-            assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id1",
+                    ),
+                ),
+            )
+            val newState = awaitItem()
+            val actualEmails = (newState.viewState as AddEditSendState.ViewState.Content)
+                .common
+                .sendAuth as SendAuth.Email
+            // Verify we have 1 empty email after removing the last one
+            assertEquals(1, actualEmails.emails.size)
+            assertEquals("", actualEmails.emails[0].value)
         }
     }
 
@@ -1338,9 +1377,8 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    authEmails = emptyList<String>().toImmutableList(),
     isSendEmailVerificationEnabled = false,
-    authType = SendAuthType.NONE,
+    sendAuth = SendAuth.None,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

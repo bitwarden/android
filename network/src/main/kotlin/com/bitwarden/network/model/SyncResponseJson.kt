@@ -899,8 +899,12 @@ data class SyncResponseJson(
      * @property maxAccessCount The max access count of the send object (nullable).
      * @property shouldHideEmail If the send object should hide the email.
      * @property type The type of send object.
+     * @property authType Specifies the authentication method required to access this Send.
      * @property accessId The access ID of the send object (nullable).
      * @property password The password of the send object (nullable).
+     * Mutually exclusive with [emails]
+     * @property emails Comma-separated list of emails that may access the send using OTP
+     * authentication. Mutually exclusive with [password]
      * @property file The file of the send object.
      * @property deletionDate The max access count of the send object.
      * @property name The name of the send object (nullable).
@@ -931,11 +935,17 @@ data class SyncResponseJson(
         @SerialName("type")
         val type: SendTypeJson,
 
+        @SerialName("authType")
+        val authType: SendAuthTypeJson?,
+
         @SerialName("accessId")
         val accessId: String?,
 
         @SerialName("password")
         val password: String?,
+
+        @SerialName("emails")
+        val emails: String?,
 
         @SerialName("file")
         val file: File?,

@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
-import kotlinx.collections.immutable.toImmutableList
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -29,7 +28,7 @@ class SendViewExtensionsTest {
             DEFAULT_STATE.copy(
                 common = DEFAULT_COMMON.copy(
                     originalSendView = sendView,
-                    authType = SendAuthType.PASSWORD,
+                    sendAuth = SendAuth.Password,
                 ),
             ),
             result,
@@ -51,7 +50,7 @@ class SendViewExtensionsTest {
             DEFAULT_STATE.copy(
                 common = DEFAULT_COMMON.copy(
                     originalSendView = sendView,
-                    authType = SendAuthType.PASSWORD,
+                    sendAuth = SendAuth.Password,
                 ),
                 selectedType = DEFAULT_TEXT_TYPE,
             ),
@@ -85,9 +84,8 @@ private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
         hasPassword = true,
         isHideEmailAddressEnabled = true,
-        authEmails = emptyList<String>().toImmutableList(),
         isSendEmailVerificationEnabled = false,
-        authType = SendAuthType.NONE,
+        sendAuth = SendAuth.None,
     )
 
 private val DEFAULT_TEXT_TYPE: AddEditSendState.ViewState.Content.SendType.Text =

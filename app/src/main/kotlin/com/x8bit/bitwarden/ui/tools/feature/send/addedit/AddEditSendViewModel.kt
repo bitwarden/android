@@ -39,16 +39,17 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -119,10 +120,9 @@ class AddEditSendViewModel @Inject constructor(
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
-                        authEmails = emptyList<String>().toImmutableList(),
                         isSendEmailVerificationEnabled = featureFlagManager
                             .getFeatureFlag(key = FlagKey.SendEmailVerification),
-                        authType = SendAuthType.NONE,
+                        sendAuth = SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
                         SendItemType.FILE -> {
@@ -522,10 +522,10 @@ class AddEditSendViewModel @Inject constructor(
         updateCommonContent {
             it.copy(
                 passwordInput = action.input,
-                authType = when {
-                    action.input.isNotEmpty() -> SendAuthType.PASSWORD
-                    !isSendEmailVerificationEnabled -> SendAuthType.NONE
-                    else -> it.authType
+                sendAuth = when {
+                    action.input.isNotEmpty() -> SendAuth.Password
+                    !isSendEmailVerificationEnabled -> SendAuth.None
+                    else -> it.sendAuth
                 },
             )
         }
@@ -559,27 +559,19 @@ class AddEditSendViewModel @Inject constructor(
 
     private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
         updateCommonContent { commonContent ->
-            when (action.authType) {
-                SendAuthType.EMAIL -> {
-                    // Initialize with one empty email field if list is empty
-                    commonContent.copy(
-                        authEmails = commonContent.authEmails.ifEmpty { listOf("") }
-                            .toImmutableList(),
-                        authType = SendAuthType.EMAIL,
-                    )
-                }
+            commonContent.copy(
+                sendAuth = when (action.sendAuth) {
+                    is SendAuth.Email -> {
+                        // Preserve existing emails if switching back to EMAIL
+                        when (val currentAuth = commonContent.sendAuth) {
+                            is SendAuth.Email -> currentAuth
+                            else -> action.sendAuth
+                        }
+                    }
 
-                SendAuthType.PASSWORD -> {
-                    commonContent.copy(
-                        authType = SendAuthType.PASSWORD,
-                    )
-                }
-
-                SendAuthType.NONE ->
-                    commonContent.copy(
-                        authType = SendAuthType.NONE,
-                    )
-            }
+                    else -> action.sendAuth
+                },
+            )
         }
     }
 
@@ -591,23 +583,52 @@ class AddEditSendViewModel @Inject constructor(
 
     private fun handleAuthEmailsChange(action: AddEditSendAction.AuthEmailChange) {
         updateCommonContent { commonContent ->
-            val updatedEmails = commonContent.authEmails.toMutableList()
-            updatedEmails[action.index] = action.email
-            commonContent.copy(authEmails = updatedEmails.toImmutableList())
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            val updatedEmails = currentAuth.emails.map { authEmail ->
+                if (authEmail.id == action.authEmail.id) {
+                    action.authEmail
+                } else {
+                    authEmail
+                }
+            }
+            commonContent.copy(
+                sendAuth = currentAuth.copy(emails = updatedEmails.toImmutableList()),
+            )
         }
     }
 
     private fun handleAuthEmailsAdd() {
         updateCommonContent { commonContent ->
-            commonContent.copy(authEmails = commonContent.authEmails.plus("").toImmutableList())
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            commonContent.copy(
+                sendAuth = currentAuth.copy(
+                    emails = currentAuth.emails.plus(
+                        AuthEmail(value = ""),
+                    ).toImmutableList(),
+                ),
+            )
         }
     }
 
     private fun handleAuthEmailsRemove(action: AddEditSendAction.AuthEmailRemove) {
         updateCommonContent { commonContent ->
-            val updatedEmails = commonContent.authEmails.toMutableList()
-            updatedEmails.removeAt(action.index)
-            commonContent.copy(authEmails = updatedEmails.toImmutableList())
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            val updatedEmails = currentAuth.emails.filterNot { it.id == action.authEmail.id }
+            commonContent.copy(
+                sendAuth = currentAuth.copy(
+                    emails = if (updatedEmails.isEmpty()) {
+                        persistentListOf(AuthEmail(value = ""))
+                    } else {
+                        updatedEmails.toImmutableList()
+                    },
+                ),
+            )
         }
     }
 
@@ -953,9 +974,8 @@ data class AddEditSendState(
                 val expirationDate: ZonedDateTime?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
-                val authEmails: ImmutableList<String>,
                 val isSendEmailVerificationEnabled: Boolean,
-                val authType: SendAuthType,
+                val sendAuth: SendAuth,
             ) : Parcelable
 
             /**
@@ -1168,7 +1188,7 @@ sealed class AddEditSendAction {
     /**
      * The user selected an authentication type.
      */
-    data class AuthTypeSelect(val authType: SendAuthType) : AddEditSendAction()
+    data class AuthTypeSelect(val sendAuth: SendAuth) : AddEditSendAction()
 
     /**
      * The user changed the authentication password.
@@ -1178,7 +1198,7 @@ sealed class AddEditSendAction {
     /**
      * The user changed the authentication email.
      */
-    data class AuthEmailChange(val email: String, val index: Int) : AddEditSendAction()
+    data class AuthEmailChange(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
      * The user added a new authentication email field.
@@ -1188,7 +1208,7 @@ sealed class AddEditSendAction {
     /**
      * The user removed an authentication email field.
      */
-    data class AuthEmailRemove(val index: Int) : AddEditSendAction()
+    data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
      * Models actions that the [AddEditSendViewModel] itself might send.

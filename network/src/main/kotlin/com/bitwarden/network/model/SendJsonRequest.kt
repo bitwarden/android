@@ -9,6 +9,7 @@ import java.time.ZonedDateTime
  * Represents a send request.
  *
  * @property type The type of send.
+ * @property authType The type of authentication method required to access this Send.
  * @property name The name of the send (nullable).
  * @property notes The notes of the send (nullable).
  * @property key The send key.
@@ -21,11 +22,15 @@ import java.time.ZonedDateTime
  * @property password The password protecting this send (nullable).
  * @property isDisabled Indicate if this send is disabled.
  * @property shouldHideEmail Should the email address of the sender be hidden (nullable).
+ * @property emails The emails allowed to authenticate this send (nullable).
  */
 @Serializable
 data class SendJsonRequest(
     @SerialName("type")
     val type: SendTypeJson,
+
+    @SerialName("authType")
+    val authType: SendAuthTypeJson?,
 
     @SerialName("name")
     val name: String?,
@@ -64,4 +69,7 @@ data class SendJsonRequest(
 
     @SerialName("hideEmail")
     val shouldHideEmail: Boolean?,
+
+    @SerialName("emails")
+    val emails: String?,
 )

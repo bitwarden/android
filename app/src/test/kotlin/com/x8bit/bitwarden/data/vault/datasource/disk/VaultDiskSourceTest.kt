@@ -584,7 +584,8 @@ private const val SEND_JSON = """
     "text": "mockText-1"
   },
   "key": "mockKey-1",
-  "expirationDate": "2023-10-27T12:00:00.000Z"
+  "expirationDate": "2023-10-27T12:00:00.000Z",
+  "authType": 1
 }
 """
 

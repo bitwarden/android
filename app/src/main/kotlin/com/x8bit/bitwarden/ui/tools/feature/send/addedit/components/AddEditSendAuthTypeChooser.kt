@@ -21,68 +21,84 @@ import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendAuthType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Displays UX for choosing authentication type for a send.
  *
- * @param selectedAuthType The currently selected authentication type from the ViewModel.
+ * @param sendAuth The current authentication configuration.
  * @param onAuthTypeSelect Callback invoked when the authentication type is selected.
  * @param onPasswordChange Callback invoked when the password value changes
- * (only relevant for [SendAuthType.PASSWORD]).
- * @param onEmailValueChange Callback invoked when the email list changes
- * (only relevant for [SendAuthType.EMAIL]).
- * @param password The current password value (only relevant for [SendAuthType.PASSWORD]).
- * @param emails The list of emails (only relevant for [SendAuthType.EMAIL]).
+ * (only relevant for [SendAuth.Password]).
+ * @param onEmailValueChange Callback invoked when an email value changes
+ * (only relevant for [SendAuth.Email]).
+ * @param onAddNewEmailClick Callback invoked when adding a new email.
+ * @param onRemoveEmailClick Callback invoked when removing an email.
+ * @param password The current password value (only relevant for [SendAuth.Password]).
  * @param isEnabled Whether the chooser is enabled.
  * @param modifier Modifier for the composable.
  */
 @Composable
 fun AddEditSendAuthTypeChooser(
-    selectedAuthType: SendAuthType,
-    onAuthTypeSelect: (SendAuthType) -> Unit,
+    sendAuth: SendAuth,
+    onAuthTypeSelect: (SendAuth) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onEmailValueChange: (String, Int) -> Unit,
+    onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
-    onRemoveEmailClick: (Int) -> Unit,
+    onRemoveEmailClick: (AuthEmail) -> Unit,
     password: String,
-    emails: ImmutableList<String>,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val options = SendAuthType.entries.associateWith { it.text() }
+    // Map option texts to their corresponding SendAuth factory functions
+    val textToNoneAuth = stringResource(id = BitwardenString.anyone_with_the_link)
+    val textToEmailAuth = stringResource(id = BitwardenString.specific_people)
+    val textToPasswordAuth = stringResource(id = BitwardenString.anyone_with_password)
+
+    val options = listOf(
+        textToNoneAuth,
+        textToEmailAuth,
+        textToPasswordAuth,
+    )
+
     Column(modifier = modifier) {
         BitwardenMultiSelectButton(
             label = stringResource(id = BitwardenString.who_can_view),
             isEnabled = isEnabled,
-            options = options.values.toImmutableList(),
-            selectedOption = selectedAuthType.text(),
+            options = options.toPersistentList(),
+            selectedOption = sendAuth.text(),
             onOptionSelected = { selected ->
-                val newAuthType = options.entries.first { it.value == selected }.key
-                onAuthTypeSelect(newAuthType)
+                val newAuth = when (selected) {
+                    textToNoneAuth -> SendAuth.None
+                    textToEmailAuth -> SendAuth.Email()
+                    textToPasswordAuth -> SendAuth.Password
+                    else -> SendAuth.None // fallback
+                }
+                onAuthTypeSelect(newAuth)
             },
-            supportingText = selectedAuthType.supportingText?.invoke(),
+            supportingText = sendAuth.supportingText?.let { it() },
             insets = PaddingValues(top = 6.dp, bottom = 4.dp),
-            cardStyle = if (selectedAuthType == SendAuthType.NONE) {
+            cardStyle = if (sendAuth is SendAuth.None) {
                 CardStyle.Full
             } else {
                 CardStyle.Top()
             },
         )
 
-        when (selectedAuthType) {
-            SendAuthType.EMAIL -> {
+        when (sendAuth) {
+            is SendAuth.Email -> {
                 SpecificPeopleEmailContent(
-                    emails = emails,
+                    emails = sendAuth.emails,
                     onEmailValueChange = onEmailValueChange,
                     onAddNewEmailClick = onAddNewEmailClick,
                     onRemoveEmailClick = onRemoveEmailClick,
                 )
             }
 
-            SendAuthType.PASSWORD -> {
+            is SendAuth.Password -> {
                 BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.password),
                     value = password,
@@ -92,34 +108,33 @@ fun AddEditSendAuthTypeChooser(
                 )
             }
 
-            else -> Unit
+            is SendAuth.None -> Unit
         }
     }
 }
 
 @Composable
 private fun ColumnScope.SpecificPeopleEmailContent(
-    emails: ImmutableList<String>,
-    onEmailValueChange: (String, Int) -> Unit,
+    emails: ImmutableList<AuthEmail>,
+    onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
-    onRemoveEmailClick: (Int) -> Unit,
+    onRemoveEmailClick: (AuthEmail) -> Unit,
 ) {
-    val emailsToDisplay = emails.ifEmpty { listOf("") }
-    emailsToDisplay.forEachIndexed { index, email ->
+    emails.forEachIndexed { index, authEmail ->
         BitwardenTextField(
             label = stringResource(id = BitwardenString.email),
-            value = email,
-            onValueChange = { onEmailValueChange(it, index) },
+            value = authEmail.value,
+            onValueChange = { onEmailValueChange(authEmail.copy(value = it)) },
             singleLine = false,
             keyboardType = KeyboardType.Email,
             actions = {
-                if (index > 0 || email.isNotEmpty()) {
+                if (index > 0 || authEmail.value.isNotEmpty()) {
                     BitwardenStandardIconButton(
                         vectorIconRes = BitwardenDrawable.ic_delete,
                         contentDescription = stringResource(id = BitwardenString.delete),
                         contentColor = BitwardenTheme.colorScheme.status.error,
                         onClick = {
-                            onRemoveEmailClick(index)
+                            onRemoveEmailClick(authEmail)
                         },
                     )
                 }

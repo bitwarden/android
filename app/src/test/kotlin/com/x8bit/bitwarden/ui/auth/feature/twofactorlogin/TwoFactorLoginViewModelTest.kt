@@ -6,7 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.data.repository.util.appLinksScheme
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
@@ -23,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.webAuthnAuthTabData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -504,7 +504,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             every {
                 generateUriForWebAuth(
                     baseUrl = Environment.Us.environmentUrlData.baseWebVaultUrlOrDefault,
-                    callbackScheme = Environment.Us.environmentUrlData.appLinksScheme,
+                    authTabData = Environment.Us.environmentUrlData.webAuthnAuthTabData,
                     data = data,
                     headerText = headerText,
                     buttonText = buttonText,

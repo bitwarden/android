@@ -50,6 +50,7 @@ configure<LibraryExtension> {
     testFixtures {
         enable = true
     }
+    sourceSets["main"].res.directories.add("src/test/res")
 }
 
 dependencies {
@@ -115,8 +116,4 @@ kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
-}
-
-tasks.withType<Test>().configureEach {
-    android.sourceSets["main"].res.srcDirs("src/test/res")
 }
