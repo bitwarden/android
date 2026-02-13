@@ -424,8 +424,12 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val viewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
                 name = "test",
-                authType = SendAuthType.EMAIL,
-                authEmails = listOf("", "  ").toImmutableList(),
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        AuthEmail(value = ""),
+                        AuthEmail(value = "  "),
+                    ),
+                ),
             ),
         )
         val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))
@@ -451,8 +455,12 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val viewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
                 name = "test",
-                authType = SendAuthType.EMAIL,
-                authEmails = listOf("valid@example.com", "invalid-email").toImmutableList(),
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        AuthEmail(value = "valid@example.com"),
+                        AuthEmail(value = "invalid-email"),
+                    ),
+                ),
             ),
         )
         val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))

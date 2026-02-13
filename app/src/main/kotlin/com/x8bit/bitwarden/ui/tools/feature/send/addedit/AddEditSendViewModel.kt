@@ -650,8 +650,8 @@ class AddEditSendViewModel @Inject constructor(
             }
 
             // Validate email authentication if EMAIL auth type is selected
-            if (content.common.authType == SendAuthType.EMAIL) {
-                val nonBlankEmails = content.common.authEmails.filter { it.isNotBlank() }
+            if (content.common.sendAuth is SendAuth.Email) {
+                val nonBlankEmails = content.common.sendAuth.emails.filter { it.value.isNotBlank() }
 
                 if (nonBlankEmails.isEmpty()) {
                     mutableStateFlow.update {
@@ -667,7 +667,7 @@ class AddEditSendViewModel @Inject constructor(
                     return@onContent
                 }
 
-                if (nonBlankEmails.any { !it.isValidEmail() }) {
+                if (nonBlankEmails.any { !it.value.isValidEmail() }) {
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = AddEditSendState.DialogState.Error(
