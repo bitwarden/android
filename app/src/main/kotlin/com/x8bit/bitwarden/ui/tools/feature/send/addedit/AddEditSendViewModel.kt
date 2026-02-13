@@ -605,9 +605,10 @@ class AddEditSendViewModel @Inject constructor(
 
             commonContent.copy(
                 sendAuth = currentAuth.copy(
-                    emails = currentAuth.emails.plus(
-                        AuthEmail(value = ""),
-                    ).toImmutableList(),
+                    emails = currentAuth
+                        .emails
+                        .plus(AuthEmail(value = ""))
+                        .toImmutableList(),
                 ),
             )
         }
