@@ -168,6 +168,90 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `on SaveUri action with originalUri should replace the original URI`() = runTest {
+        val blockedUris = mutableListOf("http://old.com", "http://other.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://new.com",
+                originalUri = "http://old.com",
+            ),
+        )
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://other.com", "http://new.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on SaveUri action editing to same value should succeed`() = runTest {
+        val blockedUris = mutableListOf("http://same.com", "http://other.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://same.com",
+                originalUri = "http://same.com",
+            ),
+        )
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://other.com", "http://same.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on SaveUri action editing to existing URI should show duplicate error`() = runTest {
+        val blockedUris = mutableListOf("http://a.com", "http://b.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://b.com",
+                originalUri = "http://a.com",
+            ),
+        )
+
+        // Should show error dialog, not update the list
+        val dialog = viewModel.stateFlow.value.dialog
+        assert(dialog is BlockAutoFillState.DialogState.AddEdit)
+        val addEditDialog = dialog as BlockAutoFillState.DialogState.AddEdit
+        assertEquals("http://b.com", addEditDialog.uri)
+        assertEquals("http://a.com", addEditDialog.originalUri)
+        assert(addEditDialog.errorMessage != null)
+    }
+
     private fun createViewModel(
         state: BlockAutoFillState? = DEFAULT_STATE,
     ): BlockAutoFillViewModel = BlockAutoFillViewModel(
