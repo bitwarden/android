@@ -23,8 +23,10 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -68,6 +70,15 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val vaultMigrationManager = mockk<VaultMigrationManager> {
         every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
     }
+
+    private val mutableCookieAcquisitionRequestFlow =
+        MutableStateFlow<CookieAcquisitionRequest?>(null)
+    private val cookieAcquisitionRequestManager =
+        mockk<CookieAcquisitionRequestManager> {
+            every {
+                cookieAcquisitionRequestFlow
+            } returns mutableCookieAcquisitionRequestFlow
+        }
 
     @BeforeEach
     fun setup() {
@@ -1701,9 +1712,110 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault unlocked with matching cookie acquisition request should show VaultUnlockedForCookieAcquisition`() {
+        mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+            hostname = DEFAULT_US_WEB_VAULT_URL,
+        )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForCookieAcquisition,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault unlocked with non-matching cookie acquisition hostname should show VaultUnlocked`() {
+        mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+            hostname = "https://other.example.com",
+        )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault unlocked with null cookie acquisition request should show VaultUnlocked`() {
+        mutableCookieAcquisitionRequestFlow.value = null
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault unlocked with matching cookie request and AutofillSave should prioritize cookie acquisition`() {
+        val autofillSaveItem: AutofillSaveItem = mockk()
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AutofillSave(autofillSaveItem = autofillSaveItem)
+        mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+            hostname = DEFAULT_US_WEB_VAULT_URL,
+        )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForCookieAcquisition,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault unlocked with matching cookie request and migration pending should show cookie acquisition`() {
+        mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+            hostname = DEFAULT_US_WEB_VAULT_URL,
+        )
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForCookieAcquisition,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when vault locked with matching cookie acquisition request should show VaultLocked`() {
+        mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+            hostname = DEFAULT_US_WEB_VAULT_URL,
+        )
+        mutableUserStateFlow.tryEmit(
+            MOCK_VAULT_UNLOCKED_USER_STATE.copy(
+                accounts = listOf(
+                    MOCK_VAULT_UNLOCKED_USER_STATE.activeAccount.copy(
+                        isVaultUnlocked = false,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultLocked,
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): RootNavViewModel =
         RootNavViewModel(
             authRepository = authRepository,
+            cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
             specialCircumstanceManager = specialCircumstanceManager,
             vaultMigrationManager = vaultMigrationManager,
         )
@@ -1715,6 +1827,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 )
 
 private const val ACCESS_TOKEN: String = "access_token"
+private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 
 private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
     activeUserId = "activeUserId",

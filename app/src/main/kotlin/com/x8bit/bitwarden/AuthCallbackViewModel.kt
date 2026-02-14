@@ -3,6 +3,7 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.util.getCookieCallbackResultOrNull
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResultOrNull
@@ -28,6 +29,7 @@ class AuthCallbackViewModel @Inject constructor(
         val webAuthResult = action.intent.getWebAuthResultOrNull()
         val duoCallbackTokenResult = action.intent.getDuoCallbackTokenResult()
         val ssoCallbackResult = action.intent.getSsoCallbackResult()
+        val cookieCallbackResult = action.intent.getCookieCallbackResultOrNull()
         when {
             yubiKeyResult != null -> {
                 authRepository.setYubiKeyResult(yubiKeyResult = yubiKeyResult)
@@ -42,6 +44,12 @@ class AuthCallbackViewModel @Inject constructor(
             ssoCallbackResult != null -> {
                 authRepository.setSsoCallbackResult(
                     result = ssoCallbackResult,
+                )
+            }
+
+            cookieCallbackResult != null -> {
+                authRepository.setCookieCallbackResult(
+                    result = cookieCallbackResult,
                 )
             }
 
