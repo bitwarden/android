@@ -32,6 +32,8 @@ class AutofillActivityManagerImpl(
             chromeBetaChannelStatusData = browserThirdPartyAutofillManager.betaChromeAutofillStatus,
             vivaldiStableChannelStatusData = browserThirdPartyAutofillManager
                 .stableVivaldiAutofillStatus,
+            defaultBrowserPackageName = browserThirdPartyAutofillManager
+                .defaultBrowserPackageName,
         )
 
     init {

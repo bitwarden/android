@@ -239,6 +239,7 @@ private val DEFAULT_BROWSER_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
         isAvailable = true,
         isThirdPartyEnabled = false,
     ),
+    defaultBrowserPackageName = null,
 )
 
 private val DEFAULT_STATE = SetupBrowserAutofillState(
