@@ -448,6 +448,13 @@ A leitura será feita automaticamente.</string>
     <string name="deletion_date">Data de apagamento</string>
     <string name="deletion_time">Horário de apagamento</string>
     <string name="deletion_date_info">O Send será apagado permanentemente no horário especificado.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Apagamento pendente</string>
     <string name="expired">Vencido</string>
     <string name="expires_at">Expira às %s</string>
@@ -936,6 +943,7 @@ Quer trocar para esta conta?</string>
     <string name="use_brave_autofill_integration">Usar a integração de preenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração de preenchimento do Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Usar integração de preenchimento do Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Integração com o autopreenchimento do Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Assim que ativado, você será direcionado para as configurações do navegador para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Sem pasta</string>
@@ -1175,8 +1183,8 @@ Quer trocar para esta conta?</string>
     <string name="migrating_items_to_x">Migrando itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
     <string name="search_archive">Buscar no arquivo</string>
-    <string name="archive_noun">Arquivo</string>
-    <string name="archive_verb">Arquivo</string>
+    <string name="archive_noun">Arquivar</string>
+    <string name="archive_verb">Arquivar</string>
     <string name="unarchive">Desarquivar</string>
     <string name="archived">Arquivados</string>
     <string name="hidden_items">Itens ocultos</string>

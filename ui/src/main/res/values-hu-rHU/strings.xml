@@ -447,6 +447,13 @@
     <string name="deletion_date">Törlési dátum</string>
     <string name="deletion_time">Törlési időpont</string>
     <string name="deletion_date_info">A Send véglegesen törlésre kerül a meghatározott időpontban.</string>
+    <string name="who_can_view">Ki láthatja</string>
+    <string name="anyone_with_the_link">Bárki ezzel a hivatkozással</string>
+    <string name="anyone_with_link_can_view_send">Bárki ezzel a hivatkozással megtekintheti ezt a Send elemet.</string>
+    <string name="specific_people">Adott személyek</string>
+    <string name="specific_people_verification_info">A Send hivatkozás megosztása után a személyeknek ellenőrizniük kell email címüket egy kóddal a Send megtekintéséhez.</string>
+    <string name="anyone_with_password">Bárki az általam beállított jelszóval</string>
+    <string name="add_email">E-mail cím hozzáadása</string>
     <string name="pending_delete">Függőben lévő törlés</string>
     <string name="expired">Lejárt</string>
     <string name="expires_at">Lejárat: %s</string>
@@ -935,6 +942,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_brave_autofill_integration">Brave automatikus kitöltés integráció használata</string>
     <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Vivaldi automatikus kitöltés integráció használata</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Javítja a bejelentkezési adatok kitöltését a támogatott webhelyeken a Chrome-ban. Az engedélyezést követően a böngésző beállításaiba kerülünk, ahol engedélyezhetjük a harmadik féltől származó automatikus kitöltést.</string>
     <string name="show_more">Több megjelenítése</string>
     <string name="no_folder">Nincs mappa</string>
