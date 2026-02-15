@@ -448,6 +448,13 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="deletion_date">Silinmə tarixi</string>
     <string name="deletion_time">Silinmə vaxtı</string>
     <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
+    <string name="who_can_view">Kimlər baxa bilər</string>
+    <string name="anyone_with_the_link">Keçidə sahib olan hər kəs</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Xüsusi insanlar</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Ayarladığınız parola sahib hər kəs</string>
+    <string name="add_email">E-poçt əlavə et</string>
     <string name="pending_delete">Silinməsi gözlənilir</string>
     <string name="expired">Müddəti bitib</string>
     <string name="expires_at">%s müddəti bitir</string>
@@ -935,6 +942,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="use_brave_autofill_integration">Brave avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_beta_autofill_integration">Chrome Beta avto-doldurma inteqrasiyasını istifadə et</string>
+    <string name="use_vivaldi_autofill_integration">Vivaldi avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilmiş brauzerlərdə dəstəklənən veb saytlar üçün giriş məlumatlarının doldurulmasını təkmilləşdirir. Fəallaşdırdıqdan sonra, üçüncü tərəf avto-doldurmanı fəallaşdırmaq üçün brauzer ayarlarına yönləndiriləcəksiniz.</string>
     <string name="show_more">Daha çox göstər</string>
     <string name="no_folder">Qovluq yoxdur</string>
@@ -1185,7 +1193,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="unable_to_unarchive_selected_item">Seçilmiş element arxivdən çıxarıla bilmir.</string>
     <string name="archiving">Arxivlənir</string>
     <string name="unarchiving">Arxivdən çıxarılır</string>
-    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_archived">Element arxivə daşındı</string>
     <string name="item_moved_to_vault">Element seyfə daşındı</string>
     <string name="archive_unavailable">Arxiv əlçatmazdır</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
@@ -1198,6 +1206,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="your_premium_subscription_ended">Premium abunəliyiniz bitdi</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin detallarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="items_transferred">Elementlər köçürüldü</string>
     <string name="updated_master_password">Güncəllənmiş ana parol</string>
 </resources>

@@ -450,6 +450,13 @@ Nolasīšana notiks automātiski.</string>
     <string name="deletion_date">Dzēšanas datums</string>
     <string name="deletion_time">Dzēšanas laiks</string>
     <string name="deletion_date_info">Send tiks neatgriezeniski izdzēsts norādītajā datumā un laikā.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Gaida dzēšanu</string>
     <string name="expired">Beidzies izmantošanas laiks</string>
     <string name="expires_at">Beigsies %s</string>
@@ -941,6 +948,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="use_brave_autofill_integration">Izmantot Brave automātiskās aizpildes iekļaušanu</string>
     <string name="use_chrome_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Izmantot Vivaldi automātiskās aizpildes iekļaušanu</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Uzlabo pieteikšanās vietumu aizpildīšanu atbalstītās tīmekļvietnēs atlasītos pārlūkos. Uzreiz pēc iespējošanas notiks novirzīšana uz pārlūka iestatījumiem, lai iespējotu trešo pušu automātisko aizpildi.</string>
     <string name="show_more">Rādīt vairāk</string>
     <string name="no_folder">Nav mapes</string>

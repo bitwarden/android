@@ -452,6 +452,13 @@ Skenovanie prebehne automaticky.</string>
     <string name="deletion_date">Dátum odstránenia</string>
     <string name="deletion_time">Čas odstránenia</string>
     <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
+    <string name="who_can_view">Kto môže zobraziť</string>
+    <string name="anyone_with_the_link">Ktokoľvek s odkazom</string>
+    <string name="anyone_with_link_can_view_send">Ktokoľvek s týmto odkazom môže zobraziť tento Send</string>
+    <string name="specific_people">Konkrétne osoby</string>
+    <string name="specific_people_verification_info">Po zdieľaní tohto odkazu na Send budú musieť jednotlivci overiť svoju e-mailovú adresu pomocou kódu na zobrazenie tohto Sendu</string>
+    <string name="anyone_with_password">Ktokoľvek s heslom od vás</string>
+    <string name="add_email">Pridať e-mail</string>
     <string name="pending_delete">Čakajúce odstránenie</string>
     <string name="expired">Exspirované</string>
     <string name="expires_at">Vyprší %s</string>
@@ -944,8 +951,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Operácia s poverením zlyhala, pretože overenie používateľa bolo zrušené.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
     <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
-    <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
-    <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chrome Beta</string>
+    <string name="use_chrome_autofill_integration">Použite integráciu automatického vypĺňania Chromu</string>
+    <string name="use_chrome_beta_autofill_integration">Použite integráciu automatického vypĺňania Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Použite integráciu automatického vypĺňania Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky vo vybraných prehliadačoch. Po zapnutí budete presmerovaní do nastavení prehliadača na povolenie automatického vypĺňania od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>

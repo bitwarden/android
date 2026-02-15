@@ -452,6 +452,13 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="deletion_date">Data usunięcia</string>
     <string name="deletion_time">Czas usunięcia</string>
     <string name="deletion_date_info">Wysyłka zostanie trwale usunięta w określonym czasie.</string>
+    <string name="who_can_view">Kto może odczytać</string>
+    <string name="anyone_with_the_link">Każdy, kto ma link</string>
+    <string name="anyone_with_link_can_view_send">Każdy, kto ma link, może odczytać wysyłkę</string>
+    <string name="specific_people">Konkretni użytkownicy</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Każdy, kto ma hasło wysyłki</string>
+    <string name="add_email">Dodaj adres e-mail</string>
     <string name="pending_delete">Oczekiwanie na usunięcie</string>
     <string name="expired">Wygasła</string>
     <string name="expires_at">Wygasa o %s</string>
@@ -945,6 +952,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="use_brave_autofill_integration">Użyj autouzupełniania Brave</string>
     <string name="use_chrome_autofill_integration">Użyj autouzupełniania Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Użyj autouzupełniania Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Użyj autouzupełniania Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Poprawia uzupełnianie danych logowania w wybranych przeglądarkach. Po włączeniu zostaniesz przekierowany do ustawień przeglądarki, aby włączyć autouzupełnianie innych firm.</string>
     <string name="show_more">Pokaż więcej</string>
     <string name="no_folder">Nieprzypisane</string>
@@ -1182,7 +1190,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Użyj blokady urządzenia, aby odblokować aplikację</string>
     <string name="loading_vault_data">Ładowanie danych sejfu…</string>
     <string name="resending">Ponowne wysyłanie</string>
-    <string name="you_left_the_organization">You left the organization</string>
+    <string name="you_left_the_organization">Nie należysz już do tej organizacji</string>
     <string name="transfer_items_to_org">Przenieś elementy do %1$s</string>
     <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
     <string name="decline_and_leave">Decline and leave</string>
@@ -1201,7 +1209,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="unarchiving">Unarchiving</string>
     <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
     <string name="item_moved_to_vault">Element został przeniesiony do archiwum</string>
-    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archive_unavailable">Archiwum jest niedostępne</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to premium</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>

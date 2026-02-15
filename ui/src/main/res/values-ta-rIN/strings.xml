@@ -448,6 +448,13 @@
     <string name="deletion_date">அழிக்கும் தேதி</string>
     <string name="deletion_time">அழிக்கும் நேரம்</string>
     <string name="deletion_date_info">குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் Send நிரந்தரமாக அழிக்கப்படும்.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">அழித்தல் நிலுவையில்</string>
     <string name="expired">காலாவதியானது</string>
     <string name="expires_at">காலாவதியாகிறது %s</string>
@@ -936,6 +943,7 @@
     <string name="use_brave_autofill_integration">Brave தானியங்கு நிரப்புதல் ஒருங்கிணைப்பை பயன்படுத்தவும்</string>
     <string name="use_chrome_autofill_integration">Chrome தானியங்கு நிரப்புதல் ஒருங்கிணைப்பை பயன்படுத்தவும்</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">தேர்ந்தெடுக்கப்பட்ட உலாவிகளில் ஆதரிக்கப்படும் இணையதளங்களுக்கான உள்நுழைவு நிரப்புதலை மேம்படுத்துகிறது. இயக்கப்பட்டதும், மூன்றாம் தரப்பு தானியங்கு நிரப்புதலை இயக்க உலாவி அமைப்புகளுக்கு நீங்கள் வழிநடத்தப்படுவீர்கள்.</string>
     <string name="show_more">மேலும் காட்டு</string>
     <string name="no_folder">கோப்புறை இல்லை</string>

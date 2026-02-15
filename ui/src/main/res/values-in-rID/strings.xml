@@ -446,6 +446,13 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="deletion_date">Tanggal Penghapusan</string>
     <string name="deletion_time">Waktu Penghapusan</string>
     <string name="deletion_date_info">Kirim akan terhapus permanen pada waktu dan tanggal yang ditetapkan.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Penghapusan menunggu keputusan</string>
     <string name="expired">Kedaluwarsa</string>
     <string name="expires_at">Kedaluwarsa pada %s</string>
@@ -931,6 +938,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="use_brave_autofill_integration">Gunakan integrasi isi otomatis Brave</string>
     <string name="use_chrome_autofill_integration">Gunakan integrasi isi otomatis Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Gunakan integrasi isi otomatis Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Meningkatkan pengisian login untuk situs web yang didukung pada browser terpilih. Setelah diaktifkan, Anda akan diarahkan ke pengaturan browser untuk mengaktifkan isi otomatis pihak ketiga.</string>
     <string name="show_more">Lihat selengkapnya</string>
     <string name="no_folder">Tidak ada folder</string>

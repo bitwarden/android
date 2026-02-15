@@ -448,6 +448,13 @@ L\'escaneig es farà automàticament.</string>
     <string name="deletion_date">Data de supressió</string>
     <string name="deletion_time">Hora de supressió</string>
     <string name="deletion_date_info">El Send se suprimirà permanentment a la data i hora especificades.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Pendent de supressió</string>
     <string name="expired">Caducat</string>
     <string name="expires_at">Expires at %s</string>
@@ -936,6 +943,7 @@ Voleu canviar a aquest compte?</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Utilitza la integració d\'emplenament automàtic de Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Millora l\'emplenament automàtic d\'inici de sessió per a llocs web compatibles en navegadors seleccionats. Una vegada habilitat, se us dirigirà a la configuració del navegador per habilitar l\'emplenament automàtic de tercers.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>

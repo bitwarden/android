@@ -448,6 +448,13 @@ A leitura será efetuada automaticamente.</string>
     <string name="deletion_date">Data de eliminação</string>
     <string name="deletion_time">Hora de eliminação</string>
     <string name="deletion_date_info">O Send será permanentemente eliminado na data e hora especificadas.</string>
+    <string name="who_can_view">Quem pode ver</string>
+    <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
+    <string name="anyone_with_link_can_view_send">Qualquer pessoa com este link pode ver este Send</string>
+    <string name="specific_people">Pessoas específicas</string>
+    <string name="specific_people_verification_info">Após partilhar este Send através do link, os indivíduos terão de verificar o e-mail com um código para poderem ver este Send</string>
+    <string name="anyone_with_password">Qualquer pessoa com uma palavra-passe definida por si</string>
+    <string name="add_email">Adicionar e-mail</string>
     <string name="pending_delete">Eliminação pendente</string>
     <string name="expired">Expirado</string>
     <string name="expires_at">Expira às %s</string>
@@ -936,6 +943,7 @@ Pretende mudar para esta conta?</string>
     <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Utilizar a integração do preenchimento automático do Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Utilizar a integração do preenchimento automático do Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Uma vez ativado, será direcionado para as definições do Brave para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Sem pasta</string>

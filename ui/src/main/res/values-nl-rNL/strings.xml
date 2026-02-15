@@ -11,7 +11,7 @@
     <string name="copy_password">Wachtwoord kopiëren</string>
     <string name="copy_username">Gebruikersnaam kopiëren</string>
     <string name="delete">Verwijderen</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Verwijderen…</string>
     <string name="do_you_really_want_to_delete">Weet je zeker dat je wilt verwijderen? Je kunt dit niet ongedaan maken.</string>
     <string name="edit">Bewerken</string>
     <string name="edit_folder">Map bewerken</string>
@@ -101,7 +101,7 @@
     <string name="one_minute">1 minuut</string>
     <string name="four_hours">4 uur</string>
     <string name="immediately">Onmiddellijk</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Sessie-timeout op \'Uitloggen\' instellen?</string>
     <string name="vault_timeout_log_out_confirmation_message">Na de time-out periode zal je uitgelogd worden. Je moet met internet verbonden zijn om in te loggen en weer toegang tot je kluis te krijgen. Je instellingen en PIN die opgeslagen zijn op dit apparaat zullen niet veranderen.</string>
     <string name="logging_in">In aan het loggen…</string>
     <string name="login_to_bitwarden">Login op Bitwarden</string>
@@ -110,8 +110,8 @@
     <string name="master_password_hint">Hoofdwachtwoordhint (optioneel)</string>
     <string name="master_password_hint_description">Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">Hoofdwachtwoord moet minstens %d tekens lang zijn.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="one">Hoofdwachtwoord moet minstens %d teken lang zijn.</item>
+        <item quantity="other">Hoofdwachtwoord moet minstens %d tekens lang zijn.</item>
     </plurals>
     <string name="min_numbers">Min. aantal cijfers</string>
     <string name="min_special">Min. aantal speciaal</string>
@@ -138,7 +138,7 @@
     <string name="other">Overig</string>
     <string name="password_generator">Wachtwoordgenerator</string>
     <string name="password_hint">Wachtwoordhint</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">We hebben je een mail gestuurd met de hint voor je hoofdwachtwoord.</string>
     <string name="password_override_alert">Weet je zeker dat je het huidige wachtwoord wilt overschrijven?</string>
     <string name="retype_master_password">Hoofdwachtwoord opnieuw invoeren</string>
     <string name="retype_new_master_password_required">Hoofdwachtwoord opnieuw invoeren (verplicht)</string>
@@ -147,8 +147,8 @@
     <string name="select">Selecteren</string>
     <string name="item_details">Itemdetails</string>
     <string name="item_updated">Item bijgewerkt</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Indienen…</string>
+    <string name="syncing">Synchroniseren…</string>
     <string name="syncing_complete">Synchronisatie voltooid</string>
     <string name="two_step_login">Tweestapsaanmelding</string>
     <string name="unlock_with_biometrics">Biometrisch ontgrendelen</string>
@@ -187,7 +187,7 @@
     <string name="add_new_attachment">Nieuwe bijlage toevoegen</string>
     <string name="attachments">Bijlagen</string>
     <string name="unable_to_download_file">Kon bestand niet downloaden.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Downloaden…</string>
     <string name="attachment_large_warning">Deze bijlage heeft een omvang van %1$s. Weet je zeker dat je deze naar je apparaat wilt downloaden?</string>
     <string name="authenticator_key">Authenticatiesleutel (TOTP)</string>
     <string name="verification_code_totp">Verificatiecode (TOTP)</string>
@@ -345,7 +345,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Er zijn geen mappen om weer te geven.</string>
     <string name="fingerprint_phrase">Vingerafdrukzin</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">Vingerafdrukzin van je account</string>
     <string name="export_vault">Kluis exporteren</string>
     <string name="lock_now">Nu vergrendelen</string>
     <string name="pin">PIN-code</string>
@@ -365,7 +365,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="clear_clipboard">Klembord wissen</string>
     <string name="clear_clipboard_description">Gekopieerde waarden automatisch van het klembord wissen.</string>
     <string name="default_uri_match_detection">Standaard URI-overeenkomstdetectie</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">URI-overeenkomstdetectie bepaalt hoe Bitwarden automatisch invulsuggesties herkent.</string>
     <string name="theme">Thema</string>
     <string name="theme_description">Verander het kleurthema van deze applicatie</string>
     <string name="copy_notes">Notities kopiëren</string>
@@ -392,7 +392,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="export_vault_file_pw_protect_info">Deze bestandsexport wordt met een wachtwoord beveiligd en vereist het bestandswachtwoord om te decoderen.</string>
     <string name="export_vault_confirmation_title">Kluisexport bevestigen</string>
     <string name="warning">Waarschuwing</string>
-    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
+    <string name="export_vault_failure">Er ging iets mis met het exporteren van je kluis. Als het probleem aanhoudt, moet je exporteren via de webkluis.</string>
     <string name="export_vault_success">Kluis met succes geëxporteerd</string>
     <string name="clone">Dupliceren</string>
     <string name="password_generator_policy_in_effect">Een of meer organisatiebeleidseisen heeft invloed op de instellingen van je generator.</string>
@@ -400,10 +400,10 @@ Het scannen gebeurt automatisch.</string>
     <string name="save_attachment_success">Bijlage succesvol opgeslagen</string>
     <string name="autofill_tile_accessibility_required">Zet \"Automatisch invullen toegankelijkheidsservice\" aan bij Bitwarden Instellingen om de Autofill tegel te gebruiken.</string>
     <string name="autofill_tile_uri_not_found">Geen wachtwoordvelden gevonden</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Verzenden naar prullenbak…</string>
     <string name="item_soft_deleted">Item verplaatst naar de prullenbak.</string>
     <string name="restore">Herstellen</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Herstellen…</string>
     <string name="item_restored">Item is hersteld.</string>
     <string name="trash">Prullenbak</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Weet je zeker dat je dit definitief wilt verwijderen? Dit kan je niet ongedaan maken.</string>
@@ -413,7 +413,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="enable_sync_on_refresh">Synchronisatie bij vernieuwen inschakelen</string>
     <string name="enable_sync_on_refresh_description">Kluis synchroniseren met pull-down gebaar.</string>
     <string name="log_in_sso">Enterprise Single Sign-On</string>
-    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
+    <string name="log_in_sso_summary">Snel inloggen met het single sign-on portaal van je organisatie. Voer de identificatie van je organisatie in om te beginnen.</string>
     <string name="org_identifier">Organisatie-identificatie</string>
     <string name="login_sso_error">Kan momenteel niet inloggen met SSO</string>
     <string name="set_master_password">Hoofdwachtwoord instellen</string>
@@ -448,6 +448,13 @@ Het scannen gebeurt automatisch.</string>
     <string name="deletion_date">Verwijderingsdatum</string>
     <string name="deletion_time">Verwijderingstijd</string>
     <string name="deletion_date_info">Deze Send wordt op de aangegeven datum en tijd definitief verwijderd.</string>
+    <string name="who_can_view">Wie kan weergeven</string>
+    <string name="anyone_with_the_link">Iedereen met de link</string>
+    <string name="anyone_with_link_can_view_send">Iedereen met deze link kan deze Send bekijken</string>
+    <string name="specific_people">Specifieke mensen</string>
+    <string name="specific_people_verification_info">Na het delen van deze Send-link moeten individuen hun e-mailadres met een code verifiëren om deze Send te kunnen bekijken</string>
+    <string name="anyone_with_password">Iedereen met een door jou ingesteld wachtwoord</string>
+    <string name="add_email">E-mail toevoegen</string>
     <string name="pending_delete">Wordt verwijderd</string>
     <string name="expired">Verlopen</string>
     <string name="expires_at">Verloopt op %s</string>
@@ -594,8 +601,8 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="api_access_token">API-toegangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?</string>
     <string name="generate_username">Gebruikersnaam genereren</string>
-    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
-    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
+    <string name="plus_addressed_email_description">Gebruik de subadressen van je e-mailprovider</string>
+    <string name="catch_all_email_description">Gebruik de catch-all inbox van je domein.</string>
     <string name="forwarded_email_description">E-mailadres genereren met een externe doorstuurdienst.</string>
     <string name="accessibility_service_disclosure">Toegankelijksheidsservice-melding</string>
     <string name="accessibility_disclosure_text">Bitwarden gebruikt de toegankelijkheidsservice om inlogvelden in apps en op websites te vinden, de juiste veld ID\'s te bepalen om de gebruikersnaam en het wachtwoord in te voeren wanneer een bijpassend paar gevonden is voor de app of site. We slaan geen informatie op die de service ons levert, ook controleren we geen elementen op het scherm naast de tekstinvoer van inloggegevens.</string>
@@ -936,6 +943,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="use_brave_autofill_integration">Brave-integratie voor automatisch invullen gebruiken</string>
     <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
     <string name="use_chrome_beta_autofill_integration">Gebruik de Chrome Bèta autofill intergratie</string>
+    <string name="use_vivaldi_autofill_integration">Vivaldi autofill-integratie gebruiken</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Verbetert het invullen van inloggegevens voor ondersteunde websites op geselecteerde webbrowsers. Eenmaal ingeschakeld word je doorgestuurd naar de instellingen van de webbrowser voor het inschakelen van automatisch invullen door derden.</string>
     <string name="show_more">Meer weergeven</string>
     <string name="no_folder">Geen map</string>
@@ -979,7 +987,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="log_deleted">Log verwijderd</string>
     <string name="app_settings">App-instellingen</string>
     <string name="replace_existing_certificate">Bestaand certificaat vervangen?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Een certificaat met de alias “%s” bestaat al. Wil je dit vervangen?\nHet vervangen van het certificaat kan de verbinding beïnvloeden met alle omgevingen die dit momenteel gebruiken.</string>
     <string name="replace_certificate">Certificaat vervangen</string>
     <string name="unable_to_read_certificate">Kan certificaat niet lezen.</string>
     <string name="cannot_delete_your_account">Het verwijderen van je account is mislukt</string>
@@ -992,7 +1000,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="use_dynamic_colors">Dynamische kleuren gebruiken</string>
     <string name="use_dynamic_colors_question">Dynamische kleuren gebruiken?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamische kleuren gebruiken de systeemkleuren en voldoen mogelijk niet aan alle toegankelijkheidsrichtlijnen.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">De passkey-operatie is mislukt omdat de browser (%1$s) niet wordt herkend. Selecteer “Vertrouwen” om %1$s toe te voegen aan de lijst van lokaal vertrouwde applicaties.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey-bewerking mislukt omdat de browser niet is vertrouwd.</string>
     <string name="trust">Vertrouwen</string>
     <string name="trusted_by_you_learn_more">Dit zijn applicaties of browsers die Bitwarden standaard niet vertrouwt, maar JIJ vertrouwt voor passkey-acties.</string>
@@ -1174,7 +1182,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="why_am_i_seeing_this">Waarom zie ik dit?</string>
     <string name="migrating_items_to_x">Items overdragen naar %s</string>
     <string name="failed_to_migrate_items_to_x">Overdracht naar %s mislukt</string>
-    <string name="search_archive">Search archive</string>
+    <string name="search_archive">Archief doorzoeken</string>
     <string name="archive_noun">Archief</string>
     <string name="archive_verb">Archief</string>
     <string name="unarchive">Dearchiveren</string>

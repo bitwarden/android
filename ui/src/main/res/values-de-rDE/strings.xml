@@ -448,6 +448,13 @@ Das Scannen erfolgt automatisch.</string>
     <string name="deletion_date">Löschdatum</string>
     <string name="deletion_time">Löschzeitpunkt</string>
     <string name="deletion_date_info">Das Send wird am angegebenen Datum zur angegebenen Uhrzeit dauerhaft gelöscht.</string>
+    <string name="who_can_view">Wer kann das sehen</string>
+    <string name="anyone_with_the_link">Alle mit dem Link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Alle mit einem von dir festgelegtem Passwort</string>
+    <string name="add_email">E-Mail hinzufügen</string>
     <string name="pending_delete">Ausstehende Löschung</string>
     <string name="expired">Abgelaufen</string>
     <string name="expires_at">Läuft ab um %s</string>
@@ -935,6 +942,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="use_brave_autofill_integration">Brave Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_beta_autofill_integration">Chrome Beta Auto-Ausfüllen-Integration verwenden</string>
+    <string name="use_vivaldi_autofill_integration">Vivaldi Auto-Ausfüllen-Integration verwenden</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Verbessert das Ausfüllen von Zugangsdaten für unterstützte Websites in ausgewählten Browsern. Einmal aktiviert, wirst du zu den Browsereinstellungen weitergeleitet, um Auto-Ausfüllen durch Drittanbieter zu aktivieren.</string>
     <string name="show_more">Mehr anzeigen</string>
     <string name="no_folder">Kein Ordner</string>

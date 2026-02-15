@@ -446,6 +446,13 @@
     <string name="deletion_date">删除日期</string>
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
+    <string name="who_can_view">谁可以查看</string>
+    <string name="anyone_with_the_link">拥有此链接的任何人</string>
+    <string name="anyone_with_link_can_view_send">拥有此链接的任何人都可以查看此 Send</string>
+    <string name="specific_people">指定人员</string>
+    <string name="specific_people_verification_info">分享此 Send 链接后，个人需要使用验证码验证他们的电子邮箱才能查看此 Send</string>
+    <string name="anyone_with_password">拥有您设置的密码的任何人</string>
+    <string name="add_email">添加电子邮箱</string>
     <string name="pending_delete">待删除</string>
     <string name="expired">已过期</string>
     <string name="expires_at">%s 过期</string>
@@ -931,6 +938,7 @@
     <string name="use_brave_autofill_integration">使用 Brave 自动填充集成</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
     <string name="use_chrome_beta_autofill_integration">使用 Chrome Beta 自动填充集成</string>
+    <string name="use_vivaldi_autofill_integration">使用 Vivaldi 自动填充集成</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">改进了对选定的浏览器上受支持网站的登录填充功能。启用后，您将被引导至浏览器设置以启用第三方自动填充。</string>
     <string name="show_more">显示更多</string>
     <string name="no_folder">无文件夹</string>

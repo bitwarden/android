@@ -452,6 +452,13 @@ Načtení proběhne automaticky.</string>
     <string name="deletion_date">Datum smazání</string>
     <string name="deletion_time">Čas smazání</string>
     <string name="deletion_date_info">Tento Send bude trvale smazán v určený datum a čas.</string>
+    <string name="who_can_view">Kdo může zobrazit</string>
+    <string name="anyone_with_the_link">Kdokoli s odkazem</string>
+    <string name="anyone_with_link_can_view_send">Kdokoli s tímto odkazem může zobrazit tento Send</string>
+    <string name="specific_people">Vybraní lidé</string>
+    <string name="specific_people_verification_info">Po sdílení tohoto odkazu Send budou muset jednotlivci ověřit svůj e-mail pomocí kódu pro zobrazení tohoto Send</string>
+    <string name="anyone_with_password">Kdokoli s heslem od Vás</string>
+    <string name="add_email">Přidat e-mail</string>
     <string name="pending_delete">Čeká na smazání</string>
     <string name="expired">Vypršela platnost</string>
     <string name="expires_at">Vyprší v %s</string>
@@ -945,6 +952,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="use_brave_autofill_integration">Použít integraci automatického vyplňování Brave</string>
     <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Použít integraci automatického vyplňování Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Použít integraci automatického vyplňování Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Zlepšuje vyplňování přihlašovacích údajů pro podporované webové stránky. Pokud je povoleno, budete přesměrováni na nastavení prohlížeče, abyste povolili automatické vyplňování třetích stran.</string>
     <string name="show_more">Zobrazit další</string>
     <string name="no_folder">Žádná složka</string>

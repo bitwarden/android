@@ -448,6 +448,13 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="deletion_date">Silinme tarihi</string>
     <string name="deletion_time">Silinme saati</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
+    <string name="who_can_view">Kim görebilir</string>
+    <string name="anyone_with_the_link">Bağlantıya sahip olan herkes</string>
+    <string name="anyone_with_link_can_view_send">Bu bağlantıya sahip olan herkes bu Send\'i görebilir</string>
+    <string name="specific_people">Belirli kişiler</string>
+    <string name="specific_people_verification_info">Bu Send bağlantısını paylaştığınızda kullanıcıların bu Send\'i görüntülemeleri için e-posta adreslerini bir kodla doğrulamaları gerekecektir</string>
+    <string name="anyone_with_password">Belirlediğiniz parolaya sahip olan herkes</string>
+    <string name="add_email">E-posta ekle</string>
     <string name="pending_delete">Silinmesi bekleniyor</string>
     <string name="expired">Süresi doldu</string>
     <string name="expires_at">%s tarihinde süresi dolacak</string>
@@ -935,6 +942,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_brave_autofill_integration">Brave otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_beta_autofill_integration">Chrome Beta otomatik doldurma entegrasyonunu kullan</string>
+    <string name="use_vivaldi_autofill_integration">Vivaldi otomatik doldurma entegrasyonunu kullan</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilen tarayıcılarda desteklenen web siteleri için oturum açma bilgilerinin doldurulmasını iyileştirir. Etkinleştirildiğinde, üçüncü taraf otomatik doldurma özelliğini etkinleştirmek için tarayıcı ayarlarına yönlendirilirsiniz.</string>
     <string name="show_more">Daha fazla göster</string>
     <string name="no_folder">Klasör yok</string>
@@ -1188,11 +1196,11 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archive_unavailable">Arşiv kullanılamıyor</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
-    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="this_item_is_archived">Bu kayıt arşivlendi.</string>
     <string name="introducing_archive">Arşiv özelliğiyle tanışın</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Şu anda ihtiyacınız olmayan kayıtlara gözden uzak, güvenli bir yerde saklayın.</string>
     <string name="go_to_archive">Arşive git</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Bu kayıt arşivlendi. Değişiklikleri kaydetmek kasanıza geri yükleyecektir.</string>
     <string name="your_premium_subscription_ended">Premium aboneliğiniz sona erdi</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arşivinize yeniden erişebilmek için Premium aboneliğinizi yeniden başlatın. Yeniden başlatmadan önce arşivlenmiş bir kaydın ayrıntılarını düzenlerseniz kayıt tekrar kasanıza taşınır.</string>
     <string name="restart_premium">Premium’u yeniden başlat</string>
