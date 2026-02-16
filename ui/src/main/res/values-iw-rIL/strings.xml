@@ -452,6 +452,13 @@
     <string name="deletion_date">תאריך מחיקה</string>
     <string name="deletion_time">זמן המחיקה</string>
     <string name="deletion_date_info">הסֵנְד יימחק לצמיתות בתאריך ובשעה שצוינו.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">ממתין למחיקה</string>
     <string name="expired">פג תוקף</string>
     <string name="expires_at">פג תוקף ב: %s</string>
@@ -946,6 +953,7 @@
     <string name="use_brave_autofill_integration">השתמש בשילוב מילוי אוטומטי של Brave</string>
     <string name="use_chrome_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome</string>
     <string name="use_chrome_beta_autofill_integration">השתמש באינטגרציית המילוי האוטומטי של Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">משפר את מילוי הכניסות עבור אתרים נתמכים בדפדפנים נבחרים. ברגע שמופעל, אתה תופנה אל הגדרות הדפדפן כדי להפעיל מילוי אוטומטי של צד שלישי.</string>
     <string name="show_more">הצג עוד</string>
     <string name="no_folder">ללא תיקייה</string>

@@ -450,6 +450,13 @@
     <string name="deletion_date">Брисање после</string>
     <string name="deletion_time">Време брисања</string>
     <string name="deletion_date_info">Слање ће бити трајно обрисано у наведени датум и време.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Брисање на чекању</string>
     <string name="expired">Истекло</string>
     <string name="expires_at">Истиче у %s</string>
@@ -941,6 +948,7 @@
     <string name="use_brave_autofill_integration">Користи Brave-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_beta_autofill_integration">Користи Chrome-ову Beta интеграцију за аутоматско попуњавање</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Побољшава попуњавање пријаве за подржане веб странице на одабраним прегледачима. Једном омогућено, биће вам усмерен на подешавања прегледача да бисте омогућили аутоматско копирање треће стране.</string>
     <string name="show_more">Прикажи више</string>
     <string name="no_folder">Нема фасцикле</string>

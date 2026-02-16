@@ -447,6 +447,13 @@
     <string name="deletion_date">Eliminazione programmata</string>
     <string name="deletion_time">Orario</string>
     <string name="deletion_date_info">Il Send verrà eliminato definitivamente dopo il periodo di tempo specificato</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Eliminazione in attesa</string>
     <string name="expired">Scaduto</string>
     <string name="expires_at">Scade alle %s</string>
@@ -935,6 +942,7 @@ Vuoi passare a questo account?</string>
     <string name="use_brave_autofill_integration">Usa l\'integrazione di riempimento automatico di Brave</string>
     <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Usa l\'integrazione di Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Migliora il riempimento dei campi di accesso per i siti supportati sui browser con integrazione. Se abiliti questa opzione, dovrai attivare l\'integrazione del riempimento automatico nelle impostazioni del browser.</string>
     <string name="show_more">Mostra di più</string>
     <string name="no_folder">Nessuna cartella</string>

@@ -448,6 +448,13 @@
     <string name="deletion_date">Дата на изтриване</string>
     <string name="deletion_time">Време на изтриване</string>
     <string name="deletion_date_info">Изпращането ще бъде окончателно изтрито на зададената дата и време.</string>
+    <string name="who_can_view">Кой може да преглежда</string>
+    <string name="anyone_with_the_link">Всеки с връзката</string>
+    <string name="anyone_with_link_can_view_send">Всеки с тази връзка може да види това Изпращане</string>
+    <string name="specific_people">Определени хора</string>
+    <string name="specific_people_verification_info">След като споделите тази връзка към Изпращане, хората ще трябва да потвърдят е-пощата си чрез код, за да могат да видят това Изпращане</string>
+    <string name="anyone_with_password">Всеки с парола, зададена от Вас</string>
+    <string name="add_email">Добавяне на е-поща</string>
     <string name="pending_delete">Предстои изтриване</string>
     <string name="expired">Изтекъл</string>
     <string name="expires_at">Изтича в %s</string>
@@ -936,6 +943,7 @@
     <string name="use_brave_autofill_integration">Използване на интеграцията с автоматичното попълване на Brave</string>
     <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome (бета)</string>
+    <string name="use_vivaldi_autofill_integration">Използване на интеграцията с автоматичното попълване на Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Подобрява попълването на данни за вписване в избрани браузъри за поддържаните уеб сайтове. Ако го включите, ще бъдете пренасочени към настройките на браузъра, за да включите автоматичното попълване чрез добавка.</string>
     <string name="show_more">Показване на повече</string>
     <string name="no_folder">Няма папка</string>
