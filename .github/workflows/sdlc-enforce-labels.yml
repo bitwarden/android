@@ -39,10 +39,9 @@ jobs:
         run: |
           if [ "$_PR_ACTION" = "opened" ] || [ "$_PR_ACTION" = "reopened" ]; then
             echo "⏳ Waiting 15s for labeler to run..."
-            echo "PR_LABELS: $_PR_LABELS"
             sleep 15
             _PR_LABELS=$(gh api "repos/$_REPO/pulls/$_PR_NUMBER" --jq '.labels')
-            echo "PR_LABELS: $_PR_LABELS"
+            echo "Labels fetched from PR: $_PR_LABELS"
           fi
           _IGNORE_FOR_RELEASE_LABEL=$(echo "$_PR_LABELS" | jq 'any(.[]; .name == "ignore-for-release")')
           if [ "$_IGNORE_FOR_RELEASE_LABEL" = "true" ]; then
