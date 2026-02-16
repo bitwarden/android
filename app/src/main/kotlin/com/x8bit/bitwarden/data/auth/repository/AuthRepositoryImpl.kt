@@ -738,18 +738,18 @@ class AuthRepositoryImpl(
                 when (refreshTokenResponse) {
                     is RefreshTokenResponseJson.Error -> {
                         if (refreshTokenResponse.isInvalidGrant) {
-                            logout(userId = userId, reason = LogoutReason.InvalidGrant)
+                            userLogoutManager.softLogout(userId = userId, reason = LogoutReason.InvalidGrant)
                         }
                         IllegalStateException(refreshTokenResponse.error).asFailure()
                     }
 
                     is RefreshTokenResponseJson.Forbidden -> {
-                        logout(userId = userId, reason = LogoutReason.RefreshForbidden)
+                        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.RefreshForbidden)
                         refreshTokenResponse.error.asFailure()
                     }
 
                     is RefreshTokenResponseJson.Unauthorized -> {
-                        logout(userId = userId, reason = LogoutReason.RefreshUnauthorized)
+                        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.RefreshUnauthorized)
                         refreshTokenResponse.error.asFailure()
                     }
 
