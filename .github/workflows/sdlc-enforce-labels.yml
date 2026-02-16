@@ -11,6 +11,8 @@ jobs:
   enforce-label:
     name: Enforce Label
     runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
     steps:
       - name: Enforce banned labels (e.g. hold, needs-qa)
         env:
@@ -29,9 +31,20 @@ jobs:
 
       - name: Enforce exactly one Change Type (t:*) label
         env:
+          _PR_ACTION: ${{ github.event.action }}
           _PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
-          _IGNORE_FOR_RELEASE_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-for-release') }}
+          _REPO: ${{ github.repository }}
+          _PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          if [ "$_PR_ACTION" = "opened" ] || [ "$_PR_ACTION" = "reopened" ]; then
+            echo "⏳ Waiting 15s for labeler to run..."
+            echo "PR_LABELS: $_PR_LABELS"
+            sleep 15
+            _PR_LABELS=$(gh api "repos/$_REPO/pulls/$_PR_NUMBER" --jq '.labels')
+            echo "PR_LABELS: $_PR_LABELS"
+          fi
+          _IGNORE_FOR_RELEASE_LABEL=$(echo "$_PR_LABELS" | jq 'any(.[]; .name == "ignore-for-release")')
           if [ "$_IGNORE_FOR_RELEASE_LABEL" = "true" ]; then
             echo "⏭️ Skipping type label check - 'ignore-for-release' label present"
             exit 0
