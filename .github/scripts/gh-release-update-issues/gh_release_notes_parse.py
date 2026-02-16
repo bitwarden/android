@@ -13,14 +13,14 @@ def extract_pr_numbers(line: str) -> List[str]:
     """Match PR numbers from GitHub format (#123)"""
     return re.findall(r'#(\d+)', line)
 
-def extract_pr_url(line: str) -> str:
-    """Match PR URL from GitHub format https://github.com/foo/bar/pull/123
+def extract_pr_url(release_notes: str) -> List[str]:
+    """Match PR URLs from GitHub format https://github.com/foo/bar/pull/123
 
     Returns:
-        The first PR URL found in the line, or empty string if no URL is found
+        A list of PR URLs found in the release notes, or empty list if no URLs are found
     """
-    matches = re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', line)
-    return matches[0] if matches else ""
+    matches = re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', release_notes)
+    return matches if matches else []
 
 def extract_pr_number_from_url(pr_url: str) -> str:
     """Extract PR number from a GitHub PR URL.
@@ -34,100 +34,6 @@ def extract_pr_number_from_url(pr_url: str) -> str:
     match = re.search(r'/pull/(\d+)', pr_url)
     return match.group(1) if match else ""
 
-def precache_pr_labels(limit: int = 500) -> Dict[str, List[str]]:
-    """Fetch the last N PRs and cache their labels in a map.
-
-    Args:
-        limit: Number of PRs to fetch (default: 500)
-
-    Returns:
-        Dictionary mapping PR number to list of label names
-    """
-    print(f"Pre-caching labels for last {limit} PRs...")
-    result = subprocess.run(
-        ['gh', 'pr', 'list', '--state', 'merged', '--json', 'number,labels', '--limit', str(limit)],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-
-    pr_cache = {}
-    prs = json.loads(result.stdout)
-    for pr in prs:
-        pr_number = str(pr['number'])
-        labels = [label['name'] for label in pr.get('labels', [])]
-        pr_cache[pr_number] = labels
-
-    print(f"Cached {len(pr_cache)} PRs")
-    return pr_cache
-
-def fetch_labels(github_pr_url: str) -> List[str]:
-    """Fetch labels from a GitHub PR using the GitHub CLI."""
-    result = subprocess.run(
-        ['gh', 'pr', 'view', github_pr_url, '--json', 'labels', '--jq', '.labels[].name'],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    return [label.strip() for label in result.stdout.strip().split('\n') if label.strip()]
-
-def should_skip_pr(release_app_label: str, pr_labels: List[str]) -> bool:
-    """Check if the PR should be skipped based on app labels.
-
-    Skip if there's at least one label that starts with "app:" but release_app_label isn't found.
-
-    Args:
-        release_app_label: The app label to look for (e.g., "app:password-manager")
-        pr_labels: List of labels from the PR
-
-    Returns:
-        True if the PR should be skipped, False otherwise
-    """
-    pr_app_labels = [label for label in pr_labels if label.startswith('app:')]
-    # Skip if there are app labels but release_app_label is not among them
-    return len(pr_app_labels) > 0 and release_app_label not in pr_app_labels
-
-def process_line(line: str) -> str:
-    """Process a single line from release notes by removing Jira tickets, conventional commit prefixes and other common patterns.
-
-    Args:
-        line: A single line from release notes
-
-    Returns:
-        Processed line with tickets and prefixes removed
-
-    Example:
-        >>> process_line("[ABC-123] feat(ui): Add new button")
-        "Add new button"
-    """
-    original = line
-
-    # Remove Jira ticket patterns:
-    line = re.sub(r'\[[A-Z]+-\d+\]', '', line) # [ABC-123] -> ""
-    line = re.sub(r'[A-Z]+-\d+:\s', '', line) # ABC-123: -> ""
-    line = re.sub(r'[A-Z]+-\d+\s-\s', '', line) # ABC-123 - -> ""
-
-    # Remove keywords and their variations
-    patterns = [
-        r'🍒',                      # 🍒 -> ""
-        r'BACKPORT',                # BACKPORT -> ""
-        r'\[deps\]:',                 # [deps]: -> ""
-        r'feat(?:\([^)]*\))?:',     # feat: or feat(ui): -> ""
-        r'bug(?:\([^)]*\))?:',      # bug: or bug(core): -> ""
-        r'ci(?:\([^)]*\))?:'        # ci: or ci(workflow): -> ""
-    ]
-    for pattern in patterns:
-        line = re.sub(pattern, '', line)
-
-    # Replace multiple consecutive spaces with a single space
-    line = re.sub(r'\s+', ' ', line)
-
-    cleaned = line.strip()
-    original_stripped = original.strip()
-    if cleaned != original_stripped:
-        print(f"Processed: {original_stripped} -> {cleaned}")
-    return cleaned
-
 def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], List[str], List[str]]:
     jira_tickets: List[str] = []
     pr_numbers: List[str] = []
@@ -136,11 +42,6 @@ def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], Li
     #community_highlights: List[str] = []
 
     print("Processing file: ", input_file)
-
-    # GitHub API / CLI does not support fetching labels for multiple PRs in a single request
-    # individual requests are slow, we're caching the most recent merged PRs which should cover most cases
-    # falling back to individual requests if the PR is not in the cache
-    pr_label_cache = precache_pr_labels(500)
 
     with open(input_file, 'r') as f:
         for line in f:

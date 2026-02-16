@@ -1,7 +1,21 @@
 import sys
+import re
 import subprocess
 from typing import List, Dict, DefaultDict
 from collections import defaultdict
+
+def extract_pr_numbers(line: str) -> List[str]:
+    """Match PR numbers from GitHub format (#123)"""
+    return re.findall(r'#(\d+)', line)
+
+def extract_pr_url(release_notes: str) -> List[str]:
+    """Match PR URLs from GitHub format https://github.com/foo/bar/pull/123
+
+    Returns:
+        A list of PR URLs found in the release notes, or empty list if no URLs are found
+    """
+    matches = re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', release_notes)
+    return matches if matches else []
 
 def create_linked_issue_comment(repo_owner: str, repo_name: str, release_name: str, release_link: str, pr_numbers: List[int]) -> str:
     if len(pr_numbers) == 0:
