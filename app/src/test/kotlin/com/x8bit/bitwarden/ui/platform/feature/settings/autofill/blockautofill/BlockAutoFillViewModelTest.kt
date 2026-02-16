@@ -18,7 +18,6 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         every { blockedAutofillUris } returns listOf("blockedUri")
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state with blocked URIs updates state to ViewState Content`() =
         runTest {
@@ -32,7 +31,6 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state with empty blocked URIs maintains state as ViewState Empty`() =
         runTest {
@@ -226,7 +224,6 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on SaveUri action editing to existing URI should show duplicate error`() = runTest {
         val blockedUris = mutableListOf("http://a.com", "http://b.com")
