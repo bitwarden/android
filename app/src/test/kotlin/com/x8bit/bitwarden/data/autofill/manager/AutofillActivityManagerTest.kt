@@ -45,6 +45,7 @@ class AutofillActivityManagerTest {
         every { stableChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
         every { betaChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
         every { stableVivaldiAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        every { defaultBrowserPackageName } returns null
     }
 
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager =
