@@ -2837,7 +2837,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 ),
                 passwordRevisionDate = BitwardenString
-                    .password_last_updated
+                    .password_updated
                     .asText("12/31/69 06:16 PM"),
                 isPremiumUser = true,
                 totpCodeItemData = TotpCodeItemData(

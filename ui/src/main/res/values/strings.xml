@@ -303,7 +303,7 @@ Scanning will happen automatically.</string>
     <string name="organization">Organization</string>
     <string name="try_again">Try again</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Invalid email address.</string>
     <string name="cards">Cards</string>
