@@ -54,8 +54,9 @@ data class BrowserThirdPartyAutofillStatus(
                 BrowserPackage.BRAVE_RELEASE -> braveStableStatusData.isAvailableButDisabled
                 BrowserPackage.CHROME_STABLE -> chromeStableStatusData.isAvailableButDisabled
                 BrowserPackage.CHROME_BETA -> chromeBetaChannelStatusData.isAvailableButDisabled
-                BrowserPackage.VIVALDI_STABLE ->
+                BrowserPackage.VIVALDI_STABLE -> {
                     vivaldiStableChannelStatusData.isAvailableButDisabled
+                }
             }
         }
 }
