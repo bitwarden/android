@@ -120,6 +120,10 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                     number = 1,
                     isDeleted = true,
                 )
+                val mockArchivedCipherListView = createMockCipherListView(
+                    number = 1,
+                    isArchived = true,
+                )
                 decryptCipherListResultFlow.tryEmit(
                     DataState.Loaded(
                         createMockDecryptCipherListResult(
@@ -128,6 +132,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                                 mockActiveLoginCipherListView,
                                 mockActiveCardCipherListView,
                                 mockDeletedCipherListView,
+                                mockArchivedCipherListView,
                             ),
                         ),
                     ),
