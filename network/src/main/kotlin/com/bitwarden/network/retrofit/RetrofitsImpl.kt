@@ -4,6 +4,7 @@ import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
+import com.bitwarden.network.interceptor.CookieInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.ssl.CertificateProvider
 import com.bitwarden.network.ssl.configureSsl
@@ -23,6 +24,7 @@ import timber.log.Timber
 internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
+    cookieInterceptor: CookieInterceptor,
     headersInterceptor: HeadersInterceptor,
     json: Json,
     private val certificateProvider: CertificateProvider,
@@ -92,6 +94,7 @@ internal class RetrofitsImpl(
 
     private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
+        .addNetworkInterceptor(cookieInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 
