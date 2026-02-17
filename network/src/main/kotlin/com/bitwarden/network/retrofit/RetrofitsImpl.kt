@@ -94,7 +94,7 @@ internal class RetrofitsImpl(
 
     private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
-        .addInterceptor(cookieInterceptor)
+        .addNetworkInterceptor(cookieInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 
