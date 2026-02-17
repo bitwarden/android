@@ -10,12 +10,7 @@ import java.io.IOException
  * flow through the appropriate callback mechanism.
  *
  * @property hostname The server hostname that triggered the redirect.
- * @property location The Location header value from the 302 response, if available.
  */
 class CookieRedirectException(
     val hostname: String,
-    val location: String?,
-) : IOException(
-    "HTTP 302 redirect detected for $hostname" +
-        (location?.let { " (Location: $it)" } ?: ""),
-)
+) : IOException("HTTP 302 redirect detected for $hostname.")

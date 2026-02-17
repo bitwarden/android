@@ -84,7 +84,7 @@ internal class BitwardenServiceClientImpl(
                 baseUrlsProvider = bitwardenServiceClientConfig.baseUrlsProvider,
             ),
             cookieInterceptor = CookieInterceptor(
-                cookieProvider = bitwardenServiceClientConfig.cookieProvider,
+                cookieProvider = cookieProvider,
             ),
             headersInterceptor = HeadersInterceptor(
                 userAgent = bitwardenServiceClientConfig.clientData.userAgent,

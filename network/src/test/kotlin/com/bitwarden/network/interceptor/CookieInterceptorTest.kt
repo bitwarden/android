@@ -72,7 +72,6 @@ class CookieInterceptorTest {
         }
 
         assertEquals("vault.bitwarden.com", exception.hostname)
-        assertNull(exception.location)
         verify { mockCookieProvider.acquireCookies("vault.bitwarden.com") }
         verify(exactly = 0) { mockCookieProvider.getCookies(any()) }
     }
@@ -166,35 +165,7 @@ class CookieInterceptorTest {
         }
 
         assertEquals("vault.bitwarden.com", exception.hostname)
-        assertEquals("https://idp.example.com/auth", exception.location)
         verify { mockCookieProvider.acquireCookies("vault.bitwarden.com") }
-    }
-
-    @Test
-    fun `intercept should return 302 response as-is when no Location header is present`() {
-        val originalRequest = Request.Builder()
-            .url("https://vault.bitwarden.com/api/accounts/profile")
-            .build()
-
-        val redirectResponse = Response.Builder()
-            .code(302)
-            .message("Found")
-            .protocol(Protocol.HTTP_1_1)
-            .request(originalRequest)
-            .build()
-
-        val chain = FakeInterceptorChain(
-            request = originalRequest,
-            responseProvider = { redirectResponse },
-        )
-
-        every { mockCookieProvider.needsBootstrap("vault.bitwarden.com") } returns false
-        every { mockCookieProvider.getCookies("vault.bitwarden.com") } returns emptyList()
-
-        val response = interceptor.intercept(chain)
-
-        assertEquals(302, response.code)
-        verify(exactly = 0) { mockCookieProvider.acquireCookies(any()) }
     }
 
     @Test
@@ -275,7 +246,6 @@ class CookieInterceptorTest {
         }
 
         assertEquals("vault.bitwarden.com", exception.hostname)
-        assertEquals("https://idp.example.com/auth", exception.location)
         verify { mockCookieProvider.acquireCookies("vault.bitwarden.com") }
     }
 }

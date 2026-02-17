@@ -7,7 +7,6 @@ import okhttp3.Request
 import okhttp3.Response
 
 private const val HEADER_COOKIE = "Cookie"
-private const val HEADER_LOCATION = "Location"
 private const val HTTP_REDIRECT = 302
 private const val PATH_CONFIG = "/api/config"
 private const val PATH_SSO_COOKIE_VENDOR = "/api/sso-cookie-vendor"
@@ -58,16 +57,13 @@ internal class CookieInterceptor(
         // immediately rather than making a doomed request.
         if (cookieProvider.needsBootstrap(hostname)) {
             cookieProvider.acquireCookies(hostname)
-            throw CookieRedirectException(hostname = hostname, location = null)
+            throw CookieRedirectException(hostname = hostname)
         }
 
         val request = originalRequest.withCookies(hostname)
         val response = chain.proceed(request)
 
-        // Return the response if it is not a redirect or does not contain
-        // a Location header.
-        val location = response.header(HEADER_LOCATION)
-        if (response.code != HTTP_REDIRECT || location == null) {
+        if (response.code != HTTP_REDIRECT) {
             return response
         }
 
@@ -77,7 +73,6 @@ internal class CookieInterceptor(
         cookieProvider.acquireCookies(hostname)
         throw CookieRedirectException(
             hostname = hostname,
-            location = location,
         )
     }
 
