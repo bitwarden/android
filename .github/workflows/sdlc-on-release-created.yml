@@ -1,0 +1,36 @@
+name: SDLC On Release Created
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_url:
+        description: 'Release URL (e.g. https://github.com/owner/repo/releases/tag/v1.0.0)'
+        required: true
+      dry-run:
+        description: 'Dry run'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  update-linked-issues:
+    name: Update Linked Issues
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Comment on Linked Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _RELEASE_URL: ${{ github.event.release.html_url || inputs.release_url }}
+          _DRY_RUN: ${{ inputs.dry-run && '--dry-run' || '' }}
+        run: |
+          python3 .github/scripts/gh-release-update-issues/gh_release_update_issues.py "$_RELEASE_URL" $_DRY_RUN

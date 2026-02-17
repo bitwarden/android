@@ -1,114 +1,114 @@
+#!/usr/bin/env python3
+# Requires Python 3.9+
+"""
+Update GitHub issues linked to Pull Requests when a new Release is published.
+
+Usage:
+    python gh_release_update_issues.py <release_url> [--dry-run]
+
+"""
+
 import re
-import sys
 import subprocess
 import json
 import argparse
+from collections import defaultdict
 from typing import List, Tuple, Dict
 
-def extract_jira_tickets(line: str) -> List[str]:
-    """Find all Jira tickets in format ABC-123 (with any prefix/suffix)"""
-    return re.findall(r'[A-Z]+-\d+', line)
-
-def extract_pr_numbers(line: str) -> List[str]:
-    """Match PR numbers from GitHub format (#123)"""
-    return re.findall(r'#(\d+)', line)
-
-def extract_pr_url(release_notes: str) -> List[str]:
-    """Match PR URLs from GitHub format https://github.com/foo/bar/pull/123
+def parse_release_url(release_url: str) -> Tuple[str, str, str]:
+    """Extract owner, repo name, and tag from a GitHub release URL.
 
     Returns:
-        A list of PR URLs found in the release notes, or empty list if no URLs are found
+        Tuple of (owner, repo_name, release_tag)
     """
-    matches = re.findall(r'https://github\.com/[\w-]+/[\w.-]+/pull/\d+', release_notes)
-    return matches if matches else []
+    match = re.search(r'github\.com/([\w-]+)/([\w.-]+)/releases/tag/(.+)$', release_url)
+    if not match:
+        raise ValueError(f"Cannot parse release URL: {release_url}")
+    return match.group(1), match.group(2), match.group(3)
 
-def extract_pr_number_from_url(pr_url: str) -> str:
-    """Extract PR number from a GitHub PR URL.
+def extract_pr_numbers(release_notes: str) -> List[int]:
+    return [int(n) for n in re.findall(r'/pull/(\d+)', release_notes)]
 
-    Args:
-        pr_url: GitHub PR URL (e.g., https://github.com/foo/bar/pull/123)
+def build_issue_comment(repo: str, release_name: str, release_link: str, pr_numbers: List[int]) -> str:
+    if len(pr_numbers) == 0:
+        return ""
+
+    pr_links = [f"* https://github.com/{repo}/pull/{pr_number}" for pr_number in pr_numbers]
+
+    return f":shipit: Pull Request(s) linked to this issue released in [{release_name}]({release_link}):\n\n"+ "\n".join(pr_links)
+
+def gh_fetch_release(repo: str, release_tag: str) -> Tuple[str, str]:
+    result = subprocess.run(
+        ['gh', 'release', 'view', release_tag, '--repo', repo, '--json', 'name,body'],
+        capture_output=True, text=True, check=True
+    )
+    data = json.loads(result.stdout)
+    return data['name'], data['body']
+
+def gh_comment_issue(repo: str, issue_number: int, comment: str) -> None:
+    """Use GitHub CLI to comment on an issue.
+    """
+    subprocess.run([
+        'gh', 'issue', 'comment', str(issue_number), '--body', comment, '--repo', repo
+    ], check=True)
+
+def gh_fetch_linked_issues_batched(owner: str, repo_name: str, pr_numbers: List[int]) -> Dict[int, List[int]]:
+    """Batch-fetch linked issues for all PRs in a single GraphQL call.
 
     Returns:
-        PR number as string, or empty string if not found
+        Dict mapping each PR number to its list of linked issue numbers.
     """
-    match = re.search(r'/pull/(\d+)', pr_url)
-    return match.group(1) if match else ""
+    if not pr_numbers:
+        return {}
 
-def process_file(input_file: str, release_app_label: str) -> Tuple[List[str], List[str], List[str]]:
-    jira_tickets: List[str] = []
-    pr_numbers: List[str] = []
-    processed_lines: List[str] = []
-    debug_lines: List[str] = []
-    #community_highlights: List[str] = []
+    tmpl = 'pr_%d: pullRequest(number: %d) { closingIssuesReferences(first: 100) { nodes { number } } }'
+    pr_fragments = "\n".join(tmpl % (pr, pr) for pr in pr_numbers)
+    query = """
+    query ($owner: String!, $repo: String!) {
+        repository(owner: $owner, name: $repo) {
+            %s
+        }
+    }
+    """ % pr_fragments
 
-    print("Processing file: ", input_file)
+    try:
+        result = subprocess.run(
+            [
+                'gh', 'api', 'graphql',
+                '-F', f'owner={owner}',
+                '-F', f'repo={repo_name}',
+                '-f', f'query={query}',
+            ],
+            capture_output=True, text=True, check=True,
+        )
+        data = json.loads(result.stdout)
+        repo_data = data['data']['repository']
 
-    with open(input_file, 'r') as f:
-        for line in f:
-            line = line.strip()
-            should_process = line and line.startswith('* ')
+        pr_issues_map: Dict[int, List[int]] = {}
+        for pr_number in pr_numbers:
+            nodes = repo_data.get(f'pr_{pr_number}', {}).get('closingIssuesReferences', {}).get('nodes', [])
+            pr_issues = [node['number'] for node in nodes]
+            pr_issues_map[pr_number] = pr_issues
+        return pr_issues_map
 
-            if should_process:
-                pr_url = extract_pr_url(line)
-                pr_labels = []
+    except subprocess.CalledProcessError as e:
+        print(f"Error batch-fetching linked issues: {e.stderr}")
+        return {}
 
-                # Fetch labels from PR URL if available
-                if pr_url:
-                    pr_number = extract_pr_number_from_url(pr_url)
-                    pr_numbers.append(pr_number)
-                    # Check cache first, fallback to individual fetch
-                    if pr_number in pr_label_cache:
-                        pr_labels = pr_label_cache[pr_number]
-                        print(f"Using cached labels for PR #{pr_number}")
-                    else:
-                        print(f"PR #{pr_number} not in cache, fetching individually...")
-                        pr_labels = fetch_labels(pr_url)
+def map_issues_to_prs(pr_issues_map: Dict[int, List[int]]) -> Dict[int, List[int]]:
+    """Invert a PR->issues map into an issue->PRs map."""
+    issue_pr_map: Dict[int, List[int]] = defaultdict(list)
+    for pr_number, issue_numbers in pr_issues_map.items():
+        for issue_number in issue_numbers:
+            issue_pr_map[issue_number].append(pr_number)
+    return dict(issue_pr_map)
 
-                    if should_skip_pr(release_app_label, pr_labels):
-                        debug_lines.append(f"{line} | skipped - labels: {pr_labels}")
-                        continue # skip the PR if it is not labeled with the app label
-
-                tickets = extract_jira_tickets(line)
-                jira_tickets.extend(tickets)
-
-                prs = extract_pr_numbers(line)
-                pr_numbers.extend(prs)
-                processed_lines.append(process_line(line))
-                debug_lines.append(f"{line} | labels: {pr_labels}")
-            else:
-                processed_lines.append(line)
-                if line == "":
-                    debug_lines.append("")
-                else:
-                    debug_lines.append(f"{line} | skipped - processing")
-
-
-    # Remove duplicates while preserving order
-    jira_tickets = list(dict.fromkeys(jira_tickets))
-    pr_numbers = list(dict.fromkeys(pr_numbers))
-
-    print("Jira tickets:", ",".join(jira_tickets))
-    print("PR numbers:", ",".join(pr_numbers))
-    print("Finished processing file: ", input_file)
-    return jira_tickets, pr_numbers, processed_lines, debug_lines
-
-def save_results(jira_tickets: List[str], pr_numbers: List[str], processed_lines: List[str], debug_lines: List[str],
-                jira_file: str = 'jira_tickets.txt',
-                pr_file: str = 'pr_numbers.txt',
-                processed_file: str = 'processed_notes.txt',
-                debug_file: str = 'processed_notes_debug.txt'
-                ) -> None:
-    with open(jira_file, 'w') as f:
-        f.write('\n'.join(jira_tickets))
-
-    with open(pr_file, 'w') as f:
-        f.write('\n'.join(pr_numbers))
-
-    with open(processed_file, 'w') as f:
-        f.write('\n'.join(processed_lines))
-
-    with open(debug_file, 'w') as f:
-        f.write('\n'.join(debug_lines))
+def comment_issues(repo: str, issue_pr_map: Dict[int, List[int]], release_name: str, release_url: str, dry_run: bool) -> None:
+    for issue_number, linked_prs in issue_pr_map.items():
+        comment = build_issue_comment(repo, release_name, release_url, linked_prs)
+        print(f"{'Dry run - ' if dry_run else ''}Commenting on issue {issue_number}:\n{comment}\n")
+        if not dry_run and comment:
+            gh_comment_issue(repo, issue_number, comment)
 
 def parse_args():
     """Parse command line arguments.
@@ -117,54 +117,33 @@ def parse_args():
         Parsed arguments namespace
     """
     parser = argparse.ArgumentParser(
-        description='Process release notes by extracting Jira tickets and PR numbers, and cleaning up the text.'
+        description='Update GitHub issues linked to Pull Requests when a new Release is published.'
     )
     parser.add_argument(
-        'release_app_label',
-        help='Filter PRs by app label (e.g., app:password-manager)'
+        'release_url',
+        help='Release URL (e.g. https://github.com/owner/repo/releases/tag/v1.0.0)'
     )
     parser.add_argument(
-        'input_file',
-        default='release_notes.txt',
-        help='Input file containing release notes (default: release_notes.txt)'
-    )
-    parser.add_argument(
-        '--processed-filepath',
-        default='processed_notes.txt',
-        help='Output file for processed notes (default: processed_notes.txt)'
-    )
-    parser.add_argument(
-        '--jira-filepath',
-        default='jira_tickets.txt',
-        help='Output file for Jira tickets (default: jira_tickets.txt)'
-    )
-    parser.add_argument(
-        '--pr-filepath',
-        default='pr_numbers.txt',
-        help='Output file for PR numbers (default: pr_numbers.txt)'
-    )
-
-    parser.add_argument(
-        '--debug-filepath',
-        default='processed_notes_debug.txt',
-        help='Output file for debug notes (default: processed_notes_debug.txt)'
+        '--dry-run',
+        action='store_true',
+        help='Run without actually updating issues'
     )
     return parser.parse_args()
+
 
 if __name__ == '__main__':
     args = parse_args()
 
-    jira_tickets, pr_numbers, processed_lines, debug_lines = process_file(
-        args.input_file,
-        args.release_app_label
-    )
-    save_results(
-        jira_tickets,
-        pr_numbers,
-        processed_lines,
-        debug_lines,
-        args.jira_filepath,
-        args.pr_filepath,
-        args.processed_filepath,
-        args.debug_filepath
-    )
+    owner, repo_name, release_tag = parse_release_url(args.release_url)
+    repo = f"{owner}/{repo_name}"
+    print(f"📋 Release URL: {args.release_url}")
+
+    release_name, release_notes = gh_fetch_release(repo, release_tag)
+    print(f"📋 Release Name: {release_name}")
+
+    pr_numbers = extract_pr_numbers(release_notes)
+    print(f"📋 PR Numbers parsed from release notes: {pr_numbers}\n")
+    pr_issues_map = gh_fetch_linked_issues_batched(owner, repo_name, pr_numbers)
+    issue_pr_map = map_issues_to_prs(pr_issues_map)
+    comment_issues(repo, issue_pr_map, release_name, args.release_url, args.dry_run)
+
