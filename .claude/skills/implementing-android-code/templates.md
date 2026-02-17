@@ -62,6 +62,8 @@ sealed class ExampleAction {
 
     data class InputChanged(val input: String) : ExampleAction()
 
+    data object ErrorDialogDismiss : ExampleAction()
+
     /**
      * Internal actions dispatched by the ViewModel from coroutines.
      */
@@ -116,6 +118,7 @@ class ExampleViewModel @Inject constructor(
         when (action) {
             ExampleAction.BackClick -> handleBackClick()
             ExampleAction.SubmitClick -> handleSubmitClick()
+            ExampleAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
             is ExampleAction.InputChanged -> handleInputChanged(action)
             is ExampleAction.Internal.ReceiveDataState -> {
                 handleReceiveDataState(action)
@@ -128,6 +131,10 @@ class ExampleViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(ExampleEvent.NavigateBack)
+    }
+
+    private fun handleErrorDialogDismiss() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun handleSubmitClick() {
@@ -302,7 +309,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
