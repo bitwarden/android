@@ -94,7 +94,7 @@ class ExampleViewModel @Inject constructor(
         ?: run {
             val args = savedStateHandle.toExampleArgs()
             ExampleState(
-                data = args.initialData,
+                data = args.itemId,
             )
         },
 ) {
