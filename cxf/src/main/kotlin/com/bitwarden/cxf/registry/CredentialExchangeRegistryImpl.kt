@@ -34,7 +34,10 @@ internal class CredentialExchangeRegistryImpl(
      * for source code and documentation.
      */
     private val exportMatcher: ByteArray by lazy {
-        application.resources.openRawResource(R.raw.export_matcher).readBytes()
+        application
+            .resources
+            .openRawResource(R.raw.export_matcher)
+            .use { it.readBytes() }
     }
 
     override suspend fun register(

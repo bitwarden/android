@@ -117,4 +117,24 @@ class CredentialExchangeImporterTest {
             val failure = result as ImportCredentialsSelectionResult.Failure
             assertTrue(failure.error is ImportCredentialsUnknownErrorException)
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `importCredentials should return Failure with original error when ImportCredentialsException is thrown`() =
+        runTest {
+            val exception = ImportCredentialsUnknownErrorException()
+            coEvery {
+                mockProviderEventsManager.importCredentials(
+                    context = any(),
+                    request = any(),
+                )
+            } throws exception
+
+            val result = importer.importCredentials(listOf("basic-auth"))
+
+            assertEquals(
+                ImportCredentialsSelectionResult.Failure(error = exception),
+                result,
+            )
+        }
 }
