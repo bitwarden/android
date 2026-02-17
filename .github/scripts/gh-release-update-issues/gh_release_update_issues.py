@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 # Requires Python 3.9+
 """
-Update GitHub issues linked to Pull Requests when a new Release is published.
+Comment GitHub issues linked to Pull Requests mentioned in a given release.
 
 Usage:
     python gh_release_update_issues.py <release_url> [--dry-run]
 
+Arguments:
+    release-url: The URL of the release to comment on
+    --dry-run: Run without actually updating issues
+
+Examples:
+    python gh_release_update_issues.py https://github.com/owner/repo/releases/tag/v1.0.0
+    python gh_release_update_issues.py https://github.com/owner/repo/releases/tag/v1.0.0 --dry-run
 """
 
 import re
@@ -111,13 +118,8 @@ def comment_issues(repo: str, issue_pr_map: Dict[int, List[int]], release_name: 
             gh_comment_issue(repo, issue_number, comment)
 
 def parse_args():
-    """Parse command line arguments.
-
-    Returns:
-        Parsed arguments namespace
-    """
     parser = argparse.ArgumentParser(
-        description='Update GitHub issues linked to Pull Requests when a new Release is published.'
+        description='Comment GitHub issues linked to Pull Requests mentioned in a given release.'
     )
     parser.add_argument(
         'release_url',
@@ -126,10 +128,9 @@ def parse_args():
     parser.add_argument(
         '--dry-run',
         action='store_true',
-        help='Run without actually updating issues'
+        help='Run without actually commenting issues'
     )
     return parser.parse_args()
-
 
 if __name__ == '__main__':
     args = parse_args()
@@ -146,4 +147,3 @@ if __name__ == '__main__':
     pr_issues_map = gh_fetch_linked_issues_batched(owner, repo_name, pr_numbers)
     issue_pr_map = map_issues_to_prs(pr_issues_map)
     comment_issues(repo, issue_pr_map, release_name, args.release_url, args.dry_run)
-
