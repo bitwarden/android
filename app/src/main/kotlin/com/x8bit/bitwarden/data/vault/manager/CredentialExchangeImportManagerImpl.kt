@@ -55,14 +55,10 @@ class CredentialExchangeImportManagerImpl(
         userId: String,
         accountsJsonList: List<String>,
     ): ImportCxfPayloadResult {
-        val allCiphers = mutableListOf<Cipher>()
-        for (accountJson in accountsJsonList) {
+        val allCiphers = accountsJsonList.flatMap { accountJson ->
             vaultSdkSource
                 .importCxf(userId = userId, payload = accountJson)
-                .fold(
-                    onSuccess = { ciphers -> allCiphers.addAll(ciphers) },
-                    onFailure = { return ImportCxfPayloadResult.Error(error = it) },
-                )
+                .getOrElse { return ImportCxfPayloadResult.Error(error = it) }
         }
 
         // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active

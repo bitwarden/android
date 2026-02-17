@@ -6,6 +6,7 @@ import com.bitwarden.cxf.model.CredentialExchangeExportResponse
 import com.bitwarden.cxf.model.CredentialExchangePayload
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 private val SUPPORTED_CXF_VERSIONS = mapOf(
     0 to setOf(0),
@@ -60,6 +61,7 @@ internal class CredentialExchangePayloadParserImpl(
                                 accountsJsonList = accountsJsonList,
                             )
                         } catch (_: SerializationException) {
+                            Timber.e("Failed to serialize received accounts.")
                             CredentialExchangePayload.Error(
                                 ImportCredentialsInvalidJsonException(
                                     "Unable to serialize accounts.",
