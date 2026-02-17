@@ -41,6 +41,7 @@
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
     <string name="archive_items">Archive Items</string>
     <string name="send_email_verification">Send Email Verification</string>
+    <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
 
     <!-- endregion Debug Menu -->
 </resources>

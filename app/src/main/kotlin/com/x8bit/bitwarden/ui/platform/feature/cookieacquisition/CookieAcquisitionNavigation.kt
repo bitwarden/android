@@ -4,7 +4,6 @@ package com.x8bit.bitwarden.ui.platform.feature.cookieacquisition
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
@@ -19,20 +18,22 @@ data object CookieAcquisitionRoute
 /**
  * Add the cookie acquisition screen to the nav graph.
  */
-fun NavGraphBuilder.cookieAcquisitionDestination() {
+fun NavGraphBuilder.cookieAcquisitionDestination(
+    onDismiss: () -> Unit,
+    onSplashScreenRemoved: () -> Unit,
+) {
     composableWithSlideTransitions<CookieAcquisitionRoute> {
-        CookieAcquisitionScreen()
+        CookieAcquisitionScreen(onDismiss = onDismiss)
     }
+    // If we are displaying the debug screen, then we can just hide the splash screen.
+    onSplashScreenRemoved()
 }
 
 /**
  * Navigate to the cookie acquisition screen.
  */
-fun NavController.navigateToCookieAcquisition(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(
-        route = CookieAcquisitionRoute,
-        navOptions = navOptions,
-    )
+fun NavController.navigateToCookieAcquisition() {
+    this.navigate(route = CookieAcquisitionRoute) {
+        launchSingleTop = true
+    }
 }

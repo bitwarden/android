@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.cookieacquisition
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememb
  */
 @Composable
 fun CookieAcquisitionScreen(
+    onDismiss: () -> Unit,
     viewModel: CookieAcquisitionViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -65,10 +67,19 @@ fun CookieAcquisitionScreen(
             is CookieAcquisitionEvent.NavigateToHelp -> {
                 intentManager.launchUri(event.uri.toUri())
             }
+
+            CookieAcquisitionEvent.NavigateBack -> onDismiss()
         }
     }
 
     val handler = rememberCookieAcquisitionHandler(viewModel = viewModel)
+
+    // Route back through the ViewModel so the pending cookie request is cleared
+    // before dismissing. A normal back-pop would leave the request active and
+    // MainViewModel would immediately re-navigate to this screen.
+    BackHandler {
+        viewModel.trySendAction(CookieAcquisitionAction.ContinueWithoutSyncingClick)
+    }
 
     CookieAcquisitionDialogs(
         dialogState = state.dialogState,
