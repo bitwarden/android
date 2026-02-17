@@ -143,7 +143,8 @@ if __name__ == '__main__':
     print(f"📋 Release Name: {release_name}")
 
     pr_numbers = extract_pr_numbers(release_notes)
-    print(f"📋 PR Numbers parsed from release notes: {pr_numbers}\n")
+    print(f"📋 PR Numbers parsed from release notes: {pr_numbers}")
     pr_issues_map = gh_fetch_linked_issues_batched(owner, repo_name, pr_numbers)
+    print(f"📋 PRs with linked issues: {[pr for pr, issues in pr_issues_map.items() if issues]}\n")
     issue_pr_map = map_issues_to_prs(pr_issues_map)
     comment_issues(repo, issue_pr_map, release_name, args.release_url, args.dry_run)
