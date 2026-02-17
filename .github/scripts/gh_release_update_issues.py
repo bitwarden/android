@@ -99,8 +99,8 @@ def gh_fetch_linked_issues_batched(owner: str, repo_name: str, pr_numbers: List[
         return pr_issues_map
 
     except subprocess.CalledProcessError as e:
-        print(f"Error batch-fetching linked issues: {e.stderr}")
-        return {}
+        print(f"::error::Error batch-fetching linked issues: {e.stderr}")
+        raise
 
 def map_issues_to_prs(pr_issues_map: Dict[int, List[int]]) -> Dict[int, List[int]]:
     """Invert a PR->issues map into an issue->PRs map."""
