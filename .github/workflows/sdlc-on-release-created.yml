@@ -33,4 +33,4 @@ jobs:
           _RELEASE_URL: ${{ github.event.release.html_url || inputs.release_url }}
           _DRY_RUN: ${{ inputs.dry-run && '--dry-run' || '' }}
         run: |
-          python3 .github/scripts/gh-release-update-issues/gh_release_update_issues.py "$_RELEASE_URL" $_DRY_RUN
+          python3 .github/scripts/gh_release_update_issues.py "$_RELEASE_URL" $_DRY_RUN
