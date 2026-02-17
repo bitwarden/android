@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import androidx.credentials.providerevents.exception.ImportCredentialsUnknownErrorException
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.cxf.model.CredentialExchangePayload
 import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
@@ -15,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
+import timber.log.Timber
 
 /**
  * Default implementation of [CredentialExchangeImportManager].
@@ -88,13 +91,15 @@ class CredentialExchangeImportManagerImpl(
             .flatMap { response ->
                 when (response) {
                     is ImportCiphersResponseJson.Invalid -> {
-                        Result.failure(ImportCredentialsUnknownErrorException())
+                        Timber.w(
+                            "Import ciphers validation failed: %s",
+                            response.validationErrors,
+                        )
+                        ImportCredentialsUnknownErrorException().asFailure()
                     }
 
                     is ImportCiphersResponseJson.Success -> {
-                        Result.success(
-                            ImportCxfPayloadResult.Success(itemCount = ciphers.size),
-                        )
+                        ImportCxfPayloadResult.Success(itemCount = ciphers.size).asSuccess()
                     }
                 }
             }
