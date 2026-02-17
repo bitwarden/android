@@ -506,8 +506,8 @@ class ExampleDiskSourceImpl(
     ExampleDiskSource {
 
     private companion object {
-        const val ENCRYPTED_TOKEN_KEY = "bwSecureStorage:exampleToken"
-        const val UNENCRYPTED_PREF_KEY = "bwPrefs:examplePreference"
+        const val ENCRYPTED_TOKEN_KEY = "exampleToken"
+        const val UNENCRYPTED_PREF_KEY = "examplePreference"
     }
 
     override var authToken: String?
@@ -515,7 +515,7 @@ class ExampleDiskSourceImpl(
         set(value) { putEncryptedString(ENCRYPTED_TOKEN_KEY, value) }
 
     override var uiPreference: Boolean
-        get() = getBoolean(UNENCRYPTED_PREF_KEY, defaultValue = false)
+        get() = getBoolean(UNENCRYPTED_PREF_KEY) ?: false
         set(value) { putBoolean(UNENCRYPTED_PREF_KEY, value) }
 }
 ```
