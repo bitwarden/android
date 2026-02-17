@@ -183,7 +183,7 @@ interface ExampleRepository {
 }
 
 // Implementation (NOT directly injected)
-class ExampleRepositoryImpl @Inject constructor(
+class ExampleRepositoryImpl(
     private val exampleDiskSource: ExampleDiskSource,
     private val exampleService: ExampleService,
 ) : ExampleRepository {
@@ -283,7 +283,7 @@ New strings belong in the `:ui` module: `ui/src/main/res/values/strings.xml`
 
 **Pattern Summary:**
 ```kotlin
-class ExampleDiskSource @Inject constructor(
+class ExampleDiskSourceImpl(
     @EncryptedPreferences private val encryptedPrefs: SharedPreferences,
     @UnencryptedPreferences private val unencryptedPrefs: SharedPreferences,
 ) {
