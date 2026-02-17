@@ -53,13 +53,11 @@ internal class CredentialExchangePayloadParserImpl(
 
                     else -> {
                         try {
-                            // We only support single account import, silently ignore additional
-                            // accounts.
-                            val accountsJson = json.encodeToString(
-                                value = exportResponse.accounts.first(),
-                            )
+                            val accountsJsonList = exportResponse
+                                .accounts
+                                .map { account -> json.encodeToString(value = account) }
                             CredentialExchangePayload.Importable(
-                                accountsJson = accountsJson,
+                                accountsJsonList = accountsJsonList,
                             )
                         } catch (_: SerializationException) {
                             CredentialExchangePayload.Error(

@@ -30,7 +30,19 @@ class CredentialExchangePayloadParserTest {
 
             assertTrue(result is CredentialExchangePayload.Importable)
             val importable = result as CredentialExchangePayload.Importable
-            assertTrue(importable.accountsJson.isNotEmpty())
+            assertEquals(1, importable.accountsJsonList.size)
+            assertTrue(importable.accountsJsonList.first().isNotEmpty())
+        }
+
+        @Test
+        fun `parse should return Importable with all accounts when payload has multiple`() {
+            val result = parser.parse(VALID_PAYLOAD_MULTIPLE_ACCOUNTS)
+
+            assertTrue(result is CredentialExchangePayload.Importable)
+            val importable = result as CredentialExchangePayload.Importable
+            assertEquals(2, importable.accountsJsonList.size)
+            assertTrue(importable.accountsJsonList[0].contains("account-123"))
+            assertTrue(importable.accountsJsonList[1].contains("account-456"))
         }
 
         @Test
@@ -102,7 +114,10 @@ class CredentialExchangePayloadParserTest {
                     decodeFromStringOrNull<CredentialExchangeExportResponse>(VALID_PAYLOAD)
                 } returns MOCK_EXPORT_RESPONSE
                 every {
-                    encodeToString<CredentialExchangeExportResponse.Account?>(any(), any())
+                    encodeToString(
+                        any<kotlinx.serialization.SerializationStrategy<CredentialExchangeExportResponse.Account>>(),
+                        any<CredentialExchangeExportResponse.Account>(),
+                    )
                 } throws SerializationException("Mock serialization failure")
             }
             val parserWithMockJson = CredentialExchangePayloadParserImpl(json = mockJson)
@@ -131,6 +146,34 @@ private val VALID_PAYLOAD = """
       "id": "account-123",
       "username": "user@example.com",
       "email": "user@example.com",
+      "collections": [],
+      "items": []
+    }
+  ]
+}
+""".trimIndent()
+
+/**
+ * Valid CXF payload with multiple accounts.
+ */
+private val VALID_PAYLOAD_MULTIPLE_ACCOUNTS = """
+{
+  "version": {"major": 1, "minor": 0},
+  "exporterRpId": "com.example.exporter",
+  "exporterDisplayName": "Example Exporter",
+  "timestamp": 1704067200,
+  "accounts": [
+    {
+      "id": "account-123",
+      "username": "user1@example.com",
+      "email": "user1@example.com",
+      "collections": [],
+      "items": []
+    },
+    {
+      "id": "account-456",
+      "username": "user2@example.com",
+      "email": "user2@example.com",
       "collections": [],
       "items": []
     }

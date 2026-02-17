@@ -38,7 +38,7 @@ class CredentialExchangeImportManagerImpl(
             is CredentialExchangePayload.Importable -> {
                 import(
                     userId = userId,
-                    accountsJson = exportResponse.accountsJson,
+                    accountsJsonList = exportResponse.accountsJsonList,
                 )
             }
 
@@ -53,29 +53,36 @@ class CredentialExchangeImportManagerImpl(
 
     private suspend fun import(
         userId: String,
-        accountsJson: String,
-    ): ImportCxfPayloadResult = vaultSdkSource
-        .importCxf(userId = userId, payload = accountsJson)
-        .flatMap { cipherList ->
-            // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active
-            val filteredCipherList = if (policyManager.hasRestrictItemTypes()) {
-                cipherList.filter { cipher -> cipher.type != CipherType.CARD }
-            } else {
-                cipherList
-            }
-
-            if (filteredCipherList.isEmpty()) {
-                // If no ciphers were returned, we can skip the remaining steps and return the
-                // appropriate result.
-                return ImportCxfPayloadResult.NoItems
-            }
-            uploadCiphers(userId = userId, ciphers = filteredCipherList)
+        accountsJsonList: List<String>,
+    ): ImportCxfPayloadResult {
+        val allCiphers = mutableListOf<Cipher>()
+        for (accountJson in accountsJsonList) {
+            vaultSdkSource
+                .importCxf(userId = userId, payload = accountJson)
+                .fold(
+                    onSuccess = { ciphers -> allCiphers.addAll(ciphers) },
+                    onFailure = { return ImportCxfPayloadResult.Error(error = it) },
+                )
         }
-        .map { syncVault(it) }
-        .fold(
-            onSuccess = { it },
-            onFailure = { ImportCxfPayloadResult.Error(error = it) },
-        )
+
+        // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active
+        val filteredCipherList = if (policyManager.hasRestrictItemTypes()) {
+            allCiphers.filter { cipher -> cipher.type != CipherType.CARD }
+        } else {
+            allCiphers
+        }
+
+        if (filteredCipherList.isEmpty()) {
+            return ImportCxfPayloadResult.NoItems
+        }
+
+        return uploadCiphers(userId = userId, ciphers = filteredCipherList)
+            .map { syncVault(it) }
+            .fold(
+                onSuccess = { it },
+                onFailure = { ImportCxfPayloadResult.Error(error = it) },
+            )
+    }
 
     private suspend fun uploadCiphers(
         userId: String,

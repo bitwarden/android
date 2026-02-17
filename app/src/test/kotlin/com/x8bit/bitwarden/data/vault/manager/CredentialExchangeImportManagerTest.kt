@@ -43,7 +43,7 @@ class CredentialExchangeImportManagerTest {
     }
     private val credentialExchangePayloadParser: CredentialExchangePayloadParser = mockk {
         every { parse(DEFAULT_PAYLOAD) } returns CredentialExchangePayload.Importable(
-            accountsJson = DEFAULT_ACCOUNT_JSON,
+            accountsJsonList = listOf(DEFAULT_ACCOUNT_JSON),
         )
     }
 
@@ -237,6 +237,92 @@ class CredentialExchangeImportManagerTest {
                 assertEquals(ImportCxfPayloadResult.NoItems, result)
                 coVerify(exactly = 1) {
                     vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                }
+                coVerify(exactly = 0) {
+                    ciphersService.importCiphers(any())
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `when multiple accounts, should call importCxf for each and aggregate ciphers`() =
+            runTest {
+                every {
+                    credentialExchangePayloadParser.parse(DEFAULT_PAYLOAD)
+                } returns CredentialExchangePayload.Importable(
+                    accountsJsonList = listOf(DEFAULT_ACCOUNT_JSON, DEFAULT_ACCOUNT_JSON_2),
+                )
+
+                val cipher1 = createMockSdkCipher(number = 1)
+                val cipher2 = createMockSdkCipher(number = 2)
+                coEvery {
+                    vaultSdkSource.importCxf(
+                        userId = DEFAULT_USER_ID,
+                        payload = DEFAULT_ACCOUNT_JSON,
+                    )
+                } returns listOf(cipher1).asSuccess()
+                coEvery {
+                    vaultSdkSource.importCxf(
+                        userId = DEFAULT_USER_ID,
+                        payload = DEFAULT_ACCOUNT_JSON_2,
+                    )
+                } returns listOf(cipher2).asSuccess()
+
+                val capturedRequest = slot<ImportCiphersJsonRequest>()
+                coEvery {
+                    ciphersService.importCiphers(capture(capturedRequest))
+                } returns ImportCiphersResponseJson.Success.asSuccess()
+                coEvery {
+                    vaultSyncManager.syncForResult(forced = true)
+                } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+                val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+                assertEquals(ImportCxfPayloadResult.Success(itemCount = 2), result)
+                assertEquals(2, capturedRequest.captured.ciphers.size)
+                coVerify(exactly = 1) {
+                    vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                    vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON_2)
+                    ciphersService.importCiphers(any())
+                    vaultSyncManager.syncForResult(forced = true)
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `when second account importCxf fails, should return Error without uploading`() =
+            runTest {
+                every {
+                    credentialExchangePayloadParser.parse(DEFAULT_PAYLOAD)
+                } returns CredentialExchangePayload.Importable(
+                    accountsJsonList = listOf(DEFAULT_ACCOUNT_JSON, DEFAULT_ACCOUNT_JSON_2),
+                )
+
+                coEvery {
+                    vaultSdkSource.importCxf(
+                        userId = DEFAULT_USER_ID,
+                        payload = DEFAULT_ACCOUNT_JSON,
+                    )
+                } returns listOf(createMockSdkCipher(number = 1)).asSuccess()
+
+                val exception = RuntimeException("SDK import failed on second account")
+                coEvery {
+                    vaultSdkSource.importCxf(
+                        userId = DEFAULT_USER_ID,
+                        payload = DEFAULT_ACCOUNT_JSON_2,
+                    )
+                } returns exception.asFailure()
+
+                coEvery {
+                    ciphersService.importCiphers(any())
+                } just awaits
+
+                val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+                assertEquals(ImportCxfPayloadResult.Error(exception), result)
+                coVerify(exactly = 1) {
+                    vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
+                    vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON_2)
                 }
                 coVerify(exactly = 0) {
                     ciphersService.importCiphers(any())
@@ -464,6 +550,45 @@ private val DEFAULT_ACCOUNT_JSON = """
               "password": {
                 "fieldType": "mockPasswordFieldType-1",
                 "value": "mockPasswordValue-1"
+              }
+            }
+          ]
+        }
+      ]
+    }
+"""
+    .trimIndent()
+
+private val DEFAULT_ACCOUNT_JSON_2 = """
+    {
+      "id": "mockId-2",
+      "username": "username-2",
+      "email": "mockEmail-2",
+      "fullName": "fullName-2",
+      "collections": [],
+      "items": [
+        {
+          "id": "mockId-2",
+          "creationAt": 1759783057,
+          "modifiedAt": 1759783057,
+          "title": "mockTitle-2",
+          "favorite": false,
+          "scope": {
+            "urls": [
+              "mockUrl-2"
+            ],
+            "androidApps": []
+          },
+          "credentials": [
+            {
+              "type": "mockType-2",
+              "username": {
+                "fieldType": "mockUsernameFieldType-2",
+                "value": "mockUsernameValue-2"
+              },
+              "password": {
+                "fieldType": "mockPasswordFieldType-2",
+                "value": "mockPasswordValue-2"
               }
             }
           ]

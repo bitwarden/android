@@ -8,7 +8,7 @@ sealed class CredentialExchangePayload {
      * Indicates that the payload is importable.
      */
     data class Importable(
-        val accountsJson: String,
+        val accountsJsonList: List<String>,
     ) : CredentialExchangePayload()
 
     /**
