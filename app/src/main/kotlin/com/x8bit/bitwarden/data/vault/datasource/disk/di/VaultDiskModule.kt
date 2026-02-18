@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
-import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.InstantTypeConverter
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.DomainsDao
@@ -42,7 +42,7 @@ class VaultDiskModule {
             )
             .fallbackToDestructiveMigration(dropAllTables = false)
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
-            .addTypeConverter(ZonedDateTimeTypeConverter())
+            .addTypeConverter(InstantTypeConverter())
             .build()
 
     @Provides

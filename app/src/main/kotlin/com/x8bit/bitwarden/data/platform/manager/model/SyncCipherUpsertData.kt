@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Required data for sync cipher upsert operations.
@@ -14,7 +14,7 @@ import java.time.ZonedDateTime
 data class SyncCipherUpsertData(
     val userId: String,
     val cipherId: String,
-    val revisionDate: ZonedDateTime,
+    val revisionDate: Instant,
     val organizationId: String?,
     val collectionIds: List<String>?,
     val isUpdate: Boolean,

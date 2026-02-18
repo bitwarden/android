@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.bitwarden.core.util.getBinaryLongFromZoneDateTime
-import com.bitwarden.core.util.getZoneDateTimeFromBinaryLong
+import com.bitwarden.core.util.getBinaryLongFromInstant
+import com.bitwarden.core.util.getInstantFromBinaryLong
 import com.bitwarden.data.datasource.disk.BaseDiskSource
-import java.time.ZonedDateTime
+import java.time.Instant
 
 private const val CURRENT_PUSH_TOKEN_KEY = "pushCurrentToken"
 private const val LAST_REGISTRATION_DATE_KEY = "pushLastRegistrationDate"
@@ -35,9 +35,9 @@ class PushDiskSourceImpl(
         return getString(CURRENT_PUSH_TOKEN_KEY.appendIdentifier(userId))
     }
 
-    override fun getLastPushTokenRegistrationDate(userId: String): ZonedDateTime? {
+    override fun getLastPushTokenRegistrationDate(userId: String): Instant? {
         return getLong(LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId))
-            ?.let { getZoneDateTimeFromBinaryLong(it) }
+            ?.let { getInstantFromBinaryLong(it) }
     }
 
     override fun storeCurrentPushToken(userId: String, pushToken: String?) {
@@ -49,11 +49,11 @@ class PushDiskSourceImpl(
 
     override fun storeLastPushTokenRegistrationDate(
         userId: String,
-        registrationDate: ZonedDateTime?,
+        registrationDate: Instant?,
     ) {
         putLong(
             key = LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId),
-            value = registrationDate?.let { getBinaryLongFromZoneDateTime(registrationDate) },
+            value = registrationDate?.let { getBinaryLongFromInstant(registrationDate) },
         )
     }
 }

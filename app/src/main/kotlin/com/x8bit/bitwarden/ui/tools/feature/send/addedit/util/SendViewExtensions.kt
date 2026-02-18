@@ -7,14 +7,10 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import kotlinx.collections.immutable.toImmutableList
-import java.time.Clock
-import java.time.ZonedDateTime
-
 /**
  * Transforms [SendView] into [AddEditSendState.ViewState.Content].
  */
 fun SendView.toViewState(
-    clock: Clock,
     baseWebSendUrl: String,
     isHideEmailAddressEnabled: Boolean,
     isSendEmailVerificationEnabled: Boolean,
@@ -31,8 +27,8 @@ fun SendView.toViewState(
             noteInput = this.notes.orEmpty(),
             isHideEmailChecked = this.hideEmail,
             isDeactivateChecked = this.disabled,
-            deletionDate = ZonedDateTime.ofInstant(this.deletionDate, clock.zone),
-            expirationDate = this.expirationDate?.let { ZonedDateTime.ofInstant(it, clock.zone) },
+            deletionDate = this.deletionDate,
+            expirationDate = this.expirationDate,
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
             isHideEmailAddressEnabled = isHideEmailAddressEnabled,

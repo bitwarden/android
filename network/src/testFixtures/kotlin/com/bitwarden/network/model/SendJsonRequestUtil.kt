@@ -1,6 +1,6 @@
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [SendJsonRequest] with a given [number].
@@ -13,8 +13,8 @@ fun createMockSendJsonRequest(
     type: SendTypeJson = SendTypeJson.FILE,
     key: String = "mockKey-$number",
     maxAccessCount: Int? = 1,
-    expirationDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-    deletionDate: ZonedDateTime = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    expirationDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
+    deletionDate: Instant = Instant.parse("2023-10-27T12:00:00Z"),
     fileLength: Long? = 1,
     file: SyncResponseJson.Send.File? = createMockFile(number = number),
     text: SyncResponseJson.Send.Text? = createMockText(number = number),

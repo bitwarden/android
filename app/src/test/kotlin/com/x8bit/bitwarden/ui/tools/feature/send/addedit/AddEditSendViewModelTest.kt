@@ -67,7 +67,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.util.UUID
 
 @Suppress("LargeClass")
@@ -319,7 +318,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
                     isSendEmailVerificationEnabled = false,
@@ -364,7 +362,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val errorMessage = "Failure"
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
                 isSendEmailVerificationEnabled = false,
@@ -609,7 +606,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
                 isSendEmailVerificationEnabled = false,
@@ -672,7 +668,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
                     isSendEmailVerificationEnabled = false,
@@ -719,7 +714,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
                     isSendEmailVerificationEnabled = false,
@@ -795,7 +789,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
                 isSendEmailVerificationEnabled = false,
@@ -864,7 +857,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
                 isSendEmailVerificationEnabled = false,
@@ -902,7 +894,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `DeletionDateChange should store the new deletion date`() {
         val viewModel = createViewModel()
-        val newDeletionDate = ZonedDateTime.parse("2024-09-13T00:00Z")
+        val newDeletionDate = Instant.parse("2024-09-13T00:00:00Z")
         // DEFAULT deletion date is "2023-11-03T00:00Z"
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
 
@@ -1465,7 +1457,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-11-03T12:00Z"),
+    deletionDate = Instant.parse("2023-11-03T12:00:00Z"),
     expirationDate = null,
     sendUrl = null,
     hasPassword = false,

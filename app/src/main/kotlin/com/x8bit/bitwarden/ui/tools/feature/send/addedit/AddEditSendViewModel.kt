@@ -61,7 +61,8 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.ZonedDateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -117,7 +118,9 @@ class AddEditSendViewModel @Inject constructor(
                         isHideEmailAddressEnabled = !policyManager
                             .getActivePolicies<PolicyInformation.SendOptions>()
                             .any { it.shouldDisableHideEmail ?: false },
-                        deletionDate = ZonedDateTime.now(clock).plusWeeks(1),
+                        deletionDate = clock
+                            .instant()
+                            .plus(@Suppress("MagicNumber") 7, ChronoUnit.DAYS),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
@@ -400,7 +403,6 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                clock = clock,
                                 baseWebSendUrl = environmentRepo
                                     .environment
                                     .environmentUrlData
@@ -442,7 +444,6 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                clock = clock,
                                 baseWebSendUrl = environmentRepo
                                     .environment
                                     .environmentUrlData
@@ -993,8 +994,8 @@ data class AddEditSendState(
                 val isHideEmailChecked: Boolean,
                 val isDeactivateChecked: Boolean,
                 val isHideEmailAddressEnabled: Boolean,
-                val deletionDate: ZonedDateTime,
-                val expirationDate: ZonedDateTime?,
+                val deletionDate: Instant,
+                val expirationDate: Instant?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
                 val isSendEmailVerificationEnabled: Boolean,
@@ -1218,7 +1219,7 @@ sealed class AddEditSendAction {
     /**
      * The user changed the deletion date.
      */
-    data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddEditSendAction()
+    data class DeletionDateChange(val deletionDate: Instant) : AddEditSendAction()
 
     /**
      * The user selected an authentication type.

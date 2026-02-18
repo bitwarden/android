@@ -29,7 +29,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("TooManyFunctions")
@@ -130,7 +129,8 @@ internal class CiphersServiceImpl(
                     url = attachment.url,
                     date = DateTimeFormatter
                         .RFC_1123_DATE_TIME
-                        .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
+                        .withZone(ZoneOffset.UTC)
+                        .format(clock.instant()),
                     version = attachment.url.toUri().getQueryParameter("sv"),
                     body = encryptedFile.asRequestBody(),
                 )

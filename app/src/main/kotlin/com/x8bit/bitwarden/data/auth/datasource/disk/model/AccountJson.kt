@@ -8,7 +8,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents the current account information for a given user.
@@ -103,7 +103,7 @@ data class AccountJson(
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: ZonedDateTime?,
+        val creationDate: Instant?,
     )
 
     /**

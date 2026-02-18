@@ -1,7 +1,7 @@
 package com.bitwarden.network
 
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.serializer.ZonedDateTimeSerializer
+import com.bitwarden.core.data.serializer.InstantSerializer
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
@@ -71,7 +71,7 @@ internal class BitwardenServiceClientImpl(
         // We allow for nullable values to have keys missing in the JSON response.
         explicitNulls = false
         serializersModule = SerializersModule {
-            contextual(ZonedDateTimeSerializer())
+            contextual(InstantSerializer())
         }
 
         // Respect model default property values.
