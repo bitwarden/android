@@ -42,7 +42,6 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setUp() {
-        onDismissCalled = false
         setContent(
             intentManager = intentManager,
         ) {
