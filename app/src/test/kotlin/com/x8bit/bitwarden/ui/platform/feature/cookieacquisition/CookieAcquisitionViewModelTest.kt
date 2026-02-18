@@ -89,6 +89,21 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ContinueWithoutSyncingClick should emit NavigateBack event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    CookieAcquisitionAction.ContinueWithoutSyncingClick,
+                )
+                assertEquals(
+                    CookieAcquisitionEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `WhyAmISeeingThisClick should emit NavigateToHelp event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -103,14 +118,17 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CookieCallbackResult Success should clear pending request`() =
+    fun `CookieCallbackResult Success should clear pending request and emit NavigateBack`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 mutableCookieCallbackResultFlow.emit(
                     CookieCallbackResult.Success(cookies = mapOf("cookie" to "value")),
                 )
-                expectNoEvents()
+                assertEquals(
+                    CookieAcquisitionEvent.NavigateBack,
+                    awaitItem(),
+                )
             }
             verify {
                 mockCookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)

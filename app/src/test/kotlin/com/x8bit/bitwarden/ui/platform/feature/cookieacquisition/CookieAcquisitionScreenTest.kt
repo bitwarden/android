@@ -21,11 +21,13 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class CookieAcquisitionScreenTest : BitwardenComposeTest() {
 
+    private var onDismissCalled = false
     private val mutableEventFlow =
         bufferedMutableSharedFlow<CookieAcquisitionEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -44,6 +46,7 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
         ) {
             CookieAcquisitionScreen(
+                onDismiss = { onDismissCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -149,6 +152,16 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on system back should send ContinueWithoutSyncingClick action`() {
+        backDispatcher?.onBackPressed()
+        verify {
+            viewModel.trySendAction(
+                CookieAcquisitionAction.ContinueWithoutSyncingClick,
+            )
+        }
+    }
+
+    @Test
     fun `error dialog dismiss should send DismissDialogClick action`() {
         mutableStateFlow.update {
             it.copy(
@@ -169,6 +182,12 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(CookieAcquisitionAction.DismissDialogClick)
         }
+    }
+
+    @Test
+    fun `NavigateBack event should call onDismiss`() {
+        mutableEventFlow.tryEmit(CookieAcquisitionEvent.NavigateBack)
+        assertTrue(onDismissCalled)
     }
 }
 
