@@ -24,7 +24,8 @@ fun NavGraphBuilder.cookieAcquisitionDestination(
 ) {
     composableWithSlideTransitions<CookieAcquisitionRoute> {
         CookieAcquisitionScreen(onDismiss = onDismiss)
-        // If we are displaying the debug screen, then we can just hide the splash screen.
+        // If we are displaying the cookie acquisition screen, then we can just hide
+        // the splash screen.
         onSplashScreenRemoved()
     }
 }
