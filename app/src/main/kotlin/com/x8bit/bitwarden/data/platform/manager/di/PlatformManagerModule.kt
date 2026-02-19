@@ -73,6 +73,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -372,12 +374,12 @@ object PlatformManagerModule {
         vaultDiskSource: VaultDiskSource,
         cookieDiskSource: CookieDiskSource,
         configDiskSource: ConfigDiskSource,
-        bitwardenServiceClient: BitwardenServiceClient,
+        authDiskSource: AuthDiskSource,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
         cookieDiskSource = cookieDiskSource,
         configDiskSource = configDiskSource,
-        bitwardenServiceClient = bitwardenServiceClient,
+        authDiskSource = authDiskSource,
     )
 
     @Provides
@@ -438,4 +440,16 @@ object PlatformManagerModule {
     @Singleton
     fun provideServerCommunicationConfigManager(): CookieAcquisitionRequestManager =
         CookieAcquisitionRequestManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideNetworkCookieManager(
+        configDiskSource: ConfigDiskSource,
+        cookieDiskSource: CookieDiskSource,
+        cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    ): NetworkCookieManager = NetworkCookieManagerImpl(
+        configDiskSource = configDiskSource,
+        cookieDiskSource = cookieDiskSource,
+        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+    )
 }

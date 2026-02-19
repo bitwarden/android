@@ -448,6 +448,13 @@ La numérisation se fera automatiquement.</string>
     <string name="deletion_date">Date de suppression</string>
     <string name="deletion_time">Heure de suppression</string>
     <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">En attente de suppression</string>
     <string name="expired">Expiré</string>
     <string name="expires_at">Expire à %s</string>
@@ -936,6 +943,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="use_brave_autofill_integration">Utilisez l\'intégration de remplissage automatique Brave</string>
     <string name="use_chrome_autofill_integration">Utiliser l\'intégration de la saisie automatique de Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Utiliser l\'intégration de saisie automatique de Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Améliore le remplissage des connexions pour les sites Web pris en charge sur les navigateurs sélectionnés. Une fois activé, vous serez dirigé vers les paramètres du navigateur pour activer le remplissage automatique par un tiers.</string>
     <string name="show_more">Afficher plus</string>
     <string name="no_folder">Aucun dossier</string>

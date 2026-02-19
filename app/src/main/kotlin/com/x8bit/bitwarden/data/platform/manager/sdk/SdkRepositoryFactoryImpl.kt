@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.platform.manager.sdk
 
 import com.bitwarden.core.ClientManagedTokens
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.sdk.CipherRepository
 import com.bitwarden.sdk.ServerCommunicationConfigRepository
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkCipherRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkTokenRepository
@@ -18,7 +18,7 @@ class SdkRepositoryFactoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val cookieDiskSource: CookieDiskSource,
     private val configDiskSource: ConfigDiskSource,
-    private val bitwardenServiceClient: BitwardenServiceClient,
+    private val authDiskSource: AuthDiskSource,
 ) : SdkRepositoryFactory {
     override fun getCipherRepository(
         userId: String,
@@ -33,7 +33,7 @@ class SdkRepositoryFactoryImpl(
     ): ClientManagedTokens =
         SdkTokenRepository(
             userId = userId,
-            tokenProvider = bitwardenServiceClient.tokenProvider,
+            authDiskSource = authDiskSource,
         )
 
     override fun getServerCommunicationConfigRepository(): ServerCommunicationConfigRepository =

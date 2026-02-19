@@ -446,6 +446,13 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="deletion_date">Ngày xóa</string>
     <string name="deletion_time">Thời gian xóa</string>
     <string name="deletion_date_info">Send sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Đang chờ xóa</string>
     <string name="expired">Đã hết hạn</string>
     <string name="expires_at">Hết hạn vào %s</string>
@@ -931,6 +938,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="use_brave_autofill_integration">Tích hợp với tính năng tự động điền của Brave</string>
     <string name="use_chrome_autofill_integration">Tích hợp với tính năng tự động điền của Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Tích hợp tự động điền cho Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Cải thiện tính năng tự động điền thông tin đăng nhập cho các trang web được hỗ trợ trên trình duyệt đã chọn. Sau khi kích hoạt, bạn sẽ được chuyển đến cài đặt trình duyệt để bật tính năng tự động điền của bên thứ ba.</string>
     <string name="show_more">Xem thêm</string>
     <string name="no_folder">Chưa phân loại</string>

@@ -504,6 +504,24 @@ private fun AddEditSendOptions(
                     )
                 }
             }
+            if (shouldShowDialog) {
+                BitwardenTwoButtonDialog(
+                    title = stringResource(id = BitwardenString.password),
+                    message = stringResource(id = BitwardenString.password_override_alert),
+                    confirmButtonText = stringResource(id = BitwardenString.yes),
+                    dismissButtonText = stringResource(id = BitwardenString.no),
+                    onConfirmClick = {
+                        onDialogConfirm()
+                        addSendHandlers.onOpenPasswordGeneratorClick()
+                    },
+                    onDismissClick = {
+                        onDialogDismiss()
+                    },
+                    onDismissRequest = {
+                        onDialogDismiss()
+                    },
+                )
+            }
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 modifier = Modifier

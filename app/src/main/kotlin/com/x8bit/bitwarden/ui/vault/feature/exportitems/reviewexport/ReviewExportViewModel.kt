@@ -94,7 +94,7 @@ class ReviewExportViewModel @Inject constructor(
                                 .value
                                 .data
                                 ?.successes
-                                ?.filter { it.deletedDate == null }
+                                ?.filter { it.deletedDate == null && it.archivedDate == null }
                                 .filterRestrictedItemsIfNecessary(),
                         )
                         .fold(
@@ -241,7 +241,7 @@ class ReviewExportViewModel @Inject constructor(
         var secureNoteItemCount = 0
         this@toItemTypeCounts
             ?.successes
-            ?.filter { it.deletedDate == null }
+            ?.filter { it.deletedDate == null && it.archivedDate == null }
             .orEmpty()
             .forEach {
                 when {

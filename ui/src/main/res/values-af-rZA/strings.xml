@@ -448,6 +448,13 @@ Skandering gebeur outomaties.</string>
     <string name="deletion_date">Skrapdatum</string>
     <string name="deletion_time">Skraptyd</string>
     <string name="deletion_date_info">Die Send sal outomaties op die aangewese datum en tyd geskrap word.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">Word geskrap</string>
     <string name="expired">Verstreke</string>
     <string name="expires_at">Expires at %s</string>
@@ -936,6 +943,7 @@ Wil u na die rekening omskakel?</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>

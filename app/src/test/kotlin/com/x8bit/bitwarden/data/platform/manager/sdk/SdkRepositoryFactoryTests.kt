@@ -1,10 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk
 
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.network.BitwardenServiceClient
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
@@ -14,15 +13,13 @@ class SdkRepositoryFactoryTests {
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val cookieDiskSource: CookieDiskSource = mockk()
     private val configDiskSource: ConfigDiskSource = mockk()
-    private val bitwardenServiceClient: BitwardenServiceClient = mockk {
-        every { tokenProvider } returns mockk()
-    }
+    private val authDiskSource: AuthDiskSource = mockk()
 
     private val sdkRepoFactory: SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
         cookieDiskSource = cookieDiskSource,
         configDiskSource = configDiskSource,
-        bitwardenServiceClient = bitwardenServiceClient,
+        authDiskSource = authDiskSource,
     )
 
     @Test

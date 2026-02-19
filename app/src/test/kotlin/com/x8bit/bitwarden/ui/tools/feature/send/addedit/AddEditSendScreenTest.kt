@@ -1580,7 +1580,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .assertIsNotEnabled()
     }
-
     //endregion Authentication UI Tests
 }
 
