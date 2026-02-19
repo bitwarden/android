@@ -117,7 +117,11 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
         label = {
             Text(
                 text = option.text,
-                style = BitwardenTheme.typography.labelLarge
+                style = if (option.isChecked) {
+                    BitwardenTheme.typography.labelLarge
+                } else {
+                    BitwardenTheme.typography.labelLargeRegular
+                }
                     .copy(lineBreak = LineBreak.Heading)
                     .toMaxScale(maxScaleFactor = 2f),
                 maxLines = 2,
