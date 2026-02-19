@@ -1,5 +1,5 @@
-name: SDLC / Comment Linked Issues on Release
-run-name: ${{ inputs.dry-run && '(Dry Run) ' || '' }}Comment Linked Issues on Release - ${{ github.event.release.name || inputs.release_url }}
+name: SDLC / Update Linked Issues on Release
+run-name: ${{ inputs.dry-run && '(Dry Run) ' || '' }}Update Linked Issues on Release - ${{ github.event.release.name || inputs.release_url }}
 
 on:
   release:
@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Comment on Linked Issues
+      - name: Update Linked Issues
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _RELEASE_URL: ${{ github.event.release.html_url || inputs.release_url }}
