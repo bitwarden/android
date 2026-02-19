@@ -184,7 +184,7 @@ fun AddEditSendContent(
 
         AddEditSendOptions(
             state = state,
-            sendRestrictionPolicy = policyDisablesSend,
+            isSendsRestrictedByPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
@@ -375,7 +375,7 @@ private fun ColumnScope.FileTypeContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
- * @param sendRestrictionPolicy When `true`, indicates that there's a policy preventing the user
+ * @param isSendsRestrictedByPolicy When `true`, indicates that there's a policy preventing the user
  * from editing or creating sends.
  * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
  * an existing send.
@@ -385,7 +385,7 @@ private fun ColumnScope.FileTypeContent(
 @Composable
 private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
-    sendRestrictionPolicy: Boolean,
+    isSendsRestrictedByPolicy: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
@@ -439,10 +439,11 @@ private fun AddEditSendOptions(
                 },
                 value = state.common.maxAccessCount,
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
-                isDecrementEnabled = state.common.maxAccessCount != null && !sendRestrictionPolicy,
-                isIncrementEnabled = !sendRestrictionPolicy,
+                isDecrementEnabled = state.common.maxAccessCount != null &&
+                    !isSendsRestrictedByPolicy,
+                isIncrementEnabled = !isSendsRestrictedByPolicy,
                 range = 0..Int.MAX_VALUE,
-                textFieldReadOnly = sendRestrictionPolicy,
+                textFieldReadOnly = isSendsRestrictedByPolicy,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("SendMaxAccessCountEntry")
@@ -455,7 +456,7 @@ private fun AddEditSendOptions(
                 BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.new_password),
                     supportingText = stringResource(id = BitwardenString.password_info),
-                    readOnly = sendRestrictionPolicy,
+                    readOnly = isSendsRestrictedByPolicy,
                     value = state.common.passwordInput,
                     onValueChange = addSendHandlers.onPasswordChange,
                     passwordFieldTestTag = "SendNewPasswordEntry",
@@ -514,14 +515,14 @@ private fun AddEditSendOptions(
                 label = stringResource(id = BitwardenString.hide_email),
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
-                readOnly = sendRestrictionPolicy,
+                readOnly = isSendsRestrictedByPolicy,
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
                 cardStyle = CardStyle.Full,
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.private_notes),
-                readOnly = sendRestrictionPolicy,
+                readOnly = isSendsRestrictedByPolicy,
                 value = state.common.noteInput,
                 singleLine = false,
                 onValueChange = addSendHandlers.onNoteChange,

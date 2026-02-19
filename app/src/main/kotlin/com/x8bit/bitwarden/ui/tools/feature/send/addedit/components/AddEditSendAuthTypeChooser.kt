@@ -46,7 +46,7 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
  * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param isEnabled Whether the chooser is enabled.
- * @param sendRestrictionPolicy if sends are restricted by a policy.
+ * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
 @Suppress("LongMethod")
