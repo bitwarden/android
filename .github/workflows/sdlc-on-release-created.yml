@@ -1,4 +1,5 @@
-name: SDLC On Release Created
+name: SDLC / Comment Linked Issues on Release
+run-name: ${{ inputs.dry-run && '(Dry Run) ' || '' }}Comment Linked Issues on Release - ${{ github.event.release.name || inputs.release_url }}
 
 on:
   release:
