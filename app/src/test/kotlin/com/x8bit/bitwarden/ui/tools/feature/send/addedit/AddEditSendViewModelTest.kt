@@ -1343,6 +1343,64 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+        val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
+        val viewModel = createViewModel(nonPremiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(nonPremiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
+            val newState = awaitItem()
+            assertEquals(
+                AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                newState.dialogState,
+            )
+            // Verify auth type was NOT changed
+            assertEquals(
+                SendAuth.None,
+                (newState.viewState as AddEditSendState.ViewState.Content).common.sendAuth,
+            )
+        }
+    }
+
+    @Test
+    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+        val premiumState = DEFAULT_STATE.copy(isPremium = true)
+        val viewModel = createViewModel(premiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(premiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
+            val newState = awaitItem()
+            // Verify no dialog was shown
+            assertEquals(null, newState.dialogState)
+            // Verify auth type was changed
+            val sendAuth = (newState.viewState as AddEditSendState.ViewState.Content)
+                .common
+                .sendAuth as SendAuth.Email
+            assertEquals(1, sendAuth.emails.size)
+            assertEquals("", sendAuth.emails[0].value)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UpgradeToPremiumClick should send NavigateToPremium event`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+            val event = awaitItem()
+            assertEquals(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+                event,
+            )
+        }
+    }
+
     //endregion Authentication Tests
 
     private fun createViewModel(

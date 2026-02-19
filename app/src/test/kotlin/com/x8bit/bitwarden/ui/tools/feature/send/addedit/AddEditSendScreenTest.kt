@@ -932,6 +932,67 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `EmailAuthRequiresPremium dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Premium subscription required")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText(
+                "Sharing with specific people is a Premium feature. " +
+                    "Your current plan does not include access to this feature.",
+            )
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `EmailAuthRequiresPremium dialog Cancel click should send DismissDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .performClick()
+
+        verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
+    }
+
+    @Test
+    fun `EmailAuthRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Upgrade to premium")
+            .performClick()
+
+        verify { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }
+    }
+
+    @Test
+    fun `on NavigateToPremium event should call launchUri on IntentManager`() = runTest {
+        val uri = "https://vault.bitwarden.com/#/settings/subscription/premium"
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToPremium(uri))
+
+        verify { intentManager.launchUri(any()) }
+    }
+
+    @Test
     fun `policy send options text should be displayed based on state`() {
         val text = "One or more organization policies are affecting your Send options."
 
