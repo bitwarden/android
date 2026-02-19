@@ -8,6 +8,7 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -212,6 +213,7 @@ class AddEditSendViewModel @Inject constructor(
         is AddEditSendAction.AuthEmailChange -> handleAuthEmailsChange(action)
         is AddEditSendAction.AuthEmailAdd -> handleAuthEmailsAdd()
         is AddEditSendAction.AuthEmailRemove -> handleAuthEmailsRemove(action)
+        AddEditSendAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
     }
 
     private fun handleInternalAction(action: AddEditSendAction.Internal): Unit = when (action) {
@@ -558,6 +560,14 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
+        // Check if user is trying to select Email auth without premium
+        if (action.sendAuth is SendAuth.Email && !state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
+            }
+            return
+        }
+
         updateCommonContent { commonContent ->
             commonContent.copy(
                 sendAuth = when (action.sendAuth) {
@@ -631,6 +641,18 @@ class AddEditSendViewModel @Inject constructor(
                 ),
             )
         }
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        val baseUrl = environmentRepo
+            .environment
+            .environmentUrlData
+            .baseWebVaultUrlOrDefault
+        sendEvent(
+            AddEditSendEvent.NavigateToPremium(
+                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+            ),
+        )
     }
 
     @Suppress("LongMethod")
@@ -1028,6 +1050,13 @@ data class AddEditSendState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that email authentication requires
+         * a premium account.
+         */
+        @Parcelize
+        data object EmailAuthRequiresPremium : DialogState()
     }
 }
 
@@ -1075,6 +1104,11 @@ sealed class AddEditSendEvent {
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
     ) : AddEditSendEvent()
+
+    /**
+     * Navigate to the premium upgrade page.
+     */
+    data class NavigateToPremium(val uri: String) : AddEditSendEvent()
 }
 
 /**
@@ -1210,6 +1244,11 @@ sealed class AddEditSendAction {
      * The user removed an authentication email field.
      */
     data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
+
+    /**
+     * User clicked upgrade to premium from the email auth premium dialog.
+     */
+    data object UpgradeToPremiumClick : AddEditSendAction()
 
     /**
      * Models actions that the [AddEditSendViewModel] itself might send.

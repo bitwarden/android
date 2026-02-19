@@ -68,6 +68,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.UUID
 
 @Suppress("LargeClass")
 class AddEditSendViewModelTest : BaseViewModelTest() {
@@ -126,6 +127,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
+            UUID::randomUUID,
         )
     }
 
@@ -136,6 +138,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
+            UUID::randomUUID,
         )
     }
 
@@ -1148,7 +1151,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Changing AuthTypeSelect should not clear emails and password`() = runTest {
-        val email1 = AuthEmail(id = "id1", value = "test@example.com")
+        every { UUID.randomUUID().toString() } returns "uuid"
         val initialCommonState = DEFAULT_COMMON_STATE.copy(
             passwordInput = "oldpassword",
             sendAuth = SendAuth.Password,
@@ -1163,6 +1166,14 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val expectedNoneViewState = DEFAULT_VIEW_STATE.copy(
             common = initialCommonState.copy(
                 sendAuth = SendAuth.None,
+            ),
+        )
+
+        val expectedEmptyEmailViewState = DEFAULT_VIEW_STATE.copy(
+            common = initialCommonState.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(AuthEmail(id = "uuid", value = "")),
+                ),
             ),
         )
 
@@ -1181,13 +1192,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            // Check the structure rather than exact equality due to random UUIDs
-            val emailState = awaitItem()
-            val sendAuth = (emailState.viewState as AddEditSendState.ViewState.Content)
-                .common
-                .sendAuth as SendAuth.Email
-            assertEquals(1, sendAuth.emails.size)
-            assertEquals("", sendAuth.emails[0].value)
+            assertEquals(
+                initialState.copy(viewState = expectedEmptyEmailViewState),
+                awaitItem(),
+            )
         }
     }
 
@@ -1246,6 +1254,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AuthEmailAdd should add empty email to list`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
         val email1 = AuthEmail(id = "id1", value = "test@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
@@ -1256,19 +1265,25 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
+        val viewStateTwoEmails = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        email1,
+                        AuthEmail(id = "uuid", value = ""),
+                    ),
+                ),
+            ),
+        )
         val viewModel = createViewModel(initialState)
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
             viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
-            val newState = awaitItem()
-            val actualEmails = (newState.viewState as AddEditSendState.ViewState.Content)
-                .common
-                .sendAuth as SendAuth.Email
-            // Verify we have 2 emails, the first unchanged and the second empty
-            assertEquals(2, actualEmails.emails.size)
-            assertEquals(email1, actualEmails.emails[0])
-            assertEquals("", actualEmails.emails[1].value)
+            assertEquals(
+                awaitItem(),
+                initialState.copy(viewState = viewStateTwoEmails),
+            )
         }
     }
 
@@ -1311,6 +1326,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AuthEmailRemove with last email should result in single empty AuthEmail`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
         val email1 = AuthEmail(id = "id1", value = "test@example.com")
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
@@ -1333,13 +1349,82 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             )
+            assertEquals(
+                initialState.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            sendAuth = SendAuth.Email(
+                                emails = persistentListOf(
+                                    AuthEmail(id = "uuid", value = ""),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+        val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
+        val viewModel = createViewModel(nonPremiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(nonPremiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
             val newState = awaitItem()
-            val actualEmails = (newState.viewState as AddEditSendState.ViewState.Content)
-                .common
-                .sendAuth as SendAuth.Email
-            // Verify we have 1 empty email after removing the last one
-            assertEquals(1, actualEmails.emails.size)
-            assertEquals("", actualEmails.emails[0].value)
+            assertEquals(
+                nonPremiumState.copy(
+                    dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                ),
+                newState,
+            )
+        }
+    }
+
+    @Test
+    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        val premiumState = DEFAULT_STATE.copy(isPremium = true)
+        val viewModel = createViewModel(premiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(premiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
+            // Verify auth type was changed
+            assertEquals(
+                premiumState.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            sendAuth = SendAuth.Email(
+                                emails = persistentListOf(
+                                    AuthEmail(id = "uuid", value = ""),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UpgradeToPremiumClick should send NavigateToPremium event`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+            val event = awaitItem()
+            assertEquals(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+                event,
+            )
         }
     }
 
