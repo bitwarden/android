@@ -41,7 +41,11 @@ fun AddEditSendState.ViewState.Content.toSendView(
             // we just update it to match the deletion date.
             common.deletionDate.toInstant()
         },
-        emails = (common.sendAuth as? SendAuth.Email)?.emails?.map { it.value }.orEmpty(),
+        emails = (common.sendAuth as? SendAuth.Email)
+            ?.emails
+            ?.map { it.value }
+            ?.filter { it.isNotBlank() }
+            .orEmpty(),
         authType = when (common.sendAuth) {
             is SendAuth.Password -> AuthType.PASSWORD
             is SendAuth.Email -> AuthType.EMAIL

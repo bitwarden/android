@@ -12,7 +12,6 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
@@ -606,9 +605,10 @@ class AddEditSendViewModel @Inject constructor(
 
             commonContent.copy(
                 sendAuth = currentAuth.copy(
-                    emails = currentAuth.emails.plus(
-                        AuthEmail(value = ""),
-                    ).toImmutableList(),
+                    emails = currentAuth
+                        .emails
+                        .plus(AuthEmail(value = ""))
+                        .toImmutableList(),
                 ),
             )
         }
@@ -648,40 +648,6 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
-
-            // Validate email authentication if EMAIL auth type is selected
-            if (content.common.sendAuth is SendAuth.Email) {
-                val nonBlankEmails = content.common.sendAuth.emails.filter { it.value.isNotBlank() }
-
-                if (nonBlankEmails.isEmpty()) {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = AddEditSendState.DialogState.Error(
-                                title = BitwardenString.no_email_addresses_entered.asText(),
-                                message = BitwardenString
-                                    .enter_at_least_one_valid_email_address_to_share_this_send
-                                    .asText(),
-                            ),
-                        )
-                    }
-                    return@onContent
-                }
-
-                if (nonBlankEmails.any { !it.value.isValidEmail() }) {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = AddEditSendState.DialogState.Error(
-                                title = BitwardenString.invalid_email_addresses.asText(),
-                                message = BitwardenString
-                                    .one_or_more_email_addresses_are_incorrect
-                                    .asText(),
-                            ),
-                        )
-                    }
-                    return@onContent
-                }
-            }
-
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
                     if (!state.isPremium) {

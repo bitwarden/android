@@ -28,6 +28,7 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
                 isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
+            defaultBrowserPackageName = null,
         )
 
         val result = browserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions()
@@ -55,6 +56,7 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            defaultBrowserPackageName = null,
         )
 
         val result = browserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions()

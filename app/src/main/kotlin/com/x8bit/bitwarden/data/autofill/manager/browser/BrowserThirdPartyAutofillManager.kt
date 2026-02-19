@@ -27,4 +27,9 @@ interface BrowserThirdPartyAutofillManager {
      * The data representing the status of the Vivaldi version
      */
     val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
+
+    /**
+     * The package name of the device's default browser, or null if it cannot be determined.
+     */
+    val defaultBrowserPackageName: String?
 }

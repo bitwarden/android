@@ -452,6 +452,13 @@
     <string name="deletion_date">Дата удаления</string>
     <string name="deletion_time">Время удаления</string>
     <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
+    <string name="who_can_view">Кто может просматривать</string>
+    <string name="anyone_with_the_link">Любой, у кого есть ссылка</string>
+    <string name="anyone_with_link_can_view_send">Любой, у кого есть эта ссылка, сможет просмотреть эту Send</string>
+    <string name="specific_people">Конкретные пользователи</string>
+    <string name="specific_people_verification_info">После того, как вы поделитесь ссылкой на Send, пользователю нужно будет подтвердить свой email кодом, чтобы просмотреть эту Send</string>
+    <string name="anyone_with_password">Любой, у кого есть установленный вами пароль</string>
+    <string name="add_email">Добавить email</string>
     <string name="pending_delete">Ожидание удаления</string>
     <string name="expired">Срок истек</string>
     <string name="expires_at">Истекает %s</string>
@@ -946,6 +953,7 @@
     <string name="use_brave_autofill_integration">Использовать интеграцию автозаполнения в Brave</string>
     <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Использовать интеграцию автозаполнения в Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Улучшает заполнение логина на поддерживаемых сайтах в выбранных браузерах. После включения вы будете направлены в настройки браузера, чтобы включить автозаполнение сторонних сайтов.</string>
     <string name="show_more">Больше</string>
     <string name="no_folder">Без папки</string>

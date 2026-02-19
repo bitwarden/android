@@ -11,6 +11,8 @@ import com.bitwarden.network.interceptor.AuthTokenProvider
 import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
+import com.bitwarden.network.model.NetworkCookie
+import com.bitwarden.network.provider.CookieProvider
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.ssl.CertificateProvider
@@ -69,6 +71,13 @@ object PlatformNetworkModule {
                 override fun getCertificateChain(alias: String?): Array<X509Certificate>? = null
 
                 override fun getPrivateKey(alias: String?): PrivateKey? = null
+            },
+            cookieProvider = object : CookieProvider {
+                override fun needsBootstrap(hostname: String): Boolean = false
+
+                override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
+
+                override fun acquireCookies(hostname: String) = Unit
             },
         ),
     )
