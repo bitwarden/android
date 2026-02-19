@@ -72,8 +72,6 @@ fun AddEditSendContent(
     permissionsManager: PermissionsManager,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
-
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
@@ -176,7 +174,7 @@ fun AddEditSendContent(
                 onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
                 password = state.common.passwordInput,
                 isEnabled = !policyDisablesSend,
-                sendRestrictionPolicy = policyDisablesSend,
+                isSendsRestrictedByPolicy = policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendAuthTypeChooser")
                     .fillMaxWidth()
@@ -488,24 +486,24 @@ private fun AddEditSendOptions(
                         modifier = Modifier.testTag(tag = "CopyPasswordButton"),
                     )
                 }
-                if (shouldShowDialog) {
-                    BitwardenTwoButtonDialog(
-                        title = stringResource(id = BitwardenString.password),
-                        message = stringResource(id = BitwardenString.password_override_alert),
-                        confirmButtonText = stringResource(id = BitwardenString.yes),
-                        dismissButtonText = stringResource(id = BitwardenString.no),
-                        onConfirmClick = {
-                            shouldShowDialog = false
-                            addSendHandlers.onOpenPasswordGeneratorClick()
-                        },
-                        onDismissClick = {
-                            shouldShowDialog = false
-                        },
-                        onDismissRequest = {
-                            shouldShowDialog = false
-                        },
-                    )
-                }
+            }
+            if (shouldShowDialog) {
+                BitwardenTwoButtonDialog(
+                    title = stringResource(id = BitwardenString.password),
+                    message = stringResource(id = BitwardenString.password_override_alert),
+                    confirmButtonText = stringResource(id = BitwardenString.yes),
+                    dismissButtonText = stringResource(id = BitwardenString.no),
+                    onConfirmClick = {
+                        shouldShowDialog = false
+                        addSendHandlers.onOpenPasswordGeneratorClick()
+                    },
+                    onDismissClick = {
+                        shouldShowDialog = false
+                    },
+                    onDismissRequest = {
+                        shouldShowDialog = false
+                    },
+                )
             }
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
