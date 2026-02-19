@@ -174,7 +174,6 @@ fun AddEditSendContent(
                 onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
                 onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
                 onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
-                onShowDialog = { shouldShowDialog = true },
                 password = state.common.passwordInput,
                 isEnabled = !policyDisablesSend,
                 sendRestrictionPolicy = policyDisablesSend,
@@ -190,13 +189,6 @@ fun AddEditSendContent(
             sendRestrictionPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
-            shouldShowDialog = shouldShowDialog,
-            onShowDialog = { shouldShowDialog = true },
-            onDialogDismiss = { shouldShowDialog = false },
-            onDialogConfirm = {
-                shouldShowDialog = false
-                addSendHandlers.onOpenPasswordGeneratorClick()
-            },
         )
 
         if (!isAddMode) {
@@ -390,10 +382,6 @@ private fun ColumnScope.FileTypeContent(
  * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
  * an existing send.
  * @param addSendHandlers THe handlers various events.
- * @param shouldShowDialog Whether to show the password override dialog.
- * @param onShowDialog Called when the dialog should be shown.
- * @param onDialogDismiss Called when the dialog is dismissed.
- * @param onDialogConfirm Called when the dialog is confirmed.
  */
 @Suppress("LongMethod")
 @Composable
@@ -402,12 +390,9 @@ private fun AddEditSendOptions(
     sendRestrictionPolicy: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddEditSendHandlers,
-    shouldShowDialog: Boolean,
-    onShowDialog: () -> Unit,
-    onDialogDismiss: () -> Unit,
-    onDialogConfirm: () -> Unit,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenExpandingHeader(
         isExpanded = isExpanded,
         onClick = { isExpanded = !isExpanded },
@@ -488,7 +473,7 @@ private fun AddEditSendOptions(
                             if (state.common.passwordInput.isEmpty()) {
                                 addSendHandlers.onOpenPasswordGeneratorClick()
                             } else {
-                                onShowDialog()
+                                shouldShowDialog = true
                             }
                         },
                         modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
@@ -501,6 +486,24 @@ private fun AddEditSendOptions(
                             addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
                         },
                         modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
+                if (shouldShowDialog) {
+                    BitwardenTwoButtonDialog(
+                        title = stringResource(id = BitwardenString.password),
+                        message = stringResource(id = BitwardenString.password_override_alert),
+                        confirmButtonText = stringResource(id = BitwardenString.yes),
+                        dismissButtonText = stringResource(id = BitwardenString.no),
+                        onConfirmClick = {
+                            shouldShowDialog = false
+                            addSendHandlers.onOpenPasswordGeneratorClick()
+                        },
+                        onDismissClick = {
+                            shouldShowDialog = false
+                        },
+                        onDismissRequest = {
+                            shouldShowDialog = false
+                        },
                     )
                 }
             }
@@ -531,17 +534,5 @@ private fun AddEditSendOptions(
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
         }
-    }
-
-    if (shouldShowDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.password),
-            message = stringResource(id = BitwardenString.password_override_alert),
-            confirmButtonText = stringResource(id = BitwardenString.yes),
-            dismissButtonText = stringResource(id = BitwardenString.no),
-            onConfirmClick = onDialogConfirm,
-            onDismissClick = onDialogDismiss,
-            onDismissRequest = onDialogDismiss,
-        )
     }
 }
