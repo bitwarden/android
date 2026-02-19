@@ -251,6 +251,7 @@ class AuthRepositoryTest {
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
+        every { softLogout(any(), any()) } just runs
     }
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
@@ -831,7 +832,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
+                userLogoutManager.softLogout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
             }
         }
 
@@ -852,7 +853,10 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.RefreshForbidden)
+                userLogoutManager.softLogout(
+                    userId = USER_ID_1,
+                    reason = LogoutReason.RefreshForbidden,
+                )
             }
         }
 
@@ -873,7 +877,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(
+                userLogoutManager.softLogout(
                     userId = USER_ID_1,
                     reason = LogoutReason.RefreshUnauthorized,
                 )
