@@ -79,9 +79,21 @@ class Fido2CredentialStoreImpl(
             .map { decryptedCipherView ->
                 decryptedCipherView.id
                     ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
-                    ?: vaultRepository.createCipher(decryptedCipherView)
+                    ?: decryptedCipherView.createCipher()
             }
             .onFailure { throw it }
+    }
+
+    private suspend fun CipherView.createCipher() {
+        val collectionIds = this.collectionIds
+        if (this.organizationId != null && collectionIds.isNotEmpty()) {
+            vaultRepository.createCipherInOrganization(
+                cipherView = this,
+                collectionIds = collectionIds,
+            )
+        } else {
+            vaultRepository.createCipher(cipherView = this)
+        }
     }
 
     /**
