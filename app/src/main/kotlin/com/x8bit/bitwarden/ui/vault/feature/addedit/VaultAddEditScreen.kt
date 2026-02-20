@@ -865,7 +865,9 @@ private fun OwnerSelectionBottomSheetContent(
                     text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
                     isSelected = selectedOption == option,
