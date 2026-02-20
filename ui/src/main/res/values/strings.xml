@@ -1059,7 +1059,7 @@ Do you want to switch to this account?</string>
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_success">Data exported successfully</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">Security</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Version</string>
