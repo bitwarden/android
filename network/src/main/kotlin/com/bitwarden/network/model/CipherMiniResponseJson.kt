@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents a minimal cipher response from the API, typically returned from bulk operations.
@@ -52,15 +52,15 @@ data class CipherMiniResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: ZonedDateTime,
+        val revisionDate: Instant,
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: ZonedDateTime,
+        val creationDate: Instant,
 
         @SerialName("deletedDate")
         @Contextual
-        val deletedDate: ZonedDateTime?,
+        val deletedDate: Instant?,
 
         @SerialName("reprompt")
         val reprompt: CipherRepromptTypeJson,
@@ -70,6 +70,6 @@ data class CipherMiniResponseJson(
 
         @SerialName("archivedDate")
         @Contextual
-        val archivedDate: ZonedDateTime?,
+        val archivedDate: Instant?,
     )
 }

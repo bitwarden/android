@@ -50,7 +50,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Suppress("LargeClass")
 class AddEditSendScreenTest : BitwardenComposeTest() {
@@ -1652,7 +1652,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
     expirationDate = null,
     sendUrl = null,
     hasPassword = true,

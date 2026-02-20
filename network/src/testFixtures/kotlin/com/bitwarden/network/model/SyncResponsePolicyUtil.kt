@@ -1,7 +1,7 @@
 package com.bitwarden.network.model
 
 import kotlinx.serialization.json.JsonObject
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [SyncResponseJson.Policy] with the given [number], [type], and [data].
@@ -14,7 +14,7 @@ fun createMockPolicy(
     type: PolicyTypeJson = PolicyTypeJson.MASTER_PASSWORD,
     isEnabled: Boolean = false,
     data: JsonObject? = null,
-    revisionDate: ZonedDateTime? = null,
+    revisionDate: Instant? = null,
 ): SyncResponseJson.Policy =
     SyncResponseJson.Policy(
         organizationId = organizationId,

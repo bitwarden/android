@@ -43,9 +43,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
-import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class FolderManagerTest {
@@ -167,7 +165,7 @@ class FolderManagerTest {
             val networkFolder = SyncResponseJson.Folder(
                 id = "1",
                 name = testFolderName,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = Instant.now(FIXED_CLOCK),
             )
 
             coEvery {
@@ -371,7 +369,7 @@ class FolderManagerTest {
             val networkFolder = SyncResponseJson.Folder(
                 id = "1",
                 name = testFolderName,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = Instant.now(FIXED_CLOCK),
             )
 
             coEvery {
@@ -440,7 +438,7 @@ class FolderManagerTest {
             SyncFolderUpsertData(
                 userId = userId,
                 folderId = folderId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = false,
             ),
         )
@@ -466,7 +464,7 @@ class FolderManagerTest {
             SyncFolderUpsertData(
                 userId = userId,
                 folderId = folderId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = true,
             ),
         )
@@ -493,9 +491,7 @@ class FolderManagerTest {
             SyncFolderUpsertData(
                 userId = userId,
                 folderId = folderId,
-                revisionDate = ZonedDateTime.ofInstant(
-                    Instant.ofEpochSecond(0), ZoneId.of("UTC"),
-                ),
+                revisionDate = Instant.ofEpochSecond(0),
                 isUpdate = true,
             ),
         )
@@ -526,7 +522,7 @@ class FolderManagerTest {
                 SyncFolderUpsertData(
                     userId = userId,
                     folderId = folderId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = false,
                 ),
             )
@@ -548,7 +544,7 @@ class FolderManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val folderView = createMockFolder(
                 number = number,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+                revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
                 vaultDiskSource.getFolders(userId = userId)
@@ -561,7 +557,7 @@ class FolderManagerTest {
                 SyncFolderUpsertData(
                     userId = userId,
                     folderId = folderId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = true,
                 ),
             )
@@ -583,7 +579,7 @@ class FolderManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val folderView = createMockFolder(
             number = number,
-            revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+            revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
         )
         coEvery {
             vaultDiskSource.getFolders(userId = userId)
@@ -593,7 +589,7 @@ class FolderManagerTest {
             SyncFolderUpsertData(
                 userId = userId,
                 folderId = folderId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = true,
             ),
         )
@@ -632,7 +628,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfParallelism = null,
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

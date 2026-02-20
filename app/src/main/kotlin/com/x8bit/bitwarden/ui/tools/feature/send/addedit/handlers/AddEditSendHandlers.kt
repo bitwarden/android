@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * A collection of handler functions for managing actions within the context of adding and editing
@@ -22,7 +22,7 @@ data class AddEditSendHandlers(
     val onNoteChange: (String) -> Unit,
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
-    val onDeletionDateChange: (ZonedDateTime) -> Unit,
+    val onDeletionDateChange: (Instant) -> Unit,
     val onDeleteClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onPasswordCopyClick: (String) -> Unit,

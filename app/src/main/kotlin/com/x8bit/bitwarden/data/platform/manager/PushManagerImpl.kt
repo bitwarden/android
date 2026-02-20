@@ -31,8 +31,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.time.Clock
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -340,8 +338,7 @@ class PushManagerImpl @Inject constructor(
     private suspend fun registerPushTokenIfNecessaryInternal(userId: String, token: String) {
         val currentToken = pushDiskSource.getCurrentPushToken(userId)
         if (token == currentToken) {
-            val lastRegistration =
-                pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant() ?: return
+            val lastRegistration = pushDiskSource.getLastPushTokenRegistrationDate(userId) ?: return
             val updateTime = clock.instant().minus(PUSH_TOKEN_UPDATE_DELAY.toJavaDuration())
             if (updateTime.isBefore(lastRegistration)) return
         }
@@ -354,7 +351,7 @@ class PushManagerImpl @Inject constructor(
                 onSuccess = {
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId = userId,
-                        registrationDate = ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC),
+                        registrationDate = clock.instant(),
                     )
                     pushDiskSource.storeCurrentPushToken(
                         userId = userId,

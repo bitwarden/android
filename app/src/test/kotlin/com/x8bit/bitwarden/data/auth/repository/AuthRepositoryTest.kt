@@ -170,7 +170,6 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
 @Suppress("LargeClass")
@@ -7695,7 +7694,7 @@ class AuthRepositoryTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
 
         private val PROFILE_1 = BASE_PROFILE_1.copy(
@@ -7733,7 +7732,7 @@ class AuthRepositoryTest {
                 kdfParallelism = null,
                 userDecryptionOptions = null,
                 isTwoFactorEnabled = true,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
             ),
             settings = AccountJson.Settings(
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,

@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents a send request.
@@ -46,11 +46,11 @@ data class SendJsonRequest(
 
     @SerialName("expirationDate")
     @Contextual
-    val expirationDate: ZonedDateTime?,
+    val expirationDate: Instant?,
 
     @SerialName("deletionDate")
     @Contextual
-    val deletionDate: ZonedDateTime,
+    val deletionDate: Instant,
 
     @SerialName("fileLength")
     val fileLength: Long?,

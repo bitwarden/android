@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class KdfManagerTest {
 
@@ -355,7 +355,7 @@ private val PROFILE_1 = AccountJson.Profile(
     kdfParallelism = 4,
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val ACCOUNT_1 = AccountJson(
@@ -382,7 +382,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
         isTwoFactorEnabled = true,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
