@@ -303,7 +303,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="organization">Organisatie</string>
     <string name="try_again">Opnieuw proberen</string>
     <string name="created">Aangemaakt: %1$s</string>
-    <string name="password_last_updated">Wachtwoord laatst bijgewerkt: %1$s</string>
+    <string name="password_updated">Wachtwoord bijgewerkt: %1$s</string>
     <string name="last_edited">Laatst bewerkt: %1$s</string>
     <string name="invalid_email">Ongeldig e-mailadres.</string>
     <string name="cards">Kaarten</string>
@@ -496,6 +496,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="hide_email">Verberg mijn e-mailadres voor ontvangers</string>
     <string name="send_options_policy_in_effect">Een of meer organisatiebeleidseisen heeft invloed op de mogelijkheden van je Send.</string>
     <string name="send_file_premium_required">Met een gratis account kun je alleen tekst delen. Voor het delen van bestanden heb je een Premium-abonnement nodig.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Het delen met specifieke mensen is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="password_prompt">Hoofdwachtwoord opnieuw vragen</string>
     <string name="password_confirmation">Hoofdwachtwoord bevestigen</string>
     <string name="password_confirmation_desc">Deze actie is beveiligd. Voer je hoofdwachtwoord opnieuw in om je identiteit vast te stellen en door te gaan.</string>
@@ -1146,7 +1147,6 @@ Wilt u naar dit account wisselen?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Automatisch aanvullen van browser inschakelen om het invullen van wachtwoorden te behouden</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Je browsers zijn onlangs bijgewerkt waardoor automatisch invullen door Bitwarden is uitgeschakeld. Om je wachtwoorden met Bitwarden in te blijven vullen, moet je automatisch invullen inschakelen via de instellingen van al je geïnstalleerde webbrowsers.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Je browsers zijn onlangs bijgewerkt waardoor automatisch invullen door Bitwarden is uitgeschakeld. Om je wachtwoorden met Bitwarden in te blijven vullen, moet je automatisch invullen inschakelen via de instellingen van al je geïnstalleerde webbrowsers.</string>
     <string name="not_now">Niet nu</string>
     <string name="import_from_bitwarden">Importeer van Bitwarden</string>
     <string name="select_account">Account selecteren</string>
@@ -1207,4 +1207,12 @@ Wilt u naar dit account wisselen?</string>
     <string name="restart_premium">Premium herstarten</string>
     <string name="items_transferred">Items overgedragen</string>
     <string name="updated_master_password">Hoofdwachtwoord bijgewerkt</string>
+    <string name="invalid_email_addresses">Ongeldige e-mailadressen</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Een of meer e-mailadressen zijn onjuist. Controleer en probeer het opnieuw.</string>
+    <string name="no_email_addresses_entered">Geen e-mailadressen ingevoerd</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Voer ten minste één geldig e-mailadres in om deze Send te delen.</string>
+    <string name="sync_with_browser">Synchroniseren met browser</string>
+    <string name="sync_with_browser_description">Om verbinding te maken met %1$s, synchroniseer je je standaardbrowser met de mobiele Bitwarden-app. Als je browser opent, voltooi je indien gevraagd je aanmelding.\nZodra de synchronisatie is voltooid, keer je terug naar deze app.</string>
+    <string name="launch_browser">Browser starten</string>
+    <string name="continue_without_syncing">Doorgaan zonder synchroniseren</string>
 </resources>

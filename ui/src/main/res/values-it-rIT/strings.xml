@@ -302,7 +302,7 @@
     <string name="organization">Organizzazione</string>
     <string name="try_again">Riprova</string>
     <string name="created">Creazione: %1$s</string>
-    <string name="password_last_updated">Ultimo aggiornamento della password: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Ultima modifica: %1$s</string>
     <string name="invalid_email">Indirizzo email non valido</string>
     <string name="cards">Carte</string>
@@ -495,6 +495,7 @@
     <string name="hide_email">Nascondi l\'indirizzo email</string>
     <string name="send_options_policy_in_effect">Le opzioni di Send sono limitate dalle politiche dell\'organizzazione</string>
     <string name="send_file_premium_required">Passa a un abbonamento Premium per condividere file in modo sicuro con Send</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Richiesta per conferma della password principale</string>
     <string name="password_confirmation">Conferma la password principale</string>
     <string name="password_confirmation_desc">Questa azione è protetta. Inserisci la password principale.</string>
@@ -1145,7 +1146,6 @@ Vuoi passare a questo account?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Abilita il riempimento automatico nel browser per mantenere la funzionalità</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Il tuo browser è stato aggiornato di recente, e il riempimento automatico di Bitwarden è stato disattivato. Per continuare a riempire le password con Bitwarden, abilita il riempimento automatico del browser.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">I tuoi browser sono stati aggiornati di recente, e il riempimento automatico di Bitwarden è stato disattivato. Per continuare a riempire le password con Bitwarden, abilita il riempimento automatico dei browser.</string>
     <string name="not_now">Non adesso</string>
     <string name="import_from_bitwarden">Importa da Bitwarden</string>
     <string name="select_account">Scegli un account</string>
@@ -1206,4 +1206,12 @@ Vuoi passare a questo account?</string>
     <string name="restart_premium">Riavvia Premium</string>
     <string name="items_transferred">Elementi trasferiti</string>
     <string name="updated_master_password">Password principale aggiornata</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

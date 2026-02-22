@@ -303,7 +303,7 @@ La numérisation se fera automatiquement.</string>
     <string name="organization">Organisation</string>
     <string name="try_again">Réessayer</string>
     <string name="created">Créé : %1$s</string>
-    <string name="password_last_updated">Dernière mise à jour du mot de passe : %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Dernière modification : %1$s</string>
     <string name="invalid_email">Adresse électronique invalide.</string>
     <string name="cards">Cartes</string>
@@ -496,6 +496,7 @@ La numérisation se fera automatiquement.</string>
     <string name="hide_email">Masquer mon adresse électronique aux destinataires</string>
     <string name="send_options_policy_in_effect">Une ou plusieurs politiques de sécurité de l\'organisation affectent vos options Send.</string>
     <string name="send_file_premium_required">Les comptes gratuits sont limités au partage de texte uniquement. Une adhésion Premium est requise pour utiliser les fichiers avec Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ressaisir le mot de passe principal</string>
     <string name="password_confirmation">Confirmation du mot de passe principal</string>
     <string name="password_confirmation_desc">Cette action est protégée, pour continuer veuillez entrer à nouveau votre mot de passe principal pour vérifier votre identité.</string>
@@ -1146,7 +1147,6 @@ Voulez-vous basculer vers ce compte ?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Activer la saisie automatique du navigateur pour continuer à saisir les mots de passe</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Votre navigateur a récemment été mis à jour, ce qui a désactivé la saisie automatique de Bitwarden. Pour continuer à saisir vos mots de passe avec Bitwarden, activez la saisie automatique du navigateur dans les paramètres de saisie automatique.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Vos navigateurs ont récemment été mis à jour, ce qui a désactivé la saisie automatique de Bitwarden. Pour continuer à saisir vos mots de passe avec Bitwarden, activez la saisie automatique du navigateur pour tous les navigateurs installés dans les paramètres de saisie automatique.</string>
     <string name="not_now">Pas maintenant</string>
     <string name="import_from_bitwarden">Importer depuis Bitwarden</string>
     <string name="select_account">Sélectionner un compte</string>
@@ -1207,4 +1207,12 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Mot de passe principal mis à jour</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

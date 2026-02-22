@@ -303,7 +303,7 @@ Skanningen sker automatiskt.</string>
     <string name="organization">Organisation</string>
     <string name="try_again">Försök igen</string>
     <string name="created">Skapad: %1$s</string>
-    <string name="password_last_updated">Lösenordet senast uppdaterat: %1$s</string>
+    <string name="password_updated">Lösenord uppdaterat: %1$s</string>
     <string name="last_edited">Senast redigerad: %1$s</string>
     <string name="invalid_email">Ogiltig e-postadress.</string>
     <string name="cards">Kort</string>
@@ -496,6 +496,7 @@ Skanningen sker automatiskt.</string>
     <string name="hide_email">Dölj min e-postadress för mottagare</string>
     <string name="send_options_policy_in_effect">En eller flera organisationsriktlinjer påverkar dina Send-inställningar.</string>
     <string name="send_file_premium_required">Gratiskonton är begränsade till att endast dela text. Ett premium-medlemskap krävs för att använda filer med Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Återupprepa huvudlösenord</string>
     <string name="password_confirmation">Bekräfta huvudlösenord</string>
     <string name="password_confirmation_desc">Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</string>
@@ -1146,7 +1147,6 @@ Vill du byta till detta konto?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Aktivera autofyll vid webbläsare för att fortsätta fylla i lösenord</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Din webbläsare har nyligen uppdaterats, som har inaktiverat Bitwardens autofyllning. För att fortsätta fylla i dina lösenord med Bitwarden, aktivera webbläsarens autofyllning i autofyllningsinställningar.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Dina webbläsare har nyligen uppdaterats, vilket har inaktiverat Bitwardens autofyllning. För att fortsätta fylla i dina lösenord med Bitwarden, aktivera webbläsarens autofyll för alla installerade webbläsare i autofyllningsinställningar.</string>
     <string name="not_now">Inte nu</string>
     <string name="import_from_bitwarden">Importera från Bitwarden</string>
     <string name="select_account">Välj konto</string>
@@ -1207,4 +1207,12 @@ Vill du byta till detta konto?</string>
     <string name="restart_premium">Starta om Premium</string>
     <string name="items_transferred">Objekt överförda</string>
     <string name="updated_master_password">Huvudlösenord uppdaterades</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

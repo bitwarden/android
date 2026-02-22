@@ -305,7 +305,7 @@
     <string name="organization">Организация</string>
     <string name="try_again">Попробуйте снова</string>
     <string name="created">Создано: %1$s</string>
-    <string name="password_last_updated">Последнее обновление пароля: %1$s</string>
+    <string name="password_updated">Пароль обновлен: %1$s</string>
     <string name="last_edited">Последнее редактирование: %1$s</string>
     <string name="invalid_email">Неверный адрес email.</string>
     <string name="cards">Карты</string>
@@ -500,6 +500,7 @@
     <string name="hide_email">Скрыть мой адрес email от получателей</string>
     <string name="send_options_policy_in_effect">На параметры Send влияют одна или несколько политик организации.</string>
     <string name="send_file_premium_required">Используя бесплатную учетную запись, можно делиться только текстом. Чтобы использовать файлы с помощью Send, требуется Премиум.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Совместное использование с конкретными пользователями является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="password_prompt">Повторный запрос мастер-пароля</string>
     <string name="password_confirmation">Подтверждение мастер-пароля</string>
     <string name="password_confirmation_desc">Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности.</string>
@@ -1162,7 +1163,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Включите автозаполнение браузера, чтобы пароли продолжали заполняться</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Недавно ваш браузер получил обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках браузера.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Недавно ваши браузеры получили обновление, в результате которого автозаполнение Bitwarden было отключено. Для продолжения ввода паролей с помощью Bitwarden, включите автозаполнение в настройках всех установленных браузеров.</string>
     <string name="not_now">Не сейчас</string>
     <string name="import_from_bitwarden">Импортировать из Bitwarden</string>
     <string name="select_account">Выберите аккаунт</string>
@@ -1223,4 +1223,12 @@
     <string name="restart_premium">Переподключить Премиум</string>
     <string name="items_transferred">Элементы переданы</string>
     <string name="updated_master_password">Мастер-пароль обновлен</string>
+    <string name="invalid_email_addresses">Неверные адреса email</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Один или несколько адресов email указаны неверно. Проверьте и попробуйте еще раз.</string>
+    <string name="no_email_addresses_entered">Не введены адреса email</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Введите хотя бы один действительный адрес email, чтобы поделиться этой Send.</string>
+    <string name="sync_with_browser">Синхронизация с браузером</string>
+    <string name="sync_with_browser_description">Чтобы подключиться к %1$s, синхронизируйте ваш браузер по умолчанию с мобильным приложением Bitwarden. Когда браузер откроется, выполните авторизацию, если будет предложено. После завершения синхронизации вы вернетесь в это приложение.</string>
+    <string name="launch_browser">Запустить браузер</string>
+    <string name="continue_without_syncing">Продолжить без синхронизации</string>
 </resources>

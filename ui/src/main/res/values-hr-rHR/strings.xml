@@ -303,7 +303,7 @@
     <string name="organization">Organizacija</string>
     <string name="try_again">Pokušaj ponovno</string>
     <string name="created">Stvoreno: %1$s</string>
-    <string name="password_last_updated">Zadnje ažuriranje lozinke: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Zadnje uređeno: %1$s</string>
     <string name="invalid_email">Nevažeća adresa e-pošte.</string>
     <string name="cards">Platne kartice</string>
@@ -497,6 +497,7 @@
     <string name="hide_email">Sakrij moju adresu e-pošte od primatelja.</string>
     <string name="send_options_policy_in_effect">Jedno ili više pravila organizacije utječe na postavke Senda.</string>
     <string name="send_file_premium_required">Kod besplatnog računa moguće je dijeljenje samo teksta. Za slanje datoteka potrebno je premium članstvo.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ponovno zatraži glavnu lozinku</string>
     <string name="password_confirmation">Potvrda glavne lozinke</string>
     <string name="password_confirmation_desc">Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</string>
@@ -1064,7 +1065,7 @@ bilo kakav problem.</string>
     <string name="export_confirmation_title">Potvrdi izvoz</string>
     <string name="export_success">Podaci uspješno izvezeni</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">Sigurnost</string>
     <string name="too_many_failed_biometric_attempts">Previše neuspjelih biometrijskih pokušaja.</string>
     <string name="version">Verzija</string>
@@ -1154,7 +1155,6 @@ bilo kakav problem.</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Za nastavk korištenja auto-ispune lozinki, omogući ovu postavku u svom pregledniku</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Tvoj je preglednik nedavno ažurirao način rada automatskog ispunjavanja. Za nastavak korištenja auto-ispune s Bitwardenom, omogući automatsko ispunjavanje u postavkama tvog preglednika.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Tvoji su preglednici nedavno ažurirali način rada automatskog ispunjavanja. Za nastavak korištenja auto-ispune s Bitwardenom, omogući automatsko ispunjavanje u postavkama tvojih preglednika.</string>
     <string name="not_now">Ne sada</string>
     <string name="import_from_bitwarden">Uvezi iz Bitwardena</string>
     <string name="select_account">Odaberi račun</string>
@@ -1215,4 +1215,12 @@ bilo kakav problem.</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Glavna lozinka ažurirana</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

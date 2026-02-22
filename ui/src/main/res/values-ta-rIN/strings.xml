@@ -303,7 +303,7 @@
     <string name="organization">நிறுவனம்</string>
     <string name="try_again">மீண்டும் முயல்</string>
     <string name="created">உருவாக்கப்பட்டது: %1$s</string>
-    <string name="password_last_updated">கடவுச்சொல் கடைசியாகப் புதுப்பிக்கப்பட்டது: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">கடைசியாகத் திருத்தப்பட்டது: %1$s</string>
     <string name="invalid_email">செல்லாத மின்னஞ்சல் முகவரி.</string>
     <string name="cards">அட்டைகள்</string>
@@ -496,6 +496,7 @@
     <string name="hide_email">பெறுநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை</string>
     <string name="send_options_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது Send தெரிவுகளை பாதிக்கிறது.</string>
     <string name="send_file_premium_required">இலவச கணக்குகள் சொற்சரம் மட்டும் பகிர்தலுக்கு கட்டுப்படுத்தப்பட்டுள்ளது. Send உடன் கோப்புகளை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">பிரதான கடவுச்சொல் மறு-தூண்டி</string>
     <string name="password_confirmation">பிரதான கடவுச்சொல் உறுதியாக்கம்</string>
     <string name="password_confirmation_desc">இச்செயல் காக்கப்பட்டது, தொடர உம் அடையாளத்தைச் சரிபார்க்க உம் பிரதான கடவுச்சொல்லை மீண்டுமுள்ளிடவும்.</string>
@@ -1058,7 +1059,7 @@
     <string name="export_confirmation_title">ஏற்றுமதியை உறுதிப்படுத்து</string>
     <string name="export_success">தரவு வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">பாதுகாப்பு</string>
     <string name="too_many_failed_biometric_attempts">பலமுறை தோல்வியுற்ற பயோமெட்ரிக் முயற்சிகள்.</string>
     <string name="version">பதிப்பு</string>
@@ -1146,7 +1147,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1207,4 +1207,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">புதுப்பிக்கப்பட்ட பிரதான கடவுச்சொல்</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

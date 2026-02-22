@@ -307,7 +307,7 @@
     <string name="organization">المؤسسة</string>
     <string name="try_again">حاول مرة أخرى</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">عنوان البريد الإلكتروني غير صالح.</string>
     <string name="cards">البطاقات</string>
@@ -504,6 +504,7 @@
     <string name="hide_email">إخفاء عنوان البريد الإلكتروني الخاص بي من المستلمين</string>
     <string name="send_options_policy_in_effect">واحدة أو أكثر من سياسات المؤسسة تؤثر على خيارات إرسال الخاص بك.</string>
     <string name="send_file_premium_required">الحسابات المجانية مقيدة بمشاركة النص فقط. مطلوب عضوية مميزة لاستخدام الملفات مع الإرسال.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
     <string name="password_confirmation">تأكيد كلمة المرور الرئيسية</string>
     <string name="password_confirmation_desc">هذا الإجراء محمي، للاستمرار أعد إدخال كلمة المرور الرئيسية للتحقق من هويتك.</string>
@@ -1082,7 +1083,7 @@
     <string name="export_confirmation_title">تأكيد التصدير</string>
     <string name="export_success">تم تصدير البيانات بنجاح</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">الأمان</string>
     <string name="too_many_failed_biometric_attempts">العديد من محاولات القياس الحيوي الفاشلة.</string>
     <string name="version">الإصدار</string>
@@ -1178,7 +1179,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1239,4 +1239,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">تحديث كلمة المرور الرئيسية</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

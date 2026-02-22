@@ -304,7 +304,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="organization">Apvienība</string>
     <string name="try_again">Mēģini vēlreiz</string>
     <string name="created">Izveidots: %1$s</string>
-    <string name="password_last_updated">Parole pēdējoreiz atjaunināta: %1$s</string>
+    <string name="password_updated">Parole atjaunināta: %1$s</string>
     <string name="last_edited">Pēdējoreiz labots: %1$s</string>
     <string name="invalid_email">Nederīga e-pasta adrese.</string>
     <string name="cards">Kartes</string>
@@ -498,6 +498,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="hide_email">Slēpt e-pasta adresi no saņēmējiem.</string>
     <string name="send_options_policy_in_effect">Viens vai vairāki apvienības nosacījumi ietekmē Send iespējas.</string>
     <string name="send_file_premium_required">Ar bezmaksas kontu ir iespējams kopīgot tikai tekstu. Ir nepieciešama Premium dalība, lai Send izmantotu datnes.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Galvenās paroles pārvaicāšana</string>
     <string name="password_confirmation">Galvenās paroles apstiprināšana</string>
     <string name="password_confirmation_desc">Šī darbība ir aizsargāta, lai turpinātu, ir jāievada galvenā parole, lai apstiprinātu identitāti.</string>
@@ -1154,7 +1155,6 @@ Vai pārslēgties uz šo kontu?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Jāiespējo pārlūka automātiskā aizpilde, lai turpinātu aizpildīt paroles</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Tavs pārlūks nesen ir atjaunināts, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, pārlūka automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Tavi pārlūki nesen ir atjaunināti, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, visos uzstādītajos pārlūkos automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
     <string name="not_now">Ne tagad</string>
     <string name="import_from_bitwarden">Ievietot no Bitwarden</string>
     <string name="select_account">Atlasīt kontu</string>
@@ -1215,4 +1215,12 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Vienumi pārcelti</string>
     <string name="updated_master_password">Galvenā parole atjaunināta</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Vienādot ar pārlūku</string>
+    <string name="sync_with_browser_description">Lai savienotos ar %1$s, noklusējuma pārlūks jāvienādo ar Bitwarden viedierīces lietotni. Kad atvērsies pārlūks, jāpabeidz pieteikšajās, ja vaicāta.\nTiklīdz vienādošana būs pabeigta, notiks pārvirzīšana atpakaļ uz šo lietotni.</string>
+    <string name="launch_browser">Palaist pārlūku</string>
+    <string name="continue_without_syncing">Turpināt bez vienādošanas</string>
 </resources>

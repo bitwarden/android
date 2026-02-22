@@ -302,7 +302,7 @@
     <string name="organization">組織</string>
     <string name="try_again">再試一次</string>
     <string name="created">建立於：%1$s</string>
-    <string name="password_last_updated">密碼最後更新於：%1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">最後編輯於：%1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
     <string name="cards">支付卡</string>
@@ -494,6 +494,7 @@
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">重新詢問主密碼</string>
     <string name="password_confirmation">確認主密碼</string>
     <string name="password_confirmation_desc">此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</string>
@@ -1139,7 +1140,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">啟用瀏覽器自動填入功能以持續自動填入密碼</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中啟用瀏覽器自動填入。</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中為所有已安裝的瀏覽器啟用自動填入功能。</string>
     <string name="not_now">以後再說</string>
     <string name="import_from_bitwarden">從 Bitwarden 匯入</string>
     <string name="select_account">選擇帳號</string>
@@ -1200,4 +1200,12 @@
     <string name="restart_premium">重新啟用進階版</string>
     <string name="items_transferred">項目已轉移</string>
     <string name="updated_master_password">已更新主密碼</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

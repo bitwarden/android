@@ -303,7 +303,7 @@
     <string name="organization">Организация</string>
     <string name="try_again">Нов опит</string>
     <string name="created">Създадено: %1$s</string>
-    <string name="password_last_updated">Последна промяна на паролата: %1$s</string>
+    <string name="password_updated">Промяна на паролата: %1$s</string>
     <string name="last_edited">Последна редакция: %1$s</string>
     <string name="invalid_email">Грешен адрес на е-поща.</string>
     <string name="cards">Карти</string>
@@ -496,6 +496,7 @@
     <string name="hide_email">Скриване на е-пощата ми от получателите.</string>
     <string name="send_options_policy_in_effect">Поне една политика на организация влияе на настройките за изпращане.</string>
     <string name="send_file_premium_required">Безплатните регистрации могат да споделят само текст. Необходим е платен абонамент, за да можете да изпращате файлове.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Споделянето с определени хора е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="password_prompt">Повторно запитване за главната парола</string>
     <string name="password_confirmation">Потвърждение на главната парола</string>
     <string name="password_confirmation_desc">Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</string>
@@ -1148,7 +1149,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Включете автоматичното попълване в браузъра си, за да продължите да се възползвате от тази функционалност</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Вашият браузър е бил обновен наскоро, и това е изключило автоматичното попълване чрез Битуорден. За да продължите да попълвате паролите си ползвайки Битуорден, включете автоматичното попълване в настройките на браузъра си.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Вашият браузър е бил обновен наскоро, и това е изключило автоматичното попълване чрез Битуорден. За да продължите да попълвате паролите си ползвайки Битуорден, включете автоматичното попълване в настройките на браузъра си.</string>
     <string name="not_now">Не сега</string>
     <string name="import_from_bitwarden">Внасяне от Битуорден</string>
     <string name="select_account">Изберете акаунт</string>
@@ -1209,4 +1209,12 @@
     <string name="restart_premium">Подновяване на платения абонамент</string>
     <string name="items_transferred">Елементите са прехвърлени</string>
     <string name="updated_master_password">Главната парола е променена</string>
+    <string name="invalid_email_addresses">Грешни адреси на е-пощи</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Един или повече от адресите на е-пощи са неправилни. Моля, прегледайте ги и опитайте отново.</string>
+    <string name="no_email_addresses_entered">Няма въведени адреси на е-пощи</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Въведете поне един правилен адрес на е-поща, за да споделите това Изпращане.</string>
+    <string name="sync_with_browser">Синхронизиране с браузъра</string>
+    <string name="sync_with_browser_description">За да се свържете с %1$s, синхронизирайте стандартния си браузър с мобилното приложение на Битуорден. Когато браузърът се отвори, завършете процедурата по вписване, ако е нужно.\nСлед като синхронизирането завърши, ще се върнете автоматично в това приложение.</string>
+    <string name="launch_browser">Стартиране на браузъра</string>
+    <string name="continue_without_syncing">Продължаване без синхронизиране</string>
 </resources>

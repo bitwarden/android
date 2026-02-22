@@ -304,7 +304,7 @@
     <string name="organization">Организација</string>
     <string name="try_again">Покушајте опет</string>
     <string name="created">Креирано: %1$s</string>
-    <string name="password_last_updated">Задње ажурирање лозинке: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Задња промена: %1$s</string>
     <string name="invalid_email">Неисправна адреса Е-поште.</string>
     <string name="cards">Кредитне Картице</string>
@@ -498,6 +498,7 @@
     <string name="hide_email">Сакриј моју е-адресу од примаоца.</string>
     <string name="send_options_policy_in_effect">Једна или више смерница организације утичу на опције „Send“-а.</string>
     <string name="send_file_premium_required">Бесплатни налози су ограничени само на дељење текста. Премиум чланство је потребно да би се користиле датотеке са „Send“-ом.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Поновно тражење главне лозинке</string>
     <string name="password_confirmation">Потврда главне лозинке</string>
     <string name="password_confirmation_desc">Ова акција је заштићена, да бисте наставили, поново унесите своју главну лозинку да бисте проверили идентитет.</string>
@@ -1066,7 +1067,7 @@
     <string name="export_confirmation_title">Потврдите извоз</string>
     <string name="export_success">Податци успешно извежени</string>
     <string name="included_in_this_export">Укључено у овај извоз</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">Сигурност</string>
     <string name="too_many_failed_biometric_attempts">Превише неуспешних покушаја биометрије.</string>
     <string name="version">Верзија</string>
@@ -1156,7 +1157,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Омогући аутоматско попуњавање претраживача да настави да уписује лозинке</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Не сада</string>
     <string name="import_from_bitwarden">Увоз из Bitwarden-а</string>
     <string name="select_account">Изабери налог</string>
@@ -1217,4 +1217,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Главна лозинка ажурирана</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>
