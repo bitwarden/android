@@ -302,7 +302,7 @@
     <string name="organization">องค์กร</string>
     <string name="try_again">Try Again</string>
     <string name="created">สร้างเมื่อ: %1$s</string>
-    <string name="password_last_updated">อัปเดตรหัสผ่านล่าสุด: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">แก้ไขล่าสุด: %1$s</string>
     <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง</string>
     <string name="cards">บัตร</string>
@@ -446,13 +446,13 @@
     <string name="deletion_date">วันที่ลบ</string>
     <string name="deletion_time">เวลาลบ</string>
     <string name="deletion_date_info">Send นี้จะถูกลบถาวรในวันที่และเวลาที่ระบุ</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="who_can_view">ใครสามารดูได้</string>
+    <string name="anyone_with_the_link">ทุกคนที่มีลิ้ง</string>
     <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
     <string name="specific_people">Specific people</string>
     <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
     <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="add_email">เพิ่มอีเมล</string>
     <string name="pending_delete">รอการลบ</string>
     <string name="expired">หมดอายุ</string>
     <string name="expires_at">หมดอายุเวลา %s</string>
@@ -494,6 +494,7 @@
     <string name="hide_email">ซ่อนที่อยู่อีเมลของฉันจากผู้รับ</string>
     <string name="send_options_policy_in_effect">นโยบายองค์กรอย่างน้อยหนึ่งรายการมีผลต่อตัวเลือก Send ของคุณ</string>
     <string name="send_file_premium_required">บัญชีฟรีถูกจำกัดให้แชร์ได้เฉพาะข้อความ ต้องเป็นสมาชิกพรีเมียมเพื่อใช้ไฟล์กับ Send</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">ถามรหัสผ่านหลักซ้ำ</string>
     <string name="password_confirmation">ยืนยันรหัสผ่านหลัก</string>
     <string name="password_confirmation_desc">การกระทำนี้ได้รับการป้องกัน โปรดกรอกรหัสผ่านหลักอีกครั้งเพื่อยืนยันตัวตนของคุณ</string>
@@ -1138,7 +1139,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์เพื่อป้อนรหัสผ่านต่อไป</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">เบราว์เซอร์ของคุณเพิ่งได้รับการอัปเดต ซึ่งปิดใช้งานการป้อนอัตโนมัติของ Bitwarden เพื่อป้อนรหัสผ่านด้วย Bitwarden ต่อไป ให้เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์ในการตั้งค่าการป้อนอัตโนมัติ</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">เบราว์เซอร์ของคุณเพิ่งได้รับการอัปเดต ซึ่งปิดใช้งานการป้อนอัตโนมัติของ Bitwarden เพื่อป้อนรหัสผ่านด้วย Bitwarden ต่อไป ให้เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์สำหรับเบราว์เซอร์ที่ติดตั้งทั้งหมดในการตั้งค่าการป้อนอัตโนมัติ</string>
     <string name="not_now">ไม่ใช่ตอนนี้</string>
     <string name="import_from_bitwarden">นำเข้าจาก Bitwarden</string>
     <string name="select_account">เลือกบัญชี</string>
@@ -1179,7 +1179,7 @@
     <string name="archive_verb">Archive</string>
     <string name="unarchive">Unarchive</string>
     <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
+    <string name="hidden_items">รายการที่ซ่อนไว้</string>
     <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Archiving</string>
@@ -1199,4 +1199,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">อัปเดตรหัสผ่านหลักแล้ว</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">ซิงค์กับบราว์เซอร์</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">เปิดบราว์เซอร์</string>
+    <string name="continue_without_syncing">ดำเนินการต่อโดยไม่ซิงค์</string>
 </resources>
