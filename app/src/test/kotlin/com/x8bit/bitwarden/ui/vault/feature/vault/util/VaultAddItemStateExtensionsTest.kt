@@ -965,7 +965,6 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should use selected collection IDs when originalCipher is null`() {
         val viewState = VaultAddEditState.ViewState.Content(
@@ -1014,7 +1013,6 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should use originalCipher collectionIds when originalCipher is present`() {
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
