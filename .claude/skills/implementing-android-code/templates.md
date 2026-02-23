@@ -362,7 +362,7 @@ fun ExampleScreen(
                 },
             )
         },
-    ) { paddingValues ->
+    ) {
         ExampleScreenContent(
             state = state,
             onInputChanged = remember(viewModel) {
