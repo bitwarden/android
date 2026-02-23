@@ -27,20 +27,7 @@ fun Intent.getCookieCallbackResultOrNull(): CookieCallbackResult? {
     val uri = data ?: return null
     if (uri.scheme != COOKIE_CALLBACK_SCHEME) return null
     if (uri.host != COOKIE_CALLBACK_HOST) return null
-
-    val cookies = uri.queryParameterNames
-        .asSequence()
-        .filter { it != COMPLETENESS_MARKER_PARAM }
-        .mapNotNull { name ->
-            uri.getQueryParameter(name)?.takeIf { it.isNotEmpty() }?.let { name to it }
-        }
-        .toMap()
-
-    return if (cookies.isEmpty()) {
-        CookieCallbackResult.MissingCookie
-    } else {
-        CookieCallbackResult.Success(cookies)
-    }
+    return uri.getCookieCallbackResult()
 }
 
 /**
