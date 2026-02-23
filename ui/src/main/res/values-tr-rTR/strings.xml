@@ -303,7 +303,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="organization">Kuruluş</string>
     <string name="try_again">Yeniden dene</string>
     <string name="created">Oluşturulma: %1$s</string>
-    <string name="password_last_updated">Son parola güncellemesi: %1$s</string>
+    <string name="password_updated">Parola güncellendi: %1$s</string>
     <string name="last_edited">Son düzenleme: %1$s</string>
     <string name="invalid_email">Geçersiz e-posta adresi.</string>
     <string name="cards">Kartlar</string>
@@ -496,6 +496,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="hide_email">E-posta adresimi alıcılardan gizle</string>
     <string name="send_options_policy_in_effect">Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</string>
     <string name="send_file_premium_required">Ücretsiz hesaplar yalnızca metin paylaşabilir. Send ile dosya paylaşmak için premium üyelik gerekir.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ana parolayı yeniden iste</string>
     <string name="password_confirmation">Ana parola onayı</string>
     <string name="password_confirmation_desc">Bu işlem korumalıdır. İşleme devam etmek için lütfen ana parolanızı yeniden girin.</string>
@@ -1145,7 +1146,6 @@ Bu hesaba geçmek ister misiniz?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Parolaları doldurmaya devam etmek için tarayıcıda otomatik doldurma etkinleştirin</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Tarayıcınız yakın zamanda güncellendi ve bu güncelleme Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurmayı tarayıcı otomatik doldurma ayarlarından etkinleştirin.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Tarayıcılarınız yakın zamanda güncellendi ve bu güncellemeler Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurma ayarlarından yüklü tüm tarayıcılar için tarayıcı otomatik doldurmayı etkinleştirin.</string>
     <string name="not_now">Şimdi değil</string>
     <string name="import_from_bitwarden">Bitwarden\'dan içe aktar</string>
     <string name="select_account">Hesap seç</string>
@@ -1206,4 +1206,12 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="restart_premium">Premium’u yeniden başlat</string>
     <string name="items_transferred">Kayıtlar aktarıldı</string>
     <string name="updated_master_password">Ana parola güncellendi</string>
+    <string name="invalid_email_addresses">Geçersiz e-posta adresi</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Bir veya daha fazla e posta adresi geçersiz. Lütfen kontrol edip yeniden deneyin.</string>
+    <string name="no_email_addresses_entered">E-posta adresi girilmedi</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send\'i paylaşmak için en az bir geçerli e-posta adresi girin.</string>
+    <string name="sync_with_browser">Tarayıcıyla eşitleyin</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Tarayıcıyı aç</string>
+    <string name="continue_without_syncing">Eşitleme yapmadan devam et</string>
 </resources>

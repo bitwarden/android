@@ -305,7 +305,7 @@ Načtení proběhne automaticky.</string>
     <string name="organization">Organizace</string>
     <string name="try_again">Zkusit znovu</string>
     <string name="created">Vytvořeno: %1$s</string>
-    <string name="password_last_updated">Poslední aktualizace hesla: %1$s</string>
+    <string name="password_updated">Heslo aktualizováno: %1$s</string>
     <string name="last_edited">Naposledy upraveno: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
@@ -500,6 +500,7 @@ Načtení proběhne automaticky.</string>
     <string name="hide_email">Skrýt mou e-mailovou adresu před příjemci</string>
     <string name="send_options_policy_in_effect">Jedna nebo více zásad organizace ovlivňuje nastavení Send.</string>
     <string name="send_file_premium_required">Bezplatné účty jsou omezeny pouze na sdílení textu. K používání souborů pomocí Send je vyžadováno prémiové členství.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sdílení s vybranými lidmi je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
     <string name="password_confirmation_desc">Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</string>
@@ -1163,7 +1164,6 @@ při opakování problémů.</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Povolit automatické vyplňování prohlížeče pro zachování vyplňování hesel</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Váš prohlížeč nedávno aktualizoval, jak funguje automatické vyplňování. Chcete-li pokračovat ve vyplňování hesel Bitwardenem, povolte automatické vyplňování prohlížeče.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Vaše prohlížeče byly nedávno aktualizovány a tím bylo zakázáno automatické vyplňování. Chcete-li pokračovat ve vyplňování hesel Bitwardenem, povolte automatické vyplňování prohlížeče.</string>
     <string name="not_now">Nyní ne</string>
     <string name="import_from_bitwarden">Importovat z Bitwardenu</string>
     <string name="select_account">Vybrat účet</string>
@@ -1224,4 +1224,12 @@ při opakování problémů.</string>
     <string name="restart_premium">Restartovat Premium</string>
     <string name="items_transferred">Převedené položky</string>
     <string name="updated_master_password">Hlavní heslo bylo aktualizováno</string>
+    <string name="invalid_email_addresses">Neplatná e-mailová adresa</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Jedna nebo více e-mailových adres je nesprávná. Zkontrolujte ji a zkuste to znovu.</string>
+    <string name="no_email_addresses_entered">Nebyly zadány žádné e-mailové adresy</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Zadejte alespoň jednu platnou e-mailovou adresu pro sdílení tohoto Send.</string>
+    <string name="sync_with_browser">Synchronizovat s prohlížečem</string>
+    <string name="sync_with_browser_description">Chcete-li se připojit k %1$s, synchronizujte výchozí prohlížeč s mobilní aplikací Bitwarden. Když se Váš prohlížeč otevře, po výzvě se přihlásíte.\nJakmile bude synchronizace dokončena, vrátíte se do této aplikace.</string>
+    <string name="launch_browser">Otevřít prohlížeč</string>
+    <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
 </resources>

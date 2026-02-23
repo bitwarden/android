@@ -302,7 +302,7 @@
     <string name="organization">组织</string>
     <string name="try_again">重试</string>
     <string name="created">创建于：%1$s</string>
-    <string name="password_last_updated">密码最后更新于：%1$s</string>
+    <string name="password_updated">密码更新于：%1$s</string>
     <string name="last_edited">最后编辑于：%1$s</string>
     <string name="invalid_email">无效的电子邮箱地址。</string>
     <string name="cards">支付卡</string>
@@ -494,6 +494,7 @@
     <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
     <string name="send_file_premium_required">免费账户仅限于共享文本。要使用文件 Send，需要高级会员。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您当前的方案不包含对此功能的访问权限。</string>
     <string name="password_prompt">主密码重新提示</string>
     <string name="password_confirmation">确认主密码</string>
     <string name="password_confirmation_desc">此操作受到保护，要继续，请重新输入主密码以验证您的身份。</string>
@@ -1139,7 +1140,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">启用浏览器自动填充以继续使用密码填充功能</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中启用浏览器自动填充功能。</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中为所有已安装的浏览器启用浏览器自动填充功能。</string>
     <string name="not_now">以后再说</string>
     <string name="import_from_bitwarden">从 Bitwarden 导入</string>
     <string name="select_account">选择账户</string>
@@ -1200,4 +1200,12 @@
     <string name="restart_premium">重启高级版</string>
     <string name="items_transferred">项目已转移</string>
     <string name="updated_master_password">已更新主密码</string>
+    <string name="invalid_email_addresses">无效的电子邮箱地址</string>
+    <string name="one_or_more_email_addresses_are_incorrect">一个或多个电子邮箱地址不正确。请检查然后重试。</string>
+    <string name="no_email_addresses_entered">未输入电子邮箱地址</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">输入至少一个有效的电子邮箱地址以分享此 Send。</string>
+    <string name="sync_with_browser">与浏览器同步</string>
+    <string name="sync_with_browser_description">要连接到 %1$s，请将您的默认浏览器与 Bitwarden 移动 App 同步。浏览器打开后，如果提示登录，请完成登录。\n同步完成后，您将返回到此 App。</string>
+    <string name="launch_browser">启动浏览器</string>
+    <string name="continue_without_syncing">继续而不同步</string>
 </resources>
