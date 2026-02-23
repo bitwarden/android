@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Cre
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -961,6 +962,96 @@ class VaultAddItemStateExtensionsTest {
         assertEquals(
             viewState.common.originalCipher?.login?.passwordRevisionDate,
             result.login?.passwordRevisionDate,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toCipherView should use selected collection IDs when originalCipher is null`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                            VaultCollection(
+                                id = "collection-2",
+                                name = "Collection 2",
+                                isSelected = false,
+                                isDefaultUserCollection = false,
+                            ),
+                            VaultCollection(
+                                id = "collection-3",
+                                name = "Collection 3",
+                                isSelected = true,
+                                isDefaultUserCollection = false,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            listOf("collection-1", "collection-3"),
+            result.collectionIds,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toCipherView should use originalCipher collectionIds when originalCipher is present`() {
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            listOf("original-collection-1", "original-collection-2"),
+            result.collectionIds,
         )
     }
 }
