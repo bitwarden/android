@@ -71,7 +71,7 @@ fun BitwardenStandardIconButton(
     ) {
         Icon(
             painter = painter,
-            contentDescription = contentDescription,
+            contentDescription = null,
         )
     }
 }
