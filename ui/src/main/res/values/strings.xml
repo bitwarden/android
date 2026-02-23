@@ -1215,4 +1215,5 @@ Do you want to switch to this account?</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
 </resources>
