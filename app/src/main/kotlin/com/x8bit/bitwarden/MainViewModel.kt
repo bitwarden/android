@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
-import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.share.ShareManager
@@ -18,6 +17,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getCookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
@@ -49,11 +49,11 @@ import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -165,19 +165,8 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        combine(
-            authRepository.userStateFlow,
-            cookieAcquisitionRequestManager.cookieAcquisitionRequestFlow,
-        ) { userState, request ->
-            userState != null &&
-                userState.activeAccount.isVaultUnlocked &&
-                request != null &&
-                request.hostname ==
-                userState.activeAccount.environment.environmentUrlData
-                    .baseWebVaultUrlOrDefault
-        }
-            .distinctUntilChanged()
-            .filter { it }
+        cookieAcquisitionRequestManager.cookieAcquisitionRequestFlow
+            .filterNotNull()
             .map { MainAction.Internal.CookieAcquisitionReady }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -206,6 +195,7 @@ class MainViewModel @Inject constructor(
             is MainAction.DuoResult -> handleDuoResult(action)
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
+            is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -247,6 +237,12 @@ class MainViewModel @Inject constructor(
 
     private fun handleWebAuthnResult(action: MainAction.WebAuthnResult) {
         authRepository.setWebAuthResult(webAuthResult = action.authResult.getWebAuthResult())
+    }
+
+    private fun handleCookieAcquisitionResult(action: MainAction.CookieAcquisitionResult) {
+        authRepository.setCookieCallbackResult(
+            result = action.cookieCallbackResult.getCookieCallbackResult(),
+        )
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -543,6 +539,13 @@ sealed class MainAction {
      * Receive the result from the WebAuthn login flow.
      */
     data class WebAuthnResult(val authResult: AuthTabIntent.AuthResult) : MainAction()
+
+    /**
+     * Receive the result from the cookie acquisition flow.
+     */
+    data class CookieAcquisitionResult(
+        val cookieCallbackResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
 
     /**
      * Receive first Intent by the application.

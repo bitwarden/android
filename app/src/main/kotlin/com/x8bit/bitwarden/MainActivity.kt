@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.WebAuthnResult(it))
     }
 
+    private val cookieLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.CookieAcquisitionResult(it))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -110,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                     duo = duoLauncher,
                     sso = ssoLauncher,
                     webAuthn = webAuthnLauncher,
+                    cookie = cookieLauncher,
                 ),
             ) {
                 ObserveScreenDataEffect(

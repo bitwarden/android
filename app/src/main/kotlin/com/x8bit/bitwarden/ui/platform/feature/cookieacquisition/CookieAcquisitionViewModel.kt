@@ -6,21 +6,27 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val PROXY_URL = "/proxy-cookie-redirect-connector.html"
+private const val COOKIE_CALLBACK_URL = "bitwarden://sso-cookie-vendor"
 private const val HELP_URL = "https://bitwarden.com/help"
 
 /**
@@ -29,17 +35,29 @@ private const val HELP_URL = "https://bitwarden.com/help"
 @HiltViewModel
 class CookieAcquisitionViewModel @Inject constructor(
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    private val networkCookieManager: NetworkCookieManager,
     authRepository: AuthRepository,
     environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CookieAcquisitionState, CookieAcquisitionEvent, CookieAcquisitionAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: CookieAcquisitionState(
-        environmentUrl = environmentRepository
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault,
-        dialogState = null,
-    ),
+    initialState = savedStateHandle[KEY_STATE]
+        ?: run {
+            val environmentUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            val hostname = requireNotNull(
+                cookieAcquisitionRequestManager
+                    .cookieAcquisitionRequestFlow
+                    .value
+                    ?.hostname,
+            )
+            CookieAcquisitionState(
+                environmentUrl = environmentUrl,
+                hostname = hostname,
+                dialogState = null,
+            )
+        },
 ) {
 
     init {
@@ -49,13 +67,8 @@ class CookieAcquisitionViewModel @Inject constructor(
 
         authRepository
             .cookieCallbackResultFlow
-            .onEach {
-                sendAction(
-                    CookieAcquisitionAction.Internal.CookieAcquisitionResultReceived(
-                        result = it,
-                    ),
-                )
-            }
+            .map { CookieAcquisitionAction.Internal.CookieAcquisitionResultReceived(result = it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -75,12 +88,14 @@ class CookieAcquisitionViewModel @Inject constructor(
     }
 
     private fun handleLaunchBrowserClick() {
-        val hostname = cookieAcquisitionRequestManager
-            .cookieAcquisitionRequestFlow
-            .value
-            ?.hostname
-            ?: return
-        sendEvent(CookieAcquisitionEvent.LaunchBrowser(uri = hostname))
+        sendEvent(
+            CookieAcquisitionEvent.LaunchBrowser(
+                uri = "${state.hostname.prefixHttpsIfNecessary()}$PROXY_URL",
+                authTabData = AuthTabData.CustomScheme(
+                    callbackUrl = COOKIE_CALLBACK_URL,
+                ),
+            ),
+        )
     }
 
     private fun handleContinueWithoutSyncingClick() {
@@ -101,6 +116,10 @@ class CookieAcquisitionViewModel @Inject constructor(
     ) {
         when (action.result) {
             is CookieCallbackResult.Success -> {
+                networkCookieManager.storeCookies(
+                    hostname = state.hostname,
+                    cookies = action.result.cookies,
+                )
                 cookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)
                 sendEvent(CookieAcquisitionEvent.NavigateBack)
             }
@@ -125,6 +144,7 @@ class CookieAcquisitionViewModel @Inject constructor(
 @Parcelize
 data class CookieAcquisitionState(
     val environmentUrl: String,
+    val hostname: String,
     val dialogState: CookieAcquisitionDialogState?,
 ) : Parcelable
 
@@ -149,7 +169,10 @@ sealed class CookieAcquisitionEvent {
     /**
      * Launch a browser to acquire cookies.
      */
-    data class LaunchBrowser(val uri: String) : CookieAcquisitionEvent()
+    data class LaunchBrowser(
+        val uri: String,
+        val authTabData: AuthTabData,
+    ) : CookieAcquisitionEvent()
 
     /**
      * Navigate to the help page.

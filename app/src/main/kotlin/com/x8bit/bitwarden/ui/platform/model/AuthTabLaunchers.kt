@@ -12,4 +12,5 @@ class AuthTabLaunchers(
     val duo: ActivityResultLauncher<Intent>,
     val sso: ActivityResultLauncher<Intent>,
     val webAuthn: ActivityResultLauncher<Intent>,
+    val cookie: ActivityResultLauncher<Intent>,
 )
