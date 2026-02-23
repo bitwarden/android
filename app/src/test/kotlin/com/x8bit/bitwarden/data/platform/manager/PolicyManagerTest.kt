@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class PolicyManagerTest {
     private val mutableUserStateFlow = MutableStateFlow<UserStateJson?>(null)
@@ -367,9 +367,9 @@ class PolicyManagerTest {
         val userState: UserStateJson = mockk {
             every { activeUserId } returns USER_ID
         }
-        val earliestRevisionDate = ZonedDateTime.parse("2024-01-01T00:00:00Z")
-        val middleRevisionDate = ZonedDateTime.parse("2024-06-01T00:00:00Z")
-        val latestRevisionDate = ZonedDateTime.parse("2024-12-01T00:00:00Z")
+        val earliestRevisionDate = Instant.parse("2024-01-01T00:00:00Z")
+        val middleRevisionDate = Instant.parse("2024-06-01T00:00:00Z")
+        val latestRevisionDate = Instant.parse("2024-12-01T00:00:00Z")
 
         val expectedOrganizationId = "mockId-1"
 
@@ -434,8 +434,8 @@ class PolicyManagerTest {
         val userState: UserStateJson = mockk {
             every { activeUserId } returns USER_ID
         }
-        val earlierRevisionDate = ZonedDateTime.parse("2024-01-01T00:00:00Z")
-        val laterRevisionDate = ZonedDateTime.parse("2024-06-01T00:00:00Z")
+        val earlierRevisionDate = Instant.parse("2024-01-01T00:00:00Z")
+        val laterRevisionDate = Instant.parse("2024-06-01T00:00:00Z")
         val expectedOrganizationId = "mockId-2"
 
         every { authDiskSource.userState } returns userState

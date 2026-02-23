@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class FirstTimeActionManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
@@ -440,7 +440,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfParallelism = 4,
     userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(
@@ -467,4 +467,5 @@ private val DEFAULT_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
     chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     vivaldiStableChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    defaultBrowserPackageName = null,
 )

@@ -200,7 +200,8 @@ private val DEFAULT_STATE = ReviewExportState(
     ),
     importCredentialsRequestData = ImportCredentialsRequestData(
         uri = Uri.EMPTY,
-        requestJson = "",
+        credentialTypes = setOf("mockCredentialType-1"),
+        knownExtensions = setOf(),
     ),
     hasOtherAccounts = true,
     dialog = null,

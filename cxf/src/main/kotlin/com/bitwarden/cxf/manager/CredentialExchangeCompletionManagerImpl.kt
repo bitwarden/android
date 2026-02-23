@@ -7,10 +7,7 @@ import androidx.credentials.providerevents.exception.ImportCredentialsException
 import androidx.credentials.providerevents.transfer.ImportCredentialsResponse
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import java.time.Clock
-import kotlin.io.encoding.Base64
 
-private const val CXP_FORMAT_VERSION_MAJOR = 0
-private const val CXP_FORMAT_VERSION_MINOR = 0
 private const val CXF_FORMAT_VERSION_MAJOR = 1
 private const val CXF_FORMAT_VERSION_MINOR = 0
 
@@ -32,9 +29,6 @@ internal class CredentialExchangeCompletionManagerImpl(
             }
 
             is ExportCredentialsResult.Success -> {
-
-                val exporterRpId = activity.packageName
-                val exporterDisplayName = activity.applicationInfo.name
                 val headerJson = """
                     {
                         "version": {
@@ -49,29 +43,12 @@ internal class CredentialExchangeCompletionManagerImpl(
                 """
                     .trimIndent()
 
-                val encodedPayload = Base64.UrlSafe
-                    .withPadding(Base64.PaddingOption.ABSENT)
-                    .encode(headerJson.toByteArray())
-
-                val responseJson = """
-                    {
-                        "version": {
-                            "major": $CXP_FORMAT_VERSION_MAJOR,
-                            "minor": $CXP_FORMAT_VERSION_MINOR
-                        },
-                        "exporterRpId": "$exporterRpId",
-                        "exporterDisplayName": "$exporterDisplayName",
-                        "payload": "$encodedPayload"
-                    }
-                """
-                    .trimIndent()
-
                 IntentHandler.setImportCredentialsResponse(
                     context = activity,
                     intent = intent,
                     uri = exportResult.uri,
                     response = ImportCredentialsResponse(
-                        responseJson = responseJson,
+                        responseJson = headerJson,
                     ),
                 )
             }

@@ -191,7 +191,8 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
 )
 private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
     uri = mockk(),
-    requestJson = "mockRequestJson",
+    credentialTypes = setOf("mockCredentialType-1"),
+    knownExtensions = setOf(),
 )
 
 private val DEFAULT_STATE = SelectAccountState(

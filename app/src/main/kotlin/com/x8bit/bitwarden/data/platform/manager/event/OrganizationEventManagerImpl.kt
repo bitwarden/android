@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.Clock
-import java.time.ZonedDateTime
 
 /**
  * The amount of time to delay before attempting the first upload events after the app is
@@ -78,7 +77,7 @@ class OrganizationEventManagerImpl(
                 event = OrganizationEventJson(
                     type = event.type,
                     cipherId = event.cipherId,
-                    date = ZonedDateTime.now(clock),
+                    date = clock.instant(),
                     organizationId = event.organizationId,
                 ),
             )

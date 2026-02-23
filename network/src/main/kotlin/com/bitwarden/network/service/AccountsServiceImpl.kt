@@ -32,7 +32,7 @@ import kotlinx.serialization.json.Json
  * The default implementation of the [AccountsService].
  */
 @Suppress("TooManyFunctions")
-internal class AccountsServiceImpl(
+internal class AccountsServiceImpl constructor(
     private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val unauthenticatedKeyConnectorApi: UnauthenticatedKeyConnectorApi,

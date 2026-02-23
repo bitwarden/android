@@ -40,7 +40,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class LoginApprovalViewModelTest : BaseViewModelTest() {
 
@@ -527,7 +526,7 @@ private val AUTH_REQUEST = AuthRequest(
     ipAddress = "1.0.0.1",
     key = "public",
     masterPasswordHash = PASSWORD_HASH,
-    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
     responseDate = null,
     requestApproved = true,
     originUrl = "www.bitwarden.com",

@@ -13,8 +13,6 @@ import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
  * Converts a Bitwarden SDK [Send] object to a corresponding [SyncResponseJson.Send] object.
@@ -26,8 +24,8 @@ fun Send.toEncryptedNetworkSend(fileLength: Long? = null): SendJsonRequest =
         notes = notes,
         key = key,
         maxAccessCount = maxAccessCount?.toInt(),
-        expirationDate = expirationDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
-        deletionDate = ZonedDateTime.ofInstant(deletionDate, ZoneOffset.UTC),
+        expirationDate = expirationDate,
+        deletionDate = deletionDate,
         fileLength = fileLength,
         file = file?.toNetworkSendFile(),
         text = text?.toNetworkSendText(),
@@ -95,9 +93,9 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         accessCount = accessCount.toUInt(),
         disabled = isDisabled,
         hideEmail = shouldHideEmail,
-        revisionDate = revisionDate.toInstant(),
-        deletionDate = deletionDate.toInstant(),
-        expirationDate = expirationDate?.toInstant(),
+        revisionDate = revisionDate,
+        deletionDate = deletionDate,
+        expirationDate = expirationDate,
         emails = emails,
         authType = authType?.toSdkAuthType() ?: AuthType.NONE,
     )

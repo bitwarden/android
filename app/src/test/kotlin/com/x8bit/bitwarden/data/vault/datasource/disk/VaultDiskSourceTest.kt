@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class VaultDiskSourceTest {
 
@@ -556,7 +556,7 @@ private val FOLDER_ENTITY = FolderEntity(
     id = "mockId-2",
     userId = USER_ID,
     name = "mockName-2",
-    revisionDate = ZonedDateTime.parse("2023-10-27T12:00Z"),
+    revisionDate = Instant.parse("2023-10-27T12:00:00Z"),
 )
 
 private const val SEND_JSON = """

@@ -50,7 +50,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Suppress("LargeClass")
 class AddEditSendScreenTest : BitwardenComposeTest() {
@@ -932,6 +932,67 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `EmailAuthRequiresPremium dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Premium subscription required")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText(
+                "Sharing with specific people is a Premium feature. " +
+                    "Your current plan does not include access to this feature.",
+            )
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `EmailAuthRequiresPremium dialog Cancel click should send DismissDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .performClick()
+
+        verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
+    }
+
+    @Test
+    fun `EmailAuthRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Upgrade to premium")
+            .performClick()
+
+        verify { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }
+    }
+
+    @Test
+    fun `on NavigateToPremium event should call launchUri on IntentManager`() = runTest {
+        val uri = "https://vault.bitwarden.com/#/settings/subscription/premium"
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToPremium(uri))
+
+        verify { intentManager.launchUri(any()) }
+    }
+
+    @Test
     fun `policy send options text should be displayed based on state`() {
         val text = "One or more organization policies are affecting your Send options."
 
@@ -1414,6 +1475,172 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `clicking generate password with empty password should send OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+        }
+    }
+
+    @Test
+    fun `clicking generate password in auth section with existing password should show dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "Are you sure you want to overwrite the current password?",
+                substring = true,
+            )
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking Yes on password override dialog should send OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        // Open dialog
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        // Click Yes
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+        }
+    }
+
+    @Test
+    fun `clicking No on password override dialog should dismiss dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "existing-password",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        // Open dialog
+        composeTestRule
+            .onAllNodesWithContentDescription("Generate password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule.onNode(isDialog()).assertExists()
+
+        // Click No
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `clicking copy password in auth section should send PasswordCopyClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "test-password",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Copy password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AddEditSendAction.PasswordCopyClick("test-password"))
+        }
+    }
+
+    @Test
+    fun `copy password button in auth section should be disabled when password is empty`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isSendEmailVerificationEnabled = true,
+                        passwordInput = "",
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Copy password")
+            .filterToOne(hasAnyAncestor(hasSetTextAction()))
+            .performScrollTo()
+            .assertIsNotEnabled()
+    }
     //endregion Authentication UI Tests
 }
 
@@ -1425,7 +1652,7 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
     expirationDate = null,
     sendUrl = null,
     hasPassword = true,

@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class AddEditSendStateExtensionsTest {
 
@@ -72,15 +71,15 @@ class AddEditSendStateExtensionsTest {
             key = null,
             accessCount = 0U,
             hasPassword = false,
-            deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
-            expirationDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
+            deletionDate = Instant.parse("2030-10-27T12:00:00Z"),
+            expirationDate = Instant.parse("2030-10-27T12:00:00Z"),
         )
 
         val result = DEFAULT_VIEW_STATE
             .copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z"),
-                    expirationDate = ZonedDateTime.parse("2026-10-27T12:00:00Z"),
+                    deletionDate = Instant.parse("2030-10-27T12:00:00Z"),
+                    expirationDate = Instant.parse("2026-10-27T12:00:00Z"),
                 ),
             )
             .toSendView(FIXED_CLOCK)
@@ -153,8 +152,8 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "mockNotes-1",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-    expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
+    expirationDate = Instant.parse("2023-10-27T12:00:00Z"),
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,

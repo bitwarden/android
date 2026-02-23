@@ -140,7 +140,7 @@ fun CipherView.toViewState(
                             timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         )
-                        ?.let { BitwardenString.password_last_updated.asText(it) },
+                        ?.let { BitwardenString.password_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,

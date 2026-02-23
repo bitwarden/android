@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class OrganizationEventManagerTest {
 
@@ -73,7 +72,7 @@ class OrganizationEventManagerTest {
             val organizationEvent = OrganizationEventJson(
                 type = OrganizationEventType.CIPHER_UPDATED,
                 cipherId = CIPHER_ID,
-                date = ZonedDateTime.now(fixedClock),
+                date = fixedClock.instant(),
                 organizationId = null,
             )
             val events = listOf(organizationEvent)
@@ -105,7 +104,7 @@ class OrganizationEventManagerTest {
         val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
-            date = ZonedDateTime.now(fixedClock),
+            date = fixedClock.instant(),
             organizationId = null,
         )
         val events = listOf(organizationEvent)
@@ -211,7 +210,7 @@ class OrganizationEventManagerTest {
                 event = OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED,
                     cipherId = CIPHER_ID,
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             )

@@ -4,8 +4,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 configure<LibraryExtension> {
@@ -56,6 +58,8 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.providerevents)
     implementation(libs.androidx.credentials.providerevents.play.services)
+    implementation(libs.google.hilt.android)
+    ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
     implementation(libs.timber)

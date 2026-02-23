@@ -21,7 +21,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 /**
@@ -119,7 +118,8 @@ internal class SendsServiceImpl(
                     url = sendFileResponse.url,
                     date = DateTimeFormatter
                         .RFC_1123_DATE_TIME
-                        .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
+                        .withZone(ZoneOffset.UTC)
+                        .format(clock.instant()),
                     version = sendFileResponse.url.toUri().getQueryParameter("sv"),
                     body = encryptedFile.asRequestBody(),
                 )
