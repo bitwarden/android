@@ -53,6 +53,10 @@ class ExampleViewModel @Inject constructor(
             sendAction(Action.Internal.DataReceived(result))  // Post internal action
         }
     }
+
+    private fun handleDataReceived(action: Action.Internal.DataReceived) {
+        mutableStateFlow.update { it.copy(data = action.result) }
+    }
 }
 ```
 
@@ -145,7 +149,7 @@ fun ExampleScreen(
                 },
             )
         },
-    ) { paddingValues ->
+    ) {
         // UI content
     }
 }
@@ -269,7 +273,7 @@ Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `
 
 New strings belong in the `:ui` module: `ui/src/main/res/values/strings.xml`
 
-- Use typographic apostrophes and quotes to avoid escape characters: `you'll` not `you\'ll`, `"word"` not `\"word\"`
+- Use typographic apostrophes and quotes to avoid escape characters: `you'll` not `you\'ll`, `“word”` not `\"word\"`
 - Reference strings via generated `BitwardenString` resource IDs
 - Do not add strings to other modules unless explicitly instructed
 
@@ -284,15 +288,19 @@ New strings belong in the `:ui` module: `ui/src/main/res/values/strings.xml`
 **Pattern Summary:**
 ```kotlin
 class ExampleDiskSourceImpl(
-    @EncryptedPreferences private val encryptedPrefs: SharedPreferences,
-    @UnencryptedPreferences private val unencryptedPrefs: SharedPreferences,
-) {
+    encryptedSharedPreferences: SharedPreferences,
+    sharedPreferences: SharedPreferences,
+) : BaseEncryptedDiskSource(
+    encryptedSharedPreferences = encryptedSharedPreferences,
+    sharedPreferences = sharedPreferences,
+),
+    ExampleDiskSource {
     fun storeAuthToken(token: String) {
-        encryptedPrefs.edit { putString(KEY_TOKEN, token) }  // Sensitive
+        putEncryptedString(KEY_TOKEN, token)  // Sensitive — uses base class method
     }
 
     fun storeThemePreference(isDark: Boolean) {
-        unencryptedPrefs.edit { putBoolean(KEY_THEME, isDark) }  // Non-sensitive
+        putBoolean(KEY_THEME, isDark)  // Non-sensitive — uses base class method
     }
 }
 ```
