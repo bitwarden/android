@@ -29,7 +29,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Suppress("LargeClass")
 class LoginWithDeviceViewModelTest : BaseViewModelTest() {
@@ -709,7 +709,7 @@ private val AUTH_REQUEST = AuthRequest(
     ipAddress = "192.168.0.1",
     key = "public",
     masterPasswordHash = "verySecureHash",
-    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
     responseDate = null,
     requestApproved = true,
     originUrl = "www.bitwarden.com",

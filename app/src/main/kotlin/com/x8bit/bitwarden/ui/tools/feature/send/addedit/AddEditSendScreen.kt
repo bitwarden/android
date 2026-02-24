@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.activity.compose.BackHandler
+import androidx.core.net.toUri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -26,6 +27,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -94,6 +96,10 @@ fun AddEditSendScreen(
             is AddEditSendEvent.NavigateToGeneratorModal -> {
                 onNavigateToGeneratorModal(event.generatorMode)
             }
+
+            is AddEditSendEvent.NavigateToPremium -> {
+                intentManager.launchUri(uri = event.uri.toUri())
+            }
         }
     }
 
@@ -101,6 +107,9 @@ fun AddEditSendScreen(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
+        },
+        onUpgradeToPremiumClick = remember(viewModel) {
+            { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }
         },
     )
     BitwardenScaffold(
@@ -201,8 +210,23 @@ fun AddEditSendScreen(
 private fun AddEditSendDialogs(
     dialogState: AddEditSendState.DialogState?,
     onDismissRequest: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        is AddEditSendState.DialogState.EmailAuthRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(
+                    id = BitwardenString.sharing_with_specific_people_is_a_premium_feature,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is AddEditSendState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),

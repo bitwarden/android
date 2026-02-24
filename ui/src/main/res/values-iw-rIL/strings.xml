@@ -305,7 +305,7 @@
     <string name="organization">ארגון</string>
     <string name="try_again">נסה שוב</string>
     <string name="created">נוצר: %1$s</string>
-    <string name="password_last_updated">הסיסמה עודכנה לאחרונה: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">נערך לאחרונה: %1$s</string>
     <string name="invalid_email">כתובת דוא\"ל אינה חוקית.</string>
     <string name="cards">כרטיסים</string>
@@ -500,6 +500,7 @@
     <string name="hide_email">הסתר את כתובת הדוא\"ל שלי מנמענים</string>
     <string name="send_options_policy_in_effect">מדיניות ארגון אחת או יותר משפיעה על אפשרויות הסֵנְד שלך.</string>
     <string name="send_file_premium_required">חשבונות חינמיים מוגבלים לשיתוף טקסט בלבד. נדרש חשבון פרימיום כדי להשתמש בקבצים עם סֵנְד.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">בקשה חוזרת של סיסמה ראשית</string>
     <string name="password_confirmation">אימות סיסמה ראשית</string>
     <string name="password_confirmation_desc">פעולה זו מוגנת. כדי להמשיך, נא להזין שוב את הסיסמה הראשית שלך כדי לאמת את זהותך.</string>
@@ -1162,7 +1163,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">הפעל מילוי אוטומטי בדפדפן כדי להמשך למלא סיסמאות</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">הדפדפן שלך עודכן לאחרונה, מה שהשבית את המילוי האוטומטי של Bitwarden. כדי להמשיך למלא סיסמאות עם Bitwarden, יש להפעיל את המילוי האוטומטי של הדפדפן בהגדרות למילוי אוטומטי.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">הדפדפנים שלך עודכנו לאחרונה, מה שהשבית את המילוי האוטומטי של Bitwarden. כדי להמשיך למלא את הסיסמאות שלך עם Bitwarden, יש להפעיל את המילוי האוטומטי של הדפדפן עבור כל הדפדפנים המותקנים בהגדרות למילוי אוטומטי.</string>
     <string name="not_now">לא כעת</string>
     <string name="import_from_bitwarden">ייבא מ־Bitwarden</string>
     <string name="select_account">בחר חשבון</string>
@@ -1223,4 +1223,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">סיסמה ראשית עודכנה</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

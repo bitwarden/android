@@ -326,7 +326,7 @@ private fun CopyRow(
     ) {
         Icon(
             painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
-            contentDescription = null,
+            contentDescription = stringResource(id = BitwardenString.copy),
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.mirrorIfRtl(),
         )

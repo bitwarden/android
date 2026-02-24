@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -84,6 +85,7 @@ class CookieAcquisitionViewModel @Inject constructor(
 
     private fun handleContinueWithoutSyncingClick() {
         cookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)
+        sendEvent(CookieAcquisitionEvent.NavigateBack)
     }
 
     private fun handleWhyAmISeeingThisClick() {
@@ -100,6 +102,7 @@ class CookieAcquisitionViewModel @Inject constructor(
         when (action.result) {
             is CookieCallbackResult.Success -> {
                 cookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)
+                sendEvent(CookieAcquisitionEvent.NavigateBack)
             }
 
             is CookieCallbackResult.MissingCookie -> {
@@ -152,6 +155,14 @@ sealed class CookieAcquisitionEvent {
      * Navigate to the help page.
      */
     data class NavigateToHelp(val uri: String) : CookieAcquisitionEvent()
+
+    /**
+     * Navigate back, dismissing the cookie acquisition screen.
+     *
+     * Implements [BackgroundEvent] because the cookie callback result may arrive while
+     * the screen is not resumed (e.g. returning from a Custom Tab browser session).
+     */
+    data object NavigateBack : CookieAcquisitionEvent(), BackgroundEvent
 }
 
 /**

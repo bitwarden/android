@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -13,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -38,9 +43,13 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onAddNewEmailClick Callback invoked when adding a new email.
  * @param onRemoveEmailClick Callback invoked when removing an email.
  * @param password The current password value (only relevant for [SendAuth.Password]).
+ * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
+ * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param isEnabled Whether the chooser is enabled.
+ * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
+@Suppress("LongMethod")
 @Composable
 fun AddEditSendAuthTypeChooser(
     sendAuth: SendAuth,
@@ -49,10 +58,14 @@ fun AddEditSendAuthTypeChooser(
     onEmailValueChange: (AuthEmail) -> Unit,
     onAddNewEmailClick: () -> Unit,
     onRemoveEmailClick: (AuthEmail) -> Unit,
+    onOpenPasswordGeneratorClick: () -> Unit,
+    onPasswordCopyClick: (String) -> Unit,
     password: String,
     isEnabled: Boolean,
+    isSendsRestrictedByPolicy: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     // Map option texts to their corresponding SendAuth factory functions
     val textToNoneAuth = stringResource(id = BitwardenString.anyone_with_the_link)
     val textToEmailAuth = stringResource(id = BitwardenString.specific_people)
@@ -104,12 +117,51 @@ fun AddEditSendAuthTypeChooser(
                     value = password,
                     onValueChange = onPasswordChange,
                     cardStyle = CardStyle.Bottom,
+                    passwordFieldTestTag = "SendPasswordEntry",
+                    readOnly = isSendsRestrictedByPolicy,
                     modifier = Modifier.fillMaxWidth(),
-                )
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (password.isEmpty()) {
+                                onOpenPasswordGeneratorClick()
+                            } else {
+                                shouldShowDialog = true
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = password.isNotEmpty(),
+                        onClick = {
+                            onPasswordCopyClick(password)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
             }
 
             is SendAuth.None -> Unit
         }
+    }
+
+    if (shouldShowDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = BitwardenString.password),
+            message = stringResource(id = BitwardenString.password_override_alert),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.no),
+            onConfirmClick = {
+                shouldShowDialog = false
+                onOpenPasswordGeneratorClick()
+            },
+            onDismissClick = { shouldShowDialog = false },
+            onDismissRequest = { shouldShowDialog = false },
+        )
     }
 }
 

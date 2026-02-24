@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStor
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
-import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.InstantTypeConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -71,7 +71,7 @@ object PlatformDiskModule {
                 name = "platform_database",
             )
             .fallbackToDestructiveMigration(dropAllTables = false)
-            .addTypeConverter(ZonedDateTimeTypeConverter())
+            .addTypeConverter(InstantTypeConverter())
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .build()
 

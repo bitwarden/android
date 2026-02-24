@@ -6,10 +6,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.Clock
 import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class SendViewExtensionsTest {
 
@@ -18,7 +15,6 @@ class SendViewExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.FILE)
 
         val result = sendView.toViewState(
-            clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
             isSendEmailVerificationEnabled = false,
@@ -40,7 +36,6 @@ class SendViewExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.TEXT)
 
         val result = sendView.toViewState(
-            clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
             isSendEmailVerificationEnabled = false,
@@ -59,11 +54,6 @@ class SendViewExtensionsTest {
     }
 }
 
-private val FIXED_CLOCK: Clock = Clock.fixed(
-    Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC,
-)
-
 private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
     AddEditSendState.ViewState.Content.Common(
         name = "mockName-1",
@@ -73,14 +63,8 @@ private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
         noteInput = "mockNotes-1",
         isHideEmailChecked = false,
         isDeactivateChecked = false,
-        deletionDate = ZonedDateTime.ofInstant(
-            Instant.parse("2023-10-27T12:00:00Z"),
-            ZoneOffset.UTC,
-        ),
-        expirationDate = ZonedDateTime.ofInstant(
-            Instant.parse("2023-10-27T12:00:00Z"),
-            ZoneOffset.UTC,
-        ),
+        deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
+        expirationDate = Instant.parse("2023-10-27T12:00:00Z"),
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
         hasPassword = true,
         isHideEmailAddressEnabled = true,

@@ -170,7 +170,6 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
 @Suppress("LargeClass")
@@ -251,6 +250,7 @@ class AuthRepositoryTest {
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
+        every { softLogout(any(), any()) } just runs
     }
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
@@ -831,7 +831,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
+                userLogoutManager.softLogout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
             }
         }
 
@@ -852,7 +852,10 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.RefreshForbidden)
+                userLogoutManager.softLogout(
+                    userId = USER_ID_1,
+                    reason = LogoutReason.RefreshForbidden,
+                )
             }
         }
 
@@ -873,7 +876,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 1) {
                 identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-                userLogoutManager.logout(
+                userLogoutManager.softLogout(
                     userId = USER_ID_1,
                     reason = LogoutReason.RefreshUnauthorized,
                 )
@@ -7691,7 +7694,7 @@ class AuthRepositoryTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
 
         private val PROFILE_1 = BASE_PROFILE_1.copy(
@@ -7729,7 +7732,7 @@ class AuthRepositoryTest {
                 kdfParallelism = null,
                 userDecryptionOptions = null,
                 isTwoFactorEnabled = true,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
             ),
             settings = AccountJson.Settings(
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
