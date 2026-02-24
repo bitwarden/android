@@ -303,7 +303,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="organization">Təşkilat</string>
     <string name="try_again">Yenidən sınayın</string>
     <string name="created">Yaradıldı: %1$s</string>
-    <string name="password_last_updated">Son parol güncəlləməsi: %1$s</string>
+    <string name="password_updated">Parol güncəlləndi: %1$s</string>
     <string name="last_edited">Son düzəliş: %1$s</string>
     <string name="invalid_email">Yararsız e-poçt ünvanı.</string>
     <string name="cards">Kartlar</string>
@@ -450,9 +450,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
     <string name="who_can_view">Kimlər baxa bilər</string>
     <string name="anyone_with_the_link">Keçidə sahib olan hər kəs</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="anyone_with_link_can_view_send">Bu keçidə sahib olan hər kəs bu \"Send\"ə baxa bilər</string>
     <string name="specific_people">Xüsusi insanlar</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="specific_people_verification_info">Bu Send keçidini paylaşdıqdan sonra, bu \"Send\"ə baxması üçün insanlar e-poçtlarını bir kodla doğrulamalıdırlar</string>
     <string name="anyone_with_password">Ayarladığınız parola sahib hər kəs</string>
     <string name="add_email">E-poçt əlavə et</string>
     <string name="pending_delete">Silinməsi gözlənilir</string>
@@ -496,6 +496,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="hide_email">E-poçt ünvanımı alıcılardan gizlət.</string>
     <string name="send_options_policy_in_effect">Bir və ya daha çox təşkilat siyasətləri \"Send\" seçimlərinizə təsir edir.</string>
     <string name="send_file_premium_required">Ödənişsiz hesablar yalnız mətn paylaşa bilər. Faylları \"Send\" ilə istifadə etmək üçün premium üzvlük tələb olunur.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Xüsusi insanlarla paylaşım, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="password_prompt">Ana parolu təkrar soruş</string>
     <string name="password_confirmation">Ana parol təsdiqi</string>
     <string name="password_confirmation_desc">Bu əməliyyat qorumalıdır, davam etmək üçün lütfən kimliyinizi doğrulamaq üçün ana parolunuzu təkrar daxil edin.</string>
@@ -1147,7 +1148,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Parolları doldurmağa davam etmək üçün brauzer Avto-doldurma fəallaşdır</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Brauzeriniz təzəlikcə güncəllənib və bu, Bitwarden-in avto-doldurma özəlliyini sıradan çıxardıb. Parollarınızı Bitwarden ilə doldurmağa davam etmək üçün avto-doldurma ayarlarında brauzer avto-doldurmanı fəallaşdırın.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Brauzerləriniz təzəlikcə güncəllənib və bu, Bitwarden-in avto-doldurma özəlliyini sıradan çıxardıb. Parollarınızı Bitwarden ilə doldurmağa davam etmək üçün quraşdırdığınız bütün brauzerlərin avto-doldurma ayarlarında brauzer avto-doldurmanı fəallaşdırın.</string>
     <string name="not_now">İndi yox</string>
     <string name="import_from_bitwarden">Bitwarden-dən daxilə köçür</string>
     <string name="select_account">Hesab seç</string>
@@ -1208,4 +1208,12 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
     <string name="items_transferred">Elementlər köçürüldü</string>
     <string name="updated_master_password">Güncəllənmiş ana parol</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Brauzerlə sinxronlaşdır</string>
+    <string name="sync_with_browser_description">%1$s ilə bağlantı qurmaq üçün ilkin brauzerinizi Bitwarden mobil tətbiqi ilə sinxronlaşdırın. Brauzeriniz açıldığı zaman, soruşulsa daxil olma prosesini tamamlayın.\nSinxronlaşdırma tamamlandıqdan sonra bu tətbiqə qayıdacaqsınız.</string>
+    <string name="launch_browser">Brauzeri başlat</string>
+    <string name="continue_without_syncing">Sinxrn olmadan davam et</string>
 </resources>

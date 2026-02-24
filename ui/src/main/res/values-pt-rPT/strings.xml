@@ -303,7 +303,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="organization">Organização</string>
     <string name="try_again">Tentar novamente</string>
     <string name="created">Criado a %1$s</string>
-    <string name="password_last_updated">Última atualização da palavra-passe: %1$s</string>
+    <string name="password_updated">Palavra-passe atualizada a %1$s</string>
     <string name="last_edited">Última edição: %1$s</string>
     <string name="invalid_email">Endereço de e-mail inválido.</string>
     <string name="cards">Cartões</string>
@@ -496,6 +496,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="hide_email">Ocultar o meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas opções do Send.</string>
     <string name="send_file_premium_required">As contas gratuitas estão limitadas apenas à partilha de texto. É necessária uma subscrição Premium para utilizar ficheiros com o Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Partilhar com pessoas específicas é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="password_prompt">Pedir novamente a palavra-passe mestra</string>
     <string name="password_confirmation">Confirmação da palavra-passe mestra</string>
     <string name="password_confirmation_desc">Esta ação está protegida. Para continuar, por favor, reintroduza a sua palavra-passe mestra para verificar a sua identidade.</string>
@@ -1146,7 +1147,6 @@ Pretende mudar para esta conta?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Ativar o preenchimento automático do navegador para continuar a preencher as palavras-passe</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">O seu navegador foi atualizado recentemente, o que desativou o preenchimento automático do Bitwarden. Para continuar a preencher as suas palavras-passe com o Bitwarden, ative o preenchimento automático do navegador nas definições de preenchimento automático.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Os seus navegadores foram atualizados recentemente, o que desativou o preenchimento automático do Bitwarden. Para continuar a preencher as suas palavras-passe com o Bitwarden, ative o preenchimento automático do navegador para todos os navegadores instalados nas definições de preenchimento automático.</string>
     <string name="not_now">Agora não</string>
     <string name="import_from_bitwarden">Importar do Bitwarden</string>
     <string name="select_account">Selecionar conta</string>
@@ -1207,4 +1207,12 @@ Pretende mudar para esta conta?</string>
     <string name="restart_premium">Reiniciar o Premium</string>
     <string name="items_transferred">Itens transferidos</string>
     <string name="updated_master_password">Palavra-passe mestra atualizada</string>
+    <string name="invalid_email_addresses">Endereços de e-mail inválidos</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Por favor, verifique e tente novamente.</string>
+    <string name="no_email_addresses_entered">Nenhum endereço de e-mail introduzido</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Introduza pelo menos um endereço de e-mail válido para partilhar este Send.</string>
+    <string name="sync_with_browser">Sincronizar com o navegador</string>
+    <string name="sync_with_browser_description">Para ligar a %1$s, sincronize o seu navegador predefinido com a app móvel Bitwarden. Quando o navegador abrir, conclua a sessão, se lhe for solicitado.\nApós a sincronização estar concluída, regressará a esta aplicação.</string>
+    <string name="launch_browser">Iniciar o navegador</string>
+    <string name="continue_without_syncing">Continuar sem sincronizar</string>
 </resources>

@@ -302,7 +302,7 @@
     <string name="organization">조직</string>
     <string name="try_again">다시 시도</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">잘못된 이메일 주소입니다.</string>
     <string name="cards">카드</string>
@@ -494,6 +494,7 @@
     <string name="hide_email">받는 사람으로부터 나의 이메일 주소 숨기기</string>
     <string name="send_options_policy_in_effect">하나 이상의 단체 정책이 Send 설정에 영향을 미치고 있습니다.</string>
     <string name="send_file_premium_required">무료 계정은 텍스트만 공유할 수 있습니다. Premium 멤버십이 있어야 Send에서 파일을 사용할 수 있습니다</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">마스터 비밀번호 재확인</string>
     <string name="password_confirmation">마스터 비밀번호 확인</string>
     <string name="password_confirmation_desc">이 작업은 보호되어 있습니다. 계속하려면 마스터 비밀번호를 입력하여 신원을 인증하세요.</string>
@@ -1052,7 +1053,7 @@
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_success">Data exported successfully</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">보안</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">버전</string>
@@ -1138,7 +1139,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1199,4 +1199,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">마스터 비밀번호 변경됨</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

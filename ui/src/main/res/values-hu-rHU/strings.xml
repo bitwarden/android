@@ -302,7 +302,7 @@
     <string name="organization">Szervezet</string>
     <string name="try_again">Próbáluk újra</string>
     <string name="created">Létrehozva: %1$s</string>
-    <string name="password_last_updated">Jelszó utolsó frissítés: %1$s</string>
+    <string name="password_updated">Jelszó utolsó frissítés: %1$s</string>
     <string name="last_edited">Utolsó szerkesztés: %1$s</string>
     <string name="invalid_email">Az email cím érvénytelen.</string>
     <string name="cards">Kártyák</string>
@@ -495,6 +495,7 @@
     <string name="hide_email">Saját email cím elrejtése a címzettek elől.</string>
     <string name="send_options_policy_in_effect">Egy vagy több szervezeti szabály érinti a Send opciókat.</string>
     <string name="send_file_premium_required">Ingyenes fiókkal csak szöveget lehet megosztani. Prémium tagság szükséges a fájlok használatához a Sendnél.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="password_prompt">Mesterjelszó újbóli bekérése</string>
     <string name="password_confirmation">Mesterjelszó megerősítése</string>
     <string name="password_confirmation_desc">Ez a művelet védett. A folytatásért ismételten meg kell adni a mesterjelszőt az személyazonosság ellenőrzéséhez.</string>
@@ -1145,7 +1146,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Engedélyezzük a böngészőben az automatikus kitöltést a jelszavak folyamatos kitöltéséhez.</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">A böngésző nemrégiben frissült, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngésző automatikus kiltöltés funkciót az automatikus kitöltés beállításaiban.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">A böngészők nemrégiben frissültek, amely letiltotta a Bitwarden automatikus kitöltés funkciót. A jelszavak kitöltéséhez a Bitwarden segítségével engedélyezzük a böngészők automatikus kiltöltés funkcióját az automatikus kitöltés beállításaiban.</string>
     <string name="not_now">Most nem</string>
     <string name="import_from_bitwarden">Importálás a Bitwardenből</string>
     <string name="select_account">Fiók kiválasztása</string>
@@ -1206,4 +1206,12 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="restart_premium">Prémium előfizetés újraindítása</string>
     <string name="items_transferred">Az elemek átvitelre kerültek.</string>
     <string name="updated_master_password">A mesterjelszó frisstésre került.</string>
+    <string name="invalid_email_addresses">Az email cím érvénytelen.</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Egy vagy több email cím helytelen. Tekintsük át és próbáljuk újra.</string>
+    <string name="no_email_addresses_entered">Nincsenek megadva email címek.</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Adjunk meg legalább egy érvényes email címet a Send elem megosztásához.</string>
+    <string name="sync_with_browser">Szinkronizálás böngészővel</string>
+    <string name="sync_with_browser_description">%1$s csatlakozáshoz szinkronizáljuk az alapértelmezett böngészőt a Bitwarden mobilalkalmazással. A böngésző megnyitásakor fejezzük be a bejelentkezést, ha a rendszer azt kéri.\nA szinkronizálás befejezése után visszakerülünk ebbe az alkalmazásba.</string>
+    <string name="launch_browser">Böngésző indítása</string>
+    <string name="continue_without_syncing">Folytatás szinkronizálás nélkül</string>
 </resources>
