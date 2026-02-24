@@ -69,7 +69,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = BitwardenString.my_vault,
-                        contentDescRes = BitwardenString.my_vault,
                     ),
                     awaitItem(),
                 )
@@ -127,7 +126,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
         val expectedWithOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = BitwardenString.vaults,
-            vaultNavBarContentDescriptionRes = BitwardenString.vaults,
             notificationState = DEFAULT_NOTIFICATION_STATE,
         )
         val accountWithoutOrganizations: UserState.Account = mockk {
@@ -136,7 +134,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
         val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = BitwardenString.my_vault,
-            vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
             notificationState = DEFAULT_NOTIFICATION_STATE,
         )
 
@@ -178,10 +175,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
             assertEquals(
-                VaultUnlockedNavBarEvent.NavigateToVaultScreen(
-                    labelRes = BitwardenString.my_vault,
-                    contentDescRes = BitwardenString.my_vault,
-                ),
+                VaultUnlockedNavBarEvent.NavigateToVaultScreen(labelRes = BitwardenString.my_vault),
                 awaitItem(),
             )
         }
@@ -285,7 +279,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = BitwardenString.my_vault,
-                        contentDescRes = BitwardenString.my_vault,
                     ),
                     awaitItem(),
                 )
@@ -309,7 +302,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = BitwardenString.my_vault,
-                        contentDescRes = BitwardenString.my_vault,
                     ),
                     awaitItem(),
                 )
@@ -333,6 +325,5 @@ private val DEFAULT_NOTIFICATION_STATE = VaultUnlockedNavBarNotificationState(
 
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = BitwardenString.my_vault,
-    vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
     notificationState = DEFAULT_NOTIFICATION_STATE,
 )
