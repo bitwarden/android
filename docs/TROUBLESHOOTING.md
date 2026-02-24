@@ -7,7 +7,7 @@
 **Problem**: Cannot resolve Bitwarden SDK from GitHub Packages
 
 **Solution**:
-1. Ensure `GITHUB_TOKEN` is set in `ci.properties` or environment
+1. Ensure `GITHUB_TOKEN` is set in `user.properties` or environment
 2. Verify token has `read:packages` scope
 3. Check network connectivity to `maven.pkg.github.com`
 

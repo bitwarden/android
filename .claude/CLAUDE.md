@@ -9,6 +9,7 @@ Official Android application for Bitwarden Password Manager and Bitwarden Authen
 - Target users: End-users via Google Play Store and F-Droid
 
 ### Key Concepts
+
 - **Zero-Knowledge Architecture**: Server never has access to unencrypted vault data or encryption keys
 - **Bitwarden SDK**: Rust-based cryptographic SDK handling all encryption/decryption operations
 - **DataState**: Wrapper for streaming data states (Loading, Loaded, Pending, Error, NoNetwork)
@@ -65,47 +66,26 @@ Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotch
 4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder`/`NavController` extensions
 5. **Write Tests** - Use the `testing-android-code` skill for test patterns and templates
 
-### Code Reviews
+### Other Skills
 
-Use the `reviewing-changes` skill for structured code review checklists covering MVVM/Compose patterns, security validation, and type-specific review guidance.
-
----
-
-## Data Models
-
-Key types used throughout the codebase:
-
-- **`UserState`** (`data/auth/`) - Active user ID, accounts list, pending account state
-- **`VaultUnlockData`** (`data/vault/repository/model/`) - User ID and vault unlock status
-- **`NetworkResult<T>`** (`network/`) - HTTP operation result: Success or Failure
-- **`BitwardenError`** (`network/`) - Error classification: Http, Network, Other
+- `reviewing-changes` - Code review checklists for MVVM/Compose patterns
+- `build-test-verify` - Build, test, lint, deploy commands and codebase discovery
+- `git-commit` - Commit message format and pre-commit workflow
+- `create-pull-request` - PR creation workflow and templates
+- `core-conventions` - Code style, naming, anti-patterns quick reference
+- `self-review-checklist` - Quality gate before committing or opening a PR
 
 ---
 
-## Security & Configuration
-
-### Security Rules
+## Security Rules
 
 **MANDATORY - These rules have no exceptions:**
 
 1. **Zero-Knowledge Architecture**: Never transmit unencrypted vault data or master passwords to the server. All encryption happens client-side via the Bitwarden SDK.
-
 2. **No Plaintext Key Storage**: Encryption keys must be stored using Android Keystore (biometric unlock) or encrypted with PIN/master password.
-
 3. **Sensitive Data Cleanup**: On logout, all sensitive data must be cleared from memory and storage via `UserLogoutManager.logout()`.
-
 4. **Input Validation**: Validate all user inputs before processing, especially URLs and credentials.
-
 5. **SDK Isolation**: Use scoped SDK sources (`ScopedVaultSdkSource`) to prevent cross-user crypto context leakage.
-
-### Security Components
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `BiometricsEncryptionManager` | `data/platform/manager/` | Android Keystore integration for biometric unlock |
-| `VaultLockManager` | `data/vault/manager/` | Vault lock/unlock operations |
-| `AuthDiskSource` | `data/auth/datasource/disk/` | Secure token and key storage |
-| `BaseEncryptedDiskSource` | `data/datasource/disk/` | EncryptedSharedPreferences base class |
 
 ---
 
