@@ -48,7 +48,7 @@ fun AuthTabIntent.AuthResult.getCookieCallbackResult(): CookieCallbackResult =
         else -> CookieCallbackResult.MissingCookie
     }
 
-internal fun Uri?.getCookieCallbackResult(): CookieCallbackResult {
+private fun Uri?.getCookieCallbackResult(): CookieCallbackResult {
     if (this == null) return CookieCallbackResult.MissingCookie
     val cookies = queryParameterNames
         .asSequence()

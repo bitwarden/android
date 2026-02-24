@@ -165,7 +165,8 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        cookieAcquisitionRequestManager.cookieAcquisitionRequestFlow
+        cookieAcquisitionRequestManager
+            .cookieAcquisitionRequestFlow
             .filterNotNull()
             .map { MainAction.Internal.CookieAcquisitionReady }
             .onEach(::sendAction)
