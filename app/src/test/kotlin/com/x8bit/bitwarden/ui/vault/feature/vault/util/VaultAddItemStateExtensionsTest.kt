@@ -1008,8 +1008,45 @@ class VaultAddItemStateExtensionsTest {
         val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
-            listOf("collection-1", "collection-3"),
-            result.collectionIds,
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                collectionIds = listOf("collection-1", "collection-3"),
+                key = null,
+                name = "mockName-1",
+                notes = null,
+                type = CipherType.LOGIN,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = null,
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = null,
+                    fido2Credentials = null,
+                ),
+                identity = null,
+                card = null,
+                secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
+            ),
+            result,
         )
     }
 
@@ -1048,8 +1085,39 @@ class VaultAddItemStateExtensionsTest {
         val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
-            listOf("original-collection-1", "original-collection-2"),
-            result.collectionIds,
+            cipherView.copy(
+                name = "mockName-1",
+                notes = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = false,
+                    fido2Credentials = null,
+                ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                fields = emptyList(),
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "hidden: value",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                ),
+            ),
+            result,
         )
     }
 }
