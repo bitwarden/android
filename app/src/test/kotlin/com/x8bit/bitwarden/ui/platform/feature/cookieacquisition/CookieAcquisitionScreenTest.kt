@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.cookieacquisition
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
@@ -11,9 +13,11 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,6 +32,7 @@ import org.junit.Test
 class CookieAcquisitionScreenTest : BitwardenComposeTest() {
 
     private var onDismissCalled = false
+    private val cookieLauncher: ActivityResultLauncher<Intent> = mockk()
     private val mutableEventFlow =
         bufferedMutableSharedFlow<CookieAcquisitionEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -36,13 +41,19 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
     private val intentManager = mockk<IntentManager> {
-        every { startCustomTabsActivity(any()) } just runs
+        every { startAuthTab(uri = any(), authTabData = any(), launcher = any()) } just runs
         every { launchUri(any()) } just runs
     }
 
     @Before
     fun setUp() {
         setContent(
+            authTabLaunchers = AuthTabLaunchers(
+                duo = mockk(),
+                sso = mockk(),
+                webAuthn = mockk(),
+                cookie = cookieLauncher,
+            ),
             intentManager = intentManager,
         ) {
             CookieAcquisitionScreen(
@@ -53,11 +64,23 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `LaunchBrowser event should call startCustomTabsActivity`() {
+    fun `LaunchBrowser event should call startAuthTab`() {
         val uri = "https://example.com"
-        mutableEventFlow.tryEmit(CookieAcquisitionEvent.LaunchBrowser(uri = uri))
+        val authTabData = AuthTabData.CustomScheme(
+            callbackUrl = "bitwarden://sso-cookie-vendor",
+        )
+        mutableEventFlow.tryEmit(
+            CookieAcquisitionEvent.LaunchBrowser(
+                uri = uri,
+                authTabData = authTabData,
+            ),
+        )
         verify {
-            intentManager.startCustomTabsActivity(uri.toUri())
+            intentManager.startAuthTab(
+                uri = uri.toUri(),
+                authTabData = authTabData,
+                launcher = cookieLauncher,
+            )
         }
     }
 
@@ -195,5 +218,6 @@ private const val DEFAULT_ENVIRONMENT_URL = "https://vault.bitwarden.com"
 
 private val DEFAULT_STATE = CookieAcquisitionState(
     environmentUrl = DEFAULT_ENVIRONMENT_URL,
+    hostname = "",
     dialogState = null,
 )

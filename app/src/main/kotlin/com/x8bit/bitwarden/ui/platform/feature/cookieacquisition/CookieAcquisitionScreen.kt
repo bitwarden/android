@@ -44,8 +44,10 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.CookieAcquisitionHandler
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememberCookieAcquisitionHandler
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
  * Top-level composable for the Cookie Acquisition screen.
@@ -54,6 +56,7 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememb
 fun CookieAcquisitionScreen(
     onDismiss: () -> Unit,
     viewModel: CookieAcquisitionViewModel = hiltViewModel(),
+    authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -61,7 +64,11 @@ fun CookieAcquisitionScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is CookieAcquisitionEvent.LaunchBrowser -> {
-                intentManager.startCustomTabsActivity(event.uri.toUri())
+                intentManager.startAuthTab(
+                    uri = event.uri.toUri(),
+                    authTabData = event.authTabData,
+                    launcher = authTabLaunchers.cookie,
+                )
             }
 
             is CookieAcquisitionEvent.NavigateToHelp -> {
@@ -212,6 +219,7 @@ private fun CookieAcquisitionScreen_preview() {
             CookieAcquisitionContent(
                 state = CookieAcquisitionState(
                     environmentUrl = "vault.bitwarden.com",
+                    hostname = "",
                     dialogState = null,
                 ),
                 handler = CookieAcquisitionHandler(
@@ -234,6 +242,7 @@ private fun CookieAcquisitionScreen_darkPreview() {
             CookieAcquisitionContent(
                 state = CookieAcquisitionState(
                     environmentUrl = "vault.bitwarden.com",
+                    hostname = "",
                     dialogState = null,
                 ),
                 handler = CookieAcquisitionHandler(

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.network
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.model.NetworkCookie
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.util.toNetworkCookieList
@@ -50,6 +51,18 @@ class NetworkCookieManagerImpl(
         cookieAcquisitionRequestManager.setPendingCookieAcquisition(
             CookieAcquisitionRequest(
                 hostname = hostname,
+            ),
+        )
+    }
+
+    override fun storeCookies(hostname: String, cookies: Map<String, String>) {
+        cookieDiskSource.storeCookieConfig(
+            hostname = hostname,
+            config = CookieConfigurationData(
+                hostname = hostname,
+                cookies = cookies.map { (name, value) ->
+                    CookieConfigurationData.Cookie(name = name, value = value)
+                },
             ),
         )
     }

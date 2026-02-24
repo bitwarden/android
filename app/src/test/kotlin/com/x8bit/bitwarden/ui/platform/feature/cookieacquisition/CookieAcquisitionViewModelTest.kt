@@ -3,12 +3,14 @@ package com.x8bit.bitwarden.ui.platform.feature.cookieacquisition
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import io.mockk.every
 import io.mockk.just
@@ -42,6 +44,10 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
             every { setPendingCookieAcquisition(data = any()) } just runs
         }
 
+    private val mockNetworkCookieManager: NetworkCookieManager = mockk {
+        every { storeCookies(hostname = any(), cookies = any()) } just runs
+    }
+
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
@@ -58,21 +64,13 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(CookieAcquisitionAction.LaunchBrowserClick)
                 assertEquals(
                     CookieAcquisitionEvent.LaunchBrowser(
-                        uri = DEFAULT_HOSTNAME,
+                        uri = "https://$DEFAULT_HOSTNAME/proxy-cookie-redirect-connector.html",
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = "bitwarden://sso-cookie-vendor",
+                        ),
                     ),
                     awaitItem(),
                 )
-            }
-        }
-
-    @Test
-    fun `LaunchBrowserClick should do nothing when no pending request`() =
-        runTest {
-            mutableCookieAcquisitionRequestFlow.value = null
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(CookieAcquisitionAction.LaunchBrowserClick)
-                expectNoEvents()
             }
         }
 
@@ -118,12 +116,13 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CookieCallbackResult Success should clear pending request and emit NavigateBack`() =
+    fun `CookieCallbackResult Success should store cookies and emit NavigateBack`() =
         runTest {
+            val cookies = mapOf("sessionToken" to "abc123")
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 mutableCookieCallbackResultFlow.emit(
-                    CookieCallbackResult.Success(cookies = mapOf("cookie" to "value")),
+                    CookieCallbackResult.Success(cookies = cookies),
                 )
                 assertEquals(
                     CookieAcquisitionEvent.NavigateBack,
@@ -131,6 +130,10 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
                 )
             }
             verify {
+                mockNetworkCookieManager.storeCookies(
+                    hostname = DEFAULT_HOSTNAME,
+                    cookies = cookies,
+                )
                 mockCookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)
             }
         }
@@ -192,6 +195,7 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
     fun `state should be restored from SavedStateHandle`() {
         val savedState = CookieAcquisitionState(
             environmentUrl = "https://custom.vault.com",
+            hostname = "custom.vault.com",
             dialogState = null,
         )
         val viewModel = createViewModel(state = savedState)
@@ -204,6 +208,7 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
         assertEquals(
             CookieAcquisitionState(
                 environmentUrl = "https://vault.bitwarden.com",
+                hostname = DEFAULT_HOSTNAME,
                 dialogState = null,
             ),
             viewModel.stateFlow.value,
@@ -218,12 +223,13 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
                 mapOf("state" to state),
             ),
             cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
+            networkCookieManager = mockNetworkCookieManager,
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
         )
 }
 
-private const val DEFAULT_HOSTNAME = "https://example.com"
+private const val DEFAULT_HOSTNAME = "example.com"
 
 private val DEFAULT_COOKIE_ACQUISITION_REQUEST = CookieAcquisitionRequest(
     hostname = DEFAULT_HOSTNAME,
@@ -231,5 +237,6 @@ private val DEFAULT_COOKIE_ACQUISITION_REQUEST = CookieAcquisitionRequest(
 
 private val DEFAULT_STATE = CookieAcquisitionState(
     environmentUrl = "https://vault.bitwarden.us",
+    hostname = DEFAULT_HOSTNAME,
     dialogState = null,
 )
