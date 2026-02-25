@@ -352,3 +352,33 @@ jobs:
             authenticatorbridge/build/reports/tests/
             data/build/reports/tests/
             ui/build/reports/tests/
+
+  coverage-notify:
+    name: Coverage Notification
+    runs-on: ubuntu-24.04
+    needs: [test-app, test-authenticator, test-libraries]
+    if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'pull_request')
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Notify Codecov that all uploads are complete
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        continue-on-error: true
+        with:
+          run_command: send-notifications
+
+      - name: Comment PR if coverage notification failed
+        if: failure()
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ACTOR: ${{ github.triggering_actor }}
+        run: |
+          echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
+          echo "> Uploading code coverage report failed. Please check the \"Notify Codecov\" step for more details." >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -n "$PR_NUMBER" ]; then
+            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Coverage Notification" step of [Test (Sharded)]('$_GITHUB_ACTION_RUN_URL') for more details.'
+            gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
+          fi
