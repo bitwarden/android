@@ -87,11 +87,13 @@ class Fido2CredentialStoreImpl(
                     }
                     ?: decryptedCipherView.createCipher()
 
-                if (result is CreateCipherResult.Error) {
-                    throw result.error
-                        ?: IllegalStateException(
+                when (result) {
+                    CreateCipherResult.Success -> Unit
+                    is CreateCipherResult.Error -> {
+                        throw result.error ?: IllegalStateException(
                             result.errorMessage ?: "Failed to save credential",
                         )
+                    }
                 }
             }
             .onFailure { throw it }
