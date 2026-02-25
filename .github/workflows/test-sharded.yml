@@ -7,9 +7,9 @@ on:
       - "rc"
       - "hotfix-rc"
   pull_request:
-    types: [opened, synchronize]
+    types: [ opened, synchronize ]
   merge_group:
-    types: [checks_requested]
+    types: [ checks_requested ]
   workflow_dispatch:
 
 env:
@@ -150,6 +150,24 @@ jobs:
         run: |
           bundle exec fastlane testAppShard testFilter:'${{ matrix.test_filter }}'
 
+      - name: Generate coverage report
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec fastlane generateCoverageReport
+
+      - name: Upload to codecov.io
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        continue-on-error: true
+        with:
+          os: linux
+          files: build/reports/kover/reportMergedCoverage.xml
+          flags: app-${{ matrix.shard_name }}
+          fail_ci_if_error: true
+          disable_search: true
+
       - name: Upload test reports
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
@@ -157,14 +175,6 @@ jobs:
           name: test-reports-app-${{ matrix.shard_name }}
           path: |
             app/build/reports/tests/
-
-      - name: Upload Kover data
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: kover-app-${{ matrix.shard_name }}
-          path: |
-            app/build/kover/
 
   test-authenticator:
     name: Test Authenticator
@@ -222,6 +232,24 @@ jobs:
         run: |
           bundle exec fastlane testLibraries modules:':authenticator'
 
+      - name: Generate coverage report
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec fastlane generateCoverageReport
+
+      - name: Upload to codecov.io
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        continue-on-error: true
+        with:
+          os: linux
+          files: build/reports/kover/reportMergedCoverage.xml
+          flags: authenticator
+          fail_ci_if_error: true
+          disable_search: true
+
       - name: Upload test reports
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
@@ -229,14 +257,6 @@ jobs:
           name: test-reports-authenticator
           path: |
             authenticator/build/reports/tests/
-
-      - name: Upload Kover data
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: kover-authenticator
-          path: |
-            authenticator/build/kover/
 
   test-libraries:
     name: "Test Libraries (${{ matrix.shard_name }})"
@@ -302,6 +322,24 @@ jobs:
         run: |
           bundle exec fastlane testLibraries modules:'${{ matrix.modules }}'
 
+      - name: Generate coverage report
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec fastlane generateCoverageReport
+
+      - name: Upload to codecov.io
+        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        continue-on-error: true
+        with:
+          os: linux
+          files: build/reports/kover/reportMergedCoverage.xml
+          flags: lib-${{ matrix.shard_name }}
+          fail_ci_if_error: true
+          disable_search: true
+
       - name: Upload test reports
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
@@ -314,143 +352,3 @@ jobs:
             authenticatorbridge/build/reports/tests/
             data/build/reports/tests/
             ui/build/reports/tests/
-
-      - name: Upload Kover data
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: kover-lib-${{ matrix.shard_name }}
-          path: |
-            core/build/kover/
-            network/build/kover/
-            cxf/build/kover/
-            authenticatorbridge/build/kover/
-            data/build/kover/
-            ui/build/kover/
-
-  aggregate-coverage:
-    name: Aggregate Coverage
-    runs-on: ubuntu-24.04
-    needs: [test-app, test-authenticator, test-libraries]
-    if: always() && !cancelled()
-    permissions:
-      packages: read
-      pull-requests: write
-
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
-      - name: Download all Kover artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          path: kover-downloads
-          pattern: kover-*
-
-      - name: Restore Kover data to build directories
-        run: |
-          # App shards all produce bin-reports/testStandardDebugUnitTest.ic
-          # Rename per shard to prevent overwrite when restoring to app/build/kover/
-          for dir in kover-downloads/kover-app-*/; do
-            shard=$(basename "$dir" | sed 's/kover-app-//')
-            mkdir -p app/build/kover/bin-reports
-            for ic in "$dir"bin-reports/*.ic; do
-              [ -f "$ic" ] && cp "$ic" "app/build/kover/bin-reports/$(basename "$ic" .ic)-${shard}.ic"
-            done
-          done
-
-          # Authenticator artifact: bin-reports/testDebugUnitTest.ic
-          if [ -d "kover-downloads/kover-authenticator" ]; then
-            mkdir -p authenticator/build/kover/bin-reports
-            cp kover-downloads/kover-authenticator/bin-reports/*.ic authenticator/build/kover/bin-reports/ 2>/dev/null || true
-          fi
-
-          # Library shards contain module-specific directory structures
-          # e.g., kover-lib-core-network-bridge/core/build/kover/bin-reports/testDebugUnitTest.ic
-          # Copy each .ic file preserving its original path relative to the artifact root
-          for dir in kover-downloads/kover-lib-*/; do
-            find "$dir" -name "*.ic" | while read -r ic; do
-              relative_path="${ic#$dir}"
-              mkdir -p "$(dirname "$relative_path")"
-              cp "$ic" "$relative_path"
-            done
-          done
-
-      - name: Generate merged coverage report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane generateCoverageReport
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: coverage-report
-          path: |
-            build/reports/kover/reportMergedCoverage.xml
-
-      - name: Upload to codecov.io
-        id: upload-to-codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
-        continue-on-error: true
-        with:
-          os: linux
-          files: build/reports/kover/reportMergedCoverage.xml
-          fail_ci_if_error: true
-          disable_search: true
-
-      - name: Comment PR if coverage upload failed
-        if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUN_ACTOR: ${{ github.triggering_actor }}
-        run: |
-          echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
-          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Aggregate Coverage\" job for more details." >> "$GITHUB_STEP_SUMMARY"
-
-          if [ -n "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Aggregate Coverage job]('$_GITHUB_ACTION_RUN_URL') for more details.'
-            gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
-          fi
