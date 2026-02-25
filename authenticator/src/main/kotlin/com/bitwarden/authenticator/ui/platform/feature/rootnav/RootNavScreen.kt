@@ -83,16 +83,8 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
-        tutorialDestination(
-            onTutorialFinished = {
-                viewModel.trySendAction(RootNavAction.Internal.TutorialFinished)
-            },
-        )
-        unlockDestination(
-            onUnlocked = {
-                viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
-            },
-        )
+        tutorialDestination()
+        unlockDestination()
         authenticatorGraph(navController = navController)
     }
 

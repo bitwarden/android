@@ -309,6 +309,5 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
 }
 
 private val DEFAULT_STATE = RootNavState(
-    hasSeenWelcomeGuide = false,
     navState = RootNavState.NavState.Splash,
 )
