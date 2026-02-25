@@ -184,25 +184,9 @@ class CookieInterceptorTest {
     }
 
     @Test
-    fun `intercept should skip cookie handling for config subpath`() {
+    fun `intercept should skip cookie handling for cloud config path`() {
         val originalRequest = Request.Builder()
-            .url("https://api.bitwarden.com/api/config/sub-path")
-            .build()
-        val chain = FakeInterceptorChain(originalRequest)
-
-        val response = interceptor.intercept(chain)
-
-        assertEquals(originalRequest, response.request)
-        verify(exactly = 0) {
-            mockCookieProvider.needsBootstrap(any())
-            mockCookieProvider.getCookies(any())
-        }
-    }
-
-    @Test
-    fun `intercept should skip cookie handling for path that starts with excluded prefix`() {
-        val originalRequest = Request.Builder()
-            .url("https://vault.bitwarden.com/api/configuration")
+            .url("https://api.bitwarden.com/config")
             .build()
         val chain = FakeInterceptorChain(originalRequest)
 

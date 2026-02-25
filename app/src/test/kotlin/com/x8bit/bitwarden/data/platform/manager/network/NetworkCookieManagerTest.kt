@@ -44,7 +44,7 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `needsBootstrap should return false when communication is null`() {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG_NO_COMMUNICATION
+        fakeConfigDiskSource.serverConfig = createServerConfig()
 
         val result = manager.needsBootstrap(HOSTNAME)
 
@@ -53,7 +53,7 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `needsBootstrap should return false when bootstrap type is not SSO`() {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG_NON_SSO
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = "other")
 
         val result = manager.needsBootstrap(HOSTNAME)
 
@@ -62,8 +62,8 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `needsBootstrap should return true when SSO type but cookie config is null`() {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG_SSO
-        every { mockCookieDiskSource.getCookieConfig(HOSTNAME) } returns null
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
+        every { mockCookieDiskSource.getCookieConfig(any()) } returns null
 
         val result = manager.needsBootstrap(HOSTNAME)
 
@@ -72,13 +72,10 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `needsBootstrap should return true when SSO type and cookies are empty`() {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG_SSO
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
         every {
             mockCookieDiskSource.getCookieConfig(HOSTNAME)
-        } returns CookieConfigurationData(
-            hostname = HOSTNAME,
-            cookies = emptyList(),
-        )
+        } returns createCookieConfig(hostname = HOSTNAME, cookies = emptyList())
 
         val result = manager.needsBootstrap(HOSTNAME)
 
@@ -87,10 +84,10 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `needsBootstrap should return false when SSO type and cookies are present`() {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG_SSO
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
         every {
             mockCookieDiskSource.getCookieConfig(HOSTNAME)
-        } returns COOKIE_CONFIG_WITH_COOKIES
+        } returns createCookieConfig(hostname = HOSTNAME)
 
         val result = manager.needsBootstrap(HOSTNAME)
 
@@ -99,7 +96,7 @@ class NetworkCookieManagerTest {
 
     @Test
     fun `getCookies should return empty list when cookie config is null`() {
-        every { mockCookieDiskSource.getCookieConfig(HOSTNAME) } returns null
+        every { mockCookieDiskSource.getCookieConfig(any()) } returns null
 
         val result = manager.getCookies(HOSTNAME)
 
@@ -110,27 +107,18 @@ class NetworkCookieManagerTest {
     fun `getCookies should return mapped cookies when config has cookies`() {
         every {
             mockCookieDiskSource.getCookieConfig(HOSTNAME)
-        } returns COOKIE_CONFIG_WITH_COOKIES
+        } returns createCookieConfig(hostname = HOSTNAME)
 
         val result = manager.getCookies(HOSTNAME)
 
-        assertEquals(
-            listOf(
-                NetworkCookie(name = "awselb", value = "session123"),
-                NetworkCookie(name = "awselbcors", value = "cors456"),
-            ),
-            result,
-        )
+        assertEquals(EXPECTED_NETWORK_COOKIES, result)
     }
 
     @Test
     fun `getCookies should return empty list when config has empty cookies`() {
         every {
             mockCookieDiskSource.getCookieConfig(HOSTNAME)
-        } returns CookieConfigurationData(
-            hostname = HOSTNAME,
-            cookies = emptyList(),
-        )
+        } returns createCookieConfig(hostname = HOSTNAME, cookies = emptyList())
 
         val result = manager.getCookies(HOSTNAME)
 
@@ -147,12 +135,127 @@ class NetworkCookieManagerTest {
             )
         }
     }
+
+    @Test
+    fun `getCookies should resolve subdomain to cookie domain`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.getCookieConfig(SUBDOMAIN_HOSTNAME) } returns null
+        every {
+            mockCookieDiskSource.getCookieConfig(COOKIE_DOMAIN)
+        } returns createCookieConfig(hostname = COOKIE_DOMAIN)
+
+        val result = manager.getCookies(SUBDOMAIN_HOSTNAME)
+
+        assertEquals(EXPECTED_NETWORK_COOKIES, result)
+    }
+
+    @Test
+    fun `needsBootstrap should return false when subdomain resolves to domain with cookies`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.getCookieConfig(SUBDOMAIN_HOSTNAME) } returns null
+        every {
+            mockCookieDiskSource.getCookieConfig(COOKIE_DOMAIN)
+        } returns createCookieConfig(hostname = COOKIE_DOMAIN)
+
+        val result = manager.needsBootstrap(SUBDOMAIN_HOSTNAME)
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun `needsBootstrap should return true when subdomain resolves to domain without cookies`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.getCookieConfig(any()) } returns null
+
+        val result = manager.needsBootstrap(SUBDOMAIN_HOSTNAME)
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun `storeCookies should store under cookieDomain when present`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.storeCookieConfig(any(), any()) } just runs
+
+        manager.storeCookies(
+            hostname = SUBDOMAIN_HOSTNAME,
+            cookies = mapOf("awselb" to "session123"),
+        )
+
+        verify {
+            mockCookieDiskSource.storeCookieConfig(
+                hostname = COOKIE_DOMAIN,
+                config = CookieConfigurationData(
+                    hostname = COOKIE_DOMAIN,
+                    cookies = listOf(
+                        CookieConfigurationData.Cookie(
+                            name = "awselb",
+                            value = "session123",
+                        ),
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `storeCookies should store under hostname when cookieDomain is null`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
+        every { mockCookieDiskSource.storeCookieConfig(any(), any()) } just runs
+
+        manager.storeCookies(
+            hostname = HOSTNAME,
+            cookies = mapOf("awselb" to "session123"),
+        )
+
+        verify {
+            mockCookieDiskSource.storeCookieConfig(
+                hostname = HOSTNAME,
+                config = CookieConfigurationData(
+                    hostname = HOSTNAME,
+                    cookies = listOf(
+                        CookieConfigurationData.Cookie(
+                            name = "awselb",
+                            value = "session123",
+                        ),
+                    ),
+                ),
+            )
+        }
+    }
 }
 
 private const val HOSTNAME = "vault.bitwarden.com"
+private const val COOKIE_DOMAIN = "bitwarden.com"
+private const val SUBDOMAIN_HOSTNAME = "api.bitwarden.com"
 private const val BOOTSTRAP_TYPE_SSO = "ssoCookieVendor"
 
-private val SERVER_CONFIG_NO_COMMUNICATION = ServerConfig(
+private val DEFAULT_COOKIES = listOf(
+    CookieConfigurationData.Cookie(name = "awselb", value = "session123"),
+    CookieConfigurationData.Cookie(name = "awselbcors", value = "cors456"),
+)
+
+private val EXPECTED_NETWORK_COOKIES = listOf(
+    NetworkCookie(name = "awselb", value = "session123"),
+    NetworkCookie(name = "awselbcors", value = "cors456"),
+)
+
+private fun createServerConfig(
+    bootstrapType: String? = null,
+    cookieDomain: String? = null,
+): ServerConfig = ServerConfig(
     lastSync = 1698408000000L,
     serverData = ConfigResponseJson(
         type = null,
@@ -161,54 +264,23 @@ private val SERVER_CONFIG_NO_COMMUNICATION = ServerConfig(
         server = null,
         environment = null,
         featureStates = null,
-        communication = null,
+        communication = bootstrapType?.let {
+            ConfigResponseJson.CommunicationJson(
+                bootstrap = ConfigResponseJson.CommunicationJson.BootstrapJson(
+                    type = it,
+                    idpLoginUrl = null,
+                    cookieName = null,
+                    cookieDomain = cookieDomain,
+                ),
+            )
+        },
     ),
 )
 
-private val SERVER_CONFIG_NON_SSO = ServerConfig(
-    lastSync = 1698408000000L,
-    serverData = ConfigResponseJson(
-        type = null,
-        version = null,
-        gitHash = null,
-        server = null,
-        environment = null,
-        featureStates = null,
-        communication = ConfigResponseJson.CommunicationJson(
-            bootstrap = ConfigResponseJson.CommunicationJson.BootstrapJson(
-                type = "other",
-                idpLoginUrl = null,
-                cookieName = null,
-                cookieDomain = null,
-            ),
-        ),
-    ),
-)
-
-private val SERVER_CONFIG_SSO = ServerConfig(
-    lastSync = 1698408000000L,
-    serverData = ConfigResponseJson(
-        type = null,
-        version = null,
-        gitHash = null,
-        server = null,
-        environment = null,
-        featureStates = null,
-        communication = ConfigResponseJson.CommunicationJson(
-            bootstrap = ConfigResponseJson.CommunicationJson.BootstrapJson(
-                type = BOOTSTRAP_TYPE_SSO,
-                idpLoginUrl = null,
-                cookieName = null,
-                cookieDomain = null,
-            ),
-        ),
-    ),
-)
-
-private val COOKIE_CONFIG_WITH_COOKIES = CookieConfigurationData(
-    hostname = HOSTNAME,
-    cookies = listOf(
-        CookieConfigurationData.Cookie(name = "awselb", value = "session123"),
-        CookieConfigurationData.Cookie(name = "awselbcors", value = "cors456"),
-    ),
+private fun createCookieConfig(
+    hostname: String,
+    cookies: List<CookieConfigurationData.Cookie> = DEFAULT_COOKIES,
+): CookieConfigurationData = CookieConfigurationData(
+    hostname = hostname,
+    cookies = cookies,
 )
