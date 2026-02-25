@@ -9,7 +9,6 @@ import java.security.MessageDigest
  * Returns the application's signing certificate hash formatted as a hex string if it has a single
  * signing certificate. Otherwise `null` is returned.
  */
-@OptIn(ExperimentalStdlibApi::class)
 fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
     return getAppSigningSignatureFingerprint()
         ?.joinToString(":") { b ->
