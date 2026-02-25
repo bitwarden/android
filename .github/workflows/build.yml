@@ -238,13 +238,9 @@ jobs:
 
       - name: Increment version
         env:
-          VERSION_CODE: ${{ needs.version.outputs.version_number }}
+          VERSION_CODE: ${{ needs.version.outputs.version_number || github.run_number }}
           VERSION_NAME: ${{ needs.version.outputs.version_name }}
-        run: |
-          VERSION_CODE="${VERSION_CODE:-$GITHUB_RUN_NUMBER}"
-          bundle exec fastlane setBuildVersionInfo \
-          versionCode:$VERSION_CODE \
-          versionName:$VERSION_NAME
+        run: ./.github/scripts/set-build-version.sh "$VERSION_CODE" "$VERSION_NAME"
 
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
@@ -542,20 +538,9 @@ jobs:
 
       - name: Increment version
         env:
-          VERSION_CODE: ${{ needs.version.outputs.version_number }}
+          VERSION_CODE: ${{ needs.version.outputs.version_number || github.run_number }}
           VERSION_NAME: ${{ needs.version.outputs.version_name }}
-        run: |
-          VERSION_CODE="${VERSION_CODE:-$GITHUB_RUN_NUMBER}"
-          bundle exec fastlane setBuildVersionInfo \
-          versionCode:$VERSION_CODE \
-          versionName:$VERSION_NAME
-
-          regex='appVersionName = "([^"]+)"'
-          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
-            VERSION_NAME="${BASH_REMATCH[1]}"
-          fi
-          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
-          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
+        run: ./.github/scripts/set-build-version.sh "$VERSION_CODE" "$VERSION_NAME"
       - name: Generate F-Droid artifacts
         env:
           FDROID_STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-KEYSTORE-PASSWORD }}

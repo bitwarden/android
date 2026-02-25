@@ -94,22 +94,9 @@ jobs:
 
       - name: Increment version
         env:
-          DEFAULT_VERSION_CODE: ${{ github.run_number }}
-          INPUT_VERSION_CODE: "${{ needs.version.outputs.version_number }}"
-          INPUT_VERSION_NAME: ${{ needs.version.outputs.version_name }}
-        run: |
-          VERSION_CODE="${INPUT_VERSION_CODE:-$DEFAULT_VERSION_CODE}"
-          VERSION_NAME_INPUT="${INPUT_VERSION_NAME:-}"
-          bundle exec fastlane setBuildVersionInfo \
-          versionCode:"$VERSION_CODE" \
-          versionName:"$VERSION_NAME_INPUT"
-
-          regex='appVersionName = "(.+)"'
-          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
-            VERSION_NAME="${BASH_REMATCH[1]}"
-          fi
-          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
-          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
+          VERSION_CODE: ${{ needs.version.outputs.version_number || github.run_number }}
+          VERSION_NAME: ${{ needs.version.outputs.version_name }}
+        run: ./.github/scripts/set-build-version.sh "$VERSION_CODE" "$VERSION_NAME"
 
       - name: Build Test Harness Debug APK
         run: ./gradlew :testharness:assembleDebug
