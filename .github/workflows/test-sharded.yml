@@ -354,6 +354,7 @@ jobs:
             network/build/reports/tests/
             cxf/build/reports/tests/
             authenticatorbridge/build/reports/tests/
+            testharness/build/reports/tests/
             data/build/reports/tests/
             ui/build/reports/tests/
 
