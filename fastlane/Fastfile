@@ -147,9 +147,12 @@ platform :android do
     gradle(tasks: tasks)
   end
 
-  desc "Generate merged Kover coverage report"
+  desc "Generate merged Kover coverage report from existing binary data"
   lane :generateCoverageReport do
-    gradle(tasks: ["koverXmlReportMergedCoverage"])
+    gradle(
+      task: "koverXmlReportMergedCoverage",
+      flags: "-x testStandardDebugUnitTest -x testDebugUnitTest",
+    )
   end
 
   desc "Apply build version information"
