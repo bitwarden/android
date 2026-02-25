@@ -3,9 +3,8 @@ name: Test
 on:
   push:
     branches:
-      - "main"
-      - "rc"
-      - "hotfix-rc"
+      - main
+      - release/**/*
   pull_request:
     types: [opened, synchronize]
   merge_group:
