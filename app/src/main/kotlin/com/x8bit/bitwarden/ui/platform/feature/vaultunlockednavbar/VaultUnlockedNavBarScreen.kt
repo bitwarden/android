@@ -8,18 +8,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navOptions
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.navigateToTabOrRoot
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
@@ -28,20 +25,18 @@ import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
-import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
-import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
-import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
-import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import kotlinx.collections.immutable.persistentListOf
 
@@ -69,6 +64,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
@@ -78,41 +74,7 @@ fun VaultUnlockedNavBarScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel = viewModel) { event ->
-        navController.apply {
-            when (event) {
-                is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
-                is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
-                    -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
-                        navigateToVaultGraph(navOptions = it)
-                    }
-                }
-
-                VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
-                VaultUnlockedNavBarEvent.NavigateToSendScreen,
-                    -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
-                        navigateToSendGraph(navOptions = it)
-                    }
-                }
-
-                VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
-                    -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
-                        navigateToGeneratorGraph(navOptions = it)
-                    }
-                }
-
-                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen,
-                    -> {
-                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
-                        navigateToSettingsGraph(navOptions = it)
-                    }
-                }
-            }
-        }
+        navController.navigateToTabOrRoot(target = event.tab)
     }
 
     VaultUnlockedNavBarScaffold(
@@ -144,6 +106,7 @@ fun VaultUnlockedNavBarScreen(
         },
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
+        onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
         onNavigateToImportLogins = onNavigateToImportLogins,
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
@@ -178,6 +141,7 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
@@ -190,10 +154,7 @@ private fun VaultUnlockedNavBarScaffold(
     // We need to ignore the all insets here and let the content screens handle it themselves.
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val navigationItems = persistentListOf<NavigationItem>(
-        VaultUnlockedNavBarTab.Vault(
-            labelRes = state.vaultNavBarLabelRes,
-            contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
-        ),
+        VaultUnlockedNavBarTab.Vault(labelRes = state.vaultNavBarLabelRes),
         VaultUnlockedNavBarTab.Send,
         VaultUnlockedNavBarTab.Generator,
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
@@ -240,6 +201,10 @@ private fun VaultUnlockedNavBarScaffold(
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAbout(isPreAuth = false)
                 },
+                onNavigateToAutofillScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAutoFill()
+                },
             )
             sendGraph(
                 navController = navController,
@@ -259,43 +224,14 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToPendingRequests = navigateToPendingRequests,
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
+                onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToImportItems = { navController.navigateToImportItemsScreen() },
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
             )
         }
-    }
-}
-
-/**
- * Helper function to determine how to navigate to a specified [VaultUnlockedNavBarTab].
- * If direct navigation is required, the [navigate] lambda will be invoked with the appropriate
- * [NavOptions].
- */
-@Suppress("MaxLineLength")
-private fun NavController.navigateToTabOrRoot(
-    tabToNavigateTo: VaultUnlockedNavBarTab,
-    navigate: (NavOptions) -> Unit,
-) {
-    if (tabToNavigateTo.startDestinationRoute.toObjectNavigationRoute() == currentDestination?.route) {
-        // We are at the start destination already, so nothing to do.
-        return
-    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute.toObjectNavigationRoute()) {
-        // We are not at the start destination but we are in the correct graph,
-        // so lets pop up to the start destination.
-        popBackStack(route = tabToNavigateTo.startDestinationRoute, inclusive = false)
-    } else {
-        // We are not in correct graph at all, so navigate there.
-        navigate(
-            navOptions {
-                popUpTo(id = graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            },
-        )
     }
 }
 

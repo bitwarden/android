@@ -7,7 +7,6 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -64,11 +63,11 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = errorTitle)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(text = errorMessage)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         val loadingMessage = "Loading message"
         mutableStateFlow.update {
@@ -82,7 +81,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = loadingMessage)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }
 
@@ -96,7 +95,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update { it.copy(description = description.asText()) }
 
-        composeTestRule.onNodeWithText(text = description).isDisplayed()
+        composeTestRule.onNodeWithText(text = description).assertIsDisplayed()
     }
 
     @Test

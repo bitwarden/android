@@ -88,4 +88,21 @@ interface CiphersDao {
         insertCiphers(ciphers)
         return deletedCiphersCount > 0 || ciphers.isNotEmpty()
     }
+
+    /**
+     * Checks if the user has any personal ciphers (ciphers with null organizationId).
+     * Returns a Flow that emits true if personal ciphers exist, false otherwise.
+     *
+     * This query is optimized for vault migration checks and uses the indexed
+     * organization_id column to avoid loading full cipher JSON.
+     */
+    @Query("""
+        SELECT EXISTS(
+            SELECT 1 FROM ciphers
+            WHERE user_id = :userId
+            AND organization_id IS NULL
+            LIMIT 1
+        )
+    """)
+    fun hasPersonalCiphersFlow(userId: String): Flow<Boolean>
 }

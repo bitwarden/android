@@ -62,7 +62,48 @@ class CipherListViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isActiveWithFido2Credentials should return true when Fido2 credentials are present and cipher is not deleted`() {
+    fun `isActiveWithCopyablePassword should return true when copyable fields contains LOGIN_PASSWORD and cipher is not deleted or archived`() {
+        val cipherListView = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+        )
+        assertTrue(cipherListView.isActiveWithCopyablePassword)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isActiveWithCopyablePassword should return false copyable fields does not contain LOGIN_PASSWORD`() {
+        val cipherListView = createMockCipherListView(
+            number = 1,
+            copyableFields = emptyList(),
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+        )
+        assertFalse(cipherListView.isActiveWithCopyablePassword)
+    }
+
+    @Test
+    fun `isActiveWithCopyablePassword should return false when cipher is archived`() {
+        val cipherListView = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+            isArchived = true,
+        )
+        assertFalse(cipherListView.isActiveWithCopyablePassword)
+    }
+
+    @Test
+    fun `isActiveWithCopyablePassword should return false when cipher is deleted`() {
+        val cipherListView = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+            isDeleted = true,
+        )
+        assertFalse(cipherListView.isActiveWithCopyablePassword)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isActiveWithFido2Credentials should return true when Fido2 credentials are present and cipher is not deleted or archived`() {
         val cipherListView = createMockCipherListView(
             number = 1,
             type = CipherListViewType.Login(
@@ -86,6 +127,21 @@ class CipherListViewExtensionsTest {
                     hasFido2 = false,
                 ),
             ),
+        )
+        assertFalse(cipherListView.isActiveWithFido2Credentials)
+    }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when cipher is archived`() {
+        val cipherListView = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Login(
+                createMockLoginListView(
+                    number = 1,
+                    hasFido2 = true,
+                ),
+            ),
+            isArchived = true,
         )
         assertFalse(cipherListView.isActiveWithFido2Credentials)
     }

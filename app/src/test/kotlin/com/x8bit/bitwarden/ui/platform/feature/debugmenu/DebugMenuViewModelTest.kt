@@ -2,12 +2,15 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.util.assertCoroutineThrows
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
-import com.x8bit.bitwarden.data.util.assertCoroutineThrows
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -16,7 +19,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -47,6 +50,13 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     private val logsManager = mockk<LogsManager> {
         every { trackNonFatalException(throwable = any()) } just runs
     }
+
+    private val mockCookieAcquisitionRequestManager =
+        mockk<CookieAcquisitionRequestManager> {
+            every { setPendingCookieAcquisition(data = any()) } just runs
+        }
+
+    private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
     fun `initial state should be correct`() {
@@ -135,25 +145,40 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `TriggerCookieAcquisition should set pending cookie acquisition`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(DebugMenuAction.TriggerCookieAcquisition)
+            verify(exactly = 1) {
+                mockCookieAcquisitionRequestManager.setPendingCookieAcquisition(
+                    data = CookieAcquisitionRequest(
+                        hostname = "https://vault.bitwarden.com",
+                    ),
+                )
+            }
+            viewModel.eventFlow.test { expectNoEvents() }
+        }
+
     private fun createViewModel(): DebugMenuViewModel = DebugMenuViewModel(
         featureFlagManager = mockFeatureFlagManager,
         debugMenuRepository = mockDebugMenuRepository,
         authRepository = mockAuthRepository,
         logsManager = logsManager,
+        cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
+        environmentRepository = fakeEnvironmentRepository,
     )
 }
 
-private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.CredentialExchangeProtocolImport to true,
-    FlagKey.CredentialExchangeProtocolExport to true,
-    FlagKey.UserManagedPrivilegedApps to true,
-)
+private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activePasswordManagerFlags
+    .associateWith { true }
+    .toImmutableMap()
 
-private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.CredentialExchangeProtocolImport to false,
-    FlagKey.CredentialExchangeProtocolExport to false,
-    FlagKey.UserManagedPrivilegedApps to false,
-)
+private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activePasswordManagerFlags
+    .associateWith { false }
+    .toImmutableMap()
 
 private val DEFAULT_STATE = DebugMenuState(
     featureFlags = DEFAULT_MAP_VALUE,

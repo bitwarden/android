@@ -11,9 +11,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.browser.auth.AuthTabIntent
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -32,12 +35,15 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
+import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.map
@@ -68,6 +74,20 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
+    private val duoLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.DuoResult(it))
+    }
+    private val ssoLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.SsoResult(it))
+    }
+    private val webAuthnLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.WebAuthnResult(it))
+    }
+
+    private val cookieLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.CookieAcquisitionResult(it))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -88,7 +108,15 @@ class MainActivity : AppCompatActivity() {
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
+            LocalManagerProvider(
+                featureFlagsState = state.featureFlagsState,
+                authTabLaunchers = AuthTabLaunchers(
+                    duo = duoLauncher,
+                    sso = ssoLauncher,
+                    webAuthn = webAuthnLauncher,
+                    cookie = cookieLauncher,
+                ),
+            ) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
                         { mainViewModel.trySendAction(MainAction.ResumeScreenDataReceived(it)) }
@@ -100,14 +128,21 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = ROOT_ROUTE,
+                        startDestination = RootNavigationRoute,
+                        modifier = Modifier
+                            .background(color = BitwardenTheme.colorScheme.background.primary),
                     ) {
-                        // Nothing else should end up at this top level, we just want the ability
-                        // to have the debug menu appear on top of the rest of the app without
-                        // interacting with the state-based navigation used by the RootNavScreen.
+                        // Root navigation, debug menu, and cookie acquisition exist at
+                        // this top level. They can appear on top of the rest of the app
+                        // without interacting with the state-based navigation used by
+                        // RootNavScreen.
                         rootNavDestination { shouldShowSplashScreen = false }
                         debugMenuDestination(
                             onNavigateBack = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                        cookieAcquisitionDestination(
+                            onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
                     }
@@ -183,6 +218,8 @@ class MainActivity : AppCompatActivity() {
                 is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
+
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(
                         LocaleListCompat.forLanguageTags(event.localeName),

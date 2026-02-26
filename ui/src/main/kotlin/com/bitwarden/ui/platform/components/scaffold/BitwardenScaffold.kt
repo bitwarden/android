@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -35,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bitwarden.ui.platform.base.util.toDp
@@ -50,6 +51,14 @@ import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 
+private const val TRAVERSAL_INDEX_TOP_APP_BAR: Float = 0f
+private const val TRAVERSAL_INDEX_CONTENT: Float = 1f
+private const val TRAVERSAL_INDEX_CONTENT_MAIN: Float = 0f
+private const val TRAVERSAL_INDEX_CONTENT_NAVIGATION_RAIL: Float = 1f
+private const val TRAVERSAL_INDEX_SNACK_BAR: Float = 2f
+private const val TRAVERSAL_INDEX_FLOATING_ACTION_BUTTON: Float = 3f
+private const val TRAVERSAL_INDEX_BOTTOM_APP_BAR: Float = 4f
+
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
  * still overridable if necessary.
@@ -59,7 +68,6 @@ import com.bitwarden.ui.platform.util.rememberWindowSize
  * The [overlay] is a nonstandard [Composable] that is placed over top the `utilityBar` and
  * `content`.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun BitwardenScaffold(
@@ -88,18 +96,49 @@ fun BitwardenScaffold(
         modifier = Modifier
             .semantics { testTagsAsResourceId = true }
             .then(other = modifier),
-        topBar = topBar,
+        topBar = {
+            Box(
+                modifier = Modifier.semantics {
+                    isTraversalGroup = true
+                    traversalIndex = TRAVERSAL_INDEX_TOP_APP_BAR
+                },
+            ) {
+                topBar()
+            }
+        },
         bottomBar = {
             if (isNavigationBarVisible) {
-                ScaffoldBottomAppBar(navigationData = navigationData)
+                ScaffoldBottomAppBar(
+                    navigationData = navigationData,
+                    modifier = Modifier.semantics {
+                        isTraversalGroup = true
+                        traversalIndex = TRAVERSAL_INDEX_BOTTOM_APP_BAR
+                    },
+                )
             }
         },
         snackbarHost = {
-            Box(modifier = Modifier.imePadding()) {
+            Box(
+                modifier = Modifier
+                    .semantics {
+                        isTraversalGroup = true
+                        traversalIndex = TRAVERSAL_INDEX_SNACK_BAR
+                    }
+                    .imePadding(),
+            ) {
                 snackbarHost()
             }
         },
-        floatingActionButton = floatingActionButton,
+        floatingActionButton = {
+            Box(
+                modifier = Modifier.semantics {
+                    isTraversalGroup = true
+                    traversalIndex = TRAVERSAL_INDEX_FLOATING_ACTION_BUTTON
+                },
+            ) {
+                floatingActionButton()
+            }
+        },
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
         contentColor = contentColor,
@@ -109,25 +148,31 @@ fun BitwardenScaffold(
                 modifier = Modifier
                     .padding(paddingValues = paddingValues)
                     .consumeWindowInsets(paddingValues = paddingValues)
-                    .imePadding(),
+                    .imePadding()
+                    .semantics {
+                        isTraversalGroup = true
+                        traversalIndex = TRAVERSAL_INDEX_CONTENT
+                    },
             ) {
                 if (isNavigationRailVisible) {
-                    ScaffoldNavigationRail(navigationData = navigationData)
+                    ScaffoldNavigationRail(
+                        navigationData = navigationData,
+                        modifier = Modifier.semantics {
+                            isTraversalGroup = true
+                            traversalIndex = TRAVERSAL_INDEX_CONTENT_NAVIGATION_RAIL
+                        },
+                    )
                 }
                 Box(
-                    modifier = Modifier.run {
-                        if (isNavigationRailVisible) {
-                            consumeWindowInsets(
-                                insets = WindowInsets.displayCutout.only(WindowInsetsSides.Start),
-                            )
-                        } else if (isNavigationBarVisible) {
-                            consumeWindowInsets(
-                                insets = WindowInsets.navigationBars.only(WindowInsetsSides.Bottom),
-                            )
-                        } else {
-                            this
+                    modifier = Modifier
+                        .semantics {
+                            isTraversalGroup = true
+                            traversalIndex = TRAVERSAL_INDEX_CONTENT_MAIN
                         }
-                    },
+                        .consumeWindowInsetsForMainContent(
+                            isNavigationRailVisible = isNavigationRailVisible,
+                            isNavigationBarVisible = isNavigationBarVisible,
+                        ),
                 ) {
                     Column {
                         utilityBar()
@@ -222,3 +267,16 @@ private fun ScaffoldNavigationRail(
         )
     }
 }
+
+@Composable
+private fun Modifier.consumeWindowInsetsForMainContent(
+    isNavigationRailVisible: Boolean,
+    isNavigationBarVisible: Boolean,
+): Modifier =
+    if (isNavigationRailVisible) {
+        consumeWindowInsets(WindowInsets.displayCutout.only(WindowInsetsSides.Start))
+    } else if (isNavigationBarVisible) {
+        consumeWindowInsets(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
+    } else {
+        this
+    }

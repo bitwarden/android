@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.util
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import java.net.URISyntaxException
 
@@ -10,7 +11,7 @@ import java.net.URISyntaxException
 @OmitFromCoverage
 fun String.toUriOrNull(): Uri? =
     try {
-        Uri.parse(this)
-    } catch (e: URISyntaxException) {
+        this.toUri()
+    } catch (_: URISyntaxException) {
         null
     }

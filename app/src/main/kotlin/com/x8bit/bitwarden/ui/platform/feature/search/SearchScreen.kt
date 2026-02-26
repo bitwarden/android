@@ -14,7 +14,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
@@ -23,6 +23,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -118,6 +119,7 @@ fun SearchScreen(
     SearchDialogs(
         dialogState = state.dialogState,
         onDismissRequest = searchHandlers.onDismissRequest,
+        onUpgradeToPremiumClick = searchHandlers.onUpgradeToPremiumClick,
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -192,8 +194,21 @@ fun SearchScreen(
 private fun SearchDialogs(
     dialogState: SearchState.DialogState?,
     onDismissRequest: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        SearchState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is SearchState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),

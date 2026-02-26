@@ -26,14 +26,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -220,8 +219,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
-            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+            painter = rememberVectorPainter(id = BitwardenDrawable.logo_bitwarden),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

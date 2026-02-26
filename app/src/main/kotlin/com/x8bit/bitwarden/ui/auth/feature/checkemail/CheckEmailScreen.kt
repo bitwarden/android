@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
@@ -40,11 +40,11 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startDefaultEmailApplication
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
-import com.x8bit.bitwarden.ui.platform.manager.utils.startDefaultEmailApplication
 
 /**
  * Top level composable for the check email screen.
@@ -117,7 +117,7 @@ private fun CheckEmailContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.open_email),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_open_email),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

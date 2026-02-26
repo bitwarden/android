@@ -189,6 +189,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
                                 id = "mockId-2",
                                 name = "mockName-2",
                                 isSelected = false,
+                                isDefaultUserCollection = false,
                             ),
                         ),
                     ),
@@ -230,6 +231,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
                         id = "mockId-1",
                         name = "mockName-1",
                         isSelected = true,
+                        isDefaultUserCollection = false,
                     ),
                 ),
             )

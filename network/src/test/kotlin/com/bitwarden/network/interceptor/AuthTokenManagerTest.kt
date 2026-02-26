@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import retrofit2.HttpException
 import java.io.IOException
 import java.time.Clock
 import java.time.Instant
@@ -49,6 +50,50 @@ class AuthTokenManagerTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(::parseJwtTokenDataOrNull)
+    }
+
+    @Nested
+    inner class TokenProvider {
+        @Test
+        fun `returns null if token provider has no auth data for user ID`() {
+            val userId = "userId"
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns null
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertNull(result)
+        }
+
+        @Test
+        fun `returns null if refresh fails`() {
+            val userId = "userId"
+            val authData = AuthTokenData(
+                userId = userId,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = FIXED_CLOCK.instant().epochSecond,
+            )
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns authData
+            every {
+                refreshTokenProvider.refreshAccessTokenSynchronously(userId = userId)
+            } returns Throwable("Fail!").asFailure()
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertNull(result)
+        }
+
+        @Test
+        fun `returns access token if refresh is not required`() {
+            val userId = "userId"
+            val authData = AuthTokenData(
+                userId = userId,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = 0L,
+            )
+            val refreshedAccessToken = "refreshed_access_token"
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns authData
+            every {
+                refreshTokenProvider.refreshAccessTokenSynchronously(userId = userId)
+            } returns refreshedAccessToken.asSuccess()
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertEquals(refreshedAccessToken, result)
+        }
     }
 
     @Nested
@@ -153,12 +198,12 @@ class AuthTokenManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `intercept should throw an exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
+        fun `intercept should throw an io exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
             val errorMessage = "Fail!"
             authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
                 override fun refreshAccessTokenSynchronously(
                     userId: String,
-                ): Result<String> = Throwable(errorMessage).asFailure()
+                ): Result<String> = IOException(errorMessage).asFailure()
             }
             val authTokenData = AuthTokenData(
                 userId = USER_ID,
@@ -172,7 +217,31 @@ class AuthTokenManagerTest {
                     chain = FakeInterceptorChain(request = request),
                 )
             }
-            assertEquals(errorMessage, throwable.cause?.message)
+            assertEquals(errorMessage, throwable.message)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `intercept should throw a http exception when auth token is expired and refreshAccessTokenSynchronously returns an error`() {
+            val error = mockk<HttpException>()
+            authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
+                override fun refreshAccessTokenSynchronously(
+                    userId: String,
+                ): Result<String> = error.asFailure()
+            }
+            val authTokenData = AuthTokenData(
+                userId = USER_ID,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = FIXED_CLOCK.instant().epochSecond - 3600L,
+            )
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull() } returns authTokenData
+
+            val throwable = assertThrows(IOException::class.java) {
+                authTokenManager.intercept(
+                    chain = FakeInterceptorChain(request = request),
+                )
+            }
+            assertEquals(throwable.cause, error)
         }
 
         @Suppress("MaxLineLength")

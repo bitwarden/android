@@ -4,19 +4,23 @@ run-name: Crowdin Pull - ${{ github.event_name == 'workflow_dispatch' && 'Manual
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 5'
+    # Run weekly on Sunday at 00:00 UTC
+    - cron: '0 0 * * 0'
+    
+permissions: {}
 
 jobs:
   crowdin-sync:
     name: Crowdin Pull - ${{ github.event_name }}
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
     steps:
       - name: Checkout repo
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
 
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
@@ -48,9 +52,11 @@ jobs:
         with:
           app-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
           private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-contents: write      # for creating and pushing a new branch
+          permission-pull-requests: write # for creating pull request
 
       - name: Download translations
-        uses: crowdin/github-action@590c05e09a29f392b203faf4d6aa8e0cd32c7835 # v2.9.1
+        uses: crowdin/github-action@0749939f635900a2521aa6aac7a3766642b2dc71 # v2.11.0
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
@@ -67,5 +73,6 @@ jobs:
           create_pull_request: true
           pull_request_title: "Crowdin Pull"
           pull_request_body: ":inbox_tray: New translations received!"
+          pull_request_labels: "automated-pr, t:misc"
           gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
           gpg_passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}

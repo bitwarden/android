@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseIdentityUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -14,11 +15,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
-import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.ssoAuthTabData
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
@@ -205,7 +206,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         action: EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
+        sendEvent(
+            EnterpriseSignOnEvent.NavigateToSsoLogin(
+                uri = action.uri,
+                authTabData = action.authTabData,
+            ),
+        )
     }
 
     private fun handleOnSsoPrevalidationFailure(
@@ -337,14 +343,13 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 if (ssoCallbackResult.state == ssoData.state) {
                     showLoading()
                     viewModelScope.launch {
-                        val result = authRepository
-                            .login(
-                                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
-                                ssoCode = ssoCallbackResult.code,
-                                ssoCodeVerifier = ssoData.codeVerifier,
-                                ssoRedirectUri = SSO_URI,
-                                organizationIdentifier = state.orgIdentifierInput,
-                            )
+                        val result = authRepository.login(
+                            email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                            ssoCode = ssoCallbackResult.code,
+                            ssoCodeVerifier = ssoData.codeVerifier,
+                            ssoRedirectUri = ssoData.redirectUri,
+                            organizationIdentifier = state.orgIdentifierInput,
+                        )
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
                 } else {
@@ -380,18 +385,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
     ) {
         val codeVerifier = generatorRepository.generateRandomString(RANDOM_STRING_LENGTH)
 
+        val environmentData = environmentRepository.environment.environmentUrlData
+        val authTabData = environmentData.ssoAuthTabData
         // Save this for later so that we can validate the SSO callback response
         val generatedSsoState = generatorRepository
             .generateRandomString(RANDOM_STRING_LENGTH)
             .also {
                 ssoResponseData = SsoResponseData(
+                    redirectUri = authTabData.callbackUrl,
                     codeVerifier = codeVerifier,
                     state = it,
                 )
             }
 
         val uri = generateUriForSso(
-            identityBaseUrl = environmentRepository.environment.environmentUrlData.baseIdentityUrl,
+            identityBaseUrl = environmentData.baseIdentityUrl,
+            redirectUrl = authTabData.callbackUrl,
             organizationIdentifier = organizationIdentifier,
             token = prevalidateSsoResult.token,
             state = generatedSsoState,
@@ -400,7 +409,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         // Hide any dialog since we're about to launch a custom tab and could return without getting
         // a result due to user intervention
-        sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(Uri.parse(uri)))
+        sendAction(
+            EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(
+                uri = uri,
+                authTabData = authTabData,
+            ),
+        )
     }
 
     private fun showError(
@@ -506,7 +520,10 @@ sealed class EnterpriseSignOnEvent {
     /**
      * Navigates to a custom tab for SSO login using [uri].
      */
-    data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
+    data class NavigateToSsoLogin(
+        val uri: Uri,
+        val authTabData: AuthTabData,
+    ) : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the set master password screen.
@@ -567,7 +584,10 @@ sealed class EnterpriseSignOnAction {
         /**
          * A [uri] has been generated to request an SSO result.
          */
-        data class OnGenerateUriForSsoResult(val uri: Uri) : Internal()
+        data class OnGenerateUriForSsoResult(
+            val uri: Uri,
+            val authTabData: AuthTabData,
+        ) : Internal()
 
         /**
          * A login result has been received.
@@ -599,6 +619,7 @@ sealed class EnterpriseSignOnAction {
 /**
  * Data needed by the SSO flow to verify and continue the process after receiving a response.
  *
+ * @property redirectUri The redirect URI used in the SSO request.
  * @property state A "state" maintained throughout the SSO process to verify that the response from
  * the server is valid and matches what was originally sent in the request.
  * @property codeVerifier A random string used to generate the code challenge for the initial SSO
@@ -606,6 +627,7 @@ sealed class EnterpriseSignOnAction {
  */
 @Parcelize
 data class SsoResponseData(
+    val redirectUri: String,
     val state: String,
     val codeVerifier: String,
 ) : Parcelable

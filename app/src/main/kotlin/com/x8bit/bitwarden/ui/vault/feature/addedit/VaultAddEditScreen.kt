@@ -33,7 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -61,23 +61,23 @@ import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwriteCredentialConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
@@ -161,8 +161,8 @@ fun VaultAddEditScreen(
                 )
             }
 
-            is VaultAddEditEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(
+            is VaultAddEditEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(
                     result = event.result,
                 )
             }
@@ -190,6 +190,10 @@ fun VaultAddEditScreen(
             VaultAddEditEvent.NavigateToLearnMore -> {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
             }
+
+            is VaultAddEditEvent.NavigateToPremium -> {
+                intentManager.launchUri(uri = event.uri.toUri())
+            }
         }
     }
 
@@ -213,6 +217,14 @@ fun VaultAddEditScreen(
         VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
     }
 
+    val archiveClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
+    }
+
+    val unarchiveClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick) }
+    }
+
     val confirmDeleteClickAction = remember(viewModel) {
         { viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick) }
     }
@@ -227,10 +239,14 @@ fun VaultAddEditScreen(
         onAutofillDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed) }
         },
-        onFido2ErrorDismiss = remember(viewModel) {
+        onCredentialErrorDismiss = remember(viewModel) {
             { errorMessage ->
                 viewModel.trySendAction(
-                    VaultAddEditAction.Common.Fido2ErrorDialogDismissed(message = errorMessage),
+                    VaultAddEditAction
+                        .Common
+                        .CredentialErrorDialogDismissed(
+                            message = errorMessage,
+                        ),
                 )
             }
         },
@@ -289,6 +305,9 @@ fun VaultAddEditScreen(
                     VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
                 )
             }
+        },
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
         },
     )
 
@@ -371,9 +390,7 @@ fun VaultAddEditScreen(
                                         }
                                     },
                                 )
-                                    .takeUnless {
-                                        state.isAddItemMode || state.isCipherInCollection
-                                    },
+                                    .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
                                     text = stringResource(id = BitwardenString.collections),
                                     onClick = remember(viewModel) {
@@ -389,6 +406,16 @@ fun VaultAddEditScreen(
                                             !state.isCipherInCollection ||
                                             !state.canAssociateToCollections
                                     },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.archive_verb),
+                                    onClick = archiveClickAction,
+                                )
+                                    .takeIf { state.displayArchiveButton },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.unarchive),
+                                    onClick = unarchiveClickAction,
+                                )
+                                    .takeIf { state.displayUnarchiveButton },
                                 OverflowMenuItemData(
                                     text = stringResource(id = BitwardenString.delete),
                                     onClick = { pendingDeleteCipher = true },
@@ -465,7 +492,7 @@ private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
-    onFido2ErrorDismiss: (Text) -> Unit,
+    onCredentialErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
@@ -474,8 +501,21 @@ private fun VaultAddEditItemDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String) -> Unit,
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultAddEditState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialogState.label())
         }
@@ -497,16 +537,22 @@ private fun VaultAddEditItemDialogs(
             )
         }
 
-        is VaultAddEditState.DialogState.Fido2Error -> {
+        is VaultAddEditState.DialogState.CredentialError -> {
             BitwardenBasicDialog(
                 title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
-                onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
+                onDismissRequest = { onCredentialErrorDismiss(dialogState.message) },
             )
         }
 
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
-            BitwardenOverwritePasskeyConfirmationDialog(
+            @Suppress("MaxLineLength")
+            BitwardenOverwriteCredentialConfirmationDialog(
+                title = stringResource(id = BitwardenString.overwrite_passkey),
+                message = stringResource(
+                    id = BitwardenString
+                        .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
+                ),
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
                 onDismissRequest = onDismissRequest,
             )
@@ -819,7 +865,9 @@ private fun OwnerSelectionBottomSheetContent(
                     text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
                     isSelected = selectedOption == option,

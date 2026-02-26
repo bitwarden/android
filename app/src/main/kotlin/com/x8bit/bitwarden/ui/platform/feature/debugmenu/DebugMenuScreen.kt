@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -31,6 +31,7 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.debug.ListItemContent
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -38,7 +39,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.feature.debugmenu.components.ListItemContent
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -84,22 +84,22 @@ fun DebugMenuScreen(
             modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            FeatureFlagContent(
-                featureFlagMap = state.featureFlags,
-                onValueChange = remember(viewModel) {
-                    { key, value ->
-                        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
-                    }
-                },
-                onResetValues = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
-                    }
-                },
-            )
-            Spacer(Modifier.height(height = 16.dp))
-            BitwardenHorizontalDivider()
-            Spacer(Modifier.height(height = 16.dp))
+            if (state.featureFlags.isNotEmpty()) {
+                FeatureFlagContent(
+                    featureFlagMap = state.featureFlags,
+                    onValueChange = remember(viewModel) {
+                        { key, value ->
+                            viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
+                        }
+                    },
+                    onResetValues = remember(viewModel) {
+                        { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+                    },
+                )
+                Spacer(Modifier.height(height = 16.dp))
+                BitwardenHorizontalDivider()
+                Spacer(Modifier.height(height = 16.dp))
+            }
             OnboardingOverrideContent(
                 onStartOnboarding = remember(viewModel) {
                     {
@@ -118,6 +118,21 @@ fun DebugMenuScreen(
                 onClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
+                    }
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(BitwardenString.trigger_cookie_acquisition),
+                onClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            DebugMenuAction.TriggerCookieAcquisition,
+                        )
                     }
                 },
                 isEnabled = true,

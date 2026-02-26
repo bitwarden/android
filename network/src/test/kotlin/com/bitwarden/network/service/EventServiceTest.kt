@@ -12,7 +12,6 @@ import retrofit2.create
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class EventServiceTest : BaseServiceTest() {
     private val fixedClock: Clock = Clock.fixed(
@@ -34,7 +33,8 @@ class EventServiceTest : BaseServiceTest() {
                 OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_CREATED,
                     cipherId = "cipher-id",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = Instant.now(fixedClock),
+                    organizationId = null,
                 ),
             ),
         )

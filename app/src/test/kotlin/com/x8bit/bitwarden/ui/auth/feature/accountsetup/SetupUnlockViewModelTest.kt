@@ -9,7 +9,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -39,6 +39,8 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
         every { setOnboardingStatus(status = any()) } just runs
+        every { isBiometricIntegrityValid(userId = DEFAULT_USER_ID) } returns false
+        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
     private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
@@ -52,12 +54,10 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
     }
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
-        every { getOrCreateCipher(userId = DEFAULT_USER_ID) } returns CIPHER
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
         every {
-            isBiometricIntegrityValid(userId = DEFAULT_USER_ID, cipher = CIPHER)
-        } returns false
-        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
+            browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns false }
     }
 
     @BeforeEach
@@ -90,10 +90,9 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     fun `ContinueClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.AUTOFILL_SETUP,
-            )
+        verify(exactly = 1) {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.AUTOFILL_SETUP)
         }
     }
 
@@ -131,29 +130,42 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and set first time value to false`() {
+    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled, browsers are setup, and set first time value to false`() {
         mutableAutofillEnabledStateFlow.update { true }
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.FINAL_STEP,
-            )
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() =
+    fun `ContinueClick should call setOnboardingStatus and set to BROWSER_AUTOFILL_SETUP if AutoFill is already enabled and browsers are not setup`() {
+        mutableAutofillEnabledStateFlow.update { true }
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
+        verify(exactly = 1) {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.BROWSER_AUTOFILL_SETUP)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and browsers are setup`() =
         runTest {
             mutableAutofillEnabledStateFlow.update { true }
             val viewModel = createViewModel()
             viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-            verify {
-                authRepository.setOnboardingStatus(
-                    status = OnboardingStatus.FINAL_STEP,
-                )
+            verify(exactly = 1) {
+                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
             }
         }
 
@@ -162,7 +174,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey and update the state`() {
         val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
+        every { authRepository.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
         val viewModel = createViewModel(initialState)
         assertEquals(initialState, viewModel.stateFlow.value)
 
@@ -173,7 +185,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+            authRepository.clearBiometrics(userId = DEFAULT_USER_ID)
         }
     }
 
@@ -322,25 +334,21 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
 
-            viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
-
-            verify {
-                biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
-            }
-
             viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
                 assertEquals(
                     SetupUnlockEvent.ShowBiometricsPrompt(CIPHER),
                     awaitItem(),
                 )
             }
+            verify {
+                authRepository.createCipherOrNull(DEFAULT_USER_ID)
+            }
         }
 
     @Test
     fun `EnableBiometricsClick actin should show error dialog when cipher is null`() {
-        every {
-            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_ID)
-        } returns null
+        every { authRepository.createCipherOrNull(DEFAULT_USER_ID) } returns null
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
@@ -393,8 +401,8 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             },
             authRepository = authRepository,
             settingsRepository = settingsRepository,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             firstTimeActionManager = firstTimeActionManager,
+            browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
         )
 }
 
@@ -426,6 +434,7 @@ private val DEFAULT_USER_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.ACCOUNT_LOCK_SETUP,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
 )
 
 private val CIPHER = mockk<Cipher>()

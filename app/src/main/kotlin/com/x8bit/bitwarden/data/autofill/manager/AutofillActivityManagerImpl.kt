@@ -30,6 +30,10 @@ class AutofillActivityManagerImpl(
             braveStableStatusData = browserThirdPartyAutofillManager.stableBraveAutofillStatus,
             chromeStableStatusData = browserThirdPartyAutofillManager.stableChromeAutofillStatus,
             chromeBetaChannelStatusData = browserThirdPartyAutofillManager.betaChromeAutofillStatus,
+            vivaldiStableChannelStatusData = browserThirdPartyAutofillManager
+                .stableVivaldiAutofillStatus,
+            defaultBrowserPackageName = browserThirdPartyAutofillManager
+                .defaultBrowserPackageName,
         )
 
     init {

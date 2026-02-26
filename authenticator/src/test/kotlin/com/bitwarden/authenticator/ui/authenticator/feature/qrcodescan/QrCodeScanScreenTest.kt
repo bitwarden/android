@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -36,10 +37,11 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            qrCodeAnalyzer = qrCodeAnalyzer,
+        ) {
             QrCodeScanScreen(
                 viewModel = viewModel,
-                qrCodeAnalyzer = qrCodeAnalyzer,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToManualCodeEntryScreen = {
                     onNavigateToManualCodeEntryScreenCalled = true

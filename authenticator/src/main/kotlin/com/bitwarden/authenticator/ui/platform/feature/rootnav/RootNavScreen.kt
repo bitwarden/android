@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -19,13 +19,15 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
-import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
+import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
+import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
@@ -42,8 +44,8 @@ import java.util.concurrent.atomic.AtomicReference
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onSplashScreenRemoved: () -> Unit = {},
-    onExitApplication: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val previousStateReference = remember { AtomicReference(state) }
@@ -63,6 +65,15 @@ fun RootNavScreen(
             .launchIn(this)
     }
 
+    BiometricChanges(
+        biometricsManager = biometricsManager,
+        onBiometricSupportChange = remember(viewModel) {
+            {
+                viewModel.trySendAction(RootNavAction.BiometricSupportChanged(it))
+            }
+        },
+    )
+
     NavHost(
         navController = navController,
         startDestination = SplashRoute,
@@ -72,25 +83,9 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
-        tutorialDestination(
-            onTutorialFinished = {
-                viewModel.trySendAction(RootNavAction.Internal.TutorialFinished)
-            },
-        )
-        unlockDestination(
-            onUnlocked = {
-                viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
-            },
-        )
-        setupDebugMenuDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
-        )
-        authenticatorGraph(
-            navController = navController,
-            onNavigateBack = onExitApplication,
-        )
+        tutorialDestination()
+        unlockDestination()
+        authenticatorGraph(navController = navController)
     }
 
     val targetRoute = when (state.navState) {

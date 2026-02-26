@@ -33,6 +33,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
+import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
@@ -98,6 +99,7 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showChevron: Boolean = true,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -160,19 +162,26 @@ fun BitwardenTextSelectionButton(
                 BitwardenRowOfActions(
                     modifier = Modifier.padding(paddingValues = actionsPadding),
                     actions = {
-                        Icon(
-                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
-                            contentDescription = null,
-                            tint = BitwardenTheme.colorScheme.icon.primary,
-                            modifier = Modifier.minimumInteractiveComponentSize(),
-                        )
+                        if (showChevron) {
+                            Icon(
+                                painter = rememberVectorPainter(
+                                    id = BitwardenDrawable.ic_chevron_down,
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.minimumInteractiveComponentSize(),
+                            )
+                        }
                         actions()
                     },
                 )
             },
             value = selectedOption.orEmpty(),
             onValueChange = {},
-            colors = bitwardenTextFieldButtonColors(),
+            colors = if (enabled) {
+                bitwardenTextFieldButtonColors()
+            } else {
+                bitwardenTextFieldColors()
+            },
             modifier = Modifier
                 .nullableTestTag(tag = textFieldTestTag)
                 .fillMaxWidth(),

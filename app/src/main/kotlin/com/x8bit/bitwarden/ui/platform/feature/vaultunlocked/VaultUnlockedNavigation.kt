@@ -8,8 +8,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutofillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
@@ -118,6 +120,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
+            onNavigateToSetupBrowserAutofill = {
+                navController.navigateToSetupBrowserAutofillScreen()
+            },
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
@@ -212,6 +217,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
+            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -249,9 +255,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
         )
         setupAutoFillDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToBrowserAutofill = { navController.navigateToSetupBrowserAutofillScreen() },
+        )
+        setupBrowserAutofillDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         importLoginsScreenDestination(
             onNavigateBack = { navController.popBackStack() },

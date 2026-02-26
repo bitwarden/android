@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.network.model.GetTokenResponseJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -25,6 +26,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -32,19 +34,26 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Provides an API for observing an modifying authentication state.
+ * Provides an API for observing and modifying authentication state.
  */
 @Suppress("TooManyFunctions")
-interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateManager {
+interface AuthRepository :
+    AuthenticatorProvider,
+    AuthRequestManager,
+    BiometricsEncryptionManager,
+    KdfManager,
+    UserStateManager {
     /**
      * Models the current auth state.
      */
@@ -61,6 +70,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
      * receive updates whenever [setSsoCallbackResult] is called.
      */
     val ssoCallbackResultFlow: Flow<SsoCallbackResult>
+
+    /**
+     * Flow of the current [CookieCallbackResult]. Subscribers should listen to the flow in order
+     * to receive updates whenever [setCookieCallbackResult] is called.
+     */
+    val cookieCallbackResultFlow: Flow<CookieCallbackResult>
 
     /**
      * Flow of the current [YubiKeyResult]. Subscribers should listen to the flow in order to
@@ -118,7 +133,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     /**
      * The organization for the active user.
      */
-    val organizations: List<SyncResponseJson.Profile.Organization>
+    val organizations: List<Organization>
 
     /**
      * Whether or not the welcome carousel should be displayed, based on the feature flag and
@@ -275,7 +290,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     ): PasswordHintResult
 
     /**
-     * Removes the users password from the account. This used used when migrating from master
+     * Removes the users password from the account. This is used when migrating from master
      * password login to key connector login.
      */
     suspend fun removePassword(masterPassword: String): RemovePasswordResult
@@ -335,6 +350,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     fun setSsoCallbackResult(result: SsoCallbackResult)
 
     /**
+     * Set the value of [cookieCallbackResultFlow].
+     */
+    fun setCookieCallbackResult(result: CookieCallbackResult)
+
+    /**
      * Get a [Boolean] indicating whether this is a known device.
      */
     suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult
@@ -352,14 +372,14 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
-     * Validates the master password for the current logged in user.
+     * Validates the master password for the current logged-in user.
      */
     suspend fun validatePassword(password: String): ValidatePasswordResult
 
     /**
-     * Validates the PIN for the current logged in user.
+     * Validates the PIN for the current logged-in user.
      */
-    suspend fun validatePin(pin: String): ValidatePinResult
+    suspend fun validatePinUserKey(pin: String): ValidatePinResult
 
     /**
      * Validates the given [password] against the master password
@@ -377,7 +397,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     ): SendVerificationEmailResult
 
     /**
-     * Validates the given [token] for the given [email]. Part of th new account registration flow.
+     * Validates the given [token] for the given [email]. Part of the new account registration flow.
      */
     suspend fun validateEmailToken(
         email: String,
@@ -395,4 +415,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     suspend fun leaveOrganization(
         organizationId: String,
     ): LeaveOrganizationResult
+
+    /**
+     * Revokes self from the organization that matches the given [organizationId]
+     */
+    suspend fun revokeFromOrganization(
+        organizationId: String,
+    ): RevokeFromOrganizationResult
 }

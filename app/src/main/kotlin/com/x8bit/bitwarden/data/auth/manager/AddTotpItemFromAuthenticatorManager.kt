@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.bitwarden.ui.platform.model.TotpData
 
 /**
  * Manager for keeping track of requests from the Bitwarden Authenticator app to add a TOTP

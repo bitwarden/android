@@ -39,4 +39,9 @@ private val DEFAULT_STATUS = BrowserThirdPartyAutofillStatus(
         isAvailable = false,
         isThirdPartyEnabled = false,
     ),
+    vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+        isAvailable = false,
+        isThirdPartyEnabled = false,
+    ),
+    defaultBrowserPackageName = null,
 )

@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
+import com.x8bit.bitwarden.data.autofill.util.buildUri
 import timber.log.Timber
 
 /**
@@ -83,6 +84,7 @@ class FilledDataBuilderImpl(
                                     autofillCipher = autofillCipher,
                                     autofillViews = autofillRequest.partition.views,
                                     inlinePresentationSpec = getCipherInlinePresentationOrNull(),
+                                    packageName = autofillRequest.packageName,
                                 )
                             }
                     }
@@ -96,7 +98,9 @@ class FilledDataBuilderImpl(
             ?.getOrLastOrNull(inlineSuggestionsAdded)
 
         return FilledData(
-            filledPartitions = filledPartitions.take(n = MAX_FILLED_PARTITIONS_COUNT),
+            filledPartitions = filledPartitions
+                .filter { it.filledItems.isNotEmpty() }
+                .take(n = MAX_FILLED_PARTITIONS_COUNT),
             ignoreAutofillIds = autofillRequest.ignoreAutofillIds,
             originalPartition = autofillRequest.partition,
             uri = autofillRequest.uri,
@@ -140,16 +144,21 @@ class FilledDataBuilderImpl(
         autofillCipher: AutofillCipher.Login,
         autofillViews: List<AutofillView.Login>,
         inlinePresentationSpec: InlinePresentationSpec?,
+        packageName: String?,
     ): FilledPartition {
         val filledItems = autofillViews
             .mapNotNull { autofillView ->
-                val value = when (autofillView) {
-                    is AutofillView.Login.Username -> autofillCipher.username
-                    is AutofillView.Login.Password -> autofillCipher.password
+                if (autofillView.data.website == autofillCipher.website ||
+                    buildUri(packageName.orEmpty(), "androidapp") == autofillCipher.website
+                ) {
+                    val value = when (autofillView) {
+                        is AutofillView.Login.Username -> autofillCipher.username
+                        is AutofillView.Login.Password -> autofillCipher.password
+                    }
+                    autofillView.buildFilledItemOrNull(value = value)
+                } else {
+                    null
                 }
-                autofillView.buildFilledItemOrNull(
-                    value = value,
-                )
             }
 
         return FilledPartition(

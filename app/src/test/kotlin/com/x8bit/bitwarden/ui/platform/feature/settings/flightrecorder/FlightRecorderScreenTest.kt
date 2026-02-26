@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -13,10 +13,10 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.performCustomAccessibilityAction
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
@@ -94,7 +94,7 @@ class FlightRecorderScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "Logging duration")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test

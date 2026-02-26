@@ -35,6 +35,7 @@ fun BitwardenContentBlock(
     modifier: Modifier = Modifier,
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
+    subtitleColor: Color = BitwardenTheme.colorScheme.text.secondary,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
     showDivider: Boolean = true,
 ) {
@@ -44,6 +45,7 @@ fun BitwardenContentBlock(
         headerTextStyle = headerTextStyle,
         subtitleText = data.subtitleText,
         subtitleTextStyle = subtitleTextStyle,
+        subtitleColor = subtitleColor,
         iconVectorResource = data.iconVectorResource,
         backgroundColor = backgroundColor,
         showDivider = showDivider,
@@ -61,6 +63,7 @@ private fun BitwardenContentBlock(
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
     subtitleText: AnnotatedString? = null,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
+    subtitleColor: Color = BitwardenTheme.colorScheme.text.secondary,
     showDivider: Boolean = true,
     @DrawableRes iconVectorResource: Int? = null,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
@@ -102,7 +105,7 @@ private fun BitwardenContentBlock(
                 Text(
                     text = it,
                     style = subtitleTextStyle,
-                    color = BitwardenTheme.colorScheme.text.secondary,
+                    color = subtitleColor,
                 )
             }
             Spacer(Modifier.height(12.dp))

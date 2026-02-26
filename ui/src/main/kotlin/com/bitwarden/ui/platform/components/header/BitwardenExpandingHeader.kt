@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -60,7 +61,7 @@ fun BitwardenExpandingHeader(
             .minimumInteractiveComponentSize()
             .padding(horizontal = 16.dp)
             .padding(paddingValues = insets)
-            .semantics(mergeDescendants = true) {},
+            .semantics(mergeDescendants = true) { heading() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Crossfade(

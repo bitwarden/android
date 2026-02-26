@@ -55,6 +55,7 @@ fun VaultItemSshKeyContent(
         itemHeader(
             value = commonState.name,
             isFavorite = commonState.favorite,
+            isArchived = commonState.archived,
             iconData = commonState.iconData,
             relatedLocations = commonState.relatedLocations,
             iconTestTag = "SshKeyItemNameIcon",
@@ -239,23 +240,8 @@ fun VaultItemSshKeyContent(
             }
         }
 
-        item(key = "created") {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Text(
-                text = commonState.created(),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp)
-                    .animateItem()
-                    .testTag("SshKeyItemCreated"),
-            )
-        }
-
         item(key = "lastUpdated") {
-            Spacer(modifier = Modifier.height(height = 4.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Text(
                 text = commonState.lastUpdated(),
                 style = BitwardenTheme.typography.bodySmall,
@@ -266,6 +252,21 @@ fun VaultItemSshKeyContent(
                     .padding(horizontal = 12.dp)
                     .animateItem()
                     .testTag("SshKeyItemLastUpdated"),
+            )
+        }
+
+        item(key = "created") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("SshKeyItemCreated"),
             )
         }
 

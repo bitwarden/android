@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">இதுபற்றி</string>
     <string name="add_folder">கோப்புறை சேர்</string>
     <string name="add_item">உருப்படியைச் சேர்</string>
     <string name="an_error_has_occurred">ஓரு பிழை நேர்ந்துவிட்டது</string>
     <string name="apply">விண்ணப்பிக்கவும்</string>
     <string name="back">பின்னே</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ரத்துசெய்</string>
     <string name="copy">நகலெடு</string>
     <string name="copy_password">கடவுச்சொல்லை நகலெடு</string>
@@ -47,7 +46,7 @@
     <string name="my_vault">என் பெட்டகம்</string>
     <string name="name">பெயர்</string>
     <string name="item_name_required">உருப்படி பெயர் (தேவை)</string>
-    <string name="send_name_required">"அனுப்பு பெயர் (தேவை)"</string>
+    <string name="send_name_required">அனுப்பு பெயர் (தேவை)</string>
     <string name="no">இல்லை</string>
     <string name="notes">குறிப்புகள்</string>
     <string name="private_notes">தனிப்பட்ட குறிப்புகள்</string>
@@ -102,8 +101,8 @@
     <string name="one_minute">௧ நிமிடம்</string>
     <string name="four_hours">௪ மணிநேரம்</string>
     <string name="immediately">உடனடியாக</string>
-    <string name="vault_timeout_log_out_confirmation_title">அறை காலாவதி நேரத்தை \"வெளியேறு\" என்று அமைக்கவா?</string>
-    <string name="vault_timeout_log_out_confirmation_message">காலாவதி காலத்திற்குப் பிறகு, நீங்கள் வெளியேற்றப்படுவீர்கள். மீண்டும் உள்நுழைந்து உங்கள் பெட்டகத்தை அணுக இணையத்துடன் இணைக்கப்பட வேண்டும். இந்த சாதனத்தில் சேமிக்கப்பட்ட உங்கள் அமைப்புகள் மற்றும் PIN மாறாது.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
     <string name="logging_in">உள்நுழைகிறது…</string>
     <string name="login_to_bitwarden">Bitwarden-ல் உள்நுழையவும்</string>
     <string name="master_password_confirmation_val_message">கடவுச்சொல் உறுதிப்படுத்தல் சரியானதல்ல.</string>
@@ -130,6 +129,8 @@
     <string name="no_text_sends">உங்கள் பெட்டகத்தில் உரை அனுப்பும் எதுவும் இல்லை.</string>
     <string name="no_file_sends">உங்கள் பெட்டகத்தில் கோப்பு அனுப்பும் எதுவும் இல்லை.</string>
     <string name="no_ssh_keys">உங்கள் பெட்டகத்தில் SSH விசைகள் எதுவும் இல்லை.</string>
+    <string name="no_archives_title">Archive is empty</string>
+    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">புதிய உரை அனுப்புதல்</string>
     <string name="new_file_send">புதிய கோப்பு அனுப்புதல்</string>
     <string name="no_username">பயனர்பெயர் இல்லை</string>
@@ -137,7 +138,7 @@
     <string name="other">மற்றவை</string>
     <string name="password_generator">கடவுச்சொல் உருவாக்கி</string>
     <string name="password_hint">கடவுச்சொல் குறிப்பு</string>
-    <string name="password_hint_alert">உங்கள் பிரதான கடவுச்சொல் குறிப்பைக் கொண்ட மின்னஞ்சலை நாங்கள் உங்களுக்கு அனுப்பியுள்ளோம்.</string>
+    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
     <string name="password_override_alert">தற்போதைய கடவுச்சொல்லை மேலெழுத உறுதியா?</string>
     <string name="retype_master_password">பிரதான கடவுச்சொல்லை மீண்டும் தட்டு</string>
     <string name="retype_new_master_password_required">புதிய முதன்மை கடவுச்சொல்லை மீண்டும் தட்டச்சு செய்யவும் (தேவை)</string>
@@ -165,8 +166,9 @@
     <string name="no_items_for_vault">உம் பெட்டகத்தில் “%1$s”-உடன் பொருந்தும் உருப்படிகள் இல்லை</string>
     <string name="search_for_a_login_or_add_a_new_login">உள்நுழைவைத் தேடு அல்லது புது உள்நுழைவைச் சேர்</string>
     <string name="disabled">முடக்கத்தில்</string>
-    <string name="bitwarden_autofill_service_alert2">உம் பெட்டகத்திற்கு புது உள்நுழைவுகளை சேர்ப்பதற்கான மிக எளிய வழி Bitwarden தன்னிரப்பி சேவையிலிருந்தே. \"அமைப்புகள்\" திரைக்கு சென்று Bitwarden தன்னிரப்பி சேவையை பயன்படுத்துவது பற்றி மேலும் அறிக.</string>
-    <string name="autofill_title">தானியங்குநிரப்பு</string>
+    <string name="bitwarden_autofill_service_alert2">புதிய உள்நுழைவுகளை உங்கள் பெட்டகத்தில் சேர்க்க எளிதான வழி, பிட்வார்டன் தானாக நிரப்புதல் சேவையிலிருந்து ஆகும். \"அமைப்புகள்\" திரைக்குச் சென்று பிட்வார்டன் தானாக நிரப்புதல் சேவையைப் பயன்படுத்துவது பற்றி மேலும் அறிக.</string>
+    <string name="autofill_noun">தானாக நிரப்பு</string>
+    <string name="autofill_verb">தானாக நிரப்பு</string>
     <string name="autofill_or_view">இவ்வுருப்படியை தன்னிரப்ப அல்லது பார்க்க வேண்டுமா?</string>
     <string name="search">தேடுக</string>
     <string name="learn_org">நிறுவனங்கள் பற்றி அறிக</string>
@@ -180,7 +182,7 @@
     <string name="send_verification_code_again">சரிபார்ப்புக் குறியீடு மின்னஞ்சலை மீண்டும் அனுப்பு</string>
     <string name="verification_email_not_sent">சரிபார்ப்பு மின்னஞ்சலை அனுப்ப இயலவில்லை. மீண்டும் முயல்.</string>
     <string name="verification_email_sent">சரிபார்ப்பு மின்னஞ்சல் அனுப்பப்பட்டது</string>
-    <string name="yubi_key_instruction">தொடர, உம் யூபிகீ NEOஐ சாதனத்தின் பின்புறத்திற்கெதிரே பிடித்திரு அ அதை உம் சாதனத்தின் USB புறையினுள் புகுத்து, பிறகு இப்பொத்தானைத் தொடு.</string>
+    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey பாதுகாப்பு விசை</string>
     <string name="add_new_attachment">புதிய இணைப்பைச் சேர்</string>
     <string name="attachments">இணைப்புகள்</string>
@@ -301,7 +303,7 @@
     <string name="organization">நிறுவனம்</string>
     <string name="try_again">மீண்டும் முயல்</string>
     <string name="created">உருவாக்கப்பட்டது: %1$s</string>
-    <string name="password_last_updated">கடவுச்சொல் கடைசியாகப் புதுப்பிக்கப்பட்டது: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">கடைசியாகத் திருத்தப்பட்டது: %1$s</string>
     <string name="invalid_email">செல்லாத மின்னஞ்சல் முகவரி.</string>
     <string name="cards">அட்டைகள்</string>
@@ -343,7 +345,7 @@
     <string name="generator">உருவாக்கி</string>
     <string name="no_folders_to_list">பட்டியலிட கோப்புறைகளில்லை.</string>
     <string name="fingerprint_phrase">கைரேகை சொற்றொடர்</string>
-    <string name="your_accounts_fingerprint">உமது கணக்கின் கைரேகை சொற்றொடர்</string>
+    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
     <string name="export_vault">பெட்டகத்தை ஏற்றுமதி செய்</string>
     <string name="lock_now">இப்போது பூட்டு</string>
     <string name="pin">கடவெண்</string>
@@ -365,10 +367,8 @@
     <string name="default_uri_match_detection">இயல்புநிலை உரலிப்பொருத்தங்கண்டறிதல்</string>
     <string name="default_uri_match_detection_description">தானியங்கு நிரப்புதல் பரிந்துரைகளை Bitwarden எவ்வாறு கண்டறிகிறது என்பதை URI பொருத்தம் கண்டறிதல் கட்டுப்படுத்துகிறது.</string>
     <string name="theme">நிற அமைப்பு</string>
-    <string name="theme_description">செயலியின் நிற அமைப்பை மாற்று</string>
+    <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">குறிப்பை நகலெடு</string>
-    <string name="exit">வெளியேறு</string>
-    <string name="exit_confirmation">Bitwarden இலிருந்து வெளியேற விரும்புகிறீர்களா?</string>
     <string name="require_master_password_on_app_restart">செயலி மறுதுவக்கத்தில் பிரதான கடவுச்சொல் கேட்கவா?</string>
     <string name="pin_require_master_password_restart">செயலி மறுதுவக்கத்தில் பூட்டவிழ்க்க உங்கள் பிரதான கடவுச்சொல்லை கோர வேண்டுமா?</string>
     <string name="ask_to_add_item">உருப்படியைச் சேர்க்கக் கேட்கவும்</string>
@@ -379,6 +379,7 @@
     <string name="download">பதிவிறக்கு</string>
     <string name="login_expired">உம் உள்நுழைவு அமர்வு காலாவதியானது.</string>
     <string name="biometrics_direction">உயிரியளவுச் சரிபார்ப்பு</string>
+    <string name="device_verification">Device verification</string>
     <string name="biometrics_failed">பயோமெட்ரிக்ஸ் தோல்வியடைந்தது</string>
     <string name="biometrics_decoding_failure">உங்கள் முதன்மை கடவுச்சொல் அல்லது PIN மூலம் உள்நுழைந்து, பின்னர் அமைப்புகளில் பயோமெட்ரிக் உள்நுழைவை மீண்டும் இயக்கவும்.</string>
     <string name="use_biometrics_to_unlock">உயிரியளவுகளால் பூட்டவிழ்</string>
@@ -391,13 +392,13 @@
     <string name="export_vault_file_pw_protect_info">இந்த கோப்பு ஏற்றுமதி கடவுச்சொல் பாதுகாக்கப்பட்டதாக இருக்கும் மற்றும் கோப்பை மறைகுறியாக்க கோப்பு கடவுச்சொல் தேவைப்படும்.</string>
     <string name="export_vault_confirmation_title">பெட்டக ஏற்றுமதியை உறுதிசெய்</string>
     <string name="warning">எச்சரிக்கை</string>
-    <string name="export_vault_failure">உம் பெட்டகத்தை ஏற்றுமதி செய்வதில் ஒரு சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து ஏற்றுமதி செய்ய வேண்டும்.</string>
+    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
     <string name="export_vault_success">பெட்டகம் வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது</string>
     <string name="clone">நகலி</string>
     <string name="password_generator_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது உருவாக்கி அமைப்புகளை பாதிக்கிறது</string>
     <string name="unable_to_save_attachment">இவ்விணைப்பை சேமிப்பதில் ஏதோ சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து இதைச் சேமிக்கலாம்.</string>
     <string name="save_attachment_success">சேர்ப்பு வெற்றிகரமாக சேமிக்கப்பட்டது</string>
-    <string name="autofill_tile_accessibility_required">தன்னிரப்பி ஓட்டைப் பயன்படுத்த Bitwarden அமைவுகளிலிருந்து \"தன்னிரப்பி அணுகல்தன்மை சேவை\"-ஐ இயக்கவும்.</string>
+    <string name="autofill_tile_accessibility_required">தானாக நிரப்புதல் டைலை பயன்படுத்த பிட்வார்டன் அமைப்புகளிலிருந்து \"தானாக நிரப்புதல் அணுகல் சேவை\" என்பதை இயக்கவும்.</string>
     <string name="autofill_tile_uri_not_found">கடவுச்சொல் புலங்களேதும் கண்டறியப்படவில்லை</string>
     <string name="soft_deleting">குப்பைக்கு அனுப்புகிறது…</string>
     <string name="item_soft_deleted">உருப்படி குப்பைக்கு அனுப்பப்பட்டது.</string>
@@ -412,7 +413,7 @@
     <string name="enable_sync_on_refresh">புத்துணர்வூட்டலில் ஒத்திசைவை அனுமதி</string>
     <string name="enable_sync_on_refresh_description">கீழ் இழுக்கும் சைகையுடன் பெட்டகத்தை ஒத்திசைத்தல்.</string>
     <string name="log_in_sso">முனைவகம் ஒற்றை உள்நுழைவு(SSO)</string>
-    <string name="log_in_sso_summary">உம் நிறுவனத்தின் ஒற்றை உள்நுழைவு புறையத்துடன் விரைவாக உள்நுழை. தொடங்க உம் நிறுவன அடையாளங்காட்டியை உள்ளிடவும்.</string>
+    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
     <string name="org_identifier">நிறுவன அடையாளங்காட்டி</string>
     <string name="login_sso_error">SSO கொண்டு தற்போது உள்நுழைய இயலாது</string>
     <string name="set_master_password">பிரதான கடவுச்சொல்லை அமை</string>
@@ -447,6 +448,13 @@
     <string name="deletion_date">அழிக்கும் தேதி</string>
     <string name="deletion_time">அழிக்கும் நேரம்</string>
     <string name="deletion_date_info">குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் Send நிரந்தரமாக அழிக்கப்படும்.</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">அழித்தல் நிலுவையில்</string>
     <string name="expired">காலாவதியானது</string>
     <string name="expires_at">காலாவதியாகிறது %s</string>
@@ -481,12 +489,14 @@
     <string name="seven_days">௭ நாட்கள்</string>
     <string name="thirty_days">௩௦ நாட்கள்</string>
     <string name="custom">தனிபயன்</string>
+    <string name="custom_timeout">Custom timeout</string>
     <string name="add_this_authenticator_key_to_a_login">இந்த அங்கீகரிப்பான் விசையை ஏற்கனவே உள்ள உள்நுழைவில் சேர்க்கவும் அல்லது புதிய உள்நுழைவை உருவாக்கவும்.</string>
     <string name="send_disabled_warning">முனைவக கொள்ளையால், உம்மால் இருக்கின்ற Sendஐ மட்டுமே அழிக்கவியலும்.</string>
     <string name="about_send">Send பற்றி</string>
     <string name="hide_email">பெறுநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை</string>
     <string name="send_options_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது Send தெரிவுகளை பாதிக்கிறது.</string>
     <string name="send_file_premium_required">இலவச கணக்குகள் சொற்சரம் மட்டும் பகிர்தலுக்கு கட்டுப்படுத்தப்பட்டுள்ளது. Send உடன் கோப்புகளை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">பிரதான கடவுச்சொல் மறு-தூண்டி</string>
     <string name="password_confirmation">பிரதான கடவுச்சொல் உறுதியாக்கம்</string>
     <string name="password_confirmation_desc">இச்செயல் காக்கப்பட்டது, தொடர உம் அடையாளத்தைச் சரிபார்க்க உம் பிரதான கடவுச்சொல்லை மீண்டுமுள்ளிடவும்.</string>
@@ -496,13 +506,27 @@
     <string name="remove_master_password">பிரதான கடவுச்சொல்லை நீக்கு</string>
     <string name="leave_organization">நிறுவனத்தைவிட்டு விலகு</string>
     <string name="leave_organization_name">%1$s விட்டு விலகவா?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="leave_organization_button">Leave %1$s</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-ஐ அங்கீகரி</string>
     <string name="fido2_return_to_app">செயலிக்குத் திரும்பு</string>
     <string name="reset_password_auto_enroll_invite_warning">உம்மைத் தானாகக் கடவுச்சொல் அகரமாக்கலில் சேர்க்கும் முனைவகக் கொள்கை இந்நிறுவனத்திடமுள்ளது. சேர்க்கையானது உம் பிரதான கடவுச்சொல்லை நிறுவன நிர்வாகிகள் மாற்ற அனுமதிக்கும்.</string>
-    <string name="vault_timeout_policy_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு %1$s மணிநேரம் மற்றும் %2$s நிமிடம(கள்) ஆகும்.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு %1$s மணிநேரம் மற்றும் %2$s நிமிடம(கள்) ஆகும். உம் பெட்டக நேரமுடிவுச் செயல் %3$s என அமைக்கப்ப்பட்டுள்ளது.</string>
-    <string name="vault_timeout_action_policy_in_effect">உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவு செயலை %1$s என அமைத்துள்ளன.</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
+    <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
     <string name="vault_timeout_to_large">உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</string>
     <string name="disable_personal_vault_export_policy_in_effect">ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</string>
     <string name="add_account">கணக்கைச் சேர்</string>
@@ -574,18 +598,12 @@
     <string name="api_key">API விசை</string>
     <string name="api_key_required_parenthesis">API விசை (தேவை)</string>
     <string name="service">சேவை</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">ஃபயர்பாக்ஸ் ரிலே</string>
-    <string name="simple_login">சிம்பிள்லாகின்</string>
-    <string name="duck_duck_go">டக் டக் கோ</string>
-    <string name="fastmail">ஃபாஸ்ட்மெயில்</string>
-    <string name="forward_email">ஃபார்வர்ட்மின்னஞ்சல்</string>
     <string name="api_access_token_required_parenthesis">API அணுகல் டோக்கன் (தேவை)</string>
     <string name="api_access_token">API அணுகல் கிள்ளாக்கு</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">தற்போதைய பயனர்பெயரை மேலெழுத உறுதியா?</string>
     <string name="generate_username">பயனர்பெயர் உருவாக்கு</string>
-    <string name="plus_addressed_email_description">உமது மின்னஞ்சல் வழங்குநரின் துணைமுகவரி திறனைப் பயன்படுத்து</string>
-    <string name="catch_all_email_description">உங்கள் டொமைனின் கட்டமைக்கப்பட்ட அனைத்தையும் பிடிக்கும் இன்பாக்ஸைப் பயன்படுத்தவும்.</string>
+    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
+    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
     <string name="forwarded_email_description">ஒரு வெளிப்புற முன்னனுப்பு சேவை மூலம் ஒரு மின்னஞ்சல் புனைப்பெயரை உருவாக்கவும்.</string>
     <string name="accessibility_service_disclosure">அணுகல்தன்மை சேவை வெளிப்படுத்தல்</string>
     <string name="accessibility_disclosure_text">பயன்பாடுகள் மற்றும் இணையதளங்களில் உள்நுழைவு புலங்களைத் தேட Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்துகிறது, பின்னர் பயன்பாடு அல்லது தளத்திற்கான பொருத்தம் கண்டறியப்பட்டால் ஒரு பயனர்பெயர் &amp; கடவுச்சொல்லை உள்ளிடுவதற்கு பொருத்தமான புல ஐடிகளை நிறுவுகிறது. சேவையால் எங்களுக்கு வழங்கப்படும் எந்த தகவலையும் நாங்கள் சேமிக்கவில்லை, மேலும் கடவுச்சொற்களின் உரை உள்ளீட்டிற்கு அப்பால் எந்த திரையில் உள்ள கூறுகளையும் கட்டுப்படுத்த நாங்கள் எந்த முயற்சியும் செய்யவில்லை.</string>
@@ -650,7 +668,8 @@
     <string name="invalid_uri">செல்லாத உரலி</string>
     <string name="the_urix_is_already_blocked">உரலி %1$s ஏற்கனவே தடுக்கப்பட்டது</string>
     <string name="login_approved">உள்நுழைவு ஏற்கப்பட்டது</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">சாதனத்துடன் உள்நுழைவது Bitwarden பயன்பாட்டின் அமைப்புகளில் அமைக்கப்பட வேண்டும். மற்றொரு விருப்பம் தேவையா?</string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">சாதனத்துடன் உள்நுழை</string>
     <string name="logging_in_on">இதில் உள்நுழைகிறது</string>
     <string name="logging_in_on_with_colon">உள்நுழைகிறது:</string>
@@ -688,6 +707,7 @@
     <string name="follow_the_steps_from_duo_to_finish_logging_in">உள்நுழைவை முடிக்க Duo-இன் படிகளைப் பின்பற்றவும்.</string>
     <string name="launch_duo">Duo-ஐ தொடங்கவும்</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">உங்கள் கிடைத்தொடர் உங்கள் Bitwarden பெட்டகத்தில் %1$s-க்கு சேமிக்கப்படும்</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">இந்த பயன்பாட்டிற்கு கிடைத்தொடர்கள் ஆதரிக்கப்படவில்லை</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">உலாவி சலுகை இல்லாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">உலாவி கையொப்பம் பொருந்தாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது</string>
@@ -748,7 +768,7 @@
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">கணக்கு லாக் அவுட்டைத் தடுப்பதற்கான வழிகளைப் பற்றி அறிக</annotation></string>
     <string name="help_with_server_geolocations">சர்வர் புவிஇருப்பிடங்களுடன் உதவி.</string>
     <string name="email_address_required">மின்னஞ்சல் முகவரி (தேவை)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்த்து உங்கள் கணக்கை உருவாக்குவதைத் தொடர மின்னஞ்சலில் உள்ள இணைப்பைத் தேர்ந்தெடுக்கவும். "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்க்கவும், உங்கள் கணக்கை உருவாக்குவதைத் தொடரவும் மின்னஞ்சலில் உள்ள இணைப்பைத் தேர்ந்தெடுக்கவும்.</string>
     <string name="change_email_address">மின்னஞ்சல் முகவரியை மாற்று</string>
     <string name="next">அடுத்து</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">தொலைந்த அல்லது மறக்கப்பட்ட முதன்மை கடவுச்சொல்லை Bitwarden மீட்டெடுக்க முடியாது.</string>
@@ -766,9 +786,16 @@
     <string name="allow_bitwarden_authenticator_syncing">அங்கீகரிப்பான் ஒத்திசைவை அனுமதிக்கவும்</string>
     <string name="there_was_an_issue_validating_the_registration_token">பதிவு டோக்கனை சரிபார்ப்பதில் ஒரு சிக்கல் இருந்தது.</string>
     <string name="turn_on_autofill">தானியங்கு நிரப்புதலை இயக்கவும்</string>
+    <string name="autofill_setup">Autofill setup</string>
+    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
     <string name="use_autofill_to_log_into_your_accounts">ஒற்றை தட்டலில் உங்கள் கணக்குகளில் உள்நுழைய தானியங்கு நிரப்புதலைப் பயன்படுத்தவும்.</string>
     <string name="turn_on_later">பின்னர் இயக்கவும்</string>
     <string name="turn_on_autofill_later">பின்னர் தானியங்கு நிரப்புதலை இயக்கவா?</string>
+    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">அமைப்புகளில் எந்த நேரத்திலும் இந்த படிநிலையை முடிக்க நீங்கள் திரும்பலாம்.</string>
     <string name="what_bitwarden_has_to_offer">இப்போது நீங்கள் Bitwarden வழங்க வேண்டிய அனைத்தையும் ஆராயலாம் மற்றும் உங்கள் கடவுச்சொற்களை பாதுகாப்பாக நிர்வகிக்கத் தொடங்கலாம்.</string>
     <string name="youre_all_set">நீங்கள் தயாராக உள்ளீர்கள்!</string>
@@ -856,8 +883,8 @@
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">உங்கள் கடவுச்சொற்றொடரை உருவாக்க எந்த வரிசையிலும் வார்த்தைகளை ஒன்றாக வைக்கவும். <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
     <string name="make_it_yours">உங்களுடையதாக ஆக்குங்கள்</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger">அதை இன்னும் வலிமையாக்க<annotation emphasis="bold">ஒரு எண் அல்லது சின்னத்தைச் சேர்க்கவும்</annotation>. இப்போது உங்களிடம் தனித்துவமான, பாதுகாப்பான மற்றும் மறக்கமுடியாத கடவுச்சொல் உள்ளது!</string>
-    <string name="need_some_inspiration">"சிறிது உத்வேகம் தேவையா?"</string>
-    <string name="check_out_the_passphrase_generator">"கடவுச்சொற்றொடர் ஜெனரேட்டரை சரிபார்க்கவும்"</string>
+    <string name="need_some_inspiration">சிறிது உத்வேகம் தேவையா?</string>
+    <string name="check_out_the_passphrase_generator">கடவுச்சொற்றொடர் ஜெனரேட்டரை சரிபார்க்கவும்</string>
     <string name="we_couldnt_verify_the_servers_certificate">எங்களால் சர்வரின் சான்றிதழைச் சரிபார்க்க முடியவில்லை. உங்கள் சாதனம் அல்லது உங்கள் Bitwarden சர்வரில் சான்றிதழ் சங்கிலி அல்லது ப்ராக்ஸி அமைப்புகள் சரியாக அமைக்கப்படாமல் இருக்கலாம்.</string>
     <string name="copy_private_key">தனிப்பட்ட விசையை நகலெடு</string>
     <string name="login_credentials">உள்நுழைவு சான்றுகள்</string>
@@ -869,13 +896,13 @@
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">இந்த கணக்கை அணுக தானியங்கு நிரப்புதலைப் பயன்படுத்த ஒரு வலை முகவரியைச் சேர்க்க வேண்டும்.</string>
     <string name="learn_about_new_logins">புதிய உள்நுழைவுகளைப் பற்றி அறிக</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">புதிய உள்நுழைவைச் சேர்க்க முக்கிய அம்சங்கள் மூலம் நாங்கள் உங்களை வழிநடத்துவோம்.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">புதிய உள்நுழைவைச் சேர்ப்பதற்கான முக்கிய அம்சங்கள் பற்றி நாங்கள் உங்களுக்கு விளக்குவோம்.</string>
     <string name="explore_the_generator">ஜெனரேட்டரை ஆராயுங்கள்</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">வழிகாட்டப்பட்ட சுற்றுப்பயணத்துடன் பாதுகாப்பான உள்நுழைவு சான்றுகளை உருவாக்குவது பற்றி மேலும் அறிக.</string>
     <string name="import_client_certificate">வாடிக்கையாளர் சான்றிதழை இறக்குமதி செய்</string>
     <string name="enter_the_client_certificate_password_and_alias">வாடிக்கையாளர் சான்றிதழ் கடவுச்சொல் மற்றும் இந்த சான்றிதழுக்கான விரும்பிய புனைப்பெயரை உள்ளிடவும்.</string>
     <string name="alias">புனைப்பெயர்</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"பாதுகாப்பான கடவுச்சொற்கள், கடவுச்சொற்றொடர்கள் மற்றும் பயனர்பெயர்களை உருவாக்க ஜெனரேட்டரைப் பயன்படுத்தவும். "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">பாதுகாப்பான கடவுச்சொற்கள், கடவுக்குறிச்சொற்கள் மற்றும் பயனர்பெயர்களை உருவாக்க ஜெனரேட்டரைப் பயன்படுத்தவும்.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">கடவுச்சொற்றொடர்கள் வலுவான கடவுச்சொற்கள் ஆகும், அவை சீரற்ற கடவுச்சொற்களை விட நினைவில் கொள்ளவும் தட்டச்சு செய்யவும் எளிதானவை. உங்கள் டிவியில் உள்ள ஸ்ட்ரீமிங் சேவை போன்ற தானியங்கு நிரப்புதல் கிடைக்காத கணக்குகளில் உள்நுழைய அவை உதவியாக இருக்கும்.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">தனிப்பட்ட பயனர்பெயர்கள் பாதுகாப்பின் ஒரு கூடுதல் அடுக்கைச் சேர்க்கின்றன மற்றும் ஹேக்கர்கள் உங்கள் கணக்குகளைக் கண்டுபிடிப்பதைத் தடுக்க உதவும்.</string>
     <string name="coachmark_1_of_6">1/6</string>
@@ -884,8 +911,8 @@
     <string name="coachmark_4_of_6">4/6</string>
     <string name="coachmark_5_of_6">5/6</string>
     <string name="coachmark_6_of_6">6/6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">உங்கள் கணக்கு இணையதளத்தின் தேவைகளை பூர்த்தி செய்ய உங்கள் கடவுச்சொல்லை சரிசெய்ய இந்த விருப்பங்களைப் பயன்படுத்தவும்.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"உங்கள் புதிய கடவுச்சொல்லை Bitwarden-ல் சேமித்த பிறகு, அதை உங்கள் கணக்கு இணையதளத்தில் புதுப்பிக்க மறக்காதீர்கள். "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">உங்கள் கணக்கு வலைத்தளத்தின் தேவைகளைப் பூர்த்தி செய்ய உங்கள் கடவுச்சொல்லை சரிசெய்ய இந்த விருப்பங்களைப் பயன்படுத்தவும்.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">உங்கள் புதிய கடவுச்சொல்லை பிட்வார்டனில் சேமித்த பிறகு, உங்கள் கணக்கு வலைத்தளத்தில் அதைப் புதுப்பிக்க மறக்க வேண்டாம்.</string>
     <string name="verify_your_identity">உங்கள் அடையாளத்தை சரிபார்க்கவும்</string>
     <string name="error_loading_certificate">சான்றிதழை ஏற்றுவதில் பிழை</string>
     <string name="certificate_alias">சான்றிதழ் புனைப்பெயர்</string>
@@ -907,6 +934,8 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">கோரிக்கை ஆதரிக்கப்படாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை என்பதால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_no_item_was_selected">உருப்படி எதுவும் தேர்ந்தெடுக்கப்படாததால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">பயனர் சரிபார்ப்பு முயற்சிகள் அதிகமாக இருந்ததால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">பயனர் பூட்டப்பட்டதால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை என்பதால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
@@ -914,13 +943,13 @@
     <string name="self_host_server_url">சுய ஹோஸ்ட் சர்வர் URL</string>
     <string name="use_brave_autofill_integration">Brave தானியங்கு நிரப்புதல் ஒருங்கிணைப்பை பயன்படுத்தவும்</string>
     <string name="use_chrome_autofill_integration">Chrome தானியங்கு நிரப்புதல் ஒருங்கிணைப்பை பயன்படுத்தவும்</string>
-    <string name="use_chrome_beta_autofill_integration">Chrome தானியங்கு நிரப்புதல் ஒருங்கிணைப்பை பயன்படுத்தவும் (பீட்டா)</string>
+    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">தேர்ந்தெடுக்கப்பட்ட உலாவிகளில் ஆதரிக்கப்படும் இணையதளங்களுக்கான உள்நுழைவு நிரப்புதலை மேம்படுத்துகிறது. இயக்கப்பட்டதும், மூன்றாம் தரப்பு தானியங்கு நிரப்புதலை இயக்க உலாவி அமைப்புகளுக்கு நீங்கள் வழிநடத்தப்படுவீர்கள்.</string>
     <string name="show_more">மேலும் காட்டு</string>
     <string name="no_folder">கோப்புறை இல்லை</string>
     <string name="show_less">குறைவாக காட்டு</string>
     <string name="add_field">புலத்தைச் சேர்</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">பிழை விவரங்களைப் பகிரு</string>
     <string name="flight_recorder">ஃபிளைட் ரெக்கார்டர்</string>
     <string name="flight_recorder_help">ஃபிளைட் ரெக்கார்டர் உதவி</string>
@@ -959,7 +988,7 @@
     <string name="log_deleted">பதிவு நீக்கப்பட்டது</string>
     <string name="app_settings">பயன்பாட்டு அமைப்புகள்</string>
     <string name="replace_existing_certificate">ஏற்கனவே உள்ள சான்றிதழை மாற்றவா?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">\"%s\" என்ற புனைப்பெயருடன் ஒரு சான்றிதழ் ஏற்கனவே உள்ளது. அதை மாற்ற விரும்புகிறீர்களா?\nசான்றிதழை மாற்றுவது தற்போது அதை பயன்படுத்தும் எந்த சூழல்களுடனான உங்கள் இணைப்பை பாதிக்கலாம்.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">சான்றிதழை மாற்று</string>
     <string name="unable_to_read_certificate">சான்றிதழை படிக்க முடியவில்லை.</string>
     <string name="cannot_delete_your_account">உங்கள் கணக்கை நீக்க முடியாது</string>
@@ -972,12 +1001,12 @@
     <string name="use_dynamic_colors">டைனமிக் வண்ணங்களைப் பயன்படுத்தவும்</string>
     <string name="use_dynamic_colors_question">டைனமிக் வண்ணங்களைப் பயன்படுத்தவா?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">இந்த வண்ணத் திட்டம் உங்கள் தற்போதைய வால்பேப்பரின் அடிப்படையில் தானாகவே கணினி வண்ணங்களை Bitwarden-க்கு பயன்படுத்துகிறது. இந்த வண்ணங்கள் அனைத்து அணுகல்தன்மை வழிகாட்டுதல்களையும் பூர்த்தி செய்யாமல் இருக்கலாம்.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">உலாவி (%1$s) அங்கீகரிக்கப்படாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது. \"%1$s\"-ஐ உள்ளூரில் நம்பகமான பயன்பாடுகளின் பட்டியலில் சேர்க்க \"நம்புக\" என்பதைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">உலாவி நம்பகமானதாக இல்லாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="trust">நம்புக</string>
     <string name="trusted_by_you_learn_more">இவை Bitwarden இயல்பாக நம்பாத பயன்பாடுகள் அல்லது உலாவிகள், ஆனால் கிடைத்தொடர் செயல்பாடுகளைச் செய்ய நீங்கள் நம்புகிறீர்கள்.</string>
     <string name="trusted_by_community_learn_more">இவை Google Play Store-ல் சேர்க்கப்படாத பயன்பாடுகள், ஆனால் சமூக உறுப்பினர்கள் அவற்றைப் பயன்படுத்திய பிறகு மற்றும் பாதுகாப்பானவை எனப் புகாரளித்த பிறகு கிடைத்தொடர் செயல்பாடுகளைச் செய்ய Bitwarden நம்புகிறது.</string>
-    <string name="trusted_by_google_learn_more">இவை Google பாதுகாப்பானவை எனக் கருதும் மற்றும் Google Play Store-ல் கிடைக்கும் பயன்பாடுகள்.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
     <string name="trusted_by_you">உங்களால் நம்பப்பட்டது</string>
     <string name="trusted_by_the_community">சமூகத்தால் நம்பப்பட்டது</string>
     <string name="trusted_by_google">Google-ஆல் நம்பப்பட்டது</string>
@@ -993,7 +1022,6 @@
     <string name="delete_x">%s-ஐ நீக்கு</string>
     <string name="failed_to_decrypt_cipher_contact_support">சைபரை மறைகுறியாக்க முடியவில்லை. ஆதரவைத் தொடர்பு கொள்ளவும்.</string>
     <string name="decryption_error">மறைகுறியாக்கப் பிழை</string>
-    <string name="add_item_rotation">உருப்படி சுழற்சியைச் சேர்</string>
     <string name="scan_a_qr_code">ஒரு QR குறியீட்டை ஸ்கேன் செய்யவும்</string>
     <string name="cannot_add_authenticator_key">அங்கீகரிப்பான் விசையைச் சேர்க்க முடியவில்லையா?</string>
     <string name="enable_camera_permission_to_use_the_scanner">வருடியைப் பயன்படுத்த படக்கருவி அனுமதியை இயக்கு</string>
@@ -1007,7 +1035,10 @@
     <string name="advanced">மேம்பட்ட</string>
     <string name="collapse_advanced_options">மேம்பட்ட விருப்பங்களைச் சுருக்கு</string>
     <string name="number_of_digits">இலக்கங்களின் எண்ணிக்கை</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d வினாடிகள்</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">உருப்படி சேமிக்கப்பட்டது</string>
     <string name="information">தகவல்</string>
     <string name="otp_type">OTP வகை</string>
@@ -1027,6 +1058,8 @@
     <string name="export">ஏற்றுமதி</string>
     <string name="export_confirmation_title">ஏற்றுமதியை உறுதிப்படுத்து</string>
     <string name="export_success">தரவு வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது</string>
+    <string name="included_in_this_export">Included in this export</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">பாதுகாப்பு</string>
     <string name="too_many_failed_biometric_attempts">பலமுறை தோல்வியுற்ற பயோமெட்ரிக் முயற்சிகள்.</string>
     <string name="version">பதிப்பு</string>
@@ -1050,7 +1083,6 @@
     <string name="sync_with_bitwarden_app">Bitwarden செயலியுடன் ஒத்திசை</string>
     <string name="learn_more_link"><annotation link="learnMore">மேலும் அறிக</annotation></string>
     <string name="shared_codes_error">Bitwarden செயலியிலிருந்து குறியீடுகளை ஒத்திசைக்க முடியவில்லை. இரண்டு செயலிகளும் புதுப்பித்த நிலையில் உள்ளதா என்பதை உறுதிப்படுத்தவும். Bitwarden செயலியில் உங்கள் தற்போதைய குறியீடுகளை நீங்கள் இன்னும் அணுகலாம்.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden செயலியுடன் ஒத்திசைக்கவும்</string>
     <string name="sync_with_bitwarden_action_card_message">உங்கள் சரிபார்ப்புக் குறியீடுகள் அனைத்தையும் காண, உங்கள் எல்லா கணக்குகளிலும் ஒத்திசைவை அனுமதிக்க வேண்டும்.</string>
     <string name="take_me_to_app_settings">என்னை செயலி அமைப்புகளுக்கு அழைத்துச் செல்லவும்</string>
@@ -1068,9 +1100,9 @@
     <string name="account_synced_from_bitwarden_app">கணக்கு Bitwarden செயலியிலிருந்து ஒத்திசைக்கப்பட்டது</string>
     <string name="local_codes">உள்ளூர் குறியீடுகள் (%1$d)</string>
     <string name="required_information_missing">தேவையான தகவல் இல்லை</string>
-    <string name="required_information_missing_message">"தேவையான தகவல் இல்லை (எ.கா., ‘services’ அல்லது ‘secret’). உங்கள் கோப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். ஆதரவிற்கு bitwarden.com/help-ஐப் பார்வையிடவும்"</string>
-    <string name="file_could_not_be_processed">"கோப்பைச் செயல்படுத்த முடியவில்லை"</string>
-    <string name="file_could_not_be_processed_message">"கோப்பைச் செயல்படுத்த முடியவில்லை. இது செல்லுபடியாகும் JSON என்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும். உதவி தேவையா? bitwarden.com/help-ஐப் பார்வையிடவும்"</string>
+    <string name="required_information_missing_message">தேவையான தகவல் இல்லை (எ.கா., ‘services’ அல்லது ‘secret’). உங்கள் கோப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். ஆதரவிற்கு bitwarden.com/help-ஐப் பார்வையிடவும்</string>
+    <string name="file_could_not_be_processed">கோப்பைச் செயல்படுத்த முடியவில்லை</string>
+    <string name="file_could_not_be_processed_message">கோப்பைச் செயல்படுத்த முடியவில்லை. இது செல்லுபடியாகும் JSON என்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும். உதவி தேவையா? bitwarden.com/help-ஐப் பார்வையிடவும்</string>
     <string name="get_help">உதவி பெறு</string>
     <string name="expand_advanced_options">மேம்பட்ட விருப்பங்களை விரி</string>
     <string name="local_items_are_expanded_click_to_collapse">உள்ளூர் உருப்படிகள் விரிவாக்கப்பட்டுள்ளன, சுருக்குவதற்கு கிளிக் செய்யவும்.</string>
@@ -1094,4 +1126,93 @@
     <string name="default_uri_match_detection_description_advanced_options">தானியங்கு நிரப்புதல் பரிந்துரைகளை Bitwarden எவ்வாறு கண்டறிகிறது என்பதை URI பொருத்தம் கண்டறிதல் கட்டுப்படுத்துகிறது.\n<annotation emphasis="bold">எச்சரிக்கை::</annotation> \"தொடங்குகிறது\" என்பது சான்றுகளை வெளிப்படுத்தும் அபாயம் கொண்ட ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"தொடங்குகிறது\" என்பது நற்சான்றிதழ்களை வெளிப்படுத்தும் அதிக ஆபத்து உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"வழக்கமான வெளிப்பாடு\" என்பது தவறாகப் பயன்படுத்தப்பட்டால் நற்சான்றிதழ்களை வெளிப்படுத்தும் அபாயம் அதிகம் உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
+    <string name="later">Later</string>
+    <string name="encryption_settings_updated">Encryption settings updated</string>
+    <string name="update_your_encryption_settings">Update your encryption settings</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="saving_items">Saving items…</string>
+    <string name="unable_to_import_your_items">Unable to import your items</string>
+    <string name="import_from_computer">Import from computer</string>
+    <string name="import_from_another_app">Import from another app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d item has been imported to your vault.</item>
+        <item quantity="other">%1$d items have been imported to your vault.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="select_account">Select account</string>
+    <string name="no_accounts_available">No accounts available</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
+    <string name="verify_your_master_password">Verify your master password</string>
+    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
+    <string name="items_to_import">Items to import</string>
+    <string name="exporting_items">Exporting items…</string>
+    <string name="export_failed">ஏற்றுமதி தோல்வியடைந்தது</string>
+    <string name="passwords">கடவுச்சொற்கள்</string>
+    <string name="passkeys">கடவுவிசைகள்</string>
+    <string name="why_is_this_step_required">Why is this step required?</string>
+    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
+    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
+    <string name="no_items_available_to_import">No items available to import</string>
+    <string name="select_a_different_account">Select a different account</string>
+    <string name="verify_your_account_email_address">Verify your account email address</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
+    <string name="lock_app">Lock app</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
+    <string name="loading_vault_data">Loading vault data…</string>
+    <string name="resending">Resending</string>
+    <string name="you_left_the_organization">You left the organization</string>
+    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="decline_and_leave">Decline and leave</string>
+    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="migrating_items_to_x">Migrating items to %s</string>
+    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
+    <string name="search_archive">Search archive</string>
+    <string name="archive_noun">Archive</string>
+    <string name="archive_verb">Archive</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="archived">Archived</string>
+    <string name="hidden_items">Hidden items</string>
+    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
+    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
+    <string name="archiving">Archiving</string>
+    <string name="unarchiving">Unarchiving</string>
+    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="archive_unavailable">Archive unavailable</string>
+    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="introducing_archive">Introducing archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
+    <string name="go_to_archive">Go to archive</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
+    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
+    <string name="restart_premium">Restart Premium</string>
+    <string name="items_transferred">Items transferred</string>
+    <string name="updated_master_password">புதுப்பிக்கப்பட்ட பிரதான கடவுச்சொல்</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

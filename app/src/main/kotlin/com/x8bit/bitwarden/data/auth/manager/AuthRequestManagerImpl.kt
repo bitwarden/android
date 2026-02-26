@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import java.time.Clock
 import javax.inject.Singleton
-import kotlin.coroutines.coroutineContext
 
 private const val PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
 private const val PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS: Long = 4L * 1_000L
@@ -129,7 +128,6 @@ class AuthRequestManagerImpl(
 
                             updateAuthRequest
                                 .creationDate
-                                .toInstant()
                                 .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
                                 .isBefore(clock.instant()) -> {
                                 clearPendingAuthRequest()
@@ -163,7 +161,7 @@ class AuthRequestManagerImpl(
         emit(result)
         if (result is AuthRequestUpdatesResult.Error) return@flow
         var isComplete = false
-        while (coroutineContext.isActive && !isComplete) {
+        while (currentCoroutineContext().isActive && !isComplete) {
             delay(PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
             val updateResult = result as AuthRequestUpdatesResult.Update
             authRequestsService
@@ -200,7 +198,6 @@ class AuthRequestManagerImpl(
 
                             updateAuthRequest
                                 .creationDate
-                                .toInstant()
                                 .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
                                 .isBefore(clock.instant()) -> {
                                 isComplete = true

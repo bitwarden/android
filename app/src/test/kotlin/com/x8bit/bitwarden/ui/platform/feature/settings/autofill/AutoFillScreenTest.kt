@@ -15,14 +15,14 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startSystemAccessibilitySettingsActivity
+import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -45,6 +45,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
+    private var onNavigateToSetupBrowserAutofillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
     private var onNavigateToPrivilegedAppsListCalled = false
 
@@ -70,7 +71,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every {
             intentManager.startSystemAutofillSettingsActivity()
         } answers { isSystemSettingsRequestSuccess }
-        every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
+        every { intentManager.startSystemAccessibilitySettingsActivity() } returns true
 
         setContent(
             intentManager = intentManager,
@@ -79,6 +80,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                onNavigateToSetupBrowserAutofill = {
+                    onNavigateToSetupBrowserAutofillScreenCalled = true
+                },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
                 },
@@ -97,6 +101,16 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             IntentManager::startSystemAccessibilitySettingsActivity,
             IntentManager::startBrowserAutofillSettingsActivity,
         )
+    }
+
+    @Test
+    fun `on NavigateToAutofillHelp should launch the browser to the autofill help page`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillHelp)
+        verify(exactly = 1) {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/auto-fill-android-troubleshooting/".toUri(),
+            )
+        }
     }
 
     @Test
@@ -153,6 +167,17 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         verify { intentManager.startCredentialManagerSettings() }
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on help card CTA should send HelpCardClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Having trouble with autofill?")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.HelpCardClick)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -334,6 +359,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Passkey management")
+            .performScrollTo()
             .performClick()
         composeTestRule.onNode(isDialog()).assertExists()
         composeTestRule
@@ -562,9 +588,58 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `browser autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+        }
+    }
+
+    @Test
     fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when NavigateToSetupBrowserAutofill event is sent should call onNavigateToSetupBrowserAutofill`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupBrowserAutofill)
+        assertTrue(onNavigateToSetupBrowserAutofillScreenCalled)
     }
 
     @Test
@@ -611,7 +686,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Use Chrome autofill integration (Beta)")
+            .onNodeWithText("Use Chrome Beta autofill integration")
             .performScrollTo()
             .performClick()
 
@@ -653,23 +728,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `PrivilegedAppsRow should display based on state`() {
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(isUserManagedPrivilegedAppsEnabled = true)
-        }
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `privileged app help link click should send AboutPrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithContentDescription("Learn more about privileged apps")
             .performScrollTo()
@@ -689,7 +748,6 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `privileged apps row click should send PrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithText("Privileged apps")
             .performScrollTo()
@@ -804,7 +862,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on NavigateToLearnMore should call launchUri`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToLearnMore)
-        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        }
     }
 }
 
@@ -818,7 +878,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
+    showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
-    isUserManagedPrivilegedAppsEnabled = false,
 )

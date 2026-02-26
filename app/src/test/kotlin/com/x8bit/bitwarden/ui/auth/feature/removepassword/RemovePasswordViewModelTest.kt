@@ -10,9 +10,9 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -84,36 +84,37 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `ContinueClick with input and remove password wrong password error with should show error dialog with message`() = runTest {
-        val password = "123"
-        val initialState = DEFAULT_STATE.copy(input = password)
-        val viewModel = createViewModel(state = initialState)
-        coEvery {
-            authRepository.removePassword(masterPassword = password)
-        } returns RemovePasswordResult.WrongPasswordError
+    fun `ContinueClick with input and remove password wrong password error with should show error dialog with message`() =
+        runTest {
+            val password = "123"
+            val initialState = DEFAULT_STATE.copy(input = password)
+            val viewModel = createViewModel(state = initialState)
+            coEvery {
+                authRepository.removePassword(masterPassword = password)
+            } returns RemovePasswordResult.WrongPasswordError
 
-        viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(RemovePasswordAction.ContinueClick)
-            assertEquals(
-                initialState.copy(
-                    dialogState = RemovePasswordState.DialogState.Loading(
-                        title = BitwardenString.deleting.asText(),
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(RemovePasswordAction.ContinueClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = RemovePasswordState.DialogState.Loading(
+                            title = BitwardenString.deleting.asText(),
+                        ),
                     ),
-                ),
-                awaitItem(),
-            )
-            assertEquals(
-                initialState.copy(
-                    dialogState = RemovePasswordState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.invalid_master_password.asText(),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = RemovePasswordState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
+                        ),
                     ),
-                ),
-                awaitItem(),
-            )
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `ContinueClick with input and remove password success should dismiss dialog`() = runTest {
@@ -288,14 +289,12 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     needsPasswordReset = false,
     isBiometricsEnabled = false,
     organizations = listOf(
-        Organization(
-            id = "mockId-1",
+        createMockOrganization(
+            number = 1,
             name = ORGANIZATION_NAME,
-            shouldManageResetPassword = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
             keyConnectorUrl = KEY_CONNECTOR_URL,
-            userIsClaimedByOrganization = false,
         ),
     ),
     needsMasterPassword = false,
@@ -304,6 +303,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

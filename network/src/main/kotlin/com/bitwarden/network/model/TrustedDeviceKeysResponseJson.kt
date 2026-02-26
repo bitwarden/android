@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * The response body for trusting a device.
@@ -14,5 +14,5 @@ data class TrustedDeviceKeysResponseJson(
     @SerialName("name") val name: String,
     @SerialName("identifier") val identifier: String,
     @SerialName("type") val type: Int,
-    @Contextual @SerialName("creationDate") val creationDate: ZonedDateTime,
+    @Contextual @SerialName("creationDate") val creationDate: Instant,
 )

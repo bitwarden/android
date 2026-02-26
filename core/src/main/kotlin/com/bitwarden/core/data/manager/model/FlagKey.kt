@@ -32,7 +32,12 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                UserManagedPrivilegedApps,
+                ForceUpdateKdfSettings,
+                CipherKeyEncryption,
+                NoLogoutOnKdfChange,
+                MigrateMyVaultToMyItems,
+                ArchiveItems,
+                SendEmailVerification,
             )
         }
     }
@@ -64,18 +69,50 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key to enabled user-managed privileged apps.
-     */
-    data object UserManagedPrivilegedApps : FlagKey<Boolean>() {
-        override val keyName: String = "pm-18970-user-managed-privileged-apps"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      *  Indicates the state of Bitwarden authentication.
      */
     data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
         override val keyName: String = "bitwarden-authentication-enabled"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
+     */
+    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
+        override val keyName: String = "pm-18021-force-update-kdf-settings"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the No Logout On KDF Change feature.
+     */
+    data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
+        override val keyName: String = "pm-23995-no-logout-on-kdf-change"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Migrate My Vault to My Items feature.
+     */
+    data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
+        override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Archive Items feature.
+     */
+    data object ArchiveItems : FlagKey<Boolean>() {
+        override val keyName: String = "pm-19148-innovation-archive"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Send Email Verification feature.
+     */
+    data object SendEmailVerification : FlagKey<Boolean>() {
+        override val keyName: String = "pm-19051-send-email-verification"
         override val defaultValue: Boolean = false
     }
 

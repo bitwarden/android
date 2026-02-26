@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.di
 
 import android.content.Context
 import android.view.autofill.AutofillManager
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
@@ -24,6 +26,8 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -60,6 +64,22 @@ object AutofillModule {
     @Provides
     fun providesBrowserAutofillEnabledManager(): BrowserThirdPartyAutofillEnabledManager =
         BrowserThirdPartyAutofillEnabledManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesBrowserAutofillDialogManager(
+        autofillEnabledManager: AutofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        clock: Clock,
+        firstTimeActionManager: FirstTimeActionManager,
+        settingsDiskSource: SettingsDiskSource,
+    ): BrowserAutofillDialogManager = BrowserAutofillDialogManagerImpl(
+        autofillEnabledManager = autofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        clock = clock,
+        firstTimeActionManager = firstTimeActionManager,
+        settingsDiskSource = settingsDiskSource,
+    )
 
     @Singleton
     @Provides

@@ -41,6 +41,7 @@ class AutofillParserTests {
         every { this@mockk.autofillId } returns cardAutofillId
         every { this@mockk.childCount } returns 0
         every { this@mockk.idPackage } returns ID_PACKAGE
+        every { this@mockk.idEntry } returns null
     }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
@@ -49,6 +50,7 @@ class AutofillParserTests {
         every { this@mockk.autofillId } returns loginAutofillId
         every { this@mockk.childCount } returns 0
         every { this@mockk.idPackage } returns ID_PACKAGE
+        every { this@mockk.idEntry } returns null
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
@@ -78,8 +80,9 @@ class AutofillParserTests {
         mockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
+            AutofillView::buildUriOrNull,
+            List<ViewNodeTraversalData>::buildPackageNameOrNull,
         )
-        mockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
         every { cardViewNode.website } returns WEBSITE
         every { loginViewNode.website } returns WEBSITE
         every {
@@ -121,7 +124,7 @@ class AutofillParserTests {
         every {
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
         } returns PACKAGE_NAME
-        every { any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME) } returns URI
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns URI
         parser = AutofillParserImpl(
             settingsRepository = settingsRepository,
         )
@@ -134,8 +137,9 @@ class AutofillParserTests {
         unmockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
+            AutofillView::buildUriOrNull,
+            List<ViewNodeTraversalData>::buildPackageNameOrNull,
         )
-        unmockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
     }
 
     @Test
@@ -170,6 +174,80 @@ class AutofillParserTests {
         assertEquals(expected, actual)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should return Fillable with website in AutofillView from url bar for compatible browser`() {
+        // Setup
+        val website = "https://m.facebook.com"
+        val packageName = "com.microsoft.emmx"
+        every {
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+        } returns packageName
+        every { assistStructure.windowNodeCount } returns 2
+        // Override the idPackage to be Edge's package name.
+        every { loginViewNode.idPackage } returns packageName
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        val urlBarNode: AssistStructure.ViewNode = mockk {
+            every { autofillHints } returns emptyArray()
+            every { autofillId } returns null
+            every { childCount } returns 0
+            every { idEntry } returns "url_bar"
+            every { idPackage } returns packageName
+            every { webDomain } returns "m.facebook.com"
+            every { webScheme } returns null
+        }
+        val urlBarWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns urlBarNode
+        }
+        every { assistStructure.getWindowNodeAt(1) } returns urlBarWindowNode
+        val loginAutofillView: AutofillView.Login.Username = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(
+                loginAutofillView.copy(data = loginAutofillView.data.copy(website = website)),
+            ),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = packageName,
+            partition = autofillPartition,
+            uri = website,
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<AutofillView>().buildUriOrNull(packageName)
+        }
+    }
+
     @Test
     fun `parse should return Fillable when at least one node valid, ignores the invalid nodes`() {
         // Setup
@@ -181,7 +259,7 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns null
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView() } returns null
+            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
             every { this@mockk.website } returns null
         }
         // `invalidChildViewNode` simulates the OS assigning a node's idPackage to "android", which
@@ -194,7 +272,7 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns ID_PACKAGE_ANDROID
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView() } returns null
+            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
             every { this@mockk.website } returns null
         }
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
@@ -207,6 +285,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -214,7 +293,7 @@ class AutofillParserTests {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
             every { this@mockk.autofillId } returns parentAutofillId
             every { this@mockk.idPackage } returns null
-            every { this@mockk.toAutofillView() } returns parentAutofillView
+            every { this@mockk.toAutofillView(parentWebsite = any()) } returns parentAutofillView
             every { this@mockk.childCount } returns 2
             every { this@mockk.getChildAt(0) } returns childViewNode
             every { this@mockk.getChildAt(1) } returns invalidChildViewNode
@@ -255,10 +334,10 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
         verify(exactly = 0) {
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(ID_PACKAGE_ANDROID)
+            any<AutofillView>().buildUriOrNull(ID_PACKAGE_ANDROID)
         }
     }
 
@@ -274,6 +353,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -285,6 +365,7 @@ class AutofillParserTests {
                 isFocused = false,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -298,8 +379,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -319,7 +400,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -335,6 +416,7 @@ class AutofillParserTests {
                 isFocused = false,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -346,6 +428,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Login(
@@ -359,8 +442,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -380,7 +463,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -398,6 +481,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = true,
+                website = URI,
             ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Password(
@@ -414,7 +498,7 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { loginViewNode.toAutofillView() } returns unusedAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedAutofillView
 
         // Test
         val actual = parser.parse(
@@ -434,7 +518,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -481,6 +565,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val loginUsernameAutofillView: AutofillView.Login = AutofillView.Login.Username(
@@ -491,6 +576,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val loginPasswordAutofillView: AutofillView.Login = AutofillView.Login.Password(
@@ -501,6 +587,7 @@ class AutofillParserTests {
                 isFocused = false,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Login(
@@ -514,9 +601,13 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { rootViewNode.toAutofillView() } returns null
-        every { hiddenUserNameViewNode.toAutofillView() } returns unusedAutofillView
-        every { passwordViewNode.toAutofillView() } returns loginPasswordAutofillView
+        every { rootViewNode.toAutofillView(parentWebsite = any()) } returns null
+        every {
+            hiddenUserNameViewNode.toAutofillView(parentWebsite = any())
+        } returns unusedAutofillView
+        every {
+            passwordViewNode.toAutofillView(parentWebsite = any())
+        } returns loginPasswordAutofillView
 
         // Test
         val actual = parser.parse(
@@ -536,7 +627,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -552,6 +643,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -563,6 +655,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -576,8 +669,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -597,7 +690,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -614,6 +707,7 @@ class AutofillParserTests {
                 isFocused = false,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -625,6 +719,7 @@ class AutofillParserTests {
                 isFocused = false,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -638,8 +733,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -659,7 +754,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -676,6 +771,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -687,6 +783,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -700,8 +797,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -721,7 +818,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = false,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -738,6 +835,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -749,6 +847,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -762,8 +861,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -783,7 +882,7 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = false,
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -799,6 +898,7 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
             monthValue = null,
         )
@@ -810,22 +910,21 @@ class AutofillParserTests {
                 isFocused = true,
                 textValue = null,
                 hasPasswordTerms = false,
+                website = URI,
             ),
         )
         val remoteBlockList = listOf(
             "blockListedUri.com",
             "blockListedAgainUri.com",
         )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
         every { settingsRepository.blockedAutofillUris } returns remoteBlockList
 
         // A function for asserting that a block listed URI results in an unfillable request.
         fun testBlockListedUri(blockListedUri: String) {
             // Setup
-            every {
-                any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
-            } returns blockListedUri
+            every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns blockListedUri
 
             // Test
             val actual = parser.parse(
@@ -844,7 +943,7 @@ class AutofillParserTests {
         // Verify all tests
         verify(exactly = BLOCK_LISTED_URIS.size + remoteBlockList.size) {
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 

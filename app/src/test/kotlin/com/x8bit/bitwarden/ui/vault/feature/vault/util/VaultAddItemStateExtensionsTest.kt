@@ -18,33 +18,23 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Cre
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
-import io.mockk.every
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultAddItemStateExtensionsTest {
 
-    @AfterEach
-    fun tearDown() {
-        // Some individual tests call mockkStatic so we will make sure this is always undone.
-        unmockkStatic(Instant::class)
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should transform Login ItemType to CipherView`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
-
         val loginItemType = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -71,7 +61,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = loginItemType.toCipherView()
+        val result = loginItemType.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             CipherView(
@@ -111,10 +101,12 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = null,
                 permissions = null,
-                creationDate = Instant.MIN,
+                creationDate = FIXED_CLOCK.instant(),
                 deletedDate = null,
-                revisionDate = Instant.MIN,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -123,8 +115,6 @@ class VaultAddItemStateExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should transform Login ItemType to CipherView with original cipher`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -157,7 +147,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             @Suppress("MaxLineLength")
@@ -170,7 +160,7 @@ class VaultAddItemStateExtensionsTest {
                 login = LoginView(
                     username = "mockUsername-1",
                     password = "mockPassword-1",
-                    passwordRevisionDate = Instant.MIN,
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
                     uris = listOf(
                         LoginUriView(
                             uri = "mockUri-1",
@@ -213,15 +203,15 @@ class VaultAddItemStateExtensionsTest {
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
                         password = "password",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
                         password = "hidden: value",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                 ),
             ),
@@ -231,8 +221,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform SecureNotes ItemType to CipherView`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -251,7 +239,7 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             CipherView(
@@ -296,10 +284,12 @@ class VaultAddItemStateExtensionsTest {
                 ),
                 passwordHistory = null,
                 permissions = null,
-                creationDate = Instant.MIN,
+                creationDate = FIXED_CLOCK.instant(),
                 deletedDate = null,
-                revisionDate = Instant.MIN,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -307,8 +297,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform SecureNotes ItemType to CipherView with original cipher`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(passwordHistory = null)
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -325,7 +313,7 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             cipherView.copy(
@@ -340,7 +328,7 @@ class VaultAddItemStateExtensionsTest {
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "hidden: value",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                 ),
             ),
@@ -350,8 +338,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform Identity ItemType to CipherView`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -384,7 +370,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             CipherView(
@@ -429,10 +415,12 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = null,
                 permissions = null,
-                creationDate = Instant.MIN,
+                creationDate = FIXED_CLOCK.instant(),
                 deletedDate = null,
-                revisionDate = Instant.MIN,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -440,8 +428,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform Identity ItemType to CipherView with original cipher`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -486,7 +472,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             @Suppress("MaxLineLength")
@@ -547,11 +533,11 @@ class VaultAddItemStateExtensionsTest {
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
                         password = "hidden: value",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                 ),
             ),
@@ -561,8 +547,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform Card ItemType to CipherView`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -583,7 +567,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             CipherView(
@@ -616,10 +600,12 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = null,
                 permissions = null,
-                creationDate = Instant.MIN,
+                creationDate = FIXED_CLOCK.instant(),
                 deletedDate = null,
-                revisionDate = Instant.MIN,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
                 sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
@@ -627,8 +613,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform Card ItemType to CipherView with original cipher`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val cipherView = DEFAULT_CARD_CIPHER_VIEW
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -661,7 +645,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             cipherView.copy(
@@ -700,11 +684,11 @@ class VaultAddItemStateExtensionsTest {
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
                         password = "hidden: value",
-                        lastUsedDate = Instant.MIN,
+                        lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                 ),
             ),
@@ -714,8 +698,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toCipherView should transform SSH Key ItemType to CipherView`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MIN
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -733,7 +715,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             CipherView(
@@ -759,14 +741,70 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = null,
                 permissions = null,
-                creationDate = Instant.MIN,
+                creationDate = FIXED_CLOCK.instant(),
                 deletedDate = null,
-                revisionDate = Instant.MIN,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
                 sshKey = SshKeyView(
                     publicKey = "mockPublicKey-1",
                     privateKey = "mockPrivateKey-1",
                     fingerprint = "mockFingerprint-1",
                 ),
+                attachmentDecryptionFailures = null,
+            ),
+            result,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toCipherView without premium should delete the archive date from the original cipher`() {
+        val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+            notes = null,
+            fields = emptyList(),
+            login = LoginView(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+                passwordRevisionDate = FIXED_CLOCK.instant(),
+                uris = null,
+                totp = null,
+                autofillOnPageLoad = false,
+                fido2Credentials = createMockSdkFido2CredentialList(1),
+            ),
+            archivedDate = FIXED_CLOCK.instant(),
+        )
+
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                customFieldData = emptyList(),
+                masterPasswordReprompt = true,
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+                totp = null,
+                fido2CredentialCreationDateTime = null,
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = false)
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    totp = null,
+                    fido2Credentials = null,
+                    uris = null,
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
+                    autofillOnPageLoad = false,
+                ),
+                archivedDate = null,
             ),
             result,
         )
@@ -782,7 +820,7 @@ class VaultAddItemStateExtensionsTest {
             login = LoginView(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
-                passwordRevisionDate = Instant.MIN,
+                passwordRevisionDate = FIXED_CLOCK.instant(),
                 uris = null,
                 totp = null,
                 autofillOnPageLoad = false,
@@ -806,7 +844,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView()
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
 
         assertEquals(
             cipherView.copy(
@@ -817,7 +855,7 @@ class VaultAddItemStateExtensionsTest {
                     totp = null,
                     fido2Credentials = null,
                     uris = null,
-                    passwordRevisionDate = Instant.MIN,
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
                     autofillOnPageLoad = false,
                 ),
             ),
@@ -827,9 +865,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toLoginView should update revision date when password differs`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MAX
-
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
 
         val viewState = VaultAddEditState.ViewState.Content(
@@ -846,8 +881,14 @@ class VaultAddItemStateExtensionsTest {
                 password = "mockPassword-1",
             ),
         )
+        val futureClock = Clock.fixed(
+            Instant.parse("2023-11-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
 
-        val result = viewState.toCipherView()
+        // We need to pass in a future clock to make sure that when the
+        // revision date is updated it is updated to a new time
+        val result = viewState.toCipherView(clock = futureClock, isPremiumUser = true)
 
         assertNotEquals(
             viewState.common.originalCipher?.login?.passwordRevisionDate,
@@ -857,9 +898,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toLoginView should keep revision date when password is equal`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MAX
-
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
 
         val viewState = VaultAddEditState.ViewState.Content(
@@ -876,8 +914,14 @@ class VaultAddItemStateExtensionsTest {
                 password = cipherView.login?.password ?: "",
             ),
         )
+        val futureClock = Clock.fixed(
+            Instant.parse("2023-11-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
 
-        val result = viewState.toCipherView()
+        // We need to pass in a future clock to make sure that if the
+        // revision date were to be updated it would be updated to a new time
+        val result = viewState.toCipherView(clock = futureClock, isPremiumUser = true)
 
         assertEquals(
             viewState.common.originalCipher?.login?.passwordRevisionDate,
@@ -887,9 +931,6 @@ class VaultAddItemStateExtensionsTest {
 
     @Test
     fun `toLoginView should not update revision date when password is null and has no history`() {
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns Instant.MAX
-
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
             passwordHistory = null,
             login = DEFAULT_LOGIN_CIPHER_VIEW.login?.copy(password = null),
@@ -909,15 +950,182 @@ class VaultAddItemStateExtensionsTest {
                 password = "updated password",
             ),
         )
+        val futureClock = Clock.fixed(
+            Instant.parse("2023-11-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
 
-        val result = viewState.toCipherView()
+        // We need to pass in a future clock to make sure that if the
+        // revision date were to be updated it would be updated to a new time
+        val result = viewState.toCipherView(clock = futureClock, isPremiumUser = true)
 
         assertEquals(
             viewState.common.originalCipher?.login?.passwordRevisionDate,
             result.login?.passwordRevisionDate,
         )
     }
+
+    @Test
+    fun `toCipherView should use selected collection IDs when originalCipher is null`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                            VaultCollection(
+                                id = "collection-2",
+                                name = "Collection 2",
+                                isSelected = false,
+                                isDefaultUserCollection = false,
+                            ),
+                            VaultCollection(
+                                id = "collection-3",
+                                name = "Collection 3",
+                                isSelected = true,
+                                isDefaultUserCollection = false,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                collectionIds = listOf("collection-1", "collection-3"),
+                key = null,
+                name = "mockName-1",
+                notes = null,
+                type = CipherType.LOGIN,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = null,
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = null,
+                    fido2Credentials = null,
+                ),
+                identity = null,
+                card = null,
+                secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should use originalCipher collectionIds when originalCipher is present`() {
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                notes = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = false,
+                    fido2Credentials = null,
+                ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                fields = emptyList(),
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "hidden: value",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
 
 private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     id = "id1234",
@@ -974,14 +1182,16 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",
-            lastUsedDate = Instant.MIN,
+            lastUsedDate = FIXED_CLOCK.instant(),
         ),
     ),
     permissions = null,
-    creationDate = Instant.MIN,
+    creationDate = FIXED_CLOCK.instant(),
     deletedDate = null,
-    revisionDate = Instant.MIN,
+    revisionDate = FIXED_CLOCK.instant(),
+    archivedDate = FIXED_CLOCK.instant(),
     sshKey = null,
+    attachmentDecryptionFailures = null,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
@@ -989,7 +1199,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
     login = LoginView(
         username = "username",
         password = "password",
-        passwordRevisionDate = Instant.MIN,
+        passwordRevisionDate = FIXED_CLOCK.instant(),
         uris = listOf(
             LoginUriView(
                 uri = "www.example.com",

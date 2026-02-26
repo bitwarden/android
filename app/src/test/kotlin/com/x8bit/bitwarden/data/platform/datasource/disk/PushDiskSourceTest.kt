@@ -1,15 +1,15 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import androidx.core.content.edit
-import com.bitwarden.core.util.getBinaryLongFromZoneDateTime
-import com.bitwarden.core.util.getZoneDateTimeFromBinaryLong
+import com.bitwarden.core.util.getBinaryLongFromInstant
+import com.bitwarden.core.util.getInstantFromBinaryLong
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class PushDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
@@ -47,7 +47,7 @@ class PushDiskSourceTest {
         )
         pushDiskSource.storeLastPushTokenRegistrationDate(
             userId = userId,
-            registrationDate = ZonedDateTime.now(),
+            registrationDate = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
         pushDiskSource.clearData(userId = userId)
@@ -99,12 +99,12 @@ class PushDiskSourceTest {
     fun `getLastPushTokenRegistrationDate should pull from SharedPreferences`() {
         val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
         val mockUserId = "mockUserId"
-        val mockLastPushTokenRegistration = ZonedDateTime.parse("2024-01-06T22:27:45.904314Z")
+        val mockLastPushTokenRegistration = Instant.parse("2024-01-06T22:27:45.904314Z")
         fakeSharedPreferences
             .edit {
                 putLong(
                     "${lastPushTokenBaseKey}_$mockUserId",
-                    getBinaryLongFromZoneDateTime(mockLastPushTokenRegistration),
+                    getBinaryLongFromInstant(mockLastPushTokenRegistration),
                 )
             }
         val actual = pushDiskSource.getLastPushTokenRegistrationDate(userId = mockUserId)!!
@@ -118,7 +118,7 @@ class PushDiskSourceTest {
     fun `storeLastPushTokenRegistrationDate for non-null values should update SharedPreferences`() {
         val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
         val mockUserId = "mockUserId"
-        val mockLastPushTokenRegistration = ZonedDateTime.parse("2024-01-06T22:27:45.904314Z")
+        val mockLastPushTokenRegistration = Instant.parse("2024-01-06T22:27:45.904314Z")
         pushDiskSource.storeLastPushTokenRegistrationDate(
             userId = mockUserId,
             registrationDate = mockLastPushTokenRegistration,
@@ -130,7 +130,7 @@ class PushDiskSourceTest {
             )
         assertEquals(
             mockLastPushTokenRegistration,
-            getZoneDateTimeFromBinaryLong(actual),
+            getInstantFromBinaryLong(actual),
         )
     }
 
@@ -138,10 +138,10 @@ class PushDiskSourceTest {
     fun `storeLastPushTokenRegistrationDate for null values should clear SharedPreferences`() {
         val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
         val mockUserId = "mockUserId"
-        val mockLastPushTokenRegistration = ZonedDateTime.now()
+        val mockLastPushTokenRegistration = Instant.parse("2023-10-27T12:00:00Z")
         val lastPushTokenKey = "${lastPushTokenBaseKey}_$mockUserId"
         fakeSharedPreferences.edit {
-            putLong(lastPushTokenKey, mockLastPushTokenRegistration.toEpochSecond())
+            putLong(lastPushTokenKey, mockLastPushTokenRegistration.epochSecond)
         }
         assertTrue(fakeSharedPreferences.contains(lastPushTokenKey))
         pushDiskSource.storeLastPushTokenRegistrationDate(

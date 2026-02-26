@@ -1,9 +1,10 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.impl.VariantOutputImpl
 import com.android.utils.cxx.io.removeExtensionIfPresent
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
-import dagger.hilt.android.plugin.util.capitalize
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -15,7 +16,6 @@ plugins {
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
@@ -43,26 +43,34 @@ val ciProperties = Properties().apply {
     }
 }
 
-android {
-    namespace = "com.x8bit.bitwarden"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+base {
+    // Set the base archive name for publishing purposes. This is used to derive the
+    // APK and AAB artifact names when uploading to Firebase and Play Store.
+    archivesName.set("com.x8bit.bitwarden")
+}
 
-    room {
-        schemaDirectory("$projectDir/schemas")
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+configure<ApplicationExtension> {
+    namespace = "com.x8bit.bitwarden"
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
     }
 
     defaultConfig {
         applicationId = "com.x8bit.bitwarden"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdk.get().toInt())
+        }
+        targetSdk {
+            version = release(libs.versions.targetSdk.get().toInt())
+        }
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
-        // artifact names when uploading to Firebase and Play Store.
-        base.archivesName = "com.x8bit.bitwarden"
 
         buildConfigField(
             type = "String",
@@ -141,39 +149,6 @@ android {
         }
     }
 
-    applicationVariants.all {
-        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
-        outputs
-            .mapNotNull { it as? BaseVariantOutputImpl }
-            .forEach { output ->
-                val fileNameWithoutExtension = when (flavorName) {
-                    "fdroid" -> "$applicationId-$flavorName"
-                    "standard" -> "$applicationId"
-                    else -> output.outputFileName.removeExtensionIfPresent(".apk")
-                }
-
-                // Set the APK output filename.
-                output.outputFileName = "$fileNameWithoutExtension.apk"
-
-                val variantName = name
-                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
-                tasks.register(renameTaskName) {
-                    group = "build"
-                    description = "Renames the bundle files for $variantName variant"
-                    doLast {
-                        renameFile(
-                            "$bundlesDir/$variantName/$namespace-$flavorName-${buildType.name}.aab",
-                            "$fileNameWithoutExtension.aab",
-                        )
-                    }
-                }
-                // Force renaming task to execute after the variant is built.
-                tasks
-                    .getByName("bundle${variantName.capitalize()}")
-                    .finalizedBy(renameTaskName)
-            }
-    }
-
     compileOptions {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
@@ -200,9 +175,50 @@ android {
     }
 }
 
+androidComponents {
+    onVariants { appVariant ->
+        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
+        val applicationId = appVariant.applicationId.get()
+        val flavorName = appVariant.flavorName
+        val variantName = appVariant.name
+        val buildType = appVariant.buildType
+        appVariant
+            .outputs
+            .mapNotNull { it as? VariantOutputImpl }
+            .forEach { output ->
+                val fileNameWithoutExtension = when (flavorName) {
+                    "fdroid" -> "$applicationId-$flavorName"
+                    "standard" -> applicationId
+                    else -> output.outputFileName.get().removeExtensionIfPresent(".apk")
+                }
+
+                // Set the APK output filename.
+                output.outputFileName.set("$fileNameWithoutExtension.apk")
+
+                val renameTaskName = "rename${variantName.uppercaseFirstChar()}AabFiles"
+                tasks.register(renameTaskName) {
+                    group = "build"
+                    description = "Renames the bundle files for $variantName variant"
+                    doLast {
+                        val namespace = appVariant.namespace.get()
+                        renameFile(
+                            "$bundlesDir/$variantName/$namespace-$flavorName-$buildType.aab",
+                            "$fileNameWithoutExtension.aab",
+                        )
+                    }
+                }
+                // Force renaming task to execute after the variant is built.
+                val bundleTaskName = "bundle${variantName.uppercaseFirstChar()}"
+                tasks
+                    .named { it == bundleTaskName }
+                    .configureEach { finalizedBy(renameTaskName) }
+            }
+    }
+}
+
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 
@@ -220,10 +236,11 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
-    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
+    implementation(project(":authenticatorbridge"))
 
     implementation(project(":annotation"))
     implementation(project(":core"))
+    implementation(project(":cxf"))
     implementation(project(":data"))
     implementation(project(":network"))
     implementation(project(":ui"))
@@ -234,8 +251,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.biometrics)
     implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material3)
@@ -245,6 +261,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.providerevents)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -258,7 +276,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
-    implementation(libs.androidx.credentials)
+    implementation(libs.bumptech.glide.okhttp)
+    ksp(libs.bumptech.glide.compiler)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)
@@ -269,7 +288,6 @@ dependencies {
     implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
     implementation(libs.timber)
-    implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -282,6 +300,7 @@ dependencies {
     standardImplementation(libs.google.play.review)
 
     // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":core")))
     testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
     testImplementation(testFixtures(project(":ui")))
@@ -290,21 +309,12 @@ dependencies {
     testImplementation(libs.google.hilt.android.testing)
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
-}
-
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        maxHeapSize = "2g"
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
-    }
 }
 
 afterEvaluate {

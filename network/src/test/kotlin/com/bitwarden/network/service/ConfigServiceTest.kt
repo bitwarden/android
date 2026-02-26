@@ -42,6 +42,14 @@ private const val CONFIG_RESPONSE_JSON = """
   },
   "featureStates": {
     "feature one": false
+  },
+  "communication": {
+    "bootstrap": {
+      "type": "ssoCookieVendor",
+      "idpLoginUrl": "https://idp.example.com/login",
+      "cookieName": "sso-cookie",
+      "cookieDomain": ".example.com"
+    }
   }
 }
 """
@@ -63,5 +71,13 @@ private val CONFIG_RESPONSE = ConfigResponseJson(
     ),
     featureStates = mapOf(
         "feature one" to JsonPrimitive(false),
+    ),
+    communication = ConfigResponseJson.CommunicationJson(
+        bootstrap = ConfigResponseJson.CommunicationJson.BootstrapJson(
+            type = "ssoCookieVendor",
+            idpLoginUrl = "https://idp.example.com/login",
+            cookieName = "sso-cookie",
+            cookieDomain = ".example.com",
+        ),
     ),
 )

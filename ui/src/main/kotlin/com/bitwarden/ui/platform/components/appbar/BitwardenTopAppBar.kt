@@ -20,11 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastMap
 import com.bitwarden.ui.R
 import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
@@ -38,12 +41,15 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
  *
- * - a single navigation control in the upper-left defined by [navigationIcon],
- *   [navigationIconContentDescription], and [onNavigationIconClick].
- * - a [title] in the middle.
- * - a [actions] lambda containing the set of actions (usually icons or similar) to display
- *  in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
- *  defining the layout of the actions.
+ * @param title The title to display in the app bar.
+ * @param scrollBehavior The [TopAppBarScrollBehavior] to apply to the app bar.
+ * @param navigationIcon The icon to be displayed for the navigation icon button.
+ * @param navigationIconContentDescription The content description of the navigation icon button.
+ * @param onNavigationIconClick The click action to occur when the navigation icon button is tapped.
+ * @param modifier The [Modifier] applied to the app bar.
+ * @param windowInsets The window insets to apply to the app bar.
+ * @param dividerStyle Applies a bottom divider based on the [TopAppBarDividerStyle] provided.
+ * @param actions A [Composable] lambda of action to display in the app bar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,17 +83,16 @@ fun BitwardenTopAppBar(
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
  *
- * - an optional single navigation control in the upper-left defined by [navigationIcon].
- * - a [title] in the middle.
- * - a [actions] lambda containing the set of actions (usually icons or similar) to display
- *  in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
- *  defining the layout of the actions.
- * - if the title text causes an overflow in the standard material [TopAppBar] a [MediumTopAppBar]
- *   will be used instead, droping the title text to a second row beneath the [navigationIcon] and
- *   [actions].
+ * @param title The title to display in the app bar.
+ * @param scrollBehavior The [TopAppBarScrollBehavior] to apply to the app bar.
+ * @param navigationIcon The option [NavigationIcon] to display the navigation icon button.
+ * @param modifier The [Modifier] applied to the app bar.
+ * @param windowInsets The window insets to apply to the app bar.
+ * @param dividerStyle Applies a bottom divider based on the [TopAppBarDividerStyle] provided.
+ * @param actions A [Composable] lambda of action to display in the app bar.
+ * @param minimumHeight The minimum height of the app bar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun BitwardenTopAppBar(
     title: String,
@@ -100,88 +105,178 @@ fun BitwardenTopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     minimumHeight: Dp = 48.dp,
 ) {
-    var titleTextHasOverflow by remember {
-        mutableStateOf(false)
-    }
-
-    val navigationIconContent: @Composable () -> Unit = remember(navigationIcon) {
-        {
-            navigationIcon?.let {
-                BitwardenStandardIconButton(
-                    painter = it.navigationIcon,
-                    contentDescription = it.navigationIconContentDescription,
-                    onClick = it.onNavigationIconClick,
-                    modifier = Modifier
-                        .testTag(tag = "CloseButton")
-                        .mirrorIfRtl(),
-                )
-            }
-        }
-    }
-    val customModifier = modifier
-        .testTag(tag = "HeaderBarComponent")
-        .scrolledContainerBottomDivider(
-            topAppBarScrollBehavior = scrollBehavior,
-            enabled = when (dividerStyle) {
-                TopAppBarDividerStyle.NONE -> false
-                TopAppBarDividerStyle.STATIC -> false
-                TopAppBarDividerStyle.ON_SCROLL -> true
-            },
-        )
-        .bottomDivider(
-            enabled = when (dividerStyle) {
-                TopAppBarDividerStyle.NONE -> false
-                TopAppBarDividerStyle.STATIC -> true
-                TopAppBarDividerStyle.ON_SCROLL -> false
-            },
-        )
-
-    if (titleTextHasOverflow) {
-        MediumTopAppBar(
-            windowInsets = windowInsets,
-            colors = bitwardenTopAppBarColors(),
-            scrollBehavior = scrollBehavior,
-            navigationIcon = navigationIconContent,
-            collapsedHeight = minimumHeight,
-            expandedHeight = 96.dp,
-            title = {
-                // The height of the component is controlled and will only allow for 1 extra row,
-                // making adding any arguments for softWrap and minLines superfluous.
-                Text(
-                    text = title,
-                    style = BitwardenTheme.typography.titleLarge,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag(tag = "PageTitleLabel"),
-                )
-            },
-            modifier = customModifier,
-            actions = actions,
-        )
-    } else {
-        TopAppBar(
-            windowInsets = windowInsets,
-            colors = bitwardenTopAppBarColors(),
-            scrollBehavior = scrollBehavior,
-            navigationIcon = navigationIconContent,
-            expandedHeight = minimumHeight,
-            title = {
-                Text(
-                    text = title,
-                    style = BitwardenTheme.typography.titleLarge,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag(tag = "PageTitleLabel"),
-                    onTextLayout = {
-                        titleTextHasOverflow = it.hasVisualOverflow
+    var titleTextHasOverflow by remember(key1 = title) { mutableStateOf(false) }
+    // Without this sub-compose layout, there would be flickering when displaying the
+    // MediumTopAppBar because the regular TopAppBar would be displayed first.
+    SubcomposeLayout(modifier = modifier) { constraints ->
+        // We assume a regular TopAppBar and only if it is overflowing do we use a MediumTopAppBar.
+        // Once we determine the overflow is occurring, we will not measure the regular one again
+        // unless the title changes or a configuration change occurs.
+        val placeables = if (titleTextHasOverflow) {
+            this
+                .subcompose(
+                    slotId = "mediumTopAppBarContent",
+                    content = {
+                        InternalMediumTopAppBar(
+                            title = title,
+                            windowInsets = windowInsets,
+                            scrollBehavior = scrollBehavior,
+                            navigationIcon = navigationIcon,
+                            minimumHeight = minimumHeight,
+                            actions = actions,
+                            dividerStyle = dividerStyle,
+                        )
                     },
                 )
-            },
-            modifier = customModifier,
-            actions = actions,
+                .fastMap { it.measure(constraints = constraints) }
+        } else {
+            this
+                .subcompose(
+                    slotId = "defaultTopAppBarContent",
+                    content = {
+                        InternalDefaultTopAppBar(
+                            title = title,
+                            windowInsets = windowInsets,
+                            scrollBehavior = scrollBehavior,
+                            navigationIcon = navigationIcon,
+                            minimumHeight = minimumHeight,
+                            actions = actions,
+                            dividerStyle = dividerStyle,
+                            onTitleTextLayout = { titleTextHasOverflow = it.hasVisualOverflow },
+                        )
+                    },
+                )
+                .fastMap { it.measure(constraints = constraints) }
+        }
+        layout(
+            width = constraints.maxWidth,
+            height = placeables.maxOfOrNull { it.height } ?: 0,
+        ) {
+            placeables.fastMap { it.place(x = 0, y = 0) }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InternalMediumTopAppBar(
+    title: String,
+    scrollBehavior: TopAppBarScrollBehavior,
+    navigationIcon: NavigationIcon?,
+    windowInsets: WindowInsets,
+    dividerStyle: TopAppBarDividerStyle,
+    actions: @Composable RowScope.() -> Unit,
+    minimumHeight: Dp,
+    modifier: Modifier = Modifier,
+) {
+    MediumTopAppBar(
+        windowInsets = windowInsets,
+        colors = bitwardenTopAppBarColors(),
+        scrollBehavior = scrollBehavior,
+        navigationIcon = { NavigationIconButton(navigationIcon = navigationIcon) },
+        collapsedHeight = minimumHeight,
+        title = { TitleText(title = title) },
+        actions = actions,
+        modifier = modifier.topAppBarModifier(
+            scrollBehavior = scrollBehavior,
+            dividerStyle = dividerStyle,
+        ),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InternalDefaultTopAppBar(
+    title: String,
+    scrollBehavior: TopAppBarScrollBehavior,
+    navigationIcon: NavigationIcon?,
+    windowInsets: WindowInsets,
+    dividerStyle: TopAppBarDividerStyle,
+    actions: @Composable RowScope.() -> Unit,
+    minimumHeight: Dp,
+    onTitleTextLayout: (TextLayoutResult) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TopAppBar(
+        windowInsets = windowInsets,
+        colors = bitwardenTopAppBarColors(),
+        scrollBehavior = scrollBehavior,
+        navigationIcon = { NavigationIconButton(navigationIcon = navigationIcon) },
+        expandedHeight = minimumHeight,
+        title = {
+            TitleText(
+                title = title,
+                maxLines = 1,
+                softWrap = false,
+                onTextLayout = onTitleTextLayout,
+            )
+        },
+        actions = actions,
+        modifier = modifier.topAppBarModifier(
+            scrollBehavior = scrollBehavior,
+            dividerStyle = dividerStyle,
+        ),
+    )
+}
+
+@Composable
+private fun NavigationIconButton(
+    navigationIcon: NavigationIcon?,
+    modifier: Modifier = Modifier,
+) {
+    navigationIcon?.let {
+        BitwardenStandardIconButton(
+            painter = it.navigationIcon,
+            contentDescription = it.navigationIconContentDescription,
+            onClick = it.onNavigationIconClick,
+            modifier = modifier
+                .testTag(tag = "CloseButton")
+                .mirrorIfRtl(),
         )
     }
 }
+
+@Composable
+private fun TitleText(
+    title: String,
+    modifier: Modifier = Modifier,
+    maxLines: Int = 2,
+    softWrap: Boolean = true,
+    onTextLayout: ((TextLayoutResult) -> Unit)? = null,
+) {
+    Text(
+        text = title,
+        style = BitwardenTheme.typography.titleLarge,
+        overflow = TextOverflow.Ellipsis,
+        maxLines = maxLines,
+        softWrap = softWrap,
+        onTextLayout = onTextLayout,
+        modifier = modifier.testTag(tag = "PageTitleLabel"),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Modifier.topAppBarModifier(
+    scrollBehavior: TopAppBarScrollBehavior,
+    dividerStyle: TopAppBarDividerStyle,
+): Modifier = this
+    .testTag(tag = "HeaderBarComponent")
+    .scrolledContainerBottomDivider(
+        topAppBarScrollBehavior = scrollBehavior,
+        enabled = when (dividerStyle) {
+            TopAppBarDividerStyle.NONE -> false
+            TopAppBarDividerStyle.STATIC -> false
+            TopAppBarDividerStyle.ON_SCROLL -> true
+        },
+    )
+    .bottomDivider(
+        enabled = when (dividerStyle) {
+            TopAppBarDividerStyle.NONE -> false
+            TopAppBarDividerStyle.STATIC -> true
+            TopAppBarDividerStyle.ON_SCROLL -> false
+        },
+    )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview

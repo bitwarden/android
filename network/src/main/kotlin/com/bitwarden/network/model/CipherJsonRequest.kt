@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents a cipher request.
@@ -23,6 +23,7 @@ import java.time.ZonedDateTime
  * @property isFavorite If the cipher is a favorite.
  * @property card The card of the cipher.
  * @property key The key of the cipher (nullable).
+ * @property archivedDate The archived date of the cipher (nullable).
  * @property encryptedFor ID of the user who the cipher is encrypted by.
  */
 @Serializable
@@ -41,7 +42,7 @@ data class CipherJsonRequest(
 
     @SerialName("lastKnownRevisionDate")
     @Contextual
-    val lastKnownRevisionDate: ZonedDateTime?,
+    val lastKnownRevisionDate: Instant?,
 
     @SerialName("type")
     val type: CipherTypeJson,
@@ -78,6 +79,10 @@ data class CipherJsonRequest(
 
     @SerialName("key")
     val key: String?,
+
+    @SerialName("archivedDate")
+    @Contextual
+    val archivedDate: Instant?,
 
     @SerialName("encryptedFor")
     val encryptedFor: String?,

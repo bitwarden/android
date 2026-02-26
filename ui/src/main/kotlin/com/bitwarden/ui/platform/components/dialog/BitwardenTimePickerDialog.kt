@@ -19,7 +19,7 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * with AM/PM.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun BitwardenTimePickerDialog(
     initialHour: Int,
@@ -57,7 +56,7 @@ fun BitwardenTimePickerDialog(
     onDismissRequest: () -> Unit,
     is24Hour: Boolean,
 ) {
-    var showTimeInput by remember { mutableStateOf(false) }
+    var showTimeInput by rememberSaveable { mutableStateOf(value = false) }
     val timePickerState = rememberTimePickerState(
         initialHour = initialHour,
         initialMinute = initialMinute,

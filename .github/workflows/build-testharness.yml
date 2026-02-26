@@ -1,0 +1,97 @@
+name: Build Test Harness
+
+on:
+  push:
+    paths:
+      - testharness/**
+  workflow_dispatch:
+    inputs:
+      version-name:
+        description: "Optional. Version string to use, in X.Y.Z format. Overrides default in the project."
+        required: false
+        type: string
+      version-code:
+        description: "Optional. Build number to use. Overrides default of GitHub run number."
+        required: false
+        type: number
+      patch_version:
+        description: "Order 999 - Overrides Patch version"
+        type: boolean
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  version:
+    name: Calculate Version Name and Number
+    uses: bitwarden/android/.github/workflows/_version.yml@main
+    with:
+      app_codename: "bwpm"
+      base_version_number: 0
+      version_name: ${{ inputs.version-name }}
+      version_number: ${{ inputs.version-code }}
+      patch_version: ${{ inputs.patch_version && '999' || '' }}
+
+  build:
+    name: Build Test Harness
+    runs-on: ubuntu-24.04
+    needs: version
+
+    steps:
+      - name: Log inputs to job summary
+        uses: bitwarden/android/.github/actions/log-inputs@main
+        with:
+          inputs: "${{ toJson(inputs) }}"
+
+      - name: Check out repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Increment version
+        env:
+          DEFAULT_VERSION_CODE: ${{ github.run_number }}
+          INPUT_VERSION_CODE: "${{ needs.version.outputs.version_number }}"
+          INPUT_VERSION_NAME: ${{ needs.version.outputs.version_name }}
+        run: |
+          VERSION_CODE="${INPUT_VERSION_CODE:-$DEFAULT_VERSION_CODE}"
+          VERSION_NAME_INPUT="${INPUT_VERSION_NAME:-}"
+          bundle exec fastlane setBuildVersionInfo \
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME_INPUT"
+
+          regex='appVersionName = "(.+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
+            VERSION_NAME="${BASH_REMATCH[1]}"
+          fi
+          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build Test Harness Debug APK
+        run: ./gradlew :testharness:assembleDebug
+
+      - name: Upload Test Harness APK
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: com.bitwarden.testharness.dev-debug.apk
+          path: testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk
+          if-no-files-found: error
+
+      - name: Create checksum for Test Harness APK
+        run: |
+          sha256sum "testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk" \
+            > ./com.bitwarden.testharness.dev.apk-sha256.txt
+
+      - name: Upload Test Harness SHA file
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: com.bitwarden.testharness.dev.apk-sha256.txt
+          path: ./com.bitwarden.testharness.dev.apk-sha256.txt
+          if-no-files-found: error

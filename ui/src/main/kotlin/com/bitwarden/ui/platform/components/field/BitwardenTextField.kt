@@ -1,7 +1,6 @@
 package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,8 +18,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,6 +37,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
@@ -46,7 +46,9 @@ import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -69,6 +71,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -93,11 +96,13 @@ import kotlinx.collections.immutable.toImmutableList
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param imeAction the preferred IME action for the keyboard to have.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -122,9 +127,11 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
+    textColor: Color = BitwardenTheme.colorScheme.text.primary,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -157,9 +164,11 @@ fun BitwardenTextField(
         readOnly = readOnly,
         enabled = enabled,
         textStyle = textStyle,
+        textColor = textColor,
         shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
         keyboardType = keyboardType,
         keyboardActions = keyboardActions,
+        imeAction = imeAction,
         isError = isError,
         autoFocus = autoFocus,
         visualTransformation = visualTransformation,
@@ -193,11 +202,13 @@ fun BitwardenTextField(
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param imeAction the preferred IME action for the keyboard to have.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -225,9 +236,11 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
+    textColor: Color = BitwardenTheme.colorScheme.text.primary,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -278,14 +291,16 @@ fun BitwardenTextField(
         val isDropDownExpanded = filteredAutoCompleteList.isNotEmpty() && hasFocused
         ExposedDropdownMenuBox(
             expanded = isDropDownExpanded,
-            onExpandedChange = { hasFocused = false },
+            onExpandedChange = {
+                hasFocused = !hasFocused
+                focusRequester.requestFocus()
+            },
             modifier = modifier.defaultMinSize(minHeight = 60.dp),
         ) {
             Column(
                 modifier = Modifier
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
-                    .focusRequester(focusRequester)
                     .cardStyle(
                         cardStyle = cardStyle,
                         paddingTop = 6.dp,
@@ -309,7 +324,7 @@ fun BitwardenTextField(
                 var focused by remember { mutableStateOf(false) }
 
                 TextField(
-                    colors = bitwardenTextFieldColors(),
+                    colors = bitwardenTextFieldColors(textColor = textColor),
                     enabled = enabled,
                     label = label?.let {
                         {
@@ -359,7 +374,10 @@ fun BitwardenTextField(
                     singleLine = singleLine,
                     readOnly = readOnly,
                     textStyle = textStyle,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = keyboardType,
+                        imeAction = imeAction,
+                    ),
                     keyboardActions = keyboardActions,
                     trailingIcon = actions?.let {
                         {
@@ -375,10 +393,16 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
-                        .menuAnchor(type = MenuAnchorType.PrimaryEditable)
+                        .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryEditable)
                         .fillMaxWidth()
+                        .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             focused = focusState.isFocused
+                            if (focused) {
+                                textFieldValueState = textFieldValueState.copy(
+                                    selection = TextRange(textFieldValueState.text.length),
+                                )
+                            }
                         },
                 )
                 supportingContent
@@ -389,11 +413,9 @@ fun BitwardenTextField(
                                 .fillMaxWidth()
                                 .padding(start = 16.dp),
                         )
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .defaultMinSize(minHeight = 48.dp)
-                                .padding(paddingValues = supportingContentPadding),
+                        BitwardenSupportingContent(
+                            cardStyle = null,
+                            insets = supportingContentPadding,
                             content = content,
                         )
                     }

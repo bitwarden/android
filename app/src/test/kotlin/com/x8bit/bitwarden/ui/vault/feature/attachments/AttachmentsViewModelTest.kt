@@ -403,7 +403,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `ChooseFileClick should emit ShowChooserSheet`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.ChooseFileClick)
@@ -659,6 +659,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )

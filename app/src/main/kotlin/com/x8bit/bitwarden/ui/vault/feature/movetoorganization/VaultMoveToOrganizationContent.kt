@@ -64,7 +64,7 @@ fun VaultMoveToOrganizationContent(
         }
 
         collectionItemsSelector(
-            collectionList = state.selectedOrganization.collections,
+            collectionList = state.selectableCollections,
             onCollectionSelect = collectionSelect,
             isCollectionsTitleVisible = !showOnlyCollections,
         )

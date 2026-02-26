@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
@@ -73,10 +72,13 @@ fun BitwardenSnackbar(
                 .clickable(
                     enabled = !bitwardenSnackbarData.withDismissAction,
                     onClick = onDismiss,
-                )
-                .padding(16.dp),
+                ),
         ) {
-            Column(modifier = Modifier.weight(weight = 1f)) {
+            Column(
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp, start = 16.dp)
+                    .weight(weight = 1f),
+            ) {
                 bitwardenSnackbarData.messageHeader?.let {
                     Text(
                         text = it(),
@@ -88,7 +90,12 @@ fun BitwardenSnackbar(
                 Text(
                     text = bitwardenSnackbarData.message(),
                     color = BitwardenTheme.colorScheme.text.reversed,
-                    style = BitwardenTheme.typography.bodyMedium,
+                    style = if (bitwardenSnackbarData.messageHeader != null) {
+                        BitwardenTheme.typography.bodyMedium
+                    } else {
+                        // Upgrade the font when it is stand alone.
+                        BitwardenTheme.typography.titleSmall
+                    },
                 )
                 bitwardenSnackbarData.actionLabel?.let {
                     Spacer(Modifier.height(12.dp))
@@ -111,7 +118,6 @@ fun BitwardenSnackbar(
                     vectorIconRes = BitwardenDrawable.ic_close,
                     contentDescription = stringResource(BitwardenString.close),
                     contentColor = BitwardenTheme.colorScheme.icon.reversed,
-                    modifier = Modifier.offset(x = 12.dp, y = (-12).dp),
                 )
             }
         }

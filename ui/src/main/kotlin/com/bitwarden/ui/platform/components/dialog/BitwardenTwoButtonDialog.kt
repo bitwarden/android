@@ -57,10 +57,16 @@ fun BitwardenTwoButtonDialog(
     onDismissRequest: () -> Unit,
     confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
     dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissOnBackPress: Boolean = true,
+    dismissOnClickOutside: Boolean = true,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(
+            dismissOnBackPress = dismissOnBackPress,
+            dismissOnClickOutside = dismissOnClickOutside,
+            usePlatformDefaultWidth = false,
+        ),
     ) {
         val configuration = LocalConfiguration.current
         val scrollState = rememberScrollState()

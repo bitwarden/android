@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -20,9 +21,7 @@ import org.junit.Test
 class DebugMenuScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<DebugMenuEvent>()
-    private val mutableStateFlow = MutableStateFlow(
-        value = DebugMenuState(featureFlags = persistentMapOf()),
-    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<DebugMenuViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
@@ -75,43 +74,43 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `feature flag content should not display if the state is empty`() {
+        mutableStateFlow.update { DebugMenuState(featureFlags = persistentMapOf()) }
         composeTestRule
-            .onNodeWithText("Email Verification", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean")
             .assertDoesNotExist()
     }
 
     @Test
     fun `feature flag content should display if the state is not empty`() {
-        mutableStateFlow.tryEmit(
+        mutableStateFlow.update {
             DebugMenuState(
                 featureFlags = persistentMapOf(
-                    FlagKey.CredentialExchangeProtocolImport to true,
+                    FlagKey.DummyBoolean to true,
                 ),
-            ),
-        )
-
+            )
+        }
         composeTestRule
-            .onNodeWithText("CXP Import", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean", ignoreCase = true)
             .assertExists()
     }
 
     @Test
     fun `boolean feature flag content should send action when clicked`() {
-        mutableStateFlow.tryEmit(
+        mutableStateFlow.update {
             DebugMenuState(
                 featureFlags = persistentMapOf(
-                    FlagKey.CredentialExchangeProtocolImport to true,
+                    FlagKey.DummyBoolean to true,
                 ),
-            ),
-        )
+            )
+        }
         composeTestRule
-            .onNodeWithText("CXP Import", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean")
             .performClick()
 
         verify(exactly = 1) {
             viewModel.trySendAction(
                 DebugMenuAction.UpdateFeatureFlag(
-                    FlagKey.CredentialExchangeProtocolImport,
+                    FlagKey.DummyBoolean,
                     false,
                 ),
             )
@@ -160,3 +159,9 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses) }
     }
 }
+
+private val DEFAULT_STATE: DebugMenuState = DebugMenuState(
+    featureFlags = persistentMapOf(
+        FlagKey.DummyBoolean to true,
+    ),
+)

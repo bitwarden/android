@@ -18,7 +18,6 @@ import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
@@ -70,7 +69,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = BitwardenString.type_text),
                 supportingLabel = state.textTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file_text),
+                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file_text),
                 onClick = sendHandlers.onTextTypeClick,
                 cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
@@ -84,7 +83,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = BitwardenString.type_file),
                 supportingLabel = state.fileTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file),
+                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file),
                 onClick = sendHandlers.onFileTypeClick,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier

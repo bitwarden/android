@@ -62,4 +62,9 @@ internal class OrganizationServiceImpl(
         authenticatedOrganizationApi
             .leaveOrganization(organizationId = organizationId)
             .toResult()
+
+    override suspend fun revokeFromOrganization(organizationId: String): Result<Unit> =
+        authenticatedOrganizationApi
+            .revokeFromOrganization(organizationId = organizationId)
+            .toResult()
 }

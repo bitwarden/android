@@ -1,19 +1,19 @@
 package com.x8bit.bitwarden.data.platform.manager.event
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
-import com.bitwarden.network.model.createMockOrganization
 import com.bitwarden.network.service.EventService
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.coEvery
@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class OrganizationEventManagerTest {
 
@@ -73,7 +72,8 @@ class OrganizationEventManagerTest {
             val organizationEvent = OrganizationEventJson(
                 type = OrganizationEventType.CIPHER_UPDATED,
                 cipherId = CIPHER_ID,
-                date = ZonedDateTime.now(fixedClock),
+                date = fixedClock.instant(),
+                organizationId = null,
             )
             val events = listOf(organizationEvent)
             coEvery { eventDiskSource.getOrganizationEvents(userId = USER_ID) } returns events
@@ -104,7 +104,8 @@ class OrganizationEventManagerTest {
         val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
-            date = ZonedDateTime.now(fixedClock),
+            date = fixedClock.instant(),
+            organizationId = null,
         )
         val events = listOf(organizationEvent)
         coEvery { eventDiskSource.getOrganizationEvents(userId = USER_ID) } returns events
@@ -170,7 +171,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should do nothing if the cipher does not belong to an organization that uses events`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-        val organization = createMockOrganization(number = 1).copy(shouldUseEvents = true)
+        val organization = createMockOrganization(number = 1, shouldUseEvents = true)
         every { authRepository.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
@@ -189,7 +190,8 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should add the event to disk if the ciphers organization allows it`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-        val organization = createMockOrganization(number = 1).copy(
+        val organization = createMockOrganization(
+            number = 1,
             id = "mockOrganizationId-1",
             shouldUseEvents = true,
         )
@@ -208,7 +210,8 @@ class OrganizationEventManagerTest {
                 event = OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED,
                     cipherId = CIPHER_ID,
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             )
         }

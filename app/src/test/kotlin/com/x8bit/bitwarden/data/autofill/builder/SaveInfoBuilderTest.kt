@@ -4,10 +4,10 @@ import android.service.autofill.FillRequest
 import android.service.autofill.SaveInfo
 import android.view.View
 import android.view.autofill.AutofillId
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -35,6 +35,7 @@ class SaveInfoBuilderTest {
         isFocused = true,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
     private val autofillIdValid: AutofillId = mockk()
     private val autofillViewDataValid = AutofillView.Data(
@@ -44,6 +45,7 @@ class SaveInfoBuilderTest {
         isFocused = true,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
     private val autofillPartitionCard: AutofillPartition.Card = AutofillPartition.Card(
         views = listOf(

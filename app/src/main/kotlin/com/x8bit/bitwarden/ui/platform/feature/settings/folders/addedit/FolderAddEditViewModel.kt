@@ -3,9 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -16,12 +17,14 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -34,7 +37,9 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass")
 class FolderAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
     private val vaultRepository: VaultRepository,
+    private val relayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<FolderAddEditState, FolderAddEditEvent, FolderAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -120,7 +125,7 @@ class FolderAddEditViewModel @Inject constructor(
                                 .orEmpty() +
                                 content.folderName,
                             id = folderAddEditType.folderId,
-                            revisionDate = DateTime.now(),
+                            revisionDate = clock.instant(),
                         ),
                     )
                     sendAction(FolderAddEditAction.Internal.CreateFolderResultReceive(result))
@@ -132,7 +137,7 @@ class FolderAddEditViewModel @Inject constructor(
                         FolderView(
                             name = content.folderName,
                             id = folderAddEditType.folderId,
-                            revisionDate = DateTime.now(),
+                            revisionDate = clock.instant(),
                         ),
                     )
                     sendAction(FolderAddEditAction.Internal.UpdateFolderResultReceive(result))
@@ -263,7 +268,10 @@ class FolderAddEditViewModel @Inject constructor(
             }
 
             is UpdateFolderResult.Success -> {
-                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_updated.asText()))
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_updated.asText()),
+                    relay = SnackbarRelay.FOLDER_UPDATED,
+                )
                 sendEvent(FolderAddEditEvent.NavigateBack)
             }
         }
@@ -289,7 +297,10 @@ class FolderAddEditViewModel @Inject constructor(
             }
 
             is CreateFolderResult.Success -> {
-                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_created.asText()))
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
+                )
                 sendEvent(FolderAddEditEvent.NavigateBack)
             }
         }
@@ -312,7 +323,10 @@ class FolderAddEditViewModel @Inject constructor(
 
             DeleteFolderResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_deleted.asText()))
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_deleted.asText()),
+                    relay = SnackbarRelay.FOLDER_DELETED,
+                )
                 sendEvent(event = FolderAddEditEvent.NavigateBack)
             }
         }
@@ -416,11 +430,6 @@ sealed class FolderAddEditEvent {
      * Navigate back to previous screen.
      */
     data object NavigateBack : FolderAddEditEvent()
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : FolderAddEditEvent()
 }
 
 /**

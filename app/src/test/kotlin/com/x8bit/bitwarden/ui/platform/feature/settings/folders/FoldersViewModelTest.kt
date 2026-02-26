@@ -1,21 +1,25 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import app.cash.turbine.test
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class FoldersViewModelTest : BaseViewModelTest() {
 
@@ -24,6 +28,26 @@ class FoldersViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
         every { foldersStateFlow } returns mutableFoldersStateFlow
+    }
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
+    }
+
+    @Test
+    fun `on snackbar data received should emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+
+        val data = BitwardenSnackbarData(message = "Snackbar!".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.emit(data)
+            assertEquals(
+                FoldersEvent.ShowSnackbar(data = data),
+                awaitItem(),
+            )
+        }
     }
 
     @Test
@@ -161,6 +185,7 @@ class FoldersViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): FoldersViewModel = FoldersViewModel(
         vaultRepository = vaultRepository,
+        snackbarRelayManager = snackbarRelayManager,
     )
 
     private fun createFolderState(
@@ -170,5 +195,9 @@ class FoldersViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_FOLDER_VIEW = FolderView("1", "test", revisionDate = DateTime.now())
+private val DEFAULT_FOLDER_VIEW = FolderView(
+    id = "1",
+    name = "test",
+    revisionDate = Instant.parse("2025-04-11T10:15:30.00Z"),
+)
 private val DEFAULT__DISPLAY_FOLDER = FolderDisplayItem("1", "test")

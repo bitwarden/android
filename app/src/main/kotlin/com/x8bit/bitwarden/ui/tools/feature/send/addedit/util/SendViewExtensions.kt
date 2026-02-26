@@ -3,17 +3,17 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
-import java.time.Clock
-import java.time.ZonedDateTime
-
+import kotlinx.collections.immutable.toImmutableList
 /**
  * Transforms [SendView] into [AddEditSendState.ViewState.Content].
  */
 fun SendView.toViewState(
-    clock: Clock,
     baseWebSendUrl: String,
     isHideEmailAddressEnabled: Boolean,
+    isSendEmailVerificationEnabled: Boolean,
 ): AddEditSendState.ViewState.Content =
     AddEditSendState.ViewState.Content(
         common = AddEditSendState.ViewState.Content.Common(
@@ -27,11 +27,22 @@ fun SendView.toViewState(
             noteInput = this.notes.orEmpty(),
             isHideEmailChecked = this.hideEmail,
             isDeactivateChecked = this.disabled,
-            deletionDate = ZonedDateTime.ofInstant(this.deletionDate, clock.zone),
-            expirationDate = this.expirationDate?.let { ZonedDateTime.ofInstant(it, clock.zone) },
+            deletionDate = this.deletionDate,
+            expirationDate = this.expirationDate,
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
             isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+            isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
+            sendAuth = when {
+                hasPassword -> SendAuth.Password
+                emails.isNotEmpty() -> {
+                    SendAuth.Email(
+                        emails = this.emails.map { AuthEmail(value = it) }.toImmutableList(),
+                    )
+                }
+
+                else -> SendAuth.None
+            },
         ),
         selectedType = when (type) {
             SendType.TEXT -> {

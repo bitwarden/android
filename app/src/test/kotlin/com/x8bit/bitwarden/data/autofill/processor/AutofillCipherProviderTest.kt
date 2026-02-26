@@ -53,6 +53,7 @@ class AutofillCipherProviderTest {
     }
     private val cardCipherListView: CipherListView = mockk {
         every { card } returns cardListView
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns CARD_CIPHER_ID
         every { name } returns CARD_NAME
@@ -70,6 +71,7 @@ class AutofillCipherProviderTest {
     }
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns CARD_CIPHER_ID
         every { name } returns CARD_NAME
@@ -81,6 +83,7 @@ class AutofillCipherProviderTest {
         every { totp } returns null
     }
     private val loginCipherListViewWithoutTotp: CipherListView = mockk {
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITHOUT_TOTP_CIPHER_ID
         every { login } returns loginListViewWithoutTotp
@@ -93,6 +96,7 @@ class AutofillCipherProviderTest {
         every { totp } returns "TOTP-CODE"
     }
     private val loginCipherListViewWithTotp: CipherListView = mockk {
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITH_TOTP_CIPHER_ID
         every { login } returns loginListViewWithTotp
@@ -106,6 +110,7 @@ class AutofillCipherProviderTest {
         every { totp } returns null
     }
     private val loginCipherViewWithoutTotp: CipherView = mockk {
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITHOUT_TOTP_CIPHER_ID
         every { login } returns loginViewWithoutTotp
@@ -119,6 +124,7 @@ class AutofillCipherProviderTest {
         every { totp } returns "TOTP-CODE"
     }
     private val loginCipherViewWithTotp: CipherView = mockk {
+        every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITH_TOTP_CIPHER_ID
         every { login } returns loginViewWithTotp
@@ -266,22 +272,31 @@ class AutofillCipherProviderTest {
     @Test
     fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, non-reprompt, and non-restricted card ciphers`() =
         runTest {
+            val archivedCardCipherView: CipherListView = mockk {
+                every { archivedDate } returns mockk()
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Card(cardListView)
+            }
             val deletedCardCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns mockk()
                 every { type } returns CipherListViewType.Card(cardListView)
             }
             val repromptCardCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherListViewType.Card(cardListView)
             }
             val restrictedCardCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns null
                 every { type } returns CipherListViewType.Card(cardListView)
                 every { reprompt } returns CipherRepromptType.NONE
                 every { organizationId } returns ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS
             }
             val personalVaultCardCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns null
                 every { type } returns CipherListViewType.Card(cardListView)
                 every { reprompt } returns CipherRepromptType.NONE
@@ -290,6 +305,7 @@ class AutofillCipherProviderTest {
             val decryptCipherListViewsResult = DecryptCipherListResult(
                 successes = listOf(
                     cardCipherListView,
+                    archivedCardCipherView,
                     deletedCardCipherView,
                     repromptCardCipherView,
                     restrictedCardCipherView,
@@ -372,11 +388,18 @@ class AutofillCipherProviderTest {
     @Test
     fun `getLoginAutofillCiphers when unlocked should decrypt then return matched, non-deleted, non-reprompt, login ciphers`() =
         runTest {
+            val archivedLoginCipherView: CipherListView = mockk {
+                every { archivedDate } returns mockk()
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Login(v1 = mockk())
+            }
             val deletedLoginCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns mockk()
                 every { type } returns CipherListViewType.Login(v1 = mockk())
             }
             val repromptLoginCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
                 every { deletedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherListViewType.Login(v1 = mockk())
@@ -385,6 +408,7 @@ class AutofillCipherProviderTest {
                 cardCipherListView,
                 loginCipherListViewWithTotp,
                 loginCipherListViewWithoutTotp,
+                archivedLoginCipherView,
                 deletedLoginCipherView,
                 repromptLoginCipherView,
             )
@@ -508,7 +532,7 @@ class AutofillCipherProviderTest {
             )
 
             verify(exactly = 1) {
-                Timber.Forest.e(
+                Timber.e(
                     t = any(),
                     message = "Failed to decrypt cipher for autofill.",
                 )
@@ -569,7 +593,7 @@ class AutofillCipherProviderTest {
             )
 
             verify(exactly = 1) {
-                Timber.Forest.e("Cipher not found for autofill.")
+                Timber.e("Cipher not found for autofill.")
             }
         }
 }
@@ -604,6 +628,7 @@ private const val LOGIN_NAME = "John's Login"
 private const val LOGIN_PASSWORD = "Password123"
 private const val LOGIN_SUBTITLE = "John Doe"
 private const val LOGIN_USERNAME = "John-Bitwarden"
+private const val URI: String = "androidapp://com.x8bit.bitwarden"
 private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     cipherId = LOGIN_WITH_TOTP_CIPHER_ID,
     isTotpEnabled = true,
@@ -611,6 +636,7 @@ private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     password = LOGIN_PASSWORD,
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
+    website = URI,
 )
 private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     cipherId = LOGIN_WITHOUT_TOTP_CIPHER_ID,
@@ -619,5 +645,5 @@ private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     password = LOGIN_PASSWORD,
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
+    website = URI,
 )
-private const val URI: String = "androidapp://com.x8bit.bitwarden"

@@ -39,13 +39,6 @@ dependencyResolutionManagement {
     }
 }
 
-buildCache {
-    local {
-        isEnabled = true
-        directory = File(rootDir, "build-cache")
-    }
-}
-
 rootProject.name = "Bitwarden"
 include(
     ":annotation",
@@ -53,7 +46,9 @@ include(
     ":authenticator",
     ":authenticatorbridge",
     ":core",
+    ":cxf",
     ":data",
     ":network",
+    ":testharness",
     ":ui",
 )

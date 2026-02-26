@@ -184,6 +184,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(LOGIN_SUCCESS.asSuccess(), result)
     }
@@ -198,6 +199,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertTrue(result.isFailure)
     }
@@ -212,6 +214,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(TWO_FACTOR_BODY.asSuccess(), result)
     }
@@ -226,6 +229,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 password = PASSWORD_HASH,
             ),
             uniqueAppId = UNIQUE_APP_ID,
+            deeplinkScheme = DEEPLINK_SCHEME,
         )
         assertEquals(INVALID_LOGIN.asSuccess(), result)
     }
@@ -241,6 +245,7 @@ class IdentityServiceTest : BaseServiceTest() {
                     password = PASSWORD_HASH,
                 ),
                 uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
             )
             assertEquals(INVALID_LOGIN.asSuccess(), result)
         }
@@ -438,6 +443,7 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     companion object {
+        private const val DEEPLINK_SCHEME = "deeplinkScheme"
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val EMAIL_TOKEN = "emailToken"
@@ -568,7 +574,6 @@ private const val LOGIN_SUCCESS_JSON = """
     "EnforceOnLogin": true
   },
   "ForcePasswordReset": true,
-  "ResetMasterPassword": true,
   "Kdf": 1,
   "KdfIterations": 600000,
   "KdfMemory": 16,
@@ -603,7 +608,6 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
     privateKey = "privateKey",
     accountKeys = createMockAccountKeysJson(number = 1),
     shouldForcePasswordReset = true,
-    shouldResetMasterPassword = true,
     twoFactorToken = null,
     masterPasswordPolicyOptions = MasterPasswordPolicyOptionsJson(
         minimumComplexity = 10,
@@ -626,6 +630,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
         keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
             keyConnectorUrl = "keyConnectorUrl",
         ),
+        masterPasswordUnlock = null,
     ),
     keyConnectorUrl = "keyConnectorUrl",
 )

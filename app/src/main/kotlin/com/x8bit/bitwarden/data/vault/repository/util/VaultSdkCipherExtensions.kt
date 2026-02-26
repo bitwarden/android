@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CipherRepromptTypeJson
 import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.FieldTypeJson
@@ -35,8 +36,6 @@ import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -54,7 +53,7 @@ fun Cipher.toEncryptedNetworkCipher(
             ?.associate { requireNotNull(it.id) to it.toNetworkAttachmentRequest() },
         reprompt = reprompt.toNetworkRepromptType(),
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
-        lastKnownRevisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
+        lastKnownRevisionDate = revisionDate,
         type = type.toNetworkCipherType(),
         login = login?.toEncryptedNetworkLogin(),
         secureNote = secureNote?.toEncryptedNetworkSecureNote(),
@@ -67,6 +66,7 @@ fun Cipher.toEncryptedNetworkCipher(
         card = card?.toEncryptedNetworkCard(),
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        archivedDate = archivedDate,
         encryptedFor = encryptedFor,
     )
 
@@ -98,15 +98,42 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
         shouldOrganizationUseTotp = organizationUseTotp,
         shouldEdit = edit,
-        revisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
-        creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
-        deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
+        revisionDate = revisionDate,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
         collectionIds = collectionIds,
         id = id.orEmpty(),
         shouldViewPassword = viewPassword,
         key = key,
         encryptedFor = encryptedFor,
+        archivedDate = archivedDate,
     )
+
+/**
+ * Updates a [SyncResponseJson.Cipher] with metadata from a
+ * [CipherMiniResponseJson.CipherMiniResponse].
+ * This is useful for updating local cipher data after bulk operations that return mini responses.
+ *
+ * @param miniResponse The mini response containing updated cipher metadata.
+ * @param collectionIds Optional list of collection IDs to update.
+ * If null, keeps existing collection IDs.
+ * @return A new [SyncResponseJson.Cipher] with updated fields from the mini response.
+ */
+fun SyncResponseJson.Cipher.updateFromMiniResponse(
+    miniResponse: CipherMiniResponseJson.CipherMiniResponse,
+    collectionIds: List<String>? = null,
+): SyncResponseJson.Cipher = copy(
+    organizationId = miniResponse.organizationId,
+    collectionIds = collectionIds ?: this.collectionIds,
+    revisionDate = miniResponse.revisionDate,
+    key = miniResponse.key,
+    attachments = miniResponse.attachments,
+    archivedDate = miniResponse.archivedDate,
+    deletedDate = miniResponse.deletedDate,
+    reprompt = miniResponse.reprompt,
+    shouldOrganizationUseTotp = miniResponse.shouldOrganizationUseTotp,
+    type = miniResponse.type,
+)
 
 /**
  * Converts a Bitwarden SDK [Card] object to a corresponding
@@ -268,9 +295,7 @@ private fun Login.toEncryptedNetworkLogin(): SyncResponseJson.Cipher.Login =
         uris = uris?.toEncryptedNetworkUriList(),
         totp = totp,
         password = password,
-        passwordRevisionDate = passwordRevisionDate?.let {
-            ZonedDateTime.ofInstant(it, ZoneOffset.UTC)
-        },
+        passwordRevisionDate = passwordRevisionDate,
         shouldAutofillOnPageLoad = autofillOnPageLoad,
         // uri needs to be null to avoid duplicating the first url entry for a login item.
         uri = null,
@@ -294,7 +319,7 @@ private fun Fido2Credential.toNetworkFido2Credential() = SyncResponseJson.Cipher
     userDisplayName = userDisplayName,
     counter = counter,
     discoverable = discoverable,
-    creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
+    creationDate = creationDate,
 )
 
 /**
@@ -313,7 +338,7 @@ private fun List<PasswordHistory>.toEncryptedNetworkPasswordHistoryList(): List<
 private fun PasswordHistory.toEncryptedNetworkPasswordHistory(): SyncResponseJson.Cipher.PasswordHistory =
     SyncResponseJson.Cipher.PasswordHistory(
         password = password,
-        lastUsedDate = ZonedDateTime.ofInstant(lastUsedDate, ZoneOffset.UTC),
+        lastUsedDate = lastUsedDate,
     )
 
 /**
@@ -386,9 +411,11 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         fields = fields?.toSdkFieldList(),
         passwordHistory = passwordHistory?.toSdkPasswordHistoryList(),
         permissions = permissions?.toSdkPermissions(),
-        creationDate = creationDate.toInstant(),
-        deletedDate = deletedDate?.toInstant(),
-        revisionDate = revisionDate.toInstant(),
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        archivedDate = archivedDate,
+        data = null,
     )
 
 /**
@@ -398,7 +425,7 @@ fun SyncResponseJson.Cipher.Login.toSdkLogin(): Login =
     Login(
         username = username,
         password = password,
-        passwordRevisionDate = passwordRevisionDate?.toInstant(),
+        passwordRevisionDate = passwordRevisionDate,
         uris = uris?.toSdkLoginUriList(),
         totp = totp,
         autofillOnPageLoad = shouldAutofillOnPageLoad,
@@ -421,7 +448,7 @@ private fun SyncResponseJson.Cipher.Fido2Credential.toSdkFido2Credential() = Fid
     userDisplayName = userDisplayName,
     counter = counter,
     discoverable = discoverable,
-    creationDate = creationDate.toInstant(),
+    creationDate = creationDate,
 )
 
 /**
@@ -557,7 +584,7 @@ fun List<SyncResponseJson.Cipher.PasswordHistory>.toSdkPasswordHistoryList(): Li
 fun SyncResponseJson.Cipher.PasswordHistory.toSdkPasswordHistory(): PasswordHistory =
     PasswordHistory(
         password = password,
-        lastUsedDate = lastUsedDate.toInstant(),
+        lastUsedDate = lastUsedDate,
     )
 
 /**
@@ -704,4 +731,5 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         deletedDate = deletedDate,
         revisionDate = revisionDate,
         copyableFields = emptyList(),
+        archivedDate = archivedDate,
     )

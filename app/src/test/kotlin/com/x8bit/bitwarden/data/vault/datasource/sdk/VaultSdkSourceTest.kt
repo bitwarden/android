@@ -2,23 +2,30 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.MasterPasswordAuthenticationData
+import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.crypto.CryptoException
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2ClientException
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.fido.SilentlyDiscoverCredentialsException
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.BitwardenException
@@ -41,6 +48,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
+import com.bitwarden.vault.DecryptException
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -195,15 +203,61 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `deriveKeyConnector should call SDK and return a Result with wrong password`() =
+    @Suppress("MaxLineLength")
+    fun `deriveKeyConnector should call SDK with WrongPassword exception and return a Result with wrong password`() =
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
             val email = "email"
             val password = "password"
-            val error = mockk<BitwardenException> {
-                every { message } returns "Wrong password"
+            val kdf = mockk<Kdf>()
+            coEvery {
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            } throws BitwardenException.DeriveKeyConnector(
+                v1 = DeriveKeyConnectorException.WrongPassword(message = "mock message"),
+            )
+            val result = vaultSdkSource.deriveKeyConnector(
+                userId = userId,
+                userKeyEncrypted = userKeyEncrypted,
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
+            assertEquals(
+                DeriveKeyConnectorResult.WrongPasswordError,
+                result.getOrNull(),
+            )
+            coVerify(exactly = 1) {
+                sdkClientManager.getOrCreateClient(userId = userId)
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
             }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `deriveKeyConnector should call SDK with Crypto exception return and return a Result with error`() =
+        runBlocking {
+            val userId = "userId"
+            val userKeyEncrypted = "userKeyEncrypted"
+            val email = "email"
+            val password = "password"
+            val error = BitwardenException.DeriveKeyConnector(
+                v1 = DeriveKeyConnectorException.Crypto(message = "mock message"),
+            )
             val kdf = mockk<Kdf>()
             coEvery {
                 clientCrypto.deriveKeyConnector(
@@ -223,7 +277,7 @@ class VaultSdkSourceTest {
                 kdf = kdf,
             )
             assertEquals(
-                DeriveKeyConnectorResult.WrongPasswordError,
+                DeriveKeyConnectorResult.Error(error = error),
                 result.getOrNull(),
             )
             coVerify(exactly = 1) {
@@ -285,14 +339,14 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `derivePinKey should call SDK and return a Result with the correct data`() = runBlocking {
+    fun `enrollPin should call SDK and return a Result with the correct data`() = runBlocking {
         val userId = "userId"
         val pin = "pin"
-        val expectedResult = mockk<DerivePinKeyResponse>()
+        val expectedResult = mockk<EnrollPinResponse>()
         coEvery {
-            clientCrypto.derivePinKey(pin = pin)
+            clientCrypto.enrollPin(pin = pin)
         } returns expectedResult
-        val result = vaultSdkSource.derivePinKey(
+        val result = vaultSdkSource.enrollPin(
             userId = userId,
             pin = pin,
         )
@@ -301,21 +355,21 @@ class VaultSdkSourceTest {
             result,
         )
         coVerify {
-            clientCrypto.derivePinKey(pin)
+            clientCrypto.enrollPin(pin)
         }
         coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
-    fun `derivePinProtectedUserKey should call SDK and return a Result with the correct data`() =
+    fun `enrollPinWithEncryptedPin should call SDK and return a Result with the correct data`() =
         runBlocking {
             val userId = "userId"
             val encryptedPin = "encryptedPin"
-            val expectedResult = "pinProtectedUserKey"
+            val expectedResult = mockk<EnrollPinResponse>()
             coEvery {
-                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+                clientCrypto.enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
             } returns expectedResult
-            val result = vaultSdkSource.derivePinProtectedUserKey(
+            val result = vaultSdkSource.enrollPinWithEncryptedPin(
                 userId = userId,
                 encryptedPin = encryptedPin,
             )
@@ -324,31 +378,37 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+                clientCrypto.enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
             }
             coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
-    fun `validatePin should call SDK and return a Result with the correct data`() =
+    fun `validatePinUserKey should call SDK and return a Result with the correct data`() =
         runBlocking {
             val userId = "userId"
             val pin = "pin"
             val pinProtectedUserKey = "pinProtectedUserKey"
             val expectedResult = true
             coEvery {
-                clientAuth.validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+                clientAuth.validatePinProtectedUserKeyEnvelope(
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
+                )
             } returns expectedResult
 
-            val result = vaultSdkSource.validatePin(
+            val result = vaultSdkSource.validatePinUserKey(
                 userId = userId,
                 pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
 
             assertEquals(expectedResult.asSuccess(), result)
             coVerify(exactly = 1) {
-                clientAuth.validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+                clientAuth.validatePinProtectedUserKeyEnvelope(
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKey,
+                )
                 sdkClientManager.getOrCreateClient(userId = userId)
             }
         }
@@ -499,7 +559,9 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
             val expectedErrorMessage = "Whoopsy"
-            val expectedException = BitwardenException.E(message = expectedErrorMessage)
+            val expectedException = BitwardenException.Crypto(
+                CryptoException.InvalidKey(expectedErrorMessage),
+            )
             coEvery {
                 clientCrypto.initializeUserCrypto(
                     req = mockInitCryptoRequest,
@@ -512,7 +574,7 @@ class VaultSdkSourceTest {
             assertEquals(
                 InitializeCryptoResult
                     .AuthenticationError(
-                        message = expectedErrorMessage,
+                        message = expectedException.message,
                         error = expectedException,
                     )
                     .asSuccess(),
@@ -585,7 +647,9 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
             val expectedErrorMessage = "Whoopsy2"
-            val expectedException = BitwardenException.E(message = expectedErrorMessage)
+            val expectedException = BitwardenException.Crypto(
+                CryptoException.InvalidKey(expectedErrorMessage),
+            )
             coEvery {
                 clientCrypto.initializeOrgCrypto(
                     req = mockInitCryptoRequest,
@@ -598,7 +662,7 @@ class VaultSdkSourceTest {
             assertEquals(
                 InitializeCryptoResult
                     .AuthenticationError(
-                        message = expectedErrorMessage,
+                        message = expectedException.message,
                         error = expectedException,
                     )
                     .asSuccess(),
@@ -1025,6 +1089,66 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `bulkMoveToOrganization should call SDK and return Result with correct data`() = runTest {
+        val userId = "userId"
+        val organizationId = "organizationId"
+        val cipherViews = listOf(mockk<CipherView>(), mockk<CipherView>())
+        val collectionIds = listOf("collectionId-1", "collectionId-2")
+        val expectedResult = listOf(mockk<EncryptionContext>(), mockk<EncryptionContext>())
+
+        coEvery {
+            ciphersClient.prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
+        } returns expectedResult
+
+        val result = vaultSdkSource.bulkMoveToOrganization(
+            userId = userId,
+            organizationId = organizationId,
+            cipherViews = cipherViews,
+            collectionIds = collectionIds,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify(exactly = 1) {
+            ciphersClient.prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
+        }
+    }
+
+    @Test
+    fun `bulkMoveToOrganization should return Failure when BitwardenException is thrown`() =
+        runTest {
+            val userId = "userId"
+            val organizationId = "organizationId"
+            val cipherViews = listOf(mockk<CipherView>())
+            val collectionIds = listOf("collectionId-1")
+            val error = BitwardenException.Decrypt(mockk<DecryptException>("mockException"))
+
+            coEvery {
+                ciphersClient.prepareCiphersForBulkShare(
+                    organizationId = organizationId,
+                    ciphers = cipherViews,
+                    collectionIds = collectionIds,
+                )
+            } throws error
+
+            val result = vaultSdkSource.bulkMoveToOrganization(
+                userId = userId,
+                organizationId = organizationId,
+                cipherViews = cipherViews,
+                collectionIds = collectionIds,
+            )
+
+            assertEquals(error.asFailure(), result)
+        }
+
+    @Test
     fun `validatePassword should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val password = "password"
@@ -1079,7 +1203,7 @@ class VaultSdkSourceTest {
             newKey = newKey,
         )
         coEvery {
-            clientCrypto.updatePassword(
+            clientCrypto.makeUpdatePassword(
                 newPassword = newPassword,
             )
         } returns updatePasswordResponse
@@ -1230,7 +1354,7 @@ class VaultSdkSourceTest {
                     any(),
                     any(),
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>())
 
             val result = vaultSdkSource.registerFido2Credential(
                 DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
@@ -1275,7 +1399,7 @@ class VaultSdkSourceTest {
                     any(),
                     any(),
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>("mockException"))
 
             val result = vaultSdkSource
                 .authenticateFido2Credential(
@@ -1292,6 +1416,7 @@ class VaultSdkSourceTest {
         val mockAutofillView = Fido2CredentialAutofillView(
             credentialId = byteArrayOf(0),
             cipherId = "mockCipherId",
+            hasCounter = false,
             rpId = "mockRpId",
             userNameForUi = "mockUserNameForUi",
             userHandle = "mockUserHandle".toByteArray(),
@@ -1320,7 +1445,7 @@ class VaultSdkSourceTest {
             val mockCipherView = createMockCipherView(number = 1)
             coEvery {
                 clientFido2.decryptFido2AutofillCredentials(mockCipherView)
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>("mockException"))
 
             val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
                 userId = "mockUserId",
@@ -1335,17 +1460,24 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
         val relyingPartyId = "relyingPartyId"
+        val userHandle = "mockUserHandle"
         val mockAutofillView = Fido2CredentialAutofillView(
             credentialId = byteArrayOf(0),
             cipherId = "mockCipherId",
             rpId = "mockRpId",
             userNameForUi = "mockUserNameForUi",
-            userHandle = "mockUserHandle".toByteArray(),
+            userHandle = userHandle.toByteArray(),
+            hasCounter = false,
         )
         val autofillViews = listOf(mockAutofillView)
 
         val authenticator: ClientFido2Authenticator = mockk {
-            coEvery { silentlyDiscoverCredentials(relyingPartyId) } returns autofillViews
+            coEvery {
+                silentlyDiscoverCredentials(
+                    relyingPartyId,
+                    userHandle.toByteArray(),
+                )
+            } returns autofillViews
         }
         every {
             clientFido2.authenticator(
@@ -1358,6 +1490,7 @@ class VaultSdkSourceTest {
             userId = userId,
             fido2CredentialStore = fido2CredentialStore,
             relyingPartyId = relyingPartyId,
+            userHandle = userHandle,
         )
 
         assertEquals(
@@ -1372,6 +1505,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val fido2CredentialStore: Fido2CredentialStore = mockk()
             val relyingPartyId = "relyingPartyId"
+            val userHandle = "mockUserHandle"
 
             coEvery {
                 clientFido2
@@ -1379,13 +1513,19 @@ class VaultSdkSourceTest {
                         userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                         credentialStore = fido2CredentialStore,
                     )
-                    .silentlyDiscoverCredentials(relyingPartyId)
-            } throws BitwardenException.E("mockException")
+                    .silentlyDiscoverCredentials(
+                        relyingPartyId,
+                        userHandle.toByteArray(),
+                    )
+            } throws BitwardenException.SilentlyDiscoverCredentials(
+                mockk<SilentlyDiscoverCredentialsException>("mockException"),
+            )
 
             val result = vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = relyingPartyId,
+                userHandle = userHandle,
             )
 
             assertTrue(result.isFailure)
@@ -1420,12 +1560,70 @@ class VaultSdkSourceTest {
                 clientVault.ciphers().decryptListWithFailures(
                     ciphers = mockCipherList,
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Decrypt(mockk<DecryptException>("mockException"))
             val result = vaultSdkSource.decryptCipherListWithFailures(
                 userId = userId,
                 cipherList = mockCipherList,
             )
             assertTrue(result.isFailure)
+        }
+
+    @Test
+    fun `makeUpdateKdf should return results when successful`() = runTest {
+        val kdf = mockk<Kdf>()
+        val updateKdfResponse = UpdateKdfResponse(
+            masterPasswordAuthenticationData = MasterPasswordAuthenticationData(
+                kdf = kdf,
+                salt = "mockSalt",
+                masterPasswordAuthenticationHash = "mockHash",
+            ),
+            masterPasswordUnlockData = MasterPasswordUnlockData(
+                kdf = kdf,
+                masterKeyWrappedUserKey = "mockKey",
+                salt = "mockSalt",
+            ),
+            oldMasterPasswordAuthenticationData = MasterPasswordAuthenticationData(
+                kdf = kdf,
+                salt = "mockSalt",
+                masterPasswordAuthenticationHash = "mockHash",
+            ),
+        )
+        coEvery {
+            clientCrypto.makeUpdateKdf(
+                password = "mockPassword",
+                kdf = kdf,
+            )
+        } returns updateKdfResponse
+
+        val result = vaultSdkSource.makeUpdateKdf(
+            userId = "mockUserId",
+            password = "mockPassword",
+            kdf = kdf,
+        )
+
+        assertEquals(
+            updateKdfResponse.asSuccess(),
+            result,
+        )
+    }
+
+    @Test
+    fun `makeUpdateKdf should return Failure when Bitwarden exception is thrown`() =
+        runTest {
+            val kdf = mockk<Kdf>()
+            val error = BitwardenException.Crypto(CryptoException.MissingKey("mockException"))
+            coEvery {
+                clientCrypto.makeUpdateKdf(
+                    password = "mockPassword",
+                    kdf = kdf,
+                )
+            } throws error
+            val result = vaultSdkSource.makeUpdateKdf(
+                userId = "mockUserId",
+                password = "mockPassword",
+                kdf = kdf,
+            )
+            assertEquals(error.asFailure(), result)
         }
 }
 

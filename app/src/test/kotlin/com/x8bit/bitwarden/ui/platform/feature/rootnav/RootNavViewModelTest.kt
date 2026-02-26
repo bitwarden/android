@@ -1,18 +1,22 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import androidx.credentials.CreatePasswordRequest
+import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -24,10 +28,14 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
+import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
@@ -55,6 +63,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
             dispatcherManager = FakeDispatcherManager(),
         )
 
+    private val mutableVaultMigrationDataStateFlow =
+        MutableStateFlow<VaultMigrationData>(VaultMigrationData.NoMigrationRequired)
+    private val vaultMigrationManager = mockk<VaultMigrationManager> {
+        every { vaultMigrationDataStateFlow } returns mutableVaultMigrationDataStateFlow
+    }
+
     @BeforeEach
     fun setup() {
         mockkStatic(::parseJwtTokenDataOrNull)
@@ -63,6 +77,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(::parseJwtTokenDataOrNull)
+        unmockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
     @Test
@@ -113,6 +128,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -150,6 +166,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -184,6 +201,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -228,6 +246,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -269,6 +288,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -310,6 +330,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -348,6 +369,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -383,14 +405,13 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "orgId",
                                 name = "orgName",
-                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
                                 keyConnectorUrl = "bitwarden.com",
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         needsMasterPassword = false,
@@ -401,6 +422,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -436,6 +458,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -476,6 +499,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -514,6 +538,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         firstTimeState = FirstTimeState(false),
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -530,7 +555,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but the is a ShareNewSend special circumstance the nav state should be VaultUnlockedForNewSend`() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ShareNewSend(
-                data = mockk<IntentManager.ShareData.TextSend>(),
+                data = mockk<ShareData.TextSend>(),
                 shouldFinishWhenComplete = true,
             )
         mutableUserStateFlow.tryEmit(
@@ -557,6 +582,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -600,6 +626,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -650,6 +677,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -667,11 +695,18 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
+        mockkObject(ProviderCreateCredentialRequest.Companion)
+
         val createCredentialRequest = CreateCredentialRequest(
             userId = "activeUserId",
             isUserPreVerified = false,
             requestData = bundleOf(),
         )
+
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
+            every { callingRequest } returns mockk<CreatePublicKeyCredentialRequest>()
+        }
+
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
         mutableUserStateFlow.tryEmit(
@@ -698,6 +733,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -707,6 +743,73 @@ class RootNavViewModelTest : BaseViewModelTest() {
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
                 createCredentialRequest = createCredentialRequest,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is a ProviderCreateCredential with password request the nav state should be VaultUnlockedForCreatePasswordRequest`() {
+        mockkObject(ProviderCreateCredentialRequest.Companion)
+
+        val mockUsername = "testUser"
+        val mockPassword = "testPassword123"
+        val mockPackageName = "com.example.app"
+
+        val createCredentialRequest = CreateCredentialRequest(
+            userId = "activeUserId",
+            isUserPreVerified = false,
+            requestData = bundleOf(),
+        )
+
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk {
+            every { callingRequest } returns mockk<CreatePasswordRequest> {
+                every { id } returns mockUsername
+                every { password } returns mockPassword
+            }
+            every { callingAppInfo } returns mockk {
+                every { packageName } returns mockPackageName
+            }
+        }
+
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarHexColor",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                        isExportable = true,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlockedForCreatePasswordRequest(
+                username = mockUsername,
+                password = mockPassword,
+                uri = "androidapp://$mockPackageName",
             ),
             viewModel.stateFlow.value,
         )
@@ -743,6 +846,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -788,6 +892,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -923,6 +1028,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -977,6 +1083,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1039,6 +1146,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1081,6 +1189,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1118,6 +1227,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1153,6 +1263,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1191,6 +1302,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1229,6 +1341,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1236,6 +1349,45 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.OnboardingAutoFillSetup,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault and they have a OnboardingStatus of BROWSER_AUTOFILL_SETUP the nav state should be OnboardingBrowserAutofillSetup`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.BROWSER_AUTOFILL_SETUP,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                        isExportable = true,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.OnboardingBrowserAutofillSetup,
             viewModel.stateFlow.value,
         )
     }
@@ -1267,6 +1419,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1305,6 +1458,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1343,6 +1497,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1381,6 +1536,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -1392,10 +1548,166 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when SpecialCircumstance is CredentialExchangeExport the nav state should be CredentialExchangeExport`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = mockk(),
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
+                ),
+            )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.CredentialExchangeExport,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when SpecialCircumstance is CredentialExchangeExport and only has 1 account, the nav state should be CredentialExchangeExportSkipAccountSelection`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = mockk(),
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
+                ),
+            )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.CredentialExchangeExportSkipAccountSelection(
+                userId = "activeUserId",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when vaultMigrationDataStateFlow emits true the nav state should be MigrateToMyItems`() {
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when vault is locked MigrateToMyItems should not show even if flow emits true`() {
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+
+        // Vault is locked
+        mutableUserStateFlow.tryEmit(
+            MOCK_VAULT_UNLOCKED_USER_STATE.copy(
+                accounts = listOf(
+                    MOCK_VAULT_UNLOCKED_USER_STATE.activeAccount.copy(isVaultUnlocked = false),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultLocked,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when vaultMigrationDataStateFlow emits false MigrateToMyItems should not show`() {
+        mutableVaultMigrationDataStateFlow.value = VaultMigrationData.NoMigrationRequired
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlocked("activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with AutofillSave circumstance should prioritize AutofillSave over migration`() {
+        val autofillSaveItem: AutofillSaveItem = mockk()
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AutofillSave(autofillSaveItem = autofillSaveItem)
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForAutofillSave(autofillSaveItem = autofillSaveItem),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when migration required with AutofillSelection circumstance should prioritize AutofillSelection over migration`() {
+        val autofillSelectionData = AutofillSelectionData(
+            type = AutofillSelectionData.Type.LOGIN,
+            framework = AutofillSelectionData.Framework.AUTOFILL,
+            uri = "uri",
+        )
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = autofillSelectionData,
+                shouldFinishWhenComplete = true,
+            )
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.VaultUnlockedForAutofillSelection(
+                activeUserId = "activeUserId",
+                type = AutofillSelectionData.Type.LOGIN,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when migration required with ShareNewSend shortcut should show migration screen`() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.ShareNewSend(
+            data = mockk<ShareData.TextSend>(),
+            shouldFinishWhenComplete = true,
+        )
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when migration required with VaultShortcut should show migration screen`() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
+        mutableVaultMigrationDataStateFlow.value = MOCK_VAULT_MIGRATION_DATA
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+
+        assertEquals(
+            RootNavState.MigrateToMyItems,
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): RootNavViewModel =
         RootNavViewModel(
             authRepository = authRepository,
             specialCircumstanceManager = specialCircumstanceManager,
+            vaultMigrationManager = vaultMigrationManager,
         )
 }
 
@@ -1427,6 +1739,59 @@ private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
             isUsingKeyConnector = false,
             firstTimeState = FirstTimeState(false),
             onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
         ),
     ),
+)
+
+private val MOCK_VAULT_UNLOCKED_USER_MULTIPLE_ACCOUNTS_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "name",
+            email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            firstTimeState = FirstTimeState(false),
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
+        ),
+
+        UserState.Account(
+            userId = "activeUserTwoId",
+            name = "name two",
+            email = "email two",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            firstTimeState = FirstTimeState(false),
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            isExportable = true,
+        ),
+    ),
+)
+
+private val MOCK_VAULT_MIGRATION_DATA = VaultMigrationData.MigrationRequired(
+    organizationName = "organizationName",
+    organizationId = "mockOrganizationId-1",
 )

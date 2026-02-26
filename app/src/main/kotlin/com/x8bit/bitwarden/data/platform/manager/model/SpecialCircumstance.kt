@@ -2,14 +2,15 @@ package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
 import androidx.credentials.CredentialManager
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.ui.platform.manager.share.model.ShareData
+import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -30,7 +31,7 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data class ShareNewSend(
-        val data: IntentManager.ShareData,
+        val data: ShareData,
         val shouldFinishWhenComplete: Boolean,
     ) : SpecialCircumstance()
 
@@ -132,6 +133,14 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data object VerificationCodeShortcut : SpecialCircumstance()
+
+    /**
+     * The app was launched to select an account to export credentials from.
+     */
+    @Parcelize
+    data class CredentialExchangeExport(
+        val data: ImportCredentialsRequestData,
+    ) : SpecialCircumstance()
 
     /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be

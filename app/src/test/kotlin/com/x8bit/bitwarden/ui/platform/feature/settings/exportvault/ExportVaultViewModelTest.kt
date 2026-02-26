@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.network.model.PolicyTypeJson
@@ -23,7 +24,6 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -143,7 +143,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ValidatePasswordResult.Success(isValid = true)
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-        } returns listOf(createMockPolicy())
+        } returns listOf(createMockPolicy(isEnabled = true))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
@@ -855,6 +855,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -243,6 +243,16 @@ interface SettingsRepository : FlightRecorderManager {
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
 
     /**
+     * Gets updates for whether the introducing archive action card is dismissed.
+     */
+    fun getIntroducingArchiveActionCardDismissedFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores that the introducing archive action card has been dismissed for the active user.
+     */
+    fun dismissIntroducingArchiveActionCard()
+
+    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
@@ -278,19 +288,19 @@ interface SettingsRepository : FlightRecorderManager {
     fun storeUserHasLoggedInValue(userId: String)
 
     /**
-     * Returns true if the given [userId] has previously registered for export via the credential
+     * Returns true if the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun isVaultRegisteredForExport(userId: String): Boolean
+    fun isAppRegisteredForExport(): Boolean
 
     /**
-     * Stores that the given [userId] has previously registered for export via the credential
+     * Stores that the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+    fun storeAppRegisteredForExport(isRegistered: Boolean)
 
     /**
-     * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
+     * Gets updates for the [isAppRegisteredForExport] value for the given [userId].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
+    fun getAppRegisteredForExportFlow(userId: String): StateFlow<Boolean>
 }

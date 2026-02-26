@@ -6,7 +6,9 @@ import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
@@ -27,7 +29,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("TooManyFunctions")
@@ -37,6 +38,18 @@ internal class CiphersServiceImpl(
     private val json: Json,
     private val clock: Clock,
 ) : CiphersService {
+    override suspend fun archiveCipher(
+        cipherId: String,
+    ): Result<Unit> = ciphersApi
+        .archiveCipher(cipherId = cipherId)
+        .toResult()
+
+    override suspend fun unarchiveCipher(
+        cipherId: String,
+    ): Result<Unit> = ciphersApi
+        .unarchiveCipher(cipherId = cipherId)
+        .toResult()
+
     override suspend fun createCipher(
         body: CipherJsonRequest,
     ): Result<CreateCipherResponseJson> =
@@ -116,7 +129,8 @@ internal class CiphersServiceImpl(
                     url = attachment.url,
                     date = DateTimeFormatter
                         .RFC_1123_DATE_TIME
-                        .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
+                        .withZone(ZoneOffset.UTC)
+                        .format(clock.instant()),
                     version = attachment.url.toUri().getQueryParameter("sv"),
                     body = encryptedFile.asRequestBody(),
                 )
@@ -183,6 +197,13 @@ internal class CiphersServiceImpl(
                 cipherId = cipherId,
                 body = body,
             )
+            .toResult()
+
+    override suspend fun bulkShareCiphers(
+        body: BulkShareCiphersJsonRequest,
+    ): Result<CipherMiniResponseJson> =
+        ciphersApi
+            .bulkShareCiphers(body = body)
             .toResult()
 
     override suspend fun updateCipherCollections(

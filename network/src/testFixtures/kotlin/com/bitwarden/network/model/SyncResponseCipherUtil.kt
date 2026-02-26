@@ -2,12 +2,12 @@
 
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
- * Constant date time used for [ZonedDateTime] properties of mock objects.
+ * Constant date time used for [Instant] properties of mock objects.
  */
-private val MOCK_ZONED_DATE_TIME = ZonedDateTime.parse("2023-10-27T12:00:00Z")
+private val MOCK_INSTANT = Instant.parse("2023-10-27T12:00:00Z")
 
 /**
  * Create a mock [SyncResponseJson.Cipher] with a given [number].
@@ -20,9 +20,10 @@ fun createMockCipher(
     collectionIds: List<String>? = listOf("mockCollectionId-$number"),
     name: String? = "mockName-$number",
     notes: String? = "mockNotes-$number",
-    creationDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
-    revisionDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
-    deletedDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
+    creationDate: Instant = MOCK_INSTANT,
+    revisionDate: Instant = MOCK_INSTANT,
+    deletedDate: Instant? = MOCK_INSTANT,
+    archivedDate: Instant? = MOCK_INSTANT,
     attachments: List<SyncResponseJson.Cipher.Attachment>? = listOf(
         createMockAttachment(number = number),
     ),
@@ -61,6 +62,7 @@ fun createMockCipher(
         creationDate = creationDate,
         revisionDate = revisionDate,
         deletedDate = deletedDate,
+        archivedDate = archivedDate,
         attachments = attachments,
         fields = fields,
         isFavorite = isFavorite,
@@ -167,7 +169,7 @@ fun createMockCard(
 fun createMockPasswordHistory(
     number: Int,
     password: String = "mockPassword-$number",
-    lastUsedDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+    lastUsedDate: Instant = MOCK_INSTANT,
 ): SyncResponseJson.Cipher.PasswordHistory =
     SyncResponseJson.Cipher.PasswordHistory(
         password = password,
@@ -220,7 +222,7 @@ fun createMockLogin(
     number: Int,
     username: String? = "mockUsername-$number",
     password: String? = "mockPassword-$number",
-    passwordRevisionDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
+    passwordRevisionDate: Instant? = MOCK_INSTANT,
     shouldAutofillOnPageLoad: Boolean? = false,
     uri: String? = "mockUri-$number",
     uris: List<SyncResponseJson.Cipher.Login.Uri> = listOf(createMockUri(number = number)),
@@ -272,7 +274,7 @@ fun createMockFido2Credential(
     userDisplayName: String? = "mockUserDisplayName-$number",
     counter: String = "mockCounter-$number",
     discoverable: String = "mockDiscoverable-$number",
-    creationDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+    creationDate: Instant = MOCK_INSTANT,
 ): SyncResponseJson.Cipher.Fido2Credential =
     SyncResponseJson.Cipher.Fido2Credential(
         credentialId = credentialId,

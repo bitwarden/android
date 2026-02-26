@@ -6,13 +6,12 @@ import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,9 +26,10 @@ class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val json = CoreModule.providesJson()
 
-    private val settingsDiskSource = SettingsDiskSourceImpl(
+    private val settingsDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
         json = json,
+        flightRecorderDiskSource = mockk(),
     )
 
     @Test
@@ -86,104 +86,6 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `flightRecorderData should pull from SharedPreferences`() {
-        val flightRecorderKey = "bwPreferencesStorage:flightRecorderData"
-        val encodedData = """
-            {
-              "data": [
-                {
-                  "id": "51"
-                  "fileName": "flight_recorder_2025-04-03_14-22-40",
-                  "startTime": 1744059882,
-                  "duration": 3600,
-                  "isActive": false
-                }
-              ]
-            }
-        """
-            .trimIndent()
-        val expected = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "51",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = false,
-                ),
-            ),
-        )
-
-        // Verify initial value is null and disk source matches shared preferences.
-        assertNull(fakeSharedPreferences.getString(flightRecorderKey, null))
-        assertNull(settingsDiskSource.flightRecorderData)
-
-        // Updating the shared preferences should update disk source.
-        fakeSharedPreferences.edit { putString(flightRecorderKey, encodedData) }
-        val actual = settingsDiskSource.flightRecorderData
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `flightRecorderDataFlow should react to changes in isFLightRecorderEnabled`() = runTest {
-        val expected = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "52",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = true,
-                ),
-            ),
-        )
-        settingsDiskSource.flightRecorderDataFlow.test {
-            // The initial values of the Flow and the property are in sync
-            assertNull(settingsDiskSource.flightRecorderData)
-            assertNull(awaitItem())
-
-            settingsDiskSource.flightRecorderData = expected
-            assertEquals(expected, awaitItem())
-
-            settingsDiskSource.flightRecorderData = null
-            assertNull(awaitItem())
-        }
-    }
-
-    @Test
-    fun `setting flightRecorderData should update SharedPreferences`() {
-        val flightRecorderKey = "bwPreferencesStorage:flightRecorderData"
-        val data = FlightRecorderDataSet(
-            data = setOf(
-                FlightRecorderDataSet.FlightRecorderData(
-                    id = "53",
-                    fileName = "flight_recorder_2025-04-03_14-22-40",
-                    startTimeMs = 1_744_059_882L,
-                    durationMs = 3_600L,
-                    isActive = true,
-                ),
-            ),
-        )
-        val expected = """
-            {
-              "data": [
-                {
-                  "id": "53",
-                  "fileName": "flight_recorder_2025-04-03_14-22-40",
-                  "startTime": 1744059882,
-                  "duration": 3600,
-                  "isActive": true
-                }
-              ]
-            }
-        """
-            .trimIndent()
-        settingsDiskSource.flightRecorderData = data
-        val actual = fakeSharedPreferences.getString(flightRecorderKey, null)
-        assertJsonEquals(expected, actual!!)
-    }
-
-    @Test
     fun `systemBiometricIntegritySource should pull from SharedPreferences`() {
         val biometricIntegritySource = "bwPreferencesStorage:biometricIntegritySource"
         val expected = "mockBiometricIntegritySource"
@@ -236,6 +138,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isPullToRefreshEnabled = true,
         )
+        settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+            userId = userId,
+            isDismissed = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -257,13 +163,18 @@ class SettingsDiskSourceTest {
         )
 
         settingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
+        settingsDiskSource.storeShowBrowserAutofillSettingBadge(userId = userId, showBadge = true)
         settingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
 
         settingsDiskSource.clearData(userId = userId)
 
         // We do not clear these even when you call clear storage
         assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getShowBrowserAutofillSettingBadge(userId = userId) ?: false)
         assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = userId) ?: false)
+        assertTrue(
+            settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = userId) ?: false,
+        )
 
         // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
@@ -875,6 +786,44 @@ class SettingsDiskSourceTest {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIntroducingArchiveActionCardDismissed when values are present should pull from SharedPreferences`() {
+        val introducingArchiveBaseKey = "bwPreferencesStorage:introducingArchiveActionCardDismissed"
+        val mockUserId = "mockUserId"
+        val introducingArchiveKey = "${introducingArchiveBaseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(introducingArchiveKey, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = mockUserId),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIntroducingArchiveActionCardDismissedFlow should react to changes in storeIntroducingArchiveActionCardDismissed`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getIntroducingArchiveActionCardDismissedFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(
+                        settingsDiskSource
+                            .getIntroducingArchiveActionCardDismissed(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                        userId = mockUserId,
+                        isDismissed = true,
+                    )
+                    assertEquals(true, awaitItem())
+                }
+        }
+
     @Test
     fun `storePullToRefreshEnabled for non-null values should update SharedPreferences`() {
         val pullToRefreshBaseKey = "bwPreferencesStorage:syncOnRefresh"
@@ -1211,6 +1160,51 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `storeShowBrowserAutofillSettingBadge should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val showBrowserAutofillSettingBadgeKey =
+            "bwPreferencesStorage:showBrowserAutofillSettingBadge_$mockUserId"
+        settingsDiskSource.storeShowBrowserAutofillSettingBadge(
+            userId = mockUserId,
+            showBadge = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(showBrowserAutofillSettingBadgeKey, false))
+    }
+
+    @Test
+    fun `getShowBrowserAutofillSettingBadge should pull value from shared preferences`() {
+        val mockUserId = "mockUserId"
+        val showBrowserAutofillSettingBadgeKey =
+            "bwPreferencesStorage:showBrowserAutofillSettingBadge_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(showBrowserAutofillSettingBadgeKey, true)
+        }
+
+        assertTrue(settingsDiskSource.getShowBrowserAutofillSettingBadge(userId = mockUserId)!!)
+    }
+
+    @Test
+    fun `storeShowBrowserAutofillSettingBadge should update the flow value`() = runTest {
+        val mockUserId = "mockUserId"
+        settingsDiskSource.getShowBrowserAutofillSettingBadgeFlow(userId = mockUserId).test {
+            // The initial values of the Flow are in sync
+            assertFalse(awaitItem() ?: false)
+            settingsDiskSource.storeShowBrowserAutofillSettingBadge(
+                userId = mockUserId,
+                showBadge = true,
+            )
+            assertTrue(awaitItem() ?: false)
+
+            // update the value to false
+            settingsDiskSource.storeShowBrowserAutofillSettingBadge(
+                userId = mockUserId,
+                showBadge = false,
+            )
+            assertFalse(awaitItem() ?: true)
+        }
+    }
+
+    @Test
     fun `storeShowUnlockSettingBadge should update SharedPreferences`() {
         val mockUserId = "mockUserId"
         val showUnlockSettingBadgeKey =
@@ -1295,35 +1289,31 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getVaultRegisteredForExport should pull from SharedPreferences`() {
-        val mockUserId = "mockUserId"
-        val vaultRegisteredForExportKey =
-            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
+    fun `getAppRegisteredForExport should pull from SharedPreferences`() {
+        val vaultRegisteredForExportKey = "bwPreferencesStorage:isVaultRegisteredForExport"
         fakeSharedPreferences.edit {
             putBoolean(vaultRegisteredForExportKey, true)
         }
-        assertTrue(settingsDiskSource.getVaultRegisteredForExport(userId = mockUserId)!!)
+        assertTrue(settingsDiskSource.getAppRegisteredForExport()!!)
     }
 
     @Test
-    fun `storeVaultRegisteredForExport should update SharedPreferences`() {
-        val mockUserId = "mockUserId"
-        val vaultRegisteredForExportKey =
-            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
-        settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+    fun `storeAppRegisteredForExport should update SharedPreferences`() {
+        val vaultRegisteredForExportKey = "bwPreferencesStorage:isVaultRegisteredForExport"
+        settingsDiskSource.storeAppRegisteredForExport(true)
         assertTrue(fakeSharedPreferences.getBoolean(vaultRegisteredForExportKey, false))
     }
 
     @Test
-    fun `storeVaultRegisteredForExport should update the flow value`() = runTest {
+    fun `storeAppRegisteredForExport should update the flow value`() = runTest {
         val mockUserId = "mockUserId"
-        settingsDiskSource.getVaultRegisteredForExportFlow(mockUserId).test {
+        settingsDiskSource.getAppRegisteredForExportFlow(mockUserId).test {
             // The initial values of the Flow are in sync
             assertFalse(awaitItem() ?: false)
-            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+            settingsDiskSource.storeAppRegisteredForExport(true)
             assertTrue(awaitItem() ?: false)
             // Update the value to false
-            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, false)
+            settingsDiskSource.storeAppRegisteredForExport(false)
             assertFalse(awaitItem() ?: true)
         }
     }
@@ -1481,5 +1471,34 @@ class SettingsDiskSourceTest {
                 Json.decodeFromStringOrNull<AppResumeScreenData>(it)
             },
         )
+    }
+
+    @Test
+    fun `browserAutofillDialogReshowTime should pull from SharedPreferences`() {
+        val browserAutofillDialogReshowTimeKey =
+            "bwPreferencesStorage:browserAutofillDialogReshowTime"
+        val expected = 11111L
+
+        // Verify initial value is null and disk source matches shared preferences.
+        assertNull(fakeSharedPreferences.getString(browserAutofillDialogReshowTimeKey, null))
+        assertNull(settingsDiskSource.browserAutofillDialogReshowTime)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences.edit {
+            putLong(browserAutofillDialogReshowTimeKey, expected)
+        }
+        val actual = settingsDiskSource.browserAutofillDialogReshowTime
+        assertEquals(Instant.ofEpochMilli(expected), actual)
+    }
+
+    @Test
+    fun `setting browserAutofillDialogReshowTime should update SharedPreferences`() {
+        val browserAutofillDialogReshowTimeKey =
+            "bwPreferencesStorage:browserAutofillDialogReshowTime"
+        val timeMs = 1111L
+        val timeInstant = Instant.ofEpochMilli(timeMs)
+        settingsDiskSource.browserAutofillDialogReshowTime = timeInstant
+        val actual = fakeSharedPreferences.getLong(browserAutofillDialogReshowTimeKey, 0L)
+        assertEquals(timeMs, actual)
     }
 }

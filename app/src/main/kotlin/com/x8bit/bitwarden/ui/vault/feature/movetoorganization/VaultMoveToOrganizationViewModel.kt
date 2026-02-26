@@ -8,6 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -17,8 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,7 +41,7 @@ private const val KEY_STATE = "state"
 class VaultMoveToOrganizationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepository: AuthRepository,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultMoveToOrganizationState, VaultMoveToOrganizationEvent, VaultMoveToOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -418,6 +418,28 @@ data class VaultMoveToOrganizationState(
 
             val selectedOrganization: Organization
                 get() = organizations.first { it.id == selectedOrganizationId }
+
+            val selectableCollections: List<VaultCollection>
+                get() {
+                    val collections = organizations
+                        .first { it.id == selectedOrganizationId }
+                        .collections
+                    return collections.filter {
+                        !it.isDefaultUserCollection ||
+                            isDefaultUserCollectionSelected
+                    }
+                }
+
+            private val isDefaultUserCollectionSelected: Boolean
+                get() =
+                    cipherToMove
+                        ?.collectionIds
+                        ?.any { collectionId ->
+                            selectedOrganization.collections.any {
+                                it.id == collectionId && it.isDefaultUserCollection
+                            }
+                        }
+                        ?: false
 
             /**
              * Models an organization.

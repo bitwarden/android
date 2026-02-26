@@ -58,7 +58,7 @@ fun SendEmpty(
 
         Spacer(modifier = Modifier.weight(1F))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_send),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_send),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

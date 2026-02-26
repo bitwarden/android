@@ -8,6 +8,7 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -57,7 +58,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        setupMockUri()
         mockkStatic(
             SavedStateHandle::toEnterpriseSignOnArgs,
             ::generateUriForSso,
@@ -69,7 +69,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             SavedStateHandle::toEnterpriseSignOnArgs,
             ::generateUriForSso,
-            Uri::parse,
         )
     }
 
@@ -165,35 +164,37 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
             val ssoUri: Uri = mockk()
             every {
-                generateUriForSso(any(), any(), any(), any(), any())
-            } returns "https://identity.bitwarden.com/sso-test"
-            every {
-                Uri.parse("https://identity.bitwarden.com/sso-test")
+                generateUriForSso(any(), any(), any(), any(), any(), any())
             } returns ssoUri
 
             val viewModel = createViewModel(state)
-            viewModel.stateFlow.test {
-                assertEquals(state, awaitItem())
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(state, stateFlow.awaitItem())
                 viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
 
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            BitwardenString.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
 
                 assertEquals(
                     state.copy(dialogState = null),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
-            }
-            viewModel.eventFlow.test {
+
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
-                    awaitItem(),
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(
+                        uri = ssoUri,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = "bitwarden://sso-callback",
+                            callbackScheme = "bitwarden",
+                        ),
+                    ),
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -391,7 +392,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -457,7 +458,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -480,7 +481,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -554,7 +555,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -628,7 +629,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createViewModel(
-                ssoData = DEFAULT_SSO_DATA,
+                ssoData = DEFAULT_SSO_DATA.copy(redirectUri = "bitwarden://sso-callback"),
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -745,7 +746,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -798,7 +799,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -854,7 +855,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -918,7 +919,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     email = "test@gmail.com",
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
+                    ssoRedirectUri = "https://bitwarden.com/sso-callback",
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -1268,23 +1269,15 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 it.trySendAction(EnterpriseSignOnAction.DialogDismiss)
             }
         }
-
-    private fun setupMockUri() {
-        mockkStatic(Uri::class)
-        val uriMock = mockk<Uri>()
-        every { Uri.parse(any()) } returns uriMock
-        every { uriMock.host } returns "www.bitwarden.com"
-    }
-
-    companion object {
-        private val DEFAULT_STATE = EnterpriseSignOnState(
-            dialogState = null,
-            orgIdentifierInput = "",
-        )
-        private val DEFAULT_SSO_DATA = SsoResponseData(
-            state = "abc",
-            codeVerifier = "def",
-        )
-        private const val DEFAULT_EMAIL = "test@gmail.com"
-    }
 }
+
+private val DEFAULT_STATE = EnterpriseSignOnState(
+    dialogState = null,
+    orgIdentifierInput = "",
+)
+private val DEFAULT_SSO_DATA = SsoResponseData(
+    redirectUri = "https://bitwarden.com/sso-callback",
+    state = "abc",
+    codeVerifier = "def",
+)
+private const val DEFAULT_EMAIL = "test@gmail.com"

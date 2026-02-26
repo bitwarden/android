@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
@@ -72,7 +72,11 @@ fun BlockAutoFillScreen(
             { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) }
         },
         onSaveClick = remember(viewModel) {
-            { viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = it)) }
+            { newUri, originalUri ->
+                viewModel.trySendAction(
+                    BlockAutoFillAction.SaveUri(newUri = newUri, originalUri = originalUri),
+                )
+            }
         },
         onRemoveClick = remember(viewModel) {
             { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) }
@@ -180,7 +184,7 @@ fun BlockAutoFillScreen(
 private fun BlockAutoFillDialogs(
     dialogState: BlockAutoFillState.DialogState? = null,
     onUriTextChange: (String) -> Unit,
-    onSaveClick: (String) -> Unit,
+    onSaveClick: (String, String?) -> Unit,
     onRemoveClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -198,7 +202,7 @@ private fun BlockAutoFillDialogs(
                     null
                 },
                 onCancelClick = onDismissRequest,
-                onSaveClick = onSaveClick,
+                onSaveClick = { newUri -> onSaveClick(newUri, dialogState.originalUri) },
             )
         }
 
@@ -222,7 +226,7 @@ private fun BlockAutoFillNoItems(
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
             painter = rememberVectorPainter(
-                id = BitwardenDrawable.blocked_uri,
+                id = BitwardenDrawable.ill_blocked_uri,
             ),
             contentDescription = null,
             modifier = Modifier

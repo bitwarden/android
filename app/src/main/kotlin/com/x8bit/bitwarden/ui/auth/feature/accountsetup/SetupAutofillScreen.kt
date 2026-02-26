@@ -27,14 +27,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.image.BitwardenGifImage
@@ -44,13 +44,13 @@ import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.rememberSetupAutoFillHandler
-import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 
 /**
  * Top level composable for the Auto-fill setup screen.
@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettings
 @Composable
 fun SetupAutoFillScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToBrowserAutofill: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SetupAutoFillViewModel = hiltViewModel(),
 ) {
@@ -75,6 +76,7 @@ fun SetupAutoFillScreen(
             }
 
             SetupAutoFillEvent.NavigateBack -> onNavigateBack()
+            SetupAutoFillEvent.NavigateToBrowserAutofill -> onNavigateToBrowserAutofill()
         }
     }
     when (state.dialogState) {
@@ -114,7 +116,7 @@ fun SetupAutoFillScreen(
                     id = if (state.isInitialSetup) {
                         BitwardenString.account_setup
                     } else {
-                        BitwardenString.turn_on_autofill
+                        BitwardenString.autofill_setup
                     },
                 ),
                 scrollBehavior = scrollBehavior,
@@ -182,13 +184,14 @@ private fun SetupAutoFillContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
+            isEnabled = state.autofillEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(12.dp))
         if (state.isInitialSetup) {
-            BitwardenTextButton(
+            BitwardenOutlinedButton(
                 label = stringResource(BitwardenString.turn_on_later),
                 onClick = onTurnOnLaterClick,
                 modifier = Modifier
@@ -228,7 +231,7 @@ private fun SetupAutoFillContentHeader(
 @Composable
 private fun OrderedHeaderContent() {
     BitwardenGifImage(
-        resId = BitwardenDrawable.img_setup_autofill,
+        resId = BitwardenDrawable.gif_setup_autofill,
         modifier = Modifier
             .clip(
                 RoundedCornerShape(

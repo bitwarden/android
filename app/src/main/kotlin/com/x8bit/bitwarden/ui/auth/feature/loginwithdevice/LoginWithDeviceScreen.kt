@@ -1,16 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,27 +15,30 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.ui.platform.components.text.BitwardenClickableText
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * The top level composable for the Login with Device screen.
@@ -120,111 +118,99 @@ private fun LoginWithDeviceScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(height = 24.dp))
+
         Text(
             text = state.title(),
-            textAlign = TextAlign.Start,
-            style = BitwardenTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+            style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
             text = state.subtitle(),
-            textAlign = TextAlign.Start,
+            textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
             text = state.description(),
-            textAlign = TextAlign.Start,
+            textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
-            text = stringResource(id = BitwardenString.fingerprint_phrase),
-            textAlign = TextAlign.Start,
-            style = BitwardenTheme.typography.titleLarge,
-            color = BitwardenTheme.colorScheme.text.primary,
+        BitwardenContentCard(
+            contentItems = persistentListOf(
+                ContentBlockData(
+                    headerText = stringResource(id = BitwardenString.fingerprint_phrase),
+                    subtitleText = state.fingerprintPhrase,
+                ),
+            ),
+            contentHeaderTextStyle = BitwardenTheme.typography.titleMedium,
+            contentSubtitleTextStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+            contentSubtitleColor = BitwardenTheme.colorScheme.text.codePink,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Text(
-            text = state.fingerprintPhrase,
-            textAlign = TextAlign.Start,
-            color = BitwardenTheme.colorScheme.text.codePink,
-            style = BitwardenTheme.typography.sensitiveInfoSmall,
-            minLines = 2,
-            modifier = Modifier
-                .testTag("FingerprintPhraseValue")
-                .padding(horizontal = 16.dp)
+                .testTag(tag = "FingerprintPhraseValue")
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
         if (state.allowsResend) {
-            Column(
-                verticalArrangement = Arrangement.Center,
+            Spacer(modifier = Modifier.height(height = 24.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.resend_notification),
+                onClick = onResendNotificationClick,
                 modifier = Modifier
-                    .defaultMinSize(minHeight = 40.dp)
-                    .align(Alignment.Start),
-            ) {
-                if (state.isResendNotificationLoading) {
-                    BitwardenCircularProgressIndicator(
-                        modifier = Modifier
-                            .padding(horizontal = 64.dp)
-                            .size(size = 16.dp),
-                    )
-                } else {
-                    BitwardenClickableText(
-                        modifier = Modifier.testTag("ResendNotificationButton"),
-                        label = stringResource(id = BitwardenString.resend_notification),
-                        style = BitwardenTheme.typography.labelLarge,
-                        innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                        onClick = onResendNotificationClick,
-                    )
-                }
-            }
+                    .testTag(tag = "ResendNotificationButton")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
         }
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         Text(
             text = state.otherOptions(),
-            textAlign = TextAlign.Start,
-            style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
+            textAlign = TextAlign.Center,
+            style = BitwardenTheme.typography.bodySmall,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        BitwardenClickableText(
-            modifier = Modifier.testTag("ViewAllLoginOptionsButton"),
-            label = stringResource(id = BitwardenString.view_all_login_options),
-            innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            style = BitwardenTheme.typography.labelLarge,
+        Spacer(modifier = Modifier.height(height = 12.dp))
+
+        BitwardenHyperTextLink(
+            annotatedResId = BitwardenString.need_another_option_view_all_login_options,
+            annotationKey = "viewAll",
+            accessibilityString = stringResource(id = BitwardenString.view_all_login_options),
             onClick = onViewAllLogInOptionsClick,
+            style = BitwardenTheme.typography.bodySmall,
+            modifier = Modifier
+                .testTag(tag = "ViewAllLoginOptionsButton")
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
         )
 
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

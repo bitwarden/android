@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
@@ -10,7 +9,6 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -168,15 +166,15 @@ class SendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "Sync")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(text = "Lock")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(text = "About Send")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -306,26 +304,22 @@ class SendScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Empty)
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test

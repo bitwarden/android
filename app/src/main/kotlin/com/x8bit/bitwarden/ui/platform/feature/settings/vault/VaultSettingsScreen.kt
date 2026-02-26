@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -21,9 +23,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
@@ -37,6 +40,7 @@ import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnac
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the vault settings screen.
@@ -49,6 +53,7 @@ fun VaultSettingsScreen(
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -60,6 +65,7 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
+            is VaultSettingsEvent.NavigateToImportItems -> onNavigateToImportItems()
             is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
@@ -158,7 +164,18 @@ fun VaultSettingsScreen(
                     .testTag("ImportItemsLinkItemView")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
-            )
+            ) {
+                if (state.showImportItemsChevron) {
+                    Icon(
+                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_right),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.primary,
+                        modifier = Modifier
+                            .mirrorIfRtl()
+                            .size(size = 16.dp),
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

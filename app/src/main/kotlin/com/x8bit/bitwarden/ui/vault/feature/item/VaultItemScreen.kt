@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -138,6 +138,9 @@ fun VaultItemScreen(
         onConfirmRestoreAction = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
         },
+        onUpgradeToPremiumClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick) }
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -198,7 +201,10 @@ fun VaultItemScreen(
                                     }
                                 },
                             )
-                                .takeUnless { state.isCipherInCollection },
+                                .takeUnless {
+                                    state.isCipherInCollection ||
+                                        !state.hasOrganizations
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.collections),
                                 onClick = remember(viewModel) {
@@ -213,6 +219,24 @@ fun VaultItemScreen(
                                     state.isCipherInCollection &&
                                         state.canAssignToCollections
                                 },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.archive_verb),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(VaultItemAction.Common.ArchiveClick) }
+                                },
+                            )
+                                .takeIf { state.displayArchiveButton },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.unarchive),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.UnarchiveClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeIf { state.displayUnarchiveButton },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.delete),
                                 onClick = remember(viewModel) {
@@ -282,8 +306,21 @@ private fun VaultItemDialogs(
     onConfirmDeleteClick: () -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialog) {
+        is VaultItemState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
             title = null,
             message = dialog.message(),

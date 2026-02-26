@@ -5,7 +5,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * The payload of a push notification.
@@ -31,7 +31,7 @@ sealed class NotificationPayload {
         @JsonNames("OrganizationId", "organizationId") val organizationId: String?,
         @JsonNames("CollectionIds", "collectionIds") val collectionIds: List<String>?,
         @Contextual
-        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: Instant?,
     ) : NotificationPayload()
 
     /**
@@ -42,7 +42,7 @@ sealed class NotificationPayload {
         @JsonNames("Id", "id") val folderId: String?,
         @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
-        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: Instant?,
     ) : NotificationPayload()
 
     /**
@@ -50,9 +50,15 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class UserNotification(
-        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("UserId", "userId")
+        override val userId: String?,
+
         @Contextual
-        @JsonNames("Date", "date") val date: ZonedDateTime?,
+        @JsonNames("Date", "date")
+        val date: Instant?,
+
+        @JsonNames("Reason", "reason")
+        val pushNotificationLogOutReason: PushNotificationLogOutReason?,
     ) : NotificationPayload()
 
     /**
@@ -63,7 +69,7 @@ sealed class NotificationPayload {
         @JsonNames("Id", "id") val sendId: String?,
         @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
-        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: Instant?,
     ) : NotificationPayload()
 
     /**
@@ -82,5 +88,13 @@ sealed class NotificationPayload {
     data class SynchronizeOrganizationKeysNotifications(
         @JsonNames("UserId", "userId") override val userId: String?,
         @JsonNames("Id", "id") val loginRequestId: String?,
+    ) : NotificationPayload()
+
+    /**
+     * A notification payload for syncing a users vault.
+     */
+    @Serializable
+    data class SyncNotification(
+        @JsonNames("UserId", "userId") override val userId: String?,
     ) : NotificationPayload()
 }

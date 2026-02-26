@@ -1,11 +1,10 @@
 package com.bitwarden.data.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
@@ -24,7 +23,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 class ServerConfigRepositoryTest {
-    private val fakeDispatcherManager: DispatcherManager = FakeDispatcherManager()
+    private val fakeDispatcherManager: FakeDispatcherManager = FakeDispatcherManager()
     private val fakeConfigDiskSource = FakeConfigDiskSource()
     private val configService: ConfigService = mockk {
         coEvery {
@@ -167,6 +166,7 @@ private val SERVER_CONFIG = ServerConfig(
             "duo-redirect" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
+        communication = null,
     ),
 )
 
@@ -190,4 +190,5 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         "duo-redirect" to JsonPrimitive(true),
         "flexible-collections-v-1" to JsonPrimitive(false),
     ),
+    communication = null,
 )

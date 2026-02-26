@@ -159,7 +159,9 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
+        archivedDate = null,
         sshKey = createSshKeyView(isEmpty),
+        attachmentDecryptionFailures = null,
     )
 
 fun createCommonContent(
@@ -181,9 +183,11 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            archived = false,
             passwordHistoryCount = null,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -244,9 +248,11 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            archived = false,
             passwordHistoryCount = 1,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     }
 
@@ -270,7 +276,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = BitwardenString.password_last_updated
+        passwordRevisionDate = BitwardenString.password_updated
             .asText("Jan 1, 1970, 12:16\u202FAM")
             .takeUnless { isEmpty },
         isPremiumUser = true,

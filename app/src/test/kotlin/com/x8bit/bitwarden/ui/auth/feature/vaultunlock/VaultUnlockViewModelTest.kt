@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -60,24 +59,11 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { logout(reason = any()) } just runs
         every { logout(userId = any(), reason = any()) } just runs
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
+        every { getOrCreateCipher(USER_ID) } returns CIPHER
+        every { isBiometricIntegrityValid(userId = DEFAULT_USER_STATE.activeUserId) } returns true
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
         every { lockVault(any(), any()) } just runs
-    }
-    private val encryptionManager: BiometricsEncryptionManager = mockk {
-        every { getOrCreateCipher(USER_ID) } returns CIPHER
-        every {
-            isBiometricIntegrityValid(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                cipher = CIPHER,
-            )
-        } returns true
-        every {
-            isBiometricIntegrityValid(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                cipher = null,
-            )
-        } returns false
     }
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         every { isUserVerified } returns true
@@ -124,7 +110,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when not set`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        verify { encryptionManager.getOrCreateCipher(USER_ID) }
+        verify { authRepository.getOrCreateCipher(USER_ID) }
     }
 
     @Test
@@ -269,6 +255,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             )
@@ -309,6 +296,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             )
@@ -504,7 +492,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
                 assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
             }
-            verify { encryptionManager.getOrCreateCipher(USER_ID) }
+            verify { authRepository.getOrCreateCipher(USER_ID) }
         }
 
     @Test
@@ -531,8 +519,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on BiometricsUnlockClick should disable isBiometricsValid and show message when cipher is null and integrity check returns false`() {
         val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
         val viewModel = createViewModel(state = initialState)
-        every { encryptionManager.getOrCreateCipher(USER_ID) } returns null
-        every { encryptionManager.isAccountBiometricIntegrityValid(USER_ID) } returns false
+        every { authRepository.getOrCreateCipher(USER_ID) } returns null
+        every { authRepository.isAccountBiometricIntegrityValid(USER_ID) } returns false
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
         assertEquals(
@@ -542,7 +530,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify { encryptionManager.getOrCreateCipher(USER_ID) }
+        verify { authRepository.getOrCreateCipher(USER_ID) }
     }
 
     @Suppress("MaxLineLength")
@@ -550,8 +538,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on BiometricsUnlockClick should disable isBiometricsValid and not show message when cipher is null and integrity check returns true`() {
         val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
         val viewModel = createViewModel(state = initialState)
-        every { encryptionManager.getOrCreateCipher(USER_ID) } returns null
-        every { encryptionManager.isAccountBiometricIntegrityValid(USER_ID) } returns true
+        every { authRepository.getOrCreateCipher(USER_ID) } returns null
+        every { authRepository.isAccountBiometricIntegrityValid(USER_ID) } returns true
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
         assertEquals(
@@ -561,7 +549,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify { encryptionManager.getOrCreateCipher(USER_ID) }
+        verify { authRepository.getOrCreateCipher(USER_ID) }
     }
 
     @Test
@@ -716,7 +704,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             }
             // The initial state causes this to be called as well as the change.
             verify(exactly = 2) {
-                encryptionManager.getOrCreateCipher(USER_ID)
+                authRepository.getOrCreateCipher(USER_ID)
             }
         }
 
@@ -743,7 +731,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             }
             // Only the call for the initial state should be called.
             verify(exactly = 1) {
-                encryptionManager.getOrCreateCipher(USER_ID)
+                authRepository.getOrCreateCipher(USER_ID)
             }
         }
 
@@ -1166,7 +1154,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } returns VaultUnlockResult.BiometricDecodingError(error = Throwable("Fail"))
-        every { encryptionManager.clearBiometrics(userId = USER_ID) } just runs
+        every { authRepository.clearBiometrics(userId = USER_ID) } just runs
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
 
@@ -1181,7 +1169,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify(exactly = 1) {
-            encryptionManager.clearBiometrics(userId = USER_ID)
+            authRepository.clearBiometrics(userId = USER_ID)
             vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
     }
@@ -1339,7 +1327,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         state: VaultUnlockState? = null,
         unlockType: UnlockType = UnlockType.STANDARD,
         vaultRepo: VaultRepository = vaultRepository,
-        biometricsEncryptionManager: BiometricsEncryptionManager = encryptionManager,
         lockManager: VaultLockManager = vaultLockManager,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
         savedStateHandle = SavedStateHandle().apply {
@@ -1348,7 +1335,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         },
         authRepository = authRepository,
         vaultRepo = vaultRepo,
-        biometricsEncryptionManager = biometricsEncryptionManager,
         bitwardenCredentialManager = bitwardenCredentialManager,
         specialCircumstanceManager = specialCircumstanceManager,
         appResumeManager = appResumeManager,
@@ -1413,6 +1399,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

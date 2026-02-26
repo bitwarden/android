@@ -31,14 +31,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -218,11 +218,11 @@ private fun SetUpLaterButton(
 ) {
     var displayConfirmation by rememberSaveable { mutableStateOf(value = false) }
     if (displayConfirmation) {
-        @Suppress("MaxLineLength")
         BitwardenTwoButtonDialog(
             title = stringResource(id = BitwardenString.set_up_unlock_later),
             message = stringResource(
-                id = BitwardenString.you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
+                id = BitwardenString
+                    .you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
             ),
             confirmButtonText = stringResource(id = BitwardenString.confirm),
             dismissButtonText = stringResource(id = BitwardenString.cancel),
@@ -235,7 +235,7 @@ private fun SetUpLaterButton(
         )
     }
 
-    BitwardenTextButton(
+    BitwardenOutlinedButton(
         label = stringResource(id = BitwardenString.set_up_later),
         onClick = { displayConfirmation = true },
         modifier = modifier.testTag(tag = "SetUpLaterButton"),
@@ -246,7 +246,7 @@ private fun SetUpLaterButton(
 private fun ColumnScope.SetupUnlockHeaderCompact() {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
-        painter = rememberVectorPainter(id = BitwardenDrawable.account_setup),
+        painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
         contentDescription = null,
         modifier = Modifier
             .standardHorizontalMargin()
@@ -290,7 +290,7 @@ private fun SetupUnlockHeaderMedium(
             .standardHorizontalMargin(),
     ) {
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.account_setup),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
             contentDescription = null,
             modifier = Modifier
                 .size(size = 100.dp)

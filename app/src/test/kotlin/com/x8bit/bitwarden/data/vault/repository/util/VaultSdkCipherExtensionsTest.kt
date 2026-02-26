@@ -9,6 +9,7 @@ import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockCard
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockCipherMiniResponse
 import com.bitwarden.network.model.createMockField
 import com.bitwarden.network.model.createMockIdentity
 import com.bitwarden.network.model.createMockLogin
@@ -16,8 +17,8 @@ import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
 import com.bitwarden.network.model.createMockUri
-import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FieldType
@@ -42,11 +43,9 @@ import org.junit.jupiter.api.assertNull
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import kotlin.collections.emptyList
 
 /**
- * Default date time used for [ZonedDateTime] properties of mock objects.
+ * Default date time used for [Instant] properties of mock objects.
  */
 private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -83,6 +82,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             syncCipher,
         )
@@ -363,6 +363,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             encryptionContext.toEncryptedNetworkCipher(),
         )
@@ -437,5 +438,55 @@ class VaultSdkCipherExtensionsTest {
 
         val loginType = result.type as CipherListViewType.Card
         assertNull(loginType.v1.brand)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should update cipher with mini response data`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            organizationId = null,
+            collectionIds = emptyList(),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = listOf("collection-1"),
+        )
+
+        assertEquals(miniResponse.organizationId, result.organizationId)
+        assertEquals(listOf("collection-1"), result.collectionIds)
+        assertEquals(miniResponse.revisionDate, result.revisionDate)
+        assertEquals(miniResponse.key, result.key)
+        assertEquals(miniResponse.attachments, result.attachments)
+        assertEquals(miniResponse.archivedDate, result.archivedDate)
+        assertEquals(miniResponse.deletedDate, result.deletedDate)
+        assertEquals(miniResponse.reprompt, result.reprompt)
+        assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
+        // Verify unchanged fields remain the same
+        assertEquals(originalCipher.name, result.name)
+        assertEquals(originalCipher.notes, result.notes)
+        assertEquals(originalCipher.id, result.id)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should preserve existing collectionIds when not provided`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = null,
+        )
+
+        assertEquals(
+            listOf("original-collection-1", "original-collection-2"),
+            result.collectionIds,
+        )
     }
 }

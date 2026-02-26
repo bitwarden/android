@@ -8,20 +8,23 @@ import app.cash.turbine.test
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
@@ -34,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -59,7 +63,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LargeClass")
@@ -75,7 +78,7 @@ class VaultLockManagerTest {
         coEvery {
             hashPassword(
                 email = MOCK_PROFILE.email,
-                password = "drowssap",
+                password = "mockValue",
                 kdf = MOCK_PROFILE.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
@@ -104,6 +107,15 @@ class VaultLockManagerTest {
     private val realtimeManager: RealtimeManager = mockk {
         every { elapsedRealtimeMs } returns FIXED_CLOCK.millis()
     }
+    private val kdfManager: KdfManager = mockk {
+        every { needsKdfUpdateToMinimums() } returns false
+        coEvery {
+            updateKdfToMinimumsIfNeeded(password = any())
+        } returns UpdateKdfMinimumsResult.Success
+    }
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager = mockk {
+        coEvery { migratePinProtectedUserKeyIfNeeded(userId = any()) } just runs
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
@@ -117,6 +129,8 @@ class VaultLockManagerTest {
         userLogoutManager = userLogoutManager,
         trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = fakeDispatcherManager,
+        kdfManager = kdfManager,
+        pinProtectedUserKeyManager = pinProtectedUserKeyManager,
     )
 
     @Test
@@ -746,15 +760,18 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
-                    privateKey = privateKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -772,15 +789,18 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
-                    privateKey = privateKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
             trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
@@ -897,24 +917,26 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -938,15 +960,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -974,16 +999,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -991,6 +1019,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
             }
         }
 
@@ -1000,8 +1029,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val userAutoUnlockKey = "userAutoUnlockKey"
@@ -1009,16 +1037,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1051,15 +1082,18 @@ class VaultLockManagerTest {
             }
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1089,16 +1123,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1116,8 +1153,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val error = Throwable("Fail")
@@ -1125,16 +1161,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
@@ -1149,15 +1188,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1175,16 +1217,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             }
@@ -1196,24 +1241,26 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1235,15 +1282,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1261,16 +1311,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             }
@@ -1288,8 +1341,7 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             val error = Throwable("Fail")
@@ -1297,16 +1349,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns error.asFailure()
@@ -1320,15 +1375,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1346,16 +1404,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             }
@@ -1367,24 +1428,26 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1405,15 +1468,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1431,16 +1497,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             }
@@ -1458,24 +1527,26 @@ class VaultLockManagerTest {
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
+            val masterPassword = "mockValue"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1496,15 +1567,18 @@ class VaultLockManagerTest {
             )
 
             val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
                 userId = USER_ID,
                 email = email,
                 kdf = kdf,
-                privateKey = privateKey,
-                signingKey = null,
-                securityState = null,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                     password = masterPassword,
-                    userKey = userKey,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                 ),
                 organizationKeys = organizationKeys,
             )
@@ -1529,16 +1603,19 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
                         userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
                             password = masterPassword,
-                            userKey = userKey,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
-                        signingKey = null,
-                        securityState = null,
                     ),
                 )
             }
@@ -1626,6 +1703,212 @@ class VaultLockManagerTest {
         }
     }
 
+    @Test
+    fun `unlockVault with initializeCrypto success should migrate pinProtectedUserKey`() =
+        runTest {
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "mockValue"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
+                            password = masterPassword,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns false.asSuccess()
+            assertEquals(
+                emptyList<VaultUnlockData>(),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+
+            val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
+                userId = USER_ID,
+                email = email,
+                kdf = kdf,
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = masterPassword,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                ),
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            assertEquals(
+                listOf(
+                    VaultUnlockData(
+                        userId = USER_ID,
+                        status = VaultUnlockData.Status.UNLOCKED,
+                    ),
+                ),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
+                            password = masterPassword,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                        ),
+                    ),
+                )
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = USER_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock success should hash and store master password`() =
+        runTest {
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "mockValue"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                password = masterPassword,
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            )
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = initUserCryptoMethod,
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns false.asSuccess()
+            assertEquals(
+                emptyList<VaultUnlockData>(),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+            fakeAuthDiskSource.storeUserAutoUnlockKey(
+                userId = USER_ID,
+                userAutoUnlockKey = null,
+            )
+
+            val result = vaultLockManager.unlockVault(
+                accountCryptographicState = createWrappedAccountCryptographicState(
+                    privateKey = privateKey,
+                    securityState = null,
+                    signedPublicKey = null,
+                    signingKey = null,
+                ),
+                userId = USER_ID,
+                email = email,
+                kdf = kdf,
+                initUserCryptoMethod = initUserCryptoMethod,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            assertEquals(
+                listOf(
+                    VaultUnlockData(
+                        userId = USER_ID,
+                        status = VaultUnlockData.Status.UNLOCKED,
+                    ),
+                ),
+                vaultLockManager.vaultUnlockDataStateFlow.value,
+            )
+
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = USER_ID,
+                userAutoUnlockKey = null,
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID,
+                passwordHash = "hashedPassword",
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = createWrappedAccountCryptographicState(
+                            privateKey = privateKey,
+                            securityState = null,
+                            signedPublicKey = null,
+                            signingKey = null,
+                        ),
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = initUserCryptoMethod,
+                    ),
+                )
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                kdfManager.updateKdfToMinimumsIfNeeded(password = masterPassword)
+            }
+        }
+
     /**
      * Resets the verification call count for the given [mock] while leaving all other mocked
      * behavior in place.
@@ -1648,24 +1931,27 @@ class VaultLockManagerTest {
     private suspend fun verifyUnlockingVault(userId: String) {
         val kdf = MOCK_PROFILE.toSdkParams()
         val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
         val userKey = "12345"
+        val masterPassword = "mockValue"
         val privateKey = "54321"
         val organizationKeys = null
         coEvery {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     kdfParams = kdf,
                     email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
+                    method = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = masterPassword,
-                        userKey = userKey,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         } coAnswers {
@@ -1674,15 +1960,22 @@ class VaultLockManagerTest {
         }
 
         vaultLockManager.unlockVault(
+            accountCryptographicState = createWrappedAccountCryptographicState(
+                privateKey = privateKey,
+                securityState = null,
+                signedPublicKey = null,
+                signingKey = null,
+            ),
             userId = userId,
             email = email,
             kdf = kdf,
-            privateKey = privateKey,
-            signingKey = null,
-            securityState = null,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
+            initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                 password = masterPassword,
-                userKey = userKey,
+                masterPasswordUnlock = MasterPasswordUnlockData(
+                    kdf = kdf,
+                    masterKeyWrappedUserKey = userKey,
+                    salt = "mockSalt",
+                ),
             ),
             organizationKeys = organizationKeys,
         )
@@ -1694,8 +1987,7 @@ class VaultLockManagerTest {
     private suspend fun verifyUnlockedVault(userId: String) {
         val kdf = MOCK_PROFILE.toSdkParams()
         val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
+        val masterPassword = "mockValue"
         val privateKey = "54321"
         val organizationKeys = null
         val userAutoUnlockKey = "userAutoUnlockKey"
@@ -1706,16 +1998,19 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     kdfParams = kdf,
                     email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
+                    method = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = masterPassword,
-                        userKey = userKey,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -1727,15 +2022,18 @@ class VaultLockManagerTest {
         } returns true.asSuccess()
 
         val result = vaultLockManager.unlockVault(
+            accountCryptographicState = createWrappedAccountCryptographicState(
+                privateKey = privateKey,
+                securityState = null,
+                signedPublicKey = null,
+                signingKey = null,
+            ),
             userId = userId,
             email = email,
             kdf = kdf,
-            privateKey = privateKey,
-            signingKey = null,
-            securityState = null,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
+            initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
                 password = masterPassword,
-                userKey = userKey,
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
             ),
             organizationKeys = organizationKeys,
         )
@@ -1745,16 +2043,19 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = null,
+                        signedPublicKey = null,
+                        signingKey = null,
+                    ),
                     userId = userId,
                     kdfParams = kdf,
                     email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
+                    method = InitUserCryptoMethod.MasterPasswordUnlock(
                         password = masterPassword,
-                        userKey = userKey,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
         }
@@ -1816,7 +2117,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfParallelism = null,
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(
@@ -1835,4 +2136,10 @@ private val MOCK_USER_STATE = UserStateJson(
     accounts = mapOf(
         USER_ID to MOCK_ACCOUNT,
     ),
+)
+
+private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockData(
+    kdf = MOCK_PROFILE.toSdkParams(),
+    masterKeyWrappedUserKey = "12345",
+    salt = "mockSalt",
 )

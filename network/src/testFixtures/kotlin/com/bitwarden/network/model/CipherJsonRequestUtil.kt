@@ -1,6 +1,6 @@
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [CipherJsonRequest] with a given [number].
@@ -27,8 +27,9 @@ fun createMockCipherJsonRequest(
         createMockPasswordHistory(number = number),
     ),
     reprompt: CipherRepromptTypeJson = CipherRepromptTypeJson.NONE,
-    lastKnownRevisionDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    lastKnownRevisionDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     key: String? = "mockKey-$number",
+    archivedDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     encryptedFor: String? = "mockEncryptedFor-$number",
 ): CipherJsonRequest =
     CipherJsonRequest(
@@ -49,5 +50,6 @@ fun createMockCipherJsonRequest(
         reprompt = reprompt,
         lastKnownRevisionDate = lastKnownRevisionDate,
         key = key,
+        archivedDate = archivedDate,
         encryptedFor = encryptedFor,
     )

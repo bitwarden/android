@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.detekt) apply true
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlinx.kover) apply true
@@ -24,8 +23,10 @@ dependencies {
     kover(project(":authenticator"))
     kover(project(":authenticatorbridge"))
     kover(project(":core"))
+    kover(project(":cxf"))
     kover(project(":data"))
     kover(project(":network"))
+    kover(project(":testharness"))
     kover(project(":ui"))
 }
 
@@ -38,8 +39,10 @@ detekt {
         "authenticator/src",
         "authenticatorbridge/src",
         "core/src",
+        "cxf/src",
         "data/src",
         "network/src",
+        "testharness/src",
         "ui/src",
     )
 }
@@ -173,6 +176,24 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
                 .filter { it.isNotBlank() }
                 .map { File(rootDir, it) }
         }
+}
+
+subprojects {
+    tasks.withType<JavaCompile>().configureEach {
+        options.isFork = true
+    }
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        @Suppress("MagicNumber")
+        forkEvery = 500
+        maxHeapSize = "2g"
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        @Suppress("UselessCallOnNotNull")
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" +
+            // Explicitly setting the user Country and Language because tests assume en-US
+            "-Duser.country=US" +
+            "-Duser.language=en"
+    }
 }
 
 afterEvaluate {

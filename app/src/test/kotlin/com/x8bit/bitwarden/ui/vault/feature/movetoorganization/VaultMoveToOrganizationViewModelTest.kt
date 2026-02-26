@@ -5,24 +5,23 @@ import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.coEvery
@@ -63,7 +62,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
 
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
@@ -150,6 +149,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 id = "mockId-1",
                 name = "mockName-1",
                 isSelected = true,
+                isDefaultUserCollection = false,
             ),
         )
         val expectedState = createVaultMoveToOrganizationState(
@@ -522,32 +522,23 @@ private val DEFAULT_USER_STATE = UserState(
             isBiometricsEnabled = false,
             needsMasterPassword = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-1",
                     name = "mockOrganizationName-1",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-2",
                     name = "mockOrganizationName-2",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "mockOrganizationId-3",
                     name = "mockOrganizationName-3",
-                    shouldManageResetPassword = false,
-                    shouldUseKeyConnector = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             trustedDevice = null,
@@ -555,6 +546,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )

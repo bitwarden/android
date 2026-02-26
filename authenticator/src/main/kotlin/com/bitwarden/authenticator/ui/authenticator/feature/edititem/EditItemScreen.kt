@@ -1,69 +1,54 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
-import android.widget.Toast
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.content.AuthenticatorErrorContent
-import com.bitwarden.authenticator.ui.platform.components.content.AuthenticatorLoadingContent
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
-import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
-import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
-import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
-import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.stepper.BitwardenStepper
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
 
@@ -79,24 +64,9 @@ fun EditItemScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val context = LocalContext.current
-    val resources = context.resources
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            EditItemEvent.NavigateBack -> {
-                onNavigateBack()
-            }
-
-            is EditItemEvent.ShowToast -> {
-                Toast
-                    .makeText(
-                        context,
-                        event.message(resources),
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
-            }
+            EditItemEvent.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -110,10 +80,8 @@ fun EditItemScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            AuthenticatorTopAppBar(
-                title = stringResource(
-                    id = BitwardenString.edit,
-                ),
+            BitwardenTopAppBar(
+                title = stringResource(id = BitwardenString.edit),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
@@ -123,7 +91,7 @@ fun EditItemScreen(
                     }
                 },
                 actions = {
-                    AuthenticatorTextButton(
+                    BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EditItemAction.SaveClick) }
@@ -134,12 +102,10 @@ fun EditItemScreen(
             )
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is EditItemState.ViewState.Content -> {
                 EditItemContent(
-                    modifier = Modifier
-                        .padding(innerPadding),
                     viewState = viewState,
                     onIssuerNameTextChange = remember(viewModel) {
                         {
@@ -208,16 +174,11 @@ fun EditItemScreen(
             }
 
             is EditItemState.ViewState.Error -> {
-                AuthenticatorErrorContent(
-                    message = viewState.message(),
-                    modifier = Modifier.padding(innerPadding),
-                )
+                BitwardenErrorContent(message = viewState.message())
             }
 
             EditItemState.ViewState.Loading -> {
-                AuthenticatorLoadingContent(
-                    modifier = Modifier.padding(innerPadding),
-                )
+                BitwardenLoadingContent()
             }
         }
     }
@@ -243,9 +204,11 @@ fun EditItemContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 modifier = Modifier
                     .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 label = stringResource(id = BitwardenString.information),
             )
@@ -262,11 +225,11 @@ fun EditItemContent(
                 value = viewState.itemData.issuer,
                 onValueChange = onIssuerNameTextChange,
                 singleLine = true,
+                cardStyle = CardStyle.Top(),
             )
         }
 
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 modifier = Modifier
                     .testTag(tag = "KeyTextField")
@@ -276,12 +239,11 @@ fun EditItemContent(
                 value = viewState.itemData.totpCode,
                 onValueChange = onTotpCodeTextChange,
                 singleLine = true,
-                capitalization = KeyboardCapitalization.Characters,
+                cardStyle = CardStyle.Middle(),
             )
         }
 
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 modifier = Modifier
                     .testTag(tag = "UsernameTextField")
@@ -291,15 +253,16 @@ fun EditItemContent(
                 value = viewState.itemData.username.orEmpty(),
                 onValueChange = onUsernameTextChange,
                 singleLine = true,
+                cardStyle = CardStyle.Middle(),
             )
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenSwitch(
                 label = stringResource(id = BitwardenString.favorite),
                 isChecked = viewState.itemData.favorite,
                 onCheckedChange = onToggleFavorite,
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .testTag(tag = "ItemFavoriteToggle")
                     .fillMaxWidth()
@@ -308,47 +271,13 @@ fun EditItemContent(
         }
 
         item(key = "AdvancedOptions") {
-            val iconRotationDegrees = animateFloatAsState(
-                targetValue = if (viewState.isAdvancedOptionsExpanded) 180f else 0f,
-                label = "expanderIconRotationAnimation",
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
+            BitwardenExpandingHeader(
+                isExpanded = viewState.isAdvancedOptionsExpanded,
+                onClick = onExpandAdvancedOptionsClicked,
                 modifier = Modifier
-                    .testTag(tag = "CollapseAdvancedOptions")
-                    .standardHorizontalMargin()
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(28.dp))
-                    .clickable(
-                        indication = ripple(
-                            bounded = true,
-                            color = MaterialTheme.colorScheme.primary,
-                        ),
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = onExpandAdvancedOptionsClicked,
-                    )
-                    .padding(vertical = 12.dp)
-                    .animateItem(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(BitwardenString.advanced),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Spacer(Modifier.width(8.dp))
-                Icon(
-                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
-                    contentDescription = if (viewState.isAdvancedOptionsExpanded) {
-                        stringResource(BitwardenString.collapse_advanced_options)
-                    } else {
-                        stringResource(BitwardenString.expand_advanced_options)
-                    },
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .rotate(degrees = iconRotationDegrees.value),
-                )
-            }
+                    .standardHorizontalMargin(),
+            )
         }
 
         if (viewState.isAdvancedOptionsExpanded) {
@@ -378,8 +307,7 @@ private fun LazyListScope.advancedOptions(
 ) {
     item(key = "OtpItemTypeSelector") {
         val possibleTypeOptions = AuthenticatorItemType.entries
-        val typeOptionsWithStrings =
-            possibleTypeOptions.associateWith { it.name }
+        val typeOptionsWithStrings = possibleTypeOptions.associateWith { it.name }
         BitwardenMultiSelectButton(
             modifier = Modifier
                 .testTag(tag = "OTPItemTypePicker")
@@ -389,6 +317,7 @@ private fun LazyListScope.advancedOptions(
             label = stringResource(id = BitwardenString.otp_type),
             options = typeOptionsWithStrings.values.toImmutableList(),
             selectedOption = viewState.itemData.type.name,
+            cardStyle = CardStyle.Top(),
             onOptionSelected = { selectedOption ->
                 val selectedOptionName = typeOptionsWithStrings
                     .entries
@@ -402,7 +331,6 @@ private fun LazyListScope.advancedOptions(
     item(key = "AlgorithmItemTypeSelector") {
         val possibleAlgorithmOptions = AuthenticatorItemAlgorithm.entries
         val algorithmOptionsWithStrings = possibleAlgorithmOptions.associateWith { it.name }
-        Spacer(Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             modifier = Modifier
                 .testTag(tag = "AlgorithmItemTypePicker")
@@ -412,6 +340,7 @@ private fun LazyListScope.advancedOptions(
             label = stringResource(id = BitwardenString.algorithm),
             options = algorithmOptionsWithStrings.values.toImmutableList(),
             selectedOption = viewState.itemData.algorithm.name,
+            cardStyle = CardStyle.Middle(),
             onOptionSelected = { selectedOption ->
                 val selectedOptionName = algorithmOptionsWithStrings
                     .entries
@@ -425,9 +354,12 @@ private fun LazyListScope.advancedOptions(
     item(key = "RefreshPeriodItemTypePicker") {
         val possibleRefreshPeriodOptions = AuthenticatorRefreshPeriodOption.entries
         val refreshPeriodOptionsWithStrings = possibleRefreshPeriodOptions.associateWith {
-            stringResource(id = BitwardenString.refresh_period_seconds, it.seconds)
+            pluralStringResource(
+                id = BitwardenPlurals.refresh_period_seconds,
+                count = it.seconds,
+                formatArgs = arrayOf(it.seconds),
+            )
         }
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             modifier = Modifier
                 .testTag(tag = "RefreshPeriodItemTypePicker")
@@ -436,10 +368,10 @@ private fun LazyListScope.advancedOptions(
                 .animateItem(),
             label = stringResource(id = BitwardenString.refresh_period),
             options = refreshPeriodOptionsWithStrings.values.toImmutableList(),
-            selectedOption = stringResource(
-                id = BitwardenString.refresh_period_seconds,
-                viewState.itemData.refreshPeriod.seconds,
+            selectedOption = refreshPeriodOptionsWithStrings.getValue(
+                key = viewState.itemData.refreshPeriod,
             ),
+            cardStyle = CardStyle.Middle(),
             onOptionSelected = remember(viewState) {
                 { selectedOption ->
                     val selectedOptionName = refreshPeriodOptionsWithStrings
@@ -453,7 +385,6 @@ private fun LazyListScope.advancedOptions(
     }
 
     item(key = "DigitsCounterItem") {
-        Spacer(modifier = Modifier.height(8.dp))
         DigitsCounterItem(
             modifier = Modifier
                 .fillMaxWidth()
@@ -475,17 +406,15 @@ private fun EditItemDialogs(
     when (dialogState) {
         is EditItemState.DialogState.Generic -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title(),
+                message = dialogState.message(),
                 onDismissRequest = onDismissRequest,
             )
         }
 
         is EditItemState.DialogState.Loading -> {
             BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.message),
+                text = dialogState.message(),
             )
         }
 
@@ -506,8 +435,7 @@ private fun DigitsCounterItem(
         value = digits.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onDigitsCounterChange,
-        increaseButtonTestTag = "DigitsIncreaseButton",
-        decreaseButtonTestTag = "DigitsDecreaseButton",
+        cardStyle = CardStyle.Bottom,
         modifier = modifier.testTag(tag = "DigitsValueLabel"),
     )
 }

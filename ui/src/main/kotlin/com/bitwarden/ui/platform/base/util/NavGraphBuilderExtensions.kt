@@ -64,10 +64,10 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithPushTransitions(
     this.composable<T>(
         typeMap = typeMap,
         deepLinks = deepLinks,
-        enterTransition = TransitionProviders.Enter.pushLeft,
+        enterTransition = TransitionProviders.Enter.pushToStart,
         exitTransition = TransitionProviders.Exit.stay,
         popEnterTransition = TransitionProviders.Enter.stay,
-        popExitTransition = TransitionProviders.Exit.pushRight,
+        popExitTransition = TransitionProviders.Exit.pushToEnd,
         sizeTransform = null,
         content = content,
     )
@@ -86,8 +86,8 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithRootPushTransitions(
         typeMap = typeMap,
         deepLinks = deepLinks,
         enterTransition = TransitionProviders.Enter.stay,
-        exitTransition = TransitionProviders.Exit.pushLeft,
-        popEnterTransition = TransitionProviders.Enter.pushRight,
+        exitTransition = TransitionProviders.Exit.pushToStart,
+        popEnterTransition = TransitionProviders.Enter.pushToEnd,
         popExitTransition = TransitionProviders.Exit.fadeOut,
         sizeTransform = null,
         content = content,

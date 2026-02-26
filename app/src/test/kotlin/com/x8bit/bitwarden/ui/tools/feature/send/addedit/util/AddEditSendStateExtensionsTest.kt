@@ -1,15 +1,18 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class AddEditSendStateExtensionsTest {
 
@@ -68,15 +71,66 @@ class AddEditSendStateExtensionsTest {
             key = null,
             accessCount = 0U,
             hasPassword = false,
-            deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
-            expirationDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
+            deletionDate = Instant.parse("2030-10-27T12:00:00Z"),
+            expirationDate = Instant.parse("2030-10-27T12:00:00Z"),
         )
 
         val result = DEFAULT_VIEW_STATE
             .copy(
                 common = DEFAULT_COMMON_STATE.copy(
-                    deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z"),
-                    expirationDate = ZonedDateTime.parse("2026-10-27T12:00:00Z"),
+                    deletionDate = Instant.parse("2030-10-27T12:00:00Z"),
+                    expirationDate = Instant.parse("2026-10-27T12:00:00Z"),
+                ),
+            )
+            .toSendView(FIXED_CLOCK)
+
+        assertEquals(sendView, result)
+    }
+
+    @Test
+    fun `toSendView should create an appropriate SendView with Auth type NONE`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
+            id = null,
+            accessId = null,
+            key = null,
+            accessCount = 0U,
+            hasPassword = false,
+            newPassword = null,
+            authType = AuthType.NONE,
+        )
+
+        val result = DEFAULT_VIEW_STATE
+            .copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    passwordInput = "",
+                    sendAuth = SendAuth.None,
+                ),
+            )
+            .toSendView(FIXED_CLOCK)
+
+        assertEquals(sendView, result)
+    }
+
+    @Test
+    fun `toSendView should create an appropriate SendView with Auth type EMAIL`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
+            id = null,
+            accessId = null,
+            key = null,
+            accessCount = 0U,
+            hasPassword = false,
+            newPassword = null,
+            emails = listOf("email@email.com"),
+            authType = AuthType.EMAIL,
+        )
+
+        val result = DEFAULT_VIEW_STATE
+            .copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    passwordInput = "",
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(AuthEmail(id = "id1", value = "email@email.com")),
+                    ),
                 ),
             )
             .toSendView(FIXED_CLOCK)
@@ -98,11 +152,13 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "mockNotes-1",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-    expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
+    expirationDate = Instant.parse("2023-10-27T12:00:00Z"),
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
+    isSendEmailVerificationEnabled = false,
+    sendAuth = SendAuth.Password,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

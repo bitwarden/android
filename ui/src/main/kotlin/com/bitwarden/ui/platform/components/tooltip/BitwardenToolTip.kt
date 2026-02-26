@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TooltipScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +43,7 @@ fun TooltipScope.BitwardenToolTip(
 ) {
     PlainTooltip(
         modifier = modifier.requiredSizeIn(minWidth = MIN_TOOLTIP_WIDTH),
-        caretSize = DpSize(width = 24.dp, height = 12.dp),
+        caretShape = TooltipDefaults.caretShape(caretSize = DpSize(width = 24.dp, height = 12.dp)),
         shape = BitwardenTheme.shapes.coachmark,
         contentColor = BitwardenTheme.colorScheme.text.primary,
         containerColor = BitwardenTheme.colorScheme.background.secondary,

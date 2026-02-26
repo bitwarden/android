@@ -112,7 +112,7 @@ private fun VaultNoItems_preview() {
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {
             VaultNoItems(
-                vectorRes = BitwardenDrawable.img_vault_items,
+                vectorRes = BitwardenDrawable.ill_vault_items,
                 headerText = stringResource(id = BitwardenString.save_and_protect_your_data),
                 message = stringResource(
                     BitwardenString.the_vault_protects_more_than_just_passwords,

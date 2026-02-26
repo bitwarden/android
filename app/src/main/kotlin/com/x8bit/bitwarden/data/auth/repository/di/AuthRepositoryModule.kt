@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.di
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
@@ -10,6 +11,7 @@ import com.bitwarden.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -59,6 +62,7 @@ object AuthRepositoryModule {
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
         keyConnectorManager: KeyConnectorManager,
         authRequestManager: AuthRequestManager,
         trustedDeviceManager: TrustedDeviceManager,
@@ -67,6 +71,8 @@ object AuthRepositoryModule {
         policyManager: PolicyManager,
         logsManager: LogsManager,
         userStateManager: UserStateManager,
+        kdfManager: KdfManager,
+        toastManager: ToastManager,
     ): AuthRepository = AuthRepositoryImpl(
         clock = clock,
         accountsService = accountsService,
@@ -83,6 +89,7 @@ object AuthRepositoryModule {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        biometricsEncryptionManager = biometricsEncryptionManager,
         keyConnectorManager = keyConnectorManager,
         authRequestManager = authRequestManager,
         trustedDeviceManager = trustedDeviceManager,
@@ -91,6 +98,8 @@ object AuthRepositoryModule {
         policyManager = policyManager,
         logsManager = logsManager,
         userStateManager = userStateManager,
+        kdfManager = kdfManager,
+        toastManager = toastManager,
     )
 
     @Provides
@@ -99,11 +108,13 @@ object AuthRepositoryModule {
         authDiskSource: AuthDiskSource,
         firstTimeActionManager: FirstTimeActionManager,
         vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
         dispatcherManager: DispatcherManager,
     ): UserStateManager = UserStateManagerImpl(
         authDiskSource = authDiskSource,
         firstTimeActionManager = firstTimeActionManager,
         vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
         dispatcherManager = dispatcherManager,
     )
 }

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -20,6 +21,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.concat
 import io.mockk.every
 import io.mockk.just
@@ -143,7 +145,7 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
+    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when selection is made`() =
         runTest {
             val expectedSaveOption = DefaultSaveOption.BITWARDEN_APP
             mutableStateFlow.value = DEFAULT_STATE
@@ -164,12 +166,6 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
                 .assertIsDisplayed()
                 .performClick()
 
-            // Click confirm:
-            composeTestRule
-                .onNodeWithText("Confirm")
-                .assertIsDisplayed()
-                .performClick()
-
             verify {
                 viewModel.trySendAction(
                     SettingsAction.DataClick.DefaultSaveOptionUpdated(expectedSaveOption),
@@ -181,6 +177,100 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
                 .onNode(isDialog())
                 .assertDoesNotExist()
         }
+
+    @Test
+    fun `on allow screen capture confirm should send AllowScreenCaptureToggle`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule.onNodeWithText("Yes").performClick()
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AllowScreenCaptureToggle(true),
+            )
+        }
+    }
+
+    @Test
+    fun `on allow screen capture cancel should dismiss dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on allow screen capture row click should display confirm enable screen capture dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Allow screen capture")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language row click should send display language selector dialog`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Language")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language selected should emit LanguageChange event`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "English (United Kingdom)")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = SettingsAction.AppearanceChange.LanguageChange(
+                    language = AppLanguage.ENGLISH_BRITISH,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on use dynamic colors row click should send DynamicColorChange event`() {
+        composeTestRule
+            .onNodeWithText(text = "Use dynamic colors")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(true))
+        }
+    }
+
+    @Test
+    fun `Unlock with biometrics row should be hidden when hasBiometricsSupport is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                hasBiometricsSupport = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertDoesNotExist()
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -188,8 +278,10 @@ private val APP_THEME = AppTheme.DEFAULT
 private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
 private val DEFAULT_STATE = SettingsState(
     appearance = SettingsState.Appearance(
-        APP_LANGUAGE,
-        APP_THEME,
+        language = APP_LANGUAGE,
+        theme = APP_THEME,
+        isDynamicColorsSupported = true,
+        isDynamicColorsEnabled = false,
     ),
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,
@@ -200,4 +292,6 @@ private val DEFAULT_STATE = SettingsState(
     version = BitwardenString.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
+    allowScreenCapture = false,
+    hasBiometricsSupport = true,
 )

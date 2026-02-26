@@ -2,9 +2,10 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
+import com.bitwarden.data.datasource.disk.util.FakeFlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -19,7 +20,10 @@ import java.time.Instant
 /**
  * Fake, memory-based implementation of [SettingsDiskSource].
  */
-class FakeSettingsDiskSource : SettingsDiskSource {
+class FakeSettingsDiskSource(
+    flightRecorderDiskSource: FakeFlightRecorderDiskSource = FakeFlightRecorderDiskSource(),
+) : SettingsDiskSource,
+    FlightRecorderDiskSource by flightRecorderDiskSource {
 
     private val mutableAppLanguageFlow = bufferedMutableSharedFlow<AppLanguage?>(replay = 1)
 
@@ -52,9 +56,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableShouldShowGeneratorCoachMarkFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableFlightRecorderDataFlow =
-        bufferedMutableSharedFlow<FlightRecorderDataSet?>(replay = 1)
-
     private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
@@ -65,6 +66,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedDisableAutoTotpCopy = mutableMapOf<String, Boolean?>()
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
+    private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
@@ -77,18 +79,22 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedAppResumeScreenData = mutableMapOf<String, String?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
+    private val userShowBrowserAutofillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
-    private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
+    private var vaultRegisteredForExport: Boolean? = null
     private var addCipherActionCount: Int? = null
     private var generatedActionCount: Int? = null
     private var createSendActionCount: Int? = null
     private var hasSeenAddLoginCoachMark: Boolean? = null
     private var hasSeenGeneratorCoachMark: Boolean? = null
-    private var storedFlightRecorderData: FlightRecorderDataSet? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
+    private var storedBrowserAutofillDialogReshowTime: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowBrowserAutofillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowUnlockSettingBadgeFlowMap =
@@ -97,11 +103,14 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableShowImportLoginsSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    private val mutableVaultRegisteredForExportFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
-
     private val mutableIsDynamicColorsEnabled =
         bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableVaultRegisteredForExportFlow =
+        bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableIntroducingArchiveActionCardDismissedFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = storedAppLanguage
@@ -195,16 +204,11 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(hasUserLoggedInOrCreatedAccount)
         }
 
-    override var flightRecorderData: FlightRecorderDataSet?
-        get() = storedFlightRecorderData
+    override var browserAutofillDialogReshowTime: Instant?
+        get() = storedBrowserAutofillDialogReshowTime
         set(value) {
-            storedFlightRecorderData = value
-            mutableFlightRecorderDataFlow.tryEmit(value)
+            storedBrowserAutofillDialogReshowTime = value
         }
-
-    override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
-        get() = mutableFlightRecorderDataFlow
-            .onSubscription { emit(storedFlightRecorderData) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -233,7 +237,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
         mutableLastSyncCallFlowMap.remove(userId)
-        mutableVaultRegisteredForExportFlowMap.remove(userId)
     }
 
     override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]
@@ -326,6 +329,18 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         getMutablePullToRefreshEnabledFlow(userId = userId).tryEmit(isPullToRefreshEnabled)
     }
 
+    override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
+        storedIntroducingArchiveActionCardDismissed[userId]
+
+    override fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?> =
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId)
+            .onSubscription { emit(getIntroducingArchiveActionCardDismissed(userId = userId)) }
+
+    override fun storeIntroducingArchiveActionCardDismissed(userId: String, isDismissed: Boolean?) {
+        storedIntroducingArchiveActionCardDismissed[userId] = isDismissed
+        getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
 
@@ -365,6 +380,19 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getShowAutoFillSettingBadge(userId = userId))
         }
 
+    override fun getShowBrowserAutofillSettingBadge(userId: String): Boolean? =
+        userShowBrowserAutofillBadge[userId]
+
+    override fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?) {
+        userShowBrowserAutofillBadge[userId] = showBadge
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId = userId).tryEmit(showBadge)
+    }
+
+    override fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId = userId).onSubscription {
+            emit(getShowBrowserAutofillSettingBadge(userId = userId))
+        }
+
     override fun getShowUnlockSettingBadge(userId: String): Boolean? =
         userShowUnlockBadge[userId]
 
@@ -391,17 +419,17 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getShowImportLoginsSettingBadge(userId = userId))
         }
 
-    override fun getVaultRegisteredForExport(userId: String): Boolean =
-        vaultRegisteredForExport[userId] ?: false
+    override fun getAppRegisteredForExport(): Boolean =
+        vaultRegisteredForExport ?: false
 
-    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?) {
-        vaultRegisteredForExport[userId] = isRegistered
-        getMutableVaultRegisteredForExportFlow(userId = userId).tryEmit(isRegistered)
+    override fun storeAppRegisteredForExport(isRegistered: Boolean?) {
+        vaultRegisteredForExport = isRegistered
+        mutableVaultRegisteredForExportFlow.tryEmit(isRegistered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
-        getMutableVaultRegisteredForExportFlow(userId = userId).onSubscription {
-            emit(getVaultRegisteredForExport(userId = userId))
+    override fun getAppRegisteredForExportFlow(userId: String): Flow<Boolean?> =
+        mutableVaultRegisteredForExportFlow.onSubscription {
+            emit(getAppRegisteredForExport())
         }
 
     override fun getAddCipherActionCount(): Int? {
@@ -464,10 +492,10 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     }
 
     /**
-     * Asserts that the stored [FlightRecorderDataSet] matches the [expected] one.
+     * Asserts that the stored introducing archive action card dismissed matches the [expected] one.
      */
-    fun assertFlightRecorderData(expected: FlightRecorderDataSet) {
-        assertEquals(expected, storedFlightRecorderData)
+    fun assertIntroducingArchiveActionCardDismissed(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedIntroducingArchiveActionCardDismissed[userId])
     }
 
     /**
@@ -475,6 +503,27 @@ class FakeSettingsDiskSource : SettingsDiskSource {
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
         assertEquals(expected, storedLastSyncTime[userId])
+    }
+
+    /**
+     *  Asserts that the stored vault timeout matches the [expected] one.
+     */
+    fun assertVaultTimeoutInMinutes(userId: String, expected: Int?) {
+        assertEquals(expected, storedVaultTimeoutInMinutes[userId])
+    }
+
+    /**
+     *  Asserts that the stored vault timeout action matches the [expected] one.
+     */
+    fun assertVaultTimeoutAction(userId: String, expected: VaultTimeoutAction?) {
+        assertEquals(expected, storedVaultTimeoutActions[userId])
+    }
+
+    /**
+     * Asserts that the stored browser autofill dialog reshow time matches the [expected] one.
+     */
+    fun assertBrowserAutofillDialogReshowTime(expected: Instant?) {
+        assertEquals(expected, storedBrowserAutofillDialogReshowTime)
     }
 
     //region Private helper functions
@@ -506,11 +555,25 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             bufferedMutableSharedFlow(replay = 1)
         }
 
+    private fun getMutableIntroducingArchiveActionCardDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableIntroducingArchiveActionCardDismissedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
     private fun getMutableShowAutoFillSettingBadgeFlow(
         userId: String,
     ): MutableSharedFlow<Boolean?> = mutableShowAutoFillSettingBadgeFlowMap.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
+
+    private fun getMutableShowBrowserAutofillSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShowBrowserAutofillSettingBadgeFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableShowUnlockSettingBadgeFlow(userId: String): MutableSharedFlow<Boolean?> =
         mutableShowUnlockSettingBadgeFlowMap.getOrPut(userId) {
@@ -522,13 +585,5 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     ): MutableSharedFlow<Boolean?> = mutableShowImportLoginsSettingBadgeFlowMap.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
-
-    private fun getMutableVaultRegisteredForExportFlow(
-        userId: String,
-    ): MutableSharedFlow<Boolean?> =
-        mutableVaultRegisteredForExportFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
     //endregion Private helper functions
 }

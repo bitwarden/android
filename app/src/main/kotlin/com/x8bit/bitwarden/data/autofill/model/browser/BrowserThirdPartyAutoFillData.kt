@@ -6,7 +6,9 @@ package com.x8bit.bitwarden.data.autofill.model.browser
 data class BrowserThirdPartyAutoFillData(
     val isAvailable: Boolean,
     val isThirdPartyEnabled: Boolean,
-)
+) {
+    val isAvailableButDisabled: Boolean = isAvailable && !isThirdPartyEnabled
+}
 
 /**
  * The overall status for all relevant browsers.
@@ -15,4 +17,46 @@ data class BrowserThirdPartyAutofillStatus(
     val braveStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeBetaChannelStatusData: BrowserThirdPartyAutoFillData,
-)
+    val vivaldiStableChannelStatusData: BrowserThirdPartyAutoFillData,
+    val defaultBrowserPackageName: String?,
+) {
+    /**
+     * The total number of available browsers.
+     */
+    val availableCount: Int
+        get() = (if (braveStableStatusData.isAvailable) 1 else 0) +
+            (if (chromeStableStatusData.isAvailable) 1 else 0) +
+            (if (chromeBetaChannelStatusData.isAvailable) 1 else 0) +
+            (if (vivaldiStableChannelStatusData.isAvailable) 1 else 0)
+
+    /**
+     * Whether any of the available browsers have third party autofill disabled.
+     */
+    val isAnyIsAvailableAndDisabled: Boolean
+        get() = braveStableStatusData.isAvailableButDisabled ||
+            chromeStableStatusData.isAvailableButDisabled ||
+            chromeBetaChannelStatusData.isAvailableButDisabled ||
+            vivaldiStableChannelStatusData.isAvailableButDisabled
+
+    /**
+     * Whether the device's default browser is one of the supported browsers and has third party
+     * autofill disabled. Returns false if the default browser is not a supported browser or
+     * cannot be determined.
+     */
+    val isDefaultBrowserAvailableAndDisabled: Boolean
+        get() {
+            val browserPackage = defaultBrowserPackageName
+                ?.let { packageName ->
+                    BrowserPackage.entries.firstOrNull { it.packageName == packageName }
+                }
+                ?: return false
+            return when (browserPackage) {
+                BrowserPackage.BRAVE_RELEASE -> braveStableStatusData.isAvailableButDisabled
+                BrowserPackage.CHROME_STABLE -> chromeStableStatusData.isAvailableButDisabled
+                BrowserPackage.CHROME_BETA -> chromeBetaChannelStatusData.isAvailableButDisabled
+                BrowserPackage.VIVALDI_STABLE -> {
+                    vivaldiStableChannelStatusData.isAvailableButDisabled
+                }
+            }
+        }
+}

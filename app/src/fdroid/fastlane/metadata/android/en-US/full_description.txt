@@ -1,0 +1,44 @@
+Recognized as best password manager by PCMag, WIRED, The Verge, CNET, G2, and more!
+
+SECURE YOUR DIGITAL LIFE
+Secure your digital life and protect against data breaches by generating and saving unique, strong passwords for every account. Maintain everything in an end-to-end encrypted password vault that only you can access.
+
+ACCESS YOUR DATA, ANYWHERE, ANYTIME, ON ANY DEVICE
+Easily manage, store, secure, and share unlimited passwords and passkeys across unlimited devices without restrictions.
+
+USE PASSKEYS WHEREVER YOU LOG IN
+Create, store, and sync passkeys across the Bitwarden mobile app and browser extensions for a secure, passwordless experience no matter what device you're on.
+
+EVERYONE SHOULD HAVE THE TOOLS TO STAY SAFE ONLINE
+Utilize Bitwarden for free with no ads or selling data. Bitwarden believes everyone should have the ability to stay safe online. Premium plans offer access to advanced features.
+
+EMPOWER YOUR TEAMS WITH BITWARDEN
+Plans for Teams and Enterprise come with professional business features. Some examples include SSO integration, self-hosting, directory integration and SCIM provisioning, global policies, API access, event logs, and more.
+
+Use Bitwarden to secure your workforce and share sensitive information with colleagues.
+
+More reasons to choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashing, and PBKDF2 SHA-256) so your data stays secure and private.
+
+3rd-party Audits
+Bitwarden regularly conducts comprehensive third-party security audits with notable security firms. These annual audits include source code assessments and penetration testing across Bitwarden IPs, servers, and web applications.
+
+Advanced 2FA
+Secure your login with a third-party authenticator, emailed codes, or FIDO2 WebAuthn credentials such as a hardware security key or passkey.
+
+Bitwarden Send
+Transmit data directly to others while maintaining end-to-end encrypted security and limiting exposure.
+
+Built-in Generator
+Create long, complex, and distinct passwords and unique usernames for every site you visit. Integrate with email alias providers for additional privacy.
+
+Global Translations
+Bitwarden translations exist for more than 50 languages.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+
+
+Accessibility Services Disclosure: Bitwarden offers the ability to use the Accessibility Service to augment Autofill on older devices or in cases where autofill is not working correctly. When enabled, the Accessibility Service is used to search for login fields in apps and websites. This establishes the appropriate field IDs when a match for the app or site is found and inserts credentials. When the Accessibility Service is active Bitwarden does not store information or control any on-screen elements beyond inserting credentials.

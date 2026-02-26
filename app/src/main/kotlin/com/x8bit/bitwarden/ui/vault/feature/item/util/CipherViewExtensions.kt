@@ -47,6 +47,7 @@ fun CipherView.toViewState(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     relatedLocations: ImmutableList<VaultItemLocation>,
+    hasOrganizations: Boolean,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -109,12 +110,14 @@ fun CipherView.toViewState(
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,
+            archived = this.archivedDate != null,
             passwordHistoryCount = passwordHistory?.count(),
             iconData = this.toIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
             ),
             relatedLocations = relatedLocations,
+            hasOrganizations = hasOrganizations,
         ),
         type = when (type) {
             CipherType.LOGIN -> {
@@ -139,7 +142,7 @@ fun CipherView.toViewState(
                             timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         )
-                        ?.let { BitwardenString.password_last_updated.asText(it) },
+                        ?.let { BitwardenString.password_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
@@ -257,7 +260,7 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential.getCreationDateText(clock: Clock): Text? =
+private fun Fido2Credential.getCreationDateText(clock: Clock): Text =
     BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,

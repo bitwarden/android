@@ -81,5 +81,5 @@ fun NavGraphBuilder.completeRegistrationDestination(
  * Pop up to the complete registration screen.
  */
 fun NavController.popUpToCompleteRegistration() {
-    this.popBackStack(route = CompleteRegistrationRoute, inclusive = false)
+    this.popBackStack(route = CompleteRegistrationRoute::class, inclusive = false)
 }

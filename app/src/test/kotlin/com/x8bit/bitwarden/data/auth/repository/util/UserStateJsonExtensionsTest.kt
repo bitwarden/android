@@ -4,27 +4,33 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Suppress("LargeClass")
 class UserStateJsonExtensionsTest {
@@ -61,7 +67,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -83,6 +89,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -112,9 +119,10 @@ class UserStateJsonExtensionsTest {
                 hasMasterPassword = true,
                 trustedDeviceUserDecryptionOptions = null,
                 keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -136,6 +144,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -184,7 +193,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -200,7 +209,7 @@ class UserStateJsonExtensionsTest {
                             avatarColorHex = "avatarColor",
                             stamp = "securityStamp",
                             isTwoFactorEnabled = false,
-                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                         ),
                     ),
                 ),
@@ -220,8 +229,8 @@ class UserStateJsonExtensionsTest {
                             every { isPremium } returns true
                             every { isPremiumFromOrganization } returns true
                             every { isTwoFactorEnabled } returns false
-                            every { creationDate } returns ZonedDateTime
-                                .parse("2024-09-13T01:00:00.00Z")
+                            every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
+                            every { userDecryption } returns null
                         }
                     },
                 ),
@@ -248,7 +257,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -266,6 +275,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = null,
                                 trustedDeviceUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -309,9 +319,10 @@ class UserStateJsonExtensionsTest {
                 hasMasterPassword = true,
                 keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
                 trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+                masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -328,6 +339,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
                                 trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+                                masterPasswordUnlock = null,
                             ),
                         ),
                     ),
@@ -360,14 +372,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -378,6 +387,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
             ),
@@ -396,6 +406,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = true,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = AccountTokensJson(
@@ -426,14 +437,11 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -450,6 +458,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -472,14 +481,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = true,
@@ -490,6 +496,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -509,6 +516,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = AccountTokensJson(
@@ -534,14 +542,11 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -558,6 +563,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -581,14 +587,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -604,6 +607,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -629,6 +633,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -651,14 +656,11 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -675,6 +677,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -698,14 +701,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -721,6 +721,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -746,6 +747,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -768,14 +770,11 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -792,6 +791,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -815,14 +815,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -838,6 +835,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -863,6 +861,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -885,14 +884,12 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -909,6 +906,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -931,16 +929,15 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
                                 // Key part of the result #1, this is true or the role is owner or
                                 // admin
                                 shouldManageResetPassword = true,
-                                shouldUseKeyConnector = false,
                                 role = OrganizationType.USER,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -959,6 +956,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -984,6 +982,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1006,14 +1005,13 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
                                     shouldManageResetPassword = true,
-                                    shouldUseKeyConnector = false,
                                     role = OrganizationType.USER,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -1030,6 +1028,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1059,6 +1058,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1082,6 +1082,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                                     keyConnectorUrl = "keyConnectorUrl",
                                 ),
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1108,6 +1109,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1137,6 +1139,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1157,6 +1160,7 @@ class UserStateJsonExtensionsTest {
                                 hasMasterPassword = false,
                                 trustedDeviceUserDecryptionOptions = null,
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1188,6 +1192,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1210,16 +1215,12 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                // Key part of the result #1, this is true or the role is owner or
-                                // admin
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
                                 role = OrganizationType.USER,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -1235,6 +1236,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1262,6 +1264,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1284,14 +1287,12 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
                                     role = OrganizationType.USER,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -1308,6 +1309,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
@@ -1331,14 +1333,11 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -1356,6 +1355,7 @@ class UserStateJsonExtensionsTest {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = false,
                         ),
+                        isExportable = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1381,6 +1381,7 @@ class UserStateJsonExtensionsTest {
                                     hasManageResetPasswordPermission = false,
                                 ),
                                 keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
                             )
                         },
                         tokens = null,
@@ -1403,14 +1404,11 @@ class UserStateJsonExtensionsTest {
                         UserOrganizations(
                             userId = "activeUserId",
                             organizations = listOf(
-                                Organization(
+                                createMockOrganization(
+                                    number = 1,
                                     id = "organizationId",
                                     name = "organizationName",
-                                    shouldManageResetPassword = false,
-                                    shouldUseKeyConnector = false,
-                                    role = OrganizationType.ADMIN,
                                     keyConnectorUrl = null,
-                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -1429,7 +1427,665 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(
                         showImportLoginsCard = false,
                     ),
+                    getUserPolicies = { _, _ -> emptyList() },
                 ),
         )
     }
+
+    @Test
+    fun `toUserState isExportable should be false if organization match policies`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "activeAvatarColorHex",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            createMockOrganization(
+                                number = 1,
+                                id = "organizationId",
+                                name = "organizationName",
+                                keyConnectorUrl = null,
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.PIN,
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.NOT_STARTED,
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = false,
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { hasPremium } returns null
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
+                            )
+                        },
+                        tokens = AccountTokensJson(
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = listOf(
+                        VaultUnlockData(
+                            userId = "activeUserId",
+                            status = VaultUnlockData.Status.UNLOCKED,
+                        ),
+                    ),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                createMockOrganization(
+                                    number = 1,
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    keyConnectorUrl = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = false,
+                        ),
+                    ),
+                    hasPendingAccountAddition = false,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                    isDeviceTrustedProvider = { false },
+                    onboardingStatus = OnboardingStatus.NOT_STARTED,
+                    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ ->
+                        listOf(
+                            createMockPolicy(
+                                id = "policyId",
+                                organizationId = "organizationId",
+                                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                                data = null,
+                                isEnabled = true,
+                            ),
+                        )
+                    },
+                ),
+        )
+    }
+
+    @Test
+    fun `toUserState isExportable should be true if policies is not enabled`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "activeAvatarColorHex",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            createMockOrganization(
+                                number = 1,
+                                id = "organizationId",
+                                name = "organizationName",
+                                keyConnectorUrl = null,
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.PIN,
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.NOT_STARTED,
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { hasPremium } returns null
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = null,
+                            )
+                        },
+                        tokens = AccountTokensJson(
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = listOf(
+                        VaultUnlockData(
+                            userId = "activeUserId",
+                            status = VaultUnlockData.Status.UNLOCKED,
+                        ),
+                    ),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                createMockOrganization(
+                                    number = 1,
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    keyConnectorUrl = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = false,
+                        ),
+                    ),
+                    hasPendingAccountAddition = false,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                    isDeviceTrustedProvider = { false },
+                    onboardingStatus = OnboardingStatus.NOT_STARTED,
+                    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ ->
+                        listOf(
+                            createMockPolicy(
+                                id = "policyId",
+                                organizationId = "organizationId",
+                                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                                data = null,
+                                isEnabled = false,
+                            ),
+                        )
+                    },
+                ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should create UserDecryptionOptionsJson when null and syncResponse has masterPasswordUnlock`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson>(relaxed = true) {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "avatarColor"
+                every { securityStamp } returns "securityStamp"
+                every { isPremium } returns false
+                every { isPremiumFromOrganization } returns false
+                every { isTwoFactorEnabled } returns true
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns UserDecryptionJson(
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            )
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "avatarColor",
+                            stamp = "securityStamp",
+                            hasPremium = false,
+                            isTwoFactorEnabled = true,
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should update existing UserDecryptionOptionsJson with masterPasswordUnlock`() {
+        val trustedDeviceOptions = TrustedDeviceUserDecryptionOptionsJson(
+            encryptedPrivateKey = "encryptedPrivateKey",
+            encryptedUserKey = "encryptedUserKey",
+            hasAdminApproval = true,
+            hasLoginApprovingDevice = false,
+            hasManageResetPasswordPermission = true,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
+                keyConnectorUserDecryptionOptions = null,
+                masterPasswordUnlock = null,
+            ),
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson> {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "newAvatarColor"
+                every { securityStamp } returns "newSecurityStamp"
+                every { isPremium } returns true
+                every { isPremiumFromOrganization } returns false
+                every { isTwoFactorEnabled } returns true
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns UserDecryptionJson(
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            )
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "newAvatarColor",
+                            stamp = "newSecurityStamp",
+                            hasPremium = true,
+                            isTwoFactorEnabled = true,
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should update existing UserDecryptionOptionsJson when syncResponse has no userDecryption`() {
+        val keyConnectorOptions = KeyConnectorUserDecryptionOptionsJson("keyConnectorUrl")
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = keyConnectorOptions,
+                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+            ),
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val syncResponse = mockk<SyncResponseJson> {
+            every { profile } returns mockk {
+                every { id } returns "activeUserId"
+                every { avatarColor } returns "updatedAvatarColor"
+                every { securityStamp } returns "updatedSecurityStamp"
+                every { isPremium } returns false
+                every { isPremiumFromOrganization } returns true
+                every { isTwoFactorEnabled } returns false
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
+            }
+            every { userDecryption } returns null
+        }
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            avatarColorHex = "updatedAvatarColor",
+                            stamp = "updatedSecurityStamp",
+                            hasPremium = true,
+                            isTwoFactorEnabled = false,
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = keyConnectorOptions,
+                                masterPasswordUnlock = null,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toUpdatedUserStateJson(syncResponse),
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should update KDF settings to minimum values`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = "stamp",
+            organizationId = null,
+            avatarColorHex = "avatarColorHex",
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toUserStateJsonKdfUpdatedMinimums should preserve other profile data while updating KDF`() {
+        val userDecryptionOptions = UserDecryptionOptionsJson(
+            hasMasterPassword = true,
+            trustedDeviceUserDecryptionOptions = null,
+            keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "test@example.com",
+            isEmailVerified = true,
+            name = "Test User",
+            stamp = "securityStamp",
+            organizationId = "orgId",
+            avatarColorHex = "#FF0000",
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 100000,
+            kdfMemory = 32,
+            kdfParallelism = 8,
+            userDecryptionOptions = userDecryptionOptions,
+            isTwoFactorEnabled = true,
+            creationDate = Instant.parse("2024-01-01T00:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(
+                environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.bitwarden.com"),
+            ),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonKdfUpdatedMinimums should only update active user account`() {
+        val activeProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "active@example.com",
+            isEmailVerified = true,
+            name = "Active User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val inactiveProfile = AccountJson.Profile(
+            userId = "inactiveUserId",
+            email = "inactive@example.com",
+            isEmailVerified = true,
+            name = "Inactive User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = false,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 500000,
+            kdfMemory = 8,
+            kdfParallelism = 2,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-08-13T01:00:00.00Z"),
+        )
+        val activeAccount = AccountJson(
+            profile = activeProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val inactiveAccount = AccountJson(
+            profile = inactiveProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf(
+                "activeUserId" to activeAccount,
+                "inactiveUserId" to inactiveAccount,
+            ),
+        )
+
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to activeAccount.copy(
+                        profile = activeProfile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                        ),
+                    ),
+                    "inactiveUserId" to inactiveAccount, // Should remain unchanged
+                ),
+            ),
+            result,
+        )
+    }
 }
+
+private val MOCK_MASTER_PASSWORD_UNLOCK_DATA = MasterPasswordUnlockDataJson(
+    salt = "mockSalt",
+    kdf = mockk(),
+    masterKeyWrappedUserKey = "masterKeyWrappedUserKeyMock",
+)

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.manager
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.ui.platform.base.MainDispatcherExtension
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -26,13 +28,11 @@ import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @ExtendWith(MainDispatcherExtension::class)
 class UserLogoutManagerTest {
     private val authDiskSource: AuthDiskSource = mockk {
-        every { storeAccountTokens(userId = any(), accountTokens = null) } just runs
-        every { storePinProtectedUserKey(userId = any(), pinProtectedUserKey = any()) } just runs
         every { userState = any() } just runs
         every { clearData(any()) } just runs
     }
@@ -43,6 +43,7 @@ class UserLogoutManagerTest {
         every { clearData(any()) } just runs
         every { storeVaultTimeoutInMinutes(any(), any()) } just runs
         every { storeVaultTimeoutAction(any(), any()) } just runs
+        every { storeAppRegisteredForExport(any()) } just runs
     }
     private val pushDiskSource: PushDiskSource = mockk {
         coEvery { clearData(any()) } just runs
@@ -59,6 +60,9 @@ class UserLogoutManagerTest {
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any()) } just runs
     }
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
+        coEvery { unregister() } returns UnregisterExportResult.Success
+    }
 
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
@@ -71,17 +75,21 @@ class UserLogoutManagerTest {
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = FakeDispatcherManager(),
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
         )
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout for single account should clear data associated with the given user and null out the user state`() {
+    fun `logout for single account should clear data associated with the given user, null out the user state, and unregister app for export`() {
         val userId = USER_ID_1
         every { authDiskSource.userState } returns SINGLE_USER_STATE_1
 
         userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
 
-        verify { authDiskSource.userState = null }
+        coVerify {
+            authDiskSource.userState = null
+            credentialExchangeRegistryManager.unregister()
+        }
         assertDataCleared(userId = userId)
     }
 
@@ -114,11 +122,28 @@ class UserLogoutManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `logout with security stamp reason should switch active user and display the login expired toast`() {
+        val userId = USER_ID_1
+        every { authDiskSource.userState } returns MULTI_USER_STATE
+
+        userLogoutManager.logout(userId = userId, reason = LogoutReason.SecurityStamp)
+
+        verify(exactly = 1) {
+            authDiskSource.userState = SINGLE_USER_STATE_2
+            toastManager.show(messageId = BitwardenString.login_expired)
+        }
+        assertDataCleared(userId = userId)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `softLogout should clear most data associated with the given user and remove token data in the authDiskSource`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
         val pinProtectedUserKey = "pinProtectedUserKey"
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        val encryptedPin = "encryptedPin"
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
@@ -128,12 +153,28 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
         every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
-        } returns pinProtectedUserKey
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+        } returns pinProtectedUserKeyEnvelope
+        every {
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        } just runs
+        every { authDiskSource.getPinProtectedUserKey(userId = userId) } returns pinProtectedUserKey
+        every {
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
+        } just runs
+        every { authDiskSource.getEncryptedPin(userId = userId) } returns encryptedPin
+        every {
+            authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+        } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
-        verify { authDiskSource.storeAccountTokens(userId = userId, accountTokens = null) }
         assertDataCleared(userId = userId)
 
         verify(exactly = 1) {
@@ -154,10 +195,15 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
             authDiskSource.storePinProtectedUserKey(
                 userId = userId,
                 pinProtectedUserKey = pinProtectedUserKey,
             )
+            authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         }
     }
 
@@ -167,6 +213,8 @@ class UserLogoutManagerTest {
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
         val pinProtectedUserKey = "pinProtectedUserKey"
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        val encryptedPin = "encryptedPin"
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
@@ -176,13 +224,29 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
         every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
-        } returns pinProtectedUserKey
+            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+        } returns pinProtectedUserKeyEnvelope
+        every {
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        } just runs
+        every { authDiskSource.getPinProtectedUserKey(userId = userId) } returns pinProtectedUserKey
+        every {
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
+        } just runs
+        every { authDiskSource.getEncryptedPin(userId = userId) } returns encryptedPin
+        every {
+            authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+        } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
         verify(exactly = 1) {
-            authDiskSource.storeAccountTokens(userId = userId, accountTokens = null)
             authDiskSource.userState = UserStateJson(
                 activeUserId = USER_ID_2,
                 accounts = MULTI_USER_STATE.accounts,
@@ -196,53 +260,15 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKey(
+            authDiskSource.storePinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKey = pinProtectedUserKey,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `softLogout with security stamp reason should switch active user and keep previous user in accounts list but display the login expired toast`() {
-        val userId = USER_ID_1
-        val vaultTimeoutInMinutes = 360
-        val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
-        val pinProtectedUserKey = "pinProtectedUserKey"
-
-        every { authDiskSource.userState } returns MULTI_USER_STATE
-        every {
-            settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
-        } returns vaultTimeoutInMinutes
-        every {
-            settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        } returns vaultTimeoutAction
-        every {
-            authDiskSource.getPinProtectedUserKey(userId = userId)
-        } returns pinProtectedUserKey
-
-        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
-
-        verify(exactly = 1) {
-            authDiskSource.storeAccountTokens(userId = userId, accountTokens = null)
-            authDiskSource.userState = UserStateJson(
-                activeUserId = USER_ID_2,
-                accounts = MULTI_USER_STATE.accounts,
-            )
-            toastManager.show(messageId = BitwardenString.login_expired)
-            settingsDiskSource.storeVaultTimeoutInMinutes(
-                userId = userId,
-                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
-            )
-            settingsDiskSource.storeVaultTimeoutAction(
-                userId = userId,
-                vaultTimeoutAction = vaultTimeoutAction,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
             authDiskSource.storePinProtectedUserKey(
                 userId = userId,
                 pinProtectedUserKey = pinProtectedUserKey,
             )
+            authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         }
     }
 
@@ -282,7 +308,7 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
@@ -309,7 +335,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_2,

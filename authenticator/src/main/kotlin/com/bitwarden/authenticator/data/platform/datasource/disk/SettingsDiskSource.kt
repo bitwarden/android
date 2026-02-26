@@ -2,13 +2,14 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Primary access point for general settings-related disk information.
  */
-interface SettingsDiskSource {
+interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
      * The currently persisted app language (or `null` if not set).
@@ -34,6 +35,16 @@ interface SettingsDiskSource {
      * Flow that emits changes to [defaultSaveOption]
      */
     val defaultSaveOptionFlow: Flow<DefaultSaveOption>
+
+    /**
+     * The currently persisted dynamic colors setting (or `null` if not set).
+     */
+    var isDynamicColorsEnabled: Boolean?
+
+    /**
+     * Emits updates that track [isDynamicColorsEnabled].
+     */
+    val isDynamicColorsEnabledFlow: Flow<Boolean?>
 
     /**
      * The currently persisted biometric integrity source for the system.

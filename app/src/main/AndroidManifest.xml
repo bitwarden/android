@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="horizons.permission.HEADSET_CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
@@ -84,14 +85,6 @@
                 <data android:pathPattern="/redirect-connector.*" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY" />
-                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY" />
-                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD" />
-                <action android:name="com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -104,6 +97,46 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="bitwarden" />
+            </intent-filter>
+            <!-- Handle Credential Exchange transfer requests -->
+            <intent-filter
+                android:autoVerify="true"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="androidx.identitycredentials.action.IMPORT_CREDENTIALS" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:mimeType="application/octet-stream"
+                    android:scheme="content"
+                    tools:ignore="AppLinkUriRelativeFilterGroupError" />
+            </intent-filter>
+        </activity>
+
+        <!-- Credential Provider Activity for handling passkey and password credential operations.
+             This activity is NOT exported to protect against external apps attempting to extract
+             vault credentials by sending malicious intents. Only our own PendingIntents can
+             launch this activity.
+
+             This is a transparent trampoline activity that launches MainActivity for credential
+             operations and forwards results back to the Credential Manager framework.
+             Uses Theme.Translucent.NoTitleBar for invisibility while allowing normal lifecycle
+             (Theme.NoDisplay requires finish() before onResume(), incompatible with ActivityResult).
+
+             Note: Unlike AuthCallbackActivity, this does NOT use noHistory="true" because it
+             must remain in the back stack to receive the ActivityResult callback from
+             MainActivity. -->
+        <activity
+            android:name=".CredentialProviderActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSWORD" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -127,6 +160,19 @@
             android:launchMode="singleTop"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="bitwarden.com" />
+                <data android:host="bitwarden.eu" />
+                <data android:pathPattern="/duo-callback" />
+                <data android:pathPattern="/sso-callback" />
+                <data android:pathPattern="/webauthn-callback" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -155,6 +201,16 @@
 
                 <data
                     android:host="webauthn-callback"
+                    android:scheme="bitwarden" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sso-cookie-vendor"
                     android:scheme="bitwarden" />
             </intent-filter>
         </activity>
@@ -249,7 +305,7 @@
             android:name="com.x8bit.bitwarden.AutofillTileService"
             android:exported="true"
             android:icon="@drawable/ic_notification"
-            android:label="@string/autofill_title"
+            android:label="@string/autofill_verb"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">
             <intent-filter>

@@ -83,7 +83,7 @@ fun String.isValidUri(): Boolean =
 fun String.toHostOrPathOrNull(): String? {
     val uri = try {
         URI(this)
-    } catch (e: URISyntaxException) {
+    } catch (_: URISyntaxException) {
         return null
     }
     return uri.host ?: uri.path
@@ -181,7 +181,6 @@ fun String.hexToColor(): Color = if (startsWith("#")) {
  * This can be applied to any [String] in order to provide some deterministic color value based on
  * arbitrary [String] properties.
  */
-@OptIn(ExperimentalStdlibApi::class)
 @Suppress("MagicNumber")
 fun String.toHexColorRepresentation(): String {
     // Produces a string with exactly two hexadecimal digits.
@@ -242,7 +241,4 @@ fun String.prefixHttpsIfNecessary(): String =
 /**
  * Checks if a string is using base32 digits.
  */
-fun String.isBase32(): Boolean {
-    val regex = ("^[A-Z2-7]+=*$").toRegex()
-    return regex.matches(this)
-}
+fun String.isBase32(): Boolean = "^[A-Za-z2-7]+=*$".toRegex().matches(this)

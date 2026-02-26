@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
-import java.time.ZonedDateTime
+import java.time.Instant
 
 private const val DEFAULT_FIDO_2_KEY_TYPE = "public-key"
 private const val DEFAULT_FIDO_2_KEY_ALGORITHM = "ECDSA"
@@ -48,6 +48,9 @@ data class SyncResponseJson(
 
     @SerialName("sends")
     val sends: List<Send>?,
+
+    @SerialName("userDecryption")
+    val userDecryption: UserDecryptionJson?,
 ) {
     /**
      * Represents domains in the vault response.
@@ -95,7 +98,7 @@ data class SyncResponseJson(
     data class Folder(
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: ZonedDateTime,
+        val revisionDate: Instant,
 
         @SerialName("name")
         val name: String?,
@@ -112,6 +115,7 @@ data class SyncResponseJson(
      * @property type The type of policy.
      * @property isEnabled If the policy is enabled or not.
      * @property data Any extra data about the policy, in the form of a JSON string.
+     * @property revisionDate The revision date of the policy (nullable).
      */
     @Serializable
     data class Policy(
@@ -129,6 +133,10 @@ data class SyncResponseJson(
 
         @SerialName("data")
         val data: JsonObject?,
+
+        @SerialName("revisionDate")
+        @Contextual
+        val revisionDate: Instant?,
     )
 
     /**
@@ -222,7 +230,7 @@ data class SyncResponseJson(
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: ZonedDateTime,
+        val creationDate: Instant,
     ) {
         /**
          * Represents an organization in the vault response.
@@ -340,7 +348,7 @@ data class SyncResponseJson(
 
             @SerialName("familySponsorshipLastSyncDate")
             @Contextual
-            val familySponsorshipLastSyncDate: ZonedDateTime?,
+            val familySponsorshipLastSyncDate: Instant?,
 
             @SerialName("name")
             val name: String?,
@@ -350,7 +358,7 @@ data class SyncResponseJson(
 
             @SerialName("familySponsorshipValidUntil")
             @Contextual
-            val familySponsorshipValidUntil: ZonedDateTime?,
+            val familySponsorshipValidUntil: Instant?,
 
             @SerialName("status")
             val status: OrganizationStatusType,
@@ -449,6 +457,7 @@ data class SyncResponseJson(
      * @property card The card of the cipher.
      * @property key The key of the cipher (nullable).
      * @property encryptedFor ID of the user who the cipher is encrypted by.
+     * @property archivedDate The archived date of the cipher (nullable).
      */
     @Serializable
     data class Cipher(
@@ -475,7 +484,7 @@ data class SyncResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: ZonedDateTime,
+        val revisionDate: Instant,
 
         @SerialName("type")
         val type: CipherTypeJson,
@@ -485,7 +494,7 @@ data class SyncResponseJson(
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: ZonedDateTime,
+        val creationDate: Instant,
 
         @SerialName("secureNote")
         val secureNote: SecureNote?,
@@ -498,7 +507,7 @@ data class SyncResponseJson(
 
         @SerialName("deletedDate")
         @Contextual
-        val deletedDate: ZonedDateTime?,
+        val deletedDate: Instant?,
 
         @SerialName("identity")
         val identity: Identity?,
@@ -532,6 +541,10 @@ data class SyncResponseJson(
 
         @SerialName("encryptedFor")
         val encryptedFor: String?,
+
+        @SerialName("archivedDate")
+        @Contextual
+        val archivedDate: Instant?,
     ) {
         /**
          * Represents an attachment in the vault response.
@@ -722,7 +735,7 @@ data class SyncResponseJson(
 
             @SerialName("passwordRevisionDate")
             @Contextual
-            val passwordRevisionDate: ZonedDateTime?,
+            val passwordRevisionDate: Instant?,
 
             @SerialName("autofillOnPageLoad")
             val shouldAutofillOnPageLoad: Boolean?,
@@ -787,7 +800,7 @@ data class SyncResponseJson(
 
             @SerialName("lastUsedDate")
             @Contextual
-            val lastUsedDate: ZonedDateTime,
+            val lastUsedDate: Instant,
         )
 
         /**
@@ -873,7 +886,7 @@ data class SyncResponseJson(
 
             @SerialName("creationDate")
             @Contextual
-            val creationDate: ZonedDateTime,
+            val creationDate: Instant,
         )
     }
 
@@ -886,8 +899,12 @@ data class SyncResponseJson(
      * @property maxAccessCount The max access count of the send object (nullable).
      * @property shouldHideEmail If the send object should hide the email.
      * @property type The type of send object.
+     * @property authType Specifies the authentication method required to access this Send.
      * @property accessId The access ID of the send object (nullable).
      * @property password The password of the send object (nullable).
+     * Mutually exclusive with [emails]
+     * @property emails Comma-separated list of emails that may access the send using OTP
+     * authentication. Mutually exclusive with [password]
      * @property file The file of the send object.
      * @property deletionDate The max access count of the send object.
      * @property name The name of the send object (nullable).
@@ -907,7 +924,7 @@ data class SyncResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: ZonedDateTime,
+        val revisionDate: Instant,
 
         @SerialName("maxAccessCount")
         val maxAccessCount: Int?,
@@ -918,18 +935,24 @@ data class SyncResponseJson(
         @SerialName("type")
         val type: SendTypeJson,
 
+        @SerialName("authType")
+        val authType: SendAuthTypeJson?,
+
         @SerialName("accessId")
         val accessId: String?,
 
         @SerialName("password")
         val password: String?,
 
+        @SerialName("emails")
+        val emails: String?,
+
         @SerialName("file")
         val file: File?,
 
         @SerialName("deletionDate")
         @Contextual
-        val deletionDate: ZonedDateTime,
+        val deletionDate: Instant,
 
         @SerialName("name")
         val name: String?,
@@ -948,7 +971,7 @@ data class SyncResponseJson(
 
         @SerialName("expirationDate")
         @Contextual
-        val expirationDate: ZonedDateTime?,
+        val expirationDate: Instant?,
     ) {
         /**
          * Represents a file in the vault response.

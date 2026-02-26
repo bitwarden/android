@@ -15,10 +15,10 @@ import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -81,19 +82,23 @@ class BitwardenCredentialManagerTest {
     private val mutableDecryptCipherListResultStateFlow =
         MutableStateFlow<DataState<DecryptCipherListResult>>(DataState.Loading)
 
+    private val mockPasskeyAttestationOptions = createMockPasskeyAttestationOptions(
+        number = 1,
+        relyingPartyId = DEFAULT_HOST,
+    )
     private val json = mockk<Json> {
         every {
             decodeFromStringOrNull<PasskeyAttestationOptions>(any())
-        } returns createMockPasskeyAttestationOptions(
-            number = 1,
-            relyingPartyId = DEFAULT_HOST,
-        )
+        } returns mockPasskeyAttestationOptions
         every {
             decodeFromStringOrNull<PasskeyAssertionOptions>(any())
         } returns createMockPasskeyAssertionOptions(number = 1)
         every {
             decodeFromStringOrNull<PasskeyAssertionOptions>(DEFAULT_FIDO2_AUTH_REQUEST_JSON)
         } returns createMockPasskeyAssertionOptions(number = 1)
+        every {
+            encodeToString(mockPasskeyAttestationOptions)
+        } returns DEFAULT_FIDO2_CREATE_REQUEST_JSON
     }
     private val mockSigningInfo = mockk<SigningInfo> {
         every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
@@ -126,6 +131,9 @@ class BitwardenCredentialManagerTest {
     }
     private val mockCredentialEntryBuilder = mockk<CredentialEntryBuilder>()
     private val mockCipherMatchingManager = mockk<CipherMatchingManager>()
+    private val mockPasskeyAttestationOptionsSanitizer = mockk<PasskeyAttestationOptionsSanitizer> {
+        every { sanitize(any()) } returns mockPasskeyAttestationOptions
+    }
 
     @BeforeEach
     fun setUp() {
@@ -139,11 +147,12 @@ class BitwardenCredentialManagerTest {
         bitwardenCredentialManager = BitwardenCredentialManagerImpl(
             vaultSdkSource = mockVaultSdkSource,
             fido2CredentialStore = mockFido2CredentialStore,
-            json = json,
-            dispatcherManager = FakeDispatcherManager(),
-            vaultRepository = mockVaultRepository,
             credentialEntryBuilder = mockCredentialEntryBuilder,
+            json = json,
+            vaultRepository = mockVaultRepository,
             cipherMatchingManager = mockCipherMatchingManager,
+            passkeyAttestationOptionsSanitizer = mockPasskeyAttestationOptionsSanitizer,
+            dispatcherManager = FakeDispatcherManager(),
         )
     }
 
@@ -192,6 +201,9 @@ class BitwardenCredentialManagerTest {
             val selectedCipherView = createMockCipherView(number = 1)
             val slot = slot<RegisterFido2CredentialRequest>()
 
+            every {
+                json.encodeToString<PasskeyAttestationOptions>(any())
+            } returns mockCreatePublicKeyCredentialRequest.requestJson
             every {
                 mockCallingAppInfo.getAppSigningSignatureFingerprint()
             } returns DEFAULT_APP_SIGNATURE.toByteArray()
@@ -242,6 +254,9 @@ class BitwardenCredentialManagerTest {
             val slot = slot<RegisterFido2CredentialRequest>()
 
             every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            every {
+                json.encodeToString<PasskeyAttestationOptions>(any())
+            } returns DEFAULT_FIDO2_CREATE_REQUEST_JSON
             every { mockCallingAppInfo.isOriginPopulated() } returns false
             every { mockCreatePublicKeyCredentialRequest.origin } returns null
             coEvery {
@@ -286,6 +301,9 @@ class BitwardenCredentialManagerTest {
 
             every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
             every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            every {
+                json.encodeToString<PasskeyAttestationOptions>(any())
+            } returns mockCreatePublicKeyCredentialRequest.requestJson
             every { mockCreatePublicKeyCredentialRequest.origin } returns DEFAULT_WEB_ORIGIN.v1
             val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
             coEvery {
@@ -413,6 +431,53 @@ class BitwardenCredentialManagerTest {
             assertEquals(
                 Fido2RegisterCredentialResult.Error.InternalError,
                 result,
+            )
+        }
+
+    @Test
+    fun `registerFido2Credential should sanitize attestation options before registration`() =
+        runTest {
+            val originalOptions = createMockPasskeyAttestationOptions(number = 1)
+            val sanitizedOptions = originalOptions.copy(
+                user = originalOptions.user.copy(id = "sanitized-user-id"),
+            )
+
+            every { mockCallingAppInfo.signingInfo } returns mockSigningInfo
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every {
+                json.encodeToString<Fido2AttestationResponse>(any(), any())
+            } returns ""
+            every {
+                json.decodeFromStringOrNull<PasskeyAttestationOptions>(any())
+            } returns originalOptions
+            every {
+                mockPasskeyAttestationOptionsSanitizer.sanitize(originalOptions)
+            } returns sanitizedOptions
+            every {
+                json.encodeToString(sanitizedOptions)
+            } returns "sanitized-json"
+            every { mockCreatePublicKeyCredentialRequest.origin } returns DEFAULT_WEB_ORIGIN.v1
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                )
+            } returns mockRegistrationResponse.asSuccess()
+
+            bitwardenCredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                createPublicKeyCredentialRequest = mockCreatePublicKeyCredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+                callingAppInfo = mockCallingAppInfo,
+            )
+
+            verify { mockPasskeyAttestationOptionsSanitizer.sanitize(originalOptions) }
+            verify { json.encodeToString(sanitizedOptions) }
+            assertEquals(
+                """{"publicKey": sanitized-json}""",
+                requestCaptureSlot.captured.requestJson,
             )
         }
 
@@ -616,7 +681,8 @@ class BitwardenCredentialManagerTest {
                         DEFAULT_PACKAGE_NAME,
                         DEFAULT_CERT_FINGERPRINT,
                         "https://${mockAssertionOptions.relyingPartyId!!}",
-                        "https://${mockAssertionOptions.relyingPartyId}",
+                        @Suppress("MaxLineLength")
+                        "https://${mockAssertionOptions.relyingPartyId}/.well-known/assetlinks.json",
                     ),
                 ),
                 requestCaptureSlot.captured.origin,
@@ -1100,6 +1166,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1239,6 +1306,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1360,6 +1428,7 @@ class BitwardenCredentialManagerTest {
                     userId = "mockUserId",
                     fido2CredentialStore = any(),
                     relyingPartyId = "mockRpId-1",
+                    userHandle = null,
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1431,7 +1500,7 @@ private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
         packageName = DEFAULT_PACKAGE_NAME,
         sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
         host = "https://$DEFAULT_HOST",
-        assetLinkUrl = "https://$DEFAULT_HOST",
+        assetLinkUrl = "https://$DEFAULT_HOST/.well-known/assetlinks.json",
     ),
 )
 private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")

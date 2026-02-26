@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Release Type'
+        description: "Release Type"
         required: true
         type: choice
         options:
@@ -22,9 +22,10 @@ jobs:
       actions: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Create RC or Test Branch
         id: rc_branch
@@ -42,10 +43,10 @@ jobs:
           branch_name="release/${branch_name}"
 
           git switch main
-          git switch -c $branch_name
-          git push origin $branch_name
-          echo "# :cherry_blossom: ${_RELEASE_TYPE} branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
-          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+          git switch -c "$branch_name"
+          git push origin "$branch_name"
+          echo "# :cherry_blossom: ${_RELEASE_TYPE} branch: ${branch_name}" >> "$GITHUB_STEP_SUMMARY"
+          echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
 
       - name: Create Hotfix Branch
         id: hotfix_branch
@@ -66,14 +67,14 @@ jobs:
           fi
           branch_name="release/hotfix-${latest_tag}"
           echo "🌿 branch name: $branch_name"
-          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+          echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
           if git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
-            echo "# :fire: :warning: Hotfix branch already exists: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+            echo "# :fire: :warning: Hotfix branch already exists: ${branch_name}" >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          git switch -c $branch_name $latest_tag
-          git push origin $branch_name
-          echo "# :fire: Hotfix branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+          git switch -c "$branch_name" "$latest_tag"
+          git push origin "$branch_name"
+          echo "# :fire: Hotfix branch: ${branch_name}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Trigger CI Workflows
         env:
@@ -81,5 +82,5 @@ jobs:
           _BRANCH_NAME: ${{ steps.rc_branch.outputs.branch_name || steps.hotfix_branch.outputs.branch_name }}
         run: |
           echo "🌿 branch name: $_BRANCH_NAME"
-          gh workflow run build.yml --ref $_BRANCH_NAME -f distribute-to-firebase=true -f publish-to-play-store=true
-          gh workflow run build-authenticator.yml --ref $_BRANCH_NAME -f distribute-to-firebase=true -f publish-to-play-store=true
+          gh workflow run build.yml --ref "$_BRANCH_NAME" -f distribute-to-firebase=true -f publish-to-play-store=true
+          gh workflow run build-authenticator.yml --ref "$_BRANCH_NAME" -f distribute-to-firebase=true -f publish-to-play-store=true

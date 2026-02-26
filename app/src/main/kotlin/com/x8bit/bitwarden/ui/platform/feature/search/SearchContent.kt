@@ -74,6 +74,8 @@ fun SearchContent(
         is ListingItemOverflowAction.VaultAction.EditClick,
         is ListingItemOverflowAction.VaultAction.LaunchClick,
         is ListingItemOverflowAction.VaultAction.ViewClick,
+        is ListingItemOverflowAction.VaultAction.ArchiveClick,
+        is ListingItemOverflowAction.VaultAction.UnarchiveClick,
         null,
             -> Unit
     }
@@ -219,7 +221,7 @@ private fun AutofillSelectionDialog(
         selectionItems = {
             if (AutofillSelectionOption.AUTOFILL in displayItem.autofillSelectionOptions) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = BitwardenString.autofill_title),
+                    text = stringResource(id = BitwardenString.autofill_verb),
                     onClick = {
                         selectionCallback(
                             displayItem,

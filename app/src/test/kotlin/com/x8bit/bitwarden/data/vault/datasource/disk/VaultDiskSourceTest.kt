@@ -1,15 +1,15 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.assertJsonEquals
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockSend
-import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class VaultDiskSourceTest {
 
@@ -336,6 +336,32 @@ class VaultDiskSourceTest {
         assertTrue(foldersDao.deleteFoldersCalled)
         assertTrue(sendsDao.deleteSendsCalled)
     }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit true when personal ciphers exist`() = runTest {
+        val personalCipher = CIPHER_ENTITY.copy(organizationId = null)
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(personalCipher))
+                assertEquals(true, awaitItem())
+            }
+    }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit false when only org ciphers exist`() = runTest {
+        val orgCipher = CIPHER_ENTITY.copy(id = "orgCipherId", organizationId = "org-123")
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(orgCipher))
+                assertEquals(false, awaitItem())
+            }
+    }
 }
 
 private const val USER_ID: String = "test_user_id"
@@ -356,6 +382,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     policies = null,
     domains = DOMAINS_1,
     sends = listOf(SEND_1),
+    userDecryption = null,
 )
 
 private const val CIPHER_JSON = """
@@ -425,6 +452,7 @@ private const val CIPHER_JSON = """
   "folderId": "mockFolderId-1",
   "organizationId": "mockOrganizationId-1",
   "deletedDate": "2023-10-27T12:00:00.000Z",
+  "archivedDate": "2023-10-27T12:00:00.000Z",
   "identity": {
     "passportNumber": "mockPassportNumber-1",
     "lastName": "mockLastName-1",
@@ -484,6 +512,7 @@ private val CIPHER_ENTITY = CipherEntity(
     hasTotp = true,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
+    organizationId = "mockOrganizationId-1",
 )
 
 private val COLLECTION_ENTITY = CollectionEntity(
@@ -527,7 +556,7 @@ private val FOLDER_ENTITY = FolderEntity(
     id = "mockId-2",
     userId = USER_ID,
     name = "mockName-2",
-    revisionDate = ZonedDateTime.parse("2023-10-27T12:00Z"),
+    revisionDate = Instant.parse("2023-10-27T12:00:00Z"),
 )
 
 private const val SEND_JSON = """
@@ -555,7 +584,8 @@ private const val SEND_JSON = """
     "text": "mockText-1"
   },
   "key": "mockKey-1",
-  "expirationDate": "2023-10-27T12:00:00.000Z"
+  "expirationDate": "2023-10-27T12:00:00.000Z",
+  "authType": 1
 }
 """
 

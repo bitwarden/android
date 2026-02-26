@@ -30,6 +30,27 @@ private val BLOCK_LISTED_URIS: List<String> = listOf(
 )
 
 /**
+ * A map of package ids and the known associated id entry for their url bar.
+ */
+private val URL_BARS: Map<String, String> = mapOf(
+    // Edge Browser Variants
+    "com.microsoft.emmx" to "url_bar",
+    "com.microsoft.emmx.beta" to "url_bar",
+    "com.microsoft.emmx.canary" to "url_bar",
+    "com.microsoft.emmx.dev" to "url_bar",
+    // Samsung Internet Browser Variants
+    "com.sec.android.app.sbrowser" to "location_bar_edit_text",
+    "com.sec.android.app.sbrowser.beta" to "location_bar_edit_text",
+    // Opera Browser Variants
+    "com.opera.browser" to "url_bar",
+    "com.opera.browser.beta" to "url_bar",
+    // Brave Browser Variants
+    "com.brave.browser" to "url_bar",
+    "com.brave.browser_beta" to "url_bar",
+    "com.brave.browser_nightly" to "url_bar",
+)
+
+/**
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
@@ -76,18 +97,23 @@ class AutofillParserImpl(
         Timber.d("Parsing AssistStructure -- ${fillRequest?.id}")
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
+        val urlBarWebsite = traversalDataList
+            .flatMap { it.urlBarWebsites }
+            .firstOrNull()
+
         // Take only the autofill views from the node that currently has focus.
         // Then remove all the fields that cannot be filled with data.
         // We fallback to taking all the fillable views if nothing has focus.
         val autofillViewsList = traversalDataList.map { it.autofillViews }
-        val autofillViews = autofillViewsList
+        val autofillViews = (autofillViewsList
             .filter { views -> views.any { it.data.isFocused } }
             .flatten()
             .filter { it !is AutofillView.Unused }
             .takeUnless { it.isEmpty() }
             ?: autofillViewsList
                 .flatten()
-                .filter { it !is AutofillView.Unused }
+                .filter { it !is AutofillView.Unused })
+            .map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
 
         // Find the focused view, or fallback to the first fillable item on the screen (so
         // we at least have something to hook into)
@@ -95,16 +121,21 @@ class AutofillParserImpl(
             .firstOrNull { it.data.isFocused }
             ?: autofillViews.firstOrNull()
 
+        if (focusedView == null) {
+            // The view is unfillable if there are no focused views.
+            return AutofillRequest.Unfillable
+        }
+
         val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
         )
-        val uri = traversalDataList.buildUriOrNull(
+        val uri = focusedView.buildUriOrNull(
             packageName = packageName,
         )
 
         val blockListedURIs = settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS
-        if (focusedView == null || blockListedURIs.contains(uri)) {
-            // The view is unfillable if there are no focused views or the URI is block listed.
+        if (blockListedURIs.contains(uri)) {
+            // The view is unfillable if the URI is block listed.
             return AutofillRequest.Unfillable
         }
 
@@ -165,7 +196,7 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
         .mapNotNull { windowNode ->
             windowNode
                 .rootViewNode
-                ?.traverse()
+                ?.traverse(parentWebsite = null)
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
@@ -243,16 +274,25 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
  */
-private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
+private fun AssistStructure.ViewNode.traverse(
+    parentWebsite: String?,
+): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
-    var idPackage: String? = this.idPackage
-    var website: String? = this.website
+    // OS sometimes defaults node.idPackage to "android", which is not a valid
+    // package name so it is ignored to prevent auto-filling unknown applications.
+    var storedIdPackage: String? = this.idPackage?.takeUnless { it.isBlank() || it == "android" }
+    val storedUrlBarId = storedIdPackage?.let { URL_BARS[it] }
+    val storedUrlBarWebsites: MutableList<String> = this
+        .website
+        ?.takeIf { _ -> storedUrlBarId != null && storedUrlBarId == this.idEntry }
+        ?.let { mutableListOf(it) }
+        ?: mutableListOf()
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView()
+    toAutofillView(parentWebsite = parentWebsite)
         ?.run(mutableAutofillViewList::add)
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
 
@@ -260,23 +300,18 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
         getChildAt(i)
-            .traverse()
+            .traverse(parentWebsite = website)
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
 
                 // Get the first non-null idPackage.
-                if (idPackage.isNullOrBlank() &&
-                    // OS sometimes defaults node.idPackage to "android", which is not a valid
-                    // package name so it is ignored to prevent auto-filling unknown applications.
-                    viewNodeTraversalData.idPackage?.equals("android") == false
-                ) {
-                    idPackage = viewNodeTraversalData.idPackage
+                if (storedIdPackage == null) {
+                    storedIdPackage = viewNodeTraversalData.idPackage
                 }
-                // Get the first non-null website.
-                if (website == null) {
-                    website = viewNodeTraversalData.website
-                }
+                // Add all url bar websites. We will deal with this later if
+                // there is somehow more than one.
+                storedUrlBarWebsites.addAll(viewNodeTraversalData.urlBarWebsites)
             }
     }
 
@@ -284,8 +319,29 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     // descendant's.
     return ViewNodeTraversalData(
         autofillViews = mutableAutofillViewList,
-        idPackage = idPackage,
+        idPackage = storedIdPackage,
+        urlBarWebsites = storedUrlBarWebsites,
         ignoreAutofillIds = mutableIgnoreAutofillIdList,
-        website = website,
     )
+}
+
+/**
+ * This updates the underlying [AutofillView.data] with the given [website] if it does not already
+ * have a website associated with it.
+ */
+private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillView {
+    val site = website ?: return this
+    if (this.data.website != null) return this
+    return when (this) {
+        is AutofillView.Card.Brand -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.CardholderName -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.ExpirationDate -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.ExpirationMonth -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.ExpirationYear -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.Number -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Card.SecurityCode -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
+    }
 }

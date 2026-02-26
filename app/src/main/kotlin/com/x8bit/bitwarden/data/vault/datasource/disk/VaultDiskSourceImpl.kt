@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringWithErrorCallback
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
@@ -55,6 +55,7 @@ class VaultDiskSourceImpl(
                     hasTotp = cipher.login?.totp != null,
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(cipher),
+                    organizationId = cipher.organizationId,
                 ),
             ),
         )
@@ -96,6 +97,9 @@ class VaultDiskSourceImpl(
                 .awaitAll()
         }
     }
+
+    override fun hasPersonalCiphersFlow(userId: String): Flow<Boolean> =
+        ciphersDao.hasPersonalCiphersFlow(userId = userId)
 
     override suspend fun getSelectedCiphers(
         userId: String,
@@ -295,6 +299,7 @@ class VaultDiskSourceImpl(
                             hasTotp = cipher.login?.totp != null,
                             cipherType = json.encodeToString(cipher.type),
                             cipherJson = json.encodeToString(cipher),
+                            organizationId = cipher.organizationId,
                         )
                     },
                 )

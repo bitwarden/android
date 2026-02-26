@@ -4,18 +4,19 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 
@@ -89,8 +90,8 @@ class AuthenticatorBridgeRepositoryImpl(
                 // Vault is unlocked, query vault disk source for totp logins:
                 val totpUris = vaultDiskSource
                     .getTotpCiphers(userId = userId)
-                    // Filter out any deleted ciphers.
-                    .filter { it.deletedDate == null }
+                    // Filter out any deleted and archived ciphers.
+                    .filter { it.deletedDate == null && it.archivedDate == null }
                     .mapNotNull {
                         scopedVaultSdkSource
                             .decryptCipher(userId = userId, cipher = it.toEncryptedSdkCipher())
@@ -137,17 +138,21 @@ class AuthenticatorBridgeRepositoryImpl(
             ?.securityState
             ?.securityState
         val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
 
         return scopedVaultSdkSource
             .initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = privateKey,
+                        securityState = securityState,
+                        signingKey = signingKey,
+                        signedPublicKey = signedPublicKey,
+                    ),
                     userId = userId,
                     kdfParams = account.profile.toSdkParams(),
                     email = account.profile.email,
-                    privateKey = privateKey,
-                    securityState = securityState,
-                    signingKey = signingKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = decryptedUserKey,
                     ),

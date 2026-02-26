@@ -1,5 +1,6 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
@@ -8,6 +9,9 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -23,7 +27,10 @@ interface AccountsService {
     /**
      * Creates a new account's keys.
      */
-    suspend fun createAccountKeys(publicKey: String, encryptedPrivateKey: String): Result<Unit>
+    suspend fun createAccountKeys(
+        publicKey: String,
+        encryptedPrivateKey: String,
+    ): Result<CreateAccountKeysResponseJson>
 
     /**
      * Make delete account request.
@@ -51,12 +58,16 @@ interface AccountsService {
     /**
      * Resend the email with the two-factor verification code.
      */
-    suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit>
+    suspend fun resendVerificationCodeEmail(
+        body: ResendEmailRequestJson,
+    ): Result<VerificationCodeResponseJson>
 
     /**
      * Resend the email with the verification code for new devices
      */
-    suspend fun resendNewDeviceOtp(body: ResendNewDeviceOtpRequestJson): Result<Unit>
+    suspend fun resendNewDeviceOtp(
+        body: ResendNewDeviceOtpRequestJson,
+    ): Result<VerificationOtpResponseJson>
 
     /**
      * Reset the password.
@@ -109,4 +120,9 @@ interface AccountsService {
         accessToken: String,
         masterKey: String,
     ): Result<Unit>
+
+    /**
+     * Update the KDF settings for the current account.
+     */
+    suspend fun updateKdf(body: UpdateKdfJsonRequest): Result<Unit>
 }

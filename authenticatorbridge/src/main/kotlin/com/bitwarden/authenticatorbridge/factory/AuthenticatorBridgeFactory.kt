@@ -5,6 +5,7 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManagerImpl
 import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
+import com.bitwarden.authenticatorbridge.util.PasswordManagerSignatureVerifierImpl
 
 /**
  * Factory for supplying implementation instances of Authenticator Bridge SDK interfaces.
@@ -29,5 +30,6 @@ class AuthenticatorBridgeFactory(
         context = applicationContext,
         connectionType = connectionType,
         symmetricKeyStorageProvider = symmetricKeyStorageProvider,
+        passwordManagerSignatureVerifier = PasswordManagerSignatureVerifierImpl(applicationContext),
     )
 }

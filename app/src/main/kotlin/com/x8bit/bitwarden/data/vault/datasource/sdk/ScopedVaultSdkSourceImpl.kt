@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 
 /**
@@ -17,6 +18,7 @@ class ScopedVaultSdkSourceImpl(
     dispatcherManager: DispatcherManager,
     featureFlagManager: FeatureFlagManager,
     sdkRepositoryFactory: SdkRepositoryFactory,
+    sdkPlatformApiFactory: SdkPlatformApiFactory,
     vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         sdkClientManager = SdkClientManagerImpl(
             // We do not want to have the real NativeLibraryManager used here to avoid
@@ -26,6 +28,7 @@ class ScopedVaultSdkSourceImpl(
             },
             sdkRepoFactory = sdkRepositoryFactory,
             featureFlagManager = featureFlagManager,
+            sdkPlatformApiFactory = sdkPlatformApiFactory,
         ),
         dispatcherManager = dispatcherManager,
     ),

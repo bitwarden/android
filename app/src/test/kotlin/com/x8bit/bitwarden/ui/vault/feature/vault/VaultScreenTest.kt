@@ -11,7 +11,6 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -23,6 +22,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
@@ -47,9 +47,7 @@ import com.bitwarden.ui.util.performLogoutAccountClick
 import com.bitwarden.ui.util.performRemoveAccountClick
 import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -79,6 +77,7 @@ import org.junit.Test
 @Suppress("LargeClass")
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
+    private var onNavigateToAutofillCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -89,7 +88,6 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToSearchScreen = false
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
-    private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
         every { promptForReview() } just runs
@@ -104,7 +102,6 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Before
     fun setUp() {
         setContent(
-            exitManager = exitManager,
             intentManager = intentManager,
             appReviewManager = appReviewManager,
         ) {
@@ -123,6 +120,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderParentFolderName = folderName
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
+                onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
             )
         }
     }
@@ -414,7 +412,6 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isPopup()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Sync").assertDoesNotExist()
         composeTestRule.onNodeWithText("Lock").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Exit").assertDoesNotExist()
 
         composeTestRule.onNodeWithContentDescription("More").performClick()
 
@@ -425,10 +422,6 @@ class VaultScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText("Lock")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Exit")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
     }
@@ -457,55 +450,6 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.LockClick) }
-    }
-
-    @Test
-    fun `exit click in the overflow menu should show a confirmation dialog`() {
-        // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onNode(isDialog())
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Are you sure you want to exit Bitwarden?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `yes click in exit confirmation dialog should send ExitConfirmationClick`() {
-        // Expand the overflow menu and show the exit confirmation dialog
-        composeTestRule.onNodeWithContentDescription("More").performClick()
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-        verify { viewModel.trySendAction(VaultAction.ExitConfirmationClick) }
     }
 
     @Test
@@ -577,6 +521,56 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.DialogDismiss) }
+    }
+
+    @Test
+    fun `ThirdPartyBrowserAutofill should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Enable browser Autofill to keep filling passwords")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        mutableStateFlow.update { it.copy(dialog = null) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ThirdPartyBrowserAutofill dialog Not now button should emit DismissThirdPartyAutofillDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 2))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Not now")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ThirdPartyBrowserAutofill dialog Go to settings now button should emit EnableThirdPartyAutofillClick`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 3))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Go to settings")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick) }
     }
 
     @Suppress("MaxLineLength")
@@ -782,6 +776,126 @@ class VaultScreenTest : BitwardenComposeTest() {
                 VaultAction.DialogDismiss,
             )
         }
+    }
+
+    @Test
+    fun `vault load KDF update required dialog should be shown or hidden according to the state`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `confirm button click on the VaultLoadKdfUpdateRequired dialog should send KdfUpdatePasswordRepromptSubmit`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        val testPassword = "test_password"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        // Enter password in the input field
+        composeTestRule
+            .onNodeWithText("Master password")
+            .performTextInput(testPassword)
+
+        // Click confirm button
+        composeTestRule
+            .onNodeWithText("Submit")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.KdfUpdatePasswordRepromptSubmit(testPassword),
+            )
+        }
+    }
+
+    @Test
+    fun `later button click on the VaultLoadKdfUpdateRequired dialog should send DialogDismiss`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        val laterText = "Later"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(laterText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+        }
+    }
+
+    @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Loading("Loading".asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText("Loading")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test
@@ -1002,12 +1116,6 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.shareText(text)
         }
-    }
-
-    @Test
-    fun `NavigateOutOfApp event should call exitApplication on the ExitManager`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
-        verify { exitManager.exitApplication() }
     }
 
     @Test
@@ -1387,6 +1495,62 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(VaultAction.FolderClick(folderItem))
+        }
+    }
+
+    @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Introducing archive")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `IntroducingArchive action card go to archive button click should send ArchiveClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Go to archive")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.IntroducingArchive,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `IntroducingArchive action card dismiss button click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
         }
     }
 
@@ -1914,6 +2078,50 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `archive count should update according to state`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, 0.toString())
+
+        val archiveCount = 7
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE.copy(archivedItemsCount = archiveCount))
+        }
+
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, archiveCount.toString())
+    }
+
+    @Test
+    fun `clicking archive item should send ArchiveClick action`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onAllNodes(hasText(rowText)).filterToOne(hasClickAction()).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+        }
+    }
+
+    @Test
     fun `trash count should update according to state`() {
         val rowText = "Trash"
         mutableStateFlow.update {
@@ -1921,7 +2129,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -1939,7 +2147,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2027,6 +2235,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `when NavigateToAutofillSettings is sent, it should call onNavigateToAutofillSettings`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAutofillSettings)
+        assertTrue(onNavigateToAutofillCalled)
+    }
+
+    @Test
     fun `when ShowSnackbar is sent snackbar should be displayed`() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
@@ -2083,7 +2297,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -2299,6 +2513,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     cipherDecryptionFailureIds = persistentListOf(),
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
+    isArchiveEnabled = true,
+    isIntroducingArchiveActionCardDismissed = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -2314,5 +2530,9 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    archivedItemsCount = 0,
+    archiveEnabled = true,
+    archiveSubText = null,
+    archiveEndIcon = null,
     showCardGroup = true,
 )

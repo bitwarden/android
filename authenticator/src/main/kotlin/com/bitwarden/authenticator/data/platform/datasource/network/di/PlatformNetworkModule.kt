@@ -11,7 +11,10 @@ import com.bitwarden.network.interceptor.AuthTokenProvider
 import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
+import com.bitwarden.network.model.NetworkCookie
+import com.bitwarden.network.provider.CookieProvider
 import com.bitwarden.network.service.ConfigService
+import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.ssl.CertificateProvider
 import dagger.Module
 import dagger.Provides
@@ -56,6 +59,7 @@ object PlatformNetworkModule {
             enableHttpBodyLogging = BuildConfig.DEBUG,
             authTokenProvider = object : AuthTokenProvider {
                 override fun getAuthTokenDataOrNull(): AuthTokenData? = null
+                override fun getAuthTokenDataOrNull(userId: String): AuthTokenData? = null
             },
             certificateProvider = object : CertificateProvider {
                 override fun chooseClientAlias(
@@ -68,6 +72,19 @@ object PlatformNetworkModule {
 
                 override fun getPrivateKey(alias: String?): PrivateKey? = null
             },
+            cookieProvider = object : CookieProvider {
+                override fun needsBootstrap(hostname: String): Boolean = false
+
+                override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
+
+                override fun acquireCookies(hostname: String) = Unit
+            },
         ),
     )
+
+    @Provides
+    @Singleton
+    fun provideDownloadService(
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): DownloadService = bitwardenServiceClient.downloadService
 }

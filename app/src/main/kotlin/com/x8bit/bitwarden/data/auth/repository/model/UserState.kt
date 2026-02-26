@@ -75,6 +75,7 @@ data class UserState(
         val isUsingKeyConnector: Boolean,
         val onboardingStatus: OnboardingStatus,
         val firstTimeState: FirstTimeState,
+        val isExportable: Boolean,
     ) {
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.

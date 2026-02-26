@@ -205,7 +205,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = VAULT_IS_LOCKED,
-            iconRes = BitwardenDrawable.icon,
+            iconRes = BitwardenDrawable.logo_bitwarden_icon,
         )
 
         // Test
@@ -233,7 +233,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
@@ -263,7 +263,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = GO_TO_MY_VAULT,
-            iconRes = BitwardenDrawable.icon,
+            iconRes = BitwardenDrawable.logo_bitwarden_icon,
         )
 
         // Test
@@ -291,7 +291,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(

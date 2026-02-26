@@ -16,10 +16,12 @@ data object ItemSearchRoute
  */
 fun NavGraphBuilder.itemSearchDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToEdit: (String) -> Unit,
 ) {
     composableWithSlideTransitions<ItemSearchRoute> {
         ItemSearchScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToEdit = onNavigateToEdit,
         )
     }
 }

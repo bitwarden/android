@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
-import android.net.Uri
 import android.os.Parcelable
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
@@ -18,19 +18,25 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -53,10 +59,10 @@ class ItemListingViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val encodingManager: BitwardenEncodingManager,
     private val settingsRepository: SettingsRepository,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
-        settingsRepository.appTheme,
-        settingsRepository.authenticatorAlertThresholdSeconds,
+        alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null,
     ),
@@ -66,12 +72,6 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        settingsRepository
-            .appThemeStateFlow
-            .map { ItemListingAction.Internal.AppThemeChangeReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -93,6 +93,12 @@ class ItemListingViewModel @Inject constructor(
             .firstTimeAccountSyncFlow
             .map { ItemListingAction.Internal.FirstTimeUserSyncReceive }
             .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ITEM_SAVED, SnackbarRelay.ITEM_ADDED)
+            .map(ItemListingEvent::ShowSnackbar)
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
     }
 
@@ -249,10 +255,6 @@ class ItemListingViewModel @Inject constructor(
                 handleDeleteItemReceive(internalAction.result)
             }
 
-            is ItemListingAction.Internal.AppThemeChangeReceive -> {
-                handleAppThemeChangeReceive(internalAction.appTheme)
-            }
-
             ItemListingAction.Internal.FirstTimeUserSyncReceive -> {
                 handleFirstTimeUserSync()
             }
@@ -260,13 +262,12 @@ class ItemListingViewModel @Inject constructor(
     }
 
     private fun handleFirstTimeUserSync() {
-        sendEvent(ItemListingEvent.ShowFirstTimeSyncSnackbar)
-    }
-
-    private fun handleAppThemeChangeReceive(appTheme: AppTheme) {
-        mutableStateFlow.update {
-            it.copy(appTheme = appTheme)
-        }
+        sendEvent(
+            event = ItemListingEvent.ShowSnackbar(
+                message = BitwardenString.account_synced_from_bitwarden_app.asText(),
+                withDismissAction = true,
+            ),
+        )
     }
 
     private fun handleDeleteItemReceive(result: DeleteItemResult) {
@@ -286,11 +287,7 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(dialog = null)
                 }
-                sendEvent(
-                    ItemListingEvent.ShowToast(
-                        message = BitwardenString.item_deleted.asText(),
-                    ),
-                )
+                sendEvent(ItemListingEvent.ShowSnackbar(BitwardenString.item_deleted.asText()))
             }
         }
     }
@@ -314,7 +311,7 @@ class ItemListingViewModel @Inject constructor(
 
             CreateItemResult.Success -> {
                 sendEvent(
-                    event = ItemListingEvent.ShowToast(
+                    event = ItemListingEvent.ShowSnackbar(
                         message = BitwardenString.verification_code_added.asText(),
                     ),
                 )
@@ -478,7 +475,7 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             SharedVerificationCodesState.SyncNotEnabled,
-                -> SharedCodesDisplayState.Codes(emptyList())
+                -> SharedCodesDisplayState.Codes(persistentListOf())
 
             is SharedVerificationCodesState.Success -> {
                 val viewState = state.viewState as? ItemListingState.ViewState.Content
@@ -506,19 +503,25 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
-                            sharedVerificationCodesState =
-                                authenticatorRepository.sharedCodesStateFlow.value,
+                            sharedVerificationCodesState = authenticatorRepository
+                                .sharedCodesStateFlow
+                                .value,
+                            showOverflow = true,
                         )
-                    },
+                    }
+                    .toImmutableList(),
                 itemList = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
-                            sharedVerificationCodesState =
-                                authenticatorRepository.sharedCodesStateFlow.value,
+                            sharedVerificationCodesState = authenticatorRepository
+                                .sharedCodesStateFlow
+                                .value,
+                            showOverflow = true,
                         )
-                    },
+                    }
+                    .toImmutableList(),
                 sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
             )
@@ -545,13 +548,8 @@ class ItemListingViewModel @Inject constructor(
             it.copy(
                 viewState = when (it.viewState) {
                     ItemListingState.ViewState.Loading -> it.viewState
-                    is ItemListingState.ViewState.Content -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
-
-                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(actionCard = null)
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(actionCard = null)
                 },
             )
         }
@@ -567,13 +565,8 @@ class ItemListingViewModel @Inject constructor(
             it.copy(
                 viewState = when (it.viewState) {
                     ItemListingState.ViewState.Loading -> it.viewState
-                    is ItemListingState.ViewState.Content -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
-
-                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
-                        actionCard = ItemListingState.ActionCardState.None,
-                    )
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(actionCard = null)
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(actionCard = null)
                 },
             )
         }
@@ -586,15 +579,18 @@ class ItemListingViewModel @Inject constructor(
     private fun handleSectionExpandedClick(action: ItemListingAction.SectionExpandedClick) {
         updateSharedItems { codes ->
             codes.copy(
-                sections = codes.sections.map {
-                    it.copy(
-                        isExpanded = if (it == action.section) {
-                            !it.isExpanded
-                        } else {
-                            it.isExpanded
-                        },
-                    )
-                },
+                sections = codes
+                    .sections
+                    .map {
+                        it.copy(
+                            isExpanded = if (it == action.section) {
+                                !it.isExpanded
+                            } else {
+                                it.isExpanded
+                            },
+                        )
+                    }
+                    .toImmutableList(),
             )
         }
     }
@@ -602,20 +598,20 @@ class ItemListingViewModel @Inject constructor(
     /**
      * Converts a [SharedVerificationCodesState] into an action card for display.
      */
-    private fun SharedVerificationCodesState.toActionCard(): ItemListingState.ActionCardState =
+    private fun SharedVerificationCodesState.toActionCard(): ItemListingState.ActionCardState? =
         when (this) {
             SharedVerificationCodesState.AppNotInstalled ->
                 if (!settingsRepository.hasUserDismissedDownloadBitwardenCard) {
                     ItemListingState.ActionCardState.DownloadBitwardenApp
                 } else {
-                    ItemListingState.ActionCardState.None
+                    null
                 }
 
             SharedVerificationCodesState.SyncNotEnabled ->
                 if (!settingsRepository.hasUserDismissedSyncWithBitwardenCard) {
                     ItemListingState.ActionCardState.SyncWithBitwarden
                 } else {
-                    ItemListingState.ActionCardState.None
+                    null
                 }
 
             SharedVerificationCodesState.Error,
@@ -623,11 +619,11 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             is SharedVerificationCodesState.Success,
-                -> ItemListingState.ActionCardState.None
+                -> null
         }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
-        val uri = Uri.parse(this)
+        val uri = this.toUri()
 
         val type = AuthenticatorItemType
             .entries
@@ -712,7 +708,6 @@ const val ISSUER = "issuer"
  */
 @Parcelize
 data class ItemListingState(
-    val appTheme: AppTheme,
     val alertThresholdSeconds: Int,
     val viewState: ViewState,
     val dialog: DialogState?,
@@ -734,7 +729,7 @@ data class ItemListingState(
          */
         @Parcelize
         data class NoItems(
-            val actionCard: ActionCardState,
+            val actionCard: ActionCardState?,
         ) : ViewState()
 
         /**
@@ -742,9 +737,9 @@ data class ItemListingState(
          */
         @Parcelize
         data class Content(
-            val actionCard: ActionCardState,
-            val favoriteItems: List<VerificationCodeDisplayItem>,
-            val itemList: List<VerificationCodeDisplayItem>,
+            val actionCard: ActionCardState?,
+            val favoriteItems: ImmutableList<VerificationCodeDisplayItem>,
+            val itemList: ImmutableList<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
         ) : ViewState() {
 
@@ -753,13 +748,10 @@ data class ItemListingState(
              */
             val shouldShowLocalHeader
                 get() =
-                    // Only show header if there are shared items
-                    !sharedItems.isEmpty() &&
-                        // And also local items
-                        itemList.isNotEmpty() &&
-                        // But there are no favorite items
-                        // (If there are favorite items, the favorites header will take care of us)
-                        favoriteItems.isEmpty()
+                    // Only show if local codes are present
+                    itemList.isNotEmpty() &&
+                        // and if there are shared items or favorites
+                        (!sharedItems.isEmpty() || favoriteItems.isNotEmpty())
         }
     }
 
@@ -767,12 +759,6 @@ data class ItemListingState(
      * Display an action card on the item [ItemListingScreen].
      */
     sealed class ActionCardState : Parcelable {
-        /**
-         * Display no action card.
-         */
-        @Parcelize
-        data object None : ActionCardState()
-
         /**
          * Display the "Download the Bitwarden app" card.
          */
@@ -868,16 +854,25 @@ sealed class ItemListingEvent {
     data object NavigateToBitwardenSettings : ItemListingEvent()
 
     /**
-     * Show a Toast with [message].
+     * Show a Snackbar with the given [data].
      */
-    data class ShowToast(
-        val message: Text,
-    ) : ItemListingEvent()
-
-    /**
-     * Show a Snackbar letting the user know accounts have synced.
-     */
-    data object ShowFirstTimeSyncSnackbar : ItemListingEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ItemListingEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
@@ -1001,11 +996,6 @@ sealed class ItemListingAction {
          * Indicates a result for deleting an item has been received.
          */
         data class DeleteItemReceive(val result: DeleteItemResult) : Internal()
-
-        /**
-         * Indicates app theme change has been received.
-         */
-        data class AppThemeChangeReceive(val appTheme: AppTheme) : Internal()
 
         /**
          * Indicates that a user synced with Bitwarden for the first time.

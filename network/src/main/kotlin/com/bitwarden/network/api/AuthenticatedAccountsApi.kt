@@ -1,10 +1,12 @@
 package com.bitwarden.network.api
 
 import com.bitwarden.network.model.CreateAccountKeysRequest
+import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import com.bitwarden.network.model.VerifyOtpRequestJson
 import retrofit2.http.Body
 import retrofit2.http.HTTP
@@ -25,7 +27,9 @@ internal interface AuthenticatedAccountsApi {
      * Creates the keys for the current account.
      */
     @POST("/accounts/keys")
-    suspend fun createAccountKeys(@Body body: CreateAccountKeysRequest): NetworkResult<Unit>
+    suspend fun createAccountKeys(
+        @Body body: CreateAccountKeysRequest,
+    ): NetworkResult<CreateAccountKeysResponseJson>
 
     /**
      * Deletes the current account.
@@ -35,6 +39,12 @@ internal interface AuthenticatedAccountsApi {
 
     @POST("/accounts/request-otp")
     suspend fun requestOtp(): NetworkResult<Unit>
+
+    /**
+     * Update the KDF settings for the current account.
+     */
+    @POST("/accounts/kdf")
+    suspend fun updateKdf(@Body body: UpdateKdfJsonRequest): NetworkResult<Unit>
 
     @POST("/accounts/verify-otp")
     suspend fun verifyOtp(

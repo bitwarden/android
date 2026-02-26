@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.send.AuthType
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import java.time.Instant
-import java.time.ZonedDateTime
 
 /**
  * Create a mock [SendView] with a given [number].
@@ -27,9 +27,9 @@ fun createMockSendView(
     accessCount: UInt = 1U,
     disabled: Boolean = false,
     hideEmail: Boolean = false,
-    revisionDate: Instant = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
-    deletionDate: Instant = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
-    expirationDate: Instant? = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
+    revisionDate: Instant = Instant.parse("2023-10-27T12:00:00Z"),
+    deletionDate: Instant = Instant.parse("2023-10-27T12:00:00Z"),
+    expirationDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
 ): SendView =
     SendView(
         id = id,
@@ -49,6 +49,8 @@ fun createMockSendView(
         revisionDate = revisionDate,
         deletionDate = deletionDate,
         expirationDate = expirationDate,
+        emails = emptyList(),
+        authType = AuthType.PASSWORD,
     )
 
 /**

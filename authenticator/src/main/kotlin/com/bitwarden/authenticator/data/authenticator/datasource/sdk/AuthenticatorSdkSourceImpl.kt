@@ -1,10 +1,10 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.sdk
 
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
-import com.bitwarden.core.DateTime
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.sdk.Client
 import com.bitwarden.vault.TotpResponse
+import java.time.Instant
 import javax.inject.Inject
 
 /**
@@ -16,7 +16,7 @@ class AuthenticatorSdkSourceImpl @Inject constructor(
 
     override suspend fun generateTotp(
         totp: String,
-        time: DateTime,
+        time: Instant,
     ): Result<TotpResponse> = runCatching {
         getClient()
             .vault()

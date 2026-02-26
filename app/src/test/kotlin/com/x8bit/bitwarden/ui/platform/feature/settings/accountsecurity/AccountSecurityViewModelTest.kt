@@ -16,12 +16,11 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -62,6 +61,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { userStateFlow } returns mutableUserStateFlow
+        every { createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+        every { isBiometricIntegrityValid(userId = DEFAULT_USER_STATE.activeUserId) } returns true
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
     private val mutableBiometricsUnlockEnabledFlow = bufferedMutableSharedFlow<Boolean>()
@@ -84,16 +85,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
     private val mutableRemovePinPolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
-        every { createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
-        every { getOrCreateCipher(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
-        every {
-            isBiometricIntegrityValid(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                cipher = CIPHER,
-            )
-        } returns true
-    }
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
@@ -123,16 +114,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when saved state is not set`() {
         val viewModel = createViewModel(initialState = null)
-        assertEquals(
-            DEFAULT_STATE,
-            viewModel.stateFlow.value,
-        )
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         verify {
-            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_STATE.activeUserId)
-            biometricsEncryptionManager.isBiometricIntegrityValid(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                cipher = CIPHER,
-            )
+            settingsRepository.isUnlockWithBiometricsEnabled
         }
         coVerify { settingsRepository.getUserFingerprint() }
     }
@@ -143,7 +127,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
-            action = "lock",
+            action = PolicyInformation.VaultTimeout.Action.LOCK,
+            type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
         mutableActivePolicyFlow.emit(
             listOf(
@@ -158,8 +143,11 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    vaultTimeoutPolicyMinutes = 10,
-                    vaultTimeoutPolicyAction = "lock",
+                    vaultTimeoutPolicy = VaultTimeoutPolicy(
+                        minutes = 10,
+                        action = PolicyInformation.VaultTimeout.Action.LOCK,
+                        type = PolicyInformation.VaultTimeout.Type.CUSTOM,
+                    ),
                 ),
                 awaitItem(),
             )
@@ -506,9 +494,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on EnableBiometricsClick should show Error dialog when cipher is null`() {
-        every {
-            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_STATE.activeUserId)
-        } returns null
+        every { authRepository.createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns null
         val viewModel = createViewModel()
 
         viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
@@ -530,9 +516,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-            every {
-                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
-            } just runs
+            every { authRepository.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
 
@@ -543,7 +527,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             verify(exactly = 1) {
-                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+                authRepository.clearBiometrics(userId = DEFAULT_USER_ID)
             }
         }
 
@@ -556,9 +540,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 isUnlockWithBiometricsEnabled = true,
             )
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-            every {
-                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
-            } just runs
+            every { authRepository.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
             every { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT } just runs
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
@@ -573,7 +555,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             verify(exactly = 1) {
-                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+                authRepository.clearBiometrics(userId = DEFAULT_USER_ID)
                 settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT
             }
         }
@@ -899,14 +881,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
-        biometricsEncryptionManager: BiometricsEncryptionManager = this.biometricsEncryptionManager,
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
-        biometricsEncryptionManager = biometricsEncryptionManager,
         policyManager = policyManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
@@ -934,41 +914,32 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = listOf(
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationUser",
                     name = "Organization User",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.USER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationAdmin",
                     name = "Organization Admin",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
-                    role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationOwner",
                     name = "Organization Owner",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.OWNER,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
+                createMockOrganization(
+                    number = 1,
                     id = "organizationCustom",
                     name = "Organization Owner",
-                    shouldUseKeyConnector = false,
-                    shouldManageResetPassword = false,
                     role = OrganizationType.CUSTOM,
                     keyConnectorUrl = null,
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             needsMasterPassword = false,
@@ -977,6 +948,7 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
         ),
     ),
 )
@@ -991,8 +963,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
-    vaultTimeoutPolicyMinutes = null,
-    vaultTimeoutPolicyAction = null,
+    vaultTimeoutPolicy = null,
     shouldShowEnableAuthenticatorSync = false,
     shouldShowUnlockActionCard = false,
     removeUnlockWithPinPolicyEnabled = false,

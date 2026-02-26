@@ -336,6 +336,49 @@ class EnvironmentUrlsDataJsonExtensionsTest {
             DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.toBaseWebVaultImportUrl,
         )
     }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for US environment`() {
+        // TODO: PM-26577 Update this to use "https"
+        val expectedScheme = "bitwarden"
+
+        assertEquals(
+            expectedScheme,
+            EnvironmentUrlDataJson.DEFAULT_US.appLinksScheme,
+        )
+    }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for EU environment`() {
+        // TODO: PM-26577 Update this to use "https"
+        val expectedScheme = "bitwarden"
+
+        assertEquals(
+            expectedScheme,
+            EnvironmentUrlDataJson.DEFAULT_EU.appLinksScheme,
+        )
+    }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for internal environment`() {
+        // TODO: PM-26577 Update this to use "https"
+        val expectedScheme = "bitwarden"
+
+        assertEquals(
+            expectedScheme,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "qa.vault.bitwarden.pw").appLinksScheme,
+        )
+    }
+
+    @Test
+    fun `appLinksScheme should return the correct scheme for custom environment`() {
+        val expectedScheme = "bitwarden"
+
+        assertEquals(
+            expectedScheme,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.appLinksScheme,
+        )
+    }
 }
 
 private val DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA = EnvironmentUrlDataJson(

@@ -87,6 +87,7 @@ class AutofillUtilsTest {
                     password = "password",
                     username = "username",
                     subtitle = "Subtitle",
+                    website = "website",
                 ),
                 second = AutofillAppInfo(
                     context = context,
@@ -103,6 +104,7 @@ class AutofillUtilsTest {
                     password = "password",
                     username = "username",
                     subtitle = "AmazonSubtitle",
+                    website = "website",
                 ),
                 second = AutofillAppInfo(
                     context = context,

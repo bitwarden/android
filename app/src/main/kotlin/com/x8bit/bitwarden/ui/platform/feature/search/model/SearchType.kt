@@ -39,6 +39,11 @@ sealed class SearchType : Parcelable {
         data object All : Vault()
 
         /**
+         * Indicates that we should be searching all archived vault items.
+         */
+        data object Archive : Vault()
+
+        /**
          * Indicates that we should be searching only login ciphers.
          */
         data object Logins : Vault()

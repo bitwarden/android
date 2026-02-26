@@ -23,7 +23,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,16 +38,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.coroutines.launch
 
 /**
@@ -155,7 +155,7 @@ private fun TutorialScreenContent(
                 .height(44.dp),
         )
 
-        AuthenticatorFilledTonalButton(
+        BitwardenFilledButton(
             label = state.actionButtonText,
             onClick = { continueClick(state.index) },
             modifier = Modifier
@@ -163,7 +163,7 @@ private fun TutorialScreenContent(
                 .fillMaxWidth(),
         )
 
-        AuthenticatorTextButton(
+        BitwardenTextButton(
             isEnabled = !state.isLastPage,
             label = stringResource(id = BitwardenString.skip),
             onClick = skipClick,
@@ -190,13 +190,13 @@ private fun TutorialScreenPortrait(
         Image(
             painter = rememberVectorPainter(id = state.image),
             contentDescription = null,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(size = 124.dp),
         )
 
         Text(
             text = stringResource(id = state.title),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.headlineMedium,
             modifier = Modifier
                 .padding(
                     top = 48.dp,
@@ -206,7 +206,7 @@ private fun TutorialScreenPortrait(
         Text(
             text = stringResource(id = state.message),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
         )
     }
 }
@@ -223,7 +223,7 @@ private fun TutorialScreenLandscape(
         Image(
             painter = rememberVectorPainter(id = state.image),
             contentDescription = null,
-            modifier = Modifier.size(132.dp),
+            modifier = Modifier.size(size = 124.dp),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -235,14 +235,14 @@ private fun TutorialScreenLandscape(
             Text(
                 text = stringResource(id = state.title),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
+                style = BitwardenTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Text(
                 text = stringResource(id = state.message),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
             )
         }
 
@@ -264,7 +264,7 @@ private fun IndicatorDots(
     ) {
         items(totalCount) { index ->
             val color = animateColorAsState(
-                targetValue = MaterialTheme.colorScheme.primary.copy(
+                targetValue = BitwardenTheme.colorScheme.icon.secondary.copy(
                     alpha = if (index == selectedIndexProvider()) 1.0f else 0.3f,
                 ),
                 label = "dotColor",

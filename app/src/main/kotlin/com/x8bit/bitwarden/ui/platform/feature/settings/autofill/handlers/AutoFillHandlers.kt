@@ -14,6 +14,8 @@ class AutoFillHandlers(
     val onBackClick: () -> Unit,
     val onAutofillActionCardClick: () -> Unit,
     val onAutofillActionCardDismissClick: () -> Unit,
+    val onBrowserAutofillActionCardClick: () -> Unit,
+    val onBrowserAutofillActionCardDismissClick: () -> Unit,
     val onAutofillServicesClick: (isEnabled: Boolean) -> Unit,
     val onAutofillStyleChange: (style: AutofillStyle) -> Unit,
     val onBrowserAutofillSelected: (browserPackage: BrowserPackage) -> Unit,
@@ -26,6 +28,7 @@ class AutoFillHandlers(
     val onDefaultUriMatchTypeSelect: (defaultUriMatchType: UriMatchType) -> Unit,
     val onBlockAutoFillClick: () -> Unit,
     val onLearnMoreClick: () -> Unit,
+    val onHelpCardClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -42,12 +45,14 @@ class AutoFillHandlers(
             onAutofillActionCardDismissClick = {
                 viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard)
             },
+            onBrowserAutofillActionCardClick = {
+                viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+            },
+            onBrowserAutofillActionCardDismissClick = {
+                viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+            },
             onAutofillServicesClick = {
-                viewModel.trySendAction(
-                    AutoFillAction.AutoFillServicesClick(
-                        it,
-                    ),
-                )
+                viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(it))
             },
             onAutofillStyleChange = {
                 viewModel.trySendAction(AutoFillAction.AutofillStyleSelected(it))
@@ -65,29 +70,20 @@ class AutoFillHandlers(
                 viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
             },
             onUseAccessibilityServiceClick = {
-                viewModel.trySendAction(
-                    AutoFillAction.UseAccessibilityAutofillClick,
-                )
+                viewModel.trySendAction(AutoFillAction.UseAccessibilityAutofillClick)
             },
             onCopyTotpAutomaticallyClick = {
-                viewModel.trySendAction(
-                    AutoFillAction.CopyTotpAutomaticallyClick(
-                        it,
-                    ),
-                )
+                viewModel.trySendAction(AutoFillAction.CopyTotpAutomaticallyClick(it))
             },
             onAskToAddLoginClick = {
                 viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(it))
             },
             onDefaultUriMatchTypeSelect = {
-                viewModel.trySendAction(
-                    AutoFillAction.DefaultUriMatchTypeSelect(
-                        it,
-                    ),
-                )
+                viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(it))
             },
             onBlockAutoFillClick = { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) },
             onLearnMoreClick = { viewModel.trySendAction(AutoFillAction.LearnMoreClick) },
+            onHelpCardClick = { viewModel.trySendAction(AutoFillAction.HelpCardClick) },
         )
     }
 }

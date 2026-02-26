@@ -1,15 +1,16 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import androidx.annotation.StringRes
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -34,10 +35,12 @@ class UserLogoutManagerImpl(
     private val toastManager: ToastManager,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
-    private val scope = CoroutineScope(dispatcherManager.unconfined)
+    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
     private val mainScope = CoroutineScope(dispatcherManager.main)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     private val mutableLogoutEventFlow: MutableSharedFlow<LogoutEvent> =
         bufferedMutableSharedFlow()
@@ -46,20 +49,22 @@ class UserLogoutManagerImpl(
     override fun logout(userId: String, reason: LogoutReason) {
         authDiskSource.userState ?: return
         Timber.d("logout reason=$reason")
-        val isExpired = reason == LogoutReason.SecurityStamp
-        if (isExpired) {
+        val isSecurityStamp = reason == LogoutReason.SecurityStamp
+        if (isSecurityStamp) {
             showToast(message = BitwardenString.login_expired)
         }
 
         val ableToSwitchToNewAccount = switchUserIfAvailable(
             currentUserId = userId,
-            isExpired = isExpired,
+            isSecurityStamp = isSecurityStamp,
             removeCurrentUserFromAccounts = true,
         )
 
         if (!ableToSwitchToNewAccount) {
-            // Update the user information and log out
+            // Update the user information and log out.
             authDiskSource.userState = null
+            // Unregister the application from CXP Export since there are no other accounts.
+            ioScope.launch { credentialExchangeRegistryManager.unregister() }
         }
 
         clearData(userId = userId)
@@ -68,24 +73,24 @@ class UserLogoutManagerImpl(
 
     override fun softLogout(userId: String, reason: LogoutReason) {
         Timber.d("softLogout reason=$reason")
-        val isExpired = reason == LogoutReason.SecurityStamp
-        if (isExpired) {
+        val isSecurityStamp = reason == LogoutReason.SecurityStamp
+        if (isSecurityStamp) {
             showToast(message = BitwardenString.login_expired)
         }
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = null,
-        )
 
-        // Save any data that will still need to be retained after otherwise clearing all dat
+        // Save any data that will still need to be retained after otherwise clearing all data
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        val encryptedPin = authDiskSource.getEncryptedPin(userId = userId)
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+        val pinProtectedUserKeyEnvelope = authDiskSource.getPinProtectedUserKeyEnvelope(
+            userId = userId,
+        )
 
         switchUserIfAvailable(
             currentUserId = userId,
             removeCurrentUserFromAccounts = false,
-            isExpired = isExpired,
+            isSecurityStamp = isSecurityStamp,
         )
 
         clearData(userId = userId)
@@ -102,10 +107,14 @@ class UserLogoutManagerImpl(
                 vaultTimeoutAction = vaultTimeoutAction,
             )
         }
-        authDiskSource.storePinProtectedUserKey(
-            userId = userId,
-            pinProtectedUserKey = pinProtectedUserKey,
-        )
+        authDiskSource.apply {
+            storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            storePinProtectedUserKey(userId = userId, pinProtectedUserKey = pinProtectedUserKey)
+            storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        }
     }
 
     private fun clearData(userId: String) {
@@ -114,7 +123,7 @@ class UserLogoutManagerImpl(
         generatorDiskSource.clearData(userId = userId)
         pushDiskSource.clearData(userId = userId)
         settingsDiskSource.clearData(userId = userId)
-        scope.launch {
+        unconfinedScope.launch {
             passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
             vaultDiskSource.deleteVaultData(userId = userId)
         }
@@ -127,7 +136,7 @@ class UserLogoutManagerImpl(
     private fun switchUserIfAvailable(
         currentUserId: String,
         removeCurrentUserFromAccounts: Boolean,
-        isExpired: Boolean = false,
+        isSecurityStamp: Boolean,
     ): Boolean {
         val currentUserState = authDiskSource.userState ?: return false
 
@@ -139,7 +148,7 @@ class UserLogoutManagerImpl(
 
         // Check if there is a new active user
         return if (updatedAccounts.isNotEmpty()) {
-            if (currentUserId == currentUserState.activeUserId && !isExpired) {
+            if (currentUserId == currentUserState.activeUserId && !isSecurityStamp) {
                 showToast(message = BitwardenString.account_switched_automatically)
             }
 

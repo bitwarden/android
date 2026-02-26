@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -80,7 +80,7 @@ private fun SetupCompleteContent(
     ) {
         Spacer(Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_setup_complete),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_setup_complete),
             contentDescription = null,
             modifier = Modifier
                 .align(CenterHorizontally)

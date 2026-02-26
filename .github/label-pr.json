@@ -1,0 +1,58 @@
+{
+  "title_patterns": {
+    "t:feature": ["feat", "feature", "tool"],
+    "t:bug": ["fix", "bug", "bugfix"],
+    "t:tech-debt": ["refactor", "chore", "cleanup", "revert", "debt", "test", "perf"],
+    "t:docs": ["docs"],
+    "t:ci": ["ci", "build", "chore(ci)"],
+    "t:deps": ["deps"],
+    "t:breaking-change": ["breaking", "breaking-change"],
+    "t:misc": ["misc"],
+    "t:llm": ["llm"]
+  },
+  "path_patterns": {
+    "app:shared": [
+      "annotation/",
+      "core/",
+      "data/",
+      "network/",
+      "ui/",
+      "authenticatorbridge/",
+      "gradle/"
+    ],
+    "app:password-manager": [
+      "app/",
+      "cxf/",
+      "testharness/"
+    ],
+    "app:authenticator": [
+      "authenticator/"
+    ],
+    "t:feature": [
+      "app/src/main/assets/fido2_privileged_community.json",
+      "app/src/main/assets/fido2_privileged_google.json",
+      "testharness/"
+    ],
+    "t:tech-debt": [
+      "gradle.properties",
+      "keystore/"
+    ],
+    "t:ci": [
+      ".checkmarx/",
+      ".github/",
+      "scripts/",
+      "fastlane/",
+      ".gradle/",
+      "detekt-config.yml"
+    ],
+    "t:docs": [
+      "docs/"
+    ],
+    "t:deps": [
+      "gradle/"
+    ],
+    "t:llm": [
+      ".claude/"
+    ]
+  }
+}

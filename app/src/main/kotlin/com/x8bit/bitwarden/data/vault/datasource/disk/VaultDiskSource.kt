@@ -25,6 +25,16 @@ interface VaultDiskSource {
     suspend fun getCiphers(userId: String): List<SyncResponseJson.Cipher>
 
     /**
+     * Checks if the user has any personal ciphers (ciphers not belonging to an organization).
+     *
+     * This is an optimized query that checks only the indexed organizationId column
+     * without loading full cipher JSON data. Intended for vault migration state checks.
+     *
+     * @return Flow that emits true if user has personal ciphers, false otherwise
+     */
+    fun hasPersonalCiphersFlow(userId: String): Flow<Boolean>
+
+    /**
      * Retrieves all ciphers with the given [cipherIds] from the data source for a given [userId].
      */
     suspend fun getSelectedCiphers(

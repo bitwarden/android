@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class AuthRequestsServiceTest : BaseServiceTest() {
 
@@ -116,7 +116,7 @@ private val AUTH_REQUEST_RESPONSE = AuthRequestsResponseJson.AuthRequest(
     ipAddress = "1.0.0.1",
     key = "key",
     masterPasswordHash = "verySecureHash",
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     responseDate = null,
     requestApproved = true,
     originUrl = "www.bitwarden.com",

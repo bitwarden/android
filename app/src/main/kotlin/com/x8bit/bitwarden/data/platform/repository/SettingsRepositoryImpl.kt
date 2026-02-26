@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -278,7 +279,7 @@ class SettingsRepositoryImpl(
         get() = activeUserId
             ?.let { userId ->
                 authDiskSource
-                    .getUserBiometicUnlockKeyFlow(userId)
+                    .getUserBiometricUnlockKeyFlow(userId)
                     .map { it != null }
             }
             ?: flowOf(false)
@@ -293,7 +294,11 @@ class SettingsRepositoryImpl(
             ?.let { userId ->
                 authDiskSource
                     .getPinProtectedUserKeyFlow(userId)
-                    .map { it != null }
+                    .combine(
+                        authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId),
+                    ) { pinProtectedUserKey, pinProtectedUserKeyEnvelope ->
+                        pinProtectedUserKey != null || pinProtectedUserKeyEnvelope != null
+                    }
             }
             ?: flowOf(false)
 
@@ -403,7 +408,7 @@ class SettingsRepositoryImpl(
             ?.userDecryptionOptions
             ?.hasMasterPassword != false
         val timeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
-        val hasPin = authDiskSource.getPinProtectedUserKey(userId = userId) != null
+        val hasPin = authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId) != null
         val hasBiometrics = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
         // The timeout action cannot be "lock" if you do not have master password, pin, or
         // biometrics unlock enabled.
@@ -495,6 +500,29 @@ class SettingsRepositoryImpl(
         }
     }
 
+    override fun getIntroducingArchiveActionCardDismissedFlow(): StateFlow<Boolean> {
+        val userId = activeUserId ?: return MutableStateFlow(value = false)
+        return settingsDiskSource
+            .getIntroducingArchiveActionCardDismissedFlow(userId = userId)
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .getIntroducingArchiveActionCardDismissed(userId = userId)
+                    ?: false,
+            )
+    }
+
+    override fun dismissIntroducingArchiveActionCard() {
+        activeUserId?.let {
+            settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                userId = it,
+                isDismissed = true,
+            )
+        }
+    }
+
     override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
         val userId = activeUserId
             ?: return BiometricsKeyResult.Error(error = NoActiveUserException())
@@ -527,21 +555,27 @@ class SettingsRepositoryImpl(
         val userId = activeUserId ?: return
         unconfinedScope.launch {
             vaultSdkSource
-                .derivePinKey(
+                .enrollPin(
                     userId = userId,
                     pin = pin,
                 )
                 .fold(
-                    onSuccess = { derivePinKeyResponse ->
+                    onSuccess = { enrollPinResponse ->
                         authDiskSource.apply {
                             storeEncryptedPin(
                                 userId = userId,
-                                encryptedPin = derivePinKeyResponse.encryptedPin,
+                                encryptedPin = enrollPinResponse.userKeyEncryptedPin,
                             )
+                            storePinProtectedUserKeyEnvelope(
+                                userId = userId,
+                                pinProtectedUserKeyEnvelope =
+                                    enrollPinResponse.pinProtectedUserKeyEnvelope,
+                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                            )
+                            // Remove any legacy pin protected user keys.
                             storePinProtectedUserKey(
                                 userId = userId,
-                                pinProtectedUserKey = derivePinKeyResponse.pinProtectedUserKey,
-                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                                pinProtectedUserKey = null,
                             )
                         }
                     },
@@ -561,6 +595,10 @@ class SettingsRepositoryImpl(
                 userId = userId,
                 encryptedPin = null,
             )
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = null,
+            )
             authDiskSource.storePinProtectedUserKey(
                 userId = userId,
                 pinProtectedUserKey = null,
@@ -575,23 +613,23 @@ class SettingsRepositoryImpl(
         settingsDiskSource.storeUseHasLoggedInPreviously(userId)
     }
 
-    override fun isVaultRegisteredForExport(userId: String): Boolean {
-        return settingsDiskSource.getVaultRegisteredForExport(userId) == true
+    override fun isAppRegisteredForExport(): Boolean {
+        return settingsDiskSource.getAppRegisteredForExport() == true
     }
 
-    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean) {
-        settingsDiskSource.storeVaultRegisteredForExport(userId, isRegistered)
+    override fun storeAppRegisteredForExport(isRegistered: Boolean) {
+        settingsDiskSource.storeAppRegisteredForExport(isRegistered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean> {
+    override fun getAppRegisteredForExportFlow(userId: String): StateFlow<Boolean> {
         return settingsDiskSource
-            .getVaultRegisteredForExportFlow(userId)
+            .getAppRegisteredForExportFlow(userId)
             .map { it ?: false }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
                 initialValue = settingsDiskSource
-                    .getVaultRegisteredForExport(userId)
+                    .getAppRegisteredForExport()
                     ?: false,
             )
     }
@@ -625,17 +663,38 @@ class SettingsRepositoryImpl(
             ?.policyInformation as? PolicyInformation.VaultTimeout
             ?: return
 
-        // Adjust the user's timeout or method if necessary to meet the policy requirements.
-        vaultUnlockPolicy.minutes?.let { maxMinutes ->
-            if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
-                vaultTimeout = VaultTimeout.Custom(maxMinutes)
+        when (vaultUnlockPolicy.type) {
+            PolicyInformation.VaultTimeout.Type.NEVER -> {
+                vaultTimeout = VaultTimeout.Never
+            }
+
+            PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+            PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                -> {
+                vaultTimeout = VaultTimeout.OnAppRestart
+            }
+
+            PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                vaultTimeout = VaultTimeout.Immediately
+            }
+
+            PolicyInformation.VaultTimeout.Type.CUSTOM,
+            null,
+                -> {
+                // Null values are treated as CUSTOM for legacy servers that do no provide a type.
+                // Is there isn't a minutes value or if the current value is within range, we
+                // leave everything alone.
+                vaultUnlockPolicy.minutes?.let { maxMinutes ->
+                    if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
+                        vaultTimeout = VaultTimeout.Custom(maxMinutes)
+                    }
+                }
             }
         }
         vaultUnlockPolicy.action?.let {
-            vaultTimeoutAction = if (it == "lock") {
-                VaultTimeoutAction.LOCK
-            } else {
-                VaultTimeoutAction.LOGOUT
+            vaultTimeoutAction = when (it) {
+                PolicyInformation.VaultTimeout.Action.LOCK -> VaultTimeoutAction.LOCK
+                PolicyInformation.VaultTimeout.Action.LOGOUT -> VaultTimeoutAction.LOGOUT
             }
         }
     }

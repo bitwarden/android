@@ -7,7 +7,6 @@ import kotlin.reflect.KClass
 /**
  * Gets the route string for an object.
  */
-@OptIn(InternalSerializationApi::class)
 fun <T : Any> T.toObjectNavigationRoute(): String = this::class.toObjectKClassNavigationRoute()
 
 /**

@@ -1,13 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -20,13 +25,18 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultSettingsViewModel @Inject constructor(
-    snackbarRelayManager: SnackbarRelayManager,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
+            showImportItemsChevron = featureFlagManager.getFeatureFlag(
+                key = FlagKey.CredentialExchangeProtocolImport,
+            ),
         )
     },
 ) {
@@ -44,6 +54,18 @@ class VaultSettingsViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
             .map { VaultSettingsAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.CredentialExchangeProtocolImport)
+            .combine(
+                policyManager.getActivePoliciesFlow(type = PolicyTypeJson.PERSONAL_OWNERSHIP),
+            ) { isEnabled, policies ->
+                VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
+                    isEnabled = isEnabled && policies.isEmpty(),
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -67,6 +89,10 @@ class VaultSettingsViewModel @Inject constructor(
             is VaultSettingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
+
+            is VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged -> {
+                handleCredentialExchangeAvailabilityChanged(action)
+            }
         }
     }
 
@@ -74,6 +100,12 @@ class VaultSettingsViewModel @Inject constructor(
         action: VaultSettingsAction.Internal.SnackbarDataReceived,
     ) {
         sendEvent(VaultSettingsEvent.ShowSnackbar(action.data))
+    }
+
+    private fun handleCredentialExchangeAvailabilityChanged(
+        action: VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged,
+    ) {
+        mutableStateFlow.update { it.copy(showImportItemsChevron = action.isEnabled) }
     }
 
     private fun handleImportLoginsCardDismissClicked() {
@@ -106,7 +138,13 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        sendEvent(VaultSettingsEvent.NavigateToImportVault)
+        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
+        ) {
+            sendEvent(VaultSettingsEvent.NavigateToImportItems)
+        } else {
+            sendEvent(VaultSettingsEvent.NavigateToImportVault)
+        }
     }
 }
 
@@ -115,6 +153,7 @@ class VaultSettingsViewModel @Inject constructor(
  */
 data class VaultSettingsState(
     val showImportActionCard: Boolean,
+    val showImportItemsChevron: Boolean,
 )
 
 /**
@@ -130,6 +169,11 @@ sealed class VaultSettingsEvent {
      * Navigate to the import vault URL.
      */
     data object NavigateToImportVault : VaultSettingsEvent()
+
+    /**
+     * Navigate to the import vault URL.
+     */
+    data object NavigateToImportItems : VaultSettingsEvent()
 
     /**
      * Navigate to the Export Vault screen.
@@ -185,6 +229,13 @@ sealed class VaultSettingsAction {
      * Internal actions not performed by user interation
      */
     sealed class Internal : VaultSettingsAction() {
+        /**
+         * Indicates that the CXF import feature availability has changed.
+         */
+        data class CredentialExchangeAvailabilityChanged(
+            val isEnabled: Boolean,
+        ) : Internal()
+
         /**
          * Indicates user first time state has changed.
          */

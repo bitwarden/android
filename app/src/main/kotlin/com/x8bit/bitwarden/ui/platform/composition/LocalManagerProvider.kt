@@ -13,8 +13,24 @@ import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.cxf.importer.CredentialExchangeImporter
+import com.bitwarden.cxf.importer.dsl.credentialExchangeImporter
+import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
+import com.bitwarden.cxf.manager.dsl.credentialExchangeCompletionManager
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
+import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.manager.exit.ExitManagerImpl
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
@@ -23,8 +39,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionMa
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
@@ -33,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import java.time.Clock
 
@@ -50,7 +65,7 @@ fun LocalManagerProvider(
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
     buildInfoManager: BuildInfoManager = BitwardenBuildInfoManagerImpl(),
     intentManager: IntentManager = IntentManager.create(
-        context = activity,
+        activity = activity,
         clock = clock,
         buildInfoManager = buildInfoManager,
     ),
@@ -59,6 +74,17 @@ fun LocalManagerProvider(
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
     nfcManager: NfcManager = NfcManagerImpl(activity = activity),
     permissionsManager: PermissionsManager = PermissionsManagerImpl(activity = activity),
+    credentialExchangeImporter: CredentialExchangeImporter =
+        credentialExchangeImporter(activity = activity),
+    credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
+        credentialExchangeCompletionManager(activity = activity, clock = clock) {
+            exporterRpId = activity.packageName
+            exporterDisplayName = activity.getString(R.string.app_name)
+        },
+    credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
+        credentialExchangeRequestValidator(activity = activity),
+    authTabLaunchers: AuthTabLaunchers,
+    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -73,6 +99,11 @@ fun LocalManagerProvider(
         LocalKeyChainManager provides keyChainManager,
         LocalNfcManager provides nfcManager,
         LocalPermissionsManager provides permissionsManager,
+        LocalCredentialExchangeImporter provides credentialExchangeImporter,
+        LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
+        LocalCredentialExchangeRequestValidator provides credentialExchangeRequestValidator,
+        LocalAuthTabLaunchers provides authTabLaunchers,
+        LocalQrCodeAnalyzer provides qrCodeAnalyzer,
         content = content,
     )
 }
@@ -99,10 +130,10 @@ val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = comp
 val LocalClock: ProvidableCompositionLocal<Clock> = compositionLocalOf { Clock.systemDefaultZone() }
 
 /**
- * Provides access to the exit manager throughout the app.
+ * Provides access to the Auth Tab launchers throughout the app.
  */
-val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
-    error("CompositionLocal ExitManager not present")
+val LocalAuthTabLaunchers: ProvidableCompositionLocal<AuthTabLaunchers> = compositionLocalOf {
+    error("CompositionLocal AuthTabLaunchers not present")
 }
 
 /**

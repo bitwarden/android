@@ -2,7 +2,9 @@ package com.bitwarden.network.api
 
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.NetworkResult
@@ -23,6 +25,22 @@ import retrofit2.http.Query
  */
 @Suppress("TooManyFunctions")
 internal interface CiphersApi {
+
+    /**
+     * Archive a cipher.
+     */
+    @PUT("ciphers/{cipherId}/archive")
+    suspend fun archiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<Unit>
+
+    /**
+     * Unarchive a cipher.
+     */
+    @PUT("ciphers/{cipherId}/unarchive")
+    suspend fun unarchiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<Unit>
 
     /**
      * Create a cipher.
@@ -74,6 +92,14 @@ internal interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Body body: ShareCipherJsonRequest,
     ): NetworkResult<SyncResponseJson.Cipher>
+
+    /**
+     * Shares multiple ciphers in bulk.
+     */
+    @PUT("ciphers/share")
+    suspend fun bulkShareCiphers(
+        @Body body: BulkShareCiphersJsonRequest,
+    ): NetworkResult<CipherMiniResponseJson>
 
     /**
      * Shares an attachment.

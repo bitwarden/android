@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.data.authenticator.manager.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
@@ -23,10 +22,11 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.repository.util.map
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.ui.platform.model.FileData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -36,7 +36,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -337,7 +337,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -375,7 +375,7 @@ private fun PendingRequestsBottomSheetContent(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.img_2fa),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_2fa),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

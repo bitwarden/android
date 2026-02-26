@@ -9,15 +9,18 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.every
@@ -25,6 +28,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -37,13 +42,11 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
     private val mutableAuthenticatorAlertThresholdFlow =
         MutableStateFlow(AUTHENTICATOR_ALERT_SECONDS)
-    private val mutableAppThemeFlow = MutableStateFlow(APP_THEME)
     private val mutableVerificationCodesFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mutableSharedCodesFlow =
         MutableStateFlow<SharedVerificationCodesState>(SharedVerificationCodesState.Loading)
-    private val firstTimeAccountSyncChannel: Channel<Unit> =
-        Channel(capacity = Channel.UNLIMITED)
+    private val firstTimeAccountSyncChannel: Channel<Unit> = Channel(capacity = Channel.UNLIMITED)
 
     private val authenticatorRepository: AuthenticatorRepository = mockk {
         every { totpCodeFlow } returns emptyFlow()
@@ -55,21 +58,35 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val encodingManager: BitwardenEncodingManager = mockk()
     private val settingsRepository: SettingsRepository = mockk {
-        every { appTheme } returns mutableAppThemeFlow.value
         every {
             authenticatorAlertThresholdSeconds
         } returns mutableAuthenticatorAlertThresholdFlow.value
         every {
             authenticatorAlertThresholdSecondsFlow
         } returns mutableAuthenticatorAlertThresholdFlow
-        every { appThemeStateFlow } returns mutableAppThemeFlow
         every { hasUserDismissedDownloadBitwardenCard } returns false
+    }
+    private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarFlow
     }
 
     @Test
     fun `initial state should be correct`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarFlow.tryEmit(expectedSnackbarData)
+            assertEquals(ItemListingEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
     }
 
     @Test
@@ -91,7 +108,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when local items are empty and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns true
@@ -109,7 +126,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
                 actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns false
@@ -124,10 +141,10 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when there are local items and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns true
@@ -142,7 +159,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should be Error when shared state is Error `() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
                 sharedItems = SharedCodesDisplayState.Error,
@@ -159,9 +176,13 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should be Codes with empty list when shared state is Success `() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = LOCAL_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
-                itemList = LOCAL_NON_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                actionCard = null,
+                favoriteItems = LOCAL_FAVORITE_ITEMS
+                    .map { it.copy(showMoveToBitwarden = true) }
+                    .toImmutableList(),
+                itemList = LOCAL_NON_FAVORITE_ITEMS
+                    .map { it.copy(showMoveToBitwarden = true) }
+                    .toImmutableList(),
                 sharedItems = SHARED_DISPLAY_ITEMS,
             ),
         )
@@ -177,7 +198,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow sharedItems value should show items even when local items are empty`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
@@ -192,9 +213,9 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow viewState value should be NoItems when both local and shared codes are empty`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
+                actionCard = null,
+                favoriteItems = persistentListOf(),
+                itemList = persistentListOf(),
                 sharedItems = SHARED_DISPLAY_ITEMS,
             ),
         )
@@ -220,10 +241,10 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                     favoriteItems = LOCAL_FAVORITE_ITEMS,
                     itemList = LOCAL_NON_FAVORITE_ITEMS,
-                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 ),
             )
             every { settingsRepository.hasUserDismissedDownloadBitwardenCard = true } just runs
@@ -241,7 +262,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.NoItems(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                 ),
             )
             every { settingsRepository.hasUserDismissedDownloadBitwardenCard = true } just runs
@@ -268,10 +289,10 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.Content(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                     favoriteItems = LOCAL_FAVORITE_ITEMS,
                     itemList = LOCAL_NON_FAVORITE_ITEMS,
-                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
                 ),
             )
             mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
@@ -290,7 +311,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = DEFAULT_STATE.copy(
                 viewState = ItemListingState.ViewState.NoItems(
-                    actionCard = ItemListingState.ActionCardState.None,
+                    actionCard = null,
                 ),
             )
             every { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true } just runs
@@ -322,7 +343,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show download bitwarden card when local items are empty and shared state is SyncNotEnabled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
             ),
         )
         every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns true
@@ -340,7 +361,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
                 actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
             ),
         )
         every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns false
@@ -355,10 +376,10 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `stateFlow value should not show sync with bitwarden card when there are local items and shared state is AppNotInstalled but user has dismissed card`() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
+                actionCard = null,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                sharedItems = SharedCodesDisplayState.Codes(persistentListOf()),
             ),
         )
         every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns true
@@ -436,11 +457,17 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on FirstTimeUserSyncReceive should emit ShowFirstTimeSyncSnackbar`() = runTest {
+    fun `on FirstTimeUserSyncReceive should emit ShowSnackbar`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             firstTimeAccountSyncChannel.send(Unit)
-            assertEquals(ItemListingEvent.ShowFirstTimeSyncSnackbar, awaitItem())
+            assertEquals(
+                ItemListingEvent.ShowSnackbar(
+                    message = BitwardenString.account_synced_from_bitwarden_app.asText(),
+                    withDismissAction = true,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -510,11 +537,18 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `on SectionExpandedClick should update expanded state for clicked section`() = runTest {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
-                actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = LOCAL_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
-                itemList = LOCAL_NON_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                actionCard = null,
+                favoriteItems = LOCAL_FAVORITE_ITEMS
+                    .map { it.copy(showMoveToBitwarden = true) }
+                    .toImmutableList(),
+                itemList = LOCAL_NON_FAVORITE_ITEMS
+                    .map { it.copy(showMoveToBitwarden = true) }
+                    .toImmutableList(),
                 sharedItems = SHARED_DISPLAY_ITEMS.copy(
-                    sections = SHARED_DISPLAY_ITEMS.sections.map { it.copy(isExpanded = false) },
+                    sections = SHARED_DISPLAY_ITEMS
+                        .sections
+                        .map { it.copy(isExpanded = false) }
+                        .toImmutableList(),
                 ),
             ),
         )
@@ -531,19 +565,18 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
-    private fun createViewModel() = ItemListingViewModel(
+    private fun createViewModel(): ItemListingViewModel = ItemListingViewModel(
         authenticatorRepository = authenticatorRepository,
         authenticatorBridgeManager = authenticatorBridgeManager,
         clipboardManager = clipboardManager,
         encodingManager = encodingManager,
         settingsRepository = settingsRepository,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 
-private val APP_THEME: AppTheme = mockk()
 private const val AUTHENTICATOR_ALERT_SECONDS = 7
 private val DEFAULT_STATE = ItemListingState(
-    appTheme = APP_THEME,
     alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
     viewState = ItemListingState.ViewState.Loading,
     dialog = null,
@@ -558,7 +591,7 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
     alertThresholdSeconds = 7,
     authCode = "123456",
     favorite = false,
-    allowLongPressActions = true,
+    showOverflow = true,
     showMoveToBitwarden = true,
 )
 
@@ -605,13 +638,16 @@ private val SHARED_VERIFICATION_ITEMS = listOf(
 
 private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
     it.toDisplayItem(
-        AUTHENTICATOR_ALERT_SECONDS,
-        SharedVerificationCodesState.AppNotInstalled,
+        alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+        sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
+        showOverflow = true,
     )
 }
 
 private val SHARED_DISPLAY_ITEMS = SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
     .toSharedCodesDisplayState(AUTHENTICATOR_ALERT_SECONDS)
 
-private val LOCAL_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filter { it.favorite }
-private val LOCAL_NON_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filterNot { it.favorite }
+private val LOCAL_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filter { it.favorite }.toImmutableList()
+private val LOCAL_NON_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS
+    .filterNot { it.favorite }
+    .toImmutableList()

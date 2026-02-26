@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
+import android.content.Intent
 import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -14,9 +16,11 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -30,6 +34,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
+    private val ssoLauncher: ActivityResultLauncher<Intent> = mockk()
     private var onNavigateBackCalled = false
     private var onNavigateToSetPasswordCalled = false
     private var onNavigateToTwoFactorLoginEmailAndOrgIdentifier: Pair<String, String>? = null
@@ -41,12 +46,18 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     }
 
     private val intentManager: IntentManager = mockk {
-        every { startCustomTabsActivity(any()) } just runs
+        every { startAuthTab(uri = any(), authTabData = any(), launcher = any()) } just runs
     }
 
     @Before
     fun setup() {
         setContent(
+            authTabLaunchers = AuthTabLaunchers(
+                duo = mockk(),
+                sso = ssoLauncher,
+                webAuthn = mockk(),
+                cookie = mockk(),
+            ),
             intentManager = intentManager,
         ) {
             EnterpriseSignOnScreen(
@@ -105,9 +116,14 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToSsoLogin should call startCustomTabsActivity`() {
         val ssoUri = Uri.parse("https://identity.bitwarden.com/sso-test")
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri))
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri, authTabData))
         verify(exactly = 1) {
-            intentManager.startCustomTabsActivity(ssoUri)
+            intentManager.startAuthTab(
+                uri = ssoUri,
+                authTabData = authTabData,
+                launcher = ssoLauncher,
+            )
         }
     }
 

@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -235,7 +235,7 @@ private fun InitialImportLoginsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_import_logins),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_import_logins),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -433,7 +433,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
     ) {
         Spacer(Modifier.height(24.dp))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_secure_devices),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_secure_devices),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

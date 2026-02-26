@@ -1,8 +1,8 @@
 package com.bitwarden.data.repository
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.model.ServerConfig
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.ConfigService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

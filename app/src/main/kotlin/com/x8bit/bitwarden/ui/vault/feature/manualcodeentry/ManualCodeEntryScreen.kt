@@ -1,9 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,12 +21,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -44,6 +40,7 @@ import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -74,15 +71,10 @@ fun ManualCodeEntryScreen(
         }
     }
 
-    val context = LocalContext.current
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ManualCodeEntryEvent.NavigateToAppSettings -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse("package:" + context.packageName)
-
-                intentManager.startActivity(intent = intent)
+                intentManager.startAppSettingsActivity()
             }
 
             is ManualCodeEntryEvent.NavigateToQrCodeScreen -> {

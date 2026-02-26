@@ -17,4 +17,18 @@ interface PolicyManager {
      * Get all the policies of the given [type] that are enabled and applicable to the user.
      */
     fun getActivePolicies(type: PolicyTypeJson): List<SyncResponseJson.Policy>
+
+    /**
+     * Get all the policies of the given [type] that are enabled and applicable to the [userId].
+     */
+    fun getUserPolicies(
+        userId: String,
+        type: PolicyTypeJson,
+    ): List<SyncResponseJson.Policy>
+
+    /**
+     * Get the organization id of the personal ownership policy.
+     * If multiple organizations enforce the policy, return the first to set it.
+     */
+    fun getPersonalOwnershipPolicyOrganizationId(): String?
 }

@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -135,7 +135,7 @@ fun RecordedLogsScreen(
                 BitwardenEmptyContent(
                     text = stringResource(id = BitwardenString.no_logs_recorded),
                     illustrationData = IconData.Local(
-                        iconRes = BitwardenDrawable.il_secure_devices,
+                        iconRes = BitwardenDrawable.ill_secure_devices,
                     ),
                     modifier = Modifier.fillMaxSize(),
                 )
