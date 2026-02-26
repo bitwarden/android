@@ -45,7 +45,7 @@ jobs:
             app/build/reports/lint-results-*.html
             app/build/reports/detekt/
 
-  test:
+  test-sharded:
     name: "Test ${{ matrix.group }}"
     runs-on: ubuntu-24.04
     permissions:
@@ -123,7 +123,7 @@ jobs:
   coverage-notify:
     name: Coverage Notification
     runs-on: ubuntu-24.04
-    needs: [test]
+    needs: test-sharded
     if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'pull_request')
     permissions:
       pull-requests: write
@@ -150,3 +150,20 @@ jobs:
             message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Coverage Notification" step of [Test]('$_GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
           fi
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    permissions: {}
+    needs: test-sharded
+    if: always()
+    steps:
+      - name: Ensure sharded tests passed
+        env:
+          TESTS_RESULT: ${{ needs.test-sharded.result }}
+        run: |
+          if [ "$TESTS_RESULT" != "success" ]; then
+            echo "❌ Tests failed"
+            exit 1
+          fi
+          echo "✅ All tests passed!"
