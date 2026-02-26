@@ -1,4 +1,5 @@
 name: Test (Sharded)
+run-name: Test ${{ github.event.pull_request && format('PR {0}', github.event.pull_request.number) || github.ref_name }}
 
 on:
   push:
@@ -45,8 +46,8 @@ jobs:
             app/build/reports/lint-results-*.html
             app/build/reports/detekt/
 
-  test-app:
-    name: "Test App (${{ matrix.shard_name }})"
+  test:
+    name: "Test ${{ matrix.group }}"
     runs-on: ubuntu-24.04
     permissions:
       packages: read
@@ -54,14 +55,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - shard_name: data
-            test_filter: '--tests "com.x8bit.bitwarden.data.*"'
-          - shard_name: ui-auth-tools
-            test_filter: '--tests "com.x8bit.bitwarden.ui.auth.*" --tests "com.x8bit.bitwarden.ui.tools.*" --tests "com.x8bit.bitwarden.ui.autofill.*" --tests "com.x8bit.bitwarden.ui.credentials.*" --tests "com.x8bit.bitwarden.*Test"'
-          - shard_name: ui-platform
-            test_filter: '--tests "com.x8bit.bitwarden.ui.platform.*"'
-          - shard_name: ui-vault
-            test_filter: '--tests "com.x8bit.bitwarden.ui.vault.*"'
+          # App shards
+          - group: app-data
+            fastlane_method: testAppShard
+            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.data.*\"'"
+          - group: app-ui-auth-tools
+            fastlane_method: testAppShard
+            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.auth.*\" --tests \"com.x8bit.bitwarden.ui.tools.*\" --tests \"com.x8bit.bitwarden.ui.autofill.*\" --tests \"com.x8bit.bitwarden.ui.credentials.*\" --tests \"com.x8bit.bitwarden.*Test\"'"
+          - group: app-ui-platform
+            fastlane_method: testAppShard
+            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.platform.*\"'"
+          - group: app-ui-vault
+            fastlane_method: testAppShard
+            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.vault.*\"'"
+          # Authenticator
+          - group: authenticator
+            fastlane_method: testLibraries
+            fastlane_options: "modules:':authenticator'"
+          # Library shards
+          - group: lib-core-network-bridge
+            fastlane_method: testLibraries
+            fastlane_options: "modules:':core :network :cxf :authenticatorbridge :testharness'"
+          - group: lib-data-ui
+            fastlane_method: testLibraries
+            fastlane_options: "modules:':data :ui'"
 
     steps:
       - name: Check out repo
@@ -72,11 +89,11 @@ jobs:
       - name: Setup Android Build
         uses: ./.github/actions/setup-android-build
 
-      - name: Run app tests
+      - name: Run tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          bundle exec fastlane testAppShard testFilter:'${{ matrix.test_filter }}'
+          bundle exec fastlane ${{ matrix.fastlane_method }} ${{ matrix.fastlane_options }}
 
       - name: Generate coverage report
         if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
@@ -92,7 +109,7 @@ jobs:
         with:
           os: linux
           files: build/reports/kover/reportMergedCoverage.xml
-          flags: app-${{ matrix.shard_name }}
+          flags: ${{ matrix.group }}
           fail_ci_if_error: true
           disable_search: true
 
@@ -100,122 +117,14 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
         with:
-          name: test-reports-app-${{ matrix.shard_name }}
-          path: |
-            app/build/reports/tests/
-
-  test-authenticator:
-    name: Test Authenticator
-    runs-on: ubuntu-24.04
-    permissions:
-      packages: read
-
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
-      - name: Run authenticator tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane testLibraries modules:':authenticator'
-
-      - name: Generate coverage report
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane generateCoverageReport
-
-      - name: Upload to codecov.io
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        continue-on-error: true
-        with:
-          os: linux
-          files: build/reports/kover/reportMergedCoverage.xml
-          flags: authenticator
-          fail_ci_if_error: true
-          disable_search: true
-
-      - name: Upload test reports
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: test-reports-authenticator
-          path: |
-            authenticator/build/reports/tests/
-
-  test-libraries:
-    name: "Test Libraries (${{ matrix.shard_name }})"
-    runs-on: ubuntu-24.04
-    permissions:
-      packages: read
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - shard_name: core-network-bridge
-            modules: ":core :network :cxf :authenticatorbridge :testharness"
-          - shard_name: data-ui
-            modules: ":data :ui"
-
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
-      - name: Run library tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane testLibraries modules:'${{ matrix.modules }}'
-
-      - name: Generate coverage report
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane generateCoverageReport
-
-      - name: Upload to codecov.io
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        continue-on-error: true
-        with:
-          os: linux
-          files: build/reports/kover/reportMergedCoverage.xml
-          flags: lib-${{ matrix.shard_name }}
-          fail_ci_if_error: true
-          disable_search: true
-
-      - name: Upload test reports
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: test-reports-lib-${{ matrix.shard_name }}
-          path: |
-            core/build/reports/tests/
-            network/build/reports/tests/
-            cxf/build/reports/tests/
-            authenticatorbridge/build/reports/tests/
-            testharness/build/reports/tests/
-            data/build/reports/tests/
-            ui/build/reports/tests/
+          name: test-reports-${{ matrix.group }}
+          path: "**/build/reports/tests/"
+          if-no-files-found: warn
 
   coverage-notify:
     name: Coverage Notification
     runs-on: ubuntu-24.04
-    needs: [test-app, test-authenticator, test-libraries]
+    needs: [test]
     if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'pull_request')
     permissions:
       pull-requests: write
