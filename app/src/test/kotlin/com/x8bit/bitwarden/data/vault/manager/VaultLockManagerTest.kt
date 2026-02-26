@@ -14,6 +14,9 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.data.manager.appstate.FakeAppStateManager
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -26,9 +29,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
+import com.x8bit.bitwarden.data.autofill.util.createdForAutofill
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -44,8 +45,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -56,9 +59,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -132,6 +137,16 @@ class VaultLockManagerTest {
         kdfManager = kdfManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
     )
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(Intent::createdForAutofill)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Intent::createdForAutofill)
+    }
 
     @Test
     fun `broadcast receiver should be registered on initialization`() {
@@ -352,7 +367,9 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = true)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(
+            intent = getMockIntent(isAutoFill = true),
+        )
 
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -369,7 +386,7 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(intent = getMockIntent())
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -386,7 +403,9 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = true)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(
+            intent = getMockIntent(isAutoFill = true),
+        )
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -402,7 +421,7 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(intent = getMockIntent())
 
         verify(exactly = 1) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
     }
@@ -429,7 +448,9 @@ class VaultLockManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // We want to skip the first time since that is different from subsequent creations
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(
+            intent = getMockIntent(isAutoFill = true),
+        )
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
@@ -446,7 +467,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = false)
+                AppCreationState.Created(intent = getMockIntent())
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -474,7 +495,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = false)
+                AppCreationState.Created(intent = getMockIntent())
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -511,7 +532,7 @@ class VaultLockManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // We want to skip the first time since that is different from subsequent foregrounds
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(intent = getMockIntent())
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
@@ -528,7 +549,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = true)
+                AppCreationState.Created(intent = getMockIntent(isAutoFill = true))
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -542,7 +563,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = true)
+                AppCreationState.Created(intent = getMockIntent(isAutoFill = true))
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -2065,7 +2086,6 @@ class VaultLockManagerTest {
         runBlocking { verifyUnlockedVault(userId = userId) }
     }
 
-    // region helper functions
     private fun setAccountTokens(userIds: List<String> = listOf(USER_ID)) {
         userIds.forEach { userId ->
             fakeAuthDiskSource.storeAccountTokens(
@@ -2077,6 +2097,11 @@ class VaultLockManagerTest {
             )
         }
     }
+
+    private fun getMockIntent(
+        isAutoFill: Boolean = false,
+    ): Intent = mockk { every { createdForAutofill } returns isAutoFill }
+    // region helper functions
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

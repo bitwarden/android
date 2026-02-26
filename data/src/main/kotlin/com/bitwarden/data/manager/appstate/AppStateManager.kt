@@ -1,8 +1,7 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.data.manager.appstate
 
-import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -12,8 +11,8 @@ interface AppStateManager {
     /**
      * Emits whenever there are changes to the app creation state.
      *
-     * This is required because the [BitwardenAccessibilityService] will keep the app process alive
-     * when the app would otherwise be destroyed.
+     * This is required because the Accessibility Service will keep the app process alive when the
+     * app would otherwise be destroyed.
      */
     val appCreatedStateFlow: StateFlow<AppCreationState>
 

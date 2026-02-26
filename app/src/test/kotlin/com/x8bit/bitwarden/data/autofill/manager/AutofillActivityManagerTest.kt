@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.data.autofill.manager
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
+import com.bitwarden.data.manager.appstate.AppStateManager
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

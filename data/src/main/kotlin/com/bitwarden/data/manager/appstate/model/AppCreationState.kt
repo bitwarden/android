@@ -1,4 +1,6 @@
-package com.x8bit.bitwarden.data.platform.manager.model
+package com.bitwarden.data.manager.appstate.model
+
+import android.content.Intent
 
 /**
  * Represents the creation state of the app.
@@ -7,9 +9,9 @@ sealed class AppCreationState {
     /**
      * Denotes that the app is currently created.
      *
-     * @param isAutoFill Whether the app was created for autofill.
+     * @param intent The intent data that started the app.
      */
-    data class Created(val isAutoFill: Boolean) : AppCreationState()
+    data class Created(val intent: Intent) : AppCreationState()
 
     /**
      * Denotes that the app is currently destroyed.

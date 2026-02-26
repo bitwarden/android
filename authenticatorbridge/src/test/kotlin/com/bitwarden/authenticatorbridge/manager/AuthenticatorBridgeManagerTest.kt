@@ -10,7 +10,6 @@ import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
 import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
-import com.bitwarden.authenticatorbridge.util.FakeLifecycleOwner
 import com.bitwarden.authenticatorbridge.util.FakeSymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.PasswordManagerSignatureVerifier
 import com.bitwarden.authenticatorbridge.util.TestAuthenticatorBridgeCallbackProvider
@@ -18,6 +17,7 @@ import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.bitwarden.core.data.util.FakeLifecycleOwner
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import io.mockk.every
 import io.mockk.just
