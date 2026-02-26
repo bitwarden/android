@@ -1,5 +1,4 @@
 name: Test
-run-name: Test ${{ github.event.pull_request && format('PR {0}', github.event.pull_request.number) || github.ref_name }}
 
 on:
   push:
