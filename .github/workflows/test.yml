@@ -4,12 +4,12 @@ run-name: Test ${{ github.event.pull_request && format('PR {0}', github.event.pu
 on:
   push:
     branches:
-      - "main"
-      - "release/**/*"
+      - main
+      - release/**/*
   pull_request:
-    types: [ opened, synchronize ]
+    types: [opened, synchronize]
   merge_group:
-    types: [ checks_requested ]
+    types: [checks_requested]
   workflow_dispatch:
 
 env:
@@ -148,6 +148,6 @@ jobs:
           echo "> Uploading code coverage report failed. Please check the \"Notify Codecov\" step for more details." >> "$GITHUB_STEP_SUMMARY"
 
           if [ -n "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Coverage Notification" step of [Test (Sharded)]('$_GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Coverage Notification" step of [Test]('$_GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
           fi
