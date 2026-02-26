@@ -15,36 +15,6 @@ env:
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
 jobs:
-  static-analysis:
-    name: Static Analysis
-    runs-on: ubuntu-24.04
-    permissions:
-      packages: read
-
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
-      - name: Run static analysis
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          bundle exec fastlane checkLint
-
-      - name: Upload lint reports
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always()
-        with:
-          name: lint-reports
-          path: |
-            app/build/reports/lint-results-*.html
-            app/build/reports/detekt/
-
   test-sharded:
     name: "Test ${{ matrix.group }}"
     runs-on: ubuntu-24.04
@@ -54,6 +24,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - group: static-analysis
+            fastlane_method: checkLint
+            fastlane_options: ""
           # App shards
           - group: app-data
             fastlane_method: testAppShard
@@ -95,14 +68,14 @@ jobs:
           bundle exec fastlane ${{ matrix.fastlane_method }} ${{ matrix.fastlane_options }}
 
       - name: Generate coverage report
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bundle exec fastlane generateCoverageReport
 
       - name: Upload to codecov.io
-        if: always() && (github.event_name == 'push' || github.event_name == 'pull_request')
+        if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         continue-on-error: true
         with:
@@ -117,7 +90,10 @@ jobs:
         if: always()
         with:
           name: test-reports-${{ matrix.group }}
-          path: "**/build/reports/tests/"
+          path: |
+            **/build/reports/tests/
+            app/build/reports/lint-results-*.html
+            app/build/reports/detekt/
           if-no-files-found: warn
 
   coverage-notify:
