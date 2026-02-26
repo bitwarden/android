@@ -30,27 +30,27 @@ jobs:
           # App shards
           - group: app-data
             fastlane_method: testAppShard
-            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.data.*\"'"
+            fastlane_options: "--tests com.x8bit.bitwarden.data.*"
           - group: app-ui-auth-tools
             fastlane_method: testAppShard
-            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.auth.*\" --tests \"com.x8bit.bitwarden.ui.tools.*\" --tests \"com.x8bit.bitwarden.ui.autofill.*\" --tests \"com.x8bit.bitwarden.ui.credentials.*\" --tests \"com.x8bit.bitwarden.MainViewModelTest\" --tests \"com.x8bit.bitwarden.CredentialProviderViewModelTest\" --tests \"com.x8bit.bitwarden.AuthCallbackViewModelTest\" --tests \"com.x8bit.bitwarden.AutofillCallbackViewModelTest\"'"
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.auth.* --tests com.x8bit.bitwarden.ui.tools.* --tests com.x8bit.bitwarden.ui.autofill.* --tests com.x8bit.bitwarden.ui.credentials.* --tests com.x8bit.bitwarden.MainViewModelTest --tests com.x8bit.bitwarden.CredentialProviderViewModelTest --tests com.x8bit.bitwarden.AuthCallbackViewModelTest --tests com.x8bit.bitwarden.AutofillCallbackViewModelTest"
           - group: app-ui-platform
             fastlane_method: testAppShard
-            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.platform.*\"'"
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.platform.*"
           - group: app-ui-vault
             fastlane_method: testAppShard
-            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.vault.*\"'"
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.vault.*"
           # Authenticator
           - group: authenticator
             fastlane_method: testLibraries
-            fastlane_options: "modules:':authenticator'"
+            fastlane_options: ":authenticator"
           # Library shards
           - group: lib-core-network-bridge
             fastlane_method: testLibraries
-            fastlane_options: "modules:':core :network :cxf :authenticatorbridge :testharness'"
+            fastlane_options: ":core :network :cxf :authenticatorbridge :testharness"
           - group: lib-data-ui
             fastlane_method: testLibraries
-            fastlane_options: "modules:':data :ui'"
+            fastlane_options: ":data :ui"
 
     steps:
       - name: Check out repo
@@ -64,8 +64,15 @@ jobs:
       - name: Run tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _GROUP: ${{ matrix.group }}
+          _FASTLANE_METHOD: ${{ matrix.fastlane_method }}
+          _FASTLANE_OPTIONS: ${{ matrix.fastlane_options }}
         run: |
-          bundle exec fastlane ${{ matrix.fastlane_method }} ${{ matrix.fastlane_options }}
+          if [ "$_GROUP" = "static-analysis" ]; then
+            bundle exec fastlane "$_FASTLANE_METHOD"
+          else
+            bundle exec fastlane "$_FASTLANE_METHOD" target:"$_FASTLANE_OPTIONS"
+          fi
 
       - name: Generate coverage report
         if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')

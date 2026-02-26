@@ -137,13 +137,13 @@ platform :android do
   lane :testAppShard do |options|
     gradle(
       task: ":app:testStandardDebugUnitTest",
-      flags: options[:testFilter],
+      flags: options[:target],
     )
   end
 
   desc "Run library module tests for specified modules"
   lane :testLibraries do |options|
-    tasks = options[:modules].split(" ").map { |mod| "#{mod}:testDebugUnitTest" }
+    tasks = options[:target].split(" ").map { |mod| "#{mod}:testDebugUnitTest" }
     gradle(tasks: tasks)
   end
 
