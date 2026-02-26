@@ -1,5 +1,6 @@
 ---
 name: build-test-verify
+version: 0.1.0
 description: Build, test, lint, and deploy commands for the Bitwarden Android project. Use when running tests, building APKs/AABs, running lint/detekt, deploying, using fastlane, or discovering codebase structure. Triggered by "run tests", "build", "gradle", "lint", "detekt", "deploy", "fastlane", "assemble", "verify", "coverage".
 ---
 

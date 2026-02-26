@@ -1,6 +1,6 @@
 ---
 name: implementing-android-code
-version: 0.1.1
+version: 0.1.2
 description: This skill should be used when implementing Android code in Bitwarden. Covers critical patterns, gotchas, and anti-patterns unique to this codebase. Triggered by "How do I implement a ViewModel?", "Create a new screen", "Add navigation", "Write a repository", "BaseViewModel pattern", "State-Action-Event", "type-safe navigation", "@Serializable route", "SavedStateHandle persistence", "process death recovery", "handleAction", "sendAction", "Hilt module", "Repository pattern", "implementing a screen", "adding a data source", "handling navigation", "encrypted storage", "security patterns", "Clock injection", "DataState", or any questions about implementing features, screens, ViewModels, data sources, or navigation in the Bitwarden Android app.
 ---
 
@@ -97,7 +97,11 @@ fun SavedStateHandle.toExampleArgs(): ExampleArgs {
     return ExampleArgs(userId = route.userId, isEditMode = route.isEditMode)
 }
 
-fun NavController.navigateToExample(userId: String, isEditMode: Boolean = false, navOptions: NavOptions? = null) {
+fun NavController.navigateToExample(
+    userId: String,
+    isEditMode: Boolean = false,
+    navOptions: NavOptions? = null
+) {
     this.navigate(route = ExampleRoute(userId, isEditMode), navOptions = navOptions)
 }
 
@@ -471,7 +475,7 @@ val FIXED_CLOCK = Clock.fixed(
 
 ## Quick Reference
 
-For build, test, and codebase discovery commands, see the **Codebase Discovery**, **Testing**, and **Deployment** sections in `CLAUDE.md`.
+For build, test, and codebase discovery commands, use the **`build-test-verify`** skill.
 
 **File Reference Format:**
 When pointing to specific code, use: `file_path:line_number`
