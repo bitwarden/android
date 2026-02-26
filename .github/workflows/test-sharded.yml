@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "rc"
-      - "hotfix-rc"
+      - "release/**/*"
   pull_request:
     types: [ opened, synchronize ]
   merge_group:
@@ -13,7 +12,6 @@ on:
   workflow_dispatch:
 
 env:
-  _JAVA_VERSION: 21
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
 jobs:
@@ -29,43 +27,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Run static analysis
         env:
@@ -93,12 +56,8 @@ jobs:
         include:
           - shard_name: data
             test_filter: '--tests "com.x8bit.bitwarden.data.*"'
-          # NOTE: Root-level tests (e.g., MainViewModelTest) must be explicitly
-          # listed here since they don't match any package glob pattern.
-          # If a new test is added to `com.x8bit.bitwarden` (not a sub-package),
-          # it must be added to this shard's test_filter.
           - shard_name: ui-auth-tools
-            test_filter: '--tests "com.x8bit.bitwarden.ui.auth.*" --tests "com.x8bit.bitwarden.ui.tools.*" --tests "com.x8bit.bitwarden.ui.autofill.*" --tests "com.x8bit.bitwarden.ui.credentials.*" --tests "com.x8bit.bitwarden.MainViewModelTest" --tests "com.x8bit.bitwarden.CredentialProviderViewModelTest" --tests "com.x8bit.bitwarden.AutofillCallbackViewModelTest" --tests "com.x8bit.bitwarden.AuthCallbackViewModelTest"'
+            test_filter: '--tests "com.x8bit.bitwarden.ui.auth.*" --tests "com.x8bit.bitwarden.ui.tools.*" --tests "com.x8bit.bitwarden.ui.autofill.*" --tests "com.x8bit.bitwarden.ui.credentials.*" --tests "com.x8bit.bitwarden.*Test"'
           - shard_name: ui-platform
             test_filter: '--tests "com.x8bit.bitwarden.ui.platform.*"'
           - shard_name: ui-vault
@@ -110,43 +69,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Run app tests
         env:
@@ -192,43 +116,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Run authenticator tests
         env:
@@ -282,43 +171,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Run library tests
         env:
