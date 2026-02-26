@@ -61,7 +61,7 @@ jobs:
             fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.data.*\"'"
           - group: app-ui-auth-tools
             fastlane_method: testAppShard
-            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.auth.*\" --tests \"com.x8bit.bitwarden.ui.tools.*\" --tests \"com.x8bit.bitwarden.ui.autofill.*\" --tests \"com.x8bit.bitwarden.ui.credentials.*\" --tests \"com.x8bit.bitwarden.*Test\"'"
+            fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.auth.*\" --tests \"com.x8bit.bitwarden.ui.tools.*\" --tests \"com.x8bit.bitwarden.ui.autofill.*\" --tests \"com.x8bit.bitwarden.ui.credentials.*\" --tests \"com.x8bit.bitwarden.MainViewModelTest\" --tests \"com.x8bit.bitwarden.CredentialProviderViewModelTest\" --tests \"com.x8bit.bitwarden.AuthCallbackViewModelTest\" --tests \"com.x8bit.bitwarden.AutofillCallbackViewModelTest\"'"
           - group: app-ui-platform
             fastlane_method: testAppShard
             fastlane_options: "testFilter:'--tests \"com.x8bit.bitwarden.ui.platform.*\"'"
