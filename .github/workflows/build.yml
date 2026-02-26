@@ -31,7 +31,6 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  JAVA_VERSION: 21
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
   DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
   PUBLISH_TO_PLAY_STORE: ${{ inputs.publish-to-play-store || github.event_name == 'push' }}
@@ -67,43 +66,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Check
         run: bundle exec fastlane check
@@ -136,16 +100,6 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
 
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
@@ -199,33 +153,8 @@ jobs:
       - name: Log out from Azure
         uses: bitwarden/gh-actions/azure-logout@main
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env.JAVA_VERSION }}
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Update app CI Build info
         run: |
@@ -451,16 +380,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          bundler-cache: true
-
-      - name: Install Fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
         with:
@@ -499,33 +418,8 @@ jobs:
       - name: Log out from Azure
         uses: bitwarden/gh-actions/azure-logout@main
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
-      - name: Cache Gradle files
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-        with:
-          path: |
-            ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure JDK
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          distribution: "temurin"
-          java-version: ${{ env.JAVA_VERSION }}
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
 
       - name: Update app CI Build info
         run: |
