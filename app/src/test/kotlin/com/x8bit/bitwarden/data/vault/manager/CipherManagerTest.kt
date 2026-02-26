@@ -766,7 +766,12 @@ class CipherManagerTest {
                 ciphersService.archiveCipher(cipherId = cipherId)
             } returns ArchiveCipherResponseJson.Success(cipher = cipher).asSuccess()
             coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = cipher)
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.copy(
+                        collectionIds = cipherView.collectionIds,
+                    ),
+                )
             } just runs
 
             val result = cipherManager.archiveCipher(
@@ -847,7 +852,12 @@ class CipherManagerTest {
                 ciphersService.unarchiveCipher(cipherId = cipherId)
             } returns UnarchiveCipherResponseJson.Success(cipher = cipher).asSuccess()
             coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = cipher)
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.copy(
+                        collectionIds = cipherView.collectionIds,
+                    ),
+                )
             } just runs
 
             val result = cipherManager.unarchiveCipher(

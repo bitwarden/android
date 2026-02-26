@@ -182,7 +182,9 @@ class CipherManagerImpl(
                     is ArchiveCipherResponseJson.Success -> {
                         vaultDiskSource.saveCipher(
                             userId = userId,
-                            cipher = response.cipher,
+                            cipher = response.cipher.copy(
+                                collectionIds = cipherView.collectionIds,
+                            ),
                         )
                         settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
                             userId = userId,
@@ -215,7 +217,9 @@ class CipherManagerImpl(
                     is UnarchiveCipherResponseJson.Success -> {
                         vaultDiskSource.saveCipher(
                             userId = userId,
-                            cipher = response.cipher,
+                            cipher = response.cipher.copy(
+                                collectionIds = cipherView.collectionIds,
+                            ),
                         )
                         response.asSuccess()
                     }
