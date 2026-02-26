@@ -24,10 +24,8 @@ fun NavController.navigateToUnlock(
 /**
  * Add the unlock screen to the nav graph.
  */
-fun NavGraphBuilder.unlockDestination(
-    onUnlocked: () -> Unit,
-) {
+fun NavGraphBuilder.unlockDestination() {
     composable<UnlockRoute> {
-        UnlockScreen(onUnlocked = onUnlocked)
+        UnlockScreen()
     }
 }

@@ -19,6 +19,8 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.core.data.manager.UuidManager
@@ -43,6 +45,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PlatformManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideAppLockManager(
+        authDiskSource: AuthDiskSource,
+        dispatcherManager: DispatcherManager,
+    ): AppLockManager = AppLockManagerImpl(
+        authDiskSource = authDiskSource,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton
