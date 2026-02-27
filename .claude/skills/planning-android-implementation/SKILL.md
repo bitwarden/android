@@ -163,7 +163,7 @@ For each phase:
 
 ### Phase Guidelines
 
-- Each phase should take no more than 1-2 hours of focused work
+- Each phase should be small enough to be independently testable and committable
 - Tests are written within the same phase as the code they verify (not deferred to a "testing phase")
 - UI phases come after their data dependencies are in place
 - If a phase has more than 5 tasks, consider splitting it
