@@ -275,7 +275,7 @@ fun VaultItemScreen(
     }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,

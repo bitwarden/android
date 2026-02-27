@@ -294,8 +294,7 @@ private fun CipherView.toIconData(
     }
 }
 
-private fun isImageFile(fileName: String?): Boolean {
-    if (fileName == null) return false
+private fun isImageFile(fileName: String): Boolean {
     val lowercasedFileName = fileName.lowercase(Locale.getDefault())
     return lowercasedFileName.endsWith(".png") ||
         lowercasedFileName.endsWith(".jpg") ||
