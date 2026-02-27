@@ -8,10 +8,12 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.manager.model.DownloadResult
+import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
+import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.service.CiphersService
@@ -168,33 +170,29 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): ArchiveCipherResult {
         val userId = activeUserId ?: return ArchiveCipherResult.Error(NoActiveUserException())
-        return cipherView
-            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
-            .flatMap { encryptionContext ->
-                ciphersService
-                    .archiveCipher(cipherId = cipherId)
-                    .flatMap {
-                        vaultSdkSource.decryptCipher(
-                            userId = userId,
-                            cipher = encryptionContext.cipher,
-                        )
+        return ciphersService
+            .archiveCipher(cipherId = cipherId)
+            .flatMap { response ->
+                when (response) {
+                    is ArchiveCipherResponseJson.Invalid -> {
+                        IllegalStateException(response.firstValidationErrorMessage)
+                            .asFailure()
                     }
-            }
-            .flatMap {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = it.copy(archivedDate = clock.instant()),
-                )
-            }
-            .onSuccess {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = it.toEncryptedNetworkCipherResponse(),
-                )
-                settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
-                    userId = userId,
-                    isDismissed = true,
-                )
+
+                    is ArchiveCipherResponseJson.Success -> {
+                        vaultDiskSource.saveCipher(
+                            userId = userId,
+                            cipher = response.cipher.copy(
+                                collectionIds = cipherView.collectionIds,
+                            ),
+                        )
+                        settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                            userId = userId,
+                            isDismissed = true,
+                        )
+                        response.asSuccess()
+                    }
+                }
             }
             .fold(
                 onSuccess = { ArchiveCipherResult.Success },
@@ -207,29 +205,25 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): UnarchiveCipherResult {
         val userId = activeUserId ?: return UnarchiveCipherResult.Error(NoActiveUserException())
-        return cipherView
-            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
-            .flatMap { encryptionContext ->
-                ciphersService
-                    .unarchiveCipher(cipherId = cipherId)
-                    .flatMap {
-                        vaultSdkSource.decryptCipher(
-                            userId = userId,
-                            cipher = encryptionContext.cipher,
-                        )
+        return ciphersService
+            .unarchiveCipher(cipherId = cipherId)
+            .flatMap { response ->
+                when (response) {
+                    is UnarchiveCipherResponseJson.Invalid -> {
+                        IllegalStateException(response.firstValidationErrorMessage)
+                            .asFailure()
                     }
-            }
-            .flatMap {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = it.copy(archivedDate = null),
-                )
-            }
-            .onSuccess {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = it.toEncryptedNetworkCipherResponse(),
-                )
+
+                    is UnarchiveCipherResponseJson.Success -> {
+                        vaultDiskSource.saveCipher(
+                            userId = userId,
+                            cipher = response.cipher.copy(
+                                collectionIds = cipherView.collectionIds,
+                            ),
+                        )
+                        response.asSuccess()
+                    }
+                }
             }
             .fold(
                 onSuccess = { UnarchiveCipherResult.Success },
@@ -255,6 +249,9 @@ class CipherManagerImpl(
     ): DeleteCipherResult {
         val userId = activeUserId
             ?: return DeleteCipherResult.Error(error = NoActiveUserException())
+        // Unlike archive/unarchive, soft delete requires edit permissions, so the
+        // migration check is intentional here to ensure the cipher is up-to-date
+        // before deletion.
         return cipherView
             .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
             .flatMap { encryptionContext ->
