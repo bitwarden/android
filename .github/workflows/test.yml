@@ -33,7 +33,7 @@ jobs:
             fastlane_options: "--tests com.x8bit.bitwarden.data.*"
           - group: app-ui-auth-tools
             fastlane_method: testAppShard
-            fastlane_options: "--tests com.x8bit.bitwarden.ui.auth.* --tests com.x8bit.bitwarden.ui.tools.* --tests com.x8bit.bitwarden.ui.autofill.* --tests com.x8bit.bitwarden.ui.credentials.* --tests com.x8bit.bitwarden.MainViewModelTest --tests com.x8bit.bitwarden.CredentialProviderViewModelTest --tests com.x8bit.bitwarden.AuthCallbackViewModelTest --tests com.x8bit.bitwarden.AutofillCallbackViewModelTest"
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.auth.* --tests com.x8bit.bitwarden.ui.tools.* --tests com.x8bit.bitwarden.ui.autofill.* --tests com.x8bit.bitwarden.ui.credentials.*"
           - group: app-ui-platform
             fastlane_method: testAppShard
             fastlane_options: "--tests com.x8bit.bitwarden.ui.platform.*"
@@ -68,6 +68,12 @@ jobs:
           _FASTLANE_METHOD: ${{ matrix.fastlane_method }}
           _FASTLANE_OPTIONS: ${{ matrix.fastlane_options }}
         run: |
+          if [ "$_GROUP" = "app-ui-auth-tools" ]; then
+            _TOP_LEVEL_TESTS=$(basename -a -s .kt app/src/test/kotlin/com/x8bit/bitwarden/*Test.kt \
+              | xargs -I{} printf ' --tests com.x8bit.bitwarden.{}')
+            _FASTLANE_OPTIONS="${_FASTLANE_OPTIONS} ${_TOP_LEVEL_TESTS}"
+          fi
+
           if [ "$_GROUP" = "static-analysis" ]; then
             bundle exec fastlane "$_FASTLANE_METHOD"
           else
