@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.data.manager.appstate
 
 import android.app.Activity
 import android.app.Application
@@ -6,9 +6,8 @@ import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.x8bit.bitwarden.data.autofill.util.createdForAutofill
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +16,7 @@ import timber.log.Timber
 /**
  * Primary implementation of [AppStateManager].
  */
-class AppStateManagerImpl(
+internal class AppStateManagerImpl(
     application: Application,
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
 ) : AppStateManager {
@@ -54,9 +53,7 @@ class AppStateManagerImpl(
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             activityCount++
             // Always be in a created state if we have an activity
-            mutableAppCreationStateFlow.value = AppCreationState.Created(
-                isAutoFill = activity.createdForAutofill,
-            )
+            mutableAppCreationStateFlow.value = AppCreationState.Created(intent = activity.intent)
         }
 
         override fun onActivityDestroyed(activity: Activity) {

@@ -1,5 +1,6 @@
 package com.bitwarden.data.manager.di
 
+import android.app.Application
 import android.content.Context
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -8,6 +9,8 @@ import com.bitwarden.data.manager.BitwardenPackageManager
 import com.bitwarden.data.manager.BitwardenPackageManagerImpl
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.manager.NativeLibraryManagerImpl
+import com.bitwarden.data.manager.appstate.AppStateManager
+import com.bitwarden.data.manager.appstate.AppStateManagerImpl
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.manager.file.FileManagerImpl
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
@@ -29,6 +32,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideAppStateManager(
+        application: Application,
+    ): AppStateManager = AppStateManagerImpl(application = application)
 
     @Provides
     @Singleton

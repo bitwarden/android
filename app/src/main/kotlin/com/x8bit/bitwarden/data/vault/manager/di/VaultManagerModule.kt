@@ -4,6 +4,7 @@ import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager

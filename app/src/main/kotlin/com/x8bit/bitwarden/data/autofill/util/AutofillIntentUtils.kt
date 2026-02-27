@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.data.autofill.util
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
 import android.content.Context
@@ -151,10 +150,10 @@ fun Intent.getAutofillCallbackIntentOrNull(): AutofillCallbackData? =
         ?.getSafeParcelableExtra(AUTOFILL_CALLBACK_DATA_KEY)
 
 /**
- * Checks if the given [Activity] was created for Autofill. This is useful to avoid locking the
+ * Checks if the given [Intent] was created for Autofill. This is useful to avoid locking the
  * vault if one of the Autofill services starts the only instance of the [MainActivity].
  */
-val Activity.createdForAutofill: Boolean
-    get() = intent.getAutofillSelectionDataOrNull() != null ||
-        intent.getAutofillSaveItemOrNull() != null ||
-        intent.getAutofillAssistStructureOrNull() != null
+val Intent.createdForAutofill: Boolean
+    get() = getAutofillSelectionDataOrNull() != null ||
+        getAutofillSaveItemOrNull() != null ||
+        getAutofillAssistStructureOrNull() != null

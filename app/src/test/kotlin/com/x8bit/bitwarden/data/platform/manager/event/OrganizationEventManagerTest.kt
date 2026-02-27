@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.event
 
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.FakeLifecycleOwner
 import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.OrganizationEventJson
@@ -13,7 +14,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.coEvery

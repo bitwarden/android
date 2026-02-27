@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.model
+package com.bitwarden.data.manager.appstate.model
 
 /**
  * Represents the foreground state of the app.

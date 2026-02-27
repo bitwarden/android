@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
