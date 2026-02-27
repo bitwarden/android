@@ -1,5 +1,6 @@
 ---
 name: committing-android-changes
+version: 0.1.0
 description: Git commit conventions and workflow for Bitwarden Android. Use when committing code, writing commit messages, or preparing changes for commit. Triggered by "commit", "git commit", "commit message", "prepare commit", "stage changes".
 ---
 

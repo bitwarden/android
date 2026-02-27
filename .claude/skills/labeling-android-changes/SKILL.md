@@ -30,6 +30,8 @@ The type keyword appears after the Jira ticket prefix:
 | `ci` / `build` | `t:ci` | CI/CD and build system changes |
 | `deps` | `t:deps` | Dependency updates |
 | `llm` | `t:llm` | LLM/Claude configuration changes |
+| `breaking` | `t:breaking-change` | Breaking changes requiring migration |
+| `misc` | `t:misc` | Changes that do not fit other categories |
 
 ## Selecting a Type
 

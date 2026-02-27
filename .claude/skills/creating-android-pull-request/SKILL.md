@@ -1,5 +1,6 @@
 ---
 name: creating-android-pull-request
+version: 0.1.0
 description: Pull request creation workflow for Bitwarden Android. Use when creating PRs, writing PR descriptions, or preparing branches for review. Triggered by "create PR", "pull request", "open PR", "gh pr create", "PR description".
 ---
 
