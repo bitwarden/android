@@ -37,4 +37,4 @@ The type keyword appears after the Jira ticket prefix:
 
 Infer the type from the task description and changes made. **If the type cannot be confidently determined, ask the user.**
 
-The CI labeling script matches `<type>:` or `<type>(` in the lowercased PR title, so the keyword must be followed by a colon or parenthesis.
+The CI labeling script matches `<type>:` or `<type>(` in the lowercased PR title, so the keyword must be followed by a colon or parenthesis. CI also accepts additional aliases (e.g., `revert`, `bugfix`, `cleanup`). See `.github/label-pr.json` for the full mapping.

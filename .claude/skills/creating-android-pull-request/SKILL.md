@@ -39,7 +39,7 @@ Invoke the `labeling-android-changes` skill for the full type keyword table and 
 1. **All tests pass**: Run `./gradlew app:testStandardDebugUnitTest` (and other affected modules)
 2. **Lint clean**: Run `./gradlew detekt`
 3. **Self-review done**: Use `perform-android-preflight-checklist` skill
-4. **No unintended changes**: Check `git diff main...HEAD` for unexpected files
+4. **No unintended changes**: Check `git diff origin/main...HEAD` for unexpected files
 5. **Branch up to date**: Rebase on `main` if needed
 
 ---
