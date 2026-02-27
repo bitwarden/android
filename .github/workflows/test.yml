@@ -15,12 +15,42 @@ env:
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
 jobs:
-  test:
-    name: Test
+  test-sharded:
+    name: "Test ${{ matrix.group }}"
     runs-on: ubuntu-24.04
     permissions:
       packages: read
-      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: static-analysis
+            fastlane_method: checkLint
+            fastlane_options: ""
+          # App shards
+          - group: app-data
+            fastlane_method: testAppShard
+            fastlane_options: "--tests com.x8bit.bitwarden.data.*"
+          - group: app-ui-auth-tools
+            fastlane_method: testAppShard
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.auth.* --tests com.x8bit.bitwarden.ui.tools.* --tests com.x8bit.bitwarden.ui.autofill.* --tests com.x8bit.bitwarden.ui.credentials.*"
+          - group: app-ui-platform
+            fastlane_method: testAppShard
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.platform.*"
+          - group: app-ui-vault
+            fastlane_method: testAppShard
+            fastlane_options: "--tests com.x8bit.bitwarden.ui.vault.*"
+          # Authenticator
+          - group: authenticator
+            fastlane_method: testLibraries
+            fastlane_options: ":authenticator"
+          # Library shards
+          - group: lib-core-network-bridge
+            fastlane_method: testLibraries
+            fastlane_options: ":core :network :cxf :authenticatorbridge :testharness"
+          - group: lib-data-ui
+            fastlane_method: testLibraries
+            fastlane_options: ":data :ui"
 
     steps:
       - name: Check out repo
@@ -31,49 +61,98 @@ jobs:
       - name: Setup Android Build
         uses: ./.github/actions/setup-android-build
 
-      - name: Build and test
+      - name: Run tests
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _GROUP: ${{ matrix.group }}
+          _FASTLANE_METHOD: ${{ matrix.fastlane_method }}
+          _FASTLANE_OPTIONS: ${{ matrix.fastlane_options }}
         run: |
-          bundle exec fastlane check
+          if [ "$_GROUP" = "app-ui-auth-tools" ]; then
+            _TOP_LEVEL_TESTS=$(basename -a -s .kt app/src/test/kotlin/com/x8bit/bitwarden/*Test.kt \
+              | xargs -I{} printf ' --tests com.x8bit.bitwarden.{}')
+            _FASTLANE_OPTIONS="${_FASTLANE_OPTIONS} ${_TOP_LEVEL_TESTS}"
+          fi
+
+          if [ "$_GROUP" = "static-analysis" ]; then
+            bundle exec fastlane "$_FASTLANE_METHOD"
+          else
+            bundle exec fastlane "$_FASTLANE_METHOD" target:"$_FASTLANE_OPTIONS"
+          fi
+
+      - name: Generate coverage report
+        if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec fastlane generateCoverageReport
+
+      - name: Upload to codecov.io
+        if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        continue-on-error: true
+        with:
+          os: linux
+          files: build/reports/kover/reportMergedCoverage.xml
+          flags: ${{ matrix.group }}
+          fail_ci_if_error: true
+          disable_search: true
 
       - name: Upload test reports
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.group }}
           path: |
-            build/reports/kover/reportMergedCoverage.xml
-            app/build/reports/tests/
-            authenticator/build/reports/tests/
-            authenticatorbridge/build/reports/tests/
-            core/build/reports/tests/
-            data/build/reports/tests/
-            network/build/reports/tests/
-            ui/build/reports/tests/
+            **/build/reports/tests/
+            app/build/reports/lint-results-*.html
+            app/build/reports/detekt/
+          if-no-files-found: warn
 
-      - name: Upload to codecov.io
-        id: upload-to-codecov
+  coverage-notify:
+    name: Coverage Notification
+    runs-on: ubuntu-24.04
+    needs: test-sharded
+    if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'pull_request')
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Notify Codecov that all uploads are complete
+        id: codecov-notify
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
         continue-on-error: true
         with:
-          os: linux
-          files: build/reports/kover/reportMergedCoverage.xml
-          fail_ci_if_error: true
-          disable_search: true
+          run_command: send-notifications
 
-      - name: Comment PR if tests failed
-        if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
+      - name: Comment PR if coverage notification failed
+        if: steps.codecov-notify.outcome == 'failure'
         env:
           PR_NUMBER: ${{ github.event.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ACTOR: ${{ github.triggering_actor }}
         run: |
           echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
-          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> "$GITHUB_STEP_SUMMARY"
+          echo "> Uploading code coverage report failed. Please check the \"Notify Codecov\" step for more details." >> "$GITHUB_STEP_SUMMARY"
 
           if [ -n "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Coverage Notification" step of [Test]('$_GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
           fi
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    permissions: {}
+    needs: test-sharded
+    if: always()
+    steps:
+      - name: Ensure sharded tests passed
+        env:
+          TESTS_RESULT: ${{ needs.test-sharded.result }}
+        run: |
+          if [ "$TESTS_RESULT" != "success" ]; then
+            echo "❌ Tests failed"
+            exit 1
+          fi
+          echo "✅ All tests passed!"
