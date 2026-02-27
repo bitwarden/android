@@ -66,7 +66,6 @@ class CiphersServiceTest : BaseServiceTest() {
         unmockkStatic(Uri::class)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `archiveCipher with success response should return a Success with the correct cipher`() =
         runTest {
@@ -82,7 +81,6 @@ class CiphersServiceTest : BaseServiceTest() {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `archiveCipher with an invalid response should return an Invalid with the correct data`() =
         runTest {
@@ -101,7 +99,6 @@ class CiphersServiceTest : BaseServiceTest() {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unarchiveCipher with success response should return a Success with the correct cipher`() =
         runTest {
