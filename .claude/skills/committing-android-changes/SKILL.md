@@ -47,7 +47,7 @@ Update error handling in login flow
 
 ## Pre-Commit Checklist
 
-Before staging and committing:
+Run the `perform-android-preflight-checklist` skill for the full quality gate. At minimum, before staging and committing:
 
 1. **Run affected module tests** (use `build-test-verify` skill for correct commands)
 2. **Check lint**: `./gradlew detekt` on changed modules
@@ -70,5 +70,12 @@ Before staging and committing:
 ## Staging Best Practices
 
 - **Stage specific files** by name rather than `git add -A` or `git add .`
+- Put each file path on its own line for readability:
+  ```bash
+  git add \
+    path/to/first/File.kt \
+    path/to/second/File.kt \
+    path/to/third/File.kt
+  ```
 - Review each file being staged to avoid accidentally including sensitive data
 - Use `git status` (without `-uall` flag) to see the working tree state
