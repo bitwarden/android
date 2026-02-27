@@ -58,17 +58,23 @@ User Request (UI Action)
 
 ### Workflow Skills
 
-> **Quick start**: Use `/work-on-android <task>` to be guided through the full development lifecycle.
+> **Quick start**: Use `/plan-android-work <task>` to refine requirements and plan,
+> then `/work-on-android <task>` for implementation.
 
-These skills define the full development lifecycle. Use them in order:
+**Planning Phase:**
 
-1. `implementing-android-code` - Patterns, gotchas, and templates for writing code
-2. `testing-android-code` - Test patterns and templates for verifying code
-3. `build-test-verify` - Build, test, lint, and deploy commands
-4. `perform-android-preflight-checklist` - Quality gate before committing
-5. `committing-android-changes` - Commit message format and pre-commit workflow
-6. `reviewing-changes` - Code review checklists for MVVM/Compose patterns
-7. `creating-android-pull-request` - PR creation workflow and templates
+1. `refining-android-requirements` - Gap analysis and structured spec from any input source
+2. `planning-android-implementation` - Architecture design and phased task breakdown
+
+**Implementation Phase:**
+
+3. `implementing-android-code` - Patterns, gotchas, and templates for writing code
+4. `testing-android-code` - Test patterns and templates for verifying code
+5. `build-test-verify` - Build, test, lint, and deploy commands
+6. `perform-android-preflight-checklist` - Quality gate before committing
+7. `committing-android-changes` - Commit message format and pre-commit workflow
+8. `reviewing-changes` - Code review checklists for MVVM/Compose patterns
+9. `creating-android-pull-request` - PR creation workflow and templates
 
 ---
 
