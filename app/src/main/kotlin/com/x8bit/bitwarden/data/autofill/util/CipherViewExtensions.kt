@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.autofill.model.AutofillField
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.util.subtitle
 
@@ -42,6 +43,14 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
                     subtitle = subtitle.orEmpty(),
                     username = login.username.orEmpty(),
                     website = uri,
+                    customFields = this@toAutofillCipherProvider.fields.orEmpty().map { field ->
+                        AutofillField(
+                            name = field.name.orEmpty(),
+                            value = field.value.orEmpty(),
+                            type = field.type,
+                        )
+                    },
+                    isStrictMatch = login.uris?.any { it.uri == uri } == true,
                 ),
             )
         }

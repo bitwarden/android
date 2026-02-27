@@ -92,6 +92,7 @@ private fun AutofillView.buildListAutofillValueOrNull(
         is AutofillView.Card.SecurityCode,
         is AutofillView.Login.Password,
         is AutofillView.Login.Username,
+        is AutofillView.Login.Custom,
         is AutofillView.Unused,
             -> {
             this
