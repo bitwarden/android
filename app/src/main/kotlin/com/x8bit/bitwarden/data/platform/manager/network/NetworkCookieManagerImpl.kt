@@ -2,11 +2,15 @@ package com.x8bit.bitwarden.data.platform.manager.network
 
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.model.NetworkCookie
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.util.toNetworkCookieList
+import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import timber.log.Timber
 
 private const val BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR = "ssoCookieVendor"
@@ -18,6 +22,7 @@ class NetworkCookieManagerImpl(
     private val configDiskSource: ConfigDiskSource,
     private val cookieDiskSource: CookieDiskSource,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    private val resourceCacheManager: ResourceCacheManager,
 ) : NetworkCookieManager {
 
     /**
@@ -77,7 +82,12 @@ class NetworkCookieManagerImpl(
     }
 
     override fun storeCookies(hostname: String, cookies: Map<String, String>) {
-        val resolvedHostname = cookieDomain ?: hostname
+        val resolvedHostname = cookieDomain
+            ?: hostname
+                .prefixHttpsIfNecessary()
+                .toUriOrNull()
+                ?.parseDomainOrNull(resourceCacheManager)
+            ?: hostname
         Timber.d(
             "storeCookies($hostname): storing ${cookies.size} cookies under $resolvedHostname",
         )

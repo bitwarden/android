@@ -447,9 +447,11 @@ object PlatformManagerModule {
         configDiskSource: ConfigDiskSource,
         cookieDiskSource: CookieDiskSource,
         cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+        resourceCacheManager: ResourceCacheManager,
     ): NetworkCookieManager = NetworkCookieManagerImpl(
         configDiskSource = configDiskSource,
         cookieDiskSource = cookieDiskSource,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+        resourceCacheManager = resourceCacheManager,
     )
 }

@@ -7,6 +7,7 @@ import com.bitwarden.network.model.NetworkCookie
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import io.mockk.every
 import io.mockk.just
@@ -26,11 +27,17 @@ class NetworkCookieManagerTest {
         mockk {
             every { setPendingCookieAcquisition(any()) } just runs
         }
+    private val mockResourceCacheManager: ResourceCacheManager = mockk {
+        every { domainExceptionSuffixes } returns emptyList()
+        every { domainNormalSuffixes } returns listOf("com")
+        every { domainWildCardSuffixes } returns emptyList()
+    }
 
     private val manager = NetworkCookieManagerImpl(
         configDiskSource = fakeConfigDiskSource,
         cookieDiskSource = mockCookieDiskSource,
         cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
+        resourceCacheManager = mockResourceCacheManager,
     )
 
     @Test
@@ -211,8 +218,35 @@ class NetworkCookieManagerTest {
     }
 
     @Test
-    fun `storeCookies should store under hostname when cookieDomain is null`() {
+    fun `storeCookies should store under parsed base domain when cookieDomain is null`() {
         fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
+        every { mockCookieDiskSource.storeCookieConfig(any(), any()) } just runs
+
+        manager.storeCookies(
+            hostname = SUBDOMAIN_HOSTNAME,
+            cookies = mapOf("awselb" to "session123"),
+        )
+
+        verify {
+            mockCookieDiskSource.storeCookieConfig(
+                hostname = COOKIE_DOMAIN,
+                config = CookieConfigurationData(
+                    hostname = COOKIE_DOMAIN,
+                    cookies = listOf(
+                        CookieConfigurationData.Cookie(
+                            name = "awselb",
+                            value = "session123",
+                        ),
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `storeCookies should store under hostname when cookieDomain is null and parsing fails`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(bootstrapType = BOOTSTRAP_TYPE_SSO)
+        every { mockResourceCacheManager.domainNormalSuffixes } returns emptyList()
         every { mockCookieDiskSource.storeCookieConfig(any(), any()) } just runs
 
         manager.storeCookies(
@@ -225,6 +259,35 @@ class NetworkCookieManagerTest {
                 hostname = HOSTNAME,
                 config = CookieConfigurationData(
                     hostname = HOSTNAME,
+                    cookies = listOf(
+                        CookieConfigurationData.Cookie(
+                            name = "awselb",
+                            value = "session123",
+                        ),
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `storeCookies should prefer cookieDomain over parsed base domain`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.storeCookieConfig(any(), any()) } just runs
+
+        manager.storeCookies(
+            hostname = SUBDOMAIN_HOSTNAME,
+            cookies = mapOf("awselb" to "session123"),
+        )
+
+        verify {
+            mockCookieDiskSource.storeCookieConfig(
+                hostname = COOKIE_DOMAIN,
+                config = CookieConfigurationData(
+                    hostname = COOKIE_DOMAIN,
                     cookies = listOf(
                         CookieConfigurationData.Cookie(
                             name = "awselb",
