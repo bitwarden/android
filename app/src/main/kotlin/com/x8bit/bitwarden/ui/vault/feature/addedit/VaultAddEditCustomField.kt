@@ -34,6 +34,8 @@ import kotlinx.collections.immutable.toImmutableList
  * @param customField The field that is to be displayed.
  * @param onCustomFieldValueChange Invoked when the user changes the value.
  * @param onCustomFieldAction Invoked when the user chooses an action.
+ * @param showMoveUpAction Whether the [CustomFieldAction.MOVE_UP] is displayed in the action dialog.
+ * @param showMoveDownAction Whether the [CustomFieldAction.MOVE_DOWN] is displayed in the action dialog.
  * @param onHiddenVisibilityChanged Emits when the visibility of a hidden custom field changes.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier Modifier for the UI elements.
@@ -45,6 +47,8 @@ fun VaultAddEditCustomField(
     customField: VaultAddEditState.Custom,
     onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     onCustomFieldAction: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
+    showMoveUpAction: Boolean,
+    showMoveDownAction: Boolean,
     onHiddenVisibilityChanged: (Boolean) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
@@ -55,6 +59,13 @@ fun VaultAddEditCustomField(
 
     if (shouldShowChooserDialog) {
         CustomFieldActionDialog(
+            customFieldActions = CustomFieldAction.entries.filter { action ->
+                when (action) {
+                    CustomFieldAction.MOVE_UP -> showMoveUpAction
+                    CustomFieldAction.MOVE_DOWN -> showMoveDownAction
+                    else -> true
+                }
+            },
             onCustomFieldAction = { action ->
                 shouldShowChooserDialog = false
                 onCustomFieldAction(action, customField)
@@ -281,6 +292,7 @@ private fun CustomFieldLinkedField(
  */
 @Composable
 private fun CustomFieldActionDialog(
+    customFieldActions: List<CustomFieldAction> = CustomFieldAction.entries,
     onCustomFieldAction: (CustomFieldAction) -> Unit,
     onEditAction: () -> Unit,
     onDismissRequest: () -> Unit,
@@ -289,20 +301,18 @@ private fun CustomFieldActionDialog(
         title = stringResource(id = BitwardenString.options),
         onDismissRequest = onDismissRequest,
     ) {
-        CustomFieldAction
-            .entries
-            .forEach { action ->
-                BitwardenBasicDialogRow(
-                    text = action.actionText.invoke(),
-                    onClick = {
-                        if (action == CustomFieldAction.EDIT) {
-                            onEditAction()
-                        } else {
-                            onCustomFieldAction(action)
-                        }
-                    },
-                )
-            }
+        customFieldActions.forEach { action ->
+            BitwardenBasicDialogRow(
+                text = action.actionText.invoke(),
+                onClick = {
+                    if (action == CustomFieldAction.EDIT) {
+                        onEditAction()
+                    } else {
+                        onCustomFieldAction(action)
+                    }
+                },
+            )
+        }
     }
 }
 
