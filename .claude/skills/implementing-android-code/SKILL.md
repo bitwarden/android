@@ -33,7 +33,7 @@ class ExampleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: ExampleRepository,
 ) : BaseViewModel<ExampleState, ExampleEvent, ExampleAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: ExampleState()
+    initialState = savedStateHandle[KEY_STATE] ?: ExampleState(),
 ) {
     init {
         stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
@@ -100,7 +100,7 @@ fun SavedStateHandle.toExampleArgs(): ExampleArgs {
 fun NavController.navigateToExample(
     userId: String,
     isEditMode: Boolean = false,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     this.navigate(route = ExampleRoute(userId, isEditMode), navOptions = navOptions)
 }
@@ -425,7 +425,7 @@ fun State.getTimestamp(clock: Clock): Instant =
 // Test with fixed clock
 val FIXED_CLOCK = Clock.fixed(
     Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC
+    ZoneOffset.UTC,
 )
 ```
 
