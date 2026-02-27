@@ -109,9 +109,42 @@ Key types used throughout the codebase:
 
 ---
 
+## Code Style & Standards
+
+- **Formatter**: Android Studio with `bitwarden-style.xml` | **Line Limit**: 100 chars | **Detekt**: Enabled
+- **Naming**: `camelCase` (vars/fns), `PascalCase` (classes), `SCREAMING_SNAKE_CASE` (constants), `...Impl` (implementations)
+- **KDoc**: Required for all public APIs
+- **String Resources**: Add new strings to `:ui` module (`ui/src/main/res/values/strings.xml`). Use typographic quotes/apostrophes (`"` `"` `'`) not escaped ASCII (`\"` `\'`)
+
+> For complete style rules (imports, formatting, documentation, Compose conventions), see `docs/STYLE_AND_BEST_PRACTICES.md`.
+
+---
+
+## Anti-Patterns
+
+In addition to the Key Principles above, follow these rules:
+
+### DO
+- Use `remember(viewModel)` for lambdas passed to composables
+- Map async results to internal actions before updating state
+- Inject `Clock` for time-dependent operations
+- Return early to reduce nesting
+
+### DON'T
+- Update state directly inside coroutines (use internal actions)
+- Use `any` types or suppress null safety
+- Catch generic `Exception` (catch specific types)
+- Use `e.printStackTrace()` (use Timber logging)
+- Create new patterns when established ones exist
+- Skip KDoc for public APIs
+
+---
+
 ## Quick Reference
 
-- **Code style**: Use `core-conventions` skill | Full rules: `docs/STYLE_AND_BEST_PRACTICES.md`
+- **Code style**: Full rules: `docs/STYLE_AND_BEST_PRACTICES.md`
 - **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
+- **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
+- **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)
