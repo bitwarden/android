@@ -100,7 +100,8 @@ file locations, and phase ordering.
 **Save the document:**
 - With ticket: `.claude/outputs/plans/PM-XXXXX-FEATURE-NAME-PLAN.md`
 - Without ticket: `.claude/outputs/plans/FEATURE-NAME-PLAN.md`
-- Feature name should be UPPER-KEBAB-CASE derived from the feature description
+- Feature name should be uppercase with hyphens (e.g., `BIOMETRIC-TIMEOUT-CONFIG-PLAN.md`)
+- Create the output directory if it does not exist
 
 **On completion**: Present the saved file path and remind the user they can execute the plan with `/work-on-android`.
 
