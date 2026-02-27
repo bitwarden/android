@@ -41,7 +41,6 @@ import javax.crypto.Cipher
 fun UnlockScreen(
     viewModel: UnlockViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
-    onUnlocked: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -54,7 +53,6 @@ fun UnlockScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            UnlockEvent.NavigateToItemListing -> onUnlocked()
             is UnlockEvent.PromptForBiometrics -> {
                 biometricsManager.promptBiometrics(
                     onSuccess = onBiometricsUnlockSuccess,

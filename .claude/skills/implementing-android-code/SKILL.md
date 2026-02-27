@@ -1,6 +1,6 @@
 ---
 name: implementing-android-code
-version: 0.1.0
+version: 0.1.1
 description: This skill should be used when implementing Android code in Bitwarden. Covers critical patterns, gotchas, and anti-patterns unique to this codebase. Triggered by "How do I implement a ViewModel?", "Create a new screen", "Add navigation", "Write a repository", "BaseViewModel pattern", "State-Action-Event", "type-safe navigation", "@Serializable route", "SavedStateHandle persistence", "process death recovery", "handleAction", "sendAction", "Hilt module", "Repository pattern", "implementing a screen", "adding a data source", "handling navigation", "encrypted storage", "security patterns", "Clock injection", "DataState", or any questions about implementing features, screens, ViewModels, data sources, or navigation in the Bitwarden Android app.
 ---
 
@@ -273,7 +273,7 @@ Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `
 
 New strings belong in the `:ui` module: `ui/src/main/res/values/strings.xml`
 
-- Use typographic apostrophes and quotes to avoid escape characters: `you'll` not `you\'ll`, `“word”` not `\"word\"`
+- Use typographic apostrophes and quotes to avoid escape characters: `you’ll` not `you\'ll`, `“word”` not `\"word\"`
 - Reference strings via generated `BitwardenString` resource IDs
 - Do not add strings to other modules unless explicitly instructed
 
@@ -288,8 +288,8 @@ New strings belong in the `:ui` module: `ui/src/main/res/values/strings.xml`
 **Pattern Summary:**
 ```kotlin
 class ExampleDiskSourceImpl(
-    encryptedSharedPreferences: SharedPreferences,
-    sharedPreferences: SharedPreferences,
+    @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+    @UnencryptedPreferences sharedPreferences: SharedPreferences,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
     sharedPreferences = sharedPreferences,
@@ -478,20 +478,3 @@ When pointing to specific code, use: `file_path:line_number`
 
 Example: `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt` (see `handleAction` method)
 
----
-
-## Summary
-
-This skill captures **Bitwarden-specific patterns** that distinguish this codebase:
-
-1. **State-Action-Event ViewModel pattern** - Synchronous state updates via `handleAction()`
-2. **Type-safe navigation** - No strings, `@Serializable` routes
-3. **No-throw error handling** - `Result<T>` and sealed classes
-4. **Interface/Impl separation** - Testability and DI safety
-5. **SavedStateHandle persistence** - Process death recovery
-6. **Security patterns** - Encrypted storage, Keystore, input validation
-7. **Clock injection** - Deterministic time handling via injected `Clock`
-
-For comprehensive details on architecture, module organization, and complete code style rules, always consult:
-- `docs/ARCHITECTURE.md`
-- `docs/STYLE_AND_BEST_PRACTICES.md`

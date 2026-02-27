@@ -201,12 +201,14 @@ class UnlockViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            expectNoEvents()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
 
             viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(mockCipher))
 
-            assertEquals(UnlockEvent.NavigateToItemListing, awaitItem())
+            assertEquals(DEFAULT_STATE.copy(dialog = UnlockState.Dialog.Loading), awaitItem())
+
+            assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
 
@@ -486,3 +488,10 @@ class UnlockViewModelTest : BaseViewModelTest() {
         authRepository = mockAuthRepository,
     )
 }
+
+private val DEFAULT_STATE = UnlockState(
+    isBiometricsEnabled = true,
+    isBiometricsValid = true,
+    showBiometricInvalidatedMessage = false,
+    dialog = null,
+)

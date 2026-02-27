@@ -56,6 +56,7 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
                 duo = mockk(),
                 sso = ssoLauncher,
                 webAuthn = mockk(),
+                cookie = mockk(),
             ),
             intentManager = intentManager,
         ) {

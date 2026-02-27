@@ -72,8 +72,9 @@ class CallingAppInfoExtensionsTest {
         assertNull(appInfo.getSignatureFingerprintAsHexString())
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `validatePrivilegedApp should return Success when privileged app is allowed`() {
+    fun `validatePrivilegedApp should return Success with raw origin when privileged app is allowed from non-verified source`() {
         val mockAppInfo = mockk<CallingAppInfo> {
             every { getOrigin(any()) } returns "origin"
             every { packageName } returns "com.x8bit.bitwarden"
@@ -83,6 +84,27 @@ class CallingAppInfoExtensionsTest {
             ValidateOriginResult.Success("origin"),
             mockAppInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
+                relyingPartyId = "relying_party_id",
+                isVerifiedSource = false,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validatePrivilegedApp should return Success with modified origin when privileged app is allowed from verified source`() {
+        val relyingPartyId = "relying_party_id"
+        val mockAppInfo = mockk<CallingAppInfo> {
+            every { getOrigin(any()) } returns "origin"
+            every { packageName } returns "com.x8bit.bitwarden"
+        }
+
+        assertEquals(
+            ValidateOriginResult.Success("https://$relyingPartyId"),
+            mockAppInfo.validatePrivilegedApp(
+                allowList = DEFAULT_ALLOW_LIST,
+                relyingPartyId = relyingPartyId,
+                isVerifiedSource = true,
             ),
         )
     }
@@ -99,6 +121,8 @@ class CallingAppInfoExtensionsTest {
             ValidateOriginResult.Error.PasskeyNotSupportedForApp,
             appInfo.validatePrivilegedApp(
                 allowList = INVALID_ALLOW_LIST,
+                relyingPartyId = "relying_party_id",
+                isVerifiedSource = false,
             ),
         )
     }
@@ -115,6 +139,8 @@ class CallingAppInfoExtensionsTest {
             ValidateOriginResult.Error.PrivilegedAppSignatureNotFound,
             appInfo.validatePrivilegedApp(
                 allowList = INVALID_ALLOW_LIST,
+                relyingPartyId = "relying_party_id",
+                isVerifiedSource = true,
             ),
         )
     }
@@ -131,6 +157,8 @@ class CallingAppInfoExtensionsTest {
             ValidateOriginResult.Error.PrivilegedAppNotAllowed,
             appInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
+                relyingPartyId = "relying_party_id",
+                isVerifiedSource = false,
             ),
         )
     }
@@ -144,7 +172,11 @@ class CallingAppInfoExtensionsTest {
 
         assertEquals(
             ValidateOriginResult.Error.PasskeyNotSupportedForApp,
-            appInfo.validatePrivilegedApp(DEFAULT_ALLOW_LIST),
+            appInfo.validatePrivilegedApp(
+                allowList = DEFAULT_ALLOW_LIST,
+                relyingPartyId = "relying_party_id",
+                isVerifiedSource = false,
+            ),
         )
     }
 
