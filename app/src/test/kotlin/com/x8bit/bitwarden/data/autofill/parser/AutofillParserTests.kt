@@ -211,7 +211,7 @@ class AutofillParserTests {
                 website = null,
             ),
         )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
         val autofillPartition = AutofillPartition.Login(
             views = listOf(
                 loginAutofillView.copy(data = loginAutofillView.data.copy(website = website)),
@@ -259,7 +259,7 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns null
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
+            every { this@mockk.toAutofillView() } returns null
             every { this@mockk.website } returns null
         }
         // `invalidChildViewNode` simulates the OS assigning a node's idPackage to "android", which
@@ -272,7 +272,7 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns ID_PACKAGE_ANDROID
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
+            every { this@mockk.toAutofillView() } returns null
             every { this@mockk.website } returns null
         }
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
@@ -293,7 +293,7 @@ class AutofillParserTests {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
             every { this@mockk.autofillId } returns parentAutofillId
             every { this@mockk.idPackage } returns null
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns parentAutofillView
+            every { this@mockk.toAutofillView() } returns parentAutofillView
             every { this@mockk.childCount } returns 2
             every { this@mockk.getChildAt(0) } returns childViewNode
             every { this@mockk.getChildAt(1) } returns invalidChildViewNode
@@ -379,8 +379,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -442,8 +442,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -498,7 +498,7 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedAutofillView
+        every { loginViewNode.toAutofillView() } returns unusedAutofillView
 
         // Test
         val actual = parser.parse(
@@ -601,13 +601,9 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { rootViewNode.toAutofillView(parentWebsite = any()) } returns null
-        every {
-            hiddenUserNameViewNode.toAutofillView(parentWebsite = any())
-        } returns unusedAutofillView
-        every {
-            passwordViewNode.toAutofillView(parentWebsite = any())
-        } returns loginPasswordAutofillView
+        every { rootViewNode.toAutofillView() } returns null
+        every { hiddenUserNameViewNode.toAutofillView() } returns unusedAutofillView
+        every { passwordViewNode.toAutofillView() } returns loginPasswordAutofillView
 
         // Test
         val actual = parser.parse(
@@ -669,8 +665,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -733,8 +729,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -797,8 +793,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -861,8 +857,8 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -917,8 +913,8 @@ class AutofillParserTests {
             "blockListedUri.com",
             "blockListedAgainUri.com",
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
         every { settingsRepository.blockedAutofillUris } returns remoteBlockList
 
         // A function for asserting that a block listed URI results in an unfillable request.
