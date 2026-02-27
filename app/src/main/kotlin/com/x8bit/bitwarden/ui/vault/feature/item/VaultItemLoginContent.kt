@@ -268,7 +268,7 @@ fun VaultItemLoginContent(
                         .onAttachmentDownloadClick,
                     onAttachmentPreviewClick = vaultCommonItemTypeHandlers
                         .onAttachmentPreviewClick,
-                    )
+                )
             }
         }
 

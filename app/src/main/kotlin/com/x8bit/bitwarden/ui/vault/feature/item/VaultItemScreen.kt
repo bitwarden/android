@@ -370,7 +370,7 @@ private fun VaultItemDialogs(
             AttachmentPreviewDialog(
                 attachmentFile = dialog.file,
                 onDismissRequest = onDismissRequest,
-                onLoaded = onPreviewLoaded
+                onLoaded = onPreviewLoaded,
             )
         }
 

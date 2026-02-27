@@ -405,7 +405,7 @@ class VaultItemViewModel @Inject constructor(
                     VaultItemAction.Internal.AttachmentDecryptReceive(
                         result = result,
                         fileName = action.attachment.title,
-                        isPreview = false
+                        isPreview = false,
                     ),
                 )
             }
@@ -431,7 +431,7 @@ class VaultItemViewModel @Inject constructor(
                     VaultItemAction.Internal.AttachmentDecryptReceive(
                         result = result,
                         fileName = action.attachment.title,
-                        isPreview = true
+                        isPreview = true,
                     ),
                 )
             }

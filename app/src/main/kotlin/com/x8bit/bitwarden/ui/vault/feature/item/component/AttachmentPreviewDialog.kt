@@ -1,17 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.component
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,27 +16,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
+private const val MAX_ZOOM_SCALE = 5f
+private const val MIN_ZOOM_SCALE = 1f
+private const val TARGET_BITMAP_SIZE = 2048
+
 /**
  * Displays a secure, temporary image attachment in a full-screen dialog with zoom and pan
- * capabilities. The dialog can be dismissed by clicking the close button or pressing the back button.
+ * capabilities. The dialog can be dismissed by clicking the close button or pressing the back
+ * button.
  *
  * @param attachmentFile The temporary [File] object representing the decrypted image.
  * @param onDismissRequest A lambda to be invoked when the dialog is dismissed.
@@ -62,74 +60,96 @@ fun AttachmentPreviewDialog(
             dismissOnBackPress = true,
         ),
     ) {
-        var scale by remember { mutableFloatStateOf(1f) }
+        var scale by remember { mutableFloatStateOf(MIN_ZOOM_SCALE) }
         var offset by remember { mutableStateOf(Offset.Zero) }
-        var painter by remember { mutableStateOf<Painter?>(null) }
-        var showContent by remember { mutableStateOf(false) }
+        var painter by remember { mutableStateOf<BitmapPainter?>(null) }
 
         LaunchedEffect(attachmentFile) {
-            val loadedPainter = withContext(Dispatchers.IO) {
+            val bitmap = withContext(Dispatchers.IO) {
                 try {
-                    val bitmap = BitmapFactory.decodeFile(attachmentFile.path)
-                    if (bitmap != null) {
-                        BitmapPainter(bitmap.asImageBitmap())
-                    } else {
-                        null
-                    }
+                    decodeDownsampledBitmap(
+                        file = attachmentFile,
+                        reqWidth = TARGET_BITMAP_SIZE,
+                        reqHeight = TARGET_BITMAP_SIZE,
+                    )
                 } finally {
                     onLoaded()
                 }
             }
 
-            if (loadedPainter != null) {
-                painter = loadedPainter
-                showContent = true
+            if (bitmap != null) {
+                painter = BitmapPainter(bitmap.asImageBitmap())
             } else {
                 // If the bitmap fails to load, dismiss the dialog.
                 onDismissRequest()
             }
         }
 
-        if (showContent && painter != null) {
+        painter?.let {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    painter = painter!!,
-                    contentDescription = stringResource(BitwardenString.preview),
-                    contentScale = ContentScale.Fit,
+                    painter = it,
+                    contentDescription = stringResource(id = BitwardenString.preview),
                     modifier = Modifier
                         .fillMaxSize()
                         .pointerInput(Unit) {
                             detectTransformGestures { _, pan, zoom, _ ->
-                                scale = (scale * zoom).coerceIn(1f, 5f)
-                                offset = if (scale > 1f) offset + pan else Offset.Zero
+                                scale = (scale * zoom).coerceIn(MIN_ZOOM_SCALE, MAX_ZOOM_SCALE)
+                                offset = if (scale > MIN_ZOOM_SCALE) offset + pan else Offset.Zero
                             }
                         }
                         .graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
                             translationX = offset.x,
-                            translationY = offset.y
-                        )
+                            translationY = offset.y,
+                        ),
                 )
 
-                IconButton(
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_close,
+                    contentDescription = stringResource(id = BitwardenString.close),
                     onClick = onDismissRequest,
                     modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.5f))
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(BitwardenString.close),
-                        tint = Color.White
-                    )
-                }
+                        .padding(top = 8.dp, end = 24.dp)
+                        .align(Alignment.TopEnd),
+                )
             }
         }
     }
+}
+
+private fun decodeDownsampledBitmap(file: File, reqWidth: Int, reqHeight: Int): Bitmap? {
+    val options = BitmapFactory.Options().apply {
+        inJustDecodeBounds = true
+    }
+    BitmapFactory.decodeFile(file.path, options)
+
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+    options.inJustDecodeBounds = false
+
+    return BitmapFactory.decodeFile(file.path, options)
+}
+
+private fun calculateInSampleSize(
+    options: BitmapFactory.Options,
+    reqWidth: Int,
+    reqHeight: Int,
+): Int {
+    val (height: Int, width: Int) = options.run { outHeight to outWidth }
+    var inSampleSize = 1
+
+    if (height > reqHeight || width > reqWidth) {
+        val halfHeight: Int = height / 2
+        val halfWidth: Int = width / 2
+
+        while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+            inSampleSize *= 2
+        }
+    }
+
+    return inSampleSize
 }

@@ -1,14 +1,18 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,71 +44,92 @@ fun AttachmentItemContent(
 ) {
     var shouldShowPremiumWarningDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowSizeWarningDialog by rememberSaveable { mutableStateOf(false) }
-    Row(
+    var onConfirmLargeFileAction by remember { mutableStateOf<() -> Unit>({}) }
+
+    Box(
+        contentAlignment = Alignment.CenterStart,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp, paddingEnd = 8.dp)
+            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
             .testTag("CipherAttachment"),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = attachmentItem.title,
-            color = BitwardenTheme.colorScheme.text.primary,
-            style = BitwardenTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .weight(1f)
-                .testTag("AttachmentNameLabel"),
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Text(
-            text = attachmentItem.displaySize,
-            color = BitwardenTheme.colorScheme.text.primary,
-            style = BitwardenTheme.typography.labelSmall,
-            modifier = Modifier
-                .testTag("AttachmentSizeLabel"),
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        if (attachmentItem.isPreviewable) {
-            BitwardenStandardIconButton(
-                vectorIconRes = BitwardenDrawable.ic_preview,
-                contentDescription = stringResource(id = BitwardenString.preview),
-                onClick = {
-                    if (!attachmentItem.isDownloadAllowed) {
-                        shouldShowPremiumWarningDialog = true
-                        return@BitwardenStandardIconButton
-                    }
-                    onAttachmentPreviewClick(attachmentItem)
-                },
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = attachmentItem.title,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                    .testTag("AttachmentPreviewButton"),
+                    .weight(1f)
+                    .testTag("AttachmentNameLabel"),
             )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = attachmentItem.displaySize,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.labelSmall,
+                    modifier = Modifier
+                        .testTag("AttachmentSizeLabel"),
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                if (attachmentItem.isPreviewable) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_preview,
+                        contentDescription = stringResource(id = BitwardenString.preview),
+                        onClick = {
+                            if (!attachmentItem.isDownloadAllowed) {
+                                shouldShowPremiumWarningDialog = true
+                                return@BitwardenStandardIconButton
+                            }
+
+                            if (attachmentItem.isLargeFile) {
+                                onConfirmLargeFileAction =
+                                    { onAttachmentPreviewClick(attachmentItem) }
+                                shouldShowSizeWarningDialog = true
+                                return@BitwardenStandardIconButton
+                            }
+
+                            onAttachmentPreviewClick(attachmentItem)
+                        },
+                        modifier = Modifier
+                            .testTag("AttachmentPreviewButton"),
+                    )
+                }
+
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_download,
+                    contentDescription = stringResource(id = BitwardenString.download),
+                    onClick = {
+                        if (!attachmentItem.isDownloadAllowed) {
+                            shouldShowPremiumWarningDialog = true
+                            return@BitwardenStandardIconButton
+                        }
+
+                        if (attachmentItem.isLargeFile) {
+                            onConfirmLargeFileAction = { onAttachmentDownloadClick(attachmentItem) }
+                            shouldShowSizeWarningDialog = true
+                            return@BitwardenStandardIconButton
+                        }
+
+                        onAttachmentDownloadClick(attachmentItem)
+                    },
+                    modifier = Modifier
+                        .testTag("AttachmentDownloadButton"),
+                )
+            }
         }
-
-        BitwardenStandardIconButton(
-            vectorIconRes = BitwardenDrawable.ic_download,
-            contentDescription = stringResource(id = BitwardenString.download),
-            onClick = {
-                if (!attachmentItem.isDownloadAllowed) {
-                    shouldShowPremiumWarningDialog = true
-                    return@BitwardenStandardIconButton
-                }
-
-                if (attachmentItem.isLargeFile) {
-                    shouldShowSizeWarningDialog = true
-                    return@BitwardenStandardIconButton
-                }
-
-                onAttachmentDownloadClick(attachmentItem)
-            },
-            modifier = Modifier
-                .testTag("AttachmentDownloadButton"),
-        )
     }
 
     if (shouldShowPremiumWarningDialog) {
@@ -140,7 +165,7 @@ fun AttachmentItemContent(
             dismissButtonText = stringResource(BitwardenString.no),
             onConfirmClick = {
                 shouldShowSizeWarningDialog = false
-                onAttachmentDownloadClick(attachmentItem)
+                onConfirmLargeFileAction()
             },
             onDismissClick = { shouldShowSizeWarningDialog = false },
             onDismissRequest = { shouldShowSizeWarningDialog = false },
