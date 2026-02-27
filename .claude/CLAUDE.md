@@ -142,6 +142,9 @@ In addition to the Key Principles above, follow these rules:
 
 ## Quick Reference
 
+- **Code style**: Full rules: `docs/STYLE_AND_BEST_PRACTICES.md`
 - **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
+- **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
+- **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)
