@@ -1,6 +1,6 @@
 ---
 name: implementing-android-code
-version: 0.1.1
+version: 0.1.2
 description: This skill should be used when implementing Android code in Bitwarden. Covers critical patterns, gotchas, and anti-patterns unique to this codebase. Triggered by "How do I implement a ViewModel?", "Create a new screen", "Add navigation", "Write a repository", "BaseViewModel pattern", "State-Action-Event", "type-safe navigation", "@Serializable route", "SavedStateHandle persistence", "process death recovery", "handleAction", "sendAction", "Hilt module", "Repository pattern", "implementing a screen", "adding a data source", "handling navigation", "encrypted storage", "security patterns", "Clock injection", "DataState", or any questions about implementing features, screens, ViewModels, data sources, or navigation in the Bitwarden Android app.
 ---
 
@@ -33,7 +33,7 @@ class ExampleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: ExampleRepository,
 ) : BaseViewModel<ExampleState, ExampleEvent, ExampleAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: ExampleState()
+    initialState = savedStateHandle[KEY_STATE] ?: ExampleState(),
 ) {
     init {
         stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
@@ -97,7 +97,11 @@ fun SavedStateHandle.toExampleArgs(): ExampleArgs {
     return ExampleArgs(userId = route.userId, isEditMode = route.isEditMode)
 }
 
-fun NavController.navigateToExample(userId: String, isEditMode: Boolean = false, navOptions: NavOptions? = null) {
+fun NavController.navigateToExample(
+    userId: String,
+    isEditMode: Boolean = false,
+    navOptions: NavOptions? = null,
+) {
     this.navigate(route = ExampleRoute(userId, isEditMode), navOptions = navOptions)
 }
 
@@ -255,7 +259,7 @@ The `:ui` module provides reusable `Bitwarden*` prefixed components. Search befo
 - `BitwardenLoadingDialog` - Loading indicators
 
 **Component Discovery:**
-Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `Bitwarden*` components. See **Codebase Discovery** in `CLAUDE.md` for search commands.
+Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `Bitwarden*` components. For build, test, and codebase discovery commands, use the **`build-test-verify`** skill.
 
 **When to Create New Reusable Components:**
 - Component used in 3+ places
@@ -421,7 +425,7 @@ fun State.getTimestamp(clock: Clock): Instant =
 // Test with fixed clock
 val FIXED_CLOCK = Clock.fixed(
     Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC
+    ZoneOffset.UTC,
 )
 ```
 
@@ -471,7 +475,7 @@ val FIXED_CLOCK = Clock.fixed(
 
 ## Quick Reference
 
-For build, test, and codebase discovery commands, see the **Codebase Discovery**, **Testing**, and **Deployment** sections in `CLAUDE.md`.
+For build, test, and codebase discovery commands, use the **`build-test-verify`** skill.
 
 **File Reference Format:**
 When pointing to specific code, use: `file_path:line_number`

@@ -4,10 +4,8 @@ Official Android application for Bitwarden Password Manager and Bitwarden Authen
 
 ## Overview
 
-### What This Project Does
-- Multi-module Android application providing secure password management and TOTP code generation
-- Implements zero-knowledge architecture where encryption/decryption happens client-side
-- Key entry points: `:app` (Password Manager), `:authenticator` (2FA TOTP generator)
+- Multi-module Android application: `:app` (Password Manager), `:authenticator` (2FA TOTP generator)
+- Zero-knowledge architecture: encryption/decryption happens client-side via Bitwarden SDK
 - Target users: End-users via Google Play Store and F-Droid
 
 ### Key Concepts
@@ -19,9 +17,7 @@ Official Android application for Bitwarden Password Manager and Bitwarden Authen
 
 ---
 
-## Architecture & Patterns
-
-### System Architecture
+## Architecture
 
 ```
 User Request (UI Action)
@@ -40,31 +36,6 @@ User Request (UI Action)
   DB    APIs     Rust SDK
 ```
 
-### Code Organization
-
-```
-android/
-├── app/                    # Password Manager application
-│   └── src/main/kotlin/com/x8bit/bitwarden/
-│       ├── data/           # Repositories, managers, data sources
-│       │   ├── auth/       # Authentication domain
-│       │   ├── vault/      # Vault/cipher domain
-│       │   ├── platform/   # Platform services
-│       │   └── tools/      # Generator, export tools
-│       └── ui/             # ViewModels, Screens, Navigation
-│           ├── auth/       # Login, registration screens
-│           ├── vault/      # Vault screens
-│           └── platform/   # Settings, debug menu
-├── authenticator/          # Authenticator 2FA application
-├── core/                   # Shared utilities, dispatcher management
-├── data/                   # Shared data layer (disk sources, models)
-├── network/                # Network layer (Retrofit services, models)
-├── ui/                     # Shared UI components, theming
-├── authenticatorbridge/    # IPC bridge between apps
-├── cxf/                    # Credential Exchange integration
-└── annotation/             # Custom annotations for code generation
-```
-
 ### Key Principles
 
 1. **No Exceptions from Data Layer**: All suspending functions return `Result<T>` or custom sealed classes
@@ -78,7 +49,7 @@ android/
 - **Repository Result Pattern**: Type-safe error handling using custom sealed classes for discrete operations and `DataState<T>` wrapper for streaming data.
 - **Common Patterns**: Flow collection via `Internal` actions, error handling via `when` branches, `DataState` streaming with `.map { }` and `.stateIn()`.
 
-> For complete architecture patterns and code templates, see `docs/ARCHITECTURE.md`.
+> For complete architecture patterns, code templates, and module organization, see `docs/ARCHITECTURE.md`.
 
 ---
 
@@ -86,45 +57,17 @@ android/
 
 ### Adding New Feature Screen
 
-Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and copy-pasteable templates. Follow these steps:
+Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates. Steps:
 
 1. **Define State/Event/Action** - `@Parcelize` state, sealed event/action classes with `Internal` subclass
-2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`, map Flow results to internal actions
-3. **Implement Screen** - Stateless `@Composable`, use `EventsEffect` for navigation, `remember(viewModel)` for action lambdas
-4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder` extension with `composableWithSlideTransitions`, `NavController` extension
-5. **Write Tests** - Use the `testing-android-code` skill for comprehensive test patterns and templates
+2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`
+3. **Implement Screen** - Stateless `@Composable`, use `EventsEffect` for navigation
+4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder`/`NavController` extensions
+5. **Write Tests** - Use the `testing-android-code` skill for test patterns and templates
 
 ### Code Reviews
 
 Use the `reviewing-changes` skill for structured code review checklists covering MVVM/Compose patterns, security validation, and type-specific review guidance.
-
-### Codebase Discovery
-
-```bash
-# Find existing Bitwarden UI components
-find ui/src/main/kotlin/com/bitwarden/ui/platform/components/ -name "Bitwarden*.kt" | sort
-
-# Find all ViewModels
-grep -rl "BaseViewModel<" app/src/main/kotlin/ --include="*.kt"
-
-# Find all Navigation files with @Serializable routes
-find app/src/main/kotlin/ -name "*Navigation.kt" | sort
-
-# Find all Hilt modules
-find app/src/main/kotlin/ -name "*Module.kt" -path "*/di/*" | sort
-
-# Find all repository interfaces
-find app/src/main/kotlin/ -name "*Repository.kt" -not -name "*Impl.kt" -path "*/repository/*" | sort
-
-# Find encrypted disk source examples
-grep -rl "EncryptedPreferences" app/src/main/kotlin/ --include="*.kt"
-
-# Find Clock injection usage
-grep -rl "private val clock: Clock" app/src/main/kotlin/ --include="*.kt"
-
-# Search existing strings before adding new ones
-grep -n "search_term" ui/src/main/res/values/strings.xml
-```
 
 ---
 
@@ -164,52 +107,6 @@ Key types used throughout the codebase:
 | `AuthDiskSource` | `data/auth/datasource/disk/` | Secure token and key storage |
 | `BaseEncryptedDiskSource` | `data/datasource/disk/` | EncryptedSharedPreferences base class |
 
-### Environment Configuration
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GITHUB_TOKEN` | Yes (CI) | GitHub Packages authentication for SDK |
-| Build flavors | - | `standard` (Play Store), `fdroid` (no Google services) |
-| Build types | - | `debug`, `beta`, `release` |
-
-### Authentication & Authorization
-
-- **Login Methods**: Email/password, SSO (OAuth 2.0 + PKCE), trusted device, passwordless auth request
-- **Vault Unlock**: Master password, PIN, biometric, trusted device key
-- **Token Management**: JWT access tokens with automatic refresh via `AuthTokenManager`
-- **Key Derivation**: PBKDF2-SHA256 or Argon2id via `KdfManager`
-
----
-
-## Testing
-
-### Test Structure
-
-```
-app/src/test/                    # App unit tests
-app/src/testFixtures/            # App test utilities
-core/src/testFixtures/           # Core test utilities (FakeDispatcherManager)
-data/src/testFixtures/           # Data test utilities (FakeSharedPreferences)
-network/src/testFixtures/        # Network test utilities (BaseServiceTest)
-ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseComposeTest)
-```
-
-### Running Tests
-
-```bash
-./gradlew test                    # Run all unit tests
-./gradlew app:testDebugUnitTest   # Run app module tests
-./gradlew :core:test              # Run core module tests
-./fastlane check                  # Run full validation (detekt, lint, tests, coverage)
-```
-
-### Test Quick Reference
-
-- **Dispatcher Control**: `FakeDispatcherManager` from `:core:testFixtures`
-- **MockK**: `mockk<T> { every { } returns }`, `coEvery { }` for suspend
-- **Flow Testing**: Turbine with `stateEventFlow()` helper from `BaseViewModelTest`
-- **Time Control**: Inject `Clock` for deterministic time testing
-
 ---
 
 ## Code Style & Standards
@@ -243,42 +140,8 @@ In addition to the Key Principles above, follow these rules:
 
 ---
 
-## Deployment
-
-### Building
-
-```bash
-# Debug builds
-./gradlew app:assembleDebug
-./gradlew authenticator:assembleDebug
-
-# Release builds (requires signing keys)
-./gradlew app:assembleStandardRelease
-./gradlew app:bundleStandardRelease
-
-# F-Droid builds
-./gradlew app:assembleFdroidRelease
-```
-
-### Versioning
-
-**Location**: `gradle/libs.versions.toml`
-```toml
-appVersionCode = "1"
-appVersionName = "2025.11.1"
-```
-
-Follow semantic versioning pattern: `YEAR.MONTH.PATCH`
-
-### Publishing
-
-- **Play Store**: Via GitHub Actions workflow with signed AAB
-- **F-Droid**: Via dedicated workflow with F-Droid signing keys
-- **Firebase App Distribution**: For beta testing
-
----
-
 ## Quick Reference
 
+- **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)
