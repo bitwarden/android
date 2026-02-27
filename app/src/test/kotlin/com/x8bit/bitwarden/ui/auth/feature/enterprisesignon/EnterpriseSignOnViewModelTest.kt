@@ -189,9 +189,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     EnterpriseSignOnEvent.NavigateToSsoLogin(
                         uri = ssoUri,
-                        authTabData = AuthTabData.CustomScheme(
-                            callbackUrl = "bitwarden://sso-callback",
-                            callbackScheme = "bitwarden",
+                        authTabData = AuthTabData.HttpsScheme(
+                            host = "bitwarden.com",
+                            path = "sso-callback",
                         ),
                     ),
                     eventFlow.awaitItem(),
