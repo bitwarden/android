@@ -53,6 +53,9 @@ Evaluate the consolidated requirements against the following 5-category rubric. 
 | Process death handling? | What state needs to survive process death? |
 | Migration requirements? | Does existing data need migration? |
 | Feature flag needed? | Should this be behind a feature flag for staged rollout? |
+| Product flavors (standard vs fdroid)? | Does this feature depend on Google Play Services? Available on F-Droid? |
+| Data layer tier? | Does this need a new Manager (single-responsibility) or only Repository/DataSource? Consult `docs/ARCHITECTURE.md` Data Layer section. |
+| Streaming vs discrete data? | Is data continuously observed (`DataState<T>` + `StateFlow`) or a one-shot operation (custom sealed class)? See `docs/ARCHITECTURE.md` Repositories section. |
 
 ### C. Security Requirements
 
@@ -63,6 +66,8 @@ Evaluate the consolidated requirements against the following 5-category rubric. 
 | Logout cleanup behavior? | What must be cleared when the user logs out? |
 | Auth-gating? | Does accessing this feature require active authentication? |
 | Input sanitization? | Are there URL or credential inputs that need validation? |
+| Sensitive data in ViewModel state? | Will passwords, tokens, or keys appear in state? Must use `@IgnoredOnParcel`. See `implementing-android-code` skill Section F. |
+| SDK crypto context isolation? | Does this use vault encryption? Must use `ScopedVaultSdkSource` for multi-account safety. See CLAUDE.md Security Rules. |
 
 ### D. UX/UI Requirements
 
@@ -84,6 +89,7 @@ Evaluate the consolidated requirements against the following 5-category rubric. 
 | Feature flag strategy? | Is this behind a server-side or local feature flag? |
 | Analytics/logging? | Are there analytics events to track? |
 | Bitwarden Authenticator impact? | Does this affect the `:authenticator` module? |
+| F-Droid compatibility? | Does this degrade gracefully without Google Play Services (no push notifications, no Play Integrity)? |
 
 ---
 

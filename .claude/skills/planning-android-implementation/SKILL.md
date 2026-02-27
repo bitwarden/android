@@ -52,6 +52,9 @@ Identify files that must be modified to integrate the new work:
 - **Data Layer**: Repository interfaces, data source interfaces, Room DAOs
 - **API Layer**: Retrofit service interfaces, request/response models
 - **Feature Flags**: Feature flag definitions and checks
+- **Managers**: Single-responsibility data layer classes (see `docs/ARCHITECTURE.md` Managers section)
+- **Test Fixtures**: Shared test utilities in `src/testFixtures/` directories
+- **Product Flavor Source Sets**: Code in `src/standard/` vs `src/main/` for Play Services dependencies
 
 ### Document Existing Patterns
 
@@ -68,25 +71,31 @@ Note the specific patterns used by the pattern anchors:
 Produce an ASCII diagram showing component relationships for the planned work:
 
 ```
-┌──────────────────┐
-│   Screen         │ ← Compose UI
-│   (Composable)   │
-└────────┬─────────┘
+┌─────────────────┐
+│   Screen        │ ← Compose UI
+│  (Composable)   │
+└────────┬────────┘
          │ State / Action / Event
-┌────────▼─────────┐
-│   ViewModel      │ ← Business logic orchestration
-│                  │
-└────────┬─────────┘
+┌────────▼────────┐
+│   ViewModel     │ ← Business logic orchestration
+└────────┬────────┘
          │ Repository calls
-┌────────▼─────────┐
-│   Repository     │ ← Data coordination
-│                  │
-└───┬────┬────┬────┘
+┌────────▼────────┐
+│   Repository    │ ← Data coordination (sealed class results)
+└───┬────┬────┬───┘
     │    │    │
-   Disk Net  SDK
+┌───▼───┐ │ ┌─▼──────┐
+│Manager│ │ │Manager │ ← Single-responsibility (optional)
+└───┬───┘ │ └─┬──────┘
+    │     │   │
+┌───▼─────▼───▼────┐
+│   Data Sources   │ ← Raw data (Result<T>, never throw)
+└─┬────┬────┬──────┘
+  │    │    │
+ Room Retrofit SDK
 ```
 
-Adapt the diagram to show the actual components planned.
+Adapt the diagram to show the actual components planned. _Consult `docs/ARCHITECTURE.md` for full data layer patterns and conventions._
 
 ### Design Decisions
 
@@ -106,6 +115,11 @@ Document key architectural decisions in a table:
 |-----------|------|-------------------|
 | [full path] | [ViewModel / Screen / Repository / etc.] | [pattern anchor file] |
 
+**Include in file inventory:**
+- `...Navigation.kt` files for new screens
+- `...Module.kt` Hilt module files for new DI bindings
+- Paired test files (`...Test.kt`) for each new class
+
 ### Files to Modify
 
 | File Path | Change Description | Risk Level |
@@ -123,7 +137,7 @@ Document key architectural decisions in a table:
 
 Break the work into sequential phases. Each phase should be independently testable and committable.
 
-**Phase ordering principle**: Foundation → SDK/Data → Network → UI → Tests (per phase)
+**Phase ordering principle**: Foundation → SDK/Data → Network → UI (tests accompany each phase)
 
 For each phase:
 
@@ -174,6 +188,7 @@ For each phase:
 **Manual Verification:**
 - [Specific manual test scenarios]
 - [Edge cases to manually verify]
+- Verify ViewModel state survives process death (test via `SavedStateHandle` persistence and `Don't keep activities` developer option)
 
 ---
 
