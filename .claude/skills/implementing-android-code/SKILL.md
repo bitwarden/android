@@ -259,7 +259,7 @@ The `:ui` module provides reusable `Bitwarden*` prefixed components. Search befo
 - `BitwardenLoadingDialog` - Loading indicators
 
 **Component Discovery:**
-Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `Bitwarden*` components. See **Codebase Discovery** in `CLAUDE.md` for search commands.
+Search `ui/src/main/kotlin/com/bitwarden/ui/platform/components/` for existing `Bitwarden*` components. For build, test, and codebase discovery commands, use the **`build-test-verify`** skill.
 
 **When to Create New Reusable Components:**
 - Component used in 3+ places
