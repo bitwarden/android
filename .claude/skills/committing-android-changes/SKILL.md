@@ -1,5 +1,5 @@
 ---
-name: git-commit
+name: committing-android-changes
 description: Git commit conventions and workflow for Bitwarden Android. Use when committing code, writing commit messages, or preparing changes for commit. Triggered by "commit", "git commit", "commit message", "prepare commit", "stage changes".
 ---
 
@@ -8,30 +8,38 @@ description: Git commit conventions and workflow for Bitwarden Android. Use when
 ## Commit Message Format
 
 ```
-[PM-XXXXX] <imperative summary>
+[PM-XXXXX] <type>: <imperative summary>
 
 <optional body explaining why, not what>
-
-Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 ### Rules
 
 1. **Ticket prefix**: Always include `[PM-XXXXX]` matching the Jira ticket
-2. **Imperative mood**: "Add feature" not "Added feature" or "Adds feature"
-3. **Co-author line**: `Co-Authored-By: Claude <noreply@anthropic.com>` (no model name)
+2. **Type keyword**: Include a conventional commit type after the ticket prefix (see table below)
+3. **Imperative mood**: "Add feature" not "Added feature" or "Adds feature"
 4. **Short summary**: Under 72 characters for the first line
 5. **Body**: Explain the "why" not the "what" — the diff shows the what
+
+### Type Keywords
+
+Invoke the `labeling-android-changes` skill for the full type keyword table and selection guidance.
 
 ### Example
 
 ```
-[PM-12345] Add biometric unlock timeout configuration
+[PM-12345] feat: Add biometric unlock timeout configuration
 
 Users reported confusion about when biometric prompts appear.
 This adds a configurable timeout setting to the security preferences.
+```
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+### Followup Commits
+
+Only the first commit on a branch needs the full format (ticket prefix, type keyword, body). Subsequent commits — whether addressing review feedback, making intermediate changes, or iterating locally — can use a short, descriptive summary with no prefix or body required.
+
+```
+Update error handling in login flow
 ```
 
 ---

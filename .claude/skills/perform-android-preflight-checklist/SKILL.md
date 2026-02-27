@@ -1,5 +1,5 @@
 ---
-name: self-review-checklist
+name: perform-android-preflight-checklist
 description: Quality gate checklist to run before committing or creating a PR. Use when finishing implementation, checking work quality, or preparing to commit. Triggered by "self review", "check my work", "ready to commit", "done implementing", "review checklist", "quality check".
 ---
 

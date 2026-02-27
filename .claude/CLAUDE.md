@@ -56,24 +56,19 @@ User Request (UI Action)
 
 ## Development Guide
 
-### Adding New Feature Screen
+### Workflow Skills
 
-Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates. Steps:
+> **Quick start**: Use `/work-on-android <task>` to be guided through the full development lifecycle.
 
-1. **Define State/Event/Action** - `@Parcelize` state, sealed event/action classes with `Internal` subclass
-2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`
-3. **Implement Screen** - Stateless `@Composable`, use `EventsEffect` for navigation
-4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder`/`NavController` extensions
-5. **Write Tests** - Use the `testing-android-code` skill for test patterns and templates
+These skills define the full development lifecycle. Use them in order:
 
-### Other Skills
-
-- `reviewing-changes` - Code review checklists for MVVM/Compose patterns
-- `build-test-verify` - Build, test, lint, deploy commands and codebase discovery
-- `git-commit` - Commit message format and pre-commit workflow
-- `create-pull-request` - PR creation workflow and templates
-- `core-conventions` - Code style, naming, anti-patterns quick reference
-- `self-review-checklist` - Quality gate before committing or opening a PR
+1. `implementing-android-code` - Patterns, gotchas, and templates for writing code
+2. `testing-android-code` - Test patterns and templates for verifying code
+3. `build-test-verify` - Build, test, lint, and deploy commands
+4. `perform-android-preflight-checklist` - Quality gate before committing
+5. `committing-android-changes` - Commit message format and pre-commit workflow
+6. `reviewing-changes` - Code review checklists for MVVM/Compose patterns
+7. `creating-android-pull-request` - PR creation workflow and templates
 
 ---
 
@@ -123,8 +118,11 @@ In addition to the Key Principles above, follow these rules:
 ## Quick Reference
 
 - **Code style**: Full rules: `docs/STYLE_AND_BEST_PRACTICES.md`
-- **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
 - **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
 - **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
+- **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
+- **Before committing**: Use `perform-android-preflight-checklist` skill, then `committing-android-changes` skill for message format
+- **Code review**: Use `reviewing-changes` skill for MVVM/Compose review checklists
+- **Creating PRs**: Use `creating-android-pull-request` skill for PR workflow and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)
