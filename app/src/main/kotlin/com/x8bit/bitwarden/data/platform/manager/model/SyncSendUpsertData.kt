@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Required data for sync send upsert operations.
@@ -14,6 +14,6 @@ import java.time.ZonedDateTime
 data class SyncSendUpsertData(
     val userId: String,
     val sendId: String,
-    val revisionDate: ZonedDateTime,
+    val revisionDate: Instant,
     val isUpdate: Boolean,
 )

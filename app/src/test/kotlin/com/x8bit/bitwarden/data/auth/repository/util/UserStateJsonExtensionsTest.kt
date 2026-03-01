@@ -30,7 +30,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Suppress("LargeClass")
 class UserStateJsonExtensionsTest {
@@ -67,7 +67,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -122,7 +122,7 @@ class UserStateJsonExtensionsTest {
                 masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -193,7 +193,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -209,7 +209,7 @@ class UserStateJsonExtensionsTest {
                             avatarColorHex = "avatarColor",
                             stamp = "securityStamp",
                             isTwoFactorEnabled = false,
-                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                         ),
                     ),
                 ),
@@ -229,8 +229,7 @@ class UserStateJsonExtensionsTest {
                             every { isPremium } returns true
                             every { isPremiumFromOrganization } returns true
                             every { isTwoFactorEnabled } returns false
-                            every { creationDate } returns ZonedDateTime
-                                .parse("2024-09-13T01:00:00.00Z")
+                            every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
                             every { userDecryption } returns null
                         }
                     },
@@ -258,7 +257,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -323,7 +322,7 @@ class UserStateJsonExtensionsTest {
                 masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -1688,7 +1687,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -1708,7 +1707,7 @@ class UserStateJsonExtensionsTest {
                 every { isPremium } returns false
                 every { isPremiumFromOrganization } returns false
                 every { isTwoFactorEnabled } returns true
-                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
             }
             every { userDecryption } returns UserDecryptionJson(
                 masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
@@ -1725,7 +1724,7 @@ class UserStateJsonExtensionsTest {
                             stamp = "securityStamp",
                             hasPremium = false,
                             isTwoFactorEnabled = true,
-                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                             userDecryptionOptions = UserDecryptionOptionsJson(
                                 hasMasterPassword = true,
                                 trustedDeviceUserDecryptionOptions = null,
@@ -1771,7 +1770,7 @@ class UserStateJsonExtensionsTest {
                 masterPasswordUnlock = null,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -1791,7 +1790,7 @@ class UserStateJsonExtensionsTest {
                 every { isPremium } returns true
                 every { isPremiumFromOrganization } returns false
                 every { isTwoFactorEnabled } returns true
-                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
             }
             every { userDecryption } returns UserDecryptionJson(
                 masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
@@ -1808,7 +1807,7 @@ class UserStateJsonExtensionsTest {
                             stamp = "newSecurityStamp",
                             hasPremium = true,
                             isTwoFactorEnabled = true,
-                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                             userDecryptionOptions = UserDecryptionOptionsJson(
                                 hasMasterPassword = true,
                                 trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
@@ -1848,7 +1847,7 @@ class UserStateJsonExtensionsTest {
                 masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
             ),
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -1868,7 +1867,7 @@ class UserStateJsonExtensionsTest {
                 every { isPremium } returns false
                 every { isPremiumFromOrganization } returns true
                 every { isTwoFactorEnabled } returns false
-                every { creationDate } returns ZonedDateTime.parse("2024-09-13T01:00:00.00Z")
+                every { creationDate } returns Instant.parse("2024-09-13T01:00:00.00Z")
             }
             every { userDecryption } returns null
         }
@@ -1883,7 +1882,7 @@ class UserStateJsonExtensionsTest {
                             stamp = "updatedSecurityStamp",
                             hasPremium = true,
                             isTwoFactorEnabled = false,
-                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                             userDecryptionOptions = UserDecryptionOptionsJson(
                                 hasMasterPassword = true,
                                 trustedDeviceUserDecryptionOptions = null,
@@ -1916,7 +1915,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -1973,7 +1972,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 8,
             userDecryptionOptions = userDecryptionOptions,
             isTwoFactorEnabled = true,
-            creationDate = ZonedDateTime.parse("2024-01-01T00:00:00.00Z"),
+            creationDate = Instant.parse("2024-01-01T00:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -2025,7 +2024,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 4,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         val inactiveProfile = AccountJson.Profile(
             userId = "inactiveUserId",
@@ -2043,7 +2042,7 @@ class UserStateJsonExtensionsTest {
             kdfParallelism = 2,
             userDecryptionOptions = null,
             isTwoFactorEnabled = false,
-            creationDate = ZonedDateTime.parse("2024-08-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-08-13T01:00:00.00Z"),
         )
         val activeAccount = AccountJson(
             profile = activeProfile,

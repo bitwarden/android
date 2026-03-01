@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppLockState
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
@@ -14,8 +16,12 @@ import com.bitwarden.core.data.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.runs
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -30,12 +36,17 @@ class AuthRepositoryTest {
     private val authenticatorSdkSource: AuthenticatorSdkSource = mockk()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val realtimeManager: RealtimeManager = mockk()
+    private val appLockManager: AppLockManager = mockk {
+        every { appLockStateFlow } returns MutableStateFlow(AppLockState.UNLOCKED)
+        every { manualAppUnlock() } just runs
+    }
 
     private val authRepository: AuthRepository = AuthRepositoryImpl(
         authDiskSource = authDiskSource,
         authenticatorSdkSource = authenticatorSdkSource,
         biometricsEncryptionManager = biometricsEncryptionManager,
         realtimeManager = realtimeManager,
+        appLockManager = appLockManager,
         dispatcherManager = FakeDispatcherManager(),
     )
 
@@ -78,6 +89,9 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
         }
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -92,6 +106,9 @@ class AuthRepositoryTest {
         assertEquals(BiometricsKeyResult.Error(error = error), result)
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
+        }
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
         }
     }
 
@@ -112,6 +129,9 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
         }
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -126,6 +146,9 @@ class AuthRepositoryTest {
             ),
             result,
         )
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -141,6 +164,9 @@ class AuthRepositoryTest {
             val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
             assertEquals(BiometricsUnlockResult.BiometricDecodingError(error), result)
+            verify(exactly = 0) {
+                appLockManager.manualAppUnlock()
+            }
         }
 
     @Test
@@ -155,6 +181,9 @@ class AuthRepositoryTest {
         val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
         assertEquals(BiometricsUnlockResult.Success, result)
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -169,6 +198,9 @@ class AuthRepositoryTest {
             val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
             assertEquals(BiometricsUnlockResult.BiometricDecodingError(error), result)
+            verify(exactly = 0) {
+                appLockManager.manualAppUnlock()
+            }
         }
 
     @Test
@@ -186,6 +218,9 @@ class AuthRepositoryTest {
         assertEquals(BiometricsUnlockResult.Success, result)
         authDiskSource.assertUserBiometricUnlockKey(encryptedBytes.toString(Charsets.ISO_8859_1))
         authDiskSource.assertUserBiometricKeyInitVector(initVector)
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test

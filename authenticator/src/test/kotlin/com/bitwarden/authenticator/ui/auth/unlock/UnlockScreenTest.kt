@@ -20,14 +20,11 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import javax.crypto.Cipher
 
 class UnlockScreenTest : AuthenticatorComposeTest() {
-
-    private var onUnlockedCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<UnlockEvent>()
@@ -48,7 +45,6 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
         ) {
             UnlockScreen(
                 viewModel = mockViewModel,
-                onUnlocked = { onUnlockedCalled = true },
             )
         }
     }
@@ -76,13 +72,6 @@ class UnlockScreenTest : AuthenticatorComposeTest() {
         verify {
             mockViewModel.trySendAction(UnlockAction.BiometricsUnlockClick)
         }
-    }
-
-    @Test
-    fun `NavigateToItemListing event should call onUnlocked callback`() {
-        mutableEventFlow.tryEmit(UnlockEvent.NavigateToItemListing)
-
-        assertTrue(onUnlockedCalled)
     }
 
     @Test

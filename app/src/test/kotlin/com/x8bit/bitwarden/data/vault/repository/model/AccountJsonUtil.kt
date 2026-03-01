@@ -5,7 +5,7 @@ import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Creates a mock [AccountJson.Profile] for testing purposes.
@@ -28,7 +28,7 @@ fun createMockAccountJsonProfile(
     kdfParallelism: Int? = null,
     userDecryptionOptions: UserDecryptionOptionsJson? = null,
     isTwoFactorEnabled: Boolean = false,
-    creationDate: ZonedDateTime = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate: Instant = Instant.parse("2024-09-13T01:00:00.00Z"),
 ): AccountJson.Profile = AccountJson.Profile(
     userId = userId,
     email = email,

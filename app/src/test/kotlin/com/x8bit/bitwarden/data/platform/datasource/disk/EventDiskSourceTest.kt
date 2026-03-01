@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class EventDiskSourceTest {
     private val fixedClock: Clock = Clock.fixed(
@@ -38,7 +37,7 @@ class EventDiskSourceTest {
         val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_DELETED,
             cipherId = "cipherId-1",
-            date = ZonedDateTime.now(fixedClock),
+            date = fixedClock.instant(),
             organizationId = null,
         )
 
@@ -54,7 +53,7 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             ),
@@ -74,7 +73,7 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
                 OrganizationEventEntity(
@@ -82,7 +81,7 @@ class EventDiskSourceTest {
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             ),
@@ -97,7 +96,7 @@ class EventDiskSourceTest {
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             ),
@@ -117,7 +116,7 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
                 OrganizationEventEntity(
@@ -125,7 +124,7 @@ class EventDiskSourceTest {
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             ),
@@ -138,7 +137,7 @@ class EventDiskSourceTest {
                 OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_DELETED,
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
                     organizationId = null,
                 ),
             ),

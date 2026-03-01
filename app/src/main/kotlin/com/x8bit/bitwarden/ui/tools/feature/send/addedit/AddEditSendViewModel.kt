@@ -4,13 +4,16 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
@@ -20,6 +23,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -36,6 +40,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
@@ -44,6 +50,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -53,7 +61,8 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.ZonedDateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -80,6 +89,7 @@ class AddEditSendViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -89,6 +99,7 @@ class AddEditSendViewModel @Inject constructor(
         val args = savedStateHandle.toAddEditSendArgs()
         val sendType = args.sendType
         val addEditSendType = args.addEditSendType
+
         AddEditSendState(
             sendType = sendType,
             shouldFinishOnComplete = specialCircumstance.shouldFinishOnComplete(),
@@ -107,10 +118,15 @@ class AddEditSendViewModel @Inject constructor(
                         isHideEmailAddressEnabled = !policyManager
                             .getActivePolicies<PolicyInformation.SendOptions>()
                             .any { it.shouldDisableHideEmail ?: false },
-                        deletionDate = ZonedDateTime.now(clock).plusWeeks(1),
+                        deletionDate = clock
+                            .instant()
+                            .plus(@Suppress("MagicNumber") 7, ChronoUnit.DAYS),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
+                        isSendEmailVerificationEnabled = featureFlagManager
+                            .getFeatureFlag(key = FlagKey.SendEmailVerification),
+                        sendAuth = SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
                         SendItemType.FILE -> {
@@ -194,6 +210,13 @@ class AddEditSendViewModel @Inject constructor(
         is AddEditSendAction.PasswordCopyClick -> {
             handleCopyClick(password = action.password)
         }
+
+        is AddEditSendAction.AuthTypeSelect -> handleAuthTypeSelect(action)
+        is AddEditSendAction.AuthPasswordChange -> handleAuthPasswordChange(action)
+        is AddEditSendAction.AuthEmailChange -> handleAuthEmailsChange(action)
+        is AddEditSendAction.AuthEmailAdd -> handleAuthEmailsAdd()
+        is AddEditSendAction.AuthEmailRemove -> handleAuthEmailsRemove(action)
+        AddEditSendAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
     }
 
     private fun handleInternalAction(action: AddEditSendAction.Internal): Unit = when (action) {
@@ -380,12 +403,12 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                clock = clock,
                                 baseWebSendUrl = environmentRepo
                                     .environment
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -421,12 +444,12 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                clock = clock,
                                 baseWebSendUrl = environmentRepo
                                     .environment
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -500,7 +523,14 @@ class AddEditSendViewModel @Inject constructor(
 
     private fun handlePasswordChange(action: AddEditSendAction.PasswordChange) {
         updateCommonContent {
-            it.copy(passwordInput = action.input)
+            it.copy(
+                passwordInput = action.input,
+                sendAuth = when {
+                    action.input.isNotEmpty() -> SendAuth.Password
+                    !isSendEmailVerificationEnabled -> SendAuth.None
+                    else -> it.sendAuth
+                },
+            )
         }
     }
 
@@ -530,6 +560,102 @@ class AddEditSendViewModel @Inject constructor(
         }
     }
 
+    private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
+        // Check if user is trying to select Email auth without premium
+        if (action.sendAuth is SendAuth.Email && !state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
+            }
+            return
+        }
+
+        updateCommonContent { commonContent ->
+            commonContent.copy(
+                sendAuth = when (action.sendAuth) {
+                    is SendAuth.Email -> {
+                        // Preserve existing emails if switching back to EMAIL
+                        when (val currentAuth = commonContent.sendAuth) {
+                            is SendAuth.Email -> currentAuth
+                            else -> action.sendAuth
+                        }
+                    }
+
+                    else -> action.sendAuth
+                },
+            )
+        }
+    }
+
+    private fun handleAuthPasswordChange(action: AddEditSendAction.AuthPasswordChange) {
+        updateCommonContent {
+            it.copy(passwordInput = action.password)
+        }
+    }
+
+    private fun handleAuthEmailsChange(action: AddEditSendAction.AuthEmailChange) {
+        updateCommonContent { commonContent ->
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            val updatedEmails = currentAuth.emails.map { authEmail ->
+                if (authEmail.id == action.authEmail.id) {
+                    action.authEmail
+                } else {
+                    authEmail
+                }
+            }
+            commonContent.copy(
+                sendAuth = currentAuth.copy(emails = updatedEmails.toImmutableList()),
+            )
+        }
+    }
+
+    private fun handleAuthEmailsAdd() {
+        updateCommonContent { commonContent ->
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            commonContent.copy(
+                sendAuth = currentAuth.copy(
+                    emails = currentAuth
+                        .emails
+                        .plus(AuthEmail(value = ""))
+                        .toImmutableList(),
+                ),
+            )
+        }
+    }
+
+    private fun handleAuthEmailsRemove(action: AddEditSendAction.AuthEmailRemove) {
+        updateCommonContent { commonContent ->
+            val currentAuth = commonContent.sendAuth as? SendAuth.Email
+                ?: return@updateCommonContent commonContent
+
+            val updatedEmails = currentAuth.emails.filterNot { it.id == action.authEmail.id }
+            commonContent.copy(
+                sendAuth = currentAuth.copy(
+                    emails = if (updatedEmails.isEmpty()) {
+                        persistentListOf(AuthEmail(value = ""))
+                    } else {
+                        updatedEmails.toImmutableList()
+                    },
+                ),
+            )
+        }
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        val baseUrl = environmentRepo
+            .environment
+            .environmentUrlData
+            .baseWebVaultUrlOrDefault
+        sendEvent(
+            AddEditSendEvent.NavigateToPremium(
+                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+            ),
+        )
+    }
+
     @Suppress("LongMethod")
     private fun handleSaveClick() {
         onContent { content ->
@@ -546,6 +672,40 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
+
+            // Validate email authentication if EMAIL auth type is selected
+            if (content.common.sendAuth is SendAuth.Email) {
+                val nonBlankEmails = content.common.sendAuth.emails.filter { it.value.isNotBlank() }
+
+                if (nonBlankEmails.isEmpty()) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = AddEditSendState.DialogState.Error(
+                                title = BitwardenString.no_email_addresses_entered.asText(),
+                                message = BitwardenString
+                                    .enter_at_least_one_valid_email_address_to_share_this_send
+                                    .asText(),
+                            ),
+                        )
+                    }
+                    return@onContent
+                }
+
+                if (nonBlankEmails.any { !it.value.isValidEmail() }) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = AddEditSendState.DialogState.Error(
+                                title = BitwardenString.invalid_email_addresses.asText(),
+                                message = BitwardenString
+                                    .one_or_more_email_addresses_are_incorrect
+                                    .asText(),
+                            ),
+                        )
+                    }
+                    return@onContent
+                }
+            }
+
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
                     if (!state.isPremium) {
@@ -684,6 +844,10 @@ class AddEditSendViewModel @Inject constructor(
         get() = !policyManager
             .getActivePolicies<PolicyInformation.SendOptions>()
             .any { it.shouldDisableHideEmail ?: false }
+
+    private val isSendEmailVerificationEnabled: Boolean
+        get() = featureFlagManager
+            .getFeatureFlag(key = FlagKey.SendEmailVerification)
 
     private inline fun onContent(
         crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
@@ -830,10 +994,12 @@ data class AddEditSendState(
                 val isHideEmailChecked: Boolean,
                 val isDeactivateChecked: Boolean,
                 val isHideEmailAddressEnabled: Boolean,
-                val deletionDate: ZonedDateTime,
-                val expirationDate: ZonedDateTime?,
+                val deletionDate: Instant,
+                val expirationDate: Instant?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
+                val isSendEmailVerificationEnabled: Boolean,
+                val sendAuth: SendAuth,
             ) : Parcelable
 
             /**
@@ -885,6 +1051,13 @@ data class AddEditSendState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that email authentication requires
+         * a premium account.
+         */
+        @Parcelize
+        data object EmailAuthRequiresPremium : DialogState()
     }
 }
 
@@ -932,6 +1105,11 @@ sealed class AddEditSendEvent {
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
     ) : AddEditSendEvent()
+
+    /**
+     * Navigate to the premium upgrade page.
+     */
+    data class NavigateToPremium(val uri: String) : AddEditSendEvent()
 }
 
 /**
@@ -1041,7 +1219,37 @@ sealed class AddEditSendAction {
     /**
      * The user changed the deletion date.
      */
-    data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddEditSendAction()
+    data class DeletionDateChange(val deletionDate: Instant) : AddEditSendAction()
+
+    /**
+     * The user selected an authentication type.
+     */
+    data class AuthTypeSelect(val sendAuth: SendAuth) : AddEditSendAction()
+
+    /**
+     * The user changed the authentication password.
+     */
+    data class AuthPasswordChange(val password: String) : AddEditSendAction()
+
+    /**
+     * The user changed the authentication email.
+     */
+    data class AuthEmailChange(val authEmail: AuthEmail) : AddEditSendAction()
+
+    /**
+     * The user added a new authentication email field.
+     */
+    data object AuthEmailAdd : AddEditSendAction()
+
+    /**
+     * The user removed an authentication email field.
+     */
+    data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
+
+    /**
+     * User clicked upgrade to premium from the email auth premium dialog.
+     */
+    data object UpgradeToPremiumClick : AddEditSendAction()
 
     /**
      * Models actions that the [AddEditSendViewModel] itself might send.

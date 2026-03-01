@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class DevicesServiceTest : BaseServiceTest() {
 
@@ -71,7 +71,7 @@ private val TRUST_DEVICE_RESPONSE: TrustedDeviceKeysResponseJson =
         name = "Pixel 8",
         identifier = "ea7c0a13-5ce4-4f96-8e17-4fc7fa54f464",
         type = 0,
-        creationDate = ZonedDateTime.parse("2024-03-25T18:04:28.23Z"),
+        creationDate = Instant.parse("2024-03-25T18:04:28.23Z"),
     )
 
 private const val TRUST_DEVICE_RESPONSE_JSON: String = """

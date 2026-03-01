@@ -28,7 +28,7 @@ class OriginManagerImpl(
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult {
         return if (callingAppInfo.isOriginPopulated()) {
-            validatePrivilegedAppOrigin(callingAppInfo)
+            validatePrivilegedAppOrigin(relyingPartyId, callingAppInfo)
         } else {
             validateCallingApplicationAssetLinks(relyingPartyId, callingAppInfo)
         }
@@ -64,44 +64,58 @@ class OriginManagerImpl(
     }
 
     private suspend fun validatePrivilegedAppOrigin(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult =
-        validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
+        validatePrivilegedAppSignatureWithGoogleList(relyingPartyId, callingAppInfo)
             .takeUnless { it is ValidateOriginResult.Error.PrivilegedAppNotAllowed }
-            ?: validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+            ?: validatePrivilegedAppSignatureWithCommunityList(relyingPartyId, callingAppInfo)
                 .takeUnless { it is ValidateOriginResult.Error.PrivilegedAppNotAllowed }
-            ?: validatePrivilegedAppSignatureWithUserTrustList(callingAppInfo)
+            ?: validatePrivilegedAppSignatureWithUserTrustList(relyingPartyId, callingAppInfo)
 
     private suspend fun validatePrivilegedAppSignatureWithGoogleList(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult =
         validatePrivilegedAppSignatureWithAllowList(
+            relyingPartyId = relyingPartyId,
             callingAppInfo = callingAppInfo,
             fileName = GOOGLE_ALLOW_LIST_FILE_NAME,
+            isVerifiedSource = true,
         )
 
     private suspend fun validatePrivilegedAppSignatureWithCommunityList(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult = validatePrivilegedAppSignatureWithAllowList(
+        relyingPartyId = relyingPartyId,
         callingAppInfo = callingAppInfo,
         fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
+        isVerifiedSource = false,
     )
 
     private suspend fun validatePrivilegedAppSignatureWithUserTrustList(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult = callingAppInfo.validatePrivilegedApp(
+        relyingPartyId = relyingPartyId,
         allowList = privilegedAppRepository.getUserTrustedAllowListJson(),
+        isVerifiedSource = true,
     )
 
     private suspend fun validatePrivilegedAppSignatureWithAllowList(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
         fileName: String,
+        isVerifiedSource: Boolean,
     ): ValidateOriginResult =
         assetManager
             .readAsset(fileName)
             .mapCatching { allowList ->
                 callingAppInfo.validatePrivilegedApp(
+                    relyingPartyId = relyingPartyId,
                     allowList = allowList,
+                    isVerifiedSource = isVerifiedSource,
                 )
             }
             .fold(

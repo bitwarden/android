@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,15 +8,18 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android {
+configure<LibraryExtension> {
     namespace = "com.bitwarden.core"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
         // Set the minimum SDK version to the SDK version used by Authenticator, which is the lowest
         // universally supported SDK version.
-        minSdk = libs.versions.minSdkBwa.get().toInt()
-
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -64,6 +68,6 @@ dependencies {
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }

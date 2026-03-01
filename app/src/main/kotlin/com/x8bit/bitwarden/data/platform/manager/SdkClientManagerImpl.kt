@@ -4,6 +4,7 @@ import android.os.Build
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 
 /**
@@ -12,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 class SdkClientManagerImpl(
     nativeLibraryManager: NativeLibraryManager,
     sdkRepoFactory: SdkRepositoryFactory,
+    sdkPlatformApiFactory: SdkPlatformApiFactory,
     private val featureFlagManager: FeatureFlagManager,
     private val clientProvider: suspend (userId: String?) -> Client = { userId ->
         Client(
@@ -20,6 +22,10 @@ class SdkClientManagerImpl(
         )
             .apply {
                 platform().loadFlags(featureFlagManager.sdkFeatureFlags)
+                platform().serverCommunicationConfig(
+                    repository = sdkRepoFactory.getServerCommunicationConfigRepository(),
+                    platformApi = sdkPlatformApiFactory.getServerCommunicationConfigPlatformApi(),
+                )
                 userId?.let {
                     platform().state().apply {
                         registerCipherRepository(sdkRepoFactory.getCipherRepository(userId = it))

@@ -55,4 +55,17 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
         override val optionText: Text
             get() = BitwardenString.use_chrome_beta_autofill_integration.asText()
     }
+
+    /**
+     * Represents the stable Vivaldi release channel.
+     */
+    @Parcelize
+    data class VivaldiStable(
+        val enabled: Boolean,
+    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val browserPackage: BrowserPackage
+            get() = BrowserPackage.VIVALDI_STABLE
+        override val optionText: Text
+            get() = BitwardenString.use_vivaldi_autofill_integration.asText()
+    }
 }

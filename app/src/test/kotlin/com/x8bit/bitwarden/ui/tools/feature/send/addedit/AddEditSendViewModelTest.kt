@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -20,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -37,6 +39,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
@@ -50,6 +54,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -62,7 +67,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
+import java.util.UUID
 
 @Suppress("LargeClass")
 class AddEditSendViewModelTest : BaseViewModelTest() {
@@ -79,7 +84,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
     }
-    private val generatorRepository = mockk<GeneratorRepository> (relaxed = true) {
+    private val generatorRepository = mockk<GeneratorRepository>(relaxed = true) {
         every { generatorResultFlow } returns mutableGeneratorResultFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
@@ -104,6 +109,16 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
+    private val mutableSendEmailVerificationFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.SendEmailVerification)
+        } returns mutableSendEmailVerificationFeatureFlagFlow
+        every {
+            getFeatureFlag(FlagKey.SendEmailVerification)
+        } answers { mutableSendEmailVerificationFeatureFlagFlow.value }
+    }
+
     @BeforeEach
     fun setup() {
         mockkStatic(
@@ -111,6 +126,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
+            UUID::randomUUID,
         )
     }
 
@@ -121,6 +137,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
+            UUID::randomUUID,
         )
     }
 
@@ -301,9 +318,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
+                    isSendEmailVerificationEnabled = false,
                 )
             } returns viewState
             every { viewState.toSendView(clock) } returns mockSendView
@@ -345,9 +362,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val errorMessage = "Failure"
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
+                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         every { viewState.toSendView(clock) } returns mockSendView
@@ -396,6 +413,66 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                     message = BitwardenString.validation_field_required.asText(
                         BitwardenString.name.asText(),
                     ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with EMAIL auth type and blank emails should show error dialog`() {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                name = "test",
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        AuthEmail(value = ""),
+                        AuthEmail(value = "  "),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = viewState,
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.no_email_addresses_entered.asText(),
+                    message = BitwardenString
+                        .enter_at_least_one_valid_email_address_to_share_this_send
+                        .asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with EMAIL auth type and valid and invalid emails should show error dialog`() {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                name = "test",
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        AuthEmail(value = "valid@example.com"),
+                        AuthEmail(value = "invalid-email"),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(DEFAULT_STATE.copy(viewState = viewState))
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = viewState,
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.invalid_email_addresses.asText(),
+                    message = BitwardenString.one_or_more_email_addresses_are_incorrect.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -529,9 +606,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
+                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -591,9 +668,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
+                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -637,9 +714,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
-                    clock = clock,
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
+                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -712,9 +789,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
+                isSendEmailVerificationEnabled = false,
             )
         } returns DEFAULT_VIEW_STATE
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -780,9 +857,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         val mockSendView = createMockSendView(number = 1)
         every {
             mockSendView.toViewState(
-                clock = clock,
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
+                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -817,7 +894,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `DeletionDateChange should store the new deletion date`() {
         val viewModel = createViewModel()
-        val newDeletionDate = ZonedDateTime.parse("2024-09-13T00:00Z")
+        val newDeletionDate = Instant.parse("2024-09-13T00:00:00Z")
         // DEFAULT deletion date is "2023-11-03T00:00Z"
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
 
@@ -966,7 +1043,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     fun `PasswordChange should update note input`() = runTest {
         val viewModel = createViewModel()
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            common = DEFAULT_COMMON_STATE.copy(passwordInput = "input"),
+            common = DEFAULT_COMMON_STATE.copy(
+                passwordInput = "input",
+                sendAuth = SendAuth.Password,
+            ),
         )
 
         viewModel.stateFlow.test {
@@ -1059,6 +1139,289 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    //region Authentication Tests
+
+    @Test
+    fun `Changing AuthTypeSelect should not clear emails and password`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        val initialCommonState = DEFAULT_COMMON_STATE.copy(
+            passwordInput = "oldpassword",
+            sendAuth = SendAuth.Password,
+        )
+
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = initialCommonState,
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        val expectedNoneViewState = DEFAULT_VIEW_STATE.copy(
+            common = initialCommonState.copy(
+                sendAuth = SendAuth.None,
+            ),
+        )
+
+        val expectedEmptyEmailViewState = DEFAULT_VIEW_STATE.copy(
+            common = initialCommonState.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(AuthEmail(id = "uuid", value = "")),
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(
+                AddEditSendAction.AuthTypeSelect(
+                    SendAuth.None,
+                ),
+            )
+            assertEquals(initialState.copy(viewState = expectedNoneViewState), awaitItem())
+
+            viewModel.trySendAction(
+                AddEditSendAction.AuthTypeSelect(
+                    SendAuth.Email(),
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(viewState = expectedEmptyEmailViewState),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `AuthPasswordChange should update passwordInput`() = runTest {
+        val viewModel = createViewModel()
+        val expectedViewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(passwordInput = "newpassword"),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthPasswordChange("newpassword"))
+            assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AuthEmailChange should update email at specified index`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1, email2),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        val expectedViewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        email1,
+                        email2.copy(value = "updated@example.com"),
+                    ),
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailChange(
+                    AuthEmail(
+                        value = "updated@example.com",
+                        id = "id2",
+                    ),
+                ),
+            )
+            assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AuthEmailAdd should add empty email to list`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        val email1 = AuthEmail(id = "id1", value = "test@example.com")
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1),
+                    ),
+                ),
+            ),
+        )
+        val viewStateTwoEmails = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(
+                        email1,
+                        AuthEmail(id = "uuid", value = ""),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
+            assertEquals(
+                awaitItem(),
+                initialState.copy(viewState = viewStateTwoEmails),
+            )
+        }
+    }
+
+    @Test
+    fun `AuthEmailRemove should remove email at specified index`() = runTest {
+        val email1 = AuthEmail(id = "id1", value = "test1@example.com")
+        val email2 = AuthEmail(id = "id2", value = "test2@example.com")
+        val email3 = AuthEmail(id = "id3", value = "test3@example.com")
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1, email2, email3),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        val expectedViewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                sendAuth = SendAuth.Email(
+                    emails = persistentListOf(email1, email3),
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id2",
+                    ),
+                ),
+            )
+            assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AuthEmailRemove with last email should result in single empty AuthEmail`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        val email1 = AuthEmail(id = "id1", value = "test@example.com")
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    sendAuth = SendAuth.Email(
+                        emails = persistentListOf(email1),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(
+                AddEditSendAction.AuthEmailRemove(
+                    AuthEmail(
+                        value = "test@example.com",
+                        id = "id1",
+                    ),
+                ),
+            )
+            assertEquals(
+                initialState.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            sendAuth = SendAuth.Email(
+                                emails = persistentListOf(
+                                    AuthEmail(id = "uuid", value = ""),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+        val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
+        val viewModel = createViewModel(nonPremiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(nonPremiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
+            val newState = awaitItem()
+            assertEquals(
+                nonPremiumState.copy(
+                    dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                ),
+                newState,
+            )
+        }
+    }
+
+    @Test
+    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        val premiumState = DEFAULT_STATE.copy(isPremium = true)
+        val viewModel = createViewModel(premiumState)
+
+        viewModel.stateFlow.test {
+            assertEquals(premiumState, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(SendAuth.Email()))
+            // Verify auth type was changed
+            assertEquals(
+                premiumState.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            sendAuth = SendAuth.Email(
+                                emails = persistentListOf(
+                                    AuthEmail(id = "uuid", value = ""),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UpgradeToPremiumClick should send NavigateToPremium event`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+            val event = awaitItem()
+            assertEquals(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+                event,
+            )
+        }
+    }
+
+    //endregion Authentication Tests
+
     private fun createViewModel(
         state: AddEditSendState? = null,
         addEditSendType: AddEditSendType = AddEditSendType.AddItem,
@@ -1082,6 +1445,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         networkConnectionManager = networkConnectionManager,
         snackbarRelayManager = snackbarRelayManager,
         generatorRepository = generatorRepository,
+        featureFlagManager = featureFlagManager,
     )
 }
 
@@ -1093,11 +1457,13 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     noteInput = "",
     isHideEmailChecked = false,
     isDeactivateChecked = false,
-    deletionDate = ZonedDateTime.parse("2023-11-03T12:00Z"),
+    deletionDate = Instant.parse("2023-11-03T12:00:00Z"),
     expirationDate = null,
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
+    isSendEmailVerificationEnabled = false,
+    sendAuth = SendAuth.None,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(

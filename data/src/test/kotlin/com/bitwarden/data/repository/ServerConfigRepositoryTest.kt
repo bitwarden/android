@@ -166,6 +166,7 @@ private val SERVER_CONFIG = ServerConfig(
             "duo-redirect" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
+        communication = null,
     ),
 )
 
@@ -189,4 +190,5 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         "duo-redirect" to JsonPrimitive(true),
         "flexible-collections-v-1" to JsonPrimitive(false),
     ),
+    communication = null,
 )

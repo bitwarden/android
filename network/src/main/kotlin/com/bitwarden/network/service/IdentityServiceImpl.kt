@@ -54,6 +54,7 @@ internal class IdentityServiceImpl(
 
     override suspend fun getToken(
         uniqueAppId: String,
+        deeplinkScheme: String,
         email: String,
         authModel: IdentityTokenAuthModel,
         twoFactorData: TwoFactorDataModel?,
@@ -76,6 +77,7 @@ internal class IdentityServiceImpl(
             twoFactorRemember = twoFactorData?.remember?.let { if (it) "1" else "0 " },
             authRequestId = authModel.authRequestId,
             newDeviceOtp = newDeviceOtp,
+            deeplinkScheme = deeplinkScheme,
         )
         .toResult()
         .recoverCatching { throwable ->

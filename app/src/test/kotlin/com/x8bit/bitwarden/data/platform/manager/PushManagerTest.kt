@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class PushManagerTest {
@@ -264,7 +263,7 @@ class PushManagerTest {
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
                             ),
                             awaitItem(),
@@ -298,7 +297,7 @@ class PushManagerTest {
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
                             ),
                             awaitItem(),
@@ -315,7 +314,7 @@ class PushManagerTest {
                             SyncFolderUpsertData(
                                 userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
                             ),
                             awaitItem(),
@@ -347,7 +346,7 @@ class PushManagerTest {
                             SyncFolderUpsertData(
                                 userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
                             ),
                             awaitItem(),
@@ -378,7 +377,7 @@ class PushManagerTest {
                         SyncSendUpsertData(
                             userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = false,
                         ),
                         awaitItem(),
@@ -408,7 +407,7 @@ class PushManagerTest {
                         SyncSendUpsertData(
                             userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = true,
                         ),
                         awaitItem(),
@@ -710,10 +709,10 @@ class PushManagerTest {
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock
+                        .instant()
+                        .minus(6, ChronoUnit.DAYS)
+                        .minus(23, ChronoUnit.HOURS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -724,18 +723,18 @@ class PushManagerTest {
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     // Assert the last registration value has not changed
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
+                        lastRegistration.epochSecond,
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.epochSecond,
                     )
                 }
 
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerStoredPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock
+                        .instant()
+                        .minus(6, ChronoUnit.DAYS)
+                        .minus(23, ChronoUnit.HOURS)
                     pushDiskSource.registeredPushToken = newToken
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
@@ -747,18 +746,15 @@ class PushManagerTest {
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     // Assert the last registration value has not changed
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
+                        lastRegistration.epochSecond,
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.epochSecond,
                     )
                 }
 
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(8, ChronoUnit.DAYS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock.instant().minus(8, ChronoUnit.DAYS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -770,7 +766,7 @@ class PushManagerTest {
                     }
                     assertEquals(
                         clock.instant().epochSecond,
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -779,10 +775,7 @@ class PushManagerTest {
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerStoredPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(8, ChronoUnit.DAYS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock.instant().minus(8, ChronoUnit.DAYS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -795,7 +788,7 @@ class PushManagerTest {
                     }
                     assertEquals(
                         clock.instant().epochSecond,
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -825,9 +818,7 @@ class PushManagerTest {
                         }
                         assertEquals(
                             clock.instant().epochSecond,
-                            pushDiskSource
-                                .getLastPushTokenRegistrationDate(userId)
-                                ?.toEpochSecond(),
+                            pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                         )
                         assertEquals(newToken, pushDiskSource.registeredPushToken)
                         assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -844,9 +835,7 @@ class PushManagerTest {
                         }
                         assertEquals(
                             clock.instant().epochSecond,
-                            pushDiskSource
-                                .getLastPushTokenRegistrationDate(userId)
-                                ?.toEpochSecond(),
+                            pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                         )
                         assertEquals(newToken, pushDiskSource.registeredPushToken)
                         assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))

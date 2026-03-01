@@ -2,7 +2,7 @@
 
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [SyncResponseJson.Profile] with a given [number].
@@ -34,7 +34,7 @@ fun createMockProfile(
     providers: List<SyncResponseJson.Profile.Provider>? = listOf(
         createMockProvider(number = number),
     ),
-    creationDate: ZonedDateTime = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate: Instant = Instant.parse("2024-09-13T01:00:00.00Z"),
 ): SyncResponseJson.Profile =
     SyncResponseJson.Profile(
         providerOrganizations = providerOrganizations,
@@ -89,10 +89,10 @@ fun createMockOrganizationNetwork(
     shouldUseEvents: Boolean = false,
     familySponsorshipFriendlyName: String? = "mockFamilySponsorshipFriendlyName-$number",
     shouldUseTotp: Boolean = false,
-    familySponsorshipLastSyncDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    familySponsorshipLastSyncDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     name: String? = "mockName-$number",
     shouldUseApi: Boolean = false,
-    familySponsorshipValidUntil: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    familySponsorshipValidUntil: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     status: OrganizationStatusType = OrganizationStatusType.ACCEPTED,
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,

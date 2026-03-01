@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Entity representing a folder in the database.
@@ -21,5 +21,5 @@ data class FolderEntity(
     val name: String?,
 
     @ColumnInfo(name = "revision_date")
-    val revisionDate: ZonedDateTime,
+    val revisionDate: Instant,
 )

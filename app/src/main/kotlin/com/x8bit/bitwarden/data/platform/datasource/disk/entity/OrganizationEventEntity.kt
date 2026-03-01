@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Entity representing an organization event in the database.
@@ -24,7 +24,7 @@ data class OrganizationEventEntity(
     val cipherId: String?,
 
     @ColumnInfo(name = "date")
-    val date: ZonedDateTime,
+    val date: Instant,
 
     @ColumnInfo(name = "organization_id")
     val organizationId: String?,

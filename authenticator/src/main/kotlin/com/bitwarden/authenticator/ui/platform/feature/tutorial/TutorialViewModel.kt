@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.feature.tutorial
 
 import android.os.Parcelable
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -13,17 +14,18 @@ import javax.inject.Inject
  * View model for the [TutorialScreen].
  */
 @HiltViewModel
-class TutorialViewModel @Inject constructor() :
-    BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
-        initialState = TutorialState(
-            index = 0,
-            pages = listOf(
-                TutorialState.TutorialSlide.IntroSlide,
-                TutorialState.TutorialSlide.QrScannerSlide,
-                TutorialState.TutorialSlide.UniqueCodesSlide,
-            ),
+class TutorialViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository,
+) : BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
+    initialState = TutorialState(
+        index = 0,
+        pages = listOf(
+            TutorialState.TutorialSlide.IntroSlide,
+            TutorialState.TutorialSlide.QrScannerSlide,
+            TutorialState.TutorialSlide.UniqueCodesSlide,
         ),
-    ) {
+    ),
+) {
     override fun handleAction(action: TutorialAction) {
         when (action) {
             is TutorialAction.PagerSwipe -> handlePagerSwipe(action)
@@ -45,6 +47,7 @@ class TutorialViewModel @Inject constructor() :
     private fun handleContinueClick(action: TutorialAction.ContinueClick) {
         if (mutableStateFlow.value.isLastPage) {
             sendEvent(TutorialEvent.NavigateToAuthenticator)
+            settingsRepository.hasSeenWelcomeTutorial = true
         } else {
             mutableStateFlow.update { it.copy(index = action.index + 1) }
             sendEvent(TutorialEvent.UpdatePager(index = action.index + 1))
@@ -53,6 +56,7 @@ class TutorialViewModel @Inject constructor() :
 
     private fun handleSkipClick() {
         sendEvent(TutorialEvent.NavigateToAuthenticator)
+        settingsRepository.hasSeenWelcomeTutorial = true
     }
 }
 

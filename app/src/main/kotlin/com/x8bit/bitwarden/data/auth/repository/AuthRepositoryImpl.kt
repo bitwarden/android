@@ -14,6 +14,7 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.repository.util.appLinksScheme
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.CreateAccountKeysResponseJson
@@ -94,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
+import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -267,6 +269,10 @@ class AuthRepositoryImpl(
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
     override val ssoCallbackResultFlow: Flow<SsoCallbackResult> =
         mutableSsoCallbackResultFlow.asSharedFlow()
+
+    private val mutableCookieCallbackResultFlow = bufferedMutableSharedFlow<CookieCallbackResult>()
+    override val cookieCallbackResultFlow: Flow<CookieCallbackResult> =
+        mutableCookieCallbackResultFlow.asSharedFlow()
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
@@ -732,18 +738,27 @@ class AuthRepositoryImpl(
                 when (refreshTokenResponse) {
                     is RefreshTokenResponseJson.Error -> {
                         if (refreshTokenResponse.isInvalidGrant) {
-                            logout(userId = userId, reason = LogoutReason.InvalidGrant)
+                            userLogoutManager.softLogout(
+                                userId = userId,
+                                reason = LogoutReason.InvalidGrant,
+                            )
                         }
                         IllegalStateException(refreshTokenResponse.error).asFailure()
                     }
 
                     is RefreshTokenResponseJson.Forbidden -> {
-                        logout(userId = userId, reason = LogoutReason.RefreshForbidden)
+                        userLogoutManager.softLogout(
+                            userId = userId,
+                            reason = LogoutReason.RefreshForbidden,
+                        )
                         refreshTokenResponse.error.asFailure()
                     }
 
                     is RefreshTokenResponseJson.Unauthorized -> {
-                        logout(userId = userId, reason = LogoutReason.RefreshUnauthorized)
+                        userLogoutManager.softLogout(
+                            userId = userId,
+                            reason = LogoutReason.RefreshUnauthorized,
+                        )
                         refreshTokenResponse.error.asFailure()
                     }
 
@@ -1248,6 +1263,10 @@ class AuthRepositoryImpl(
         mutableSsoCallbackResultFlow.tryEmit(result)
     }
 
+    override fun setCookieCallbackResult(result: CookieCallbackResult) {
+        mutableCookieCallbackResultFlow.tryEmit(result)
+    }
+
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService
             .getIsKnownDevice(
@@ -1573,6 +1592,7 @@ class AuthRepositoryImpl(
     ): LoginResult = identityService
         .getToken(
             uniqueAppId = authDiskSource.uniqueAppId,
+            deeplinkScheme = environmentRepository.environment.environmentUrlData.appLinksScheme,
             email = email,
             authModel = authModel,
             twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),

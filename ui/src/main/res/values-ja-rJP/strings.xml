@@ -302,7 +302,7 @@
     <string name="organization">組織</string>
     <string name="try_again">もう一度実行</string>
     <string name="created">作成日: %1$s</string>
-    <string name="password_last_updated">パスワードの最終更新: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">最終編集: %1$s</string>
     <string name="invalid_email">無効なメールアドレスです。</string>
     <string name="cards">カード</string>
@@ -446,6 +446,13 @@
     <string name="deletion_date">削除日</string>
     <string name="deletion_time">削除時刻</string>
     <string name="deletion_date_info">Send は指定された日時に完全に削除されます。</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">削除の保留中</string>
     <string name="expired">有効期限切れ</string>
     <string name="expires_at">%s で期限切れ</string>
@@ -487,6 +494,7 @@
     <string name="hide_email">メールアドレスを受信者に表示しない</string>
     <string name="send_options_policy_in_effect">一つ以上の組織ポリシーが Send の設定に影響しています。</string>
     <string name="send_file_premium_required">無料アカウントではテキストの共有のみに制限されています。Send でファイルを送信するにはプレミアム会員登録が必要です。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">マスターパスワードの再要求</string>
     <string name="password_confirmation">マスターパスワードの確認</string>
     <string name="password_confirmation_desc">この操作は保護されています。続行するには、確認のためにマスターパスワードを再入力してください。</string>
@@ -931,6 +939,7 @@
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
@@ -1044,7 +1053,7 @@
     <string name="export_confirmation_title">エクスポートの確認</string>
     <string name="export_success">データのエクスポートに成功しました</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">セキュリティ</string>
     <string name="too_many_failed_biometric_attempts">生体認証の失敗回数が多すぎます。</string>
     <string name="version">バージョン</string>
@@ -1130,7 +1139,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1191,4 +1199,12 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">マスターパスワードを更新しました</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

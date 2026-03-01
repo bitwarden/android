@@ -122,6 +122,39 @@ platform :android do
     )
   end
 
+  desc "Run static analysis (detekt + lint)"
+  lane :checkLint do
+    gradle(
+      tasks: [
+        "detekt",
+        "lintStandardDebug",
+        "lintDebug",
+      ]
+    )
+  end
+
+  desc "Run app module tests for a specific shard"
+  lane :testAppShard do |options|
+    gradle(
+      task: ":app:testStandardDebugUnitTest",
+      flags: options[:target],
+    )
+  end
+
+  desc "Run library module tests for specified modules"
+  lane :testLibraries do |options|
+    tasks = options[:target].split(" ").map { |mod| "#{mod}:testDebugUnitTest" }
+    gradle(tasks: tasks)
+  end
+
+  desc "Generate merged Kover coverage report from existing binary data"
+  lane :generateCoverageReport do
+    gradle(
+      task: "koverXmlReportMergedCoverage",
+      flags: "-x testStandardDebugUnitTest -x testDebugUnitTest",
+    )
+  end
+
   desc "Apply build version information"
   fastlane_require "time"
   lane :setBuildVersionInfo do |options|

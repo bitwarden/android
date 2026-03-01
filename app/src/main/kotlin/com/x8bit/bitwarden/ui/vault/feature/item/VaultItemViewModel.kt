@@ -1301,7 +1301,7 @@ class VaultItemViewModel @Inject constructor(
                 updateDialogState(dialog = null)
                 snackbarRelayManager.sendSnackbarData(
                     data = BitwardenSnackbarData(BitwardenString.item_moved_to_archived.asText()),
-                    relay = SnackbarRelay.CIPHER_ARCHIVED,
+                    relay = SnackbarRelay.CIPHER_ARCHIVED_VIEW,
                 )
                 sendEvent(VaultItemEvent.NavigateBack)
             }
@@ -1325,7 +1325,7 @@ class VaultItemViewModel @Inject constructor(
                 updateDialogState(dialog = null)
                 snackbarRelayManager.sendSnackbarData(
                     data = BitwardenSnackbarData(BitwardenString.item_moved_to_vault.asText()),
-                    relay = SnackbarRelay.CIPHER_UNARCHIVED,
+                    relay = SnackbarRelay.CIPHER_UNARCHIVED_VIEW,
                 )
                 sendEvent(VaultItemEvent.NavigateBack)
             }

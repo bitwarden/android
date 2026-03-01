@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class AuthenticatorBridgeRepositoryTest {
 
@@ -508,14 +508,14 @@ private val USER_1_DELETED_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1Deleted"
     every { login?.username } returns "username"
     every { archivedDate } returns null
-    every { deletedDate } returns ZonedDateTime.parse("2023-10-27T12:00:00Z")
+    every { deletedDate } returns Instant.parse("2023-10-27T12:00:00Z")
     every { name } returns "cipher1"
 }
 
 private val USER_1_ARCHIVED_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1Deleted"
     every { login?.username } returns "username"
-    every { archivedDate } returns ZonedDateTime.parse("2023-10-27T12:00:00Z")
+    every { archivedDate } returns Instant.parse("2023-10-27T12:00:00Z")
     every { deletedDate } returns null
     every { name } returns "cipher1"
 }

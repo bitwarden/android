@@ -85,7 +85,7 @@ class OriginManagerTest {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
             }
             assertEquals(
-                ValidateOriginResult.Success(DEFAULT_ORIGIN),
+                ValidateOriginResult.Success("https://$DEFAULT_ORIGIN"),
                 result,
             )
         }
@@ -139,7 +139,7 @@ class OriginManagerTest {
                 mockPrivilegedAppRepository.getUserTrustedAllowListJson()
             }
             assertEquals(
-                ValidateOriginResult.Success(DEFAULT_ORIGIN),
+                ValidateOriginResult.Success("https://$DEFAULT_ORIGIN"),
                 result,
             )
         }

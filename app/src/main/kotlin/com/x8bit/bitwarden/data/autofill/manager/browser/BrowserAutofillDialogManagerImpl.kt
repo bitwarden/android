@@ -29,7 +29,7 @@ internal class BrowserAutofillDialogManagerImpl(
         get() = autofillEnabledManager.isAutofillEnabled &&
             browserThirdPartyAutofillEnabledManager
                 .browserThirdPartyAutofillStatus
-                .isAnyIsAvailableAndDisabled &&
+                .isDefaultBrowserAvailableAndDisabled &&
             !firstTimeActionManager
                 .currentOrDefaultUserFirstTimeState
                 .showSetupBrowserAutofillCard &&

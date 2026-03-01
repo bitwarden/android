@@ -429,7 +429,7 @@ private fun ColumnScope.VaultSettings(
                 Icon(
                     modifier = Modifier.mirrorIfRtl(),
                     painter = painterResource(id = BitwardenDrawable.ic_external_link),
-                    contentDescription = null,
+                    contentDescription = stringResource(id = BitwardenString.external_link),
                     tint = BitwardenTheme.colorScheme.icon.primary,
                 )
             },

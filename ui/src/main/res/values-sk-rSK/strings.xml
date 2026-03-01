@@ -305,7 +305,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
     <string name="created">Vytvorené: %1$s</string>
-    <string name="password_last_updated">Naposledy upravené heslo: %1$s</string>
+    <string name="password_updated">Aktualizované heslo: %1$s</string>
     <string name="last_edited">Naposledy upravené: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
@@ -452,6 +452,13 @@ Skenovanie prebehne automaticky.</string>
     <string name="deletion_date">Dátum odstránenia</string>
     <string name="deletion_time">Čas odstránenia</string>
     <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
+    <string name="who_can_view">Kto môže zobraziť</string>
+    <string name="anyone_with_the_link">Ktokoľvek s odkazom</string>
+    <string name="anyone_with_link_can_view_send">Ktokoľvek s týmto odkazom môže zobraziť tento Send</string>
+    <string name="specific_people">Konkrétne osoby</string>
+    <string name="specific_people_verification_info">Po zdieľaní tohto odkazu na Send budú musieť jednotlivci overiť svoju e-mailovú adresu pomocou kódu na zobrazenie tohto Sendu</string>
+    <string name="anyone_with_password">Ktokoľvek s heslom od vás</string>
+    <string name="add_email">Pridať e-mail</string>
     <string name="pending_delete">Čakajúce odstránenie</string>
     <string name="expired">Exspirované</string>
     <string name="expires_at">Vyprší %s</string>
@@ -493,6 +500,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="hide_email">Skryť moju e-mailovú adresu pred príjemcami</string>
     <string name="send_options_policy_in_effect">Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</string>
     <string name="send_file_premium_required">Bezplatné účty sú obmedzené len na zdieľanie textu. Na odosielanie súborov cez Send sa vyžaduje prémiové členstvo.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Zdieľanie s konkrétnymi osobami je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="password_prompt">Znova zadajte hlavné heslo</string>
     <string name="password_confirmation">Potvrdenie hlavného hesla</string>
     <string name="password_confirmation_desc">Táto akcia je chránená. Ak chcete pokračovať, znova zadajte hlavné heslo a overte svoju totožnosť.</string>
@@ -944,8 +952,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Operácia s poverením zlyhala, pretože overenie používateľa bolo zrušené.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
     <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
-    <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
-    <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chrome Beta</string>
+    <string name="use_chrome_autofill_integration">Použite integráciu automatického vypĺňania Chromu</string>
+    <string name="use_chrome_beta_autofill_integration">Použite integráciu automatického vypĺňania Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Použite integráciu automatického vypĺňania Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky vo vybraných prehliadačoch. Po zapnutí budete presmerovaní do nastavení prehliadača na povolenie automatického vypĺňania od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>
@@ -1154,7 +1163,6 @@ Chcete prepnúť na tento účet?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Povolenie funkcie automatického vypĺňania v prehliadači na ponechanie vypĺňania hesiel</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Váš prehliadač bol nedávno aktualizovaný, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadači v nastaveniach automatického vypĺňania.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Vaše prehliadače boli nedávno aktualizované, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadačoch v nastaveniach automatického vypĺňania.</string>
     <string name="not_now">Teraz nie</string>
     <string name="import_from_bitwarden">Importovať z Bitwardenu</string>
     <string name="select_account">Vyberte účet</string>
@@ -1215,4 +1223,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="restart_premium">Reštartovať Prémium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Hlavné heslo bolo aktualizované</string>
+    <string name="invalid_email_addresses">Neplatná e-mailová adresa</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Jedna alebo viaceré e-mailové adresy sú nesprávne. Skontrolujte ich a skúste to znovu.</string>
+    <string name="no_email_addresses_entered">Nezadali ste žiadne e-mailové adresy</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Zadajte aspoň jednu platnú e-mailovú adresu, aby ste mohli zdieľať tento Send.</string>
+    <string name="sync_with_browser">Synchronizácia s prehliadačom</string>
+    <string name="sync_with_browser_description">Ak sa chcete pripojiť k %1$s, synchronizujte svoj predvolený prehliadač s mobilnou aplikáciou Bitwarden. Po otvorení prehliadača sa prihláste, ak budete vyzvaní.\nPo dokončení synchronizácie sa vrátite do tejto aplikácie.</string>
+    <string name="launch_browser">Spustiť prehliadač</string>
+    <string name="continue_without_syncing">Pokračovať bez synchronizácie</string>
 </resources>

@@ -76,6 +76,11 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = false,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = null,
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -105,6 +110,11 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = true,
                 isThirdPartyEnabled = true,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = "com.android.chrome",
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -137,6 +147,11 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = "com.android.chrome",
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -169,6 +184,11 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = "com.android.chrome",
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {
@@ -178,6 +198,40 @@ class BrowserAutofillDialogManagerTest {
             firstTimeActionManager.currentOrDefaultUserFirstTimeState
         } returns FirstTimeState(showSetupBrowserAutofillCard = false)
         fakeSettingsDiskSource.browserAutofillDialogReshowTime = FIXED_CLOCK.instant()
+
+        assertFalse(manager.shouldShowDialog)
+
+        verify(exactly = 1) {
+            autofillEnabledManager.isAutofillEnabled
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        }
+    }
+
+    @Test
+    fun `shouldShowDialog should be false when default browser is not a supported browser`() {
+        val browserThirdPartyAutofillStatus = BrowserThirdPartyAutofillStatus(
+            braveStableStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            chromeStableStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+            chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = "org.mozilla.firefox",
+        )
+        every { autofillEnabledManager.isAutofillEnabled } returns true
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns browserThirdPartyAutofillStatus
 
         assertFalse(manager.shouldShowDialog)
 
@@ -202,6 +256,11 @@ class BrowserAutofillDialogManagerTest {
                 isAvailable = true,
                 isThirdPartyEnabled = false,
             ),
+            vivaldiStableChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = false,
+                isThirdPartyEnabled = false,
+            ),
+            defaultBrowserPackageName = "com.android.chrome",
         )
         every { autofillEnabledManager.isAutofillEnabled } returns true
         every {

@@ -1,4 +1,5 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.impl.VariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -10,15 +11,21 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = "com.bitwarden.testharness"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
         applicationId = "com.bitwarden.testharness"
         // API 28 - CredentialManager with Play Services support
-        minSdk = libs.versions.minSdkBwa.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
+        targetSdk {
+            version = release(libs.versions.targetSdk.get().toInt())
+        }
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
@@ -39,15 +46,6 @@ android {
         }
     }
 
-    applicationVariants.all {
-        outputs
-            .mapNotNull { it as? BaseVariantOutputImpl }
-            .forEach { output ->
-                // Set the APK output filename.
-                output.outputFileName = "$applicationId.apk"
-            }
-    }
-
     buildFeatures {
         compose = true
         buildConfig = true
@@ -63,11 +61,23 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
+}
 
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
-        }
+androidComponents {
+    onVariants { appVariant ->
+        appVariant
+            .outputs
+            .mapNotNull { it as? VariantOutputImpl }
+            .forEach { output ->
+                // Set the APK output filename.
+                output.outputFileName.set("${appVariant.applicationId.get()}.apk")
+            }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 

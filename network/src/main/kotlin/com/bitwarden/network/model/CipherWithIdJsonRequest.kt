@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents a cipher request with an ID, typically used in bulk operations
@@ -31,7 +31,7 @@ data class CipherWithIdJsonRequest(
 
     @SerialName("lastKnownRevisionDate")
     @Contextual
-    val lastKnownRevisionDate: ZonedDateTime?,
+    val lastKnownRevisionDate: Instant?,
 
     @SerialName("type")
     val type: CipherTypeJson,

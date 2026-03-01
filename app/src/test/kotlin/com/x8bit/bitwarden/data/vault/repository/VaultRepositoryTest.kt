@@ -77,7 +77,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.security.GeneralSecurityException
 import java.time.Instant
-import java.time.ZonedDateTime
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 
@@ -1551,7 +1550,7 @@ private val MOCK_BASE_PROFILE = AccountJson.Profile(
     kdfParallelism = null,
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_PROFILE = MOCK_BASE_PROFILE.copy(

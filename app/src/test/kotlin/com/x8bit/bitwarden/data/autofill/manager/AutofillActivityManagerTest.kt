@@ -44,6 +44,8 @@ class AutofillActivityManagerTest {
         every { stableBraveAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
         every { stableChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
         every { betaChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        every { stableVivaldiAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        every { defaultBrowserPackageName } returns null
     }
 
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager =
@@ -119,4 +121,6 @@ private val DEFAULT_EXPECTED_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
     braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    vivaldiStableChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    defaultBrowserPackageName = null,
 )

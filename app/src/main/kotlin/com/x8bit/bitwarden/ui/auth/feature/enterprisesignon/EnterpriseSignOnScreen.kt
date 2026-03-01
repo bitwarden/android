@@ -66,7 +66,7 @@ fun EnterpriseSignOnScreen(
             is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
                 intentManager.startAuthTab(
                     uri = event.uri,
-                    redirectScheme = event.scheme,
+                    authTabData = event.authTabData,
                     launcher = authTabLaunchers.sso,
                 )
             }

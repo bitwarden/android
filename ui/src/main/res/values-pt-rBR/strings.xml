@@ -303,7 +303,7 @@ A leitura será feita automaticamente.</string>
     <string name="organization">Organização</string>
     <string name="try_again">Tentar novamente</string>
     <string name="created">Criado: %1$s</string>
-    <string name="password_last_updated">Última atualização de senha: %1$s</string>
+    <string name="password_updated">Última atualização de senha: %1$s</string>
     <string name="last_edited">Última edição: %1$s</string>
     <string name="invalid_email">Endereço de e-mail inválido.</string>
     <string name="cards">Cartões</string>
@@ -448,6 +448,13 @@ A leitura será feita automaticamente.</string>
     <string name="deletion_date">Data de apagamento</string>
     <string name="deletion_time">Horário de apagamento</string>
     <string name="deletion_date_info">O Send será apagado permanentemente no horário especificado.</string>
+    <string name="who_can_view">Quem pode visualizar</string>
+    <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
+    <string name="anyone_with_link_can_view_send">Qualquer um com este link pode ver este Send</string>
+    <string name="specific_people">Pessoas específicas</string>
+    <string name="specific_people_verification_info">Após compartilhar este link de Send, indivíduos precisarão verificar seus e-mails com um código para visualizar este Send</string>
+    <string name="anyone_with_password">Qualquer pessoa com uma senha configurada por você</string>
+    <string name="add_email">Adicionar e-mail</string>
     <string name="pending_delete">Apagamento pendente</string>
     <string name="expired">Vencido</string>
     <string name="expires_at">Expira às %s</string>
@@ -489,6 +496,7 @@ A leitura será feita automaticamente.</string>
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
     <string name="send_file_premium_required">Contas gratuitas são limitadas para compartilhar apenas texto. É necessário um plano Premium para usar arquivos com o Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">O compartilhamento com pessoas específicas é um recurso do Premium. O seu plano atual não inclui acesso a este recurso.</string>
     <string name="password_prompt">Resolicitar senha principal</string>
     <string name="password_confirmation">Confirmação de senha principal</string>
     <string name="password_confirmation_desc">Esta ação é protegida, para continuar redigite a sua senha principal para verificar a sua identidade.</string>
@@ -936,6 +944,7 @@ Quer trocar para esta conta?</string>
     <string name="use_brave_autofill_integration">Usar a integração de preenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração de preenchimento do Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Usar integração de preenchimento do Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Integração com o autopreenchimento do Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Assim que ativado, você será direcionado para as configurações do navegador para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Sem pasta</string>
@@ -1138,7 +1147,6 @@ Quer trocar para esta conta?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Ative o preenchimento automático do navegador para continuar preenchendo senhas</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">O seu navegador foi atualizado recentemente, e isso desativou o preenchimento automático do Bitwarden. Para continuar preenchendo suas senhas com o Bitwarden, ative o preenchimento automático de navegador nas configurações de preenchimento automático.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Os seus navegadores foram atualizados recentemente, e isso desativou o preenchimento automático do Bitwarden. Para continuar preenchendo suas senhas com o Bitwarden, ative o preenchimento automático de navegador nas configurações de preenchimento automático.</string>
     <string name="not_now">Agora não</string>
     <string name="import_from_bitwarden">Importar do Bitwarden</string>
     <string name="select_account">Selecionar conta</string>
@@ -1175,8 +1183,8 @@ Quer trocar para esta conta?</string>
     <string name="migrating_items_to_x">Migrando itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
     <string name="search_archive">Buscar no arquivo</string>
-    <string name="archive_noun">Arquivo</string>
-    <string name="archive_verb">Arquivo</string>
+    <string name="archive_noun">Arquivar</string>
+    <string name="archive_verb">Arquivar</string>
     <string name="unarchive">Desarquivar</string>
     <string name="archived">Arquivados</string>
     <string name="hidden_items">Itens ocultos</string>
@@ -1199,4 +1207,12 @@ Quer trocar para esta conta?</string>
     <string name="restart_premium">Retomar Premium</string>
     <string name="items_transferred">Itens transferidos</string>
     <string name="updated_master_password">Senha principal atualizada</string>
+    <string name="invalid_email_addresses">Endereços de e-mail inválidos</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Revise e tente novamente.</string>
+    <string name="no_email_addresses_entered">Nenhum endereço de e-mail digitado</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Digite pelo menos um endereço de e-mail válido para compartilhar este Send.</string>
+    <string name="sync_with_browser">Sincronizar com o navegador</string>
+    <string name="sync_with_browser_description">Para conectar ao %1$s, sincronize o seu navegador padrão com o aplicativo do Bitwarden. Quando seu navegador abrir, conclua a autenticação se necessário.\nNa conclusão da sincronização, você voltará ao aplicativo.</string>
+    <string name="launch_browser">Abrir navegador</string>
+    <string name="continue_without_syncing">Continuar sem sincronizar</string>
 </resources>

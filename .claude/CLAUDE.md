@@ -1,105 +1,150 @@
-# Claude Guidelines
+# Bitwarden Android - Claude Code Configuration
 
-Core directives for maintaining code quality and consistency in the Bitwarden Android project.
+Official Android application for Bitwarden Password Manager and Bitwarden Authenticator, providing secure password management, two-factor authentication, and credential autofill services with zero-knowledge encryption.
 
-## Core Directives
+## Overview
 
-**You MUST follow these directives at all times.**
+- Multi-module Android application: `:app` (Password Manager), `:authenticator` (2FA TOTP generator)
+- Zero-knowledge architecture: encryption/decryption happens client-side via Bitwarden SDK
+- Target users: End-users via Google Play Store and F-Droid
 
-1. **Adhere to Architecture**: All code modifications MUST follow patterns in `docs/ARCHITECTURE.md`
-2. **Follow Code Style**: ALWAYS follow `docs/STYLE_AND_BEST_PRACTICES.md`
-3. **Error Handling**: Use Result types and sealed classes per architecture guidelines
-4. **Best Practices**: Follow Kotlin idioms (immutability, appropriate data structures, coroutines)
-5. **Document Everything**: All public APIs require KDoc documentation
-6. **Dependency Management**: Use Hilt DI patterns as established in the project
-7. **Use Established Patterns**: Leverage existing components before creating new ones
-8. **File References**: Use file:line_number format when referencing code
+### Key Concepts
+- **Zero-Knowledge Architecture**: Server never has access to unencrypted vault data or encryption keys
+- **Bitwarden SDK**: Rust-based cryptographic SDK handling all encryption/decryption operations
+- **DataState**: Wrapper for streaming data states (Loading, Loaded, Pending, Error, NoNetwork)
+- **Result Types**: Custom sealed classes for operation results (never throw exceptions from data layer)
+- **UDF (Unidirectional Data Flow)**: State flows down, actions flow up through ViewModels
 
-## Code Quality Standards
+---
 
-### Module Organization
+## Architecture
 
-**Core Library Modules:**
-- **`:core`** - Common utilities and managers shared across multiple modules
-- **`:data`** - Data sources, database, data repositories
-- **`:network`** - Networking interfaces, API clients, network utilities
-- **`:ui`** - Reusable Bitwarden Composables, theming, UI utilities
+```
+User Request (UI Action)
+         |
+    Screen (Compose)
+         |
+    ViewModel (State/Action/Event)
+         |
+    Repository (Business Logic)
+         |
+    +----+----+----+
+    |    |    |    |
+  Disk  Network  SDK
+   |      |      |
+ Room  Retrofit  Bitwarden
+  DB    APIs     Rust SDK
+```
 
-**Application Modules:**
-- **`:app`** - Password Manager application, feature screens, ViewModels, DI setup
-- **`:authenticator`** - Authenticator application for 2FA/TOTP code generation
+### Key Principles
 
-**Specialized Library Modules:**
-- **`:authenticatorbridge`** - Communication bridge between :authenticator and :app
-- **`:annotation`** - Custom annotations for code generation (Hilt, Room, etc.)
-- **`:cxf`** - Android Credential Exchange (CXF/CXP) integration layer
+1. **No Exceptions from Data Layer**: All suspending functions return `Result<T>` or custom sealed classes
+2. **State Hoisting to ViewModel**: All state that affects behavior must live in the ViewModel's state
+3. **Interface-Based DI**: All implementations use interface/`...Impl` pairs with Hilt injection
+4. **Encryption by Default**: All sensitive data encrypted via SDK before storage
 
-### Patterns Enforcement
+### Core Patterns
 
-- **MVVM + UDF**: ViewModels with StateFlow, Compose UI
-- **Hilt DI**: Interface injection, @HiltViewModel, @Inject constructor
-- **Testing**: JUnit 5, MockK, Turbine for Flow testing
-- **Error Handling**: Sealed Result types, no throws in business logic
+- **BaseViewModel**: Enforces UDF with State/Action/Event pattern. See `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt`.
+- **Repository Result Pattern**: Type-safe error handling using custom sealed classes for discrete operations and `DataState<T>` wrapper for streaming data.
+- **Common Patterns**: Flow collection via `Internal` actions, error handling via `when` branches, `DataState` streaming with `.map { }` and `.stateIn()`.
 
-## Security Requirements
+> For complete architecture patterns, code templates, and module organization, see `docs/ARCHITECTURE.md`.
 
-**Every change must consider:**
-- Zero-knowledge architecture preservation
-- Proper encryption key handling (Android Keystore)
-- Input validation and sanitization
-- Secure data storage patterns
-- Threat model implications
+---
 
-## Workflow Practices
+## Development Guide
 
-### Before Implementation
+### Adding New Feature Screen
 
-1. Read relevant architecture documentation
-2. Search for existing patterns to follow
-3. Identify affected modules and dependencies
-4. Consider security implications
+Use the `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates. Steps:
 
-### During Implementation
+1. **Define State/Event/Action** - `@Parcelize` state, sealed event/action classes with `Internal` subclass
+2. **Implement ViewModel** - Extend `BaseViewModel<S, E, A>`, persist state via `SavedStateHandle`
+3. **Implement Screen** - Stateless `@Composable`, use `EventsEffect` for navigation
+4. **Define Navigation** - `@Serializable` route, `NavGraphBuilder`/`NavController` extensions
+5. **Write Tests** - Use the `testing-android-code` skill for test patterns and templates
 
-1. Follow existing code style in surrounding files
-2. Write tests alongside implementation
-3. Add KDoc to all public APIs
-4. Validate against architecture guidelines
+### Code Reviews
 
-### After Implementation
+Use the `reviewing-changes` skill for structured code review checklists covering MVVM/Compose patterns, security validation, and type-specific review guidance.
 
-1. Ensure all tests pass
-2. Verify compilation succeeds
-3. Review security considerations
-4. Update relevant documentation
+---
+
+## Data Models
+
+Key types used throughout the codebase:
+
+- **`UserState`** (`data/auth/`) - Active user ID, accounts list, pending account state
+- **`VaultUnlockData`** (`data/vault/repository/model/`) - User ID and vault unlock status
+- **`NetworkResult<T>`** (`network/`) - HTTP operation result: Success or Failure
+- **`BitwardenError`** (`network/`) - Error classification: Http, Network, Other
+
+---
+
+## Security & Configuration
+
+### Security Rules
+
+**MANDATORY - These rules have no exceptions:**
+
+1. **Zero-Knowledge Architecture**: Never transmit unencrypted vault data or master passwords to the server. All encryption happens client-side via the Bitwarden SDK.
+
+2. **No Plaintext Key Storage**: Encryption keys must be stored using Android Keystore (biometric unlock) or encrypted with PIN/master password.
+
+3. **Sensitive Data Cleanup**: On logout, all sensitive data must be cleared from memory and storage via `UserLogoutManager.logout()`.
+
+4. **Input Validation**: Validate all user inputs before processing, especially URLs and credentials.
+
+5. **SDK Isolation**: Use scoped SDK sources (`ScopedVaultSdkSource`) to prevent cross-user crypto context leakage.
+
+### Security Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `BiometricsEncryptionManager` | `data/platform/manager/` | Android Keystore integration for biometric unlock |
+| `VaultLockManager` | `data/vault/manager/` | Vault lock/unlock operations |
+| `AuthDiskSource` | `data/auth/datasource/disk/` | Secure token and key storage |
+| `BaseEncryptedDiskSource` | `data/datasource/disk/` | EncryptedSharedPreferences base class |
+
+---
+
+## Code Style & Standards
+
+- **Formatter**: Android Studio with `bitwarden-style.xml` | **Line Limit**: 100 chars | **Detekt**: Enabled
+- **Naming**: `camelCase` (vars/fns), `PascalCase` (classes), `SCREAMING_SNAKE_CASE` (constants), `...Impl` (implementations)
+- **KDoc**: Required for all public APIs
+- **String Resources**: Add new strings to `:ui` module (`ui/src/main/res/values/strings.xml`). Use typographic quotes/apostrophes (`"` `"` `'`) not escaped ASCII (`\"` `\'`)
+
+> For complete style rules (imports, formatting, documentation, Compose conventions), see `docs/STYLE_AND_BEST_PRACTICES.md`.
+
+---
 
 ## Anti-Patterns
 
-**Avoid these:**
-- Creating new patterns when established ones exist
-- Exception-based error handling in business logic
-- Direct dependency access (use DI)
-- Mutable state in ViewModels (use StateFlow)
-- Missing null safety handling
-- Undocumented public APIs
-- Tight coupling between modules
+In addition to the Key Principles above, follow these rules:
 
-## Communication & Decision-Making
+### DO
+- Use `remember(viewModel)` for lambdas passed to composables
+- Map async results to internal actions before updating state
+- Inject `Clock` for time-dependent operations
+- Return early to reduce nesting
 
-Always clarify ambiguous requirements before implementing. Use specific questions:
-- "Should this use [Approach A] or [Approach B]?"
-- "This affects [X]. Proceed or review first?"
-- "Expected behavior for [specific requirement]?"
+### DON'T
+- Update state directly inside coroutines (use internal actions)
+- Use `any` types or suppress null safety
+- Catch generic `Exception` (catch specific types)
+- Use `e.printStackTrace()` (use Timber logging)
+- Create new patterns when established ones exist
+- Skip KDoc for public APIs
 
-Defer high-impact decisions to the user:
-- Architecture/module changes, public API modifications
-- Security mechanisms, database migrations
-- Third-party library additions
+---
 
-## Reference Documentation
+## Quick Reference
 
-Critical resources:
-- `docs/ARCHITECTURE.md` - Architecture patterns and principles
-- `docs/STYLE_AND_BEST_PRACTICES.md` - Code style guidelines
-
-**Do not duplicate information from these files - reference them instead.**
+- **Code style**: Full rules: `docs/STYLE_AND_BEST_PRACTICES.md`
+- **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
+- **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
+- **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
+- **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
+- **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)

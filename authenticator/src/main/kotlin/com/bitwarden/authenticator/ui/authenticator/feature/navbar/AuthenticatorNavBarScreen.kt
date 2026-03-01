@@ -173,7 +173,6 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_verification_codes_filled
         override val iconRes get() = BitwardenDrawable.ic_verification_codes
         override val labelRes get() = BitwardenString.verification_codes
-        override val contentDescriptionRes get() = BitwardenString.verification_codes
         override val graphRoute get() = ItemListingGraphRoute
         override val startDestinationRoute get() = ItemListingRoute
         override val testTag get() = "VerificationCodesTab"
@@ -188,7 +187,6 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_settings_filled
         override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = BitwardenString.settings
-        override val contentDescriptionRes get() = BitwardenString.settings
         override val graphRoute get() = SettingsGraphRoute
         override val startDestinationRoute get() = SettingsRoute
         override val testTag get() = "SettingsTab"

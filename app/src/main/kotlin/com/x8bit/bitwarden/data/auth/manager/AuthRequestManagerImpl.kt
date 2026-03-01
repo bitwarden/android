@@ -128,7 +128,6 @@ class AuthRequestManagerImpl(
 
                             updateAuthRequest
                                 .creationDate
-                                .toInstant()
                                 .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
                                 .isBefore(clock.instant()) -> {
                                 clearPendingAuthRequest()
@@ -199,7 +198,6 @@ class AuthRequestManagerImpl(
 
                             updateAuthRequest
                                 .creationDate
-                                .toInstant()
                                 .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
                                 .isBefore(clock.instant()) -> {
                                 isComplete = true

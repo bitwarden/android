@@ -10,7 +10,7 @@ import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import retrofit2.create
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class FoldersServiceTest : BaseServiceTest() {
     private val folderApi: FoldersApi = retrofit.create()
@@ -89,7 +89,7 @@ private const val DEFAULT_NAME = "TestName"
 private val DEFAULT_FOLDER = SyncResponseJson.Folder(
     id = DEFAULT_ID,
     name = DEFAULT_NAME,
-    revisionDate = ZonedDateTime.parse("2024-01-24T22:40:17.1559611Z"),
+    revisionDate = Instant.parse("2024-01-24T22:40:17.1559611Z"),
 )
 
 private const val CREATE_UPDATE_FOLDER_SUCCESS_JSON = """

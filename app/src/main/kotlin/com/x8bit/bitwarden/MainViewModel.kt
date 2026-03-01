@@ -17,6 +17,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getCookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
@@ -39,7 +41,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -52,6 +53,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -75,6 +77,7 @@ private const val ANIMATION_DEBOUNCE_DELAY_MS = 500L
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
+    cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -162,6 +165,13 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        cookieAcquisitionRequestManager
+            .cookieAcquisitionRequestFlow
+            .filterNotNull()
+            .map { MainAction.Internal.CookieAcquisitionReady }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         // On app launch, mark all active users as having previously logged in.
         // This covers any users who are active prior to this value being recorded.
         viewModelScope.launch {
@@ -186,6 +196,7 @@ class MainViewModel @Inject constructor(
             is MainAction.DuoResult -> handleDuoResult(action)
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
+            is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -207,6 +218,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
+            is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
         }
     }
 
@@ -226,6 +238,12 @@ class MainViewModel @Inject constructor(
 
     private fun handleWebAuthnResult(action: MainAction.WebAuthnResult) {
         authRepository.setWebAuthResult(webAuthResult = action.authResult.getWebAuthResult())
+    }
+
+    private fun handleCookieAcquisitionResult(action: MainAction.CookieAcquisitionResult) {
+        authRepository.setCookieCallbackResult(
+            result = action.cookieCallbackResult.getCookieCallbackResult(),
+        )
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -269,6 +287,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
         mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
+    }
+
+    private fun handleCookieAcquisitionReady() {
+        sendEvent(MainEvent.NavigateToCookieAcquisition)
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -391,7 +413,8 @@ class MainViewModel @Inject constructor(
                     SpecialCircumstance.CredentialExchangeExport(
                         data = ImportCredentialsRequestData(
                             uri = importCredentialsRequest.uri,
-                            requestJson = importCredentialsRequest.request.requestJson,
+                            credentialTypes = importCredentialsRequest.request.credentialTypes,
+                            knownExtensions = importCredentialsRequest.request.knownExtensions,
                         ),
                     )
             }
@@ -519,6 +542,13 @@ sealed class MainAction {
     data class WebAuthnResult(val authResult: AuthTabIntent.AuthResult) : MainAction()
 
     /**
+     * Receive the result from the cookie acquisition flow.
+     */
+    data class CookieAcquisitionResult(
+        val cookieCallbackResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
      * Receive first Intent by the application.
      */
     data class ReceiveFirstIntent(val intent: Intent) : MainAction()
@@ -588,6 +618,12 @@ sealed class MainAction {
         data class DynamicColorsUpdate(
             val isDynamicColorsEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the cookie acquisition conditions are met and navigation
+         * should proceed.
+         */
+        data object CookieAcquisitionReady : Internal()
     }
 }
 
@@ -616,6 +652,11 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
+
+    /**
+     * Navigate to the cookie acquisition screen.
+     */
+    data object NavigateToCookieAcquisition : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

@@ -72,7 +72,11 @@ fun BlockAutoFillScreen(
             { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) }
         },
         onSaveClick = remember(viewModel) {
-            { viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = it)) }
+            { newUri, originalUri ->
+                viewModel.trySendAction(
+                    BlockAutoFillAction.SaveUri(newUri = newUri, originalUri = originalUri),
+                )
+            }
         },
         onRemoveClick = remember(viewModel) {
             { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) }
@@ -180,7 +184,7 @@ fun BlockAutoFillScreen(
 private fun BlockAutoFillDialogs(
     dialogState: BlockAutoFillState.DialogState? = null,
     onUriTextChange: (String) -> Unit,
-    onSaveClick: (String) -> Unit,
+    onSaveClick: (String, String?) -> Unit,
     onRemoveClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -198,7 +202,7 @@ private fun BlockAutoFillDialogs(
                     null
                 },
                 onCancelClick = onDismissRequest,
-                onSaveClick = onSaveClick,
+                onSaveClick = { newUri -> onSaveClick(newUri, dialogState.originalUri) },
             )
         }
 

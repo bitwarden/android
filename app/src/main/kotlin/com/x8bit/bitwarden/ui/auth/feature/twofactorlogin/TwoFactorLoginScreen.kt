@@ -104,7 +104,7 @@ fun TwoFactorLoginScreen(
             is TwoFactorLoginEvent.NavigateToDuo -> {
                 intentManager.startAuthTab(
                     uri = event.uri,
-                    redirectScheme = event.scheme,
+                    authTabData = event.authTabData,
                     launcher = authTabLaunchers.duo,
                 )
             }
@@ -112,7 +112,7 @@ fun TwoFactorLoginScreen(
             is TwoFactorLoginEvent.NavigateToWebAuth -> {
                 intentManager.startAuthTab(
                     uri = event.uri,
-                    redirectScheme = event.scheme,
+                    authTabData = event.authTabData,
                     launcher = authTabLaunchers.webAuthn,
                 )
             }

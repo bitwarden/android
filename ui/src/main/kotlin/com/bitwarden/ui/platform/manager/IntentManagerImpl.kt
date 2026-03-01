@@ -27,6 +27,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData
@@ -77,13 +78,25 @@ internal class IntentManagerImpl(
 
     override fun startAuthTab(
         uri: Uri,
-        redirectScheme: String,
+        authTabData: AuthTabData,
         launcher: ActivityResultLauncher<Intent>,
     ) {
         val providerPackageName = CustomTabsClient.getPackageName(activity, null).toString()
         if (CustomTabsClient.isAuthTabSupported(activity, providerPackageName)) {
             Timber.d("Launching uri with AuthTab for $providerPackageName")
-            AuthTabIntent.Builder().build().launch(launcher, uri, redirectScheme)
+            when (authTabData) {
+                is AuthTabData.CustomScheme -> {
+                    AuthTabIntent.Builder()
+                        .build()
+                        .launch(launcher, uri, authTabData.callbackScheme)
+                }
+
+                is AuthTabData.HttpsScheme -> {
+                    AuthTabIntent.Builder()
+                        .build()
+                        .launch(launcher, uri, authTabData.host, "\\${authTabData.path}")
+                }
+            }
         } else {
             // Fall back to a Custom Tab.
             Timber.d("Launching uri with CustomTabs fallback for $providerPackageName")

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.util
 
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import java.security.MessageDigest
 
@@ -9,7 +10,6 @@ import java.security.MessageDigest
  * Returns the application's signing certificate hash formatted as a hex string if it has a single
  * signing certificate. Otherwise `null` is returned.
  */
-@OptIn(ExperimentalStdlibApi::class)
 fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
     return getAppSigningSignatureFingerprint()
         ?.joinToString(":") { b ->
@@ -21,8 +21,11 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
  * Returns true if this [CallingAppInfo] is present in the privileged app [allowList]. Otherwise,
  * returns false.
  */
-fun CallingAppInfo.validatePrivilegedApp(allowList: String): ValidateOriginResult {
-
+fun CallingAppInfo.validatePrivilegedApp(
+    relyingPartyId: String,
+    allowList: String,
+    isVerifiedSource: Boolean,
+): ValidateOriginResult {
     if (!allowList.contains("\"$packageName\"")) {
         return ValidateOriginResult.Error.PrivilegedAppNotAllowed
     }
@@ -32,7 +35,15 @@ fun CallingAppInfo.validatePrivilegedApp(allowList: String): ValidateOriginResul
         if (origin.isNullOrEmpty()) {
             ValidateOriginResult.Error.PasskeyNotSupportedForApp
         } else {
-            ValidateOriginResult.Success(origin)
+            ValidateOriginResult.Success(
+                origin = if (isVerifiedSource) {
+                    // For verified sources we simplify the `origin` before passing it to the SDK
+                    // in order to trivially match the Relying Party ID.
+                    relyingPartyId.prefixHttpsIfNecessary()
+                } else {
+                    origin
+                },
+            )
         }
     } catch (_: IllegalStateException) {
         // We know the package name is in the allow list so we can infer that this exception is

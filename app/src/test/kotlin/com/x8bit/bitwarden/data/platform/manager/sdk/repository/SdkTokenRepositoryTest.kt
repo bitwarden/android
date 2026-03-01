@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk.repository
 
-import com.bitwarden.network.provider.TokenProvider
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -11,38 +12,60 @@ import org.junit.jupiter.api.Test
 
 class SdkTokenRepositoryTest {
 
-    private val tokenProvider: TokenProvider = mockk()
+    private val authDiskSource: AuthDiskSource = mockk()
 
     @Test
     fun `getAccessToken should return null when userId is null`() = runTest {
         val repository = createSdkTokenRepository(userId = null)
         assertNull(repository.getAccessToken())
         verify(exactly = 0) {
-            tokenProvider.getAccessToken(userId = any())
+            authDiskSource.getAccountTokens(userId = any())
         }
     }
 
     @Test
-    fun `getAccessToken should return null when userId is valid and tokenProvider returns null`() =
+    fun `getAccessToken should return null when userId is valid and tokens are null`() =
         runTest {
-            every { tokenProvider.getAccessToken(userId = USER_ID) } returns null
+            every { authDiskSource.getAccountTokens(userId = USER_ID) } returns null
             val repository = createSdkTokenRepository()
             assertNull(repository.getAccessToken())
             verify(exactly = 1) {
-                tokenProvider.getAccessToken(userId = USER_ID)
+                authDiskSource.getAccountTokens(userId = USER_ID)
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getAccessToken should return access token when userId is valid and tokenProvider returns an access token`() =
+    fun `getAccessToken should return null when userId is valid and accessToken is null`() =
+        runTest {
+            every {
+                authDiskSource.getAccountTokens(userId = USER_ID)
+            } returns AccountTokensJson(
+                accessToken = null,
+                refreshToken = "refreshToken",
+            )
+            val repository = createSdkTokenRepository()
+            assertNull(repository.getAccessToken())
+            verify(exactly = 1) {
+                authDiskSource.getAccountTokens(userId = USER_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAccessToken should return access token when userId is valid and accessToken is present`() =
         runTest {
             val accessToken = "access_token"
-            every { tokenProvider.getAccessToken(userId = USER_ID) } returns accessToken
+            every {
+                authDiskSource.getAccountTokens(userId = USER_ID)
+            } returns AccountTokensJson(
+                accessToken = accessToken,
+                refreshToken = "refreshToken",
+            )
             val repository = createSdkTokenRepository()
             assertEquals(accessToken, repository.getAccessToken())
             verify(exactly = 1) {
-                tokenProvider.getAccessToken(userId = USER_ID)
+                authDiskSource.getAccountTokens(userId = USER_ID)
             }
         }
 
@@ -50,7 +73,7 @@ class SdkTokenRepositoryTest {
         userId: String? = USER_ID,
     ): SdkTokenRepository = SdkTokenRepository(
         userId = userId,
-        tokenProvider = tokenProvider,
+        authDiskSource = authDiskSource,
     )
 }
 

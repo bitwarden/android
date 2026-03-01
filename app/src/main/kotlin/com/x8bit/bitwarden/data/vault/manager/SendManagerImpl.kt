@@ -279,7 +279,7 @@ class SendManagerImpl(
         val isValidCreate = !isUpdate && localSend == null
         val isValidUpdate = isUpdate &&
             localSend != null &&
-            localSend.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
+            localSend.revisionDate.epochSecond < revisionDate.epochSecond
         if (!isValidCreate && !isValidUpdate) return
         if (activeUserId != userId) {
             // We cannot update right now since the accounts do not match, so we will

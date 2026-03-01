@@ -21,7 +21,7 @@ fun SyncResponseJson.Folder.toEncryptedSdkFolder(): Folder =
     Folder(
         id = id,
         name = name.orEmpty(),
-        revisionDate = revisionDate.toInstant(),
+        revisionDate = revisionDate,
     )
 
 /**

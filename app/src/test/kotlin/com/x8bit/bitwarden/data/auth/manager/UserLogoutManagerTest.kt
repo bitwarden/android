@@ -28,7 +28,7 @@ import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @ExtendWith(MainDispatcherExtension::class)
 class UserLogoutManagerTest {
@@ -308,7 +308,7 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
@@ -335,7 +335,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_2,

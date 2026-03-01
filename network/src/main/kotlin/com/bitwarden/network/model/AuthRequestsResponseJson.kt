@@ -3,7 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Response body for authentication requests used for Login with device.
@@ -50,11 +50,11 @@ data class AuthRequestsResponseJson(
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: ZonedDateTime,
+        val creationDate: Instant,
 
         @SerialName("responseDate")
         @Contextual
-        val responseDate: ZonedDateTime?,
+        val responseDate: Instant?,
 
         @SerialName("requestApproved")
         val requestApproved: Boolean?,

@@ -162,7 +162,7 @@ class FolderManagerImpl(
         val isValidCreate = !isUpdate && localFolder == null
         val isValidUpdate = isUpdate &&
             localFolder != null &&
-            localFolder.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
+            localFolder.revisionDate.epochSecond < revisionDate.epochSecond
 
         if (!isValidCreate && !isValidUpdate) return
         if (activeUserId != userId) {

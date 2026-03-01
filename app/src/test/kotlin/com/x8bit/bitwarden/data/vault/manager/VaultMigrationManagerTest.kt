@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class VaultMigrationManagerTest {
@@ -1222,7 +1221,7 @@ private val MOCK_USER_STATE = UserStateJson(
                 kdfParallelism = null,
                 userDecryptionOptions = null,
                 isTwoFactorEnabled = false,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
             ),
             tokens = AccountTokensJson(
                 accessToken = "accessToken",

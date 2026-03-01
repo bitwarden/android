@@ -154,10 +154,7 @@ private fun VaultUnlockedNavBarScaffold(
     // We need to ignore the all insets here and let the content screens handle it themselves.
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val navigationItems = persistentListOf<NavigationItem>(
-        VaultUnlockedNavBarTab.Vault(
-            labelRes = state.vaultNavBarLabelRes,
-            contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
-        ),
+        VaultUnlockedNavBarTab.Vault(labelRes = state.vaultNavBarLabelRes),
         VaultUnlockedNavBarTab.Send,
         VaultUnlockedNavBarTab.Generator,
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),

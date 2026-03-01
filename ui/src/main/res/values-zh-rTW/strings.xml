@@ -17,7 +17,7 @@
     <string name="edit_folder">編輯資料夾</string>
     <string name="email">電子郵件</string>
     <string name="email_address">電子郵件地址</string>
-    <string name="enter_pin">請輸入 PIN 碼。</string>
+    <string name="enter_pin">請輸入您的 PIN 碼</string>
     <string name="favorites">我的最愛</string>
     <string name="folder">資料夾</string>
     <string name="folder_created">已新增資料夾。</string>
@@ -64,14 +64,14 @@
     <string name="website_uri">網站 (URI)</string>
     <string name="username">使用者名稱</string>
     <string name="validation_field_required">必須填入 %1$s 欄位。</string>
-    <string name="you_must_attach_a_file_to_save_this_send">你必須附加檔案才能儲存此 Send 項目。</string>
+    <string name="you_must_attach_a_file_to_save_this_send">您必須附加檔案才能儲存此 Send。</string>
     <string name="value_has_been_copied">%1$s 已複製。</string>
     <string name="verify_master_password">驗證主密碼</string>
     <string name="verify_pin">驗證 PIN 碼</string>
     <string name="view">檢視</string>
     <string name="yes">是</string>
     <string name="account">帳戶</string>
-    <string name="account_created_success">您已成功建立新帳號！</string>
+    <string name="account_created_success">您的新帳戶已建立！</string>
     <string name="set_bitwarden_as_passkey_manager_description">於裝置設定將 Bitwarden 設為您的密鑰提供者</string>
     <string name="avoid_ambiguous_characters">避免易混淆的字元</string>
     <string name="bitwarden_autofill_service">Bitwarden 自動填入服務</string>
@@ -79,7 +79,7 @@
     <string name="close">關閉</string>
     <string name="continue_text">繼續</string>
     <string name="create_account">建立帳戶</string>
-    <string name="create_an_account">建立帳號</string>
+    <string name="create_an_account">建立帳戶</string>
     <string name="edit_item">編輯項目</string>
     <string name="edit_login">編輯登錄</string>
     <string name="edit_card">編輯支付卡</string>
@@ -150,7 +150,7 @@
     <string name="syncing">正在同步…</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">兩步驟登入</string>
-    <string name="unlock_with_biometrics">使用生物識別技術解鎖</string>
+    <string name="unlock_with_biometrics">使用生物辨識解鎖</string>
     <string name="unlock_with_pin">使用 PIN 碼解鎖</string>
     <string name="verification_code">驗證碼</string>
     <string name="view_login">檢視登入</string>
@@ -177,12 +177,12 @@
     <string name="enter_verification_code_new_device">我們無法辨識這部裝置。請輸入傳送到您電子郵件的驗證碼，以驗證您的身分。</string>
     <string name="recovery_code_title">復原代碼</string>
     <string name="remember">記住</string>
-    <string name="remember_email">記住電子郵件地址</string>
+    <string name="remember_email">記住電子郵件</string>
     <string name="send_verification_code_again">再次傳送​​包含驗證碼的電子郵件</string>
     <string name="verification_email_not_sent">無法傳送​​驗證電子郵件。請再試一次。</string>
     <string name="verification_email_sent">已傳送驗證電子郵件</string>
     <string name="yubi_key_instruction">若要繼續，請將您的 YubiKey 靠在裝置的背面或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</string>
-    <string name="yubi_key_title">YubiKey 安全鑰匙</string>
+    <string name="yubi_key_title">Yubico 安全金鑰</string>
     <string name="add_new_attachment">新增附件</string>
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">無法下載檔案。</string>
@@ -233,7 +233,7 @@
     <string name="april">四月</string>
     <string name="august">八月</string>
     <string name="brand">發卡組織</string>
-    <string name="card_details">支付卡詳情</string>
+    <string name="card_details">付款卡詳細資料</string>
     <string name="cardholder_name">持卡人姓名</string>
     <string name="city_town">市/鎮</string>
     <string name="company">公司</string>
@@ -302,7 +302,7 @@
     <string name="organization">組織</string>
     <string name="try_again">再試一次</string>
     <string name="created">建立於：%1$s</string>
-    <string name="password_last_updated">密碼最後更新於：%1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">最後編輯於：%1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
     <string name="cards">支付卡</string>
@@ -446,6 +446,13 @@
     <string name="deletion_date">刪除日期</string>
     <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
+    <string name="who_can_view">Who can view</string>
+    <string name="anyone_with_the_link">Anyone with the link</string>
+    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="specific_people">Specific people</string>
+    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="anyone_with_password">Anyone with a password set by you</string>
+    <string name="add_email">Add email</string>
     <string name="pending_delete">等待刪除</string>
     <string name="expired">已逾期</string>
     <string name="expires_at">於 %s 到期</string>
@@ -487,6 +494,7 @@
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">重新詢問主密碼</string>
     <string name="password_confirmation">確認主密碼</string>
     <string name="password_confirmation_desc">此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</string>
@@ -932,6 +940,7 @@
     <string name="use_brave_autofill_integration">使用 Brave 自動填入整合功能</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自動填入整合功能</string>
     <string name="use_chrome_beta_autofill_integration">使用 Chrome Beta 自動填入整合功能</string>
+    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">在支援的網站上改善所選瀏覽器的登入自動填入體驗。啟用後，您將被導向至瀏覽器設定以啟用第三方自動填入功能。</string>
     <string name="show_more">顯示更多</string>
     <string name="no_folder">預設資料夾</string>
@@ -1131,7 +1140,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">啟用瀏覽器自動填入功能以持續自動填入密碼</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中啟用瀏覽器自動填入。</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中為所有已安裝的瀏覽器啟用自動填入功能。</string>
     <string name="not_now">以後再說</string>
     <string name="import_from_bitwarden">從 Bitwarden 匯入</string>
     <string name="select_account">選擇帳號</string>
@@ -1192,4 +1200,12 @@
     <string name="restart_premium">重新啟用進階版</string>
     <string name="items_transferred">項目已轉移</string>
     <string name="updated_master_password">已更新主密碼</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
 </resources>

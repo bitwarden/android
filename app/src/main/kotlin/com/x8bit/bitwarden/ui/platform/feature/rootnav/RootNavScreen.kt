@@ -360,9 +360,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
             else -> when (initialState.destination.rootLevelRoute()) {
                 // Disable transitions when coming from the splash screen
                 SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
-                // The MigrateToMyItemsGraphRoute and ResetPasswordRoute animation should be stay
-                // but due to an issue when combining certain animations, we are just using a
-                // fadeIn instead.
+                // The MigrateToMyItemsGraphRoute and ResetPasswordRoute animation
+                // should stay but due to an issue when combining certain animations,
+                // we are just using a fadeIn instead.
                 MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
                 ResetPasswordRoute.toObjectNavigationRoute(),
                     -> RootTransitionProviders.Enter.fadeIn

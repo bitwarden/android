@@ -57,7 +57,6 @@ import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @Suppress("LargeClass")
@@ -135,7 +134,7 @@ class SendManagerTest {
             SyncSendUpsertData(
                 userId = userId,
                 sendId = sendId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = false,
             ),
         )
@@ -159,7 +158,7 @@ class SendManagerTest {
             SyncSendUpsertData(
                 userId = userId,
                 sendId = sendId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = true,
             ),
         )
@@ -179,7 +178,7 @@ class SendManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val send = createMockSend(
             number = number,
-            revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+            revisionDate = FIXED_CLOCK.instant(),
         )
         val updatedSend = createMockSend(number = number)
         coEvery { vaultDiskSource.getSends(userId = userId) } returns MutableStateFlow(listOf(send))
@@ -190,7 +189,7 @@ class SendManagerTest {
             SyncSendUpsertData(
                 userId = userId,
                 sendId = sendId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+                revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
                 isUpdate = true,
             ),
         )
@@ -220,7 +219,7 @@ class SendManagerTest {
 
             val sendView = createMockSend(
                 number = number,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+                revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
                 vaultDiskSource.getSends(userId = userId)
@@ -230,7 +229,7 @@ class SendManagerTest {
                 SyncSendUpsertData(
                     userId = userId,
                     sendId = sendId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = true,
                 ),
             )
@@ -261,7 +260,7 @@ class SendManagerTest {
                 SyncSendUpsertData(
                     userId = userId,
                     sendId = sendId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = false,
                 ),
             )
@@ -294,7 +293,7 @@ class SendManagerTest {
                 SyncSendUpsertData(
                     userId = userId,
                     sendId = sendId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = false,
                 ),
             )
@@ -316,7 +315,7 @@ class SendManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendView = createMockSend(
                 number = number,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+                revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
                 vaultDiskSource.getSends(userId = userId)
@@ -330,7 +329,7 @@ class SendManagerTest {
                 SyncSendUpsertData(
                     userId = userId,
                     sendId = sendId,
-                    revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                    revisionDate = FIXED_CLOCK.instant(),
                     isUpdate = true,
                 ),
             )
@@ -352,7 +351,7 @@ class SendManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val sendView = createMockSend(
             number = number,
-            revisionDate = ZonedDateTime.now(FIXED_CLOCK).minus(5, ChronoUnit.MINUTES),
+            revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
         )
         coEvery {
             vaultDiskSource.getSends(userId = userId)
@@ -362,7 +361,7 @@ class SendManagerTest {
             SyncSendUpsertData(
                 userId = userId,
                 sendId = sendId,
-                revisionDate = ZonedDateTime.now(FIXED_CLOCK),
+                revisionDate = FIXED_CLOCK.instant(),
                 isUpdate = true,
             ),
         )
@@ -972,7 +971,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfParallelism = null,
     userDecryptionOptions = null,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

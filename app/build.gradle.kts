@@ -1,9 +1,10 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.impl.VariantOutputImpl
 import com.android.utils.cxx.io.removeExtensionIfPresent
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
-import dagger.hilt.android.plugin.util.capitalize
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -42,26 +43,34 @@ val ciProperties = Properties().apply {
     }
 }
 
-android {
-    namespace = "com.x8bit.bitwarden"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+base {
+    // Set the base archive name for publishing purposes. This is used to derive the
+    // APK and AAB artifact names when uploading to Firebase and Play Store.
+    archivesName.set("com.x8bit.bitwarden")
+}
 
-    room {
-        schemaDirectory("$projectDir/schemas")
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+configure<ApplicationExtension> {
+    namespace = "com.x8bit.bitwarden"
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
     }
 
     defaultConfig {
         applicationId = "com.x8bit.bitwarden"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk {
+            version = release(libs.versions.minSdk.get().toInt())
+        }
+        targetSdk {
+            version = release(libs.versions.targetSdk.get().toInt())
+        }
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
-        // artifact names when uploading to Firebase and Play Store.
-        base.archivesName = "com.x8bit.bitwarden"
 
         buildConfigField(
             type = "String",
@@ -140,39 +149,6 @@ android {
         }
     }
 
-    applicationVariants.all {
-        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
-        outputs
-            .mapNotNull { it as? BaseVariantOutputImpl }
-            .forEach { output ->
-                val fileNameWithoutExtension = when (flavorName) {
-                    "fdroid" -> "$applicationId-$flavorName"
-                    "standard" -> "$applicationId"
-                    else -> output.outputFileName.removeExtensionIfPresent(".apk")
-                }
-
-                // Set the APK output filename.
-                output.outputFileName = "$fileNameWithoutExtension.apk"
-
-                val variantName = name
-                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
-                tasks.register(renameTaskName) {
-                    group = "build"
-                    description = "Renames the bundle files for $variantName variant"
-                    doLast {
-                        renameFile(
-                            "$bundlesDir/$variantName/$namespace-$flavorName-${buildType.name}.aab",
-                            "$fileNameWithoutExtension.aab",
-                        )
-                    }
-                }
-                // Force renaming task to execute after the variant is built.
-                tasks
-                    .getByName("bundle${variantName.capitalize()}")
-                    .finalizedBy(renameTaskName)
-            }
-    }
-
     compileOptions {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
@@ -199,9 +175,50 @@ android {
     }
 }
 
+androidComponents {
+    onVariants { appVariant ->
+        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
+        val applicationId = appVariant.applicationId.get()
+        val flavorName = appVariant.flavorName
+        val variantName = appVariant.name
+        val buildType = appVariant.buildType
+        appVariant
+            .outputs
+            .mapNotNull { it as? VariantOutputImpl }
+            .forEach { output ->
+                val fileNameWithoutExtension = when (flavorName) {
+                    "fdroid" -> "$applicationId-$flavorName"
+                    "standard" -> applicationId
+                    else -> output.outputFileName.get().removeExtensionIfPresent(".apk")
+                }
+
+                // Set the APK output filename.
+                output.outputFileName.set("$fileNameWithoutExtension.apk")
+
+                val renameTaskName = "rename${variantName.uppercaseFirstChar()}AabFiles"
+                tasks.register(renameTaskName) {
+                    group = "build"
+                    description = "Renames the bundle files for $variantName variant"
+                    doLast {
+                        val namespace = appVariant.namespace.get()
+                        renameFile(
+                            "$bundlesDir/$variantName/$namespace-$flavorName-$buildType.aab",
+                            "$fileNameWithoutExtension.aab",
+                        )
+                    }
+                }
+                // Force renaming task to execute after the variant is built.
+                val bundleTaskName = "bundle${variantName.uppercaseFirstChar()}"
+                tasks
+                    .named { it == bundleTaskName }
+                    .configureEach { finalizedBy(renameTaskName) }
+            }
+    }
+}
+
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 

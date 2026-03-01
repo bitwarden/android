@@ -17,7 +17,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.composition.LocalClock
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
-import java.time.ZonedDateTime
+import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.hours
  */
 @Composable
 fun AddEditSendDeletionDateChooser(
-    onDateSelect: (ZonedDateTime) -> Unit,
+    onDateSelect: (Instant) -> Unit,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
     clock: Clock = LocalClock.current,
@@ -44,7 +44,7 @@ fun AddEditSendDeletionDateChooser(
         onOptionSelected = { selected ->
             selectedOption = options.entries.first { it.value == selected }.key
             onDateSelect(
-                ZonedDateTime.now(clock).plus(selectedOption.offsetMillis, ChronoUnit.MILLIS),
+                clock.instant().plus(selectedOption.offsetMillis, ChronoUnit.MILLIS),
             )
         },
         supportingText = stringResource(id = BitwardenString.deletion_date_info),

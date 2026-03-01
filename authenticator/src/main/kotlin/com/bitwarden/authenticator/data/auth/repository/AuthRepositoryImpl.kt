@@ -3,6 +3,8 @@ package com.bitwarden.authenticator.data.auth.repository
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppLockState
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -26,6 +28,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val authenticatorSdkSource: AuthenticatorSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val realtimeManager: RealtimeManager,
+    private val appLockManager: AppLockManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     BiometricsEncryptionManager by biometricsEncryptionManager {
@@ -44,20 +47,24 @@ class AuthRepositoryImpl @Inject constructor(
                 initialValue = isUnlockWithBiometricsEnabled,
             )
 
+    override val appLockStateFlow: StateFlow<AppLockState> = appLockManager.appLockStateFlow
+
     override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult =
         authenticatorSdkSource
             .generateBiometricsKey()
             .onSuccess { biometricsKey ->
-                authDiskSource.storeUserBiometricUnlockKey(
-                    biometricsKey = try {
-                        cipher
-                            .doFinal(biometricsKey.encodeToByteArray())
-                            .toString(Charsets.ISO_8859_1)
-                    } catch (e: GeneralSecurityException) {
-                        Timber.w(e, "setupBiometricsKey failed encrypt the biometric key")
-                        return BiometricsKeyResult.Error(error = e)
-                    },
-                )
+                val encryptedBiometricsKey = try {
+                    cipher
+                        .doFinal(biometricsKey.encodeToByteArray())
+                        .toString(Charsets.ISO_8859_1)
+                } catch (e: GeneralSecurityException) {
+                    Timber.w(e, "setupBiometricsKey failed encrypt the biometric key")
+                    return BiometricsKeyResult.Error(error = e)
+                }
+
+                // Set app to unlocked to ensure we do not re-lock after saving the biometric key.
+                appLockManager.manualAppUnlock()
+                authDiskSource.storeUserBiometricUnlockKey(biometricsKey = encryptedBiometricsKey)
                 authDiskSource.userBiometricKeyInitVector = cipher.iv
             }
             .fold(
@@ -102,7 +109,8 @@ class AuthRepositoryImpl @Inject constructor(
             authDiskSource.storeUserBiometricUnlockKey(biometricsKey = encryptedBiometricsKey)
             authDiskSource.userBiometricKeyInitVector = cipher.iv
         }
-
+        // Unlock the app here for state-based navigation to trigger.
+        appLockManager.manualAppUnlock()
         return BiometricsUnlockResult.Success
     }
 

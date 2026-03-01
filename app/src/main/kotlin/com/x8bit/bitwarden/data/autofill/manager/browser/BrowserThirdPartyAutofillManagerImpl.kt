@@ -2,7 +2,10 @@ package com.x8bit.bitwarden.data.autofill.manager.browser
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
@@ -27,6 +30,18 @@ class BrowserThirdPartyAutofillManagerImpl(
         get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
     override val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
         get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_BETA)
+    override val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
+        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.VIVALDI_STABLE)
+
+    override val defaultBrowserPackageName: String?
+        get() {
+            val intent = Intent(Intent.ACTION_VIEW, "https://example.com".toUri())
+            return context
+                .packageManager
+                .resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                ?.activityInfo
+                ?.packageName
+        }
 
     private fun getThirdPartyAutoFillStatusForChannel(
         releaseChannel: BrowserPackage,

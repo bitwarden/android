@@ -52,6 +52,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendAuthTypeChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
@@ -160,9 +161,30 @@ fun AddEditSendContent(
             )
         }
 
+        if (state.common.isSendEmailVerificationEnabled) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            AddEditSendAuthTypeChooser(
+                sendAuth = state.common.sendAuth,
+                onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
+                onPasswordChange = addSendHandlers.onAuthPasswordChange,
+                onEmailValueChange = addSendHandlers.onEmailValueChange,
+                onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
+                onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
+                onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
+                onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
+                password = state.common.passwordInput,
+                isEnabled = !policyDisablesSend,
+                isSendsRestrictedByPolicy = policyDisablesSend,
+                modifier = Modifier
+                    .testTag("SendAuthTypeChooser")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
         AddEditSendOptions(
             state = state,
-            sendRestrictionPolicy = policyDisablesSend,
+            isSendsRestrictedByPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
@@ -353,7 +375,7 @@ private fun ColumnScope.FileTypeContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
- * @param sendRestrictionPolicy When `true`, indicates that there's a policy preventing the user
+ * @param isSendsRestrictedByPolicy When `true`, indicates that there's a policy preventing the user
  * from editing or creating sends.
  * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
  * an existing send.
@@ -363,7 +385,7 @@ private fun ColumnScope.FileTypeContent(
 @Composable
 private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
-    sendRestrictionPolicy: Boolean,
+    isSendsRestrictedByPolicy: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
@@ -417,50 +439,54 @@ private fun AddEditSendOptions(
                 },
                 value = state.common.maxAccessCount,
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
-                isDecrementEnabled = state.common.maxAccessCount != null && !sendRestrictionPolicy,
-                isIncrementEnabled = !sendRestrictionPolicy,
+                isDecrementEnabled = state.common.maxAccessCount != null &&
+                    !isSendsRestrictedByPolicy,
+                isIncrementEnabled = !isSendsRestrictedByPolicy,
                 range = 0..Int.MAX_VALUE,
-                textFieldReadOnly = sendRestrictionPolicy,
+                textFieldReadOnly = isSendsRestrictedByPolicy,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("SendMaxAccessCountEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenPasswordField(
-                label = stringResource(id = BitwardenString.new_password),
-                supportingText = stringResource(id = BitwardenString.password_info),
-                readOnly = sendRestrictionPolicy,
-                value = state.common.passwordInput,
-                onValueChange = addSendHandlers.onPasswordChange,
-                passwordFieldTestTag = "SendNewPasswordEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            ) {
-                BitwardenStandardIconButton(
-                    vectorIconRes = BitwardenDrawable.ic_generate,
-                    contentDescription = stringResource(id = BitwardenString.generate_password),
-                    onClick = {
-                        if (state.common.passwordInput.isEmpty()) {
-                            addSendHandlers.onOpenPasswordGeneratorClick()
-                        } else {
-                            shouldShowDialog = true
-                        }
-                    },
-                    modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-                )
-                BitwardenStandardIconButton(
-                    vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = BitwardenString.copy_password),
-                    isEnabled = state.common.passwordInput.isNotEmpty(),
-                    onClick = {
-                        addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
-                    },
-                    modifier = Modifier.testTag(tag = "CopyPasswordButton"),
-                )
+
+            if (!state.common.isSendEmailVerificationEnabled) {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenPasswordField(
+                    label = stringResource(id = BitwardenString.new_password),
+                    supportingText = stringResource(id = BitwardenString.password_info),
+                    readOnly = isSendsRestrictedByPolicy,
+                    value = state.common.passwordInput,
+                    onValueChange = addSendHandlers.onPasswordChange,
+                    passwordFieldTestTag = "SendNewPasswordEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (state.common.passwordInput.isEmpty()) {
+                                addSendHandlers.onOpenPasswordGeneratorClick()
+                            } else {
+                                shouldShowDialog = true
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = state.common.passwordInput.isNotEmpty(),
+                        onClick = {
+                            addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
             }
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(
@@ -489,14 +515,14 @@ private fun AddEditSendOptions(
                 label = stringResource(id = BitwardenString.hide_email),
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
-                readOnly = sendRestrictionPolicy,
+                readOnly = isSendsRestrictedByPolicy,
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
                 cardStyle = CardStyle.Full,
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.private_notes),
-                readOnly = sendRestrictionPolicy,
+                readOnly = isSendsRestrictedByPolicy,
                 value = state.common.noteInput,
                 singleLine = false,
                 onValueChange = addSendHandlers.onNoteChange,

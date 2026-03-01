@@ -357,23 +357,8 @@ fun VaultItemIdentityContent(
             }
         }
 
-        item(key = "created") {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Text(
-                text = commonState.created(),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp)
-                    .animateItem()
-                    .testTag("IdentityItemCreated"),
-            )
-        }
-
         item(key = "lastUpdated") {
-            Spacer(modifier = Modifier.height(height = 4.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Text(
                 text = commonState.lastUpdated(),
                 style = BitwardenTheme.typography.bodySmall,
@@ -384,6 +369,21 @@ fun VaultItemIdentityContent(
                     .padding(horizontal = 12.dp)
                     .animateItem()
                     .testTag("IdentityItemLastUpdated"),
+            )
+        }
+
+        item(key = "created") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("IdentityItemCreated"),
             )
         }
 

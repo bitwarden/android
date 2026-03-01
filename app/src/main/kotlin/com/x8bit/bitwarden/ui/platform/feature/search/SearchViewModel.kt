@@ -167,7 +167,9 @@ class SearchViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(
                 SnackbarRelay.CIPHER_ARCHIVED,
+                SnackbarRelay.CIPHER_ARCHIVED_VIEW,
                 SnackbarRelay.CIPHER_UNARCHIVED,
+                SnackbarRelay.CIPHER_UNARCHIVED_VIEW,
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,

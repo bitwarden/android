@@ -52,11 +52,13 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -74,14 +76,18 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -167,6 +173,11 @@ class MainViewModelTest : BaseViewModelTest() {
         every { show(message = any(), duration = any()) } just runs
         every { show(messageId = any(), duration = any()) } just runs
     }
+    private val mutableCookieAcquisitionRequestFlow =
+        MutableStateFlow<CookieAcquisitionRequest?>(null)
+    private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
+        every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
+    }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
     }
@@ -225,6 +236,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
         )
+        unmockkConstructor(JSONObject::class)
     }
 
     @Suppress("MaxLineLength")
@@ -251,14 +263,14 @@ class MainViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             // We skip the first 2 events because they are the default appTheme and appLanguage
-            awaitItem()
-            awaitItem()
+            skipItems(2)
 
             mutableUserStateFlow.value = UserState(
                 activeUserId = userId1,
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = false,
@@ -270,6 +282,7 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -281,9 +294,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                     mockk<UserState.Account> {
                         every { userId } returns userId2
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -945,9 +960,16 @@ class MainViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on ReceiveNewIntent with import credentials request data should set the special circumstance to CredentialExchangeExport`() {
+        mockkConstructor(JSONObject::class)
+        every {
+            anyConstructed<JSONObject>().put(any<String>(), any<JSONArray>())
+        } returns mockk()
         val viewModel = createViewModel()
         val importCredentialsRequestData = ProviderImportCredentialsRequest(
-            request = ImportCredentialsRequest("mockRequestJson"),
+            request = ImportCredentialsRequest(
+                setOf("mockCredentialType-1"),
+                setOf(),
+            ),
             callingAppInfo = mockk(),
             uri = mockk(),
             credId = "mockCredId",
@@ -966,7 +988,8 @@ class MainViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.CredentialExchangeExport(
                 data = ImportCredentialsRequestData(
                     uri = importCredentialsRequestData.uri,
-                    requestJson = importCredentialsRequestData.request.requestJson,
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
                 ),
             ),
             specialCircumstanceManager.specialCircumstance,
@@ -1129,12 +1152,46 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
+        runTest {
+            mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+                hostname = DEFAULT_US_WEB_VAULT_URL,
+            )
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUserStateFlow.value = DEFAULT_USER_STATE
+                assertEquals(
+                    MainEvent.NavigateToCookieAcquisition,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `cookie acquisition should not emit event when conditions are false`() =
+        runTest {
+            mutableCookieAcquisitionRequestFlow.value = null
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUserStateFlow.value = DEFAULT_USER_STATE
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
+        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,
@@ -1164,6 +1221,7 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private const val ACTIVE_USER_ID: String = "activeUserId"
+private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private val DEFAULT_ACCOUNT = UserState.Account(
     userId = ACTIVE_USER_ID,
     name = "Active User",

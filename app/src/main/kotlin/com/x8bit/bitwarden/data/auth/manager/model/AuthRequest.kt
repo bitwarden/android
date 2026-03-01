@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Represents a Login Approval request.
@@ -27,8 +27,8 @@ data class AuthRequest(
     val ipAddress: String,
     val key: String?,
     val masterPasswordHash: String?,
-    val creationDate: ZonedDateTime,
-    val responseDate: ZonedDateTime?,
+    val creationDate: Instant,
+    val responseDate: Instant?,
     val requestApproved: Boolean,
     val originUrl: String,
     val fingerprint: String,

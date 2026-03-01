@@ -33,7 +33,6 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_generator_filled
         override val iconRes get() = BitwardenDrawable.ic_generator
         override val labelRes get() = BitwardenString.generator
-        override val contentDescriptionRes get() = BitwardenString.generator
         override val graphRoute get() = GeneratorGraphRoute
         override val startDestinationRoute get() = GeneratorRoute.Standard
         override val testTag get() = "GeneratorTab"
@@ -48,7 +47,6 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_send_filled
         override val iconRes get() = BitwardenDrawable.ic_send
         override val labelRes get() = BitwardenString.send
-        override val contentDescriptionRes get() = BitwardenString.send
         override val graphRoute get() = SendGraphRoute
         override val startDestinationRoute get() = SendRoute
         override val testTag get() = "SendTab"
@@ -61,7 +59,6 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     @Parcelize
     data class Vault(
         override val labelRes: Int,
-        override val contentDescriptionRes: Int,
     ) : VaultUnlockedNavBarTab() {
         override val iconResSelected get() = BitwardenDrawable.ic_vault_filled
         override val iconRes get() = BitwardenDrawable.ic_vault
@@ -81,7 +78,6 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_settings_filled
         override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = BitwardenString.settings
-        override val contentDescriptionRes get() = BitwardenString.settings
         override val graphRoute get() = SettingsGraphRoute
         override val startDestinationRoute get() = SettingsRoute.Standard
         override val testTag get() = "SettingsTab"

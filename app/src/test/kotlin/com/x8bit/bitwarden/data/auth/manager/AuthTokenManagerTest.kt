@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class AuthTokenManagerTest {
 
@@ -188,7 +188,7 @@ private val ACCOUNT: AccountJson = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,

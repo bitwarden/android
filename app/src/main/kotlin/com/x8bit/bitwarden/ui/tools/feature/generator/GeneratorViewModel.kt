@@ -663,7 +663,7 @@ class GeneratorViewModel @Inject constructor(
     private suspend fun generatePassphrase(passphrase: GeneratorState.MainType.Passphrase) {
         val request = PassphraseGeneratorRequest(
             numWords = passphrase.numWords.toUByte(),
-            wordSeparator = passphrase.wordSeparator?.toString() ?: " ",
+            wordSeparator = passphrase.wordSeparator?.toString().orEmpty(),
             capitalize = passphrase.capitalize,
             includeNumber = passphrase.includeNumber,
         )

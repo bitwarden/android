@@ -32,7 +32,7 @@ internal interface CiphersApi {
     @PUT("ciphers/{cipherId}/archive")
     suspend fun archiveCipher(
         @Path("cipherId") cipherId: String,
-    ): NetworkResult<Unit>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Unarchive a cipher.
@@ -40,7 +40,7 @@ internal interface CiphersApi {
     @PUT("ciphers/{cipherId}/unarchive")
     suspend fun unarchiveCipher(
         @Path("cipherId") cipherId: String,
-    ): NetworkResult<Unit>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Create a cipher.

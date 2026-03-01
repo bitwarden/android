@@ -40,7 +40,7 @@ fun BitwardenTonalIconButton(
     ) {
         Icon(
             painter = rememberVectorPainter(id = vectorIconRes),
-            contentDescription = contentDescription,
+            contentDescription = null,
         )
     }
 }

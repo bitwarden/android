@@ -35,7 +35,12 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = common.originalCipher?.id,
-        collectionIds = common.originalCipher?.collectionIds.orEmpty(),
+        collectionIds = common.originalCipher?.collectionIds
+            ?: common.selectedOwner
+                ?.collections
+                ?.filter { it.isSelected }
+                ?.map { it.id }
+                .orEmpty(),
         key = common.originalCipher?.key,
         edit = common.originalCipher?.edit ?: true,
         viewPassword = common.originalCipher?.viewPassword ?: true,

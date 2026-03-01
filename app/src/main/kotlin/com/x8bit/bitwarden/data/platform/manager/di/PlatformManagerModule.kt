@@ -11,6 +11,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.cxf.registry.CredentialExchangeRegistry
 import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -36,6 +38,8 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -69,8 +73,12 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactoryImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactoryImpl
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
@@ -219,10 +227,12 @@ object PlatformManagerModule {
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
         sdkRepositoryFactory: SdkRepositoryFactory,
+        sdkPlatformApiFactory: SdkPlatformApiFactory,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
         sdkRepoFactory = sdkRepositoryFactory,
+        sdkPlatformApiFactory = sdkPlatformApiFactory,
     )
 
     @Provides
@@ -362,10 +372,22 @@ object PlatformManagerModule {
     @Singleton
     fun provideSdkRepositoryFactory(
         vaultDiskSource: VaultDiskSource,
-        bitwardenServiceClient: BitwardenServiceClient,
+        cookieDiskSource: CookieDiskSource,
+        configDiskSource: ConfigDiskSource,
+        authDiskSource: AuthDiskSource,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
-        bitwardenServiceClient = bitwardenServiceClient,
+        cookieDiskSource = cookieDiskSource,
+        configDiskSource = configDiskSource,
+        authDiskSource = authDiskSource,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSdkPlatformApiFactory(
+        serverCommConfigManager: CookieAcquisitionRequestManager,
+    ): SdkPlatformApiFactory = SdkPlatformApiFactoryImpl(
+        serverCommConfigManager = serverCommConfigManager,
     )
 
     @Provides
@@ -412,5 +434,22 @@ object PlatformManagerModule {
     ): CredentialExchangeRegistryManager = CredentialExchangeRegistryManagerImpl(
         credentialExchangeRegistry = credentialExchangeRegistry,
         settingsDiskSource = settingsDiskSource,
+    )
+
+    @Provides
+    @Singleton
+    fun provideServerCommunicationConfigManager(): CookieAcquisitionRequestManager =
+        CookieAcquisitionRequestManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideNetworkCookieManager(
+        configDiskSource: ConfigDiskSource,
+        cookieDiskSource: CookieDiskSource,
+        cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    ): NetworkCookieManager = NetworkCookieManagerImpl(
+        configDiskSource = configDiskSource,
+        cookieDiskSource = cookieDiskSource,
+        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
     )
 }

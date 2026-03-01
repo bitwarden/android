@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import timber.log.Timber
 
 /**
@@ -76,13 +78,44 @@ class Fido2CredentialStoreImpl(
                 userId = authRepository.activeUserId ?: throw NoActiveUserException(),
                 cipher = cred.cipher,
             )
-            .map { decryptedCipherView ->
-                decryptedCipherView.id
-                    ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
-                    ?: vaultRepository.createCipher(decryptedCipherView)
+            .onSuccess { decryptedCipherView ->
+                val result = decryptedCipherView.id
+                    ?.let {
+                        vaultRepository
+                            .updateCipher(it, decryptedCipherView)
+                            .toCreateCipherResult()
+                    }
+                    ?: decryptedCipherView.createCipher()
+
+                when (result) {
+                    CreateCipherResult.Success -> Unit
+                    is CreateCipherResult.Error -> {
+                        throw result.error ?: IllegalStateException(
+                            result.errorMessage ?: "Failed to save credential",
+                        )
+                    }
+                }
             }
             .onFailure { throw it }
     }
+
+    private suspend fun CipherView.createCipher(): CreateCipherResult {
+        val collectionIds = this.collectionIds
+        return if (this.organizationId != null && collectionIds.isNotEmpty()) {
+            vaultRepository.createCipherInOrganization(
+                cipherView = this,
+                collectionIds = collectionIds,
+            )
+        } else {
+            vaultRepository.createCipher(cipherView = this)
+        }
+    }
+
+    private fun UpdateCipherResult.toCreateCipherResult(): CreateCipherResult =
+        when (this) {
+            UpdateCipherResult.Success -> CreateCipherResult.Success
+            is UpdateCipherResult.Error -> CreateCipherResult.Error(errorMessage, error)
+        }
 
     /**
      * Return a filtered list containing elements that match the given [relyingPartyId] and a

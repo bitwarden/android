@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,13 +8,16 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android {
+configure<LibraryExtension> {
     namespace = "com.bitwarden.ui"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt())
+    }
 
     defaultConfig {
-        minSdk = libs.versions.minSdkBwa.get().toInt()
-
+        minSdk {
+            version = release(libs.versions.minSdkBwa.get().toInt())
+        }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -46,6 +50,7 @@ android {
     testFixtures {
         enable = true
     }
+    sourceSets["main"].res.directories.add("src/test/res")
 }
 
 dependencies {
@@ -109,10 +114,6 @@ dependencies {
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
-}
-
-tasks.withType<Test>().configureEach {
-    android.sourceSets["main"].res.srcDirs("src/test/res")
 }

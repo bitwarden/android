@@ -33,7 +33,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthDiskSourceTest {
@@ -1556,7 +1555,7 @@ private val USER_STATE = UserStateJson(
                 kdfMemory = 16,
                 kdfParallelism = 4,
                 isTwoFactorEnabled = false,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                 userDecryptionOptions = UserDecryptionOptionsJson(
                     hasMasterPassword = true,
                     trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(

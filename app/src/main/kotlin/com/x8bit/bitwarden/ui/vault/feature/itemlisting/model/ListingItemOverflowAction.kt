@@ -190,7 +190,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class ArchiveClick(val cipherId: String) : VaultAction() {
             override val title: Text get() = BitwardenString.archive_verb.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
+            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -199,7 +199,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class UnarchiveClick(val cipherId: String) : VaultAction() {
             override val title: Text get() = BitwardenString.unarchive.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
+            override val requiresPasswordReprompt: Boolean get() = true
         }
     }
 }

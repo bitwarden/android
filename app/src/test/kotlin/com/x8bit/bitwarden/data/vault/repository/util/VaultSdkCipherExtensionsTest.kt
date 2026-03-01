@@ -43,10 +43,9 @@ import org.junit.jupiter.api.assertNull
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
- * Default date time used for [ZonedDateTime] properties of mock objects.
+ * Default date time used for [Instant] properties of mock objects.
  */
 private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -83,7 +82,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             syncCipher,
         )
@@ -364,7 +363,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                archivedDate = ZonedDateTime.ofInstant(FIXED_CLOCK.instant(), ZoneOffset.UTC),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             encryptionContext.toEncryptedNetworkCipher(),
         )

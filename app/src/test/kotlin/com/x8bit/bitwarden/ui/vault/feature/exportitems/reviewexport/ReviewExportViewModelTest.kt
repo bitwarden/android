@@ -120,6 +120,10 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                     number = 1,
                     isDeleted = true,
                 )
+                val mockArchivedCipherListView = createMockCipherListView(
+                    number = 1,
+                    isArchived = true,
+                )
                 decryptCipherListResultFlow.tryEmit(
                     DataState.Loaded(
                         createMockDecryptCipherListResult(
@@ -128,6 +132,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                                 mockActiveLoginCipherListView,
                                 mockActiveCardCipherListView,
                                 mockDeletedCipherListView,
+                                mockArchivedCipherListView,
                             ),
                         ),
                     ),
@@ -415,7 +420,8 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
 private val MOCK_URI = mockk<Uri>()
 private val DEFAULT_REQUEST_DATA = ImportCredentialsRequestData(
     uri = MOCK_URI,
-    requestJson = "mockRequestJson",
+    credentialTypes = setOf("mockCredentialType-1"),
+    knownExtensions = setOf(),
 )
 private val DEFAULT_CONTENT_VIEW_STATE = ReviewExportState.ViewState.Content(
     itemTypeCounts = ReviewExportState.ItemTypeCounts(

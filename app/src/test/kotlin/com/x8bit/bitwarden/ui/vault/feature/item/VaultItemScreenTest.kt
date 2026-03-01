@@ -2558,7 +2558,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     fun `in login state, password updated should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Password last updated: Apr 14, 1983 3:56 PM")
+            .onNodeWithTextAfterScroll(text = "Password updated: Apr 14, 1983 3:56 PM")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2566,7 +2566,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist(
-            text = "Password last updated: Apr 14, 1983 3:56 PM",
+            text = "Password updated: Apr 14, 1983 3:56 PM",
         )
     }
     //endregion login
@@ -3382,7 +3382,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
                 isLaunchable = true,
             ),
         ),
-        passwordRevisionDate = BitwardenString.password_last_updated.asText("Apr 14, 1983 3:56 PM"),
+        passwordRevisionDate = BitwardenString.password_updated.asText("Apr 14, 1983 3:56 PM"),
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,

@@ -21,7 +21,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.ZonedDateTime
+import java.time.Instant
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
@@ -39,8 +39,8 @@ import kotlin.time.Duration.Companion.hours
  */
 @Composable
 fun AddEditSendCustomDateChooser(
-    originalSelection: ZonedDateTime,
-    onDateSelect: (ZonedDateTime) -> Unit,
+    originalSelection: Instant,
+    onDateSelect: (Instant) -> Unit,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
     clock: Clock = LocalClock.current,
@@ -70,8 +70,8 @@ fun AddEditSendCustomDateChooser(
             onDateSelect(
                 (currentSelectionOption as? CustomDeletionOption.Current)
                     ?.time
-                    ?: ZonedDateTime
-                        .now(clock)
+                    ?: clock
+                        .instant()
                         .plus(currentSelectionOption.offsetMillis, ChronoUnit.MILLIS),
             )
         },
@@ -89,7 +89,7 @@ private sealed class CustomDeletionOption : Parcelable {
 
     @Parcelize
     data class Current(
-        val time: ZonedDateTime,
+        val time: Instant,
     ) : CustomDeletionOption() {
         override val offsetMillis: Long get() = 0L
 

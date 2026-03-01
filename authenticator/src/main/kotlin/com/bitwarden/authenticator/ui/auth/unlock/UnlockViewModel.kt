@@ -97,7 +97,7 @@ class UnlockViewModel @Inject constructor(
 
             BiometricsUnlockResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(UnlockEvent.NavigateToItemListing)
+                // State-based navigation will take it from here.
             }
         }
     }
@@ -182,11 +182,6 @@ sealed class UnlockEvent {
      * Prompts the user for biometrics unlock.
      */
     data class PromptForBiometrics(val cipher: Cipher) : UnlockEvent(), BackgroundEvent
-
-    /**
-     * Navigates to the item listing screen.
-     */
-    data object NavigateToItemListing : UnlockEvent()
 }
 
 /**
