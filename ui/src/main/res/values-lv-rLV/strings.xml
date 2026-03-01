@@ -865,6 +865,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="copy_public_key">Ievietot starpliktuvē publisko atslēgu</string>
     <string name="copy_fingerprint">Ievietot starpliktuvē pirkstu nospiedumu</string>
     <string name="enable_notifications">Iespējot paziņojumus</string>
+    <plurals name="notifications_content_description">
+        <item quantity="zero">%d notifications</item>
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Ātra un viegla pieteikšanās dažādās ierīcēs</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden var paziņot par katru reizi, kad tiek saņemts jauns pieteikšanās pieprasījums no citas ierīces.</string>
     <string name="skip_for_now">Pagaidām izlaist</string>
@@ -1223,4 +1228,5 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="sync_with_browser_description">Lai savienotos ar %1$s, noklusējuma pārlūks jāvienādo ar Bitwarden viedierīces lietotni. Kad atvērsies pārlūks, jāpabeidz pieteikšajās, ja vaicāta.\nTiklīdz vienādošana būs pabeigta, notiks pārvirzīšana atpakaļ uz šo lietotni.</string>
     <string name="launch_browser">Palaist pārlūku</string>
     <string name="continue_without_syncing">Turpināt bez vienādošanas</string>
+    <string name="external_link">External link</string>
 </resources>

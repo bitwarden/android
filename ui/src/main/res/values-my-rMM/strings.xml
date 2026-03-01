@@ -855,6 +855,9 @@ Do you want to switch to this account?</string>
     <string name="copy_public_key">Copy public key</string>
     <string name="copy_fingerprint">Copy fingerprint</string>
     <string name="enable_notifications">Enable notifications</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
@@ -1207,4 +1210,5 @@ Do you want to switch to this account?</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
 </resources>

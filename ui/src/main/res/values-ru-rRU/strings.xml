@@ -870,6 +870,12 @@
     <string name="copy_public_key">Скопировать публичный ключ</string>
     <string name="copy_fingerprint">Скопировать отпечаток</string>
     <string name="enable_notifications">Включить уведомления</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d уведомление</item>
+        <item quantity="few">%d уведомления</item>
+        <item quantity="many">%d уведомлений</item>
+        <item quantity="other">%d уведомления</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Быстро и легко авторизуйтесь на разных устройствах</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden может уведомлять вас каждый раз, когда вы получаете новый запрос на вход с другого устройства.</string>
     <string name="skip_for_now">Пока пропустить</string>
@@ -1231,4 +1237,5 @@
     <string name="sync_with_browser_description">Чтобы подключиться к %1$s, синхронизируйте ваш браузер по умолчанию с мобильным приложением Bitwarden. Когда браузер откроется, выполните авторизацию, если будет предложено. После завершения синхронизации вы вернетесь в это приложение.</string>
     <string name="launch_browser">Запустить браузер</string>
     <string name="continue_without_syncing">Продолжить без синхронизации</string>
+    <string name="external_link">Внешняя ссылка</string>
 </resources>

@@ -855,6 +855,9 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="copy_public_key">Sao chép khóa công khai</string>
     <string name="copy_fingerprint">Sao chép vân tay</string>
     <string name="enable_notifications">Bật thông báo</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Đăng nhập nhanh và dễ dàng trên mọi thiết bị</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi nhận được yêu cầu đăng nhập mới từ một thiết bị khác.</string>
     <string name="skip_for_now">Bỏ qua bây giờ</string>
@@ -1211,4 +1214,5 @@ các vấn đề.</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
 </resources>
