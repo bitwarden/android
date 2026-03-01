@@ -860,6 +860,10 @@
     <string name="copy_public_key">பொது விசையை நகலெடு</string>
     <string name="copy_fingerprint">கைரேகையை நகலெடு</string>
     <string name="enable_notifications">அறிவிப்புகளை இயக்கு</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">சாதனங்களில் விரைவாகவும் எளிதாகவும் உள்நுழையவும்</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">மற்றொரு சாதனத்திலிருந்து ஒரு புதிய உள்நுழைவு கோரிக்கையை நீங்கள் பெறும் ஒவ்வொரு முறையும் Bitwarden உங்களுக்குத் தெரிவிக்க முடியும்.</string>
     <string name="skip_for_now">இப்போதைக்கு தவிர்க்கவும்</string>
@@ -1215,4 +1219,5 @@
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
 </resources>

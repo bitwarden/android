@@ -859,6 +859,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="copy_public_key">Public açarı kopyala</string>
     <string name="copy_fingerprint">Barmaq izini kopyala</string>
     <string name="enable_notifications">Bildirişləri fəallaşdır</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d bildiriş</item>
+        <item quantity="other">%d bildiriş</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Cihazlar arasında cəld və asan giriş et</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden, başqa bir cihazdan yeni bir giriş tələbi aldığınız hər dəfəsində sizi məlumatlandıracaq.</string>
     <string name="skip_for_now">İndilik ötür</string>
@@ -1208,12 +1212,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
     <string name="items_transferred">Elementlər köçürüldü</string>
     <string name="updated_master_password">Güncəllənmiş ana parol</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="invalid_email_addresses">Yararsız e-poçt ünvanı</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Bir və ya daha çox e-poçt ünvanı yanlışdır. Lütfən incələyib yenidən sınayın.</string>
+    <string name="no_email_addresses_entered">Heç bir e-poçt ünvanı daxil edilməyib</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send-i paylaşmaq üçün ən azı bir yararlı e-poçt ünvanı daxil edin.</string>
     <string name="sync_with_browser">Brauzerlə sinxronlaşdır</string>
     <string name="sync_with_browser_description">%1$s ilə bağlantı qurmaq üçün ilkin brauzerinizi Bitwarden mobil tətbiqi ilə sinxronlaşdırın. Brauzeriniz açıldığı zaman, soruşulsa daxil olma prosesini tamamlayın.\nSinxronlaşdırma tamamlandıqdan sonra bu tətbiqə qayıdacaqsınız.</string>
     <string name="launch_browser">Brauzeri başlat</string>
     <string name="continue_without_syncing">Sinxrn olmadan davam et</string>
+    <string name="external_link">Xarici keçid</string>
 </resources>

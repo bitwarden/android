@@ -860,6 +860,10 @@ Pretende mudar para esta conta?</string>
     <string name="copy_public_key">Copiar chave pública</string>
     <string name="copy_fingerprint">Copiar impressão digital</string>
     <string name="enable_notifications">Ativar notificações</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d notificação</item>
+        <item quantity="other">%d notificações</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Iniciar sessão de forma rápida e fácil em todos os dispositivos</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">O Bitwarden pode notificá-lo sempre que receber um novo pedido de início de sessão de outro dispositivo.</string>
     <string name="skip_for_now">Saltar por agora</string>
@@ -1215,4 +1219,5 @@ Pretende mudar para esta conta?</string>
     <string name="sync_with_browser_description">Para ligar a %1$s, sincronize o seu navegador predefinido com a app móvel Bitwarden. Quando o navegador abrir, conclua a sessão, se lhe for solicitado.\nApós a sincronização estar concluída, regressará a esta aplicação.</string>
     <string name="launch_browser">Iniciar o navegador</string>
     <string name="continue_without_syncing">Continuar sem sincronizar</string>
+    <string name="external_link">Link externo</string>
 </resources>

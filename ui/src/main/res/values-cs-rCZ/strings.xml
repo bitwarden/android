@@ -869,6 +869,12 @@ Chcete se přepnout na tento účet?</string>
     <string name="copy_public_key">Kopírovat veřejný klíč</string>
     <string name="copy_fingerprint">Kopírovat otisk prstu</string>
     <string name="enable_notifications">Povolit oznámení</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d oznámení</item>
+        <item quantity="few">%d oznámení</item>
+        <item quantity="many">%d oznámení</item>
+        <item quantity="other">%d oznámení</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Přihlašujte se rychle a snadno napříč zařízeními</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden Vás může upozornit pokaždé, když obdržíte novou žádost o přihlášení z jiného zařízení.</string>
     <string name="skip_for_now">Prozatím přeskočit</string>
@@ -965,7 +971,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="view_recorded_logs">Zobrazit zaznamenané protokoly</string>
     <string name="enable_flight_recorder_title">Povolit letový zapisovač</string>
     <string name="recorded_logs_title">Nahrané protokoly</string>
-    <string name="no_logs_recorded">Nebyly zaznamenány žádné logy</string>
+    <string name="no_logs_recorded">Nebyly nahrány žádné logy</string>
     <string name="experiencing_an_issue">Máte problém?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povolte dočasné logování pro shromažďování a prohlížení logů lokálně. Pokud je povoleno, stav aplikací a síťových hovorů mohou být zaznamenány - ale nikdy citlivé informace o trezoru.</string>
     <string name="to_get_started_set_a_logging_duration">Chcete-li začít, nastavte dobu trvání logování. Logování 
@@ -992,8 +998,8 @@ při opakování problémů.</string>
     <string name="key_connector_organization">Organizace:</string>
     <string name="password_no_longer_required_confirm_domain">Hlavní heslo již není vyžadováno pro členy následující organizace. Potvrďte níže uvedenou doménu u správce Vaší organizace.</string>
     <string name="please_confirm_domain_with_admin">Potvrďte níže uvedenou doménu u správce Vaší organizace.\n\nDoména Key Connectoru:\n%1$s</string>
-    <string name="flight_recorder_banner_title">Letový zapisovač zapnutý</string>
-    <string name="flight_recorder_banner_message">Letový zapisovač bude aktivní do %1$s v %2$s. Pro deaktivování se vraťte do nastavení.</string>
+    <string name="flight_recorder_banner_title">Letový zapisovač je zapnutý</string>
+    <string name="flight_recorder_banner_message">Letový zapisovač bude aktivní do %1$s, %2$s. Pro deaktivování se vraťte do nastavení.</string>
     <string name="go_to_settings">Přejít do nastavení</string>
     <string name="all_logs_deleted">Všechny logy byly smazány</string>
     <string name="log_deleted">Log byl smazán</string>
@@ -1056,7 +1062,7 @@ při opakování problémů.</string>
     <string name="information">Informace</string>
     <string name="otp_type">Typ OTP</string>
     <string name="search_codes">Prohledat kódy</string>
-    <string name="secure_your_accounts_with_bitwarden_authenticator">Zabezpečte své účty pomocí Autentikátoru Bitwarden</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Zabezpečte své účty pomocí Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Získejte ověřovací kódy pro všechny své účty, které podporují dvoufázové ověření.</string>
     <string name="use_your_device_camera_to_scan_codes">Použijte kameru zařízení ke skenování kódů</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Naskenujte QR kód v nastavení dvoufázového ověření pro jakýkoli účet.</string>
@@ -1076,7 +1082,7 @@ při opakování problémů.</string>
     <string name="security">Zabezpečení</string>
     <string name="too_many_failed_biometric_attempts">Příliš mnoho neúspěšných pokusů o biometrii.</string>
     <string name="version">Verze</string>
-    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Přečtěte si více o tom, jak používat Autentikátor Bitwarden v Centru nápovědy.</string>
+    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Přečtěte si více o tom, jak používat Bitwarden Authenticator v Centru nápovědy.</string>
     <string name="key">Klíč</string>
     <string name="create_verification_code">Vytvořit ověřovací kód</string>
     <string name="key_is_required">Klíč je povinný.</string>
@@ -1087,7 +1093,7 @@ při opakování problémů.</string>
     <string name="key_is_invalid">Klíč je neplatný.</string>
     <string name="backup">Záloha</string>
     <string name="data_backup_title">Zálohování dat</string>
-    <string name="data_backup_message">Data Autentikátoru Bitwarden jsou zálohována a mohou být obnovena z pravidelných záloh Vašeho zařízení.</string>
+    <string name="data_backup_message">Data Bitwarden Authenticator jsou zálohována a mohou být obnovena z pravidelných záloh Vašeho zařízení.</string>
     <string name="import_2fas_password_protected_not_supported">Importování ze souborů chráněných hesly 2FAS není podporován. Zkuste to znovu s exportovaným souborem, který není chráněn heslem.</string>
     <string name="import_bitwarden_unsupported_format">Importování CSV souborů Bitwardenu není podporováno. Zkuste to znovu s exportovaným souborem JSON.</string>
     <string name="download_bitwarden_card_title">Stáhnout aplikaci Bitwarden</string>
@@ -1232,4 +1238,5 @@ při opakování problémů.</string>
     <string name="sync_with_browser_description">Chcete-li se připojit k %1$s, synchronizujte výchozí prohlížeč s mobilní aplikací Bitwarden. Když se Váš prohlížeč otevře, po výzvě se přihlásíte.\nJakmile bude synchronizace dokončena, vrátíte se do této aplikace.</string>
     <string name="launch_browser">Otevřít prohlížeč</string>
     <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
+    <string name="external_link">Externí odkaz</string>
 </resources>
