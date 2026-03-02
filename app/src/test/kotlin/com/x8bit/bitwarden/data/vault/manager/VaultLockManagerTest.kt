@@ -14,6 +14,9 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.data.manager.appstate.FakeAppStateManager
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -26,9 +29,6 @@ import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction

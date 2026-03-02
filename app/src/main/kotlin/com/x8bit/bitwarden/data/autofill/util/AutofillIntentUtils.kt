@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.data.autofill.util
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
 import android.content.Context
@@ -13,6 +12,10 @@ import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.toPendingIntentMutabilityFlag
+import com.bitwarden.data.autofill.util.AUTOFILL_BUNDLE_KEY
+import com.bitwarden.data.autofill.util.AUTOFILL_CALLBACK_DATA_KEY
+import com.bitwarden.data.autofill.util.AUTOFILL_SAVE_ITEM_DATA_KEY
+import com.bitwarden.data.autofill.util.AUTOFILL_SELECTION_DATA_KEY
 import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import com.x8bit.bitwarden.AutofillCallbackActivity
 import com.x8bit.bitwarden.MainActivity
@@ -21,11 +24,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillCallbackData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import kotlin.random.Random
-
-private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
-private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
-private const val AUTOFILL_CALLBACK_DATA_KEY = "autofill-callback-data"
-private const val AUTOFILL_BUNDLE_KEY = "autofill-bundle-key"
 
 /**
  * Creates an [Intent] in order to send the user to a manual selection process for autofill.
@@ -149,12 +147,3 @@ fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
 fun Intent.getAutofillCallbackIntentOrNull(): AutofillCallbackData? =
     getBundleExtra(AUTOFILL_BUNDLE_KEY)
         ?.getSafeParcelableExtra(AUTOFILL_CALLBACK_DATA_KEY)
-
-/**
- * Checks if the given [Activity] was created for Autofill. This is useful to avoid locking the
- * vault if one of the Autofill services starts the only instance of the [MainActivity].
- */
-val Activity.createdForAutofill: Boolean
-    get() = intent.getAutofillSelectionDataOrNull() != null ||
-        intent.getAutofillSaveItemOrNull() != null ||
-        intent.getAutofillAssistStructureOrNull() != null

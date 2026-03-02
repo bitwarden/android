@@ -1,8 +1,7 @@
-package com.x8bit.bitwarden.data.platform.manager.util
+package com.bitwarden.data.manager.appstate
 
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

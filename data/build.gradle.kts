@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.serialization)
