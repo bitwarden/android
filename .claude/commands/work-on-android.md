@@ -47,18 +47,20 @@ Invoke the `committing-android-changes` skill to stage and commit the changes wi
 
 ### Phase 6: Review
 
-Invoke the `reviewing-changes` skill to perform a self-review of the committed diff. Address any issues found before proceeding.
+**Pre-requisites:**
+- `bitwarden-code-review` from the [Bitwarden Plugin Marketplace](https://github.com/bitwarden/ai-plugins) must be installed in order to perform this phase. If it is not installed prompt the user to install it, or skip the review phase.
+
+Launch a subagent with the `/bitwarden-code-review:code-review-local` command to perform a **local** code review of the committed diff. Validate and address any issues found before proceeding.
 
 **Before advancing**: Share review findings and confirm readiness for PR creation.
 
 ### Phase 7: Pull Request
 
-Invoke the `creating-android-pull-request` skill to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
-
-**On completion**: Share the PR URL with the user.
+Prompt the user to invoke the `creating-android-pull-request` skill to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
 
 ## Guidelines
 
 - Be explicit about which phase you are in at all times.
+- Never proceed to another phase without user confirmation.
 - If the user wants to skip a phase, acknowledge and move to the next applicable phase.
 - If starting from a partially completed task (e.g., code already written), skip to the appropriate phase.
