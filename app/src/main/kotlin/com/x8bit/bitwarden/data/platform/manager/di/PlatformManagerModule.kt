@@ -30,8 +30,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -105,12 +103,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PlatformManagerModule {
-
-    @Provides
-    @Singleton
-    fun provideAppStateManager(
-        application: Application,
-    ): AppStateManager = AppStateManagerImpl(application = application)
 
     @Provides
     @Singleton
