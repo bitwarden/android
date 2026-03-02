@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.data.platform.manager
 import android.app.Activity
 import android.app.Application
 import app.cash.turbine.test
+import com.bitwarden.core.data.util.FakeLifecycleOwner
 import com.x8bit.bitwarden.data.autofill.util.createdForAutofill
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
