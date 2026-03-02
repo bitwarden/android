@@ -859,6 +859,10 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="copy_public_key">Ortak anahtarı kopyala</string>
     <string name="copy_fingerprint">Parmak izini kopyala</string>
     <string name="enable_notifications">Bildirimleri etkinleştir</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d bildirim</item>
+        <item quantity="other">%d bildirim</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Farklı cihazlarda hızlıca ve kolayca oturum açın</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Başka bir cihazdan yeni bir giriş isteği aldığınızda Bitwarden size bildirim gönderebilir.</string>
     <string name="skip_for_now">Şimdilik geç</string>
@@ -1214,4 +1218,5 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Tarayıcıyı aç</string>
     <string name="continue_without_syncing">Eşitleme yapmadan devam et</string>
+    <string name="external_link">Dış bağlantı</string>
 </resources>

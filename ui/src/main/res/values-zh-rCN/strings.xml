@@ -855,6 +855,9 @@
     <string name="copy_public_key">复制公钥</string>
     <string name="copy_fingerprint">复制指纹</string>
     <string name="enable_notifications">启用通知</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d 个通知</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">快速和轻松地跨设备登录</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden 可以在每次收到来自其他设备的新登录请求时通知您。</string>
     <string name="skip_for_now">暂时跳过</string>
@@ -1208,4 +1211,5 @@
     <string name="sync_with_browser_description">要连接到 %1$s，请将您的默认浏览器与 Bitwarden 移动 App 同步。浏览器打开后，如果提示登录，请完成登录。\n同步完成后，您将返回到此 App。</string>
     <string name="launch_browser">启动浏览器</string>
     <string name="continue_without_syncing">继续而不同步</string>
+    <string name="external_link">外部链接</string>
 </resources>

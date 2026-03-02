@@ -859,6 +859,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="copy_public_key">Nyilvános kulcs másolása</string>
     <string name="copy_fingerprint">Ujjlenyomat másolása</string>
     <string name="enable_notifications">Értesítések engedélyezése</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d értesítés</item>
+        <item quantity="other">%d értesítés</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Bejelentkezés gyorsan és egyszerűen minden eszközön</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">A Bitwarden minden alkalommal értesíthetést küld, amikor új bejelentkezési kérelem érkezik egy másik eszközről.</string>
     <string name="skip_for_now">Kihagyás most</string>
@@ -1214,4 +1218,5 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="sync_with_browser_description">%1$s csatlakozáshoz szinkronizáljuk az alapértelmezett böngészőt a Bitwarden mobilalkalmazással. A böngésző megnyitásakor fejezzük be a bejelentkezést, ha a rendszer azt kéri.\nA szinkronizálás befejezése után visszakerülünk ebbe az alkalmazásba.</string>
     <string name="launch_browser">Böngésző indítása</string>
     <string name="continue_without_syncing">Folytatás szinkronizálás nélkül</string>
+    <string name="external_link">Külső hivatkozás</string>
 </resources>

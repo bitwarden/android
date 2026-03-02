@@ -448,13 +448,13 @@ Skanningen sker automatiskt.</string>
     <string name="deletion_date">Raderingsdatum</string>
     <string name="deletion_time">Raderingstid</string>
     <string name="deletion_date_info">Denna Send kommer att raderas permanent på angivet datum och klockslag.</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">Vem kan se</string>
+    <string name="anyone_with_the_link">Vem som helst med länken</string>
+    <string name="anyone_with_link_can_view_send">Vem som helst med denna länk kan se denna Send</string>
+    <string name="specific_people">Specifika personer</string>
+    <string name="specific_people_verification_info">Efter att ha delat denna Send-länk måste personer verifiera sin e-post med en kod för att se denna Send</string>
+    <string name="anyone_with_password">Alla som har ett lösenord inställt av dig</string>
+    <string name="add_email">Lägg till e-postadress</string>
     <string name="pending_delete">Väntar på radering</string>
     <string name="expired">Upphört</string>
     <string name="expires_at">Går ut den %s</string>
@@ -860,6 +860,10 @@ Vill du byta till detta konto?</string>
     <string name="copy_public_key">Kopiera offentlig nyckel</string>
     <string name="copy_fingerprint">Kopiera fingeravtryck</string>
     <string name="enable_notifications">Aktivera aviseringar</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d avisering</item>
+        <item quantity="other">%d aviseringar</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Logga in snabbt och enkelt på alla enheter</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden kan meddela dig varje gång du får en ny inloggningsbegäran från en annan enhet.</string>
     <string name="skip_for_now">Hoppa över nu</string>
@@ -1207,12 +1211,13 @@ Vill du byta till detta konto?</string>
     <string name="restart_premium">Starta om Premium</string>
     <string name="items_transferred">Objekt överförda</string>
     <string name="updated_master_password">Huvudlösenord uppdaterades</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
+    <string name="invalid_email_addresses">Ogiltiga e-postadresser</string>
+    <string name="one_or_more_email_addresses_are_incorrect">En eller flera e-postadresser är felaktiga. Granska och försök igen.</string>
+    <string name="no_email_addresses_entered">Inga e-postadresser har angetts</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Ange minst en giltig e-postadress för att dela denna Send.</string>
+    <string name="sync_with_browser">Synkronisera med webbläsaren</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
-    <string name="launch_browser">Launch browser</string>
-    <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="launch_browser">Starta webbläsare</string>
+    <string name="continue_without_syncing">Fortsätt utan att synkronisera</string>
+    <string name="external_link">External link</string>
 </resources>

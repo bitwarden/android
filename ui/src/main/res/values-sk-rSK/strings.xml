@@ -870,6 +870,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="copy_public_key">Kopírovať verejný kľúč</string>
     <string name="copy_fingerprint">Kopírovať odtlačok prsta</string>
     <string name="enable_notifications">Povoliť upozornenia</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d upozornenie</item>
+        <item quantity="few">%d upozornenia</item>
+        <item quantity="many">%d upozornení</item>
+        <item quantity="other">%d upozornení</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Rýchle a jednoduché prihlásenie v rôznych zariadeniach</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden vás môže upozorniť vždy, keď dostanete novú žiadosť o prihlásenie z iného zariadenia.</string>
     <string name="skip_for_now">Teraz preskočiť</string>
@@ -1231,4 +1237,5 @@ Chcete prepnúť na tento účet?</string>
     <string name="sync_with_browser_description">Ak sa chcete pripojiť k %1$s, synchronizujte svoj predvolený prehliadač s mobilnou aplikáciou Bitwarden. Po otvorení prehliadača sa prihláste, ak budete vyzvaní.\nPo dokončení synchronizácie sa vrátite do tejto aplikácie.</string>
     <string name="launch_browser">Spustiť prehliadač</string>
     <string name="continue_without_syncing">Pokračovať bez synchronizácie</string>
+    <string name="external_link">Externý odkaz</string>
 </resources>
