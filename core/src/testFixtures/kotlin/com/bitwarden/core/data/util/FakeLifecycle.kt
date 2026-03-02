@@ -1,4 +1,4 @@
-package com.bitwarden.authenticatorbridge.util
+package com.bitwarden.core.data.util
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
