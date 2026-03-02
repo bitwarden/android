@@ -9,6 +9,10 @@ You are guiding the developer through requirements refinement and implementation
 
 **Input**: $ARGUMENTS
 
+## Prerequisites
+
+- **Jira/Confluence access**: Fetching tickets and wiki pages requires the `bitwarden-atlassian-tools@bitwarden-marketplace` MCP plugin. If the plugin is not installed, Jira ticket IDs and Confluence URLs cannot be fetched automatically.
+
 ## Workflow Phases
 
 Work through each phase sequentially. **Confirm with the user before advancing to the next phase.** The user may skip phases that are not applicable. If starting from a partially completed plan, skip to the appropriate phase.
@@ -22,6 +26,7 @@ Parse the input to detect and fetch all available sources:
 - **Confluence URLs** (containing `atlassian.net/wiki` or confluence page IDs): Extract page ID and fetch via `get_confluence_page`. If the page is a parent page, fetch child pages via `get_child_pages` and ask the user which are relevant.
 - **Free text**: Treat as direct requirements — no fetching needed.
 - **Multiple inputs**: All are first-class sources. Fetch each independently and consolidate.
+- **Tool unavailable**: If `get_issue`, `get_confluence_page`, or other Atlassian tools are not available, inform the user that the `bitwarden-atlassian-tools@bitwarden-marketplace` MCP plugin is required and prompt them to install and configure it. In the meantime, ask the user to paste the relevant content directly. Treat pasted content as free-text input.
 
 **Present a structured summary:**
 1. Sources identified and fetched (with links)
