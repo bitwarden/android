@@ -31,6 +31,7 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
@@ -49,11 +50,21 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideAppLockManager(
+        appStateManager: AppStateManager,
+        realtimeManager: RealtimeManager,
+        settingsRepository: SettingsRepository,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         dispatcherManager: DispatcherManager,
+        @ApplicationContext context: Context,
     ): AppLockManager = AppLockManagerImpl(
+        appStateManager = appStateManager,
+        realtimeManager = realtimeManager,
+        settingsRepository = settingsRepository,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         dispatcherManager = dispatcherManager,
+        context = context,
     )
 
     @Provides

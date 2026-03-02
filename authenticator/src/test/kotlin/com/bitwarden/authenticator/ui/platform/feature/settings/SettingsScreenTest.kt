@@ -1,7 +1,9 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import android.content.Intent
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -12,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.authenticator.BuildConfig
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -33,13 +36,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SettingsScreenTest : AuthenticatorComposeTest() {
 
     private var onNavigateToTutorialCalled = false
-    private var onNaviateToExportCalled = false
+    private var onNavigateToExportCalled = false
     private var onNavigateToImportCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -65,10 +69,28 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             SettingsScreen(
                 viewModel = viewModel,
                 onNavigateToTutorial = { onNavigateToTutorialCalled = true },
-                onNavigateToExport = { onNaviateToExportCalled = true },
+                onNavigateToExport = { onNavigateToExportCalled = true },
                 onNavigateToImport = { onNavigateToImportCalled = true },
             )
         }
+    }
+
+    @Test
+    fun `NavigateToTutorial event should invoke onNavigateToTutorial`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToTutorial)
+        assertTrue(onNavigateToTutorialCalled)
+    }
+
+    @Test
+    fun `NavigateToExport event should invoke onNavigateToExport`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToExport)
+        assertTrue(onNavigateToExportCalled)
+    }
+
+    @Test
+    fun `NavigateToImport event should invoke onNavigateToImport`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToImport)
+        assertTrue(onNavigateToImportCalled)
     }
 
     @Test
@@ -271,6 +293,67 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             .onNodeWithText("Use your device’s lock method to unlock the app")
             .assertDoesNotExist()
     }
+
+    @Test
+    fun `Session timeout row should be hidden when hasBiometricsSupport is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(hasBiometricsSupport = false) }
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Session timeout row should be disabled when isUnlockWithBiometricsEnabled is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertIsNotEnabled()
+    }
+
+    @Test
+    fun `Session timeout row should display dialog when clicked`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Session timeout")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `Session timeout dialog should emit action when row clicked`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 hour")
+            .performScrollTo()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AppTimeoutChange(AppTimeout.OneHour.type),
+            )
+        }
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -294,4 +377,5 @@ private val DEFAULT_STATE = SettingsState(
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
     hasBiometricsSupport = true,
+    appTimeout = AppTimeout.OnAppRestart,
 )
