@@ -12,6 +12,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -70,6 +71,7 @@ class SettingsViewModel @Inject constructor(
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
             isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            appTimeout = settingsRepository.appTimeoutState,
         ),
 ) {
 
@@ -92,6 +94,11 @@ class SettingsViewModel @Inject constructor(
         authRepository
             .isUnlockWithBiometricsEnabledFlow
             .map { SettingsAction.Internal.UnlockWithBiometricsUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .appTimeoutStateFlow
+            .map { SettingsAction.Internal.AppTimeoutStateUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         snackbarRelayManager
@@ -123,6 +130,16 @@ class SettingsViewModel @Inject constructor(
                 handleAboutClick(action)
             }
 
+            is SettingsAction.BiometricSupportChanged -> {
+                handleBiometricSupportChanged(action)
+            }
+
+            is SettingsAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: SettingsAction.Internal) {
+        when (action) {
             is SettingsAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
@@ -141,8 +158,8 @@ class SettingsViewModel @Inject constructor(
                 handleUnlockWithBiometricsUpdated(action)
             }
 
-            is SettingsAction.BiometricSupportChanged -> {
-                handleBiometricSupportChanged(action)
+            is SettingsAction.Internal.AppTimeoutStateUpdated -> {
+                handleAppTimeoutStateUpdated(action)
             }
         }
     }
@@ -161,6 +178,12 @@ class SettingsViewModel @Inject constructor(
                 isUnlockWithBiometricsEnabled = action.isEnabled,
             )
         }
+    }
+
+    private fun handleAppTimeoutStateUpdated(
+        action: SettingsAction.Internal.AppTimeoutStateUpdated,
+    ) {
+        mutableStateFlow.update { it.copy(appTimeout = action.appTimeout) }
     }
 
     private fun handleSharedAccountsStateUpdated(
@@ -186,6 +209,8 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled -> {
                 handleUnlockWithBiometricToggleEnabled(action)
             }
+
+            is SettingsAction.SecurityClick.AppTimeoutChange -> handleAppTimeoutChange(action)
         }
     }
 
@@ -258,6 +283,20 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.setupBiometricsKey(cipher = action.cipher)
             sendAction(SettingsAction.Internal.BiometricsKeyResultReceive(result = result))
+        }
+    }
+
+    private fun handleAppTimeoutChange(action: SettingsAction.SecurityClick.AppTimeoutChange) {
+        settingsRepository.appTimeoutState = when (action.appTimeout) {
+            AppTimeout.Type.IMMEDIATELY -> AppTimeout.Immediately
+            AppTimeout.Type.ONE_MINUTE -> AppTimeout.OneMinute
+            AppTimeout.Type.FIVE_MINUTES -> AppTimeout.FiveMinutes
+            AppTimeout.Type.FIFTEEN_MINUTES -> AppTimeout.FifteenMinutes
+            AppTimeout.Type.THIRTY_MINUTES -> AppTimeout.ThirtyMinutes
+            AppTimeout.Type.ONE_HOUR -> AppTimeout.OneHour
+            AppTimeout.Type.FOUR_HOURS -> AppTimeout.FourHours
+            AppTimeout.Type.ON_APP_RESTART -> AppTimeout.OnAppRestart
+            AppTimeout.Type.NEVER -> AppTimeout.Never
         }
     }
 
@@ -425,6 +464,7 @@ class SettingsViewModel @Inject constructor(
             sharedAccountsState: SharedVerificationCodesState,
             isScreenCaptureAllowed: Boolean,
             isDynamicColorsEnabled: Boolean,
+            appTimeout: AppTimeout,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
@@ -453,6 +493,7 @@ class SettingsViewModel @Inject constructor(
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
                 hasBiometricsSupport = true,
+                appTimeout = appTimeout,
             )
         }
     }
@@ -474,6 +515,7 @@ data class SettingsState(
     val version: Text,
     val copyrightInfo: Text,
     val allowScreenCapture: Boolean,
+    val appTimeout: AppTimeout,
 ) : Parcelable {
 
     /**
@@ -617,6 +659,13 @@ sealed class SettingsAction {
          * Indicates the user clicked allow screen capture toggle.
          */
         data class AllowScreenCaptureToggle(val enabled: Boolean) : SecurityClick()
+
+        /**
+         * Indicates the user changed the app timeout setting.
+         */
+        data class AppTimeoutChange(
+            val appTimeout: AppTimeout.Type,
+        ) : SecurityClick()
     }
 
     /**
@@ -721,39 +770,46 @@ sealed class SettingsAction {
     /**
      * Models actions that the Settings screen itself may send.
      */
-    sealed class Internal {
+    sealed class Internal : SettingsAction() {
 
         /**
          * Indicates the biometrics key validation results has been received.
          */
-        data class BiometricsKeyResultReceive(val result: BiometricsKeyResult) : SettingsAction()
+        data class BiometricsKeyResultReceive(val result: BiometricsKeyResult) : Internal()
 
         /**
          * Indicates that shared account state was updated.
          */
         data class SharedAccountsStateUpdated(
             val state: SharedVerificationCodesState,
-        ) : SettingsAction()
+        ) : Internal()
 
         /**
          * Indicates that the default save option on disk was updated.
          */
         data class DefaultSaveOptionUpdated(
             val option: DefaultSaveOption,
-        ) : SettingsAction()
+        ) : Internal()
 
         /**
          * Indicates that the dynamic colors state on disk was updated.
          */
         data class DynamicColorsUpdated(
             val isEnabled: Boolean,
-        ) : SettingsAction()
+        ) : Internal()
 
         /**
          * Indicates that the biometric state on disk was updated.
          */
         data class UnlockWithBiometricsUpdated(
             val isEnabled: Boolean,
-        ) : SettingsAction()
+        ) : Internal()
+
+        /**
+         * Indicates that the app timeout state on disk was updated.
+         */
+        data class AppTimeoutStateUpdated(
+            val appTimeout: AppTimeout,
+        ) : Internal()
     }
 }

@@ -42,10 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.feature.settings.security.util.displayLabel
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -64,6 +66,7 @@ import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -189,7 +192,6 @@ fun SettingsScreen(
         ) {
             SecuritySettings(
                 state = state,
-                biometricsManager = biometricsManager,
                 onBiometricToggle = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -203,6 +205,9 @@ fun SettingsScreen(
                             SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
                         )
                     }
+                },
+                onAppTimeoutChange = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.SecurityClick.AppTimeoutChange(it)) }
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -309,11 +314,12 @@ fun SettingsScreen(
 //region Security settings
 
 @Composable
-private fun SecuritySettings(
+private fun ColumnScope.SecuritySettings(
     state: SettingsState,
-    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onBiometricToggle: (Boolean) -> Unit,
     onScreenCaptureChange: (Boolean) -> Unit,
+    onAppTimeoutChange: (AppTimeout.Type) -> Unit,
+    resources: Resources = LocalResources.current,
 ) {
     Spacer(modifier = Modifier.height(height = 12.dp))
     BitwardenListHeaderText(
@@ -323,26 +329,51 @@ private fun SecuritySettings(
         label = stringResource(id = BitwardenString.security),
     )
 
-    Spacer(modifier = Modifier.height(8.dp))
     if (state.hasBiometricsSupport) {
-        UnlockWithBiometricsRow(
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenSwitch(
+            cardStyle = CardStyle.Top(),
+            label = stringResource(id = BitwardenString.lock_app),
+            isChecked = state.isUnlockWithBiometricsEnabled,
+            onCheckedChange = { onBiometricToggle(it) },
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            isChecked = state.isUnlockWithBiometricsEnabled,
-            onBiometricToggle = { onBiometricToggle(it) },
-            biometricsManager = biometricsManager,
+        )
+        BitwardenMultiSelectButton(
+            label = stringResource(id = BitwardenString.session_timeout),
+            options = AppTimeout.Type.entries.map { it.displayLabel() }.toImmutableList(),
+            selectedOption = state.appTimeout.type.displayLabel(),
+            onOptionSelected = { selectedType ->
+                val selectedOption = AppTimeout.Type.entries.first {
+                    it.displayLabel.toString(resources) == selectedType
+                }
+                onAppTimeoutChange(selectedOption)
+            },
+            isEnabled = state.isUnlockWithBiometricsEnabled,
+            textFieldTestTag = "SessionTimeoutStatusLabel",
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .testTag("AppTimeoutSwitch")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        BitwardenSupportingText(
+            text = stringResource(
+                id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
+            ),
+            cardStyle = CardStyle.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
+    Spacer(modifier = Modifier.height(height = 8.dp))
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        cardStyle = if (state.hasBiometricsSupport) {
-            CardStyle.Bottom
-        } else {
-            CardStyle.Full
-        },
+        cardStyle = CardStyle.Full,
         onValueChange = onScreenCaptureChange,
         modifier = Modifier
             .fillMaxWidth()
@@ -464,26 +495,6 @@ private fun DefaultSaveOptionSelectionRow(
         },
         cardStyle = CardStyle.Bottom,
         modifier = modifier,
-    )
-}
-
-@Composable
-private fun UnlockWithBiometricsRow(
-    isChecked: Boolean,
-    onBiometricToggle: (Boolean) -> Unit,
-    biometricsManager: BiometricsManager,
-    modifier: Modifier = Modifier,
-) {
-    if (!biometricsManager.isBiometricsSupported) return
-    BitwardenSwitch(
-        modifier = modifier,
-        cardStyle = CardStyle.Top(),
-        label = stringResource(id = BitwardenString.lock_app),
-        subtext = stringResource(
-            id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
-        ),
-        isChecked = isChecked,
-        onCheckedChange = onBiometricToggle,
     )
 }
 

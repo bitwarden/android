@@ -130,4 +130,19 @@ class SettingDiskSourceTest {
             settingDiskSource.previouslySyncedBitwardenAccountIds,
         )
     }
+
+    @Test
+    fun `appTimeoutInMinutes should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:appTimeoutInMinutes"
+
+        // Shared preferences and the disk source start with the same value:
+        assertNull(settingDiskSource.appTimeoutInMinutes)
+
+        // Updating the disk source updates shared preferences:
+        settingDiskSource.appTimeoutInMinutes = 60
+        assertEquals(sharedPreferences.getInt(sharedPrefsKey, 0), 60)
+
+        sharedPreferences.edit { putInt(sharedPrefsKey, 240) }
+        assertEquals(settingDiskSource.appTimeoutInMinutes, 240)
+    }
 }
