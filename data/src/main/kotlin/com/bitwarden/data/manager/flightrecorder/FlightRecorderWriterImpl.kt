@@ -5,9 +5,11 @@ import android.util.Log
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.data.repository.ServerConfigRepository
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.BufferedWriter
@@ -30,6 +32,7 @@ internal class FlightRecorderWriterImpl(
     private val fileManager: FileManager,
     private val dispatcherManager: DispatcherManager,
     private val buildInfoManager: BuildInfoManager,
+    private val serverConfigRepository: ServerConfigRepository,
 ) : FlightRecorderWriter {
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
         fileManager.delete(File(File(fileManager.logsDirectory), data.fileName))
@@ -56,7 +59,6 @@ internal class FlightRecorderWriterImpl(
                 val startTime = Instant
                     .ofEpochMilli(data.startTimeMs)
                     .toFormattedPattern(pattern = LOG_TIME_PATTERN, clock = clock)
-                val operatingSystem = "${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})"
                 // Upon creating the new file, we pre-populate it with basic data
                 BufferedWriter(FileWriter(logFile, true)).use { bw ->
                     bw.append("Bitwarden Android - ${buildInfoManager.applicationName}")
@@ -69,10 +71,30 @@ internal class FlightRecorderWriterImpl(
                     bw.newLine()
                     bw.append("Build: ${buildInfoManager.buildAndFlavor}")
                     bw.newLine()
-                    bw.append("Operating System: $operatingSystem")
+                    bw.append("SDK Version: \uD83E\uDD80 ${buildInfoManager.sdkData}")
                     bw.newLine()
-                    bw.append("Device: ${Build.BRAND} ${Build.MODEL}")
+                    buildInfoManager.ciBuildInfo?.takeIf { it.isNotBlank() }?.let { ciInfo ->
+                        bw.append("CI Build Info: $ciInfo")
+                        bw.newLine()
+                    }
+                    bw.append("Device: ${buildInfoManager.deviceData}")
                     bw.newLine()
+
+                    // Server configuration data
+                    val serverConfig = serverConfigRepository.serverConfigStateFlow.value
+                    val serverData = serverConfig?.serverData
+                    val serverInfo = StringBuilder()
+                        .append("\uD83C\uDF29 Server:")
+                        .apply {
+                            serverData?.server?.name?.let { append(" $it") }
+                                ?: append(" Bitwarden Cloud")
+                            serverData?.version?.let { append(" $it") }
+                            serverData?.environment?.cloudRegion?.let { append(" @ $it") }
+                        }
+                        .toString()
+                    bw.append(serverInfo)
+                    bw.newLine()
+
                     bw.append("Fingerprint: ${Build.FINGERPRINT}")
                     bw.newLine()
                 }
