@@ -103,10 +103,10 @@ internal class FlightRecorderWriterImpl(
                         bw.append(it)
                     }
                     bw.append(" – ")
-                    bw.append(message)
+                    bw.append(message.redactUrls())
                     throwable?.let {
                         bw.append(" – ")
-                        bw.append(it.getStackTraceString())
+                        bw.append(it.getStackTraceString().redactUrls())
                     }
                     bw.newLine()
                 }
@@ -141,3 +141,24 @@ private val Int.logLevel: String
         Log.ASSERT -> "ASSERT"
         else -> "UNKNOWN"
     }
+
+/**
+ * Redacts URLs and quoted hostnames in the string by replacing them with [REDACTED].
+ * Handles both full URLs and hostnames in quotes (e.g., "Unable to resolve host "example.com"").
+ */
+@Suppress("MagicNumber")
+private fun String.redactUrls(): String {
+    val urlPattern = Regex("""(https?://)([\w.-]+)((?:/[\w./?&=%-]*)?)""")
+    val afterUrlRedaction = urlPattern.replace(this) { matchResult ->
+        val protocol = matchResult.groupValues[1]
+        val path = matchResult.groupValues[3]
+        "$protocol[REDACTED]$path"
+    }
+
+    // Redact hostnames that appear in double quotes without protocol and path
+    // This handles cases like: Unable to resolve host "com.example.server"
+    val quotedHostnamePattern = Regex(""""([\w-]+\.[\w.-]+)"""")
+    return quotedHostnamePattern.replace(afterUrlRedaction) {
+        """"[REDACTED]""""
+    }
+}
