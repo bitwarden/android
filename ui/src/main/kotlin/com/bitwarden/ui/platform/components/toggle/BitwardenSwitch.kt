@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.button.BitwardenHelpIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
@@ -53,9 +54,9 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param subtext The text to be displayed under the [label].
  * @param supportingText An optional supporting text to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
- * @param tooltip The data required to display a tooltip.
+ * @param helpData The data required to display a help button.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
- * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * @param enabled Whether this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
@@ -71,7 +72,7 @@ fun BitwardenSwitch(
     subtext: String? = null,
     supportingText: String? = null,
     contentDescription: String? = null,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
     actions: (@Composable RowScope.() -> Unit)? = null,
@@ -83,7 +84,7 @@ fun BitwardenSwitch(
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
         contentDescription = contentDescription,
-        tooltip = tooltip,
+        helpData = helpData,
         readOnly = readOnly,
         enabled = enabled,
         cardStyle = cardStyle,
@@ -115,9 +116,9 @@ fun BitwardenSwitch(
  * @param subtext The text to be displayed under the [label].
  * @param supportingText An optional supporting text to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
- * @param tooltip The data required to display a tooltip.
+ * @param helpData The data required to display a help button.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
- * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * @param enabled Whether this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
@@ -133,7 +134,7 @@ fun BitwardenSwitch(
     subtext: String? = null,
     supportingText: String? = null,
     contentDescription: String? = null,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
     actions: (@Composable RowScope.() -> Unit)? = null,
@@ -145,7 +146,7 @@ fun BitwardenSwitch(
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
         contentDescription = contentDescription,
-        tooltip = tooltip,
+        helpData = helpData,
         readOnly = readOnly,
         enabled = enabled,
         cardStyle = cardStyle,
@@ -177,7 +178,7 @@ fun BitwardenSwitch(
  * @param subtext The text to be displayed under the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
- * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * @param enabled Whether this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
@@ -223,9 +224,9 @@ fun BitwardenSwitch(
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param subtext The text to be displayed under the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
- * @param tooltip The data required to display a tooltip.
+ * @param helpData The data required to display a help button.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
- * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * @param enabled Whether this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
@@ -242,7 +243,7 @@ fun BitwardenSwitch(
     modifier: Modifier = Modifier,
     subtext: String? = null,
     contentDescription: String? = null,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
@@ -291,9 +292,9 @@ fun BitwardenSwitch(
                                 }
                                 .testTag(tag = "SwitchText"),
                         )
-                        tooltip?.let {
-                            ToolTip(
-                                tooltip = it,
+                        helpData?.let {
+                            HelpButton(
+                                helpData = it,
                                 isVisible = subtext != null,
                                 size = 16.dp,
                             )
@@ -315,7 +316,7 @@ fun BitwardenSwitch(
                         )
                     }
                 }
-                tooltip?.let { ToolTip(tooltip = it, isVisible = subtext == null) }
+                helpData?.let { HelpButton(helpData = it, isVisible = subtext == null) }
             }
             Spacer(modifier = Modifier.width(width = 16.dp))
             Switch(
@@ -360,18 +361,15 @@ private fun ColumnScope.SupportingContent(
 }
 
 @Composable
-private fun RowScope.ToolTip(
-    tooltip: TooltipData,
+private fun RowScope.HelpButton(
+    helpData: BitwardenHelpButtonData,
     isVisible: Boolean,
     size: Dp = 48.dp,
 ) {
     if (!isVisible) return
     Spacer(modifier = Modifier.width(width = 8.dp))
-    BitwardenStandardIconButton(
-        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-        contentDescription = tooltip.contentDescription,
-        onClick = tooltip.onClick,
-        contentColor = BitwardenTheme.colorScheme.icon.secondary,
+    BitwardenHelpIconButton(
+        helpData = helpData,
         modifier = Modifier
             .size(size = size)
             .testTag(tag = "SwitchTooltip"),
@@ -402,9 +400,10 @@ private fun BitwardenSwitch_preview() {
                 supportingText = "description",
                 isChecked = true,
                 onCheckedChange = {},
-                tooltip = TooltipData(
+                helpData = BitwardenHelpButtonData(
                     onClick = { },
                     contentDescription = "content description",
+                    isExternalLink = false,
                 ),
                 actions = {
                     BitwardenStandardIconButton(
@@ -420,9 +419,10 @@ private fun BitwardenSwitch_preview() {
                 supportingText = "description",
                 isChecked = true,
                 onCheckedChange = {},
-                tooltip = TooltipData(
+                helpData = BitwardenHelpButtonData(
                     onClick = { },
                     contentDescription = "content description",
+                    isExternalLink = true,
                 ),
                 cardStyle = CardStyle.Middle(),
             )

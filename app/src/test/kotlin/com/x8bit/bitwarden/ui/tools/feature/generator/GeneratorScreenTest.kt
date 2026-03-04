@@ -1464,7 +1464,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .filterToOne(hasClickAction())
             // Find the content description
             .onChildren()
-            .filterToOne(hasContentDescription("Learn more"))
+            .filterToOne(hasContentDescription("Learn more, External link"))
             .assertIsDisplayed()
             .performClick()
 

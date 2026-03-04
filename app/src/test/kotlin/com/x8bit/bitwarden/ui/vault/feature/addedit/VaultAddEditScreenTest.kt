@@ -1268,7 +1268,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Authenticator key help, External link",
+            )
             .performClick()
 
         verify {
@@ -3071,7 +3073,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Master password re-prompt help, External link",
+            )
             .performClick()
 
         verify {

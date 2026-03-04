@@ -2339,7 +2339,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll("Authenticator key help, External link")
             .performClick()
 
         verify {
