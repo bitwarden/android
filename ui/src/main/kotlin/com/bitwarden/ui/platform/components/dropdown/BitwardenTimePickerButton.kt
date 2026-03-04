@@ -14,9 +14,9 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 
@@ -28,12 +28,12 @@ private const val MINUTES_PER_HOUR: Int = 60
  * @param label The descriptive text label for the [OutlinedTextField].
  * @param totalMinutes The currently selected time value in minutes.
  * @param onTimeSelect A lambda that is invoked when a time is selected from the menu.
- * @param is24Hour Whether or not the time should be displayed in 24-hour format.
+ * @param is24Hour Whether the time should be displayed in 24-hour format.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  * @param supportingContent An optional supporting content that will appear below the button.
- * @param tooltip A nullable [TooltipData], representing the tooltip icon.
+ * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied within the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
@@ -51,7 +51,7 @@ fun BitwardenTimePickerButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
@@ -67,7 +67,7 @@ fun BitwardenTimePickerButton(
         modifier = modifier,
         isEnabled = isEnabled,
         supportingContent = supportingContent,
-        tooltip = tooltip,
+        helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         actionsPadding = actionsPadding,
@@ -82,12 +82,12 @@ fun BitwardenTimePickerButton(
  * @param hours The currently selected time value in hours.
  * @param minutes The currently selected time value in minutes.
  * @param onTimeSelect A lambda that is invoked when a time is selected from the menu.
- * @param is24Hour Whether or not the time should be displayed in 24-hour format.
+ * @param is24Hour Whether the time should be displayed in 24-hour format.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  * @param supportingContent An optional supporting content that will appear below the button.
- * @param tooltip A nullable [TooltipData], representing the tooltip icon.
+ * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied within the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
@@ -106,7 +106,7 @@ fun BitwardenTimePickerButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
@@ -152,7 +152,7 @@ fun BitwardenTimePickerButton(
         enabled = isEnabled,
         showChevron = false,
         supportingContent = supportingContent,
-        tooltip = tooltip,
+        helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         actionsPadding = actionsPadding,

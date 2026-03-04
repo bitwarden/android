@@ -44,6 +44,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -53,7 +54,6 @@ import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -263,11 +263,12 @@ private fun AutoFillScreenContent(
             BitwardenTextRow(
                 text = stringResource(BitwardenString.privileged_apps),
                 onClick = autoFillHandlers.onPrivilegedAppsClick,
-                tooltip = TooltipData(
+                helpData = BitwardenHelpButtonData(
                     contentDescription = stringResource(
                         id = BitwardenString.learn_more_about_privileged_apps,
                     ),
                     onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+                    isExternalLink = false,
                 ),
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
