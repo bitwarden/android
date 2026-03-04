@@ -772,6 +772,7 @@ class VaultLockManagerTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -801,6 +802,7 @@ class VaultLockManagerTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    upgradeToken = null,
                 ),
             )
             trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
@@ -937,6 +939,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1012,6 +1015,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1050,6 +1054,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1136,6 +1141,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1174,6 +1180,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
@@ -1230,6 +1237,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             }
@@ -1261,6 +1269,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1324,6 +1333,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             }
@@ -1362,6 +1372,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns error.asFailure()
@@ -1417,6 +1428,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             }
@@ -1448,6 +1460,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1510,6 +1523,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             }
@@ -1547,6 +1561,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1616,6 +1631,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             }
@@ -1728,6 +1744,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1791,6 +1808,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1829,6 +1847,7 @@ class VaultLockManagerTest {
                         kdfParams = kdf,
                         email = email,
                         method = initUserCryptoMethod,
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1898,6 +1917,7 @@ class VaultLockManagerTest {
                         kdfParams = kdf,
                         email = email,
                         method = initUserCryptoMethod,
+                        upgradeToken = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1952,6 +1972,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } coAnswers {
@@ -2011,6 +2032,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -2056,6 +2078,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
                     ),
+                    upgradeToken = null,
                 ),
             )
         }

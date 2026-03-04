@@ -58,6 +58,21 @@ interface VaultDiskSource {
     suspend fun deleteCipher(userId: String, cipherId: String)
 
     /**
+     * Saves multiple ciphers to the data source for the given [userId].
+     */
+    suspend fun saveCiphers(userId: String, ciphers: List<SyncResponseJson.Cipher>)
+
+    /**
+     * Deletes ciphers with the given [cipherIds] from the data source for the given [userId].
+     */
+    suspend fun deleteSelectedCiphers(userId: String, cipherIds: List<String>)
+
+    /**
+     * Deletes all ciphers from the data source for the given [userId].
+     */
+    suspend fun deleteAllCiphers(userId: String)
+
+    /**
      * Saves a collection to the data source for the given [userId].
      */
     suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection)

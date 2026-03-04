@@ -156,6 +156,7 @@ class AuthenticatorBridgeRepositoryImpl(
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = decryptedUserKey,
                     ),
+                    upgradeToken = null,
                 ),
             )
             .flatMap { result ->
