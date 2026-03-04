@@ -192,6 +192,7 @@ class VaultLockManagerImpl(
                             email = email,
                             method = initUserCryptoMethod,
                             userId = userId,
+                            upgradeToken = null,
                         ),
                     )
                     .flatMap { result ->
