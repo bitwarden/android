@@ -91,12 +91,8 @@ fun AccountSecurityScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
-    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(
-                action = AccountSecurityAction.UnlockWithBiometricToggleEnabled(cipher = it),
-            )
-        }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleEnabled(it))
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -142,14 +138,12 @@ fun AccountSecurityScreen(
 
     AccountSecurityDialogs(
         state = state,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+        onDismissRequest = { viewModel.trySendAction(AccountSecurityAction.DismissDialog) },
+        onConfirmLogoutClick = {
+            viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick)
         },
-        onConfirmLogoutClick = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
-        },
-        onFingerprintLearnMore = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
+        onFingerprintLearnMore = {
+            viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick)
         },
     )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -163,8 +157,8 @@ fun AccountSecurityScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.BackClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(AccountSecurityAction.BackClick)
                 },
             )
         },
@@ -183,15 +177,11 @@ fun AccountSecurityScreen(
                 BitwardenActionCard(
                     cardTitle = stringResource(id = BitwardenString.set_up_unlock),
                     actionText = stringResource(BitwardenString.get_started),
-                    onActionClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
-                        }
+                    onActionClick = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
                     },
-                    onDismissClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
-                        }
+                    onDismissClick = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
                     },
                     leadingContent = {
                         NotificationBadge(notificationCount = 1)
@@ -212,8 +202,8 @@ fun AccountSecurityScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
                 text = stringResource(id = BitwardenString.pending_log_in_requests),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
+                onClick = {
+                    viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
                 },
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
@@ -240,15 +230,11 @@ fun AccountSecurityScreen(
             BitwardenUnlockWithBiometricsSwitch(
                 biometricSupportStatus = biometricSupportStatus,
                 isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
-                onDisableBiometrics = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            AccountSecurityAction.UnlockWithBiometricToggleDisabled,
-                        )
-                    }
+                onDisableBiometrics = {
+                    viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleDisabled)
                 },
-                onEnableBiometrics = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick) }
+                onEnableBiometrics = {
+                    viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
                 },
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
@@ -261,8 +247,8 @@ fun AccountSecurityScreen(
                 BitwardenUnlockWithPinSwitch(
                     isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                     isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
-                    onUnlockWithPinToggleAction = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
+                    onUnlockWithPinToggleAction = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it))
                     },
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
@@ -275,12 +261,8 @@ fun AccountSecurityScreen(
             if (state.shouldShowEnableAuthenticatorSync) {
                 SyncWithAuthenticatorRow(
                     isChecked = state.isAuthenticatorSyncChecked,
-                    onCheckedChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                AccountSecurityAction.AuthenticatorSyncToggle(enabled = it),
-                            )
-                        }
+                    onCheckedChange = {
+                        viewModel.trySendAction(AccountSecurityAction.AuthenticatorSyncToggle(it))
                     },
                 )
                 Spacer(Modifier.height(16.dp))
@@ -296,8 +278,8 @@ fun AccountSecurityScreen(
             SessionTimeoutRow(
                 vaultTimeoutPolicy = state.vaultTimeoutPolicy,
                 selectedVaultTimeoutType = state.vaultTimeout.type,
-                onVaultTimeoutTypeSelect = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
+                onVaultTimeoutTypeSelect = {
+                    viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it))
                 },
                 modifier = Modifier
                     .testTag("VaultTimeoutChooser")
@@ -308,12 +290,8 @@ fun AccountSecurityScreen(
                 SessionCustomTimeoutRow(
                     vaultTimeoutPolicy = state.vaultTimeoutPolicy,
                     customVaultTimeout = customTimeout,
-                    onCustomVaultTimeoutSelect = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                AccountSecurityAction.CustomVaultTimeoutSelect(it),
-                            )
-                        }
+                    onCustomVaultTimeoutSelect = {
+                        viewModel.trySendAction(AccountSecurityAction.CustomVaultTimeoutSelect(it))
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -333,8 +311,8 @@ fun AccountSecurityScreen(
             SessionTimeoutActionRow(
                 isEnabled = state.isSessionTimeoutActionEnabled,
                 selectedVaultTimeoutAction = state.vaultTimeoutAction,
-                onVaultTimeoutActionSelect = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
+                onVaultTimeoutActionSelect = {
+                    viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it))
                 },
                 supportingText = state.sessionTimeoutActionSupportingText?.invoke(),
                 cardStyle = if (state.sessionTimeoutSupportText == null) {
@@ -359,8 +337,8 @@ fun AccountSecurityScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
                 text = stringResource(id = BitwardenString.account_fingerprint_phrase),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
+                onClick = {
+                    viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick)
                 },
                 cardStyle = CardStyle.Top(),
                 modifier = Modifier
@@ -370,8 +348,8 @@ fun AccountSecurityScreen(
             )
             BitwardenExternalLinkRow(
                 text = stringResource(id = BitwardenString.two_step_login),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
+                onConfirmClick = {
+                    viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick)
                 },
                 withDivider = false,
                 dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
@@ -387,8 +365,8 @@ fun AccountSecurityScreen(
             if (state.isUnlockWithPasswordEnabled) {
                 BitwardenExternalLinkRow(
                     text = stringResource(id = BitwardenString.change_master_password),
-                    onConfirmClick = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
+                    onConfirmClick = {
+                        viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick)
                     },
                     withDivider = false,
                     dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
@@ -404,9 +382,7 @@ fun AccountSecurityScreen(
             if (state.hasUnlockMechanism) {
                 BitwardenTextRow(
                     text = stringResource(id = BitwardenString.lock_now),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
-                    },
+                    onClick = { viewModel.trySendAction(AccountSecurityAction.LockNowClick) },
                     cardStyle = CardStyle.Middle(),
                     modifier = Modifier
                         .testTag("LockNowLabel")
@@ -416,9 +392,7 @@ fun AccountSecurityScreen(
             }
             BitwardenTextRow(
                 text = stringResource(id = BitwardenString.log_out),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
-                },
+                onClick = { viewModel.trySendAction(AccountSecurityAction.LogoutClick) },
                 cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("LogOutLabel")
@@ -427,9 +401,7 @@ fun AccountSecurityScreen(
             )
             BitwardenTextRow(
                 text = stringResource(id = BitwardenString.delete_account),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
-                },
+                onClick = { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) },
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .testTag("DeleteAccountLabel")

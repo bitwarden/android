@@ -96,9 +96,7 @@ fun ManualCodeEntryScreen(
             ),
             confirmButtonText = stringResource(id = BitwardenString.settings),
             dismissButtonText = stringResource(id = BitwardenString.no_thanks),
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) }
-            },
+            onConfirmClick = { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) },
             onDismissClick = { shouldShowPermissionDialog = false },
             onDismissRequest = { shouldShowPermissionDialog = false },
             title = null,
@@ -119,8 +117,8 @@ fun ManualCodeEntryScreen(
                 title = stringResource(id = BitwardenString.create_verification_code),
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
                 },
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
             )
@@ -128,25 +126,19 @@ fun ManualCodeEntryScreen(
     ) {
         ManualCodeEntryContent(
             state = state,
-            onNameChange = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.IssuerTextChange(it)) }
+            onNameChange = { viewModel.trySendAction(ManualCodeEntryAction.IssuerTextChange(it)) },
+            onKeyChange = { viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it)) },
+            onSaveLocallyClick = {
+                viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
             },
-            onKeyChange = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it)) }
+            onSaveToBitwardenClick = {
+                viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick)
             },
-            onSaveLocallyClick = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick) }
-            },
-            onSaveToBitwardenClick = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick) }
-            },
-            onScanQrCodeClick = remember(viewModel) {
-                {
-                    if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
-                        viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
-                    } else {
-                        launcher.launch(Manifest.permission.CAMERA)
-                    }
+            onScanQrCodeClick = {
+                if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                    viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
+                } else {
+                    launcher.launch(Manifest.permission.CAMERA)
                 }
             },
         )

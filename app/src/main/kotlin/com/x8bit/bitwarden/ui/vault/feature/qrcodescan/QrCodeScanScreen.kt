@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,13 +56,11 @@ fun QrCodeScanScreen(
     viewModel: QrCodeScanViewModel = hiltViewModel(),
     qrCodeAnalyzer: QrCodeAnalyzer = LocalQrCodeAnalyzer.current,
 ) {
-    qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
+    qrCodeAnalyzer.onQrCodeScanned = {
+        viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it))
     }
 
-    val onEnterKeyManuallyClick = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
-    }
+    val onEnterKeyManuallyClick = { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -86,8 +83,8 @@ fun QrCodeScanScreen(
                     title = stringResource(id = BitwardenString.scan_qr_code),
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(QrCodeScanAction.CloseClick)
                     },
                     scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
                         state = rememberTopAppBarState(),
@@ -96,8 +93,8 @@ fun QrCodeScanScreen(
             },
         ) {
             CameraPreview(
-                cameraErrorReceive = remember(viewModel) {
-                    { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
+                cameraErrorReceive = {
+                    viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
                 modifier = Modifier.fillMaxSize(),

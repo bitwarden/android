@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
@@ -92,17 +91,15 @@ fun VaultUnlockedNavBarScreen(
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
-        generatorTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
+        generatorTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
-        sendTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }
+        sendTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) },
+        vaultTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
         },
-        vaultTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick) }
-        },
-        settingsTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick) }
+        settingsTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
         },
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
