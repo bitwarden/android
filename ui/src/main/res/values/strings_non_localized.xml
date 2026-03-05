@@ -42,6 +42,7 @@
     <string name="send_email_verification">Send Email Verification</string>
     <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
     <string name="clear_sso_cookies">Clear SSO cookies</string>
+    <string name="mobile_premium_upgrade">Mobile Premium Upgrade</string>
 
     <!-- endregion Debug Menu -->
 </resources>
