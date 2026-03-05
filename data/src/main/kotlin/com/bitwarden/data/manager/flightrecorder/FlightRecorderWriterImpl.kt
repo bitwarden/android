@@ -94,7 +94,6 @@ internal class FlightRecorderWriterImpl(
                         .toString()
                     bw.append(serverInfo)
                     bw.newLine()
-
                     bw.append("Fingerprint: ${Build.FINGERPRINT}")
                     bw.newLine()
                 }
