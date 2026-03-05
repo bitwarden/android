@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -159,6 +160,48 @@ class PushManagerTest {
 
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with premium status changed emits to premiumStatusChangedFlow`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        PremiumStatusChangedData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            premium = true,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with premium status changed also emits to fullSyncFlow`() =
+            runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with premium status changed with null fields does not emit`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP,
+                    )
                     expectNoEvents()
                 }
             }
@@ -1061,5 +1104,23 @@ private val SYNC_VAULT_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Premium": true
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": null,
+      "Premium": null
     }""",
 )
