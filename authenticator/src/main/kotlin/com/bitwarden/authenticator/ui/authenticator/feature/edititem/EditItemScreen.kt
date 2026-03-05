@@ -85,17 +85,11 @@ fun EditItemScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(EditItemAction.CancelClick)
-                    }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(EditItemAction.CancelClick) },
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(EditItemAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(EditItemAction.SaveClick) },
                         modifier = Modifier.semantics { testTag = "SaveButton" },
                     )
                 },
@@ -107,68 +101,32 @@ fun EditItemScreen(
             is EditItemState.ViewState.Content -> {
                 EditItemContent(
                     viewState = viewState,
-                    onIssuerNameTextChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.IssuerNameTextChange(it),
-                            )
-                        }
+                    onIssuerNameTextChange = {
+                        viewModel.trySendAction(EditItemAction.IssuerNameTextChange(it))
                     },
-                    onUsernameTextChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.UsernameTextChange(it),
-                            )
-                        }
+                    onUsernameTextChange = {
+                        viewModel.trySendAction(EditItemAction.UsernameTextChange(it))
                     },
-                    onToggleFavorite = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.FavoriteToggleClick(it),
-                            )
-                        }
+                    onToggleFavorite = {
+                        viewModel.trySendAction(EditItemAction.FavoriteToggleClick(it))
                     },
-                    onTypeOptionClicked = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.TypeOptionClick(it),
-                            )
-                        }
+                    onTypeOptionClicked = {
+                        viewModel.trySendAction(EditItemAction.TypeOptionClick(it))
                     },
-                    onTotpCodeTextChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.TotpCodeTextChange(it),
-                            )
-                        }
+                    onTotpCodeTextChange = {
+                        viewModel.trySendAction(EditItemAction.TotpCodeTextChange(it))
                     },
-                    onAlgorithmOptionClicked = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.AlgorithmOptionClick(it),
-                            )
-                        }
+                    onAlgorithmOptionClicked = {
+                        viewModel.trySendAction(EditItemAction.AlgorithmOptionClick(it))
                     },
-                    onRefreshPeriodOptionClicked = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.RefreshPeriodOptionClick(it),
-                            )
-                        }
+                    onRefreshPeriodOptionClicked = {
+                        viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(it))
                     },
-                    onNumberOfDigitsChanged = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.NumberOfDigitsOptionClick(it),
-                            )
-                        }
+                    onNumberOfDigitsChanged = {
+                        viewModel.trySendAction(EditItemAction.NumberOfDigitsOptionClick(it))
                     },
-                    onExpandAdvancedOptionsClicked = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                EditItemAction.ExpandAdvancedOptionsClick,
-                            )
-                        }
+                    onExpandAdvancedOptionsClicked = {
+                        viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
                     },
                 )
             }

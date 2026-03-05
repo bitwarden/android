@@ -99,9 +99,7 @@ fun VaultItemListingScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->

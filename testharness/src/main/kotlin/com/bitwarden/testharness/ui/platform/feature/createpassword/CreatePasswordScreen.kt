@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -63,8 +62,8 @@ fun CreatePasswordScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(CreatePasswordAction.BackClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(CreatePasswordAction.BackClick)
                     },
                 ),
             )
@@ -81,8 +80,8 @@ fun CreatePasswordScreen(
             BitwardenTextField(
                 label = stringResource(R.string.username),
                 value = state.username,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.UsernameChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(CreatePasswordAction.UsernameChanged(it))
                 },
                 cardStyle = null,
                 modifier = Modifier
@@ -95,8 +94,8 @@ fun CreatePasswordScreen(
             BitwardenTextField(
                 label = stringResource(R.string.password),
                 value = state.password,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.PasswordChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(CreatePasswordAction.PasswordChanged(it))
                 },
                 cardStyle = null,
                 modifier = Modifier
@@ -108,9 +107,7 @@ fun CreatePasswordScreen(
 
             BitwardenFilledButton(
                 label = stringResource(R.string.execute),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.ExecuteClick) }
-                },
+                onClick = { viewModel.trySendAction(CreatePasswordAction.ExecuteClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,9 +118,7 @@ fun CreatePasswordScreen(
 
             BitwardenTextButton(
                 label = stringResource(BitwardenString.clear),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.ClearResultClick) }
-                },
+                onClick = { viewModel.trySendAction(CreatePasswordAction.ClearResultClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()

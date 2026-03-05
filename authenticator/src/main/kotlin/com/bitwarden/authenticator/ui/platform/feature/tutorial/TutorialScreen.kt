@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,18 +82,10 @@ fun TutorialScreen(
         TutorialScreenContent(
             state = state,
             pagerState = pagerState,
-            onPagerSwipe = remember(viewModel) {
-                { viewModel.trySendAction(TutorialAction.PagerSwipe(it)) }
-            },
-            onDotClick = remember(viewModel) {
-                { viewModel.trySendAction(TutorialAction.DotClick(it)) }
-            },
-            continueClick = remember(viewModel) {
-                { viewModel.trySendAction(TutorialAction.ContinueClick(it)) }
-            },
-            skipClick = remember(viewModel) {
-                { viewModel.trySendAction(TutorialAction.SkipClick) }
-            },
+            onPagerSwipe = { viewModel.trySendAction(TutorialAction.PagerSwipe(it)) },
+            onDotClick = { viewModel.trySendAction(TutorialAction.DotClick(it)) },
+            continueClick = { viewModel.trySendAction(TutorialAction.ContinueClick(it)) },
+            skipClick = { viewModel.trySendAction(TutorialAction.SkipClick) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

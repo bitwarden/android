@@ -106,7 +106,6 @@ User Request (UI Action)
 In addition to the Key Principles above, follow these rules:
 
 ### DO
-- Use `remember(viewModel)` for lambdas passed to composables
 - Map async results to internal actions before updating state
 - Inject `Clock` for time-dependent operations
 - Return early to reduce nesting

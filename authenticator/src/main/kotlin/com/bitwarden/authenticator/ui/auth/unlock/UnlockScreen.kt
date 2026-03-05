@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -44,11 +43,11 @@ fun UnlockScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(it)) }
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(UnlockAction.BiometricsUnlockSuccess(it))
     }
-    val onBiometricsLockOut: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(UnlockAction.BiometricsLockout) }
+    val onBiometricsLockOut: () -> Unit = {
+        viewModel.trySendAction(UnlockAction.BiometricsLockout)
     }
 
     EventsEffect(viewModel = viewModel) { event ->
@@ -71,9 +70,7 @@ fun UnlockScreen(
 
     UnlockDialogs(
         dialog = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(UnlockAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(UnlockAction.DismissDialog) },
     )
 
     BitwardenScaffold(
@@ -97,9 +94,7 @@ fun UnlockScreen(
             Spacer(modifier = Modifier.height(32.dp))
             BitwardenFilledButton(
                 label = stringResource(id = BitwardenString.unlock),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(UnlockAction.BiometricsUnlockClick) }
-                },
+                onClick = { viewModel.trySendAction(UnlockAction.BiometricsUnlockClick) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),

@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
@@ -66,9 +65,7 @@ fun EnvironmentScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val certificateImportFilePickerLauncher = intentManager.getActivityResultLauncher { result ->
         intentManager.getFileDataFromActivityResult(result)?.let {
-            viewModel.trySendAction(
-                EnvironmentAction.ImportCertificateFilePickerResultReceive(it),
-            )
+            viewModel.trySendAction(EnvironmentAction.ImportCertificateFilePickerResultReceive(it))
         }
     }
     val scope = rememberCoroutineScope()
@@ -101,32 +98,24 @@ fun EnvironmentScreen(
             BitwardenBasicDialog(
                 title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
-                },
+                onDismissRequest = { viewModel.trySendAction(EnvironmentAction.DialogDismiss) },
                 throwable = dialog.throwable,
             )
         }
 
         is EnvironmentState.DialogState.SetCertificateData -> {
             BitwardenClientCertificateDialog(
-                onConfirmClick = remember(viewModel) {
-                    { alias, password ->
-                        viewModel.trySendAction(
-                            EnvironmentAction.SetCertificateInfoResultReceive(
-                                certificateFileData = dialog.certificateBytes,
-                                password = password,
-                                alias = alias,
-                            ),
-                        )
-                    }
+                onConfirmClick = { alias, password ->
+                    viewModel.trySendAction(
+                        EnvironmentAction.SetCertificateInfoResultReceive(
+                            certificateFileData = dialog.certificateBytes,
+                            password = password,
+                            alias = alias,
+                        ),
+                    )
                 },
-                onDismissRequest = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            action = EnvironmentAction.SetCertificatePasswordDialogDismiss,
-                        )
-                    }
+                onDismissRequest = {
+                    viewModel.trySendAction(EnvironmentAction.SetCertificatePasswordDialogDismiss)
                 },
             )
         }
@@ -139,16 +128,12 @@ fun EnvironmentScreen(
                     BitwardenString.system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden,
                 ),
                 confirmButtonText = stringResource(BitwardenString.continue_text),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick) }
+                onConfirmClick = {
+                    viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick)
                 },
                 dismissButtonText = stringResource(BitwardenString.cancel),
-                onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
-                },
+                onDismissClick = { viewModel.trySendAction(EnvironmentAction.DialogDismiss) },
+                onDismissRequest = { viewModel.trySendAction(EnvironmentAction.DialogDismiss) },
             )
         }
 
@@ -158,21 +143,15 @@ fun EnvironmentScreen(
                 message = dialog.message(),
                 confirmButtonText = stringResource(BitwardenString.replace_certificate),
                 dismissButtonText = stringResource(BitwardenString.cancel),
-                onConfirmClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            EnvironmentAction.ConfirmOverwriteCertificateClick(
-                                triggeringAction = dialog.triggeringAction,
-                            ),
-                        )
-                    }
+                onConfirmClick = {
+                    viewModel.trySendAction(
+                        EnvironmentAction.ConfirmOverwriteCertificateClick(
+                            triggeringAction = dialog.triggeringAction,
+                        ),
+                    )
                 },
-                onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
-                },
+                onDismissClick = { viewModel.trySendAction(EnvironmentAction.DialogDismiss) },
+                onDismissRequest = { viewModel.trySendAction(EnvironmentAction.DialogDismiss) },
             )
         }
 
@@ -189,15 +168,11 @@ fun EnvironmentScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.CloseClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(EnvironmentAction.CloseClick) },
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(EnvironmentAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(EnvironmentAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
                 },
@@ -230,9 +205,7 @@ fun EnvironmentScreen(
                 supportingText = stringResource(
                     id = BitwardenString.self_hosted_environment_footer,
                 ),
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
-                },
+                onValueChange = { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) },
                 autoCompleteOptions = if (BuildConfig.BUILD_TYPE != "release") {
                     persistentListOf(
                         "https://vault.qa.bitwarden.pw",
@@ -265,8 +238,8 @@ fun EnvironmentScreen(
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.web_vault_url),
                 value = state.webVaultServerUrl,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.WebVaultServerUrlChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(EnvironmentAction.WebVaultServerUrlChange(it))
                 },
                 keyboardType = KeyboardType.Uri,
                 textFieldTestTag = "WebVaultUrlEntry",
@@ -281,8 +254,8 @@ fun EnvironmentScreen(
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.api_url),
                 value = state.apiServerUrl,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ApiServerUrlChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(EnvironmentAction.ApiServerUrlChange(it))
                 },
                 keyboardType = KeyboardType.Uri,
                 cardStyle = CardStyle.Full,
@@ -297,8 +270,8 @@ fun EnvironmentScreen(
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.identity_url),
                 value = state.identityServerUrl,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.IdentityServerUrlChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(EnvironmentAction.IdentityServerUrlChange(it))
                 },
                 keyboardType = KeyboardType.Uri,
                 textFieldTestTag = "IdentityUrlEntry",
@@ -313,8 +286,8 @@ fun EnvironmentScreen(
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.icons_url),
                 value = state.iconsServerUrl,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it))
                 },
                 supportingText = stringResource(id = BitwardenString.custom_environment_footer),
                 keyboardType = KeyboardType.Uri,
@@ -355,9 +328,7 @@ fun EnvironmentScreen(
 
             BitwardenFilledButton(
                 label = stringResource(id = BitwardenString.import_certificate),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) }
-                },
+                onClick = { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -368,8 +339,8 @@ fun EnvironmentScreen(
 
             BitwardenOutlinedButton(
                 label = stringResource(id = BitwardenString.choose_system_certificate),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick) }
+                onClick = {
+                    viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

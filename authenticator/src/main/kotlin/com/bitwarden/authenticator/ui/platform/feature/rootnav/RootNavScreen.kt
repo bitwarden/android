@@ -67,10 +67,8 @@ fun RootNavScreen(
 
     BiometricChanges(
         biometricsManager = biometricsManager,
-        onBiometricSupportChange = remember(viewModel) {
-            {
-                viewModel.trySendAction(RootNavAction.BiometricSupportChanged(it))
-            }
+        onBiometricSupportChange = {
+            viewModel.trySendAction(RootNavAction.BiometricSupportChanged(it))
         },
     )
 

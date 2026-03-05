@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
@@ -69,16 +68,12 @@ fun FlightRecorderScreen(
                 title = stringResource(id = BitwardenString.enable_flight_recorder_title),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(FlightRecorderAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(FlightRecorderAction.BackClick) },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(FlightRecorderAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(FlightRecorderAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
                 },
@@ -88,12 +83,10 @@ fun FlightRecorderScreen(
     ) {
         FlightRecorderContent(
             state = state,
-            onDurationSelected = remember(viewModel) {
-                { viewModel.trySendAction(FlightRecorderAction.DurationSelect(it)) }
+            onDurationSelected = {
+                viewModel.trySendAction(FlightRecorderAction.DurationSelect(it))
             },
-            onHelpCenterClick = remember(viewModel) {
-                { viewModel.trySendAction(FlightRecorderAction.HelpCenterClick) }
-            },
+            onHelpCenterClick = { viewModel.trySendAction(FlightRecorderAction.HelpCenterClick) },
         )
     }
 }

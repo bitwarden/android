@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -76,11 +75,9 @@ fun SetupBrowserAutofillScreen(
     }
     SetupBrowserAutofillDialogs(
         dialogState = state.dialogState,
-        onDismissDialog = remember(viewModel) {
-            { viewModel.trySendAction(SetupBrowserAutofillAction.DismissDialog) }
-        },
-        onTurnOnLaterConfirm = remember(viewModel) {
-            { viewModel.trySendAction(SetupBrowserAutofillAction.TurnOnLaterConfirmClick) }
+        onDismissDialog = { viewModel.trySendAction(SetupBrowserAutofillAction.DismissDialog) },
+        onTurnOnLaterConfirm = {
+            viewModel.trySendAction(SetupBrowserAutofillAction.TurnOnLaterConfirmClick)
         },
     )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -104,8 +101,8 @@ fun SetupBrowserAutofillScreen(
                     NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                         navigationIconContentDescription = stringResource(BitwardenString.close),
-                        onNavigationIconClick = remember(viewModel) {
-                            { viewModel.trySendAction(SetupBrowserAutofillAction.CloseClick) }
+                        onNavigationIconClick = {
+                            viewModel.trySendAction(SetupBrowserAutofillAction.CloseClick)
                         },
                     )
                 },
@@ -114,17 +111,15 @@ fun SetupBrowserAutofillScreen(
     ) {
         SetupBrowserAutofillContent(
             state = state,
-            onWhyIsThisStepRequiredClick = remember(viewModel) {
-                { viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick) }
+            onWhyIsThisStepRequiredClick = {
+                viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick)
             },
-            onBrowserClick = remember(viewModel) {
-                { viewModel.trySendAction(SetupBrowserAutofillAction.BrowserIntegrationClick(it)) }
+            onBrowserClick = {
+                viewModel.trySendAction(SetupBrowserAutofillAction.BrowserIntegrationClick(it))
             },
-            onContinueClick = remember(viewModel) {
-                { viewModel.trySendAction(SetupBrowserAutofillAction.ContinueClick) }
-            },
-            onTurnOnLaterClick = remember(viewModel) {
-                { viewModel.trySendAction(SetupBrowserAutofillAction.TurnOnLaterClick) }
+            onContinueClick = { viewModel.trySendAction(SetupBrowserAutofillAction.ContinueClick) },
+            onTurnOnLaterClick = {
+                viewModel.trySendAction(SetupBrowserAutofillAction.TurnOnLaterClick)
             },
             modifier = Modifier.fillMaxSize(),
         )
