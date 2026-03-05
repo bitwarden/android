@@ -253,6 +253,16 @@ interface SettingsRepository : FlightRecorderManager {
     fun dismissIntroducingArchiveActionCard()
 
     /**
+     * Gets updates for whether the premium upgrade banner is dismissed.
+     */
+    fun getPremiumUpgradeBannerDismissedFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores that the premium upgrade banner has been dismissed for the active user.
+     */
+    fun dismissPremiumUpgradeBanner()
+
+    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
