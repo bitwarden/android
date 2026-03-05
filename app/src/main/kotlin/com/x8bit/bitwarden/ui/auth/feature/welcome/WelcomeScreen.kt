@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -90,18 +89,10 @@ fun WelcomeScreen(
         WelcomeScreenContent(
             state = state,
             pagerState = pagerState,
-            onPagerSwipe = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.PagerSwipe(it)) }
-            },
-            onDotClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.DotClick(it)) }
-            },
-            onCreateAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.CreateAccountClick) }
-            },
-            onLoginClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.LoginClick) }
-            },
+            onPagerSwipe = { viewModel.trySendAction(WelcomeAction.PagerSwipe(it)) },
+            onDotClick = { viewModel.trySendAction(WelcomeAction.DotClick(it)) },
+            onCreateAccountClick = { viewModel.trySendAction(WelcomeAction.CreateAccountClick) },
+            onLoginClick = { viewModel.trySendAction(WelcomeAction.LoginClick) },
             modifier = Modifier.fillMaxSize(),
         )
     }

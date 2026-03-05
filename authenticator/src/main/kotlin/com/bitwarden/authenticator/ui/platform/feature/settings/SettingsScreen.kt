@@ -98,12 +98,8 @@ fun SettingsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarState = rememberBitwardenSnackbarHostState()
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
-    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(
-                SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(cipher = it),
-            )
-        }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(it))
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -165,10 +161,8 @@ fun SettingsScreen(
 
     BiometricChanges(
         biometricsManager = biometricsManager,
-        onBiometricSupportChange = remember(viewModel) {
-            {
-                viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
-            }
+        onBiometricSupportChange = {
+            viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
         },
     )
 
@@ -192,55 +186,33 @@ fun SettingsScreen(
         ) {
             SecuritySettings(
                 state = state,
-                onBiometricToggle = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.SecurityClick.UnlockWithBiometricToggle(it),
-                        )
-                    }
+                onBiometricToggle = {
+                    viewModel.trySendAction(
+                        SettingsAction.SecurityClick.UnlockWithBiometricToggle(it),
+                    )
                 },
-                onScreenCaptureChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
-                        )
-                    }
+                onScreenCaptureChange = {
+                    viewModel.trySendAction(
+                        SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
+                    )
                 },
-                onAppTimeoutChange = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.SecurityClick.AppTimeoutChange(it)) }
+                onAppTimeoutChange = {
+                    viewModel.trySendAction(SettingsAction.SecurityClick.AppTimeoutChange(it))
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
             VaultSettings(
-                onExportClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.ExportClick)
-                    }
+                onExportClick = { viewModel.trySendAction(SettingsAction.DataClick.ExportClick) },
+                onImportClick = { viewModel.trySendAction(SettingsAction.DataClick.ImportClick) },
+                onBackupClick = { viewModel.trySendAction(SettingsAction.DataClick.BackupClick) },
+                onSyncWithBitwardenClick = {
+                    viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                 },
-                onImportClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.ImportClick)
-                    }
+                onSyncLearnMoreClick = {
+                    viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick)
                 },
-                onBackupClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.BackupClick)
-                    }
-                },
-                onSyncWithBitwardenClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
-                    }
-                },
-                onSyncLearnMoreClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick) }
-                },
-                onDefaultSaveOptionUpdated = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.DataClick.DefaultSaveOptionUpdated(it),
-                        )
-                    }
+                onDefaultSaveOptionUpdated = {
+                    viewModel.trySendAction(SettingsAction.DataClick.DefaultSaveOptionUpdated(it))
                 },
                 defaultSaveOption = state.defaultSaveOption,
                 shouldShowDefaultSaveOptions = state.showDefaultSaveOptionRow,
@@ -249,46 +221,36 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state.appearance,
-                onLanguageSelection = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it)) }
+                onLanguageSelection = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it))
                 },
-                onThemeSelection = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
-                    }
+                onThemeSelection = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
                 },
-                onDynamicColorChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.AppearanceChange.DynamicColorChange(it),
-                        )
-                    }
+                onDynamicColorChange = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(it))
                 },
             )
             Spacer(Modifier.height(16.dp))
             HelpSettings(
-                onTutorialClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
-                    }
+                onTutorialClick = {
+                    viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
                 },
-                onHelpCenterClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
-                    }
+                onHelpCenterClick = {
+                    viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
             AboutSettings(
                 state = state,
-                onSubmitCrashLogsCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it)) }
+                onSubmitCrashLogsCheckedChange = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it))
                 },
-                onPrivacyPolicyClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick) }
+                onPrivacyPolicyClick = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick)
                 },
-                onVersionClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.VersionClick) }
+                onVersionClick = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.VersionClick)
                 },
             )
             Box(
