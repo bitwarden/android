@@ -49,6 +49,7 @@ import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
@@ -61,7 +62,6 @@ import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.field.model.TextToolbarType
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
@@ -1170,9 +1170,10 @@ private fun UsernameOptionsItem(
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,
             contentDescription = stringResource(id = BitwardenString.learn_more),
+            isExternalLink = true,
         ),
         cardStyle = CardStyle.Full,
         modifier = modifier.testTag(tag = "UsernameTypePicker"),

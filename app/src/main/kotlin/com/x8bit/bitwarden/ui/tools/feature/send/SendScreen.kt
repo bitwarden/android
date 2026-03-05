@@ -164,6 +164,7 @@ fun SendScreen(
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.about_send),
+                                isExternalLink = true,
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(SendAction.AboutSendClick) }
                                 },

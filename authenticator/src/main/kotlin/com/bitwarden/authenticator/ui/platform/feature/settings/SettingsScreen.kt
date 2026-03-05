@@ -35,7 +35,9 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -439,6 +441,7 @@ private fun ColumnScope.VaultSettings(
         },
     )
     if (shouldShowSyncWithBitwardenApp) {
+        val learnMore = stringResource(id = BitwardenString.learn_more_link)
         BitwardenTextRow(
             text = stringResource(id = BitwardenString.sync_with_bitwarden_app),
             description = annotatedStringResource(
@@ -450,7 +453,19 @@ private fun ColumnScope.VaultSettings(
                 },
             ),
             onClick = onSyncWithBitwardenClick,
-            modifier = Modifier.standardHorizontalMargin(),
+            modifier = Modifier
+                .semantics {
+                    customActions = listOf(
+                        CustomAccessibilityAction(
+                            label = learnMore,
+                            action = {
+                                onSyncLearnMoreClick()
+                                true
+                            },
+                        ),
+                    )
+                }
+                .standardHorizontalMargin(),
             cardStyle = if (shouldShowDefaultSaveOptions) {
                 CardStyle.Middle()
             } else {

@@ -23,8 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -32,14 +30,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
-import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.camera.CameraPreview
 import com.bitwarden.ui.platform.components.camera.QrCodeSquare
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -184,7 +181,7 @@ private fun PortraitQRCodeContent(
             Text(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -225,7 +222,7 @@ private fun LandscapeQRCodeContent(
             Text(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodySmall,
             )
 
@@ -242,32 +239,13 @@ private fun BottomClickableText(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val enterKeyText = stringResource(id = BitwardenString.enter_key_manually)
-    Text(
-        text = annotatedStringResource(
-            id = BitwardenString.cannot_scan_qr_code_enter_key_manually,
-            linkHighlightStyle = spanStyleOf(
-                color = BitwardenTheme.colorScheme.text.interaction,
-                textStyle = BitwardenTheme.typography.bodyMedium,
-            ),
-            style = spanStyleOf(
-                color = Color.White,
-                textStyle = BitwardenTheme.typography.bodyMedium,
-            ),
-            onAnnotationClick = {
-                when (it) {
-                    "enterKeyManually" -> onEnterCodeManuallyClick()
-                }
-            },
-        ),
-        modifier = modifier.semantics {
-            CustomAccessibilityAction(
-                label = enterKeyText,
-                action = {
-                    onEnterCodeManuallyClick()
-                    true
-                },
-            )
-        },
+    BitwardenHyperTextLink(
+        annotatedResId = BitwardenString.cannot_scan_qr_code_enter_key_manually,
+        annotationKey = "enterKeyManually",
+        accessibilityString = stringResource(BitwardenString.enter_key_manually),
+        onClick = onEnterCodeManuallyClick,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.primary,
+        modifier = modifier,
     )
 }

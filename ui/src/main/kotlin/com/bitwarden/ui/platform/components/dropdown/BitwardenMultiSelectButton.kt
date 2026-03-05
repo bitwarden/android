@@ -21,11 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.ImmutableList
@@ -44,12 +44,12 @@ import kotlinx.collections.immutable.toImmutableList
  * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option is selected from the dropdown
  * menu.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param dialogSubtitle The subtitle to apply to the dialog.
- * @param supportingText A optional supporting text that will appear below the text field.
- * @param tooltip A nullable [TooltipData], representing the tooltip icon.
+ * @param supportingText An optional supporting text that will appear below the text field.
+ * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
@@ -68,7 +68,7 @@ fun BitwardenMultiSelectButton(
     dialogSubtitle: String? = null,
     isEnabled: Boolean = true,
     supportingText: String? = null,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
@@ -93,7 +93,7 @@ fun BitwardenMultiSelectButton(
                 )
             }
         },
-        tooltip = tooltip,
+        helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         actionsPadding = actionsPadding,
@@ -113,11 +113,11 @@ fun BitwardenMultiSelectButton(
  * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option is selected from the dropdown
  * menu.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  * @param supportingContent An optional supporting content that will appear below the button.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
- * @param tooltip A nullable [TooltipData], representing the tooltip icon.
+ * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
@@ -136,7 +136,7 @@ fun BitwardenMultiSelectButton(
     dialogSubtitle: String? = null,
     isEnabled: Boolean = true,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
@@ -153,7 +153,7 @@ fun BitwardenMultiSelectButton(
         cardStyle = cardStyle,
         enabled = isEnabled,
         supportingContent = supportingContent,
-        tooltip = tooltip,
+        helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         actionsPadding = actionsPadding,

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -29,7 +30,6 @@ import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -456,9 +456,10 @@ private fun TotpField(
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             readOnly = true,
             singleLine = true,
-            tooltip = TooltipData(
+            helpData = BitwardenHelpButtonData(
                 onClick = onAuthenticatorHelpToolTipClick,
                 contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
+                isExternalLink = true,
             ),
             actions = {
                 BitwardenCircularCountdownIndicator(
@@ -480,9 +481,10 @@ private fun TotpField(
         BitwardenTextField(
             label = stringResource(id = BitwardenString.authenticator_key),
             value = "",
-            tooltip = TooltipData(
+            helpData = BitwardenHelpButtonData(
                 onClick = onAuthenticatorHelpToolTipClick,
                 contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
+                isExternalLink = true,
             ),
             supportingText = stringResource(id = BitwardenString.premium_subscription_required),
             enabled = false,
