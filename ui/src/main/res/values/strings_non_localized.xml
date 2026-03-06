@@ -41,6 +41,7 @@
     <string name="archive_items">Archive Items</string>
     <string name="send_email_verification">Send Email Verification</string>
     <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
+    <string name="clear_sso_cookies">Clear SSO cookies</string>
 
     <!-- endregion Debug Menu -->
 </resources>

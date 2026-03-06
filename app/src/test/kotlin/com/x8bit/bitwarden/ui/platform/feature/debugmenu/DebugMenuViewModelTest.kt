@@ -5,6 +5,7 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.assertCoroutineThrows
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -49,6 +50,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 
     private val logsManager = mockk<LogsManager> {
         every { trackNonFatalException(throwable = any()) } just runs
+    }
+
+    private val mockCookieDiskSource = mockk<CookieDiskSource> {
+        every { clearCookies() } just runs
     }
 
     private val mockCookieAcquisitionRequestManager =
@@ -144,6 +149,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ClearSsoCookies should call clearCookies on CookieDiskSource`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ClearSsoCookies)
+        verify(exactly = 1) {
+            mockCookieDiskSource.clearCookies()
+        }
+    }
+
+    @Test
     fun `TriggerCookieAcquisition should set pending cookie acquisition`() =
         runTest {
             val viewModel = createViewModel()
@@ -164,6 +178,7 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         authRepository = mockAuthRepository,
         logsManager = logsManager,
         cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
+        cookieDiskSource = mockCookieDiskSource,
         environmentRepository = fakeEnvironmentRepository,
     )
 }

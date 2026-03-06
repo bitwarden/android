@@ -5,6 +5,7 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -27,7 +28,7 @@ import javax.inject.Inject
 /**
  * ViewModel for the [DebugMenuScreen]
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
@@ -35,6 +36,7 @@ class DebugMenuViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    private val cookieDiskSource: CookieDiskSource,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(featureFlags = persistentMapOf()),
@@ -64,6 +66,7 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.GenerateCrashClick -> handleCrashClick()
             DebugMenuAction.GenerateErrorReportClick -> handleErrorReportClick()
             DebugMenuAction.TriggerCookieAcquisition -> handleTriggerCookieAcquisition()
+            DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
         }
     }
 
@@ -98,6 +101,10 @@ class DebugMenuViewModel @Inject constructor(
         featureFlagResetJob = viewModelScope.launch {
             debugMenuRepository.resetFeatureFlagOverrides()
         }
+    }
+
+    private fun handleClearSsoCookies() {
+        cookieDiskSource.clearCookies()
     }
 
     private fun handleTriggerCookieAcquisition() {
@@ -195,6 +202,11 @@ sealed class DebugMenuAction {
      * The user has clicked trigger cookie acquisition button.
      */
     data object TriggerCookieAcquisition : DebugMenuAction()
+
+    /**
+     * The user has clicked clear SSO cookies button.
+     */
+    data object ClearSsoCookies : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.
