@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
@@ -115,10 +116,17 @@ class VaultViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val accountSummaries = userState.toAccountSummaries()
-        val activeAccountSummary = userState.toActiveAccountSummary()
-        val vaultFilterData = userState.activeAccount.toVaultFilterData(
+        val userState = authRepository.userStateFlow.value
+        val accountSummaries = userState?.toAccountSummaries().orEmpty()
+        val activeAccount = userState?.activeAccount ?: run {
+            // We use this empty account to avoid a crash that can occur during a race condition.
+            // The state-based navigation brought us here but the UserState has now been set to
+            // null, we just need to wait here a short while longer and state-based navigation will
+            // get us out of here.
+            UserState.EMPTY_ACCOUNT
+        }
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
+        val vaultFilterData = activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any(),
@@ -131,11 +139,11 @@ class VaultViewModel @Inject constructor(
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            isPremium = userState.activeAccount.isPremium,
+            isPremium = activeAccount.isPremium,
             isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
-            baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
-            hasMasterPassword = userState.activeAccount.hasMasterPassword,
+            baseIconUrl = activeAccount.environment.environmentUrlData.baseIconUrl,
+            hasMasterPassword = activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
             flightRecorderSnackBar = settingsRepository
