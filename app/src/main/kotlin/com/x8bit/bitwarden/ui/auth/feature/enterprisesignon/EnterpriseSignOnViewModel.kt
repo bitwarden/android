@@ -13,6 +13,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -137,7 +138,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
         when (val loginResult = action.loginResult) {
             is LoginResult.Error -> {
                 showError(
-                    message = loginResult.errorMessage?.asText()
+                    message = loginResult.error.toErrorResId()?.asText()
+                        ?: loginResult.errorMessage?.asText()
                         ?: BitwardenString.login_sso_error.asText(),
                     error = loginResult.error,
                 )

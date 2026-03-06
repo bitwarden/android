@@ -16,6 +16,7 @@ import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -181,19 +182,21 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
     private fun vaultErrorReceive(
         vaultData: DataState.Error<Triple<CipherView?, List<CollectionView>, UserState?>>,
     ) {
+        val errorMessage = vaultData.error.toErrorResId()?.asText()
+            ?: BitwardenString.generic_error_message.asText()
         mutableStateFlow.update {
             val data = vaultData.data
             if (data != null) {
                 it.copy(
                     viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = errorMessage,
                     ),
                 )
             } else {
                 it.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = errorMessage,
                     ),
                     dialogState = null,
                 )

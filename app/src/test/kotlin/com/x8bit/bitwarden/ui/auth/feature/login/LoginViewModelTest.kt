@@ -6,6 +6,7 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -286,6 +287,48 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository.login(email = EMAIL, password = "")
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns error with CookieRedirectException should display cookie redirect message`() =
+        runTest {
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                )
+            } returns LoginResult.Error(
+                errorMessage = null,
+                error = error,
+            )
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Loading(
+                            message = BitwardenString.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.cookie_redirect_error.asText(),
+                            error = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "")
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test

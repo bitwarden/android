@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -184,7 +185,8 @@ class CompleteRegistrationViewModel @Inject constructor(
                     it.copy(
                         dialog = CompleteRegistrationDialog.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = registerAccountResult.errorMessage?.asText()
+                            message = registerAccountResult.error.toErrorResId()?.asText()
+                                ?: registerAccountResult.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             error = registerAccountResult.error,
                         ),

@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
@@ -288,9 +289,8 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = result
-                                .errorMessage
-                                ?.asText()
+                            message = result.error.toErrorResId()?.asText()
+                                ?: result.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
@@ -350,9 +350,8 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = result
-                                .errorMessage
-                                ?.asText()
+                            message = result.error.toErrorResId()?.asText()
+                                ?: result.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             result.error,
                         ),

@@ -170,6 +170,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import com.bitwarden.network.exception.CookieRedirectException
 import javax.net.ssl.SSLHandshakeException
 
 @Suppress("LargeClass")
@@ -1842,6 +1843,33 @@ class AuthRepositoryTest {
             } returns SSLHandshakeException("error").asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.CertificateError, result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+        }
+
+    @Test
+    fun `login get token fails should return Error with CookieRedirectException`() =
+        runTest {
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns error.asFailure()
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+            assertEquals(
+                LoginResult.Error(errorMessage = null, error = error),
+                result,
+            )
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
         }
@@ -5224,6 +5252,41 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `register should return Error with CookieRedirectException`() =
+        runTest {
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.register(
+                    body = RegisterRequestJson(
+                        email = EMAIL,
+                        masterPasswordHash = PASSWORD_HASH,
+                        masterPasswordHint = null,
+                        key = ENCRYPTED_USER_KEY,
+                        keys = RegisterRequestJson.Keys(
+                            publicKey = PUBLIC_KEY,
+                            encryptedPrivateKey = PRIVATE_KEY,
+                        ),
+                        kdfType = KdfTypeJson.PBKDF2_SHA256,
+                        kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                    ),
+                )
+            } returns error.asFailure()
+
+            val result = repository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
+            )
+            assertEquals(
+                RegisterResult.Error(errorMessage = null, error = error),
+                result,
+            )
+        }
+
+    @Test
     fun `register returns Invalid should return Error with invalid message`() = runTest {
         coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
@@ -7219,6 +7282,31 @@ class AuthRepositoryTest {
             result,
         )
     }
+
+    @Test
+    fun `sendVerificationEmail should return Error with CookieRedirectException`() =
+        runTest {
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery {
+                identityService.sendVerificationEmail(
+                    SendVerificationEmailRequestJson(
+                        email = EMAIL,
+                        name = NAME,
+                        receiveMarketingEmails = true,
+                    ),
+                )
+            } returns error.asFailure()
+
+            val result = repository.sendVerificationEmail(
+                email = EMAIL,
+                name = NAME,
+                receiveMarketingEmails = true,
+            )
+            assertEquals(
+                SendVerificationEmailResult.Error(errorMessage = null, error = error),
+                result,
+            )
+        }
 
     @Test
     fun `validateEmailToken should return success result when service returns success`() = runTest {
