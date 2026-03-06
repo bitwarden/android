@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +27,7 @@ import com.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -39,16 +41,22 @@ import kotlinx.collections.immutable.persistentListOf
  *
  * @param menuItemDataList The list of [OverflowMenuItemData] that will populate the overflow
  * dropdown menu.
+ * @param modifier The [Modifier] for this composable.
+ * @param isVisible Indicates if this composable should be shown.
+ * @param contentDescription The content description for the icon button.
+ * @param vectorIconRes The resource indicating what icon to display.
+ * @param testTag The test tag applied to this composable.
  */
 @Composable
 fun BitwardenOverflowActionItem(
     menuItemDataList: ImmutableList<OverflowMenuItemData>,
-    contentDescription: String,
     modifier: Modifier = Modifier,
+    isVisible: Boolean = true,
+    contentDescription: String = stringResource(id = BitwardenString.more_options),
     @DrawableRes vectorIconRes: Int = BitwardenDrawable.ic_ellipsis_vertical,
     testTag: String? = "HeaderBarOptionsButton",
 ) {
-    if (menuItemDataList.isEmpty()) return
+    if (menuItemDataList.isEmpty() || !isVisible) return
     var isOverflowMenuVisible by rememberSaveable { mutableStateOf(false) }
     Box(
         contentAlignment = Alignment.Center,
@@ -107,7 +115,6 @@ fun BitwardenOverflowActionItem(
 private fun BitwardenOverflowActionItem_preview() {
     BitwardenTheme {
         BitwardenOverflowActionItem(
-            contentDescription = "More",
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = "Test",

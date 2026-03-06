@@ -105,17 +105,15 @@ fun FolderAddEditScreen(
                         },
                         modifier = Modifier.testTag("SaveButton"),
                     )
-                    if (state.shouldShowOverflowMenu) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.delete),
-                                    onClick = { shouldShowConfirmationDialog = true },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.shouldShowOverflowMenu,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.delete),
+                                onClick = { shouldShowConfirmationDialog = true },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },

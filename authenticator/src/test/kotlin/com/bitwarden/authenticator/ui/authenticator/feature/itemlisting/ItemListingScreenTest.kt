@@ -363,7 +363,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         composeTestRule
             .onNodeWithText(text = "issuer")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "More"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule

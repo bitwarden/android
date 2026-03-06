@@ -365,7 +365,6 @@ fun VaultAddEditScreen(
                             modifier = Modifier.testTag("SaveButton"),
                         )
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = persistentListOfNotNull(
                                 OverflowMenuItemData(
                                     text = stringResource(id = BitwardenString.attachments),

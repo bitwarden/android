@@ -144,7 +144,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = RecordedLogsState.ViewState.Content(items = persistentListOf()))
         }
-        composeTestRule.onNodeWithContentDescription(label = "More").performClick()
+        composeTestRule.onNodeWithContentDescription(label = "More options").performClick()
         composeTestRule.onNodeWithText(text = "Share all").performClick()
 
         verify(exactly = 1) {
@@ -157,7 +157,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = RecordedLogsState.ViewState.Content(items = persistentListOf()))
         }
-        composeTestRule.onNodeWithContentDescription(label = "More").performClick()
+        composeTestRule.onNodeWithContentDescription(label = "More options").performClick()
         composeTestRule.onNodeWithText(text = "Delete all").performClick()
         composeTestRule
             .onAllNodesWithText(text = "Delete logs")
@@ -195,7 +195,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").assertIsEnabled()
 
@@ -218,7 +218,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").assertIsNotEnabled()
     }
@@ -243,7 +243,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Share").performClick()
 
@@ -272,7 +272,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").performClick()
         composeTestRule
