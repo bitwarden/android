@@ -42,7 +42,7 @@
     <string name="master_password">Master password</string>
     <string name="master_password_required">Master password (required)</string>
     <string name="new_master_password_required">New master password (required)</string>
-    <string name="more">More</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">My vault</string>
     <string name="name">Name</string>
     <string name="item_name_required">Item name (required)</string>
