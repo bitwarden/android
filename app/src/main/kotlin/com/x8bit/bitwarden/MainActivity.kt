@@ -207,6 +207,14 @@ class MainActivity : AppCompatActivity() {
         .takeIf { it }
         ?: super.dispatchKeyEvent(event)
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        // resize only one time at the start
+        if (!mainViewModel.stateFlow.value.hasResizeBeenRequested) {
+            setHorizonOSAppLayout()
+        }
+    }
+
     @Composable
     private fun SetupEventsEffect(navController: NavController) {
         EventsEffect(viewModel = mainViewModel) { event ->
@@ -260,6 +268,33 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    private fun isHorizonOSDevice(): Boolean {
+        return Build.MANUFACTURER.equals("Oculus", ignoreCase = true) ||
+            Build.MANUFACTURER.equals("Meta", ignoreCase = true)
+    }
+
+    @Suppress("MagicNumber", "TooGenericExceptionCaught")
+    private fun setHorizonOSAppLayout() {
+        if (!isHorizonOSDevice()) {
+            return
+        }
+        window.decorView.post {
+            try {
+                val clazz = Class.forName("horizonos.view.WindowExt")
+                val method = clazz.getMethod(
+                    "requestWindowResize",
+                    android.view.Window::class.java,
+                    Int::class.javaPrimitiveType,
+                    Int::class.javaPrimitiveType,
+                )
+                method.invoke(null, window, 1024, 640)
+                mainViewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
+            } catch (t: Throwable) {
+                // Not Horizon OS / API not present / request ignored by system
+            }
         }
     }
 }
