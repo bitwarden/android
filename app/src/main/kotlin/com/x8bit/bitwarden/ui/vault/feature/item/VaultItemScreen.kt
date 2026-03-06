@@ -168,7 +168,6 @@ fun VaultItemScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.attachments),

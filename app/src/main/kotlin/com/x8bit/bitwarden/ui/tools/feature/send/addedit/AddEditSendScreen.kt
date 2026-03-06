@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.activity.compose.BackHandler
-import androidx.core.net.toUri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
@@ -138,42 +138,36 @@ fun AddEditSendScreen(
                         },
                         modifier = Modifier.testTag("SaveButton"),
                     )
-                    if (!state.isAddMode) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOfNotNull(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.remove_password),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                AddEditSendAction.RemovePasswordClick,
-                                            )
-                                        }
-                                    },
-                                )
-                                    .takeIf { state.hasPassword && !state.policyDisablesSend },
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.copy_link),
-                                    onClick = remember(viewModel) {
-                                        { viewModel.trySendAction(AddEditSendAction.CopyLinkClick) }
-                                    },
-                                )
-                                    .takeIf { !state.policyDisablesSend },
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.share_link),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                AddEditSendAction.ShareLinkClick,
-                                            )
-                                        }
-                                    },
-                                )
-                                    .takeIf { !state.policyDisablesSend },
-                            ),
-                        )
-                    }
+                    BitwardenOverflowActionItem(
+                        isVisible = !state.isAddMode,
+                        menuItemDataList = persistentListOfNotNull(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.remove_password),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            AddEditSendAction.RemovePasswordClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeIf { state.hasPassword && !state.policyDisablesSend },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.copy_link),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(AddEditSendAction.CopyLinkClick) }
+                                },
+                            )
+                                .takeIf { !state.policyDisablesSend },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.share_link),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(AddEditSendAction.ShareLinkClick) }
+                                },
+                            )
+                                .takeIf { !state.policyDisablesSend },
+                        ),
+                    )
                 },
             )
         },

@@ -215,7 +215,6 @@ fun VaultUnlockScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.log_out),

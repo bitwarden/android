@@ -71,23 +71,21 @@ fun PasswordHistoryScreen(
                     { viewModel.trySendAction(PasswordHistoryAction.CloseClick) }
                 },
                 actions = {
-                    if (state.menuEnabled) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.clear),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                PasswordHistoryAction.PasswordClearClick,
-                                            )
-                                        }
-                                    },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.menuEnabled,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.clear),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            PasswordHistoryAction.PasswordClearClick,
+                                        )
+                                    }
+                                },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },

@@ -602,7 +602,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -625,7 +625,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -646,7 +646,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -667,7 +667,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -686,7 +686,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -706,7 +706,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -726,7 +726,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -762,7 +762,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -791,7 +791,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -839,7 +839,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -862,7 +862,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Options")
+            .onNodeWithContentDescription(label = "More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -881,7 +881,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -900,7 +900,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -918,7 +918,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -936,7 +936,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -970,7 +970,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule

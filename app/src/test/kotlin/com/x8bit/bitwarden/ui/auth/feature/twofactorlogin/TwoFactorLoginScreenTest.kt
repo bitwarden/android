@@ -247,13 +247,13 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `options menu icon click should show the auth method options`() {
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         composeTestRule.onNodeWithText("Recovery code").assertIsDisplayed()
     }
 
     @Test
     fun `options menu option click should should send SelectAuthMethod and close the menu`() {
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         composeTestRule.onNodeWithText("Recovery code").performClick()
         verify {
             viewModel.trySendAction(
