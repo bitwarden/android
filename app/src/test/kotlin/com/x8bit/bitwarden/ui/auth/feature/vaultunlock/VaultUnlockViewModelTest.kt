@@ -59,8 +59,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { logout(reason = any()) } just runs
         every { logout(userId = any(), reason = any()) } just runs
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
-        every { getOrCreateCipher(USER_ID) } returns CIPHER
-        every { isBiometricIntegrityValid(userId = DEFAULT_USER_STATE.activeUserId) } returns true
+        every { getOrCreateCipher(userId = any()) } returns CIPHER
+        every { isBiometricIntegrityValid(userId = any()) } returns true
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
         every { lockVault(any(), any()) } just runs
@@ -111,6 +111,22 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         verify { authRepository.getOrCreateCipher(USER_ID) }
+    }
+
+    @Test
+    fun `initial state should be correct when UserState is not present`() {
+        mutableUserStateFlow.update { null }
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(
+                accountSummaries = emptyList(),
+                avatarColorString = "#ff000000",
+                initials = "",
+                email = "",
+                userId = "",
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
