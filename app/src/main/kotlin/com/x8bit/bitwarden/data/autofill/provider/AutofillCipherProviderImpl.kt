@@ -7,6 +7,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.autofill.model.AutofillField
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
@@ -132,6 +133,17 @@ class AutofillCipherProviderImpl(
                     subtitle = cipherView.subtitle.orEmpty(),
                     username = cipherView.login?.username.orEmpty(),
                     website = uri,
+                    customFields = cipherView.fields
+                        .orEmpty()
+                        .filter { it.type != com.bitwarden.vault.FieldType.BOOLEAN }
+                        .map { field ->
+                        AutofillField(
+                            name = field.name.orEmpty(),
+                            value = field.value.orEmpty(),
+                            type = field.type,
+                        )
+                    },
+                    isStrictMatch = cipherView.login?.uris?.any { it.uri == uri } == true,
                 )
             }
     }
