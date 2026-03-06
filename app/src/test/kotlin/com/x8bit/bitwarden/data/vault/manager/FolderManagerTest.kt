@@ -4,6 +4,7 @@ import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.FolderJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateFolderResponseJson
@@ -309,6 +310,43 @@ class FolderManagerTest {
 
             val result = folderManager.updateFolder(folderId = folderId, folderView = folderView)
             assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateFolder with folderService failure should return Error with CookieRedirectException`() =
+        runTest {
+            val date = FIXED_CLOCK.instant()
+            val testFolderName = "TestName"
+            val folderId = "testId"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val folderView = FolderView(
+                id = folderId,
+                name = testFolderName,
+                revisionDate = date,
+            )
+            val error = CookieRedirectException(hostname = "example.com")
+
+            coEvery {
+                vaultSdkSource.encryptFolder(userId = ACTIVE_USER_ID, folder = folderView)
+            } returns Folder(id = folderId, name = testFolderName, revisionDate = date).asSuccess()
+
+            coEvery {
+                folderService.updateFolder(
+                    folderId = folderId,
+                    body = FolderJsonRequest(name = testFolderName),
+                )
+            } returns error.asFailure()
+
+            val result = folderManager.updateFolder(folderId = folderId, folderView = folderView)
+            assertEquals(
+                UpdateFolderResult.Error(
+                    errorMessage = error.message,
+                    error = error,
+                ),
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")

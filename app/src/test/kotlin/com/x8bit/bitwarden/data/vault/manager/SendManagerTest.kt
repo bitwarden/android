@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.SendTypeJson
@@ -821,6 +822,36 @@ class SendManagerTest {
             )
 
             assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
+        }
+
+    @Test
+    fun `updateSend with sendsService failure should return Error with CookieRedirectException`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery {
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
+                        .copy(fileLength = null),
+                )
+            } returns error.asFailure()
+
+            val result = sendManager.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
+
+            assertEquals(
+                UpdateSendResult.Error(errorMessage = null, error = error),
+                result,
+            )
         }
 
     @Test

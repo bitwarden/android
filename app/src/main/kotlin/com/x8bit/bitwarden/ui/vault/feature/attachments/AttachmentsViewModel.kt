@@ -15,6 +15,7 @@ import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -210,7 +211,8 @@ class AttachmentsViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = AttachmentsState.ViewState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = dataState.error.toErrorResId()?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }

@@ -571,6 +571,7 @@ select Add TOTP to store the key safely</string>
     <string name="never_lock_warning">Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</string>
     <string name="environment_page_urls_error">One or more of the URLs entered are invalid. Please revise it and try to save again.</string>
     <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
+    <string name="cookie_redirect_error">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
     <string name="allow_screen_capture">Allow screen capture</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Are you sure you want to turn on screen capture?</string>
     <string name="log_in_requested">Login requested</string>

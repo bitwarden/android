@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -764,9 +765,8 @@ class SearchViewModel @Inject constructor(
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = result
-                                .errorMessage
-                                ?.asText()
+                            message = result.error.toErrorResId()?.asText()
+                                ?: result.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
@@ -795,7 +795,8 @@ class SearchViewModel @Inject constructor(
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
-                            message = result.errorMessage?.asText()
+                            message = result.error.toErrorResId()?.asText()
+                                ?: result.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
@@ -919,7 +920,8 @@ class SearchViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = SearchState.ViewState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = vaultData.error.toErrorResId()?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                         dialogState = null,
                     )

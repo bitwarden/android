@@ -67,6 +67,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrNull
@@ -1850,9 +1851,8 @@ class VaultItemListingViewModel @Inject constructor(
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = result
-                                .errorMessage
-                                ?.asText()
+                            message = result.error.toErrorResId()?.asText()
+                                ?: result.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
@@ -2120,7 +2120,8 @@ class VaultItemListingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     viewState = VaultItemListingState.ViewState.Error(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = vaultData.error.toErrorResId()?.asText()
+                            ?: BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )
