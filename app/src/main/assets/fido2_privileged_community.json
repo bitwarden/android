@@ -87,6 +87,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.fido.client",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "BC:C3:5D:4D:36:06:F1:54:F0:40:2A:B7:63:4E:84:90:C0:B2:44:C2:67:5C:3C:62:38:98:69:87:02:4F:0C:02"
+          }
+        ]
+      }
     }
   ]
 }
