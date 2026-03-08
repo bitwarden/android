@@ -856,7 +856,7 @@
     <string name="copy_fingerprint">คัดลอกลายนิ้วมือ</string>
     <string name="enable_notifications">เปิดการแจ้งเตือน</string>
     <plurals name="notifications_content_description">
-        <item quantity="other">%d notifications</item>
+        <item quantity="other">%d การแจ้งเตือน</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">เข้าสู่ระบบอย่างรวดเร็วและง่ายดายข้ามอุปกรณ์</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden สามารถแจ้งเตือนคุณทุกครั้งที่คุณได้รับคำขอเข้าสู่ระบบใหม่จากอุปกรณ์อื่น</string>
@@ -1210,5 +1210,5 @@
     <string name="sync_with_browser_description">เมื่อต้องการเชื่อมต่อกับ %1$s ให้ซิงค์เบราว์เซอร์เริ่มต้นกับแอปมือถือ Bitwarden เมื่อเบราว์เซอร์เปิดขึ้น ให้เข้าสู่ระบบให้เสร็จสิ้นหากได้รับแจ้ง\nเมื่อซิงค์เสร็จแล้ว ระบบจะพากลับมาที่แอปนี้</string>
     <string name="launch_browser">เปิดบราว์เซอร์</string>
     <string name="continue_without_syncing">ดำเนินการต่อโดยไม่ซิงค์</string>
-    <string name="external_link">External link</string>
+    <string name="external_link">ลิงก์ภายนอก</string>
 </resources>
