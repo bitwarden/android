@@ -5,6 +5,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.sdk.Authenticat
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
 import com.bitwarden.authenticator.data.platform.manager.lock.model.AppLockState
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -23,8 +25,10 @@ import javax.inject.Inject
 /**
  * Default implementation of [AuthRepository].
  */
+@Suppress("LongParameterList")
 class AuthRepositoryImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
+    private val settingsRepository: SettingsRepository,
     private val authenticatorSdkSource: AuthenticatorSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val realtimeManager: RealtimeManager,
@@ -64,6 +68,7 @@ class AuthRepositoryImpl @Inject constructor(
 
                 // Set app to unlocked to ensure we do not re-lock after saving the biometric key.
                 appLockManager.manualAppUnlock()
+                settingsRepository.appTimeoutState = AppTimeout.OnAppRestart
                 authDiskSource.storeUserBiometricUnlockKey(biometricsKey = encryptedBiometricsKey)
                 authDiskSource.userBiometricKeyInitVector = cipher.iv
             }

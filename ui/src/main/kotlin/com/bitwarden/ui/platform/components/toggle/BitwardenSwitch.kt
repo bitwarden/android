@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
@@ -261,7 +262,7 @@ fun BitwardenSwitch(
             )
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
-                contentDescription?.let { this.contentDescription = it }
+                this.contentDescription = contentDescription ?: label.text
             },
     ) {
         Row(
@@ -283,7 +284,12 @@ fun BitwardenSwitch(
                             } else {
                                 BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                             },
-                            modifier = Modifier.testTag(tag = "SwitchText"),
+                            modifier = Modifier
+                                .semantics {
+                                    // The top-level content description will handle this callout.
+                                    hideFromAccessibility()
+                                }
+                                .testTag(tag = "SwitchText"),
                         )
                         tooltip?.let {
                             ToolTip(

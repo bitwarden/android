@@ -1,12 +1,12 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.data.manager.appstate
 
 import android.app.Activity
 import android.app.Application
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.autofill.util.createdForAutofill
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
+import com.bitwarden.core.data.util.FakeLifecycleOwner
+import com.bitwarden.data.autofill.util.createdForAutofill
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -15,7 +15,9 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AppStateManagerTest {
@@ -30,6 +32,16 @@ class AppStateManagerTest {
         application = application,
         processLifecycleOwner = fakeLifecycleOwner,
     )
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(Activity::createdForAutofill)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Activity::createdForAutofill)
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -62,7 +74,6 @@ class AppStateManagerTest {
     @Test
     fun `appCreatedStateFlow should emit whenever the underlying activities are all destroyed or a creation event occurs`() =
         runTest {
-            mockkStatic(Activity::createdForAutofill)
             val activity = mockk<Activity> {
                 every { isChangingConfigurations } returns false
                 every { createdForAutofill } returns false
@@ -83,6 +94,5 @@ class AppStateManagerTest {
                 activityLifecycleCallbacks.captured.onActivityDestroyed(activity)
                 assertEquals(AppCreationState.Destroyed, awaitItem())
             }
-            unmockkStatic(Activity::createdForAutofill)
         }
 }

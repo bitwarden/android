@@ -302,7 +302,7 @@
     <string name="organization">組織</string>
     <string name="try_again">再試一次</string>
     <string name="created">建立於：%1$s</string>
-    <string name="password_updated">Password updated: %1$s</string>
+    <string name="password_updated">密碼更新於：%1$s</string>
     <string name="last_edited">最後編輯於：%1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
     <string name="cards">支付卡</string>
@@ -446,13 +446,13 @@
     <string name="deletion_date">刪除日期</string>
     <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">誰可以檢視</string>
+    <string name="anyone_with_the_link">任何持有連結的人</string>
+    <string name="anyone_with_link_can_view_send">任何持有此連結的人都可以檢視此 Send</string>
+    <string name="specific_people">特定人員</string>
+    <string name="specific_people_verification_info">分享此 Send 連結後，收件者需使用驗證碼驗證其電子郵件，才能檢視此 Send</string>
+    <string name="anyone_with_password">任何持有您設定之密碼的人</string>
+    <string name="add_email">新增電子郵件</string>
     <string name="pending_delete">等待刪除</string>
     <string name="expired">已逾期</string>
     <string name="expires_at">於 %s 到期</string>
@@ -494,7 +494,7 @@
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">與特定人員分享為 Premium 功能。您目前的方案不包含此功能的使用權限。</string>
     <string name="password_prompt">重新詢問主密碼</string>
     <string name="password_confirmation">確認主密碼</string>
     <string name="password_confirmation_desc">此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</string>
@@ -856,6 +856,9 @@
     <string name="copy_public_key">複製公開金鑰</string>
     <string name="copy_fingerprint">複製指紋</string>
     <string name="enable_notifications">啟用通知</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d 通知</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">快速輕鬆的使用不同裝置登入</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden 可以在您透過其它裝置收到新登入要求時通知您。</string>
     <string name="skip_for_now">下次再說</string>
@@ -940,7 +943,7 @@
     <string name="use_brave_autofill_integration">使用 Brave 自動填入整合功能</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自動填入整合功能</string>
     <string name="use_chrome_beta_autofill_integration">使用 Chrome Beta 自動填入整合功能</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">使用 Vivaldi 自動填入整合功能</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">在支援的網站上改善所選瀏覽器的登入自動填入體驗。啟用後，您將被導向至瀏覽器設定以啟用第三方自動填入功能。</string>
     <string name="show_more">顯示更多</string>
     <string name="no_folder">預設資料夾</string>
@@ -1200,12 +1203,13 @@
     <string name="restart_premium">重新啟用進階版</string>
     <string name="items_transferred">項目已轉移</string>
     <string name="updated_master_password">已更新主密碼</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
-    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
-    <string name="launch_browser">Launch browser</string>
-    <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="invalid_email_addresses">電郵無效</string>
+    <string name="one_or_more_email_addresses_are_incorrect">一個或多個電子郵件地址不正確。請檢查後再試一次。</string>
+    <string name="no_email_addresses_entered">尚未輸入任何電子郵件地址</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">請至少輸入一個有效的電子郵件地址以分享此 Send。</string>
+    <string name="sync_with_browser">與瀏覽器同步</string>
+    <string name="sync_with_browser_description">若要連線至 %1$s，請將您的預設瀏覽器與 Bitwarden 行動應用程式同步。瀏覽器開啟後，如有提示請完成登入。\n同步完成後，您將返回此應用程式。</string>
+    <string name="launch_browser">開啟瀏覽器</string>
+    <string name="continue_without_syncing">不進行同步並繼續</string>
+    <string name="external_link">外部連結</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.util
+package com.bitwarden.core.data.util
 
 import androidx.lifecycle.LifecycleOwner
 

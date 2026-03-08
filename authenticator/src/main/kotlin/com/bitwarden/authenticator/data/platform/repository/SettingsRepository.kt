@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository
 
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
@@ -101,4 +102,14 @@ interface SettingsRepository : FlightRecorderManager {
      * Whether or not the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean
+
+    /**
+     * Gets or sets the [AppTimeout].
+     */
+    var appTimeoutState: AppTimeout
+
+    /**
+     * Gets updates for the [AppTimeout].
+     */
+    val appTimeoutStateFlow: StateFlow<AppTimeout>
 }

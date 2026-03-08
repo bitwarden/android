@@ -5,13 +5,13 @@ import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

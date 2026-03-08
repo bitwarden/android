@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * Provides methods for inserting, retrieving, and deleting ciphers from the database using the
  * [CipherEntity].
  */
+@Suppress("TooManyFunctions")
 @Dao
 interface CiphersDao {
 
@@ -76,6 +77,13 @@ interface CiphersDao {
      */
     @Query("DELETE FROM ciphers WHERE user_id = :userId AND id = :cipherId")
     suspend fun deleteCipher(userId: String, cipherId: String): Int
+
+    /**
+     * Deletes the stored ciphers associated with the given [userId] whose IDs are in [cipherIds].
+     * This will return the number of rows deleted by this query.
+     */
+    @Query("DELETE FROM ciphers WHERE user_id = :userId AND id IN (:cipherIds)")
+    suspend fun deleteSelectedCiphers(userId: String, cipherIds: List<String>): Int
 
     /**
      * Deletes all the stored ciphers associated with the given [userId] and then add all new

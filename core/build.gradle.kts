@@ -59,6 +59,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
 
+    testFixturesImplementation(libs.androidx.lifecycle.process)
     testFixturesImplementation(libs.kotlinx.serialization)
     testFixturesImplementation(platform(libs.junit.bom))
     testFixturesImplementation(libs.junit.jupiter)

@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.timber)
 
     // Test environment dependencies:
+    testImplementation(testFixtures(project(":core")))
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.jupiter)

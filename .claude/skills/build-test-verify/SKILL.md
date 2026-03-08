@@ -14,7 +14,7 @@ description: Build, test, lint, and deploy commands for the Bitwarden Android pr
 | Build flavors | - | `standard` (Play Store), `fdroid` (no Google services) |
 | Build types | - | `debug`, `beta`, `release` |
 
-If builds fail resolving the Bitwarden SDK, verify `GITHUB_TOKEN` in `ci.properties` or environment and check connectivity to `maven.pkg.github.com`.
+If builds fail resolving the Bitwarden SDK, verify `GITHUB_TOKEN` in `user.properties` or environment and check connectivity to `maven.pkg.github.com`.
 
 ---
 

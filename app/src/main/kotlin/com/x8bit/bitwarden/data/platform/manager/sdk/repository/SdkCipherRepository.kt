@@ -40,4 +40,33 @@ class SdkCipherRepository(
             cipher = value.toEncryptedNetworkCipherResponse(encryptedFor = userId),
         )
     }
+
+    override suspend fun setBulk(values: Map<String, Cipher>) {
+        val validEntries = values.filter { (id, cipher) ->
+            if (id != cipher.id) {
+                Timber.e(
+                    "SDK Cipher 'setBulk' operation: ID's do not match for '$id'",
+                )
+                false
+            } else {
+                true
+            }
+        }
+        if (validEntries.isEmpty()) return
+        vaultDiskSource.saveCiphers(
+            userId = userId,
+            ciphers = validEntries.values.map {
+                it.toEncryptedNetworkCipherResponse(encryptedFor = userId)
+            },
+        )
+    }
+
+    override suspend fun removeBulk(keys: List<String>) {
+        if (keys.isEmpty()) return
+        vaultDiskSource.deleteSelectedCiphers(userId = userId, cipherIds = keys)
+    }
+
+    override suspend fun removeAll() {
+        vaultDiskSource.deleteAllCiphers(userId = userId)
+    }
 }

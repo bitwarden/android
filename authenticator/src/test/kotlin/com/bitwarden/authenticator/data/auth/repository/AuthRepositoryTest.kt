@@ -6,6 +6,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.sdk.Authenticat
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
 import com.bitwarden.authenticator.data.platform.manager.lock.model.AppLockState
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
@@ -20,9 +22,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -33,6 +37,7 @@ import javax.crypto.Cipher
 
 class AuthRepositoryTest {
     private val authDiskSource: FakeAuthDiskSource = FakeAuthDiskSource()
+    private val settingsRepository: SettingsRepository = mockk()
     private val authenticatorSdkSource: AuthenticatorSdkSource = mockk()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val realtimeManager: RealtimeManager = mockk()
@@ -43,6 +48,7 @@ class AuthRepositoryTest {
 
     private val authRepository: AuthRepository = AuthRepositoryImpl(
         authDiskSource = authDiskSource,
+        settingsRepository = settingsRepository,
         authenticatorSdkSource = authenticatorSdkSource,
         biometricsEncryptionManager = biometricsEncryptionManager,
         realtimeManager = realtimeManager,
@@ -56,6 +62,11 @@ class AuthRepositoryTest {
         every {
             anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
         } returns true
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
@@ -120,6 +131,7 @@ class AuthRepositoryTest {
         coEvery { authenticatorSdkSource.generateBiometricsKey() } returns biometricsKey.asSuccess()
         every { CIPHER.doFinal(any()) } returns encryptedBytes
         every { CIPHER.iv } returns iv
+        every { settingsRepository.appTimeoutState = AppTimeout.OnAppRestart } just runs
 
         val result = authRepository.setupBiometricsKey(cipher = CIPHER)
 
@@ -131,6 +143,7 @@ class AuthRepositoryTest {
         }
         verify(exactly = 1) {
             appLockManager.manualAppUnlock()
+            settingsRepository.appTimeoutState = AppTimeout.OnAppRestart
         }
     }
 
