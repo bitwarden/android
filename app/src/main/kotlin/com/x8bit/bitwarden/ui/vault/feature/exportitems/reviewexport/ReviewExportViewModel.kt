@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.manager.util.toImportCredentialsRequestDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -188,8 +187,7 @@ class ReviewExportViewModel @Inject constructor(
                 ),
                 dialog = ReviewExportState.DialogState.General(
                     title = BitwardenString.an_error_has_occurred.asText(),
-                    message = data.error.toErrorResId()?.asText()
-                        ?: BitwardenString.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = data.error,
                 ),
             )

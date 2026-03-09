@@ -16,7 +16,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -247,8 +246,8 @@ class StartRegistrationViewModel @Inject constructor(
                         dialog = StartRegistrationDialog.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
                             message = sendVerificationEmailResult
-                                .error.toErrorResId()?.asText()
-                                ?: sendVerificationEmailResult.errorMessage?.asText()
+                                .errorMessage
+                                ?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             error = sendVerificationEmailResult.error,
                         ),

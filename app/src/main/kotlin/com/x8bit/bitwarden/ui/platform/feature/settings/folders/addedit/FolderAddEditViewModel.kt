@@ -15,7 +15,6 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -261,9 +260,7 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = result.error.toErrorResId()?.asText()
-                                ?: result.errorMessage?.asText()
-                                ?: BitwardenString.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )

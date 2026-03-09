@@ -12,7 +12,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -181,8 +180,9 @@ class LoginWithDeviceViewModel @Inject constructor(
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = loginResult.error.toErrorResId()?.asText()
-                                ?: loginResult.errorMessage?.asText()
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             error = loginResult.error,
                         ),
@@ -226,7 +226,9 @@ class LoginWithDeviceViewModel @Inject constructor(
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = loginResult.errorMessage?.asText()
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )

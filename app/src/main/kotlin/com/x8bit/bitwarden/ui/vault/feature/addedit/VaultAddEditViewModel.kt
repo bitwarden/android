@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -1750,8 +1749,9 @@ class VaultAddEditViewModel @Inject constructor(
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
                         title = BitwardenString.an_error_has_occurred.asText(),
-                        message = result.error.toErrorResId()?.asText()
-                            ?: result.errorMessage?.asText()
+                        message = result
+                            .errorMessage
+                            ?.asText()
                             ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
@@ -1790,8 +1790,9 @@ class VaultAddEditViewModel @Inject constructor(
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
                         title = BitwardenString.an_error_has_occurred.asText(),
-                        message = result.error.toErrorResId()?.asText()
-                            ?: result.errorMessage?.asText()
+                        message = result
+                            .errorMessage
+                            ?.asText()
                             ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
@@ -1895,8 +1896,7 @@ class VaultAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = VaultAddEditState.ViewState.Error(
-                            message = vaultDataState.error.toErrorResId()?.asText()
-                                ?: BitwardenString.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }

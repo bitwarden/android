@@ -1,6 +1,5 @@
 package com.bitwarden.network.util
 
-import com.bitwarden.network.exception.CookieRedirectException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
@@ -117,31 +116,6 @@ class NetworkUtilsTest {
         assertEquals(
             false,
             IllegalStateException().isSslHandShakeError(),
-        )
-    }
-
-    @Test
-    fun `isCookieRedirectError should return true for CookieRedirectException`() {
-        assertEquals(
-            true,
-            CookieRedirectException(hostname = "example.com").isCookieRedirectError(),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `isCookieRedirectError should return true if exceptions cause is CookieRedirectException`() {
-        assertEquals(
-            true,
-            Exception(CookieRedirectException(hostname = "example.com")).isCookieRedirectError(),
-        )
-    }
-
-    @Test
-    fun `isCookieRedirectError should return false for other throwable`() {
-        assertEquals(
-            false,
-            IllegalStateException().isCookieRedirectError(),
         )
     }
 }

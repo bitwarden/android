@@ -33,7 +33,6 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -1100,8 +1099,7 @@ class VaultItemViewModel @Inject constructor(
                         hasPremium = userState.activeAccount.isPremium,
                         viewState = vaultDataState.toViewStateOrError(
                             account = userState.activeAccount,
-                            errorText = vaultDataState.error.toErrorResId()?.asText()
-                                ?: BitwardenString.generic_error_message.asText(),
+                            errorText = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }

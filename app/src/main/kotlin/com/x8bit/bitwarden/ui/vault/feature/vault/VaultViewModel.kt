@@ -44,7 +44,6 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -1191,8 +1190,7 @@ class VaultViewModel @Inject constructor(
             isPremium = state.isPremium,
             hasMasterPassword = state.hasMasterPassword,
             errorTitle = BitwardenString.an_error_has_occurred.asText(),
-            errorMessage = vaultData.error.toErrorResId()?.asText()
-                ?: BitwardenString.generic_error_message.asText(),
+            errorMessage = BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             isArchiveEnabled = state.isArchiveEnabled,

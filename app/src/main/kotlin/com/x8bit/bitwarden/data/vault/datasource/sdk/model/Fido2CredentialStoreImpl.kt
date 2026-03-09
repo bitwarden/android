@@ -114,10 +114,7 @@ class Fido2CredentialStoreImpl(
     private fun UpdateCipherResult.toCreateCipherResult(): CreateCipherResult =
         when (this) {
             UpdateCipherResult.Success -> CreateCipherResult.Success
-            is UpdateCipherResult.Error -> CreateCipherResult.Error(
-                errorMessage = errorMessage,
-                error = error,
-            )
+            is UpdateCipherResult.Error -> CreateCipherResult.Error(errorMessage, error)
         }
 
     /**

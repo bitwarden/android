@@ -8,7 +8,6 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.manager.model.DownloadResult
-import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
@@ -212,40 +211,6 @@ class CipherManagerTest {
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
             assertEquals(CreateCipherResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `createCipher with ciphersService failure should return Error with CookieRedirectException`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val mockCipherView = createMockCipherView(number = 1)
-            val error = CookieRedirectException(hostname = "example.com")
-            coEvery {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = mockCipherView,
-                )
-            } returns createMockEncryptionContext(
-                number = 1,
-                cipher = createMockSdkCipher(number = 1, clock = clock),
-            ).asSuccess()
-            coEvery {
-                ciphersService.createCipher(
-                    body = createMockCipherJsonRequest(
-                        number = 1,
-                        login = createMockLogin(number = 1, uri = null),
-                    ),
-                )
-            } returns error.asFailure()
-
-            val result = cipherManager.createCipher(cipherView = mockCipherView)
-
-            assertEquals(
-                CreateCipherResult.Error(errorMessage = null, error = error),
-                result,
-            )
         }
 
     @Suppress("MaxLineLength")

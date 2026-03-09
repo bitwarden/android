@@ -16,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
@@ -178,8 +177,7 @@ class LoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = loginResult.error.toErrorResId()?.asText()
-                                ?: loginResult.errorMessage?.asText()
+                            message = loginResult.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
                             error = loginResult.error,
                         ),

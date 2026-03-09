@@ -1,7 +1,6 @@
 package com.bitwarden.network.util
 
 import okio.ByteString.Companion.decodeBase64
-import com.bitwarden.network.exception.CookieRedirectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.charset.Charset
@@ -61,12 +60,4 @@ fun Throwable?.isSslHandShakeError(): Boolean {
     return this is SSLHandshakeException ||
         this is CertPathValidatorException ||
         this?.cause?.isSslHandShakeError() ?: false
-}
-
-/**
- * Returns true if the throwable represents a cookie redirect error.
- */
-fun Throwable?.isCookieRedirectError(): Boolean {
-    return this is CookieRedirectException ||
-        this?.cause?.isCookieRedirectError() ?: false
 }

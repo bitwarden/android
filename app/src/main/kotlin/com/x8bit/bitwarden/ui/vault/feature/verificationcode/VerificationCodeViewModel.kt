@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -329,8 +328,7 @@ class VerificationCodeViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     viewState = VerificationCodeState.ViewState.Error(
-                        message = vaultData.error.toErrorResId()?.asText()
-                            ?: BitwardenString.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )

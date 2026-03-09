@@ -110,10 +110,7 @@ class FolderManagerImpl(
                                 .fold(
                                     onSuccess = { UpdateFolderResult.Success(it) },
                                     onFailure = {
-                                        UpdateFolderResult.Error(
-                                            errorMessage = null,
-                                            error = it,
-                                        )
+                                        UpdateFolderResult.Error(errorMessage = null, error = it)
                                     },
                                 )
                         }
@@ -123,12 +120,7 @@ class FolderManagerImpl(
                         }
                     }
                 },
-                onFailure = {
-                    UpdateFolderResult.Error(
-                        errorMessage = it.message,
-                        error = it,
-                    )
-                },
+                onFailure = { UpdateFolderResult.Error(it.message, error = it) },
             )
     }
 

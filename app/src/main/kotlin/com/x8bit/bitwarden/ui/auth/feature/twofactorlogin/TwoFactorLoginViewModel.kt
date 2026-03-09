@@ -21,7 +21,6 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.platform.util.toErrorResId
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -296,8 +295,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = loginResult.error.toErrorResId()?.asText()
-                                ?: loginResult.errorMessage?.asText()
+                            message = loginResult.errorMessage?.asText()
                                 ?: BitwardenString.invalid_verification_code.asText(),
                             error = loginResult.error,
                         ),
