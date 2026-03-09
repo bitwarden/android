@@ -13,11 +13,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -78,11 +78,12 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                         label = stringResource(id = BitwardenString.password_prompt),
                         isChecked = commonState.masterPasswordReprompt,
                         onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                        tooltip = TooltipData(
+                        helpData = BitwardenHelpButtonData(
                             onClick = commonTypeHandlers.onTooltipClick,
                             contentDescription = stringResource(
                                 id = BitwardenString.master_password_re_prompt_help,
                             ),
+                            isExternalLink = true,
                         ),
                         cardStyle = CardStyle.Full,
                         modifier = Modifier

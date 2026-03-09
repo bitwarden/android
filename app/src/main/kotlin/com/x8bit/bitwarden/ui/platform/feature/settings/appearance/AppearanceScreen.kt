@@ -26,10 +26,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -136,13 +136,14 @@ fun AppearanceScreen(
                 onCheckedChange = {
                     viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it))
                 },
-                tooltip = TooltipData(
+                helpData = BitwardenHelpButtonData(
                     onClick = {
                         viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick)
                     },
                     contentDescription = stringResource(
                         id = BitwardenString.show_website_icons_help,
                     ),
+                    isExternalLink = true,
                 ),
                 cardStyle = CardStyle.Full,
                 modifier = Modifier

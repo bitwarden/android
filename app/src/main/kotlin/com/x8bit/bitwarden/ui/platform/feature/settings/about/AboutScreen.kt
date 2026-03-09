@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -277,9 +277,10 @@ private fun ColumnScope.FlightRecorderCard(
         label = stringResource(id = BitwardenString.flight_recorder),
         isChecked = isFlightRecorderEnabled,
         onCheckedChange = onFlightRecorderCheckedChange,
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             contentDescription = stringResource(id = BitwardenString.flight_recorder_help),
             onClick = onFlightRecorderTooltipClick,
+            isExternalLink = true,
         ),
         subtext = logExpiration?.invoke(),
         cardStyle = CardStyle.Top(),
