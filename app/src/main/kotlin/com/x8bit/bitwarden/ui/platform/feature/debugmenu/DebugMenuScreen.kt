@@ -122,12 +122,10 @@ fun DebugMenuScreen(
             Spacer(Modifier.height(height = 8.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.clear_sso_cookies),
-                onClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            DebugMenuAction.ClearSsoCookies,
-                        )
-                    }
+                onClick = {
+                    viewModel.trySendAction(
+                        DebugMenuAction.ClearSsoCookies,
+                    )
                 },
                 isEnabled = true,
                 modifier = Modifier
