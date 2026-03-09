@@ -1445,7 +1445,7 @@ class VaultViewModel @Inject constructor(
  * @property accountSummaries List of all the current accounts.
  * @property viewState The specific view state representing loading, no items, or content state.
  * @property dialog Information about any dialogs that may need to be displayed.
- * @property isSwitchingAccounts Whether or not we are actively switching accounts.
+ * @property isSwitchingAccounts Whether we are actively switching accounts.
  * @property isPremium Whether the user is a premium user.
  */
 @Parcelize
@@ -1508,8 +1508,7 @@ data class VaultState(
     sealed class ViewState : Parcelable {
 
         /**
-         * Determines whether or not the Floating Action Button (FAB) should be shown for the
-         * given state.
+         * Determines whether the Floating Action Button (FAB) should be shown for the given state.
          */
         abstract val hasFab: Boolean
 

@@ -351,7 +351,7 @@ data class ItemSearchState(
             val localListHeader: Text get() = BitwardenString.local_codes.asText(itemList.size)
 
             /**
-             * Whether or not there should be a "Local codes" header shown above local codes.
+             * Whether there should be a "Local codes" header shown above local codes.
              */
             val hasLocalAndSharedItems get() = !sharedItems.isEmpty() && itemList.isNotEmpty()
         }

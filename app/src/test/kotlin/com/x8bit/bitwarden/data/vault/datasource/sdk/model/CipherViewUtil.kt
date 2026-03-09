@@ -34,7 +34,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
  * Create a mock [CipherView].
  *
  * @param number the number to create the cipher with.
- * @param isDeleted whether or not the cipher has been deleted.
+ * @param isDeleted whether the cipher has been deleted.
  * @param cipherType the type of cipher to create.
  */
 @Suppress("LongParameterList")

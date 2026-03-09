@@ -235,14 +235,14 @@ sealed class QrCodeScanAction {
     /**
      * User clicked save to Bitwarden on the choose save location dialog.
      *
-     * @param saveAsDefault Whether or not he user checked "Save as default".
+     * @param saveAsDefault Whether the user checked "Save as default".
      */
     data class SaveToBitwardenClick(val saveAsDefault: Boolean) : QrCodeScanAction()
 
     /**
      * User clicked save locally on the save to Bitwarden dialog.
      *
-     * @param saveAsDefault Whether or not he user checked "Save as default".
+     * @param saveAsDefault Whether the user checked "Save as default".
      */
     data class SaveLocallyClick(val saveAsDefault: Boolean) : QrCodeScanAction()
 }

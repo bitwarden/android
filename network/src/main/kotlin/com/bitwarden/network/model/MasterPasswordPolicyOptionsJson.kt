@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
  *
  * @property minimumComplexity The minimum required password complexity (if applicable).
  * @property minimumLength The minimum required password length (if applicable).
- * @property shouldRequireUppercase Whether or not uppercase characters should be required.
- * @property shouldRequireLowercase Whether or not lowercase characters should be required.
- * @property shouldRequireNumbers Whether or not numbers should be required.
- * @property shouldRequireSpecialCharacters Whether or not special characters should be required.
- * @property shouldEnforceOnLogin Whether or not the restrictions should be enforced on login.
+ * @property shouldRequireUppercase Whether uppercase characters should be required.
+ * @property shouldRequireLowercase Whether lowercase characters should be required.
+ * @property shouldRequireNumbers Whether numbers should be required.
+ * @property shouldRequireSpecialCharacters Whether special characters should be required.
+ * @property shouldEnforceOnLogin Whether the restrictions should be enforced on login.
  */
 @Serializable
 data class MasterPasswordPolicyOptionsJson(

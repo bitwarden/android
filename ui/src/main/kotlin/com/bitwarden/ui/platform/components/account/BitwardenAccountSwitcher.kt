@@ -85,7 +85,7 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  * Note that this is intended to be used in conjunction with screens containing a top app bar but
  * should be placed with the screen's content and not with the bar itself.
  *
- * @param isVisible Whether or not this component is visible. Changing this value will animate the
+ * @param isVisible Whether this component is visible. Changing this value will animate the
  * component in or out of view.
  * @param accountSummaries The accounts to display in the switcher.
  * @param onSwitchAccountClick A callback when an account is clicked indicating that the account
@@ -97,7 +97,7 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  * @param onAddAccountClick A callback when the Add Account row is clicked.
  * @param onDismissRequest A callback when the component requests to be dismissed. This is triggered
  * whenever the user clicks on the scrim or any of the switcher items.
- * @param isAddAccountAvailable Whether or not the "Add account" button is available. Note that even
+ * @param isAddAccountAvailable Whether the "Add account" button is available. Note that even
  * when `true`, this button may be hidden when there are more than [MAXIMUM_ACCOUNT_LIMIT] accounts
  * present.
  * @param modifier A [Modifier] for the composable.

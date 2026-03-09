@@ -1439,7 +1439,7 @@ data class VaultItemState(
         }
 
     /**
-     * Whether or not the cipher has been deleted.
+     * Whether the cipher has been deleted.
      */
     val isCipherDeleted: Boolean
         get() = viewState.asContentOrNull()
@@ -1453,13 +1453,13 @@ data class VaultItemState(
             ?.canEdit == true
 
     /**
-     * Whether or not the fab is visible.
+     * Whether the fab is visible.
      */
     val isFabVisible: Boolean
         get() = viewState is ViewState.Content && !isCipherDeleted && isCipherEditable
 
     /**
-     * Whether or not the cipher is in a collection.
+     * Whether the cipher is in a collection.
      */
     val isCipherInCollection: Boolean
         get() = viewState.asContentOrNull()
@@ -1470,7 +1470,7 @@ data class VaultItemState(
             ?: false
 
     /**
-     * Whether or not the cipher can be deleted.
+     * Whether the cipher can be deleted.
      */
     val canDelete: Boolean
         get() = viewState.asContentOrNull()
@@ -1478,7 +1478,7 @@ data class VaultItemState(
             ?.canDelete == true
 
     /**
-     * Whether or not the cipher can be deleted.
+     * Whether the cipher can be deleted.
      */
     val canRestore: Boolean
         get() = viewState.asContentOrNull()
@@ -1719,7 +1719,7 @@ data class VaultItemState(
                      * A wrapper for the password data.
                      *
                      * @property password The password itself.
-                     * @property isVisible Whether or not it is currently visible.
+                     * @property isVisible Whether it is currently visible.
                      * @property canViewPassword Indicates whether the current user can view and
                      * copy passwords associated with the login item.
                      */
@@ -1824,7 +1824,7 @@ data class VaultItemState(
                      * A wrapper for the number data.
                      *
                      * @property number The card number itself.
-                     * @property isVisible Whether or not it is currently visible.
+                     * @property isVisible Whether it is currently visible.
                      */
                     @Parcelize
                     data class NumberData(
@@ -1836,7 +1836,7 @@ data class VaultItemState(
                      * A wrapper for the code data.
                      *
                      * @property code The security code itself.
-                     * @property isVisible Whether or not it is currently visible.
+                     * @property isVisible Whether it is currently visible.
                      */
                     @Parcelize
                     data class CodeData(
