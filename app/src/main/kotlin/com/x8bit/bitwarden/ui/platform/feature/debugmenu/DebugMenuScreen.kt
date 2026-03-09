@@ -119,6 +119,19 @@ fun DebugMenuScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(BitwardenString.clear_sso_cookies),
+                onClick = {
+                    viewModel.trySendAction(
+                        DebugMenuAction.ClearSsoCookies,
+                    )
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
             Spacer(Modifier.height(height = 16.dp))
             BitwardenHorizontalDivider()
             Spacer(Modifier.height(height = 16.dp))
