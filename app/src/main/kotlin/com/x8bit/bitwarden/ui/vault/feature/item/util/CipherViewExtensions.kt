@@ -88,9 +88,10 @@ fun CipherView.toViewState(
                     ) {
                         null
                     } else {
+                        val fileName = requireNotNull(it.fileName)
                         VaultItemState.ViewState.Content.Common.AttachmentItem(
                             id = requireNotNull(it.id),
-                            title = requireNotNull(it.fileName),
+                            title = fileName,
                             displaySize = requireNotNull(it.sizeName),
                             url = requireNotNull(it.url),
                             isLargeFile = try {
@@ -99,6 +100,7 @@ fun CipherView.toViewState(
                                 false
                             },
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
+                            isPreviewable = isImageFile(fileName),
                         )
                     }
                 }
@@ -290,6 +292,16 @@ private fun CipherView.toIconData(
             IconData.Local(iconRes = this.type.iconRes)
         }
     }
+}
+
+private fun isImageFile(fileName: String): Boolean {
+    val lowercasedFileName = fileName.lowercase(Locale.getDefault())
+    return lowercasedFileName.endsWith(".png") ||
+        lowercasedFileName.endsWith(".jpg") ||
+        lowercasedFileName.endsWith(".jpeg") ||
+        lowercasedFileName.endsWith(".gif") ||
+        lowercasedFileName.endsWith(".webp") ||
+        lowercasedFileName.endsWith(".bmp")
 }
 
 @get:DrawableRes
