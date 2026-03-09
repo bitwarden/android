@@ -5,7 +5,6 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -36,7 +35,6 @@ class DebugMenuViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
-    private val cookieDiskSource: CookieDiskSource,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(featureFlags = persistentMapOf()),
@@ -104,7 +102,7 @@ class DebugMenuViewModel @Inject constructor(
     }
 
     private fun handleClearSsoCookies() {
-        cookieDiskSource.clearCookies()
+        debugMenuRepository.clearSsoCookies()
     }
 
     private fun handleTriggerCookieAcquisition() {
