@@ -60,7 +60,7 @@ class BitwardenAppGlideModule : AppGlideModule() {
         val client = certificateManager
             .createMtlsOkHttpClient()
             .newBuilder()
-            .addInterceptor(GlideCookieInterceptor(networkCookieManager))
+            .addNetworkInterceptor(GlideCookieInterceptor(networkCookieManager))
             .build()
 
         // Register OkHttpUrlLoader that uses our mTLS + cookie OkHttpClient
