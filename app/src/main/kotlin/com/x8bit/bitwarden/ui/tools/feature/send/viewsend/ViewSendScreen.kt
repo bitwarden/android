@@ -28,14 +28,13 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,8 +87,7 @@ fun ViewSendScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
+    val resources = LocalResources.current
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -114,9 +112,7 @@ fun ViewSendScreen(
 
     ViewSendDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ViewSendAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(ViewSendAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -130,9 +126,7 @@ fun ViewSendScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(ViewSendAction.CloseClick) }
-                    },
+                    onNavigationIconClick = { viewModel.trySendAction(ViewSendAction.CloseClick) },
                 ),
                 scrollBehavior = scrollBehavior,
             )
@@ -144,9 +138,7 @@ fun ViewSendScreen(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(ViewSendAction.EditClick) }
-                    },
+                    onClick = { viewModel.trySendAction(ViewSendAction.EditClick) },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
                     contentDescription = stringResource(id = BitwardenString.edit_send),
                     modifier = Modifier.testTag(tag = "EditItemButton"),
@@ -158,18 +150,10 @@ fun ViewSendScreen(
         ViewSendScreenContent(
             state = state,
             modifier = Modifier.fillMaxSize(),
-            onCopyClick = remember(viewModel) {
-                { viewModel.trySendAction(ViewSendAction.CopyClick) }
-            },
-            onCopyNotesClick = remember(viewModel) {
-                { viewModel.trySendAction(ViewSendAction.CopyNotesClick) }
-            },
-            onDeleteClick = remember(viewModel) {
-                { viewModel.trySendAction(ViewSendAction.DeleteClick) }
-            },
-            onShareClick = remember(viewModel) {
-                { viewModel.trySendAction(ViewSendAction.ShareClick) }
-            },
+            onCopyClick = { viewModel.trySendAction(ViewSendAction.CopyClick) },
+            onCopyNotesClick = { viewModel.trySendAction(ViewSendAction.CopyNotesClick) },
+            onDeleteClick = { viewModel.trySendAction(ViewSendAction.DeleteClick) },
+            onShareClick = { viewModel.trySendAction(ViewSendAction.ShareClick) },
         )
     }
 }

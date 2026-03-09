@@ -72,9 +72,7 @@ fun VerificationCodeScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VerificationCodeAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(

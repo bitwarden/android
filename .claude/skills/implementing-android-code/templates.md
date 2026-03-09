@@ -342,9 +342,7 @@ fun ExampleScreen(
     // Dialogs
     ExampleDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ExampleAction.ErrorDialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(ExampleAction.ErrorDialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -357,20 +355,14 @@ fun ExampleScreen(
                 title = stringResource(id = BitwardenString.example),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ExampleAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(ExampleAction.BackClick) },
             )
         },
     ) {
         ExampleScreenContent(
             state = state,
-            onInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ExampleAction.InputChanged(it)) }
-            },
-            onSubmitClick = remember(viewModel) {
-                { viewModel.trySendAction(ExampleAction.SubmitClick) }
-            },
+            onInputChanged = { viewModel.trySendAction(ExampleAction.InputChanged(it)) },
+            onSubmitClick = { viewModel.trySendAction(ExampleAction.SubmitClick) },
             modifier = Modifier
                 .fillMaxSize(),
         )

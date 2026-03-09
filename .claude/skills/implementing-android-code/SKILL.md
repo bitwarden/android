@@ -148,9 +148,7 @@ fun ExampleScreen(
             BitwardenTopAppBar(
                 title = stringResource(R.string.title),
                 navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ExampleAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(ExampleAction.BackClick) },
             )
         },
     ) {
@@ -165,7 +163,6 @@ fun ExampleScreen(
 - ✅ Use `hiltViewModel()` for dependency injection
 - ✅ Use `collectAsStateWithLifecycle()` for state (not `collectAsState()`)
 - ✅ Use `EventsEffect(viewModel)` for one-shot events
-- ✅ Use `remember(viewModel) { }` for stable callbacks to prevent recomposition
 - ✅ Use `Bitwarden*` prefixed components from `:ui` module
 
 **State Hoisting Rules:**

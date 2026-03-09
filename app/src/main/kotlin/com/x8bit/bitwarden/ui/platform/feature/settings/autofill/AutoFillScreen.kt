@@ -162,9 +162,7 @@ fun AutoFillScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(AutoFillAction.BackClick) },
             )
         },
     ) {

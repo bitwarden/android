@@ -68,22 +68,14 @@ fun BlockAutoFillScreen(
 
     BlockAutoFillDialogs(
         dialogState = state.dialog,
-        onUriTextChange = remember(viewModel) {
-            { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) }
+        onUriTextChange = { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) },
+        onSaveClick = { newUri, originalUri ->
+            viewModel.trySendAction(
+                BlockAutoFillAction.SaveUri(newUri = newUri, originalUri = originalUri),
+            )
         },
-        onSaveClick = remember(viewModel) {
-            { newUri, originalUri ->
-                viewModel.trySendAction(
-                    BlockAutoFillAction.SaveUri(newUri = newUri, originalUri = originalUri),
-                )
-            }
-        },
-        onRemoveClick = remember(viewModel) {
-            { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) }
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
-        },
+        onRemoveClick = { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) },
+        onDismissRequest = { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -97,9 +89,7 @@ fun BlockAutoFillScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(BlockAutoFillAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(BlockAutoFillAction.BackClick) },
             )
         },
         floatingActionButton = {
@@ -109,9 +99,7 @@ fun BlockAutoFillScreen(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
-                    },
+                    onClick = { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
@@ -147,12 +135,8 @@ fun BlockAutoFillScreen(
                     items(viewState.blockedUris, key = { it }) { uri ->
                         BlockAutoFillListItem(
                             label = uri,
-                            onClick = remember(viewModel) {
-                                {
-                                    viewModel.trySendAction(
-                                        BlockAutoFillAction.EditUriClick(uri),
-                                    )
-                                }
+                            onClick = {
+                                viewModel.trySendAction(BlockAutoFillAction.EditUriClick(uri))
                             },
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
@@ -164,8 +148,8 @@ fun BlockAutoFillScreen(
                 is BlockAutoFillState.ViewState.Empty -> {
                     item {
                         BlockAutoFillNoItems(
-                            addItemClickAction = remember(viewModel) {
-                                { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
+                            addItemClickAction = {
+                                viewModel.trySendAction(BlockAutoFillAction.AddUriClick)
                             },
                             modifier = Modifier.fillMaxSize(),
                         )

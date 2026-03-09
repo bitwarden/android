@@ -11,7 +11,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -55,8 +54,8 @@ fun MasterPasswordHintScreen(
             BitwardenBasicDialog(
                 title = stringResource(id = BitwardenString.password_hint),
                 message = stringResource(id = BitwardenString.password_hint_alert),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
+                onDismissRequest = {
+                    viewModel.trySendAction(MasterPasswordHintAction.DismissDialog)
                 },
             )
         }
@@ -73,8 +72,8 @@ fun MasterPasswordHintScreen(
                     ?: stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
                 throwable = dialogState.error,
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
+                onDismissRequest = {
+                    viewModel.trySendAction(MasterPasswordHintAction.DismissDialog)
                 },
             )
         }
@@ -93,15 +92,13 @@ fun MasterPasswordHintScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(MasterPasswordHintAction.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(MasterPasswordHintAction.CloseClick)
                 },
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.submit),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(MasterPasswordHintAction.SubmitClick) }
-                        },
+                        onClick = { viewModel.trySendAction(MasterPasswordHintAction.SubmitClick) },
                         modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
@@ -117,8 +114,8 @@ fun MasterPasswordHintScreen(
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
                 value = state.emailInput,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(MasterPasswordHintAction.EmailInputChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(MasterPasswordHintAction.EmailInputChange(it))
                 },
                 label = stringResource(id = BitwardenString.email_address),
                 keyboardType = KeyboardType.Email,

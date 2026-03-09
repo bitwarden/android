@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -63,9 +62,7 @@ fun LoginWithDeviceScreen(
 
     LoginWithDeviceDialogs(
         state = state.dialogState,
-        onDismissDialog = remember(viewModel) {
-            { viewModel.trySendAction(LoginWithDeviceAction.DismissDialog) }
-        },
+        onDismissDialog = { viewModel.trySendAction(LoginWithDeviceAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -79,8 +76,8 @@ fun LoginWithDeviceScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginWithDeviceAction.CloseButtonClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(LoginWithDeviceAction.CloseButtonClick)
                 },
             )
         },
@@ -89,11 +86,11 @@ fun LoginWithDeviceScreen(
             is LoginWithDeviceState.ViewState.Content -> {
                 LoginWithDeviceScreenContent(
                     state = viewState,
-                    onResendNotificationClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick) }
+                    onResendNotificationClick = {
+                        viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick)
                     },
-                    onViewAllLogInOptionsClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick) }
+                    onViewAllLogInOptionsClick = {
+                        viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick)
                     },
                     modifier = Modifier.fillMaxSize(),
                 )

@@ -64,15 +64,11 @@ fun PrivilegedAppsListScreen(
 
     PrivilegedAppListDialogs(
         state = state,
-        onDismissDialogClick = remember(viewModel) {
-            { viewModel.trySendAction(PrivilegedAppsListAction.DismissDialogClick) }
+        onDismissDialogClick = {
+            viewModel.trySendAction(PrivilegedAppsListAction.DismissDialogClick)
         },
-        onConfirmDeleteTrustedAppClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    PrivilegedAppsListAction.UserTrustedAppDeleteConfirmClick(it),
-                )
-            }
+        onConfirmDeleteTrustedAppClick = {
+            viewModel.trySendAction(PrivilegedAppsListAction.UserTrustedAppDeleteConfirmClick(it))
         },
     )
 
@@ -83,8 +79,8 @@ fun PrivilegedAppsListScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(PrivilegedAppsListAction.BackClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PrivilegedAppsListAction.BackClick)
                 },
             )
         },
@@ -94,8 +90,8 @@ fun PrivilegedAppsListScreen(
     ) {
         PrivilegedAppsListContent(
             state = state,
-            onDeleteClick = remember(viewModel) {
-                { viewModel.trySendAction(PrivilegedAppsListAction.UserTrustedAppDeleteClick(it)) }
+            onDeleteClick = {
+                viewModel.trySendAction(PrivilegedAppsListAction.UserTrustedAppDeleteClick(it))
             },
             modifier = Modifier
                 .fillMaxSize()

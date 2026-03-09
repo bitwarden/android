@@ -176,26 +176,17 @@ fun GeneratorScreen(
             }
         }
     }
-    val onRegenerateClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+    val onRegenerateClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+
+    val onCopyClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.CopyClick) }
+
+    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it))
     }
 
-    val onCopyClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.CopyClick) }
+    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it))
     }
-
-    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it)) }
-    }
-
-    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit =
-        remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it),
-                )
-            }
-        }
 
     val onShowNextCoachMark: () -> Unit = remember {
         { scope.launch { coachMarkState.showNextCoachMark() } }
@@ -227,20 +218,16 @@ fun GeneratorScreen(
                         ModalAppBar(
                             generatorMode = generatorMode,
                             scrollBehavior = scrollBehavior,
-                            onCloseClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.CloseClick) }
-                            },
-                            onSaveClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.SaveClick) }
-                            },
+                            onCloseClick = { viewModel.trySendAction(GeneratorAction.CloseClick) },
+                            onSaveClick = { viewModel.trySendAction(GeneratorAction.SaveClick) },
                         )
                     }
 
                     GeneratorMode.Default -> {
                         DefaultAppBar(
                             scrollBehavior = scrollBehavior,
-                            onPasswordHistoryClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                            onPasswordHistoryClick = {
+                                viewModel.trySendAction(GeneratorAction.PasswordHistoryClick)
                             },
                         )
                     }
