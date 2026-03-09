@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.glide
 
 import android.content.Context
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.network.ssl.createMtlsOkHttpClient
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
@@ -25,6 +26,7 @@ import java.io.InputStream
  *
  * The configuration mirrors the SSL setup used in RetrofitsImpl for API calls.
  */
+@OmitFromCoverage
 @GlideModule
 class BitwardenAppGlideModule : AppGlideModule() {
 
