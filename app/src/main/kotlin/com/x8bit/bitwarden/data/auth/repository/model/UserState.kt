@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 
@@ -43,7 +44,7 @@ data class UserState(
      * @property isPremium `true` if the account has a premium membership.
      * @property isLoggedIn `true` if the account is logged in, or `false` if it requires additional
      * authentication to view their vault.
-     * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
+     * @property isVaultUnlocked Whether the user's vault is currently unlocked.
      * @property needsPasswordReset If the user needs to reset their password.
      * @property needsMasterPassword Indicates whether the user needs to create a password (e.g.
      * they logged in using SSO and don't yet have one). NOTE: This should **not** be used to
@@ -96,4 +97,32 @@ data class UserState(
         val hasLoginApprovingDevice: Boolean,
         val hasResetPasswordPermission: Boolean,
     )
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * A basic empty account model.
+         */
+        val EMPTY_ACCOUNT: Account = Account(
+            userId = "",
+            name = null,
+            email = "",
+            avatarColorHex = "".toHexColorRepresentation(),
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            organizations = emptyList(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            needsMasterPassword = false,
+            hasMasterPassword = true,
+            trustedDevice = null,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(),
+            isExportable = false,
+        )
+    }
 }

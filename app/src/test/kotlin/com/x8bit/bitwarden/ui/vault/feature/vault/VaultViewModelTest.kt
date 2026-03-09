@@ -229,6 +229,22 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `initial state should be correct when UserState is not present`() {
+        mutableUserStateFlow.update { null }
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(
+                accountSummaries = emptyList(),
+                avatarColorString = "#ff000000",
+                initials = "",
+                showImportActionCard = false,
+                isPremium = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
