@@ -146,6 +146,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ClearSsoCookies should call clearSsoCookies on DebugMenuRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ClearSsoCookies)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.clearSsoCookies()
+        }
+    }
+
+    @Test
     fun `TriggerCookieAcquisition should set pending cookie acquisition`() =
         runTest {
             val viewModel = createViewModel()

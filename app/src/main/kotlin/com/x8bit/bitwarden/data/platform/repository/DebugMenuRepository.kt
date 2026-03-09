@@ -49,4 +49,9 @@ interface DebugMenuRepository {
      * @param userStateUpdateTrigger A passable lambda to trigger a user state update.
      */
     fun modifyStateToShowOnboardingCarousel(userStateUpdateTrigger: () -> Unit)
+
+    /**
+     * Clears all stored SSO cookie configurations.
+     */
+    fun clearSsoCookies()
 }
