@@ -27,7 +27,7 @@ import javax.inject.Inject
 /**
  * ViewModel for the [DebugMenuScreen]
  */
-@Suppress("LongParameterList", "TooManyFunctions")
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
