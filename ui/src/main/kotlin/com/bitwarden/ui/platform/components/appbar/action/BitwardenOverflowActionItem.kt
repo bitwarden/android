@@ -43,16 +43,22 @@ import kotlinx.collections.immutable.persistentListOf
  *
  * @param menuItemDataList The list of [OverflowMenuItemData] that will populate the overflow
  * dropdown menu.
+ * @param modifier The [Modifier] for this composable.
+ * @param isVisible Indicates if this composable should be shown.
+ * @param contentDescription The content description for the icon button.
+ * @param vectorIconRes The resource indicating what icon to display.
+ * @param testTag The test tag applied to this composable.
  */
 @Composable
 fun BitwardenOverflowActionItem(
     menuItemDataList: ImmutableList<OverflowMenuItemData>,
-    contentDescription: String,
     modifier: Modifier = Modifier,
+    isVisible: Boolean = true,
+    contentDescription: String = stringResource(id = BitwardenString.more_options),
     @DrawableRes vectorIconRes: Int = BitwardenDrawable.ic_ellipsis_vertical,
     testTag: String? = "HeaderBarOptionsButton",
 ) {
-    if (menuItemDataList.isEmpty()) return
+    if (menuItemDataList.isEmpty() || !isVisible) return
     var isOverflowMenuVisible by rememberSaveable { mutableStateOf(false) }
     Box(
         contentAlignment = Alignment.Center,
@@ -134,7 +140,6 @@ private fun BitwardenDropdownMenuItem(
 private fun BitwardenOverflowActionItem_preview() {
     BitwardenTheme {
         BitwardenOverflowActionItem(
-            contentDescription = "More",
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = "Test",

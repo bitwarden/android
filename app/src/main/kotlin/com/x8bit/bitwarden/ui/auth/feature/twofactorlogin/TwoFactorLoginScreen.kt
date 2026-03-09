@@ -144,23 +144,22 @@ fun TwoFactorLoginScreen(
                     viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick)
                 },
                 actions = {
-                    if (!state.isNewDeviceVerification) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = state.availableAuthMethods
-                                .map {
-                                    OverflowMenuItemData(
-                                        text = it.title(),
-                                        onClick = {
-                                            viewModel.trySendAction(
-                                                TwoFactorLoginAction.SelectAuthMethod(it),
-                                            )
-                                        },
-                                    )
-                                }
-                                .toPersistentList(),
-                        )
-                    }
+                    BitwardenOverflowActionItem(
+                        isVisible = !state.isNewDeviceVerification,
+                        menuItemDataList = state
+                            .availableAuthMethods
+                            .map {
+                                OverflowMenuItemData(
+                                    text = it.title(),
+                                    onClick = {
+                                        viewModel.trySendAction(
+                                            TwoFactorLoginAction.SelectAuthMethod(it),
+                                        )
+                                    },
+                                )
+                            }
+                            .toPersistentList(),
+                    )
                 },
             )
         },

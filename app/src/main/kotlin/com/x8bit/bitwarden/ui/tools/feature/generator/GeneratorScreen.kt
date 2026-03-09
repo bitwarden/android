@@ -298,7 +298,6 @@ private fun DefaultAppBar(
         dividerStyle = TopAppBarDividerStyle.NONE,
         actions = {
             BitwardenOverflowActionItem(
-                contentDescription = stringResource(BitwardenString.more),
                 menuItemDataList = persistentListOf(
                     OverflowMenuItemData(
                         text = stringResource(id = BitwardenString.password_history),

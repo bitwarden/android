@@ -119,7 +119,6 @@ fun ResetPasswordScreen(
                         modifier = Modifier.testTag("SaveButton"),
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(BitwardenString.log_out),

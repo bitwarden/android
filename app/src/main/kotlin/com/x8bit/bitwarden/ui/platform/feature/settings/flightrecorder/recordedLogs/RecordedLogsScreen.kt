@@ -168,7 +168,6 @@ private fun RecordedLogsOverflowMenu(
         )
     }
     BitwardenOverflowActionItem(
-        contentDescription = stringResource(BitwardenString.more),
         modifier = modifier,
         menuItemDataList = persistentListOf(
             OverflowMenuItemData(
@@ -310,7 +309,6 @@ private fun LogRow(
         }
         Spacer(modifier = Modifier.width(width = 12.dp))
         BitwardenOverflowActionItem(
-            contentDescription = stringResource(BitwardenString.more),
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = stringResource(id = BitwardenString.share),

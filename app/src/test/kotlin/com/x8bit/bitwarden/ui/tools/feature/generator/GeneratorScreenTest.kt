@@ -148,7 +148,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Default))
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .assertIsDisplayed()
     }
 

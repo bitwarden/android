@@ -140,7 +140,6 @@ fun SendScreen(
                         onClick = { viewModel.trySendAction(SendAction.SearchClick) },
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),
