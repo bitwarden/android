@@ -1215,7 +1215,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="no_email_addresses_entered">Keine E-Mail-Adressen eingegeben</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Gib mindestens eine gültige E-Mail-Adresse ein, um dieses Send mit anderen zu teilen.</string>
     <string name="sync_with_browser">Mit Browser synchronisieren</string>
-    <string name="sync_with_browser_description">Um dich mit %1$s zu verbinden, synchronisiere deinen Standardbrowser mit der mobilen Bitwarden-App. Wenn sich der Browser öffnet, melde dich bei Bedarf an. \nSobald die Synchronisierung abgeschlossen ist, wirst du zu dieser App zurückgeleitet.</string>
+    <string name="sync_with_browser_description">Um dich mit %1$s zu verbinden, synchronisiere deinen Standardbrowser mit der mobilen Bitwarden-App. Wenn sich dein Browser öffnet, dann schließ die Anmeldung ab, wenn du dazu aufgefordert wirst.\nSobald die Synchronisierung abgeschlossen ist, wirst du zu dieser App zurückgeleitet.</string>
     <string name="launch_browser">Browser starten</string>
     <string name="continue_without_syncing">Ohne Synchronisierung fortfahren</string>
     <string name="external_link">Externer Link</string>
