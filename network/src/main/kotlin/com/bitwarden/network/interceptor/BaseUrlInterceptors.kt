@@ -7,7 +7,7 @@ import com.bitwarden.annotation.OmitFromCoverage
  */
 @OmitFromCoverage
 internal class BaseUrlInterceptors(
-    private val baseUrlsProvider: BaseUrlsProvider,
+    val baseUrlsProvider: BaseUrlsProvider,
 ) {
     /**
      * An interceptor for "/api" calls.

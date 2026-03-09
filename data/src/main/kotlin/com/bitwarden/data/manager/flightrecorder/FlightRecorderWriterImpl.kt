@@ -8,7 +8,10 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.network.interceptor.BaseUrlsProvider
+import com.bitwarden.network.util.redactHostnamesInMessage
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import timber.log.Timber
 import java.io.BufferedWriter
 import java.io.File
@@ -30,6 +33,7 @@ internal class FlightRecorderWriterImpl(
     private val fileManager: FileManager,
     private val dispatcherManager: DispatcherManager,
     private val buildInfoManager: BuildInfoManager,
+    private val baseUrlsProvider: BaseUrlsProvider,
 ) : FlightRecorderWriter {
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
         fileManager.delete(File(File(fileManager.logsDirectory), data.fileName))
@@ -103,15 +107,38 @@ internal class FlightRecorderWriterImpl(
                         bw.append(it)
                     }
                     bw.append(" – ")
-                    bw.append(message.redactUrls())
+                    bw.append(message.redactUrls()) // Apply hostname redaction
                     throwable?.let {
                         bw.append(" – ")
-                        bw.append(it.getStackTraceString().redactUrls())
+                        bw.append(it.getStackTraceString().redactUrls()) // Also redact stack traces
                     }
                     bw.newLine()
                 }
             }
         }
+    }
+
+    /**
+     * Redacts ONLY the user's configured self-hosted server hostname.
+     *
+     * Preserves ALL Bitwarden domains (including QA/staging).
+     * Delegates to [com.bitwarden.network.util.redactHostnamesInMessage].
+     *
+     * Examples:
+     * - "https://api.bitwarden.com/sync" → unchanged (Bitwarden cloud)
+     * - "https://vault.qa.bitwarden.pw/api" → unchanged (Bitwarden QA)
+     * - "https://vault.example.com/api" → "https://[REDACTED_SELF_HOST]/api" (self-hosted)
+     */
+    private fun String.redactUrls(): String {
+        // Get configured hostnames from BaseUrlsProvider
+        val configuredHosts = setOf(
+            baseUrlsProvider.getBaseApiUrl().toHttpUrlOrNull()?.host,
+            baseUrlsProvider.getBaseIdentityUrl().toHttpUrlOrNull()?.host,
+            baseUrlsProvider.getBaseEventsUrl().toHttpUrlOrNull()?.host,
+        ).filterNotNull().toSet()
+
+        // Delegate to HostnameRedactionUtil for all redaction logic
+        return this.redactHostnamesInMessage(configuredHosts)
     }
 }
 
@@ -141,24 +168,3 @@ private val Int.logLevel: String
         Log.ASSERT -> "ASSERT"
         else -> "UNKNOWN"
     }
-
-/**
- * Redacts URLs and quoted hostnames in the string by replacing them with [REDACTED].
- * Handles both full URLs and hostnames in quotes (e.g., "Unable to resolve host "example.com"").
- */
-@Suppress("MagicNumber")
-private fun String.redactUrls(): String {
-    val urlPattern = Regex("""(https?://)([\w.-]+)((?:/[\w./?&=%-]*)?)""")
-    val afterUrlRedaction = urlPattern.replace(this) { matchResult ->
-        val protocol = matchResult.groupValues[1]
-        val path = matchResult.groupValues[3]
-        "$protocol[REDACTED]$path"
-    }
-
-    // Redact hostnames that appear in double quotes without protocol and path
-    // This handles cases like: Unable to resolve host "com.example.server"
-    val quotedHostnamePattern = Regex(""""([\w-]+\.[\w.-]+)"""")
-    return quotedHostnamePattern.replace(afterUrlRedaction) {
-        """"[REDACTED]""""
-    }
-}
