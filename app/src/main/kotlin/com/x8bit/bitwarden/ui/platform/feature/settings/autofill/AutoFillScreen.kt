@@ -201,11 +201,20 @@ private fun AutoFillScreenContent(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
+        val autofillServicesLabel = stringResource(id = BitwardenString.autofill_services)
         BitwardenSwitch(
-            label = stringResource(id = BitwardenString.autofill_services),
+            label = autofillServicesLabel,
             supportingText = stringResource(
                 id = BitwardenString.autofill_services_explanation_long,
             ),
+            contentDescription = if (state.isAutoFillServicesEnabled) {
+                autofillServicesLabel
+            } else {
+                stringResource(
+                    id = BitwardenString.external_link_format,
+                    formatArgs = arrayOf(autofillServicesLabel),
+                )
+            },
             isChecked = state.isAutoFillServicesEnabled,
             onCheckedChange = autoFillHandlers.onAutofillServicesClick,
             cardStyle = CardStyle.Full,
@@ -397,7 +406,7 @@ private fun AutofillCallToActionCard(
                     trailingContent = {
                         Icon(
                             painter = rememberVectorPainter(BitwardenDrawable.ic_chevron_right),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = BitwardenString.external_link),
                             tint = BitwardenTheme.colorScheme.icon.primary,
                         )
                     },

@@ -163,6 +163,7 @@ private fun FlightRecorderContent(
             onClick = onHelpCenterClick,
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

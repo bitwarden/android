@@ -515,7 +515,10 @@ private fun UriField(
             if (uriData.isLaunchable) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_external_link,
-                    contentDescription = stringResource(id = BitwardenString.launch),
+                    contentDescription = stringResource(
+                        id = BitwardenString.external_link_format,
+                        formatArgs = arrayOf(stringResource(id = BitwardenString.launch)),
+                    ),
                     onClick = { onLaunchUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
                 )

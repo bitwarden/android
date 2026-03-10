@@ -53,6 +53,7 @@ fun VaultEntryListItem(
             .map { option ->
                 SelectionItemData(
                     text = option.title(),
+                    contentDescription = option.contentDescription(),
                     onClick = { onOverflowOptionClick(option) },
                 )
             }
