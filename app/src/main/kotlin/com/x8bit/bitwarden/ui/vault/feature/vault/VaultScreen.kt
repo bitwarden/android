@@ -102,9 +102,7 @@ fun VaultScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VaultAction.RefreshPull) },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     LifecycleEventEffect { _, event ->
@@ -238,7 +236,6 @@ private fun VaultScreenScaffold(
                         onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),

@@ -285,7 +285,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -322,7 +322,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1187,7 +1187,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm Delete option is present
@@ -1454,7 +1454,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Click on the attachments hint item in the dropdown
         composeTestRule
             .onAllNodesWithText("Attachments")
@@ -1473,7 +1473,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Click on the clone item in the dropdown
         composeTestRule
             .onAllNodesWithText("Clone")
@@ -1498,7 +1498,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Click on the move to organization hint item in the dropdown
         composeTestRule
             .onAllNodesWithText("Move to Organization")
@@ -1525,7 +1525,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Confirm it does not exist
         composeTestRule
             .onAllNodesWithText("Move to Organization")
@@ -1552,7 +1552,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm Collections option is present
@@ -1595,7 +1595,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
         // Click on the move to organization hint item in the dropdown
         composeTestRule
@@ -1624,7 +1624,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -1657,7 +1657,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     fun `Menu should display correct items when cipher is not in a collection`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -2339,7 +2339,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll("Authenticator key help, External link")
             .performClick()
 
         verify {

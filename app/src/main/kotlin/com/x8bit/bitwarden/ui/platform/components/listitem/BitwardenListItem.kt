@@ -143,7 +143,7 @@ fun BitwardenListItem(
         if (selectionDataList.isNotEmpty()) {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
-                contentDescription = stringResource(id = BitwardenString.options),
+                contentDescription = stringResource(id = BitwardenString.more_options),
                 onClick = { shouldShowDialog = true },
                 modifier = Modifier.nullableTestTag(tag = optionsTestTag),
             )

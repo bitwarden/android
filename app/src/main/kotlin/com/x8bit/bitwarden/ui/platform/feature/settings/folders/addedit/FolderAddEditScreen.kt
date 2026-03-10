@@ -12,7 +12,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -62,9 +61,7 @@ fun FolderAddEditScreen(
 
     FolderAddEditItemDialogs(
         dialogState = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(FolderAddEditAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(FolderAddEditAction.DismissDialog) },
     )
 
     if (shouldShowConfirmationDialog) {
@@ -94,28 +91,22 @@ fun FolderAddEditScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(FolderAddEditAction.CloseClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(FolderAddEditAction.CloseClick) },
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(FolderAddEditAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(FolderAddEditAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
-                    if (state.shouldShowOverflowMenu) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.delete),
-                                    onClick = { shouldShowConfirmationDialog = true },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.shouldShowOverflowMenu,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.delete),
+                                onClick = { shouldShowConfirmationDialog = true },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },
@@ -129,8 +120,8 @@ fun FolderAddEditScreen(
                     BitwardenTextField(
                         label = stringResource(id = BitwardenString.name),
                         value = viewState.folderName,
-                        onValueChange = remember(viewModel) {
-                            { viewModel.trySendAction(FolderAddEditAction.NameTextChange(it)) }
+                        onValueChange = {
+                            viewModel.trySendAction(FolderAddEditAction.NameTextChange(it))
                         },
                         textFieldTestTag = "FolderNameField",
                         cardStyle = CardStyle.Full,

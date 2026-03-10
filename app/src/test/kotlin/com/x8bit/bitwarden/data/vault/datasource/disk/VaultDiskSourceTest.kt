@@ -160,6 +160,44 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `saveCiphers should call insertCiphers`() = runTest {
+        assertFalse(ciphersDao.insertCiphersCalled)
+        assertEquals(0, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.saveCiphers(USER_ID, listOf(CIPHER_1))
+
+        assertTrue(ciphersDao.insertCiphersCalled)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+        val storedCipherEntity = ciphersDao.storedCiphers.first()
+        assertEquals(CIPHER_ENTITY.copy(cipherJson = ""), storedCipherEntity.copy(cipherJson = ""))
+        assertJsonEquals(CIPHER_ENTITY.cipherJson, storedCipherEntity.cipherJson)
+    }
+
+    @Test
+    fun `deleteSelectedCiphers should call deleteSelectedCiphers`() = runTest {
+        assertFalse(ciphersDao.deleteSelectedCiphersCalled)
+        ciphersDao.storedCiphers.add(CIPHER_ENTITY)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.deleteSelectedCiphers(USER_ID, listOf(CIPHER_1.id))
+
+        assertTrue(ciphersDao.deleteSelectedCiphersCalled)
+        assertEquals(emptyList<CipherEntity>(), ciphersDao.storedCiphers)
+    }
+
+    @Test
+    fun `deleteAllCiphers should call deleteAllCiphers`() = runTest {
+        assertFalse(ciphersDao.deleteCiphersCalled)
+        ciphersDao.storedCiphers.add(CIPHER_ENTITY)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.deleteAllCiphers(USER_ID)
+
+        assertTrue(ciphersDao.deleteCiphersCalled)
+        assertEquals(emptyList<CipherEntity>(), ciphersDao.storedCiphers)
+    }
+
+    @Test
     fun `saveCollection should call insertCollection`() = runTest {
         assertFalse(collectionsDao.insertCollectionCalled)
         assertEquals(0, collectionsDao.storedCollections.size)

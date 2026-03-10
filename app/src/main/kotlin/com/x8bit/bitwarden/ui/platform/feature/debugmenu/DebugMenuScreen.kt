@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -71,10 +70,8 @@ fun DebugMenuScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(DebugMenuAction.NavigateBack)
-                        }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(DebugMenuAction.NavigateBack)
                     },
                 ),
             )
@@ -87,13 +84,11 @@ fun DebugMenuScreen(
             if (state.featureFlags.isNotEmpty()) {
                 FeatureFlagContent(
                     featureFlagMap = state.featureFlags,
-                    onValueChange = remember(viewModel) {
-                        { key, value ->
-                            viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
-                        }
+                    onValueChange = { key, value ->
+                        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
                     },
-                    onResetValues = remember(viewModel) {
-                        { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+                    onResetValues = {
+                        viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
                     },
                 )
                 Spacer(Modifier.height(height = 16.dp))
@@ -101,25 +96,15 @@ fun DebugMenuScreen(
                 Spacer(Modifier.height(height = 16.dp))
             }
             OnboardingOverrideContent(
-                onStartOnboarding = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.RestartOnboarding)
-                    }
-                },
-                onStartOnboardingCarousel = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel)
-                    }
+                onStartOnboarding = { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) },
+                onStartOnboardingCarousel = {
+                    viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel)
                 },
             )
             Spacer(Modifier.height(16.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.reset_coach_mark_tour_status),
-                onClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
-                    }
-                },
+                onClick = { viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses) },
                 isEnabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,12 +113,19 @@ fun DebugMenuScreen(
             Spacer(Modifier.height(height = 8.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.trigger_cookie_acquisition),
-                onClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            DebugMenuAction.TriggerCookieAcquisition,
-                        )
-                    }
+                onClick = { viewModel.trySendAction(DebugMenuAction.TriggerCookieAcquisition) },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(BitwardenString.clear_sso_cookies),
+                onClick = {
+                    viewModel.trySendAction(
+                        DebugMenuAction.ClearSsoCookies,
+                    )
                 },
                 isEnabled = true,
                 modifier = Modifier
@@ -152,9 +144,7 @@ fun DebugMenuScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.generate_error_report),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick) }
-                },
+                onClick = { viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick) },
                 isEnabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,9 +153,7 @@ fun DebugMenuScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.generate_crash),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) }
-                },
+                onClick = { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) },
                 isEnabled = true,
                 modifier = Modifier
                     .fillMaxWidth()

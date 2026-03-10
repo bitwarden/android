@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Primary access point for general settings-related disk information.
  */
+@Suppress("TooManyFunctions")
 interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
@@ -103,6 +104,17 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * period is nearing expiration.
      */
     fun getAlertThresholdSecondsFlow(): Flow<Int>
+
+    /**
+     * Gets or sets the app timeout in minutes.
+     */
+    var appTimeoutInMinutes: Int?
+
+    /**
+     * Emits updates that track [appTimeoutInMinutes]. This will replay the last known value,
+     * if any.
+     */
+    val appTimeoutInMinutesFlow: Flow<Int?>
 
     /**
      * Retrieves the biometric integrity validity for the given [systemBioIntegrityState].

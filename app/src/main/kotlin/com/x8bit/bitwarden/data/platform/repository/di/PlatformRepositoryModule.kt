@@ -7,6 +7,7 @@ import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -92,10 +93,12 @@ object PlatformRepositoryModule {
         serverConfigRepository: ServerConfigRepository,
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
+        cookieDiskSource: CookieDiskSource,
     ): DebugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = featureFlagOverrideDiskSource,
         serverConfigRepository = serverConfigRepository,
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
+        cookieDiskSource = cookieDiskSource,
     )
 }

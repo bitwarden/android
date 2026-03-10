@@ -1268,7 +1268,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Authenticator key help, External link",
+            )
             .performClick()
 
         verify {
@@ -1329,7 +1331,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1356,7 +1358,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1381,7 +1383,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1442,7 +1444,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1487,7 +1489,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1514,7 +1516,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1543,7 +1545,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1571,7 +1573,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1618,7 +1620,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1658,7 +1660,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -3071,7 +3073,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Master password re-prompt help, External link",
+            )
             .performClick()
 
         verify {
@@ -3548,7 +3552,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3594,7 +3598,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm Collections option is present
@@ -3641,7 +3645,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3725,7 +3729,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3773,7 +3777,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -4326,7 +4330,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm it does not exist
@@ -4361,7 +4365,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -4429,7 +4433,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -4465,7 +4469,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule

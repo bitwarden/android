@@ -118,24 +118,20 @@ fun VaultItemScreen(
 
     VaultItemDialogs(
         dialog = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
+        onDismissRequest = { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) },
+        onConfirmDeleteClick = {
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
         },
-        onConfirmDeleteClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
+        onConfirmCloneWithoutFido2Credential = {
+            viewModel.trySendAction(
+                VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick,
+            )
         },
-        onConfirmCloneWithoutFido2Credential = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick,
-                )
-            }
+        onConfirmRestoreAction = {
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
         },
-        onConfirmRestoreAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
-        },
-        onUpgradeToPremiumClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick) }
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
         },
     )
 
@@ -150,51 +146,44 @@ fun VaultItemScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.CloseClick)
                 },
                 actions = {
                     if (state.canRestore) {
                         BitwardenTextButton(
                             label = stringResource(id = BitwardenString.restore),
-                            onClick = remember(viewModel) {
-                                {
-                                    viewModel.trySendAction(
-                                        VaultItemAction.Common.RestoreVaultItemClick,
-                                    )
-                                }
+                            onClick = {
+                                viewModel.trySendAction(
+                                    VaultItemAction.Common.RestoreVaultItemClick,
+                                )
                             },
                             modifier = Modifier.testTag("RestoreButton"),
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.attachments),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultItemAction.Common.AttachmentsClick,
-                                        )
-                                    }
+                                onClick = {
+                                    viewModel.trySendAction(
+                                        VaultItemAction.Common.AttachmentsClick,
+                                    )
                                 },
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.clone),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(VaultItemAction.Common.CloneClick) }
+                                onClick = {
+                                    viewModel.trySendAction(VaultItemAction.Common.CloneClick)
                                 },
                             )
                                 .takeUnless { state.isCipherInCollection },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.move_to_organization),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultItemAction.Common.MoveToOrganizationClick,
-                                        )
-                                    }
+                                onClick = {
+                                    viewModel.trySendAction(
+                                        VaultItemAction.Common.MoveToOrganizationClick,
+                                    )
                                 },
                             )
                                 .takeUnless {
@@ -203,12 +192,8 @@ fun VaultItemScreen(
                                 },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.collections),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultItemAction.Common.CollectionsClick,
-                                        )
-                                    }
+                                onClick = {
+                                    viewModel.trySendAction(VaultItemAction.Common.CollectionsClick)
                                 },
                             )
                                 .takeIf {
@@ -217,30 +202,22 @@ fun VaultItemScreen(
                                 },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.archive_verb),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(VaultItemAction.Common.ArchiveClick) }
+                                onClick = {
+                                    viewModel.trySendAction(VaultItemAction.Common.ArchiveClick)
                                 },
                             )
                                 .takeIf { state.displayArchiveButton },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.unarchive),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultItemAction.Common.UnarchiveClick,
-                                        )
-                                    }
+                                onClick = {
+                                    viewModel.trySendAction(VaultItemAction.Common.UnarchiveClick)
                                 },
                             )
                                 .takeIf { state.displayUnarchiveButton },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.delete),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultItemAction.Common.DeleteClick,
-                                        )
-                                    }
+                                onClick = {
+                                    viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                                 },
                             )
                                 .takeIf { state.canDelete },
@@ -256,9 +233,7 @@ fun VaultItemScreen(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
-                    },
+                    onClick = { viewModel.trySendAction(VaultItemAction.Common.EditClick) },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
                     contentDescription = stringResource(id = BitwardenString.edit_item),
                     modifier = Modifier

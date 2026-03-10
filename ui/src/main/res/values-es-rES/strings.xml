@@ -102,7 +102,7 @@
     <string name="four_hours">4 horas</string>
     <string name="immediately">Inmediatamente</string>
     <string name="vault_timeout_log_out_confirmation_title">¿Establecer el tiempo de espera de la sesión en \"Cerrar sesión\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
+    <string name="vault_timeout_log_out_confirmation_message">Después del período de tiempo de espera, se cerrará la sesión. Deberá estar conectado a Internet para iniciar sesión y volver a acceder a su caja fuerte. Los ajustes y el PIN guardados en este dispositivo no cambiarán.</string>
     <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Iniciar sesión en Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmación de la contraseña no es correcta.</string>
@@ -110,8 +110,8 @@
     <string name="master_password_hint">Pista de contraseña maestra (opcional)</string>
     <string name="master_password_hint_description">Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">Master password must be at least %d character long.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="one">La contraseña maestra debe tener al menos %d caracteres.</item>
+        <item quantity="other">La contraseña maestra debe tener al menos %d caracteres.</item>
     </plurals>
     <string name="min_numbers">Mínimo de caracteres numéricos</string>
     <string name="min_special">Mínimo de caracteres especiales</string>
@@ -129,8 +129,8 @@
     <string name="no_text_sends">No hay textos Send en tu caja fuerte.</string>
     <string name="no_file_sends">No hay archivos Send en tu caja fuerte.</string>
     <string name="no_ssh_keys">No hay claves SSH en tu caja fuerte.</string>
-    <string name="no_archives_title">Archive is empty</string>
-    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
+    <string name="no_archives_title">El archivo está vacío</string>
+    <string name="no_archives_message">Llena tu archivo con elementos que no deseas ver en los resultados al buscar ni en las sugerencias de autocompletado, pero que podrías necesitar algún día.</string>
     <string name="new_text_send">Texto nuevo Send</string>
     <string name="new_file_send">Archivo nuevo Send</string>
     <string name="no_username">Sin nombre de usuario</string>
@@ -182,7 +182,7 @@
     <string name="send_verification_code_again">Reenviar código de verificación por correo electrónico</string>
     <string name="verification_email_not_sent">No se puedo enviar el correo de verificación. Prueba de nuevo.</string>
     <string name="verification_email_sent">Correo de verificación enviado</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
+    <string name="yubi_key_instruction">Para continuar, mantenga la clave de seguridad Yubico contra la parte posterior del dispositivo o insértela en el puerto USB del dispositivo y, a continuación, toque su botón.</string>
     <string name="yubi_key_title">Clave de seguridad YubiKey</string>
     <string name="add_new_attachment">Añadir nuevo archivo adjunto</string>
     <string name="attachments">Adjuntos</string>
@@ -270,7 +270,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="address">Dirección</string>
     <string name="expiration">Expiración</string>
     <string name="show_website_icons">Mostrar los iconos del sitio web</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Mostrar ayuda sobre los iconos del sitio web</string>
     <string name="show_website_icons_description">Mostrar una imagen reconocible junto a cada inicio de sesión.</string>
     <string name="icons_url">URL del servidor de iconos</string>
     <string name="vault_is_locked">Caja fuerte bloqueada</string>
@@ -279,7 +279,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="no_items_collection">No hay elementos en esta colección.</string>
     <string name="no_items_folder">No hay elementos en esta carpeta.</string>
     <string name="no_items_trash">No hay elementos en la papelera.</string>
-    <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+    <string name="autofill_accessibility_summary">Ayuda a rellenar los campos de nombre de usuario y contraseña en otras aplicaciones y en la web.</string>
     <string name="autofill_service_description">El servicio de autocompletar de Bitwarden utiliza el Marco de Autocompletar de Android para ayudarte a completar información de inicios de sesión en otras aplicaciones en tu dispositivo.</string>
     <string name="bitwarden_autofill_go_to_settings">No hemos podido abrir automáticamente las opciones de autocompletado de Android. Puedes ir al menú de opciones de autocompletado manualmente desde Ajustes de Android &gt; Sistema &gt; Idiomas y entradas &gt; Avanzado &gt; Servicio autocompletado.</string>
     <string name="custom_field_name">Nombre del campo personalizado</string>
@@ -292,7 +292,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="new_uri">Nueva URI</string>
     <string name="add_website">Añadir página web</string>
     <string name="base_domain">Dominio base</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Predeterminado (%1$s)</string>
     <string name="exact">Exacta</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expresión regular</string>
@@ -303,7 +303,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="organization">Organización</string>
     <string name="try_again">Inténtelo de nuevo</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_updated">Password updated: %1$s</string>
+    <string name="password_updated">Contraseña actualizada: %1$s</string>
     <string name="last_edited">Última edición: %1$s</string>
     <string name="invalid_email">Dirección de correo electrónico inválida.</string>
     <string name="cards">Tarjetas</string>
@@ -315,14 +315,14 @@ El escaneo se realizará automáticamente.</string>
     <string name="contact_info">Información de Contacto</string>
     <string name="check_password_for_data_breaches">Propietario</string>
     <plurals name="password_exposed">
-        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">Esta contraseña ha sido comprometida %d vez en violaciones de datos. Debe cambiarla.</item>
+        <item quantity="other">Esta contraseña se ha visto comprometida %d veces en violaciones de datos. Deberías cambiarla.</item>
     </plurals>
     <string name="password_safe">Esta contraseña no fue encontrada en ninguna filtración de datos conocida. Debería poder utilizarla de forma segura.</string>
     <string name="identity_name">Nombre de la identidad</string>
     <string name="value">Valor</string>
     <string name="password_history">Historial de contraseñas</string>
-    <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
+    <string name="password_history_count"><annotation link="passwordHistory">Historial de contraseñas: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="types">Tipos</string>
     <string name="no_passwords_to_list">No hay contraseñas que listar.</string>
     <string name="search_file_sends">Buscar Sends de archivos</string>
@@ -365,13 +365,13 @@ El escaneo se realizará automáticamente.</string>
     <string name="clear_clipboard">Limpiar el portapapeles</string>
     <string name="clear_clipboard_description">Borrar automáticamente los valores copiados de tu portapapeles.</string>
     <string name="default_uri_match_detection">Detección por defecto de coincidencia de URI</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">La detección de coincidencias URI controla cómo Bitwarden identifica las sugerencias de autocompletado.</string>
     <string name="theme">Tema</string>
-    <string name="theme_description">Change the application’s color theme</string>
+    <string name="theme_description">Cambiar el tema de color de la aplicación</string>
     <string name="copy_notes">Copiar nota</string>
-    <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+    <string name="require_master_password_on_app_restart">¿Solicitar contraseña maestra al reiniciar la aplicación?</string>
     <string name="pin_require_master_password_restart">¿Quiere solicitar el desbloqueo con su contraseña maestra cuando se reinicie la aplicación?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item">Solicitar añadir elemento</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
     <string name="on_restart">Al reiniciar la aplicación</string>
     <string name="capitalize">Mayúsculas iniciales</string>
@@ -379,9 +379,9 @@ El escaneo se realizará automáticamente.</string>
     <string name="download">Descargar</string>
     <string name="login_expired">Su sesión ha expirado.</string>
     <string name="biometrics_direction">Verificación biométrica</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_verification">Verificación del dispositivo</string>
     <string name="biometrics_failed">TOTP</string>
-    <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
+    <string name="biometrics_decoding_failure">Inicie sesión con su contraseña maestra o PIN y, a continuación, vuelva a habilitar el inicio de sesión biométrico en Ajustes.</string>
     <string name="use_biometrics_to_unlock">Utilizar biometría para desbloquear</string>
     <string name="file_format">Formato de archivo</string>
     <string name="export_vault_master_password_description">Introduzca su contraseña maestra para exportar la información de su caja fuerte.</string>
@@ -431,11 +431,11 @@ El escaneo se realizará automáticamente.</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="passkey_management">Gestión de claves de acceso</string>
     <string name="autofill_services">Servicios de Autocompletado</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Mostrar sugerencias de autocompletado</string>
+    <string name="autofill_suggestions_inline">En línea (se muestra en el teclado)</string>
+    <string name="autofill_suggestions_popup">Ventana emergente (aparece sobre el campo de entrada)</string>
     <string name="accessibility">Usar accesibilidad</string>
-    <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
+    <string name="accessibility_description5">Es necesario utilizar el cuadro de acción rápida de autocompletar.</string>
     <string name="personal_ownership_policy_in_effect">Una política de organización está afectando sus opciones de propiedad.</string>
     <string name="send">Send</string>
     <string name="send_details">Detalles del Send</string>
@@ -450,17 +450,17 @@ El escaneo se realizará automáticamente.</string>
     <string name="deletion_date_info">El Send se eliminará permanentemente en la fecha y hora especificada.</string>
     <string name="who_can_view">Who can view</string>
     <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="anyone_with_link_can_view_send">Cualquier persona con este enlace puede ver este envío</string>
     <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="specific_people_verification_info">Después de compartir este enlace de envío, las personas deberán verificar su correo electrónico con un código para ver este envío</string>
     <string name="anyone_with_password">Anyone with a password set by you</string>
     <string name="add_email">Add email</string>
     <string name="pending_delete">Eliminación pendiente</string>
     <string name="expired">Caducó</string>
-    <string name="expires_at">Expires at %s</string>
+    <string name="expires_at">Caduca en %s</string>
     <string name="expires_tomorrow">Expira mañana</string>
-    <string name="expires_on">Expires on %s</string>
-    <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
+    <string name="expires_on">Caduca el %s</string>
+    <string name="stops_logging_on">Detiene el registro en %1$s a las %2$s</string>
     <string name="maximum_access_count">Número máximo de accesos</string>
     <string name="maximum_access_count_info">Si se configura, los usuarios ya no podrán acceder a este Send una vez que se alcance el número máximo de accesos.</string>
     <string name="maximum_access_count_reached">Número máximo de accesos alcanzado</string>
@@ -489,8 +489,8 @@ El escaneo se realizará automáticamente.</string>
     <string name="seven_days">7 días</string>
     <string name="thirty_days">30 días</string>
     <string name="custom">Personalizado</string>
-    <string name="custom_timeout">Custom timeout</string>
-    <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
+    <string name="custom_timeout">Tiempo de espera personalizado</string>
+    <string name="add_this_authenticator_key_to_a_login">Añade esta clave de autenticación a un inicio de sesión existente o crea uno nuevo.</string>
     <string name="send_disabled_warning">Debido a una política empresarial, sólo puede eliminar un Send existente.</string>
     <string name="about_send">Acerca de Send</string>
     <string name="hide_email">Ocultar mi dirección de correo electrónico a los destinatarios.</string>
@@ -506,27 +506,27 @@ El escaneo se realizará automáticamente.</string>
     <string name="remove_master_password">Remueve Contraseña Maestra</string>
     <string name="leave_organization">Abandonar Organización</string>
     <string name="leave_organization_name">¿Abandonar %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">¿Estás seguro de que quieres salir de %1$s?</string>
+    <string name="leave_organization_button">Salir %1$s</string>
+    <string name="leave_organization_warning">Si rechazas la solicitud, tus elementos personales permanecerán en tu cuenta, pero perderás el acceso a los elementos compartidos y a las funcionalidades de organización.\n\nPonte en contacto con tu administrador para recuperar el acceso.</string>
+    <string name="how_to_manage_my_vault">Cómo gestionar Mi caja fuerte</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Volver a la App</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organización tiene una política empresarial que lo inscribirá automáticamente en el restablecimiento de contraseña. La inscripción permitirá a los administradores de la organización cambiar su contraseña maestra.</string>
     <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s, %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="other">%1$d hours</item>
+        <item quantity="one">%1$d hora</item>
+        <item quantity="other">%1$d horas</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="other">%1$d minutes</item>
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Your organization has set the maximum session timeout to %1$s and %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">This setting is managed by your organization.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Su organización ha establecido el tiempo de espera máximo de la sesión en %1$s y %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Su organización ha establecido el tiempo de espera máximo de la sesión en %1$s.</string>
+    <string name="this_setting_is_managed_by_your_organization">Estos ajustes los gestiona tu organización.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Su organización ha establecido el tiempo de espera predeterminado de la sesión en nunca.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Su organización ha establecido el tiempo de espera predeterminado de la sesión al reiniciar la aplicación.</string>
     <string name="vault_timeout_to_large">El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</string>
     <string name="add_account">Añadir cuenta</string>
@@ -562,7 +562,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="scan_qr_code">Escanear código QR</string>
     <string name="cannot_scan_qr_code_enter_key_manually">¿No puedes escanear el código QR? <annotation link="enterKeyManually">Introduce la clave manualmente</annotation></string>
     <string name="authenticator_key_scanner">Clave de Autenticador</string>
-    <string name="authenticator_key_help">Authenticator key help</string>
+    <string name="authenticator_key_help">Ayuda con la clave del autenticador</string>
     <string name="enter_key_manually">Introducir Clave manualmente</string>
     <string name="add_totp">Añadir TOTP</string>
     <string name="set_up_authenticator_key">Set up authenticator key</string>
@@ -579,8 +579,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Dirección IP</string>
     <string name="time">Hora</string>
-    <string name="select_time">Select time</string>
-    <string name="switch_input_mode">Switch input mode</string>
+    <string name="select_time">Seleccionar hora</string>
+    <string name="switch_input_mode">Cambiar modo de entrada</string>
     <string name="confirm_log_in">Confirmar inicio de sesión</string>
     <string name="deny_log_in">Denegar inicio de sesión</string>
     <string name="log_in_denied">Inicio de sesión denegado</string>
@@ -598,7 +598,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="api_key">Clave de la API</string>
     <string name="api_key_required_parenthesis">Clave API (requerida)</string>
     <string name="service">Servicio</string>
-    <string name="api_access_token_required_parenthesis">API access token (required)</string>
+    <string name="api_access_token_required_parenthesis">Token de acceso a la API (obligatorio)</string>
     <string name="api_access_token">Token de acceso API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">¿Está seguro que desea sobrescribir el nombre de usuario actual?</string>
     <string name="generate_username">Generar nombre de usuario</string>
@@ -669,11 +669,11 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="invalid_uri">URI no válida</string>
     <string name="the_urix_is_already_blocked">El URI %1$s ya está bloqueada</string>
     <string name="login_approved">Inicio de sesión aprobado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">El inicio de sesión con el dispositivo debe configurarse en los ajustes de la aplicación Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">¿Necesitas otra opción? <annotation link="viewAll">Ver todas las opciones de inicio de sesión</annotation></string>
     <string name="log_in_with_device">Iniciar sesión con el dispositivo</string>
     <string name="logging_in_on">Iniciando sesión en</string>
-    <string name="logging_in_on_with_colon">Logging in on:</string>
+    <string name="logging_in_on_with_colon">Iniciar sesión en:</string>
     <string name="vault">Caja fuerte</string>
     <string name="appearance">Apariencia</string>
     <string name="account_security">Seguridad de la cuenta</string>
@@ -708,7 +708,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga los pasos de Duo para terminar de iniciar sesión.</string>
     <string name="launch_duo">Iniciar Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tu clave de acceso se guardará en tu caja fuerte de Bitwarden para %1$s</string>
-    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Tu contraseña se guardará en tu caja fuerte de Bitwarden durante %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Claves de acceso no soportadas para esta aplicación</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">La operación de la clave de acceso falló porque el navegador no tiene privilegios</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">La operación de la clave de acceso falló porque la firma del navegador no coincide</string>
@@ -722,19 +722,19 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="continue_to_complete_web_authn_verification">Continúa para completar la verificación de WebAuthn.</string>
     <string name="launch_web_authn">Iniciar WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Hubo un error al iniciar autenticación de doble factor WebAuthn</string>
-    <string name="self_hosted_server_url">Self-hosted server URL</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="self_hosted_server_url">URL del servidor autoalojado</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">La operación de credenciales falló porque no se pudo verificar al usuario.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">La operación de la clave de acceso falló porque el usuario no pudo ser verificado.</string>
     <string name="user_verification_direction">Verificación de usuario</string>
     <string name="create_account_on">Crea una cuenta en</string>
     <string name="create_account_on_with_colon">Crea una cuenta en:</string>
     <string name="we_sent_an_email_to">Hemos enviado un correo electrónico a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Al continuar, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
-    <string name="unsubscribe">Unsubscribe</string>
+    <string name="unsubscribe">Cancelar suscripción</string>
     <string name="check_your_email">Comprueba tu correo electrónico</string>
     <string name="open_email_app">Abrir aplicación de correo electrónico</string>
     <string name="email_verified">Correo electrónico verificado</string>
-    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
+    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Reciba correos electrónicos de Bitwarden con anuncios, consejos y oportunidades de investigación. <annotation link="unsubscribe">Cancelar suscripción</annotation> en cualquier momento.</string>
     <string name="security_prioritized">Seguridad, priorizada</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
     <string name="welcome_message_2">Configura el desbloqueo biométrico y el autocompletado para iniciar sesión en tus cuentas sin tener que escribir ni una sola letra.</string>
@@ -750,13 +750,13 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="account_setup">Configuración de la cuenta</string>
     <string name="set_up_unlock">Set up unlock</string>
     <string name="set_up_later">Configurar más tarde</string>
-    <string name="set_up_unlock_later">Set up unlock later?</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
+    <string name="set_up_unlock_later">¿Configurar el desbloqueo más tarde?</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Puedes volver a completar este paso en cualquier momento desde Seguridad de la cuenta en Ajustes.</string>
     <string name="confirm">Confirmar</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Configura la biometría o elige un código PIN para acceder rápidamente a tu caja fuerte y Autocompletar tus inicios de sesión.</string>
     <string name="never_lose_access_to_your_vault">Nunca pierdas acceso a tu caja fuerte</string>
-    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">La mejor manera de asegurarte de que siempre puedas acceder a tu caja fuerte es establecer medidas de seguridad desde el principio.</string>
+    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Una de las mejores formas de crear una contraseña segura y fácil de recordar es utilizar una frase de contraseña. \nA continuación te explicamos cómo hacerlo:</string>
     <string name="create_a_hint">Crea una pista</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">La pista se te enviará vía correo electrónico cuando la solicites.</string>
     <string name="write_your_password_down">Write your password down</string>
@@ -766,37 +766,37 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="generate_button_label">Generar</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
-    <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
-    <string name="help_with_server_geolocations">Help with server geolocations.</string>
+    <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Más información sobre cómo evitar el bloqueo de cuentas</annotation></string>
+    <string name="help_with_server_geolocations">Ayuda con la geolocalización de servidores.</string>
     <string name="email_address_required">Dirección de correo electrónico (requerido)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Cambiar dirección de correo electrónico</string>
     <string name="next">Siguiente</string>
-    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden no puede recuperar una contraseña maestra perdida u olvidada.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Elige tu contraseña maestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Elige una contraseña fuerte y única para mantener tu información segura.</string>
     <plurals name="minimum_characters">
-        <item quantity="one">%d character</item>
-        <item quantity="other">%d characters</item>
+        <item quantity="one">%d carácter</item>
+        <item quantity="other">%d caracteres</item>
     </plurals>
     <string name="expired_link">Enlace expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Reiniciar registro</string>
-    <string name="authenticator_sync">Authenticator Sync</string>
+    <string name="authenticator_sync">Sincronización del autenticador</string>
     <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
-    <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+    <string name="there_was_an_issue_validating_the_registration_token">Se ha producido un problema al validar el token de registro.</string>
     <string name="turn_on_autofill">Activar autocompletado</string>
-    <string name="autofill_setup">Autofill setup</string>
-    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
+    <string name="autofill_setup">Configuración del autocompletado</string>
+    <string name="turn_on_browser_autofill_integration">Activar la integración del autocompletado del navegador</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Estás utilizando un navegador que requiere permisos especiales para que Bitwarden pueda autocompletar tus contraseñas.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Estás utilizando navegadores que requieren permisos especiales para que Bitwarden pueda autocompletar tus contraseñas.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Estás utilizando un navegador que requiere permisos especiales para que Bitwarden pueda autocompletar tus contraseñas. Activa tu integración de autocompletado preferida a continuación.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Estás utilizando navegadores que requieren permisos especiales para que Bitwarden pueda autocompletar tus contraseñas. Activa el autocompletado en todos los navegadores instalados para continuar.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utiliza el autocompletado para iniciar sesión en tus cuentas con un solo toque.</string>
     <string name="turn_on_later">Activar más tarde</string>
     <string name="turn_on_autofill_later">¿Activar autocompletado más tarde?</string>
-    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
+    <string name="turn_on_browser_autofill_integration_later">¿Activar la integración del autocompletado del navegador más tarde?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
     <string name="what_bitwarden_has_to_offer">Ahora puedes explorar todo lo que Bitwarden ofrece y empezar a gestionar tus contraseñas de forma segura.</string>
     <string name="youre_all_set">¡Todo listo!</string>
@@ -805,13 +805,13 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="new_master_password_hint">Nueva pista de la contraseña maestra</string>
     <string name="get_started">Empezar</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
-    <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+    <string name="the_vault_protects_more_than_just_passwords">La caja fuerte protege mucho más que contraseñas. Guarda aquí de forma segura tus datos de inicio de sesión, identificaciones, tarjetas y notas.</string>
     <string name="new_login">Nuevo inicio de sesión</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Comparte archivos y datos de forma segura con cualquiera, en cualquier plataforma. Tu información permanecerá encriptada de extremo a extremo, limitando su exposición.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Importar inicios de sesión guardados</string>
-    <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
+    <string name="use_a_computer_to_import_logins">Utilice un ordenador para importar los datos de inicio de sesión desde un administrador de contraseñas existente</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_settings">Puede volver a completar este paso en cualquier momento en los ajustes de Caja fuerte.</string>
     <string name="import_logins_later">Importar inicios de sesión más tarde</string>
     <string name="import_logins_later_dialog_title">¿Importar inicios de sesión más tarde?</string>
     <string name="do_you_have_a_computer_available">¿Tienes un ordenador disponible?</string>
@@ -819,25 +819,25 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="import_logins">Importar Inicios de Sesión</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
     <string name="give_your_vault_a_head_start">Give your vault a head start</string>
-    <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
-    <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
+    <string name="class_3_biometrics_description">El desbloqueo mediante datos biométricos requiere una autenticación biométrica sólida y puede que no sea compatible con todas las opciones biométricas de este dispositivo.</string>
+    <string name="class_2_biometrics_description">El desbloqueo mediante datos biométricos requiere una autenticación biométrica sólida y no es compatible con las opciones biométricas disponibles en este dispositivo.</string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">En tu ordenador, <annotation emphasis="bold">inicia sesión en tu navegador actual o en tu administrador de contraseñas.</annotation></string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exporta tus contraseñas.</annotation> Esta opción suele encontrarse en los ajustes.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Seleccione Importar datos</annotation> en la aplicación web y, a continuación, haga clic en Hecho para finalizar la sincronización.</string>
     <string name="step_1_of_3">Paso 1 de 3</string>
     <string name="export_your_saved_logins">Exportar tus inicios de sesión guardados</string>
     <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">En tu ordenador, abre una nueva pestaña del navegador y <annotation emphasis="bold">ve a <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Inicia sesión en la aplicación web de Bitwarden.</string>
     <string name="step_2_of_3">Paso 2 de 3</string>
     <string name="log_in_to_bitwarden">Iniciar sesión en Bitwarden</string>
     <string name="step_3_of_3">Paso 3 de 3</string>
     <string name="import_logins_to_bitwarden">Importar inicios de sesión a Bitwarden</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
-    <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
-    <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
-    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">En la navegación de Bitwarden, <annotation emphasis="bold">busque la opción Herramientas</annotation> y <annotation emphasis="bold">seleccione Importar datos.</annotation></string>
+    <string name="fill_out_the_form_and_import_your_saved_password_file">Rellene el formulario e <annotation emphasis="bold">importe su archivo de contraseñas guardado.</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Por su seguridad, asegúrese de <annotation emphasis="bold">eliminar el archivo con las contraseñas guardadas.</annotation></string>
+    <string name="need_help_check_out_import_help">¿Necesitas ayuda? Consulta <annotation link="importHelp">la ayuda para importar</annotation>.</string>
+    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Guarde el archivo exportado</annotation> en algún lugar de su ordenador donde pueda encontrarlo fácilmente.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este no es un servidor de Bitwarden reconocido. Puede que tengas que consultar con tu proveedor o actualizar tu servidor.</string>
     <string name="syncing_logins_loading_message">Sincronizando inicios de sesión...</string>
     <string name="download_the_browser_extension">Descarga la extensión del navegador</string>
@@ -862,10 +862,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="copy_fingerprint">Copiar huella</string>
     <string name="enable_notifications">Habilitar notificaciones</string>
     <plurals name="notifications_content_description">
-        <item quantity="one">%d notification</item>
-        <item quantity="other">%d notifications</item>
+        <item quantity="one">%d notificación</item>
+        <item quantity="other">%d notificaciones</item>
     </plurals>
-    <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+    <string name="log_in_quickly_and_easily_across_devices">Inicie sesión de forma rápida y sencilla en todos los dispositivos</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden puede notificarte cada vez que recibas una nueva petición de inicio de sesión desde otro dispositivo.</string>
     <string name="skip_for_now">Saltar por ahora</string>
     <string name="done_text">Hecho</string>
@@ -879,20 +879,20 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="copy_phone">Copiar número de teléfono</string>
     <string name="copy_address">Copiar dirección</string>
     <string name="biometrics_no_longer_supported_title">La biometría ya no está soportada en este dispositivo</string>
-    <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-    <string name="cxp_import">CXP Import</string>
-    <string name="cxp_export">CXP Export</string>
+    <string name="biometrics_no_longer_supported">Se ha cerrado su sesión porque los datos biométricos de su dispositivo no cumplen los últimos requisitos de seguridad. Para actualizar los ajustes, vuelva a iniciar sesión o póngase en contacto con su administrador para obtener acceso.</string>
+    <string name="cxp_import">Importar CXP</string>
+    <string name="cxp_export">Exportar CXP</string>
     <string name="choose_three_or_four_random_words">Elige tres o cuatro palabras aleatorias</string>
     <string name="pick_three_or_four_random_unrelated_words">Elige tres o cuatro palabras aleatorias sin relación que puedas memorizar fácilmente. Piensa en <annotation emphasis="bold">objetos, lugares o cosas</annotation> que te gusten.</string>
     <string name="combine_those_words_together">Combinar estas palabras juntas</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Combina las palabras en cualquier orden para formar tu contraseña. <annotation emphasis="bold">Utiliza guiones, espacios o déjalas como una sola palabra larga</annotation>: ¡tú eliges!</string>
     <string name="make_it_yours">Hazlo tuyo</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Añade un número o símbolo</annotation> para que sea aún más segura. ¡Ahora tienes una contraseña única, segura y fácil de recordar!</string>
     <string name="need_some_inspiration">¿Necesitas inspiración?</string>
     <string name="check_out_the_passphrase_generator">Check out the passphrase generator</string>
-    <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
+    <string name="we_couldnt_verify_the_servers_certificate">No hemos podido verificar el certificado del servidor. Es posible que la cadena de certificados o los ajustes del proxy de tu dispositivo o del servidor Bitwarden no estén configurados correctamente.</string>
     <string name="copy_private_key">Copiar clave privada</string>
-    <string name="login_credentials">Login Credentials</string>
+    <string name="login_credentials">Credenciales de inicio de sesión</string>
     <string name="autofill_options">Opciones de Autocompletado</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Usa este botón para generar una nueva contraseña única.</string>
     <string name="coachmark_1_of_3">1 DE 3</string>
@@ -928,28 +928,28 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="unsupported_certificate_type">Tipo de certificado no soportado</string>
     <string name="certificate_password_incorrect">Contraseña del certificado incorrecta</string>
     <string name="invalid_certificate_chain">Cadena de certificados inválida</string>
-    <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
-    <string name="link">Link</string>
+    <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">El uso de un certificado del sistema es menos seguro que almacenar el certificado con Bitwarden. Si continúa, se mostrará una lista de los certificados del sistema disponibles, si ya hay alguno instalado.</string>
+    <string name="link">Enlace</string>
     <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">La operación de la clave de acceso falló porque la URL del host no está presente en la petición.</string>
     <string name="passkey_operation_failed_because_app_signature_is_invalid">La operación de la clave de acceso falló porque la firma de la aplicación no es válida.</string>
-    <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+    <string name="passkey_registration_failed_due_to_an_internal_error">El registro de la clave de acceso ha fallado debido a un error interno.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">La operación de Passkey ha fallado porque no se puede identificar la parte confiable.</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">La operación de la clave de acceso falló porque la petición es inválida.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">La operación de la clave de acceso falló porque no se seleccionó ningún elemento.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">La operación de la clave de acceso falló porque la petición no está soportada.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">La operación de contraseña ha fallado porque el elemento seleccionado no existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">La operación con la contraseña ha fallado porque no se ha seleccionado ningún elemento.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">La operación de credenciales ha fallado porque la solicitud no es válida.</string>
+    <string name="credential_operation_failed_because_the_request_is_unsupported">La operación de credenciales ha fallado porque la solicitud no es compatible.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">La operación de credenciales ha fallado porque se han superado los intentos de verificación del usuario.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">La operación de credenciales ha fallado porque el usuario está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">La operación de credencial ha fallado porque el elemento seleccionado no existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">La operación de credenciales falló porque se canceló la verificación del usuario.</string>
     <string name="self_host_server_url">URL del servidor autoalojado</string>
     <string name="use_brave_autofill_integration">Usar integración de autocompletado de Brave</string>
     <string name="use_chrome_autofill_integration">Usar integración de autocompletado de Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_chrome_beta_autofill_integration">Utiliza la integración de autocompletar de Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Utiliza la integración de autocompletado de Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Mejora el completado de inicios de sesión en sitios web soportados en navegadores seleccionados. Una vez activado, serás dirigido a los ajustes del navegador para activar el autocompletado de terceros.</string>
     <string name="show_more">Mostrar más</string>
     <string name="no_folder">Sin carpeta</string>
@@ -957,16 +957,18 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="add_field">Añadir campo</string>
     <string name="share_error_details">Compartir detalles del error</string>
     <string name="flight_recorder">Flight recorder</string>
-    <string name="flight_recorder_help">Flight recorder help</string>
+    <string name="flight_recorder_help">Ayuda con la caja negra</string>
     <string name="view_recorded_logs">Ver registros grabados</string>
     <string name="enable_flight_recorder_title">Enable flight recorder</string>
     <string name="recorded_logs_title">Registros grabados</string>
     <string name="no_logs_recorded">No hay registros grabados</string>
     <string name="experiencing_an_issue">¿Tienes problemas?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
-    <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+    <string name="to_get_started_set_a_logging_duration">Para empezar, establezca una duración de registro. El registro 
+se desactivará automáticamente tras este periodo, lo que le dará tiempo para capturar la actividad mientras reproduce 
+cualquier problema.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+    <string name="for_details_on_what_is_and_isnt_logged">Para obtener más información sobre lo que se registra y lo que no, visite el\n<annotation link="helpCenter">centro de ayuda de Bitwarden.</annotation></string>
     <string name="logging_duration">Duración del registro</string>
     <string name="flight_recorder_one_hour">1 hora</string>
     <string name="flight_recorder_eight_hours">8 horas</string>
@@ -976,7 +978,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="share_all">Compartir todo</string>
     <string name="unable_to_share">No se puede compartir</string>
     <string name="please_try_again_or_select_a_different_log">Por favor, inténtalo de nuevo o selecciona un registro diferente.</string>
-    <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+    <string name="the_log_file_you_are_trying_to_share_has_been_removed">El archivo de registro que está intentando compartir ha sido eliminado.</string>
     <string name="delete_log">Eliminar registro</string>
     <string name="do_you_really_want_to_delete_this_log">¿Estás seguro de que realmente quieres eliminar este registro?</string>
     <string name="delete_logs">Eliminar registros</string>
@@ -993,7 +995,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="log_deleted">Log deleted</string>
     <string name="app_settings">Ajustes de la aplicación</string>
     <string name="replace_existing_certificate">¿Reemplazar certificado existente?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Ya existe un certificado con el alias \"%s\". ¿Desea sustituirlo?\nLa sustitución del certificado puede afectar a su conexión con cualquier entorno que lo esté utilizando actualmente.</string>
     <string name="replace_certificate">Reemplazar certificado</string>
     <string name="unable_to_read_certificate">No se puede leer el certificado.</string>
     <string name="cannot_delete_your_account">No se puede eliminar tu cuenta</string>
@@ -1002,20 +1004,20 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="view_file_send">Ver Send de archivo</string>
     <string name="view_text_send">Ver Send de texto</string>
     <string name="delete_send">Eliminar Send</string>
-    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="use_dynamic_colors">Use dynamic colors</string>
-    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="missing_send_resync_your_vault">Si falta, vuelve a sincronizar tu caja fuerte</string>
+    <string name="use_dynamic_colors">Utilizar colores dinámicos</string>
+    <string name="use_dynamic_colors_question">¿Utilizar colores dinámicos?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Los colores dinámicos usan los colores del sistema y pueden no cumplir con todas las directrices de accesibilidad.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">El funcionamiento de Passkey ha fallado porque el navegador (%1$s) no se reconoce. Seleccione \"Confiar\" para añadir %1$s a la lista de aplicaciones de confianza locales.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">La operación de la clave de acceso falló porque el navegador no es de confianza.</string>
     <string name="trust">Confiar</string>
     <string name="trusted_by_you_learn_more">Estas son las aplicaciones o navegadores que Bitwarden no confía por defecto, pero que TÚ confías para realizar operaciones de claves de acceso.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
+    <string name="trusted_by_community_learn_more">Estas son aplicaciones que no están incluidas en Google Play Store, pero Bitwarden confía en ellas para realizar operaciones con claves de acceso después de que los miembros de la comunidad las hayan utilizado y las hayan reportado como seguras.</string>
+    <string name="trusted_by_google_learn_more">Estas son aplicaciones que Google considera seguras y que están disponibles en Google Play Store.</string>
     <string name="trusted_by_you">Confiado por Ti</string>
     <string name="trusted_by_the_community">Confiado por la Comunidad</string>
     <string name="trusted_by_google">Confiado por Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">Para proteger a los usuarios de los intentos de phishing, de forma predeterminada, Bitwarden solo completa las operaciones con claves de acceso a través de aplicaciones o navegadores web en los que confían Google o la comunidad de Bitwarden.</string>
     <string name="about_privileged_applications">Acerca de las aplicaciones privilegiadas</string>
     <string name="learn_more_about_privileged_apps">Saber más acerca de las aplicaciones privilegiadas</string>
     <string name="privileged_apps">Aplicaciones privilegiadas</string>
@@ -1025,7 +1027,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">¿Estás seguro de que quieres dejar de confiar en %s?</string>
     <string name="installed_apps">Aplicaciones instaladas</string>
     <string name="delete_x">Eliminar %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">No se ha podido descifrar el código. Póngase en contacto con el servicio de asistencia.</string>
     <string name="decryption_error">Error de descifrado</string>
     <string name="scan_a_qr_code">Escanear un código QR</string>
     <string name="cannot_add_authenticator_key">¿No se puede agregar la clave del autenticador?</string>
@@ -1041,8 +1043,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="collapse_advanced_options">Colapsar opciones avanzadas</string>
     <string name="number_of_digits">Número de dígitos</string>
     <plurals name="refresh_period_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
     </plurals>
     <string name="item_saved">Elemento guardado</string>
     <string name="information">Información</string>
@@ -1063,8 +1065,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="export">Exportar</string>
     <string name="export_confirmation_title">Confirmar exportación</string>
     <string name="export_success">Datos exportados correctamente</string>
-    <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
+    <string name="included_in_this_export">Incluido en esta exportación</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Solo se exportarán los códigos almacenados localmente en este dispositivo. Los códigos sincronizados no se incluyen</string>
     <string name="security">Seguridad</string>
     <string name="too_many_failed_biometric_attempts">Demasiados intentos fallidos de biometría.</string>
     <string name="version">Versión</string>
@@ -1103,7 +1105,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="choose_save_location_message">Guarda esta clave de autenticador aquí o agrégala a un inicio de sesión en tu aplicación de Bitwarden.</string>
     <string name="save_option_as_default">Guardar opción por defecto</string>
     <string name="account_synced_from_bitwarden_app">Cuenta sincronizada desde la aplicación de Bitwarden</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Códigos locales (%1$d)</string>
     <string name="required_information_missing">Información requerida faltante</string>
     <string name="required_information_missing_message">Falta información requerida (por ejemplo, \'servicios\' o \'secreto\'). Revisa tu archivo e inténtalo de nuevo. Visita bitwarden.com/help para obtener soporte</string>
     <string name="file_could_not_be_processed">No se pudo procesar el archivo</string>
@@ -1118,107 +1120,107 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="copy_error_report">Copy error report</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden no pudo descifrar el elemento %1$d de la caja fuerte. Copie y comparta este informe de error con el servicio de atención al cliente para evitar una pérdida adicional de datos.</item>
+        <item quantity="other">Bitwarden no pudo descifrar los elementos %1$d de la caja fuerte. Copie y comparta este informe de error con el servicio de atención al cliente para evitar una pérdida adicional de datos.</item>
     </plurals>
-    <string name="select_a_card_for_x">Select a card for %s</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="later">Later</string>
-    <string name="encryption_settings_updated">Encryption settings updated</string>
-    <string name="update_your_encryption_settings">Update your encryption settings</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
-    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
-    <string name="import_cancelled">Import cancelled</string>
-    <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
-    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="saving_items">Saving items…</string>
-    <string name="unable_to_import_your_items">Unable to import your items</string>
-    <string name="import_from_computer">Import from computer</string>
-    <string name="import_from_another_app">Import from another app</string>
+    <string name="select_a_card_for_x">Selecciona una tarjeta para %s</string>
+    <string name="advanced_options">Opciones avanzadas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Más información sobre la detección de coincidencias</annotation></string>
+    <string name="keep_your_credential_secure">Mantenga sus credenciales seguras</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Más información sobre cómo mantener seguras las credenciales al utilizar \"%1$s\".</string>
+    <string name="are_you_sure_you_want_to_use">¿Estás seguro de que quieres usar \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">La detección de coincidencias URI controla cómo Bitwarden identifica las sugerencias de autocompletado.\n<annotation emphasis="bold">Advertencia:</annotation> La \"expresión regular\" es una opción avanzada que, si se utiliza incorrectamente, aumenta el riesgo de comprometer las credenciales.</string>
+    <string name="default_uri_match_detection_description_advanced_options">La detección de coincidencias URI controla cómo Bitwarden identifica las sugerencias de autocompletado.\n<annotation emphasis="bold">Advertencia:</annotation> \"Comienza por\" es una opción avanzada con un mayor riesgo de comprometer las credenciales.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Comienza con\" es una opción avanzada con mayor riesgo de comprometer las credenciales.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">La \"expresión regular\" es una opción avanzada que, si se utiliza incorrectamente, aumenta el riesgo de comprometer las credenciales.</string>
+    <string name="later">Más tarde</string>
+    <string name="encryption_settings_updated">Configuración de cifrado actualizada</string>
+    <string name="update_your_encryption_settings">Actualiza tus ajustes de cifrado</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Los nuevos ajustes de cifrado recomendados mejorará la seguridad de tu cuenta. Introduce tu contraseña maestra para actualizar ahora.</string>
+    <string name="import_was_cancelled_in_the_selected_app">La importación de credenciales se ha cancelado en la aplicación seleccionada. No se ha importado ningún elemento.</string>
+    <string name="import_cancelled">Importación cancelada</string>
+    <string name="no_items_imported">No se han importado elementos</string>
+    <string name="no_items_received_from_the_selected_app">No se han recibido elementos de la aplicación seleccionada.</string>
+    <string name="vault_sync_failed">Error en la sincronización de almacén la caja fuerte</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Tus elementos se han importado correctamente, pero no serán visibles en tu caja fuerte hasta que se realice la sincronización.</string>
+    <string name="there_was_a_problem_importing_your_items">Ha habido un problema al importar tus elementos. Inténtalo de nuevo. Si el problema persiste, ponte en contacto con el servicio de asistencia.</string>
+    <string name="saving_items">Guardando elementos…</string>
+    <string name="unable_to_import_your_items">No se pueden importar tus elementos</string>
+    <string name="import_from_computer">Importar desde el ordenador</string>
+    <string name="import_from_another_app">Importar desde otra aplicación</string>
     <plurals name="x_items_have_been_imported_to_your_vault">
-        <item quantity="one">%1$d item has been imported to your vault.</item>
-        <item quantity="other">%1$d items have been imported to your vault.</item>
+        <item quantity="one">El elemento %1$d se ha importado a su caja fuerte.</item>
+        <item quantity="other">Se han importado %1$d elementos a su caja fuerte.</item>
     </plurals>
-    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="not_now">Not now</string>
-    <string name="import_from_bitwarden">Import from Bitwarden</string>
-    <string name="select_account">Select account</string>
-    <string name="no_accounts_available">No accounts available</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
-    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
-    <string name="verify_your_master_password">Verify your master password</string>
-    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
-    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
-    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
-    <string name="items_to_import">Items to import</string>
-    <string name="exporting_items">Exporting items…</string>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Habilita el autocompletado del navegador para seguir rellenando contraseñas</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">Tu navegador se ha actualizado recientemente, lo que ha desactivado el autocompletado de Bitwarden. Para seguir completando tus contraseñas con Bitwarden, habilita el autocompletado del navegador en los ajustes de autocompletado.</string>
+    <string name="not_now">Ahora no</string>
+    <string name="import_from_bitwarden">Importar desde Bitwarden</string>
+    <string name="select_account">Seleccionar cuenta</string>
+    <string name="no_accounts_available">No hay cuentas disponibles</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">No tienes ninguna cuenta desde la que puedas importar datos. Es posible que la política de seguridad de tu organización restrinja la importación de elementos desde Bitwarden a otra aplicación.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Importación restringida, no se pueden importar tarjetas desde esta cuenta.</string>
+    <string name="verify_your_master_password">Verifique su contraseña maestra</string>
+    <string name="having_trouble_with_autofill">¿Tienes problemas con el autocompletado?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Acceda aquí a la documentación de ayuda y resolución de problemas</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importa contraseñas, claves de acceso y otros tipos de elementos desde tu caja fuerte de Bitwarden.</string>
+    <string name="items_to_import">Elementos para importar</string>
+    <string name="exporting_items">Exportando elementos…</string>
     <string name="export_failed">Export failed</string>
     <string name="passwords">Contraseñas</string>
     <string name="passkeys">Passkeys</string>
-    <string name="why_is_this_step_required">Why is this step required?</string>
-    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
-    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
-    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Your vault may be empty, or importing some item types isn’t allowed for your account.</string>
-    <string name="no_items_available_to_import">No items available to import</string>
-    <string name="select_a_different_account">Select a different account</string>
-    <string name="verify_your_account_email_address">Verify your account email address</string>
-    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Enter the 6-digit code that was emailed to the address below</string>
-    <string name="lock_app">Lock app</string>
-    <string name="use_your_devices_lock_method_to_unlock_the_app">Use your device’s lock method to unlock the app</string>
-    <string name="loading_vault_data">Loading vault data…</string>
-    <string name="resending">Resending</string>
-    <string name="you_left_the_organization">You left the organization</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
-    <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
-    <string name="migrating_items_to_x">Migrating items to %s</string>
-    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
-    <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
-    <string name="archiving">Archiving</string>
-    <string name="unarchiving">Unarchiving</string>
+    <string name="why_is_this_step_required">¿Por qué es necesario este paso?</string>
+    <string name="kdf_update_failed_active_account_not_found">Error al actualizar Kdf, no se ha encontrado ninguna cuenta activa. Vuelva a intentarlo o póngase en contacto con nosotros.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Se ha producido un error al intentar actualizar los ajustes de kdf. Vuelva a intentarlo o póngase en contacto con nosotros.</string>
+    <string name="the_import_request_could_not_be_processed">No se pudo procesar la solicitud de importación.</string>
+    <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">Es posible que tu caja fuerte esté vacía o que tu cuenta no permita importar algunos tipos de elementos.</string>
+    <string name="no_items_available_to_import">No hay elementos disponibles para importar</string>
+    <string name="select_a_different_account">Selecciona otra cuenta</string>
+    <string name="verify_your_account_email_address">Verifica la dirección de correo electrónico de tu cuenta</string>
+    <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Introduzca el código de 6 dígitos que se envió por correo electrónico a la dirección que figura a continuación</string>
+    <string name="lock_app">Bloquear aplicación</string>
+    <string name="use_your_devices_lock_method_to_unlock_the_app">Utiliza el método de bloqueo de tu dispositivo para desbloquear la aplicación</string>
+    <string name="loading_vault_data">Cargando datos de la caja fuerte…</string>
+    <string name="resending">Reenviando</string>
+    <string name="you_left_the_organization">Dejaste la organización</string>
+    <string name="transfer_items_to_org">Transferir elementos a %1$s</string>
+    <string name="transfer_items_description">%1$s exige que todos los artículos sean propiedad de la organización por motivos de seguridad y cumplimiento normativo. Haga clic en Aceptar para transferir la propiedad de sus elementos.</string>
+    <string name="decline_and_leave">Rechazar y salir</string>
+    <string name="why_am_i_seeing_this">¿Por qué veo esto?</string>
+    <string name="migrating_items_to_x">Migración de elementos a %s</string>
+    <string name="failed_to_migrate_items_to_x">No se pudieron migrar los elementos a %s</string>
+    <string name="search_archive">Buscar en el archivo</string>
+    <string name="archive_noun">Archivar</string>
+    <string name="archive_verb">Archivar</string>
+    <string name="unarchive">Desarchivar</string>
+    <string name="archived">Archivado</string>
+    <string name="hidden_items">Elementos ocultos</string>
+    <string name="unable_to_archive_selected_item">No se puede archivar el elemento seleccionado.</string>
+    <string name="unable_to_unarchive_selected_item">No se puede desarchivar el elemento seleccionado.</string>
+    <string name="archiving">Archivado</string>
+    <string name="unarchiving">Desarchivado</string>
     <string name="item_moved_to_archived">Item moved to archive</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
-    <string name="this_item_is_archived">This item is archived.</string>
-    <string name="introducing_archive">Introducing archive</string>
+    <string name="item_moved_to_vault">Elemento trasladado a la caja fuerte</string>
+    <string name="archive_unavailable">Archivar no disponible</string>
+    <string name="archiving_items_is_a_premium_feature">El archivado de elementos es una funcionalidad Premium. Tu plan actual no incluye acceso a esta función.</string>
+    <string name="upgrade_to_premium">Mejorar a premium</string>
+    <string name="this_item_is_archived">Este elemento está archivado.</string>
+    <string name="introducing_archive">Introducción al archivo</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
     <string name="go_to_archive">Go to archive</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Este elemento está archivado. Al guardar los cambios, se restaurará en tu caja fuerte.</string>
+    <string name="your_premium_subscription_ended">Tu suscripción Premium ha finalizado</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Para volver a acceder a tu archivo, reinicia tu suscripción Premium. Si editas los detalles de un elemento archivado antes de reiniciar, se volverá a mover a tu caja fuerte.</string>
+    <string name="restart_premium">Reiniciar Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Contraseña maestra actualizada</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
-    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
-    <string name="launch_browser">Launch browser</string>
-    <string name="continue_without_syncing">Continue without syncing</string>
-    <string name="external_link">External link</string>
+    <string name="invalid_email_addresses">Direcciones de correo electrónico no válidas</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Una o más direcciones de correo electrónico son incorrectas. Revísalas y vuelve a intentarlo.</string>
+    <string name="no_email_addresses_entered">No se han introducido direcciones de correo electrónico</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Introduce al menos una dirección de correo electrónico válida para compartir este envío.</string>
+    <string name="sync_with_browser">Sincronizar con el navegador</string>
+    <string name="sync_with_browser_description">Para conectarse a %1$s, sincronice su navegador predeterminado con la aplicación móvil Bitwarden. Cuando se abra el navegador, complete el inicio de sesión si se le solicita.\nUna vez completada la sincronización, volverá a esta aplicación.</string>
+    <string name="launch_browser">Abrir el navegador</string>
+    <string name="continue_without_syncing">Continuar sin sincronizar</string>
+    <string name="external_link">Enlace externo</string>
 </resources>

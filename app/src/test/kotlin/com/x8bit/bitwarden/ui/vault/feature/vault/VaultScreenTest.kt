@@ -413,7 +413,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Sync").assertDoesNotExist()
         composeTestRule.onNodeWithText("Lock").assertDoesNotExist()
 
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule.onNode(isPopup()).assertIsDisplayed()
         composeTestRule
@@ -429,7 +429,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `sync click in the overflow menu should send SyncClick`() {
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule
             .onAllNodesWithText("Sync")
@@ -442,7 +442,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `lock click in the overflow menu should send LockClick`() {
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule
             .onAllNodesWithText("Lock")
@@ -1359,7 +1359,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1430,7 +1430,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1674,7 +1674,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1745,7 +1745,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule

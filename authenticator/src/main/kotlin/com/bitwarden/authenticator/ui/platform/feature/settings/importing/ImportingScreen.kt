@@ -13,7 +13,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
@@ -54,10 +53,8 @@ fun ImportingScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val importLocationReceive: (FileData) -> Unit = remember {
-        {
-            viewModel.trySendAction(ImportAction.ImportLocationReceive(it))
-        }
+    val importLocationReceive: (FileData) -> Unit = {
+        viewModel.trySendAction(ImportAction.ImportLocationReceive(it))
     }
     val launcher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)?.let {
@@ -116,27 +113,17 @@ fun ImportingScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(ImportAction.CloseButtonClick)
-                    }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(ImportAction.CloseButtonClick) },
             )
         },
     ) {
         ImportScreenContent(
             modifier = Modifier.fillMaxSize(),
             state = state,
-            onImportFormatOptionSelected = remember(viewModel) {
-                {
-                    viewModel.trySendAction(ImportAction.ImportFormatOptionSelect(it))
-                }
+            onImportFormatOptionSelected = {
+                viewModel.trySendAction(ImportAction.ImportFormatOptionSelect(it))
             },
-            onImportClick = remember(viewModel) {
-                {
-                    viewModel.trySendAction(ImportAction.ImportClick)
-                }
-            },
+            onImportClick = { viewModel.trySendAction(ImportAction.ImportClick) },
         )
     }
 }

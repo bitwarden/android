@@ -860,8 +860,8 @@ Vuoi passare a questo account?</string>
     <string name="copy_fingerprint">Copia impronta</string>
     <string name="enable_notifications">Abilita le notifiche</string>
     <plurals name="notifications_content_description">
-        <item quantity="one">%d notification</item>
-        <item quantity="other">%d notifications</item>
+        <item quantity="one">%d notifica</item>
+        <item quantity="other">%d notifiche</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Accedi rapidamente e facilmente su più dispositivi</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden può inviarti una notifica ogni volta che ricevi una richiesta di accesso da un nuovo dispositivo.</string>
@@ -1218,5 +1218,5 @@ Vuoi passare a questo account?</string>
     <string name="sync_with_browser_description">Per connetterti a %1$s, sincronizza il tuo browser predefinito con l\'applicazione mobile Bitwarden. All\'avvio del browser, se richiesto, completa l\'accesso.\nUna volta completata la sincronizzazione, tornerai a questa app.</string>
     <string name="launch_browser">Avvia il browser</string>
     <string name="continue_without_syncing">Continua senza sincronizzare</string>
-    <string name="external_link">External link</string>
+    <string name="external_link">Link esterno</string>
 </resources>

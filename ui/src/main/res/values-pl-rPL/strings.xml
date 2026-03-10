@@ -1233,7 +1233,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="no_email_addresses_entered">Brak adresu e-mail</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Wpisz co najmniej jeden prawidłowy adres e-mail, aby udostępnić wysyłkę.</string>
     <string name="sync_with_browser">Synchronizuj z przeglądarką</string>
-    <string name="sync_with_browser_description">Aby połączyć się z %1$s, zsynchronizuj domyślną przeglądarkę z aplikacją mobilną Bitwarden. Zaloguj się do przeglądarki, jeśli to będzie konieczne. Po zakończeniu synchronizacji nastąpi powrót do aplikacji.</string>
+    <string name="sync_with_browser_description">Aby połączyć się z %1$s, zsynchronizuj domyślną przeglądarkę z aplikacją mobilną Bitwarden. Zaloguj się do przeglądarki, jeśli to będzie konieczne.\nPo zakończeniu synchronizacji nastąpi powrót do aplikacji.</string>
     <string name="launch_browser">Uruchom przeglądarkę</string>
     <string name="continue_without_syncing">Kontynuuj bez synchronizacji</string>
     <string name="external_link">Link zewnętrzny</string>

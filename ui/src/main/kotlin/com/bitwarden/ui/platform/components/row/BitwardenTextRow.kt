@@ -22,11 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
-import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenHelpIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -45,7 +44,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * [isEnabled].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
- * @param tooltip The data required to display a tooltip.
+ * @param helpData The data required to display a help button.
  * @param content The content of the [BitwardenTextRow].
  */
 @Suppress("LongMethod")
@@ -60,7 +59,7 @@ fun BitwardenTextRow(
     isEnabled: Boolean = true,
     clickable: Boolean = isEnabled,
     withDivider: Boolean = false,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     content: (@Composable () -> Unit)? = null,
 ) {
     Box(
@@ -96,7 +95,7 @@ fun BitwardenTextRow(
                         },
                         modifier = Modifier.nullableTestTag(tag = textTestTag),
                     )
-                    tooltip?.let { ToolTip(tooltip = it) }
+                    helpData?.let { HelpButton(helpData = it) }
                 }
                 description?.let {
                     Text(
@@ -119,17 +118,13 @@ fun BitwardenTextRow(
 }
 
 @Composable
-private fun RowScope.ToolTip(
-    tooltip: TooltipData,
+private fun RowScope.HelpButton(
+    helpData: BitwardenHelpButtonData,
 ) {
     Spacer(modifier = Modifier.width(width = 8.dp))
-    BitwardenStandardIconButton(
-        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-        contentDescription = tooltip.contentDescription,
-        onClick = tooltip.onClick,
-        contentColor = BitwardenTheme.colorScheme.icon.secondary,
-        modifier = Modifier
-            .testTag(tag = "TextRowTooltip"),
+    BitwardenHelpIconButton(
+        helpData = helpData,
+        modifier = Modifier.testTag(tag = "TextRowTooltip"),
     )
 }
 
@@ -144,9 +139,10 @@ private fun BitwardenTextRowWithTooltipAndContent_Preview() {
         textTestTag = "sampleTestTag",
         isEnabled = true,
         withDivider = false,
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             contentDescription = "Tooltip Description",
             onClick = {},
+            isExternalLink = false,
         ),
     )
 }
@@ -162,6 +158,6 @@ private fun BitwardenTextRowWithDividerDisabled_Preview() {
         textTestTag = "sampleDisabledTestTag",
         isEnabled = false,
         withDivider = true,
-        tooltip = null,
+        helpData = null,
     )
 }

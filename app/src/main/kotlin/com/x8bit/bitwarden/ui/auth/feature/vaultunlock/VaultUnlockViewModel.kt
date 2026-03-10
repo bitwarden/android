@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -62,10 +63,16 @@ class VaultUnlockViewModel @Inject constructor(
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val activeAccount = userState.activeAccount
-        val accountSummaries = userState.toAccountSummaries()
-        val activeAccountSummary = userState.toActiveAccountSummary()
+        val userState = authRepository.userStateFlow.value
+        val activeAccount = userState?.activeAccount ?: run {
+            // We use this empty account to avoid a crash that can occur during a race condition.
+            // The state-based navigation brought us here but the UserState has now been set to
+            // null, we just need to wait here a short while longer and state-based navigation will
+            // get us out of here.
+            UserState.EMPTY_ACCOUNT
+        }
+        val accountSummaries = userState?.toAccountSummaries().orEmpty()
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val vaultUnlockType = activeAccount.vaultUnlockType
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
         if (!activeAccount.hasManualUnlockMechanism) {
@@ -90,11 +97,11 @@ class VaultUnlockViewModel @Inject constructor(
             environmentUrl = activeAccount.environment.label,
             input = "",
             isBiometricEnabled = activeAccount.isBiometricsEnabled,
-            isBiometricsValid = authRepository.isBiometricIntegrityValid(userState.activeUserId),
+            isBiometricsValid = authRepository.isBiometricIntegrityValid(activeAccount.userId),
             showAccountMenu = showAccountMenu,
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
-            userId = userState.activeUserId,
+            userId = activeAccount.userId,
             getCredentialsRequest = specialCircumstance?.toGetCredentialsRequestOrNull(),
             fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
             createCredentialRequest = specialCircumstance?.toCreateCredentialRequestOrNull(),

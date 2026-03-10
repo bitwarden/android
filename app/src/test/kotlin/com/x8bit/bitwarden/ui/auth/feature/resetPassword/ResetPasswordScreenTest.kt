@@ -93,7 +93,7 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
     @Test
     fun `logout button click from more menu should display confirmation dialog and emit ConfirmLogoutClick`() {
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
