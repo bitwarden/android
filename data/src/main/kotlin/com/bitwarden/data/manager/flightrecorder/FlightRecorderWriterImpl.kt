@@ -121,13 +121,7 @@ internal class FlightRecorderWriterImpl(
     /**
      * Redacts ONLY the user's configured self-hosted server hostname.
      *
-     * Preserves ALL Bitwarden domains (including QA/staging).
-     * Delegates to [com.bitwarden.network.util.redactHostnamesInMessage].
-     *
-     * Examples:
-     * - "https://api.bitwarden.com/sync" → unchanged (Bitwarden cloud)
-     * - "https://vault.qa.bitwarden.pw/api" → unchanged (Bitwarden QA)
-     * - "https://vault.example.com/api" → "https://[REDACTED_SELF_HOST]/api" (self-hosted)
+     * Preserves ALL Bitwarden domains (including QA/dev).
      */
     private fun String.redactUrls(): String {
         // Get configured hostnames from BaseUrlsProvider
