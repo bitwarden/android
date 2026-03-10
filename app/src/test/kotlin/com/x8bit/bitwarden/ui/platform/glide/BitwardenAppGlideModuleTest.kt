@@ -44,4 +44,17 @@ class BitwardenAppGlideModuleTest {
 
         assertTrue(hasCertificateManagerMethod)
     }
+
+    @Test
+    fun `BitwardenGlideEntryPoint should declare networkCookieManager method`() {
+        val entryPointInterface = BitwardenAppGlideModule::class.java
+            .declaredClasses
+            .firstOrNull { it.simpleName == "BitwardenGlideEntryPoint" }
+
+        val methods = requireNotNull(entryPointInterface).declaredMethods
+        val hasNetworkCookieManagerMethod =
+            methods.any { it.name == "networkCookieManager" }
+
+        assertTrue(hasNetworkCookieManagerMethod)
+    }
 }
