@@ -169,6 +169,7 @@ private fun SetupBrowserAutofillContent(
             label = stringResource(id = BitwardenString.why_is_this_step_required),
             style = BitwardenTheme.typography.labelMedium,
             onClick = onWhyIsThisStepRequiredClick,
+            isExternalLink = true,
             modifier = Modifier
                 .wrapContentWidth()
                 .align(alignment = Alignment.CenterHorizontally)
