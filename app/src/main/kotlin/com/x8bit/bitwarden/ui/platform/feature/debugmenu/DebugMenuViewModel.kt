@@ -64,6 +64,7 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.GenerateCrashClick -> handleCrashClick()
             DebugMenuAction.GenerateErrorReportClick -> handleErrorReportClick()
             DebugMenuAction.TriggerCookieAcquisition -> handleTriggerCookieAcquisition()
+            DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
         }
     }
 
@@ -98,6 +99,10 @@ class DebugMenuViewModel @Inject constructor(
         featureFlagResetJob = viewModelScope.launch {
             debugMenuRepository.resetFeatureFlagOverrides()
         }
+    }
+
+    private fun handleClearSsoCookies() {
+        debugMenuRepository.clearSsoCookies()
     }
 
     private fun handleTriggerCookieAcquisition() {
@@ -195,6 +200,11 @@ sealed class DebugMenuAction {
      * The user has clicked trigger cookie acquisition button.
      */
     data object TriggerCookieAcquisition : DebugMenuAction()
+
+    /**
+     * The user has clicked clear SSO cookies button.
+     */
+    data object ClearSsoCookies : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.
