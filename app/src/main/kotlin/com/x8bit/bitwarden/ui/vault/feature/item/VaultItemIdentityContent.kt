@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -137,13 +138,21 @@ fun VaultItemIdentityContent(
         }
         identityState.ssn?.let { ssn ->
             item(key = "ssn") {
-                IdentityCopyField(
+                BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.ssn),
                     value = ssn,
-                    copyContentDescription = stringResource(id = BitwardenString.copy_ssn),
-                    textFieldTestTag = "IdentitySsnEntry",
-                    copyActionTestTag = "IdentityCopySsnButton",
-                    onCopyClick = vaultIdentityItemTypeHandlers.onCopySsnClick,
+                    onValueChange = {},
+                    readOnly = true,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_copy,
+                            contentDescription = stringResource(id = BitwardenString.copy_ssn),
+                            onClick = vaultIdentityItemTypeHandlers.onCopySsnClick,
+                            modifier = Modifier.testTag(tag = "IdentityCopySsnButton"),
+                        )
+                    },
+                    passwordFieldTestTag = "IdentitySsnEntry",
+                    showPasswordTestTag = "IdentityViewSsnButton",
                     cardStyle = identityState
                         .propertyList
                         .toListItemCardStyle(
