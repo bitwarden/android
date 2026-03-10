@@ -161,7 +161,6 @@ fun VaultVerificationCodeItem(
 
         if (showOverflow) {
             BitwardenOverflowActionItem(
-                contentDescription = stringResource(id = BitwardenString.more),
                 menuItemDataList = persistentListOfNotNull(
                     OverflowMenuItemData(
                         text = stringResource(id = BitwardenString.copy),

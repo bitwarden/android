@@ -17,7 +17,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -81,9 +80,7 @@ fun VaultSettingsScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(VaultSettingsAction.BackClick) },
             )
         },
         snackbarHost = {
@@ -107,17 +104,11 @@ fun VaultSettingsScreen(
                     cardTitle = stringResource(id = BitwardenString.import_saved_logins),
                     actionText = stringResource(BitwardenString.get_started),
                     cardSubtitle = stringResource(BitwardenString.use_a_computer_to_import_logins),
-                    onActionClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
-                        }
+                    onActionClick = {
+                        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
                     },
-                    onDismissClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                VaultSettingsAction.ImportLoginsCardDismissClick,
-                            )
-                        }
+                    onDismissClick = {
+                        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
                     },
                     leadingContent = {
                         NotificationBadge(notificationCount = 1)
@@ -129,9 +120,7 @@ fun VaultSettingsScreen(
             }
             BitwardenTextRow(
                 text = stringResource(BitwardenString.folders),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) }
-                },
+                onClick = { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Top(),
                 modifier = Modifier
@@ -142,9 +131,7 @@ fun VaultSettingsScreen(
 
             BitwardenTextRow(
                 text = stringResource(BitwardenString.export_vault),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) }
-                },
+                onClick = { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Middle(),
                 modifier = Modifier
@@ -155,9 +142,7 @@ fun VaultSettingsScreen(
 
             BitwardenTextRow(
                 text = stringResource(BitwardenString.import_items),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                },
+                onClick = { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier

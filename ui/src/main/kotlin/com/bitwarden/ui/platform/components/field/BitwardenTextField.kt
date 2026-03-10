@@ -60,7 +60,8 @@ import com.bitwarden.ui.platform.base.util.simpleVerticalScrollbar
 import com.bitwarden.ui.platform.base.util.toPx
 import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
-import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenHelpIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.field.model.TextToolbarType
@@ -69,10 +70,8 @@ import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextTool
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -86,7 +85,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
  * @param onValueChange callback that is triggered when the input of the text field changes.
- * @param tooltip the optional tooltip to be displayed in the label.
+ * @param helpData An optional help button to be displayed in the label.
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param leadingIconData the optional resource for the leading icon on the text field.
@@ -94,7 +93,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether or not the text field is enabled.
+ * @param enabled Whether the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
  * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
@@ -119,7 +118,7 @@ fun BitwardenTextField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     placeholder: String? = null,
     leadingIconData: IconData? = null,
     supportingText: String? = null,
@@ -147,7 +146,7 @@ fun BitwardenTextField(
         label = label,
         value = value,
         onValueChange = onValueChange,
-        tooltip = tooltip,
+        helpData = helpData,
         placeholder = placeholder,
         leadingIconData = leadingIconData,
         supportingContent = supportingText?.let {
@@ -189,7 +188,7 @@ fun BitwardenTextField(
  * @param label label for the text field.
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
- * @param tooltip the optional tooltip to be displayed in the label.
+ * @param helpData An optional help button to be displayed in the label.
  * @param onValueChange callback that is triggered when the input of the text field changes.
  * @param supportingContent An optional supporting content composable that will appear below the
  * text input.
@@ -200,7 +199,7 @@ fun BitwardenTextField(
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether or not the text field is enabled.
+ * @param enabled Whether the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
  * @param textColor An optional color that may be used to override the text color.
  * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
@@ -228,7 +227,7 @@ fun BitwardenTextField(
     supportingContent: (@Composable ColumnScope.() -> Unit)?,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     placeholder: String? = null,
     leadingIconData: IconData? = null,
@@ -309,7 +308,7 @@ fun BitwardenTextField(
                     .fillMaxWidth()
                     .semantics {
                         customActions = listOfNotNull(
-                            tooltip?.let {
+                            helpData?.let {
                                 CustomAccessibilityAction(
                                     label = it.contentDescription,
                                     action = {
@@ -330,7 +329,7 @@ fun BitwardenTextField(
                         {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(text = it)
-                                tooltip?.let { tooltipData ->
+                                helpData?.let { helpButtonData ->
                                     val targetSize = if (textFieldValue.text.isEmpty() || focused) {
                                         16.dp
                                     } else {
@@ -338,15 +337,12 @@ fun BitwardenTextField(
                                     }
                                     val size by animateDpAsState(
                                         targetValue = targetSize,
-                                        label = "${tooltipData.contentDescription}_animation",
+                                        label = "${helpButtonData.contentDescription}_animation",
                                     )
                                     Spacer(modifier = Modifier.width(width = 8.dp))
-                                    BitwardenStandardIconButton(
-                                        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-                                        contentDescription = tooltipData.contentDescription,
-                                        onClick = tooltipData.onClick,
-                                        contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                                        modifier = Modifier.size(size),
+                                    BitwardenHelpIconButton(
+                                        helpData = helpButtonData,
+                                        modifier = Modifier.size(size = size),
                                     )
                                 }
                             }

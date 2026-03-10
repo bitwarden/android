@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -34,8 +33,8 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -100,42 +99,32 @@ fun AboutScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AboutAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(AboutAction.BackClick) },
             )
         },
     ) {
         AboutScreenContent(
             state = state,
             modifier = Modifier.fillMaxSize(),
-            onHelpCenterClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.HelpCenterClick) }
+            onHelpCenterClick = { viewModel.trySendAction(AboutAction.HelpCenterClick) },
+            onPrivacyPolicyClick = { viewModel.trySendAction(AboutAction.PrivacyPolicyClick) },
+            onLearnAboutOrgsClick = {
+                viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick)
             },
-            onPrivacyPolicyClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.PrivacyPolicyClick) }
+            onSubmitCrashLogsCheckedChange = {
+                viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it))
             },
-            onLearnAboutOrgsClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick) }
+            onFlightRecorderCheckedChange = {
+                viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it))
             },
-            onSubmitCrashLogsCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
+            onFlightRecorderTooltipClick = {
+                viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick)
             },
-            onFlightRecorderCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it)) }
+            onViewRecordedLogsClick = {
+                viewModel.trySendAction(AboutAction.ViewRecordedLogsClick)
             },
-            onFlightRecorderTooltipClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick) }
-            },
-            onViewRecordedLogsClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.ViewRecordedLogsClick) }
-            },
-            onVersionClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.VersionClick) }
-            },
-            onWebVaultClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.WebVaultClick) }
-            },
+            onVersionClick = { viewModel.trySendAction(AboutAction.VersionClick) },
+            onWebVaultClick = { viewModel.trySendAction(AboutAction.WebVaultClick) },
         )
     }
 }
@@ -288,9 +277,10 @@ private fun ColumnScope.FlightRecorderCard(
         label = stringResource(id = BitwardenString.flight_recorder),
         isChecked = isFlightRecorderEnabled,
         onCheckedChange = onFlightRecorderCheckedChange,
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             contentDescription = stringResource(id = BitwardenString.flight_recorder_help),
             onClick = onFlightRecorderTooltipClick,
+            isExternalLink = true,
         ),
         subtext = logExpiration?.invoke(),
         cardStyle = CardStyle.Top(),

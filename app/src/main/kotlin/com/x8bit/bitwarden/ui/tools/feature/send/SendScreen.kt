@@ -71,9 +71,7 @@ fun SendScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(SendAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(
@@ -122,12 +120,8 @@ fun SendScreen(
 
     SendDialogs(
         dialogState = state.dialogState,
-        onAddSendSelected = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.AddSendSelected(it)) }
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.DismissDialog) }
-        },
+        onAddSendSelected = { viewModel.trySendAction(SendAction.AddSendSelected(it)) },
+        onDismissRequest = { viewModel.trySendAction(SendAction.DismissDialog) },
     )
 
     val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
@@ -143,30 +137,22 @@ fun SendScreen(
                 actions = {
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = BitwardenString.search_sends),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(SendAction.SearchClick) }
-                        },
+                        onClick = { viewModel.trySendAction(SendAction.SearchClick) },
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.SyncClick) }
-                                },
+                                onClick = { viewModel.trySendAction(SendAction.SyncClick) },
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.lock),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.LockClick) }
-                                },
+                                onClick = { viewModel.trySendAction(SendAction.LockClick) },
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.about_send),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.AboutSendClick) }
-                                },
+                                onClick = { viewModel.trySendAction(SendAction.AboutSendClick) },
+                                isExternalLink = true,
                             ),
                         ),
                     )
@@ -180,9 +166,7 @@ fun SendScreen(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(SendAction.AddSendClick) }
-                    },
+                    onClick = { viewModel.trySendAction(SendAction.AddSendClick) },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
@@ -204,17 +188,13 @@ fun SendScreen(
 
             SendState.ViewState.Empty -> SendEmpty(
                 policyDisablesSend = state.policyDisablesSend,
-                onAddItemClick = remember(viewModel) {
-                    { viewModel.trySendAction(SendAction.AddSendClick) }
-                },
+                onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
                 modifier = modifier,
             )
 
             is SendState.ViewState.Error -> BitwardenErrorContent(
                 message = viewState.message(),
-                onTryAgainClick = remember(viewModel) {
-                    { viewModel.trySendAction(SendAction.RefreshClick) }
-                },
+                onTryAgainClick = { viewModel.trySendAction(SendAction.RefreshClick) },
                 modifier = modifier,
             )
 

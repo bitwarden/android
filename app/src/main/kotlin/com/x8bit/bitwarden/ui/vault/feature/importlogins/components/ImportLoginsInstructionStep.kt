@@ -19,13 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -40,12 +40,12 @@ import kotlinx.collections.immutable.persistentListOf
 fun ImportLoginsInstructionStep(
     stepText: String,
     stepTitle: String,
-    ctaText: String = stringResource(BitwardenString.continue_text),
     instructions: ImmutableList<ContentBlockData>,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
+    ctaText: String = stringResource(BitwardenString.continue_text),
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -67,13 +67,12 @@ fun ImportLoginsInstructionStep(
             contentSubtitleTextStyle = BitwardenTheme.typography.labelSmall,
         )
         Spacer(Modifier.height(24.dp))
-        Text(
-            text = annotatedStringResource(
-                id = BitwardenString.need_help_check_out_import_help,
-                onAnnotationClick = { onHelpClick() },
-            ),
+        BitwardenHyperTextLink(
+            annotatedResId = BitwardenString.need_help_check_out_import_help,
+            annotationKey = "importHelp",
+            accessibilityString = stringResource(id = BitwardenString.import_help),
+            onClick = onHelpClick,
             style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))

@@ -15,7 +15,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -57,31 +56,25 @@ fun DeleteAccountConfirmationScreen(
 
     DeleteAccountConfirmationDialogs(
         dialogState = state.dialog,
-        onDeleteAccountAcknowledge = remember(viewModel) {
-            { viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountAcknowledge) }
+        onDeleteAccountAcknowledge = {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountAcknowledge)
         },
-        onDismissDialog = remember(viewModel) {
-            { viewModel.trySendAction(DeleteAccountConfirmationAction.DismissDialog) }
+        onDismissDialog = {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.DismissDialog)
         },
     )
 
     DeleteAccountConfirmationScaffold(
         state = state,
-        onCloseClick = remember(viewModel) {
-            { viewModel.trySendAction(DeleteAccountConfirmationAction.CloseClick) }
+        onCloseClick = { viewModel.trySendAction(DeleteAccountConfirmationAction.CloseClick) },
+        onDeleteAccountClick = {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountClick)
         },
-        onDeleteAccountClick = remember(viewModel) {
-            { viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountClick) }
+        onResendCodeClick = {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.ResendCodeClick)
         },
-        onResendCodeClick = remember(viewModel) {
-            { viewModel.trySendAction(DeleteAccountConfirmationAction.ResendCodeClick) }
-        },
-        onVerificationCodeTextChange = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    DeleteAccountConfirmationAction.VerificationCodeTextChange(it),
-                )
-            }
+        onVerificationCodeTextChange = {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.VerificationCodeTextChange(it))
         },
     )
 }

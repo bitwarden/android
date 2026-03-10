@@ -99,6 +99,7 @@ class AuthenticatorBridgeRepositoryTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_1_UNLOCK_KEY,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -118,6 +119,7 @@ class AuthenticatorBridgeRepositoryTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_2_UNLOCK_KEY,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -219,6 +221,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -261,6 +264,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -287,6 +291,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -325,6 +330,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
@@ -350,6 +356,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeCrypto(
@@ -367,6 +374,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(

@@ -16,24 +16,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.camera.CameraPreview
 import com.bitwarden.ui.platform.components.camera.QrCodeSquare
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
@@ -57,13 +52,11 @@ fun QrCodeScanScreen(
     viewModel: QrCodeScanViewModel = hiltViewModel(),
     qrCodeAnalyzer: QrCodeAnalyzer = LocalQrCodeAnalyzer.current,
 ) {
-    qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
+    qrCodeAnalyzer.onQrCodeScanned = {
+        viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it))
     }
 
-    val onEnterKeyManuallyClick = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
-    }
+    val onEnterKeyManuallyClick = { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -86,8 +79,8 @@ fun QrCodeScanScreen(
                     title = stringResource(id = BitwardenString.scan_qr_code),
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(QrCodeScanAction.CloseClick)
                     },
                     scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
                         state = rememberTopAppBarState(),
@@ -96,8 +89,8 @@ fun QrCodeScanScreen(
             },
         ) {
             CameraPreview(
-                cameraErrorReceive = remember(viewModel) {
-                    { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
+                cameraErrorReceive = {
+                    viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
                 modifier = Modifier.fillMaxSize(),
@@ -146,7 +139,7 @@ private fun QrCodeContentCompact(
             Text(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -187,7 +180,7 @@ private fun QrCodeContentMedium(
             Text(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodySmall,
             )
 
@@ -203,30 +196,13 @@ private fun EnterKeyManuallyText(
     onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val enterKeyManuallyString = stringResource(BitwardenString.enter_key_manually)
-    Text(
-        text = annotatedStringResource(
-            id = BitwardenString.cannot_scan_qr_code_enter_key_manually,
-            onAnnotationClick = {
-                when (it) {
-                    "enterKeyManually" -> onEnterKeyManuallyClick()
-                }
-            },
-        ),
+    BitwardenHyperTextLink(
+        annotatedResId = BitwardenString.cannot_scan_qr_code_enter_key_manually,
+        annotationKey = "enterKeyManually",
+        accessibilityString = stringResource(BitwardenString.enter_key_manually),
+        onClick = onEnterKeyManuallyClick,
         style = BitwardenTheme.typography.bodySmall,
-        color = Color.White,
-        textAlign = TextAlign.Center,
-        modifier = modifier
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = enterKeyManuallyString,
-                        action = {
-                            onEnterKeyManuallyClick()
-                            true
-                        },
-                    ),
-                )
-            },
+        color = BitwardenTheme.colorScheme.text.primary,
+        modifier = modifier,
     )
 }

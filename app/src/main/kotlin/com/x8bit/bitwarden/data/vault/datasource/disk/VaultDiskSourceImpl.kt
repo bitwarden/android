@@ -157,6 +157,32 @@ class VaultDiskSourceImpl(
         ciphersDao.deleteCipher(userId, cipherId)
     }
 
+    override suspend fun saveCiphers(
+        userId: String,
+        ciphers: List<SyncResponseJson.Cipher>,
+    ) {
+        ciphersDao.insertCiphers(
+            ciphers = ciphers.map { cipher ->
+                CipherEntity(
+                    id = cipher.id,
+                    userId = userId,
+                    hasTotp = cipher.login?.totp != null,
+                    cipherType = json.encodeToString(cipher.type),
+                    cipherJson = json.encodeToString(cipher),
+                    organizationId = cipher.organizationId,
+                )
+            },
+        )
+    }
+
+    override suspend fun deleteSelectedCiphers(userId: String, cipherIds: List<String>) {
+        ciphersDao.deleteSelectedCiphers(userId = userId, cipherIds = cipherIds)
+    }
+
+    override suspend fun deleteAllCiphers(userId: String) {
+        ciphersDao.deleteAllCiphers(userId = userId)
+    }
+
     override suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection) {
         collectionsDao.insertCollection(
             collection = CollectionEntity(

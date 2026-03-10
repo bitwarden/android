@@ -62,10 +62,8 @@ fun ExportScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val exportLocationReceive: (Uri) -> Unit = remember {
-        {
-            viewModel.trySendAction(ExportAction.ExportLocationReceive(it))
-        }
+    val exportLocationReceive: (Uri) -> Unit = {
+        viewModel.trySendAction(ExportAction.ExportLocationReceive(it))
     }
     val fileSaveLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)?.let {
@@ -91,11 +89,7 @@ fun ExportScreen(
     }
 
     var shouldShowConfirmationPrompt by remember { mutableStateOf(false) }
-    val confirmExportClick = remember(viewModel) {
-        {
-            viewModel.trySendAction(ExportAction.ConfirmExportClick)
-        }
-    }
+    val confirmExportClick = { viewModel.trySendAction(ExportAction.ConfirmExportClick) }
     if (shouldShowConfirmationPrompt) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = BitwardenString.export_confirmation_title),
@@ -118,11 +112,7 @@ fun ExportScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(ExportAction.DialogDismiss)
-                    }
-                },
+                onDismissRequest = { viewModel.trySendAction(ExportAction.DialogDismiss) },
             )
         }
 
@@ -144,11 +134,7 @@ fun ExportScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(ExportAction.CloseButtonClick)
-                    }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(ExportAction.CloseButtonClick) },
             )
         },
         snackbarHost = { BitwardenSnackbarHost(snackbarState) },
@@ -156,10 +142,8 @@ fun ExportScreen(
         ExportScreenContent(
             modifier = Modifier.fillMaxSize(),
             state = state,
-            onExportFormatOptionSelected = remember(viewModel) {
-                {
-                    viewModel.trySendAction(ExportAction.ExportFormatOptionSelect(it))
-                }
+            onExportFormatOptionSelected = {
+                viewModel.trySendAction(ExportAction.ExportFormatOptionSelect(it))
             },
             onExportClick = { shouldShowConfirmationPrompt = true },
         )

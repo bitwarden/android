@@ -72,9 +72,7 @@ fun VerificationCodeScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VerificationCodeAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(
@@ -119,7 +117,6 @@ fun VerificationCodeScreen(
                         onClick = verificationCodeHandler.searchIconClick,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),

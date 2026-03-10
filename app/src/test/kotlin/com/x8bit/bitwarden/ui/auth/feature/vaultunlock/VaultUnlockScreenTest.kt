@@ -381,7 +381,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
 
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         composeTestRule.onNode(isPopup()).assertIsDisplayed()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
 
@@ -408,7 +408,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `Yes click in the logout confirmation dialog should send the ConfirmLogoutClick action`() {
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         // Click on the logout item to display the dialog
         composeTestRule

@@ -17,6 +17,7 @@ private const val DYNAMIC_COLORS_KEY = "dynamicColors"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "alertThresholdSeconds"
+private const val APP_TIMEOUT_IN_MINUTES_KEY = "appTimeoutInMinutes"
 private const val FIRST_LAUNCH_KEY = "hasSeenWelcomeTutorial"
 private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
@@ -31,6 +32,7 @@ private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 /**
  * Primary implementation of [SettingsDiskSource].
  */
+@Suppress("TooManyFunctions")
 class SettingsDiskSourceImpl(
     sharedPreferences: SharedPreferences,
     flightRecorderDiskSource: FlightRecorderDiskSource,
@@ -45,6 +47,8 @@ class SettingsDiskSourceImpl(
 
     private val mutableAlertThresholdSecondsFlow =
         bufferedMutableSharedFlow<Int>()
+
+    private val mutableAppTimeoutInMinutesFlow = bufferedMutableSharedFlow<Int?>()
 
     private val mutableIsCrashLoggingEnabledFlow =
         bufferedMutableSharedFlow<Boolean?>()
@@ -178,6 +182,16 @@ class SettingsDiskSourceImpl(
 
     override fun getAlertThresholdSecondsFlow(): Flow<Int> = mutableAlertThresholdSecondsFlow
         .onSubscription { emit(getAlertThresholdSeconds()) }
+
+    override var appTimeoutInMinutes: Int?
+        get() = getInt(APP_TIMEOUT_IN_MINUTES_KEY)
+        set(value) {
+            putInt(APP_TIMEOUT_IN_MINUTES_KEY, value)
+            mutableAppTimeoutInMinutesFlow.tryEmit(value)
+        }
+
+    override val appTimeoutInMinutesFlow: Flow<Int?>
+        get() = mutableAppTimeoutInMinutesFlow.onSubscription { emit(appTimeoutInMinutes) }
 
     override fun getAccountBiometricIntegrityValidity(
         systemBioIntegrityState: String,

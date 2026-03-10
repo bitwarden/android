@@ -33,7 +33,6 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
-                CipherKeyEncryption,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 ArchiveItems,
@@ -57,14 +56,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-export-mobile"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Cipher Key Encryption feature.
-     */
-    data object CipherKeyEncryption : FlagKey<Boolean>() {
-        override val keyName: String = "cipher-key-encryption"
         override val defaultValue: Boolean = false
     }
 
