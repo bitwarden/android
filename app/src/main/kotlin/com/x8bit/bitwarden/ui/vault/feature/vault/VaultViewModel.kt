@@ -33,6 +33,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.MINIMUM_CXP_GMS_VERSION
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -113,6 +115,7 @@ class VaultViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val gmsManager: GmsManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -997,7 +1000,9 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
     ) {
         viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled) {
+            if (action.isCredentialExchangeProtocolExportEnabled &&
+                gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION)
+            ) {
                 credentialExchangeRegistryManager.register()
             } else {
                 credentialExchangeRegistryManager.unregister()
