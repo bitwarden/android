@@ -1086,13 +1086,13 @@ data class SearchState(
 ) : Parcelable {
 
     /**
-     * Whether or not this represents an autofill selection flow.
+     * Whether this represents an autofill selection flow.
      */
     val isAutofill: Boolean
         get() = autofillSelectionData != null
 
     /**
-     * Whether or not this represents a listing screen for totp.
+     * Whether this represents a listing screen for totp.
      */
     val isTotp: Boolean get() = totpData != null
 
@@ -1101,7 +1101,7 @@ data class SearchState(
      */
     sealed class ViewState : Parcelable {
         /**
-         * Determines whether or not the the Vault Filter may be shown (when applicable).
+         * Determines whether the Vault Filter may be shown (when applicable).
          */
         abstract val hasVaultFilter: Boolean
 

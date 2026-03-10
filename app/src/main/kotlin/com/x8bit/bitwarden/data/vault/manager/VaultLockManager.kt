@@ -35,12 +35,12 @@ interface VaultLockManager {
     var isFromLockFlow: Boolean
 
     /**
-     * Whether or not the vault is currently locked for the given [userId].
+     * Whether the vault is currently locked for the given [userId].
      */
     fun isVaultUnlocked(userId: String): Boolean
 
     /**
-     * Whether or not the vault is currently unlocking for the given [userId].
+     * Whether the vault is currently unlocking for the given [userId].
      */
     fun isVaultUnlocking(userId: String): Boolean
 

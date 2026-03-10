@@ -30,9 +30,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  * @param cardStyle The optional card style to surround the button.
- * `null`.
  * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
  * `null`.
  */

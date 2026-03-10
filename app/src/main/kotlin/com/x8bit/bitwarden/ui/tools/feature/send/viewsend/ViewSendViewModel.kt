@@ -255,7 +255,7 @@ data class ViewSendState(
         }
 
     /**
-     * Whether or not the fab is visible.
+     * Whether the fab is visible.
      */
     val isFabVisible: Boolean get() = viewState is ViewState.Content
 

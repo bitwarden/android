@@ -38,7 +38,7 @@ class SetupUnlockViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        // whether or not the user has completed the initial setup prior to this.
+        // whether the user has completed the initial setup prior to this.
         val isInitialSetup = savedStateHandle.toSetupUnlockArgs().isInitialSetup
         SetupUnlockState(
             userId = userId,

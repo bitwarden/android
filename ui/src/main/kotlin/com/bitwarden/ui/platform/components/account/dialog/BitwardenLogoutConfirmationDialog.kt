@@ -7,7 +7,7 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
- * A reusable dialog for confirming whether or not the user wants to log out.
+ * A reusable dialog for confirming whether the user wants to log out.
  *
  * @param onDismissRequest A callback for when the dialog is requesting dismissal.
  * @param onConfirmClick A callback for when the log out confirmation button is clicked.

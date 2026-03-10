@@ -13,12 +13,12 @@ import javax.crypto.Cipher
 interface AuthRepository : BiometricsEncryptionManager {
 
     /**
-     * Whether or not biometric unlocking is enabled for the current user.
+     * Whether biometric unlocking is enabled for the current user.
      */
     val isUnlockWithBiometricsEnabled: Boolean
 
     /**
-     * Tracks whether or not biometric unlocking is enabled for the current user.
+     * Tracks whether biometric unlocking is enabled for the current user.
      */
     val isUnlockWithBiometricsEnabledFlow: StateFlow<Boolean>
 

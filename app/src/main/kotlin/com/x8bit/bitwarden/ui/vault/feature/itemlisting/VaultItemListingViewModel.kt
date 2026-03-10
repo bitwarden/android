@@ -600,7 +600,7 @@ class VaultItemListingViewModel @Inject constructor(
             return
         }
 
-        // There's no need to ask the user whether or not they want to use their master password
+        // There's no need to ask the user whether they want to use their master password
         // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
         // user can only reach this part of the flow if they have no master password.
         settingsRepository.storeUnlockPin(
@@ -2883,7 +2883,7 @@ data class VaultItemListingState(
         }
 
     /**
-     * Whether or not the add FAB should be shown.
+     * Whether the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
         get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
@@ -2896,19 +2896,19 @@ data class VaultItemListingState(
         }
 
     /**
-     * Whether or not this represents a listing screen for autofill.
+     * Whether this represents a listing screen for autofill.
      */
     val isAutofill: Boolean
         get() = autofillSelectionData != null
 
     /**
-     * Whether or not this represents a listing screen for CredentialManager creation requests.
+     * Whether this represents a listing screen for CredentialManager creation requests.
      */
     val isCredentialManagerCreation: Boolean
         get() = createCredentialRequest != null
 
     /**
-     * Whether or not this represents a listing screen for totp.
+     * Whether this represents a listing screen for totp.
      */
     val isTotp: Boolean get() = totpData != null
 
@@ -2949,19 +2949,19 @@ data class VaultItemListingState(
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
-     * Whether or not the account switcher should be shown.
+     * Whether the account switcher should be shown.
      */
     val shouldShowAccountSwitcher: Boolean
         get() = isAutofill || isCredentialManagerCreation || isTotp
 
     /**
-     * Whether or not the navigation icon should be shown.
+     * Whether the navigation icon should be shown.
      */
     val shouldShowNavigationIcon: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
 
     /**
-     * Whether or not the overflow menu should be shown.
+     * Whether the overflow menu should be shown.
      */
     val shouldShowOverflowMenu: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
@@ -3180,10 +3180,10 @@ data class VaultItemListingState(
      * @property iconTestTag The test tag for the icon (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
      * @property optionsTestTag The test tag associated with the [overflowOptions].
-     * @property isAutofill whether or not this screen is part of an autofill flow.
-     * @property isCredentialCreation whether or not this screen is part of CredentialManager
+     * @property isAutofill whether this screen is part of an autofill flow.
+     * @property isCredentialCreation whether this screen is part of CredentialManager
      * creation flow.
-     * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
+     * @property shouldShowMasterPasswordReprompt whether a master password reprompt is
      * required for various secure actions.
      * @property itemType Indicates the type of item this is.
      */
@@ -3263,7 +3263,7 @@ data class VaultItemListingState(
         abstract val titleText: Text
 
         /**
-         * Whether or not the screen has a floating action button (FAB).
+         * Whether the screen has a floating action button (FAB).
          */
         abstract val hasFab: Boolean
 

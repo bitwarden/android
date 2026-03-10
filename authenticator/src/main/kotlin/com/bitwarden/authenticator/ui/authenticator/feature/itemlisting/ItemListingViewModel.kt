@@ -744,7 +744,7 @@ data class ItemListingState(
         ) : ViewState() {
 
             /**
-             * Whether or not there should be a "Local codes" header shown above local codes.
+             * Whether there should be a "Local codes" header shown above local codes.
              */
             val shouldShowLocalHeader
                 get() =

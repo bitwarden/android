@@ -854,7 +854,7 @@ class VaultAddEditViewModel @Inject constructor(
             return
         }
 
-        // There's no need to ask the user whether or not they want to use their master password
+        // There's no need to ask the user whether they want to use their master password
         // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
         // user can only reach this part of the flow if they have no master password.
         settingsRepository.storeUnlockPin(
@@ -2452,7 +2452,7 @@ data class VaultAddEditState(
         }
 
     /**
-     * Whether or not the cipher is in a collection.
+     * Whether the cipher is in a collection.
      */
     val isCipherInCollection: Boolean
         get() = (viewState as? ViewState.Content)

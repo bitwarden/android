@@ -317,7 +317,7 @@ data class AutoFillState(
         }
 
     /**
-     * Whether or not the dropdown controlling the [autofillStyle] value is displayed.
+     * Whether the dropdown controlling the [autofillStyle] value is displayed.
      */
     val showInlineAutofill: Boolean get() = isAutoFillServicesEnabled && showInlineAutofillOption
 
@@ -327,7 +327,7 @@ data class AutoFillState(
     val browserCount: Int get() = browserAutofillSettingsOptions.size
 
     /**
-     * Whether or not the toggles for enabling 3rd-party autofill support should be displayed.
+     * Whether the toggles for enabling 3rd-party autofill support should be displayed.
      */
     val showBrowserSettingOptions: Boolean
         get() = isAutoFillServicesEnabled && browserAutofillSettingsOptions.isNotEmpty()
