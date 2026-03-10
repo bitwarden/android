@@ -36,6 +36,7 @@ detekt = "1.23.8"
 firebaseBom = "34.10.0"
 glide = "5.0.5"
 glideCompose = "1.0.0-beta01"
+googleBilling = "8.3.0"
 googleGuava = "33.5.0-jre"
 googleProtoBufJava = "4.34.0"
 googleProtoBufPlugin = "0.9.6"
@@ -104,6 +105,7 @@ bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integratio
 bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+google-billing = { module = "com.android.billingclient:billing", version.ref = "googleBilling" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
