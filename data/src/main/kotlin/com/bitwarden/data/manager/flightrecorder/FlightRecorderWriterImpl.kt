@@ -56,46 +56,31 @@ internal class FlightRecorderWriterImpl(
             val logFile = File(logFolder, data.fileName)
             if (!logFile.exists()) {
                 logFile.createNewFile()
+
+                val ciInfo = buildInfoManager.ciBuildInfo?.takeIf { it.isNotBlank() }
+                val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
+                val serverInfo = StringBuilder()
+                    .append(serverData?.server?.name ?: "Bitwarden Cloud")
+                    .apply {
+                        serverData?.version?.let { append(" $it") }
+                        serverData?.environment?.cloudRegion?.let { append(" @ $it") }
+                    }
+                    .toString()
                 val startTime = Instant
                     .ofEpochMilli(data.startTimeMs)
                     .toFormattedPattern(pattern = LOG_TIME_PATTERN, clock = clock)
                 // Upon creating the new file, we pre-populate it with basic data
                 BufferedWriter(FileWriter(logFile, true)).use { bw ->
-                    bw.append("Bitwarden Android - ${buildInfoManager.applicationName}")
-                    bw.newLine()
-                    bw.append("Log Start Time: $startTime")
-                    bw.newLine()
-                    bw.append("Log Duration: ${data.durationMs.milliseconds}")
-                    bw.newLine()
-                    bw.append("App Version: ${buildInfoManager.versionData}")
-                    bw.newLine()
-                    bw.append("Build: ${buildInfoManager.buildAndFlavor}")
-                    bw.newLine()
-                    bw.append("SDK Version: \uD83E\uDD80 ${buildInfoManager.sdkData}")
-                    bw.newLine()
-                    buildInfoManager.ciBuildInfo?.takeIf { it.isNotBlank() }?.let { ciInfo ->
-                        bw.append("CI Build Info: $ciInfo")
-                        bw.newLine()
-                    }
-                    bw.append("Device: ${buildInfoManager.deviceData}")
-                    bw.newLine()
-
-                    // Server configuration data
-                    val serverConfig = serverConfigRepository.serverConfigStateFlow.value
-                    val serverData = serverConfig?.serverData
-                    val serverInfo = StringBuilder()
-                        .append("\uD83C\uDF29 Server:")
-                        .apply {
-                            serverData?.server?.name?.let { append(" $it") }
-                                ?: append(" Bitwarden Cloud")
-                            serverData?.version?.let { append(" $it") }
-                            serverData?.environment?.cloudRegion?.let { append(" @ $it") }
-                        }
-                        .toString()
-                    bw.append(serverInfo)
-                    bw.newLine()
-                    bw.append("Fingerprint: ${Build.FINGERPRINT}")
-                    bw.newLine()
+                    bw.appendLine("Bitwarden Android - ${buildInfoManager.applicationName}")
+                    bw.appendLine("Log Start Time: $startTime")
+                    bw.appendLine("Log Duration: ${data.durationMs.milliseconds}")
+                    bw.appendLine("App Version: ${buildInfoManager.versionData}")
+                    bw.appendLine("Build: ${buildInfoManager.buildAndFlavor}")
+                    bw.appendLine("SDK Version: \uD83E\uDD80 ${buildInfoManager.sdkData}")
+                    ciInfo.let { bw.appendLine("CI Build Info: $it") }
+                    bw.appendLine("Device: ${buildInfoManager.deviceData}")
+                    bw.appendLine("\uD83C\uDF29 Server: $serverInfo")
+                    bw.appendLine("Fingerprint: ${Build.FINGERPRINT}")
                 }
             }
             logFile
