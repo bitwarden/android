@@ -4,8 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -170,7 +170,7 @@ sealed class SettingsEvent {
     /**
      * Navigate to the account security screen.
      */
-    data object NavigateAccountSecurityShortcut : SettingsEvent(), BackgroundEvent
+    data object NavigateAccountSecurityShortcut : SettingsEvent(), DeferredBackgroundEvent
 
     /**
      * Navigate to the appearance screen.

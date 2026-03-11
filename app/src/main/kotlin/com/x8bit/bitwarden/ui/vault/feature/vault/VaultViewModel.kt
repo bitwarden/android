@@ -2289,7 +2289,7 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates that the flight recorder data was received.
