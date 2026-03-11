@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
  * The default [BitwardenColorScheme] for dark mode.
  */
 val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = true,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray200,
         secondary = PrimitiveColors.gray600,
@@ -84,6 +85,7 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
  * The default [BitwardenColorScheme] for light mode.
  */
 val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = false,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray1300,
         secondary = PrimitiveColors.gray700,
@@ -167,6 +169,7 @@ fun dynamicBitwardenColorScheme(
 ): BitwardenColorScheme {
     val defaultTheme = if (isDarkTheme) darkBitwardenColorScheme else lightBitwardenColorScheme
     return BitwardenColorScheme(
+        isDarkTheme = isDarkTheme,
         text = BitwardenColorScheme.TextColors(
             primary = materialColorScheme.onBackground,
             secondary = materialColorScheme.onSurface,

@@ -77,7 +77,7 @@ fun QrCodeScanScreen(
 
     // This screen should always look like it's in dark mode
     CompositionLocalProvider(LocalBitwardenColorScheme provides darkBitwardenColorScheme) {
-        StatusBarsAppearanceAffect(isLightStatusBars = false)
+        StatusBarsAppearanceAffect()
         QrCodeScanDialogs(
             dialogState = state.dialog,
             onSaveHereClick = { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) },
