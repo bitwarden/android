@@ -357,6 +357,7 @@ class UserStateJsonExtensionsTest {
 
     @Test
     fun `toUserState should return the correct UserState for an unlocked vault`() {
+        val expectedCreationDate = Instant.parse("2024-06-15T10:30:00Z")
         assertEquals(
             UserState(
                 activeUserId = "activeUserId",
@@ -388,6 +389,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = expectedCreationDate,
                     ),
                 ),
             ),
@@ -408,6 +410,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns expectedCreationDate
                         },
                         tokens = AccountTokensJson(
                             accessToken = "accessToken",
@@ -497,6 +500,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -518,6 +522,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = AccountTokensJson(
                             accessToken = null,
@@ -608,6 +613,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -635,6 +641,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -722,6 +729,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -749,6 +757,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -836,6 +845,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -863,6 +873,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -957,6 +968,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -984,6 +996,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -1059,6 +1072,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1084,6 +1098,7 @@ class UserStateJsonExtensionsTest {
                                 ),
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -1140,6 +1155,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1162,6 +1178,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -1237,6 +1254,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1266,6 +1284,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -1356,6 +1375,7 @@ class UserStateJsonExtensionsTest {
                             showImportLoginsCard = false,
                         ),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1383,6 +1403,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = null,
                         settings = AccountJson.Settings(
@@ -1465,6 +1486,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = false,
+                        creationDate = null,
                     ),
                 ),
             ),
@@ -1485,6 +1507,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = AccountTokensJson(
                             accessToken = "accessToken",
@@ -1583,6 +1606,7 @@ class UserStateJsonExtensionsTest {
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             ),
@@ -1603,6 +1627,7 @@ class UserStateJsonExtensionsTest {
                                 keyConnectorUserDecryptionOptions = null,
                                 masterPasswordUnlock = null,
                             )
+                            every { creationDate } returns null
                         },
                         tokens = AccountTokensJson(
                             accessToken = "accessToken",

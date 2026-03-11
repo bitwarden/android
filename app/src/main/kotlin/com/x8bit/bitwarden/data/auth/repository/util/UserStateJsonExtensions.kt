@@ -248,6 +248,7 @@ fun UserStateJson.toUserState(
                     firstTimeState = firstTimeState,
                     isExportable = !hasPersonalOwnershipRestrictedOrg &&
                         !hasPersonalVaultExportRestrictedOrg,
+                    creationDate = profile.creationDate,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

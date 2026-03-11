@@ -1241,6 +1241,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = DEFAULT_FIRST_TIME_STATE,
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(
