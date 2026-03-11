@@ -11,7 +11,11 @@ sealed class RestoreCipherResult {
     data object Success : RestoreCipherResult()
 
     /**
-     * Generic error while restoring a cipher.
+     * Generic error while restoring a cipher. The optional [errorMessage] may be displayed
+     * directly in the UI when present.
      */
-    data class Error(val error: Throwable) : RestoreCipherResult()
+    data class Error(
+        val error: Throwable,
+        val errorMessage: String? = null,
+    ) : RestoreCipherResult()
 }
