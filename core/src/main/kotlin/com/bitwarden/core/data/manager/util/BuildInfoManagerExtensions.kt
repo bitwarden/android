@@ -1,6 +1,6 @@
 @file:OmitFromCoverage
 
-package com.bitwarden.ui.platform.manager.util
+package com.bitwarden.core.data.manager.util
 
 import android.os.Build
 import com.bitwarden.annotation.OmitFromCoverage
