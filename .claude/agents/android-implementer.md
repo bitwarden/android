@@ -12,11 +12,6 @@ tools:
   - Grep
   - LSP
   - Agent
-  - Search
-  - Replace
-  - Find
-  - "Skill(refining-android-requirements)"
-  - "Skill(planning-android-implementation)"
   - "Skill(implementing-android-code)"
   - "Skill(testing-android-code)"
   - "Skill(build-test-verify)"
@@ -48,8 +43,6 @@ Action: [Proceeding to next phase / Iterating on: X]
 If status is NEEDS REFINEMENT, iterate up to 3 times before proceeding with the best available output and noting remaining concerns.
 
 **Review criteria by phase:**
-- **Requirements**: Specific enough to implement without guessing? Edge cases identified?
-- **Planning**: Follows existing architecture patterns? Scope appropriate?
 - **Implementation**: Follows skill guidance and CLAUDE.md anti-patterns list?
 - **Testing**: Covers happy path, error cases, and edge cases?
 - **Build & Verify**: All tests pass? No compilation errors or warnings?
