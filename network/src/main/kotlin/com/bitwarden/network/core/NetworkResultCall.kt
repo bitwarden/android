@@ -75,19 +75,13 @@ internal class NetworkResultCall<T>(
 
         // Check if this is a hardcoded default URL that will be replaced by BaseUrlInterceptor
         // Match against the defaults from RetrofitsImpl.kt line 111 and EnvironmentUrlDataJson
-        val actualHost = if (baseUrlsProvider != null) {
+        val actualHost = baseUrlsProvider?.let { provider ->
             when (originalUrl.host) {
-                "api.bitwarden.com" -> baseUrlsProvider.getBaseApiUrl().toHttpUrlOrNull()?.host
-                "identity.bitwarden.com" -> baseUrlsProvider.getBaseIdentityUrl()
-                    .toHttpUrlOrNull()?.host
-
-                "events.bitwarden.com" -> baseUrlsProvider.getBaseEventsUrl()
-                    .toHttpUrlOrNull()?.host
-
+                "api.bitwarden.com" -> provider.getBaseApiUrl().toHttpUrlOrNull()?.host
+                "identity.bitwarden.com" -> provider.getBaseIdentityUrl().toHttpUrlOrNull()?.host
+                "events.bitwarden.com" -> provider.getBaseEventsUrl().toHttpUrlOrNull()?.host
                 else -> null
             }
-        } else {
-            null
         }
 
         // Rebuild the URL without query params, using actual host if available
