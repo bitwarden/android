@@ -77,7 +77,7 @@ class FlightRecorderScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = "Bitwarden help center", substring = true)
             .performScrollTo()
-            .performCustomAccessibilityAction(label = "Bitwarden help center")
+            .performCustomAccessibilityAction(label = "Bitwarden help center, External link")
         verify(exactly = 1) {
             viewModel.trySendAction(FlightRecorderAction.HelpCenterClick)
         }

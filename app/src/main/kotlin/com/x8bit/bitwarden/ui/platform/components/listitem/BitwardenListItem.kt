@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -157,7 +159,9 @@ fun BitwardenListItem(
             selectionItems = {
                 selectionDataList.forEach { itemData ->
                     BitwardenBasicDialogRow(
-                        modifier = Modifier.testTag("AlertSelectionOption"),
+                        modifier = Modifier
+                            .semantics { contentDescription = itemData.contentDescription }
+                            .testTag(tag = "AlertSelectionOption"),
                         text = itemData.text,
                         onClick = {
                             shouldShowDialog = false
@@ -171,11 +175,12 @@ fun BitwardenListItem(
 }
 
 /**
- * Wrapper for the an individual selection item's data.
+ * Wrapper for an individual selection item's data.
  */
 data class SelectionItemData(
     val text: String,
     val onClick: () -> Unit,
+    val contentDescription: String = text,
     val testTag: String? = null,
 )
 

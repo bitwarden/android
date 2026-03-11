@@ -17,6 +17,7 @@ import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManagerImpl
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriterImpl
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.service.DownloadService
 import dagger.Module
@@ -82,12 +83,14 @@ object DataManagerModule {
         dispatcherManager: DispatcherManager,
         buildInfoManager: BuildInfoManager,
         baseUrlsProvider: BaseUrlsProvider,
+        serverConfigRepository: ServerConfigRepository,
     ): FlightRecorderWriter = FlightRecorderWriterImpl(
         clock = clock,
         fileManager = fileManager,
         dispatcherManager = dispatcherManager,
         buildInfoManager = buildInfoManager,
         baseUrlsProvider = baseUrlsProvider,
+        serverConfigRepository = serverConfigRepository,
     )
 
     @Provides

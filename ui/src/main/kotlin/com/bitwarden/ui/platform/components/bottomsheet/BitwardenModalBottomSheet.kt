@@ -37,7 +37,7 @@ import org.jetbrains.annotations.VisibleForTesting
  * when the "close" icon is clicked, caller must handle any desired animation or hiding of the
  * bottom sheet. This will be invoked _after_ the sheet has been animated away.
  * @param topBarActions Row of actions to add the top bar of the bottom sheet.
- * @param showBottomSheet Whether or not to show the bottom sheet, by default this is true assuming
+ * @param showBottomSheet Whether to show the bottom sheet, by default this is true assuming
  * the showing/hiding will be handled by the caller.
  * @param sheetContent Content to display in the bottom sheet. The content is passed the padding
  * from the containing [BitwardenScaffold] and a `onDismiss` lambda to be used for manual dismissal

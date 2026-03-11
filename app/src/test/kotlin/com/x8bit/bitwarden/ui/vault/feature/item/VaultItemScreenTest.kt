@@ -2367,7 +2367,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
             .onChildren()
-            .filterToOne(hasContentDescription("Launch"))
+            .filterToOne(hasContentDescription("Launch, External link"))
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2379,7 +2379,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
             .onSiblings()
-            .filterToOne(hasContentDescription("Launch"))
+            .filterToOne(hasContentDescription("Launch, External link"))
             .assertDoesNotExist()
     }
 
@@ -2437,7 +2437,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
             .onChildren()
-            .filterToOne(hasContentDescription("Launch"))
+            .filterToOne(hasContentDescription("Launch, External link"))
             .performClick()
 
         verify {

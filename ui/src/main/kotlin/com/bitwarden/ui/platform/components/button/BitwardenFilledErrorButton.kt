@@ -17,7 +17,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
- * @param isEnabled Whether or not the button is enabled.
+ * @param isEnabled Whether the button is enabled.
  */
 @Composable
 fun BitwardenFilledErrorButton(

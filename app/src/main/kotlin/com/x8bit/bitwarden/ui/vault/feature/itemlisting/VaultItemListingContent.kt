@@ -261,6 +261,7 @@ fun VaultItemListingContent(
                         .map { option ->
                             SelectionItemData(
                                 text = option.title(),
+                                contentDescription = option.contentDescription(),
                                 onClick = {
                                     when (option) {
                                         is ListingItemOverflowAction.SendAction.DeleteClick -> {

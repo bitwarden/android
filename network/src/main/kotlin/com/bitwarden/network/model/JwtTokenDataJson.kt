@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  *
  * @property userId The ID of the user.
  * @property email The user's email address.
- * @property isEmailVerified Whether or not the user's email is verified.
+ * @property isEmailVerified Whether the user's email is verified.
  * @property name The user's name.
  * @property expirationAsEpochTime The expiration time measured as an epoch time in seconds.
  * @property hasPremium True if the user has a premium account.

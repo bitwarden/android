@@ -69,12 +69,12 @@ interface SettingsRepository : FlightRecorderManager {
     val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
 
     /**
-     * Sets whether or not screen capture is allowed for the current user.
+     * Sets whether screen capture is allowed for the current user.
      */
     var isScreenCaptureAllowed: Boolean
 
     /**
-     * Whether or not screen capture is allowed for the current user.
+     * Whether screen capture is allowed for the current user.
      */
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
@@ -94,12 +94,12 @@ interface SettingsRepository : FlightRecorderManager {
     val isCrashLoggingEnabledFlow: Flow<Boolean>
 
     /**
-     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean
 
     /**
-     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     * Whether the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean
 

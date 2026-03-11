@@ -24,7 +24,7 @@ import com.bitwarden.ui.util.Text
  *
  * @param text The text to display.
  * @param onClick Invoked when either the radio button or text is clicked.
- * @param isSelected Whether or not the radio button should be checked.
+ * @param isSelected Whether the radio button should be checked.
  */
 @Composable
 fun BitwardenSelectionRow(

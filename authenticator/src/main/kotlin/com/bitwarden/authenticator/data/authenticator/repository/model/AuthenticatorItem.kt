@@ -25,7 +25,7 @@ data class AuthenticatorItem(
          * The item is from the local Authenticator app database.
          *
          * @param cipherId Local cipher ID.
-         * @param isFavorite Whether or not the user has marked the item as a favorite.
+         * @param isFavorite Whether the user has marked the item as a favorite.
          */
         data class Local(
             val cipherId: String,

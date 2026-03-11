@@ -73,6 +73,7 @@ fun ImportLoginsInstructionStep(
             accessibilityString = stringResource(id = BitwardenString.import_help),
             onClick = onHelpClick,
             style = BitwardenTheme.typography.bodySmall,
+            isExternalLink = true,
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))

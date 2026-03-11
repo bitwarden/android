@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 /**
  * Models an option for each type of supported browser version to enable third party autofill. Each
  * [BrowserAutofillSettingsOption] contains the associated [BrowserPackage], the [optionText]
- * to display in any UI component, and whether or not the third party autofill [isEnabled].
+ * to display in any UI component, and whether the third party autofill [isEnabled].
  */
 @Parcelize
 sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable {
