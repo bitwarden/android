@@ -4,8 +4,8 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.base.util.hexToColor
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.account.util.initials
@@ -541,7 +541,7 @@ sealed class VaultUnlockEvent {
     /**
      * Prompts the user for biometrics unlock.
      */
-    data class PromptForBiometrics(val cipher: Cipher) : BackgroundEvent, VaultUnlockEvent()
+    data class PromptForBiometrics(val cipher: Cipher) : VaultUnlockEvent(), DeferredBackgroundEvent
 
     /**
      * Completes the get credentials request with an error response.

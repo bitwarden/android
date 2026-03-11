@@ -1503,7 +1503,7 @@ sealed class SearchAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates a result for updating a cipher during the autofill-and-save process.
