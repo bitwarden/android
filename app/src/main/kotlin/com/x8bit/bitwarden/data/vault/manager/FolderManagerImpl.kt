@@ -53,7 +53,8 @@ class FolderManagerImpl(
     }
 
     override suspend fun createFolder(folderView: FolderView): CreateFolderResult {
-        val userId = activeUserId ?: return CreateFolderResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return CreateFolderResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptFolder(userId = userId, folder = folderView)
             .flatMap { folderService.createFolder(body = it.toEncryptedNetworkFolder()) }
@@ -68,7 +69,8 @@ class FolderManagerImpl(
     }
 
     override suspend fun deleteFolder(folderId: String): DeleteFolderResult {
-        val userId = activeUserId ?: return DeleteFolderResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return DeleteFolderResult.Error(error = NoActiveUserException())
         return folderService
             .deleteFolder(folderId = folderId)
             .onSuccess {

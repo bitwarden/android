@@ -289,7 +289,10 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -314,7 +317,10 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
