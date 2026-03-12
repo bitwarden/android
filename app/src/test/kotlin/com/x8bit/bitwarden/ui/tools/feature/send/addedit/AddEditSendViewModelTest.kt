@@ -825,6 +825,59 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `DeleteClick vaultRepository deleteSend Error with message should display error message`() =
+        runTest {
+            val errorMessage = "User-friendly error"
+            val error = Throwable("Ooops")
+            val sendId = "mockId-1"
+            coEvery {
+                vaultRepository.deleteSend(sendId)
+            } returns DeleteSendResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+            val initialState = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                    isSendEmailVerificationEnabled = false,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val viewModel = createViewModel(
+                state = initialState,
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AddEditSendAction.DeleteClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddEditSendState.DialogState.Loading(
+                            message = BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddEditSendState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `DeleteClick vaultRepository deleteSend Success should emit NavigateUpToSearchOrRoot`() =
         runTest {
             val sendId = "mockId-1"

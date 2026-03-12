@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -117,7 +118,12 @@ class SendManagerImpl(
             .onSuccess { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) }
             .fold(
                 onSuccess = { DeleteSendResult.Success },
-                onFailure = { DeleteSendResult.Error(error = it) },
+                onFailure = {
+                    DeleteSendResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
