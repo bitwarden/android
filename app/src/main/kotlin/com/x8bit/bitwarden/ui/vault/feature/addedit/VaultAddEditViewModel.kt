@@ -1821,7 +1821,8 @@ class VaultAddEditViewModel @Inject constructor(
             is ArchiveCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = BitwardenString.unable_to_archive_selected_item.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_archive_selected_item.asText(),
                         error = result.error,
                     ),
                 )
@@ -1845,7 +1846,8 @@ class VaultAddEditViewModel @Inject constructor(
             is UnarchiveCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                         error = result.error,
                     ),
                 )
@@ -1873,7 +1875,8 @@ class VaultAddEditViewModel @Inject constructor(
             is DeleteCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )

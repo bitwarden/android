@@ -1018,7 +1018,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
                             error = result.error,
                         ),
                     )
@@ -1039,7 +1040,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                             error = result.error,
                         ),
                     )

@@ -357,6 +357,59 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `ArchiveClick with ArchiveCipherResult error with errorMessage should display that message`() =
+            runTest {
+                val cipherView = createMockCipherView(number = 1, isArchived = false)
+                every {
+                    cipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canRestore = false,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                        hasOrganizations = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
+                mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                val viewModel = createViewModel(state = null)
+
+                val errorMessage = "You do not have permission to edit this."
+                val error = Throwable("Oh dang.")
+                coEvery {
+                    vaultRepo.archiveCipher(
+                        cipherId = "mockId-1",
+                        cipherView = cipherView,
+                    )
+                } returns ArchiveCipherResult.Error(
+                    errorMessage = errorMessage,
+                    error = error,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Common.ArchiveClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_VIEW_STATE,
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = errorMessage.asText(),
+                            error = error,
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `UnarchiveClick with UnarchiveCipherResult Success should send snackbar event and NavigateBack`() =
             runTest {
                 val cipherView = createMockCipherView(number = 1, isArchived = true)
@@ -444,6 +497,69 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE.copy(
                         dialog = VaultItemState.DialogState.Generic(
                             message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            error = error,
+                        ),
+                        viewState = DEFAULT_VIEW_STATE.copy(
+                            common = DEFAULT_COMMON.copy(
+                                archived = true,
+                                currentCipher = cipherView,
+                            ),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `UnarchiveClick with UnarchiveCipherResult error with errorMessage should display that message`() =
+            runTest {
+                val cipherView = createMockCipherView(number = 1, isArchived = true)
+                every {
+                    cipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canRestore = false,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                        hasOrganizations = true,
+                    )
+                } returns DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        archived = true,
+                        currentCipher = cipherView,
+                    ),
+                )
+                mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                val viewModel = createViewModel(state = null)
+
+                val errorMessage = "You do not have permission to edit this."
+                val error = Throwable("Oh dang.")
+                coEvery {
+                    vaultRepo.unarchiveCipher(
+                        cipherId = "mockId-1",
+                        cipherView = cipherView,
+                    )
+                } returns UnarchiveCipherResult.Error(
+                    errorMessage = errorMessage,
+                    error = error,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Common.UnarchiveClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = errorMessage.asText(),
                             error = error,
                         ),
                         viewState = DEFAULT_VIEW_STATE.copy(
@@ -624,6 +740,57 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         viewState = DEFAULT_VIEW_STATE,
                         dialog = VaultItemState.DialogState.Generic(
                             message = BitwardenString.generic_error_message.asText(),
+                            error = error,
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ConfirmDeleteClick with DeleteCipherResult error with errorMessage should display that message`() =
+            runTest {
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canRestore = false,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                        hasOrganizations = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                val errorMessage = "You do not have permission to edit this."
+                val error = Throwable("Oh dang.")
+                coEvery {
+                    vaultRepo.softDeleteCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns DeleteCipherResult.Error(
+                    errorMessage = errorMessage,
+                    error = error,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_VIEW_STATE,
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = errorMessage.asText(),
                             error = error,
                         ),
                     ),
@@ -823,6 +990,57 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewState = DEFAULT_VIEW_STATE,
                     dialog = VaultItemState.DialogState.Generic(
                         message = BitwardenString.generic_error_message.asText(),
+                        error = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ConfirmRestoreClick with RestoreCipherResult error with errorMessage should display that message`() {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value =
+                DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepo.restoreCipher(
+                    cipherId = VAULT_ITEM_ID,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns RestoreCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = DEFAULT_VIEW_STATE,
+                    dialog = VaultItemState.DialogState.Generic(
+                        message = errorMessage.asText(),
                         error = error,
                     ),
                 ),

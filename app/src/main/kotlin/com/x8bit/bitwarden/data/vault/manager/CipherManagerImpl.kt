@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -111,7 +112,12 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = {
+                    CreateCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
                     it
@@ -157,7 +163,12 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = {
+                    CreateCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
                     it
@@ -169,7 +180,8 @@ class CipherManagerImpl(
         cipherId: String,
         cipherView: CipherView,
     ): ArchiveCipherResult {
-        val userId = activeUserId ?: return ArchiveCipherResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return ArchiveCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .archiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -196,7 +208,12 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { ArchiveCipherResult.Success },
-                onFailure = { ArchiveCipherResult.Error(error = it) },
+                onFailure = {
+                    ArchiveCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
@@ -204,7 +221,8 @@ class CipherManagerImpl(
         cipherId: String,
         cipherView: CipherView,
     ): UnarchiveCipherResult {
-        val userId = activeUserId ?: return UnarchiveCipherResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return UnarchiveCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .unarchiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -227,7 +245,12 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { UnarchiveCipherResult.Success },
-                onFailure = { UnarchiveCipherResult.Error(error = it) },
+                onFailure = {
+                    UnarchiveCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
@@ -239,7 +262,12 @@ class CipherManagerImpl(
             .onSuccess { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) }
             .fold(
                 onSuccess = { DeleteCipherResult.Success },
-                onFailure = { DeleteCipherResult.Error(error = it) },
+                onFailure = {
+                    DeleteCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
@@ -278,7 +306,12 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { DeleteCipherResult.Success },
-                onFailure = { DeleteCipherResult.Error(error = it) },
+                onFailure = {
+                    DeleteCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
@@ -294,7 +327,12 @@ class CipherManagerImpl(
         )
             .fold(
                 onSuccess = { DeleteAttachmentResult.Success },
-                onFailure = { DeleteAttachmentResult.Error(error = it) },
+                onFailure = {
+                    DeleteAttachmentResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
 
     private suspend fun deleteCipherAttachmentForResult(
@@ -359,7 +397,12 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { RestoreCipherResult.Success },
-                onFailure = { RestoreCipherResult.Error(error = it) },
+                onFailure = {
+                    RestoreCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
@@ -399,7 +442,12 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { UpdateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = {
+                    UpdateCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
                 onSuccess = { it },
             )
     }
@@ -436,7 +484,12 @@ class CipherManagerImpl(
                 )
             }
             .fold(
-                onFailure = { ShareCipherResult.Error(error = it) },
+                onFailure = {
+                    ShareCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
                 onSuccess = { ShareCipherResult.Success },
             )
     }
@@ -466,7 +519,12 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { ShareCipherResult.Success },
-                onFailure = { ShareCipherResult.Error(error = it) },
+                onFailure = {
+                    ShareCipherResult.Error(
+                        errorMessage = it.userFriendlyMessage,
+                        error = it,
+                    )
+                },
             )
     }
 
