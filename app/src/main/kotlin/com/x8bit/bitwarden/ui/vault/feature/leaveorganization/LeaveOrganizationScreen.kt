@@ -200,6 +200,7 @@ private fun LeaveOrganizationContent(
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.how_to_manage_my_vault),
             onClick = onHelpLinkClick,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

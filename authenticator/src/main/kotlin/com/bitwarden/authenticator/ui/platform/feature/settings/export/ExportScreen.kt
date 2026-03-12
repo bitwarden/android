@@ -212,6 +212,7 @@ private fun ExportScreenContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.export),
             onClick = onExportClick,
+            isExternalLink = true,
             modifier = Modifier
                 .testTag("ExportVaultButton")
                 .standardHorizontalMargin()
