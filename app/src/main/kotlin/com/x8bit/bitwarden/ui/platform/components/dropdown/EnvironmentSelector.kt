@@ -97,7 +97,12 @@ fun EnvironmentSelector(
         if (isHelpEnabled) {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-                contentDescription = stringResource(BitwardenString.help_with_server_geolocations),
+                contentDescription = stringResource(
+                    id = BitwardenString.external_link_format,
+                    formatArgs = arrayOf(
+                        stringResource(id = BitwardenString.help_with_server_geolocations),
+                    ),
+                ),
                 onClick = onHelpClick,
                 contentColor = BitwardenTheme.colorScheme.icon.secondary,
                 // Align with design but keep accessible touch target of IconButton.
