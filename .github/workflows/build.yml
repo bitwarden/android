@@ -366,6 +366,21 @@ jobs:
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
 
+  sanity_test:
+    name: Sanity Test (SauceLabs)
+    needs: [publish_playstore]
+    uses: bitwarden/test/.github/workflows/mobile_android_tests.yml@main
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      id-token: write
+    with:
+      sanity: true
+      branch: main
+      run_id: ${{ github.run_id }}
+    secrets: inherit
+
   publish_fdroid:
     name: Publish F-Droid artifacts
     needs:
