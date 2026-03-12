@@ -51,42 +51,10 @@ jobs:
       version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
 
-  build:
-    name: Build
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Log inputs to job summary
-        uses: bitwarden/android/.github/actions/log-inputs@main
-        with:
-          inputs: "${{ toJson(inputs) }}"
-
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
-      - name: Check
-        run: bundle exec fastlane check
-
-      - name: Build
-        run: bundle exec fastlane assembleDebugApks
-
-      - name: Upload test reports on failure
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: failure()
-        with:
-          name: test-reports
-          path: app/build/reports/tests/
-
   publish_playstore:
     name: Publish Play Store artifacts
     needs:
       - version
-      - build
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
@@ -370,7 +338,6 @@ jobs:
     name: Publish F-Droid artifacts
     needs:
       - version
-      - build
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
