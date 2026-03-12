@@ -24,19 +24,25 @@ Sequential five-phase workflow for diagnosing and resolving build failures cause
 
 CRITICAL: Before applying any fix, always read the `sdk-internal` PR diff to understand the author's intent. A compile fix alone may be insufficient if the SDK change introduces new behavior that requires a dedicated code path.
 
+## Current State (preprocessed)
+
+- **Current branch**: !`git branch --show-current`
+- **SDK version diff vs main**: !`git diff main -- gradle/libs.versions.toml | grep sdk-android || echo "No SDK version change detected"`
+- **Latest CI failure (current branch)**: !`gh run list --branch $(git branch --show-current) --status failure --limit 1 --json databaseId,event,conclusion -q '.[0]' 2>/dev/null || echo "No failures found"`
+
 ## Proactive Behavior
 
-- If reviewing an SDK update PR and CI checks are failing, skip Phase 1 and jump directly to Phase 2.
+- If the preprocessed state above shows CI failures, skip Phase 1 and jump directly to Phase 2.
 - If no CI failures exist, focus on Phase 1 (changelog review) and Phase 5 (impact assessment).
-- If invoked from a worktree checkout of an SDK update PR, check CI status first and begin diagnosis if failing.
+- If the SDK version diff above shows no change, confirm the branch and version catalog before proceeding.
 
 ---
 
 ## Phase 1: Identify the Update
 
-Determine what changed in the SDK version bump.
+Determine what changed in the SDK version bump. The preprocessed SDK version diff above may already provide this; verify and continue.
 
-1. **Extract version diff** from `gradle/libs.versions.toml`:
+1. **Extract version diff** (if not already shown above) from `gradle/libs.versions.toml`:
    ```bash
    git diff main -- gradle/libs.versions.toml | grep sdk-android
    ```
