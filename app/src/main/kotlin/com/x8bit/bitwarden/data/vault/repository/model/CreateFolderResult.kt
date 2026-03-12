@@ -13,7 +13,11 @@ sealed class CreateFolderResult {
     data class Success(val folderView: FolderView) : CreateFolderResult()
 
     /**
-     * Generic error while creating a folder.
+     * Generic error while creating a folder. The optional [errorMessage] may be displayed
+     * directly in the UI when present.
      */
-    data class Error(val error: Throwable) : CreateFolderResult()
+    data class Error(
+        val error: Throwable,
+        val errorMessage: String? = null,
+    ) : CreateFolderResult()
 }
