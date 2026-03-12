@@ -11,7 +11,11 @@ sealed class DeleteFolderResult {
     data object Success : DeleteFolderResult()
 
     /**
-     * Generic error while deleting a folder.
+     * Generic error while deleting a folder. The optional [errorMessage] may be displayed
+     * directly in the UI when present.
      */
-    data class Error(val error: Throwable) : DeleteFolderResult()
+    data class Error(
+        val error: Throwable,
+        val errorMessage: String? = null,
+    ) : DeleteFolderResult()
 }

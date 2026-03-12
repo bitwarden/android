@@ -11,7 +11,11 @@ sealed class DeleteCipherResult {
     data object Success : DeleteCipherResult()
 
     /**
-     * Generic error while deleting a cipher.
+     * Generic error while deleting a cipher. The optional [errorMessage] may be displayed
+     * directly in the UI when present.
      */
-    data class Error(val error: Throwable) : DeleteCipherResult()
+    data class Error(
+        val error: Throwable,
+        val errorMessage: String? = null,
+    ) : DeleteCipherResult()
 }
