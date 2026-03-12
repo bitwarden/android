@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -707,6 +708,7 @@ private fun CopyRow(
         ) {
             Text(
                 modifier = Modifier
+                    .semantics { hideFromAccessibility() }
                     .padding(end = 16.dp)
                     .weight(1f),
                 text = text(),
@@ -715,7 +717,7 @@ private fun CopyRow(
             )
             Icon(
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
-                contentDescription = null,
+                contentDescription = stringResource(id = BitwardenString.copy),
                 tint = BitwardenTheme.colorScheme.icon.primary,
             )
         }
