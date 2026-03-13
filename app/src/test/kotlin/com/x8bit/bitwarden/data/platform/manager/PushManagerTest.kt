@@ -228,11 +228,10 @@ class PushManagerTest {
 
             @Test
             fun `onMessageReceived with vault emits to fullSyncFlow`() = runTest {
-                val activeUserId = authDiskSource.userState?.activeUserId
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        activeUserId,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -240,10 +239,11 @@ class PushManagerTest {
 
             @Test
             fun `onMessageReceived with policy changed to fullSyncFlow`() = runTest {
+                val activeUserId = authDiskSource.userState?.activeUserId
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(POLICY_CHANGED_NOTIFICATION_MAP)
                     assertEquals(
-                        "any user ID",
+                        activeUserId,
                         awaitItem(),
                     )
                 }
