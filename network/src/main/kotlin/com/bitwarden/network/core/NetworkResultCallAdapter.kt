@@ -1,5 +1,6 @@
 package com.bitwarden.network.core
 
+import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.NetworkResult
 import retrofit2.Call
 import retrofit2.CallAdapter
@@ -10,8 +11,10 @@ import java.lang.reflect.Type
  */
 internal class NetworkResultCallAdapter<T>(
     private val successType: Type,
+    private val baseUrlsProvider: BaseUrlsProvider,
 ) : CallAdapter<T, Call<NetworkResult<T>>> {
 
     override fun responseType(): Type = successType
-    override fun adapt(call: Call<T>): Call<NetworkResult<T>> = NetworkResultCall(call, successType)
+    override fun adapt(call: Call<T>): Call<NetworkResult<T>> =
+        NetworkResultCall(call, successType, baseUrlsProvider)
 }

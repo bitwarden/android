@@ -1,6 +1,8 @@
 package com.bitwarden.network.core
 
+import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.NetworkResult
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
@@ -23,10 +25,12 @@ private const val NO_CONTENT_RESPONSE_CODE: Int = 204
 internal class NetworkResultCall<T>(
     private val backingCall: Call<T>,
     private val successType: Type,
+    private val baseUrlsProvider: BaseUrlsProvider? = null,
 ) : Call<NetworkResult<T>> {
     override fun cancel(): Unit = backingCall.cancel()
 
-    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(backingCall, successType)
+    override fun clone(): Call<NetworkResult<T>> =
+        NetworkResultCall(backingCall, successType, baseUrlsProvider)
 
     override fun enqueue(callback: Callback<NetworkResult<T>>): Unit = backingCall.enqueue(
         object : Callback<T> {
@@ -67,8 +71,26 @@ internal class NetworkResultCall<T>(
     fun executeForResult(): NetworkResult<T> = requireNotNull(execute().body())
 
     private fun Throwable.toFailure(): NetworkResult<T> {
-        // We rebuild the URL without query params, we do not want to log those
-        val url = backingCall.request().url.toUrl().run { "$protocol://$authority$path" }
+        val originalUrl = backingCall.request().url.toUrl()
+
+        // Check if this is a hardcoded default URL that will be replaced by BaseUrlInterceptor
+        // Match against the defaults from RetrofitsImpl.kt line 111 and EnvironmentUrlDataJson
+        val actualHost = baseUrlsProvider?.let { provider ->
+            when (originalUrl.host) {
+                "api.bitwarden.com" -> provider.getBaseApiUrl().toHttpUrlOrNull()?.host
+                "identity.bitwarden.com" -> provider.getBaseIdentityUrl().toHttpUrlOrNull()?.host
+                "events.bitwarden.com" -> provider.getBaseEventsUrl().toHttpUrlOrNull()?.host
+                else -> null
+            }
+        }
+
+        // Rebuild the URL without query params, using actual host if available
+        val url = if (actualHost != null) {
+            "${originalUrl.protocol}://$actualHost${originalUrl.path}"
+        } else {
+            "${originalUrl.protocol}://${originalUrl.authority}${originalUrl.path}"
+        }
+
         Timber.w(this, "Network Error: $url")
         return NetworkResult.Failure(this)
     }
