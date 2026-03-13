@@ -174,7 +174,7 @@ class PushManagerTest {
                     assertEquals(
                         PremiumStatusChangedData(
                             userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                            premium = true,
+                            isPremium = true,
                         ),
                         awaitItem(),
                     )

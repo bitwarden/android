@@ -314,17 +314,15 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.PREMIUM_STATUS_CHANGED -> {
                 json
-                    .decodeFromString<
-                        NotificationPayload.PremiumStatusChangedNotification,
-                        >(
+                    .decodeFromString<NotificationPayload.PremiumStatusChangedNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { it.userId != null && it.enabled != null }
+                    .takeIf { it.userId != null && it.isPremium != null }
                     ?.let { payload ->
                         mutablePremiumStatusChangedSharedFlow.tryEmit(
                             PremiumStatusChangedData(
                                 userId = requireNotNull(payload.userId),
-                                premium = requireNotNull(payload.enabled),
+                                isPremium = requireNotNull(payload.isPremium),
                             ),
                         )
                         mutableFullSyncSharedFlow.tryEmit(

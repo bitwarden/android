@@ -104,6 +104,6 @@ sealed class NotificationPayload {
     @Serializable
     data class PremiumStatusChangedNotification(
         @JsonNames("UserId", "userId") override val userId: String?,
-        @JsonNames("Premium", "premium") val enabled: Boolean?,
+        @JsonNames("Premium", "premium") val isPremium: Boolean?,
     ) : NotificationPayload()
 }
