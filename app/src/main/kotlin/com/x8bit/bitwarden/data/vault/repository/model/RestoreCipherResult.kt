@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
+
 /**
  * Models result of restoring a cipher.
  */
@@ -16,6 +18,6 @@ sealed class RestoreCipherResult {
      */
     data class Error(
         val error: Throwable,
-        val errorMessage: String? = null,
+        val errorMessage: String? = error.userFriendlyMessage,
     ) : RestoreCipherResult()
 }

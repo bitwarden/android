@@ -142,6 +142,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isDismissed = true,
         )
+        settingsDiskSource.storePremiumUpgradeBannerDismissed(
+            userId = userId,
+            isDismissed = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -174,6 +178,9 @@ class SettingsDiskSourceTest {
         assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = userId) ?: false)
         assertTrue(
             settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = userId) ?: false,
+        )
+        assertTrue(
+            settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false,
         )
 
         // These should be cleared
@@ -817,6 +824,44 @@ class SettingsDiskSourceTest {
 
                     // Updating the disk source updates shared preferences
                     settingsDiskSource.storeIntroducingArchiveActionCardDismissed(
+                        userId = mockUserId,
+                        isDismissed = true,
+                    )
+                    assertEquals(true, awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPremiumUpgradeBannerDismissed when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:premiumUpgradeBannerDismissed"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = mockUserId),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPremiumUpgradeBannerDismissedFlow should react to changes in storePremiumUpgradeBannerDismissed`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getPremiumUpgradeBannerDismissedFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(
+                        settingsDiskSource
+                            .getPremiumUpgradeBannerDismissed(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storePremiumUpgradeBannerDismissed(
                         userId = mockUserId,
                         isDismissed = true,
                     )

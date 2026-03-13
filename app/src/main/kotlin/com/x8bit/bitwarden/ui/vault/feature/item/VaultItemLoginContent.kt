@@ -266,6 +266,7 @@ fun VaultItemLoginContent(
                     cardStyle = attachments.toListItemCardStyle(index = index),
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
+                    onUpgradeToPremiumClick = vaultCommonItemTypeHandlers.onUpgradeToPremiumClick,
                 )
             }
         }

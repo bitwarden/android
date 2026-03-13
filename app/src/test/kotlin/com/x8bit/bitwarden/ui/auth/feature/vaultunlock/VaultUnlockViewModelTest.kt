@@ -272,6 +272,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -313,6 +314,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -1416,6 +1418,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

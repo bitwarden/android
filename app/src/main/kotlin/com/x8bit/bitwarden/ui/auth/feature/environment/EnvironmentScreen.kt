@@ -329,6 +329,7 @@ fun EnvironmentScreen(
             BitwardenFilledButton(
                 label = stringResource(id = BitwardenString.import_certificate),
                 onClick = { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) },
+                isExternalLink = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()

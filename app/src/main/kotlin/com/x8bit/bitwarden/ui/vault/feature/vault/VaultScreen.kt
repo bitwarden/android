@@ -371,7 +371,7 @@ private fun VaultScreenScaffold(
 
                 is VaultState.ViewState.Error -> BitwardenErrorContent(
                     message = viewState.message(),
-                    onTryAgainClick = vaultHandlers.tryAgainClick,
+                    onButtonClick = vaultHandlers.tryAgainClick,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

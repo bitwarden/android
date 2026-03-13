@@ -626,6 +626,7 @@ private fun FingerPrintPhraseDialog(
         confirmButton = {
             BitwardenTextButton(
                 label = stringResource(id = BitwardenString.learn_more),
+                isExternalLink = true,
                 onClick = onLearnMore,
             )
         },
