@@ -177,6 +177,7 @@ private fun LeaveOrganizationContent(
             onClick = onHelpLinkClick,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -207,7 +208,6 @@ private fun LeaveOrganizationContent(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

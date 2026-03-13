@@ -187,6 +187,7 @@ private fun MigrateToMyItemsTextContent(
             onClick = onLearnMoreClick,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
