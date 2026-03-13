@@ -4,15 +4,6 @@
 
 ### First Pass: Understand the Refactoring
 
-<thinking>
-Analyze the refactoring scope:
-1. What pattern is being improved?
-2. Why is this refactoring needed?
-3. Does this change behavior or just structure?
-4. What's the scope? (files affected, migration completeness)
-5. What are the risks if something breaks?
-</thinking>
-
 **1. Understand the goal:**
 - What pattern is being improved?
 - Why is this refactoring needed?
@@ -29,15 +20,6 @@ Analyze the refactoring scope:
 - Are tests updated to reflect changes?
 
 ### Second Pass: Verify Consistency
-
-<thinking>
-Verify refactoring quality:
-1. Is the new pattern applied consistently throughout?
-2. Are there missed instances of the old pattern?
-3. Do tests still pass with same behavior?
-4. Is the migration complete or partial?
-5. Does this introduce any new issues?
-</thinking>
 
 **4. Pattern consistency:**
 - Is the new pattern applied consistently throughout?
@@ -169,16 +151,7 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
 
 ## Example Reviews
 
