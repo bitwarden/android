@@ -63,6 +63,9 @@ enum class NotificationType {
 
     @SerialName("25")
     POLICY_CHANGED,
+
+    @SerialName("27")
+    PREMIUM_STATUS_CHANGED,
 }
 
 @Keep

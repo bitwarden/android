@@ -272,6 +272,7 @@ private fun ReviewExportContent(
         BitwardenFilledButton(
             label = stringResource(BitwardenString.import_items),
             onClick = onImportItemsClick,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .nullableTestTag("ImportItemsButton"),

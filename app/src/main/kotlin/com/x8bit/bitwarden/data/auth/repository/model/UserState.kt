@@ -4,6 +4,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import java.time.Instant
 
 /**
  * Represents the overall "user state" of the current active user as well as any users that may be
@@ -56,6 +57,7 @@ data class UserState(
      * user's vault is enabled.
      * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
      * @property isUsingKeyConnector Indicates if the account is currently using a key connector.
+     * @property creationDate The date the account was created, if available.
      */
     data class Account(
         val userId: String,
@@ -77,6 +79,7 @@ data class UserState(
         val onboardingStatus: OnboardingStatus,
         val firstTimeState: FirstTimeState,
         val isExportable: Boolean,
+        val creationDate: Instant?,
     ) {
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.
@@ -123,6 +126,7 @@ data class UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(),
             isExportable = false,
+            creationDate = null,
         )
     }
 }

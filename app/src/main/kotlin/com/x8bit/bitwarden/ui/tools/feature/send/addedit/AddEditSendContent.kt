@@ -329,6 +329,7 @@ private fun ColumnScope.FileTypeContent(
                     chooseFileCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             },
+            isExternalLink = true,
             modifier = Modifier
                 .testTag(tag = "SendChooseFileButton")
                 .fillMaxWidth()

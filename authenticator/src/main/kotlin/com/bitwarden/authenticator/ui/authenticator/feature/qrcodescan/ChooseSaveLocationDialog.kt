@@ -110,6 +110,7 @@ fun ChooseSaveLocationDialog(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
                     label = stringResource(BitwardenString.save_to_bitwarden),
+                    isExternalLink = true,
                     onClick = { onTakeMeToBitwardenClick.invoke(isSaveAsDefaultChecked) },
                 )
             }

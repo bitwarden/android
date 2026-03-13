@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
 import com.bitwarden.vault.FolderView
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 
 /**
  * Models result of creating a folder.
@@ -18,6 +19,6 @@ sealed class CreateFolderResult {
      */
     data class Error(
         val error: Throwable,
-        val errorMessage: String? = null,
+        val errorMessage: String? = error.userFriendlyMessage,
     ) : CreateFolderResult()
 }

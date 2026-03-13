@@ -464,6 +464,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

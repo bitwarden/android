@@ -737,6 +737,80 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ConfirmDeleteClick with DeleteCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherListView = createMockCipherListView(number = 1)
+            val cipherView = createMockCipherView(number = 1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.softDeleteCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns DeleteCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    )
+                        .copy(totp = "mockTotp-1"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit NavigateBack`() =
         runTest {
             val stateWithDialog = createVaultAddItemState(
@@ -2478,6 +2552,96 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ArchiveClick with ArchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            mutableUserStateFlow.update {
+                it?.copy(
+                    accounts = it.accounts.map { account ->
+                        account.copy(isPremium = true)
+                    },
+                )
+            }
+            val cipherListView =
+                createMockCipherListView(number = 1, isArchived = false)
+            val cipherView =
+                createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    originalCipher = cipherView,
+                ),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.archiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns ArchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    hasPremium = true,
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    )
+                        .copy(totp = "mockTotp-1"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `UnarchiveClick with UnarchiveCipherResult Success should send snackbar event and NavigateBack`() =
         runTest {
             val cipherListView = createMockCipherListView(number = 1, isArchived = false)
@@ -2587,6 +2751,95 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            mutableUserStateFlow.update {
+                it?.copy(
+                    accounts = it.accounts.map { account ->
+                        account.copy(isPremium = true)
+                    },
+                )
+            }
+            val cipherListView =
+                createMockCipherListView(number = 1, isArchived = false)
+            val cipherView =
+                createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    originalCipher = cipherView,
+                ),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.unarchiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns UnarchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    hasPremium = true,
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
@@ -5049,6 +5302,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     isExportable = true,
+                    creationDate = null,
                 ),
             ),
             hasPendingAccountAddition = false,

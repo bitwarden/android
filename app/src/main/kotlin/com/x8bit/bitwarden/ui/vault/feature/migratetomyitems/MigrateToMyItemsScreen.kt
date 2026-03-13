@@ -218,6 +218,7 @@ private fun MigrateToMyItemsActions(
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.why_am_i_seeing_this),
             onClick = onHelpClick,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

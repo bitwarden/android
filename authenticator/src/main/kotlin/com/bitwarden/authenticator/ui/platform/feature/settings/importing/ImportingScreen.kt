@@ -163,6 +163,7 @@ private fun ImportScreenContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.import_vault),
             onClick = onImportClick,
+            isExternalLink = true,
             modifier = Modifier
                 .testTag("ImportVaultButton")
                 .standardHorizontalMargin()

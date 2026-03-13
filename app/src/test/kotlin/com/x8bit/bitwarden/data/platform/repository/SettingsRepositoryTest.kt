@@ -887,6 +887,38 @@ class SettingsRepositoryTest {
         }
 
     @Test
+    fun `dismissPremiumUpgradeBanner should properly update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.dismissPremiumUpgradeBanner()
+        assertEquals(
+            true,
+            fakeSettingsDiskSource.getPremiumUpgradeBannerDismissed(userId = USER_ID),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPremiumUpgradeBannerDismissedFlow should react to changes in SettingsDiskSource`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository
+                .getPremiumUpgradeBannerDismissedFlow()
+                .test {
+                    assertFalse(awaitItem())
+                    fakeSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                        userId = USER_ID,
+                        isDismissed = true,
+                    )
+                    assertTrue(awaitItem())
+                    fakeSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                        userId = USER_ID,
+                        isDismissed = false,
+                    )
+                    assertFalse(awaitItem())
+                }
+        }
+
+    @Test
     fun `storePullToRefreshEnabled should properly update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository.storePullToRefreshEnabled(true)
