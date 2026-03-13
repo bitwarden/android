@@ -74,7 +74,8 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
             .onNodeWithText(
                 text = "By declining, your personal items will stay in your account, but you’ll " +
                     "lose access to shared items and organization features. Learn more",
-            ).performCustomAccessibilityAction(label = "Learn more")
+            )
+            .performCustomAccessibilityAction(label = "Learn more, External link")
         verify { viewModel.trySendAction(LeaveOrganizationAction.HelpLinkClick) }
     }
 

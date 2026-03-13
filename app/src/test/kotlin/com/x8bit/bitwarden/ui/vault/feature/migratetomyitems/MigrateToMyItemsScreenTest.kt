@@ -93,11 +93,13 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Why am I seeing this link click should send HelpLinkClicked action`() {
-        composeTestRule.onNodeWithText(
-            "$ORGANIZATION_NAME is requiring all items to be owned by the " +
-                "organization for security and compliance. Click accept to transfer ownership of " +
-                "your items. Learn more",
-        ).performCustomAccessibilityAction(label = "Learn more")
+        composeTestRule
+            .onNodeWithText(
+                "$ORGANIZATION_NAME is requiring all items to be owned by the " +
+                    "organization for security and compliance. " +
+                    "Click accept to transfer ownership of your items. Learn more",
+            )
+            .performCustomAccessibilityAction(label = "Learn more, External link")
 
         verify {
             viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked)
