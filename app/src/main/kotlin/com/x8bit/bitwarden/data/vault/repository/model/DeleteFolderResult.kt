@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
+
 /**
  * Models result of deleting a folder.
  */
@@ -16,6 +18,6 @@ sealed class DeleteFolderResult {
      */
     data class Error(
         val error: Throwable,
-        val errorMessage: String? = null,
+        val errorMessage: String? = error.userFriendlyMessage,
     ) : DeleteFolderResult()
 }
