@@ -526,7 +526,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = state.viewState.message(),
-                    onTryAgainClick = vaultItemListingHandlers.refreshClick,
+                    onButtonClick = vaultItemListingHandlers.refreshClick,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
