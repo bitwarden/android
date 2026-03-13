@@ -17,7 +17,7 @@ sealed class UpdateCipherResult {
      * the UI when present.
      */
     data class Error(
-        val error: Throwable? = null,
+        val error: Throwable?,
         val errorMessage: String? = error?.userFriendlyMessage,
     ) : UpdateCipherResult()
 }
