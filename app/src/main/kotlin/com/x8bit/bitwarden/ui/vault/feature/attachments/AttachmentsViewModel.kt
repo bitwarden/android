@@ -298,7 +298,10 @@ class AttachmentsViewModel @Inject constructor(
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
