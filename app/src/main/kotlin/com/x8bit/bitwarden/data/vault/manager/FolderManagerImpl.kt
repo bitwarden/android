@@ -120,12 +120,7 @@ class FolderManagerImpl(
                         }
                     }
                 },
-                onFailure = {
-                    UpdateFolderResult.Error(
-                        error = it,
-                        errorMessage = it.message,
-                    )
-                },
+                onFailure = { UpdateFolderResult.Error(error = it) },
             )
     }
 
