@@ -69,6 +69,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
+    private var onNavigateToPreviewAttachmentId: String? = null
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
@@ -93,6 +94,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
+                onNavigateToPreviewAttachment = { id, _, _ ->
+                    onNavigateToPreviewAttachmentId = id
+                },
             )
         }
     }
@@ -136,6 +140,19 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToPasswordHistory(itemId = id))
         assertEquals(id, onNavigateToPasswordHistoryId)
+    }
+
+    @Test
+    fun `NavigateToPreviewAttachment event should invoke onNavigateToPreviewAttachment`() {
+        val cipherId = "cipherId1234"
+        mutableEventFlow.tryEmit(
+            VaultItemEvent.NavigateToPreviewAttachment(
+                cipherId = cipherId,
+                attachmentId = "attachmentId4321",
+                fileName = "fileName",
+            ),
+        )
+        assertEquals(cipherId, onNavigateToPreviewAttachmentId)
     }
 
     @Test

@@ -42,7 +42,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.component.AttachmentPreviewDialog
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -64,6 +63,11 @@ fun VaultItemScreen(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (
+        cipherId: String,
+        attachmentId: String,
+        fileName: String,
+    ) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
@@ -116,15 +120,16 @@ fun VaultItemScreen(
                     intentManager.createDocumentIntent(event.fileName),
                 )
             }
+
+            is VaultItemEvent.NavigateToPreviewAttachment -> {
+                onNavigateToPreviewAttachment(event.cipherId, event.attachmentId, event.fileName)
+            }
         }
     }
 
     VaultItemDialogs(
         dialog = state.dialog,
         onDismissRequest = { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) },
-        onPreviewLoaded = {
-            viewModel.trySendAction(VaultItemAction.Internal.AttachmentPreviewLoaded)
-        },
         onConfirmDeleteClick = {
             viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
         },
@@ -275,12 +280,10 @@ fun VaultItemScreen(
     }
 }
 
-@Suppress("LongParameterList", "LongMethod")
 @Composable
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
-    onPreviewLoaded: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
@@ -343,14 +346,6 @@ private fun VaultItemDialogs(
             onDismissClick = onDismissRequest,
             onDismissRequest = onDismissRequest,
         )
-
-        is VaultItemState.DialogState.AttachmentPreview -> {
-            AttachmentPreviewDialog(
-                attachmentFile = dialog.file,
-                onDismissRequest = onDismissRequest,
-                onLoaded = onPreviewLoaded,
-            )
-        }
 
         null -> Unit
     }

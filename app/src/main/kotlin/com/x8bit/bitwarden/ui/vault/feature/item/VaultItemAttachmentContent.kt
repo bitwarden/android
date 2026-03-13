@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,13 +42,26 @@ fun AttachmentItemContent(
 ) {
     var shouldShowPremiumWarningDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowSizeWarningDialog by rememberSaveable { mutableStateOf(false) }
-    var onConfirmLargeFileAction by remember { mutableStateOf<() -> Unit>({}) }
 
     Box(
         contentAlignment = Alignment.CenterStart,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingStart = 16.dp,
+                onClick = {
+                    if (!attachmentItem.isDownloadAllowed) {
+                        shouldShowPremiumWarningDialog = true
+                        return@cardStyle
+                    }
+                    if (attachmentItem.isLargeFile) {
+                        shouldShowSizeWarningDialog = true
+                        return@cardStyle
+                    }
+                    onAttachmentPreviewClick(attachmentItem)
+                },
+            )
             .testTag("CipherAttachment"),
     ) {
         Row(
@@ -83,30 +95,6 @@ fun AttachmentItemContent(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                if (attachmentItem.isPreviewable) {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_preview,
-                        contentDescription = stringResource(id = BitwardenString.preview),
-                        onClick = {
-                            if (!attachmentItem.isDownloadAllowed) {
-                                shouldShowPremiumWarningDialog = true
-                                return@BitwardenStandardIconButton
-                            }
-
-                            if (attachmentItem.isLargeFile) {
-                                onConfirmLargeFileAction =
-                                    { onAttachmentPreviewClick(attachmentItem) }
-                                shouldShowSizeWarningDialog = true
-                                return@BitwardenStandardIconButton
-                            }
-
-                            onAttachmentPreviewClick(attachmentItem)
-                        },
-                        modifier = Modifier
-                            .testTag("AttachmentPreviewButton"),
-                    )
-                }
-
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_download,
                     contentDescription = stringResource(id = BitwardenString.download),
@@ -117,7 +105,6 @@ fun AttachmentItemContent(
                         }
 
                         if (attachmentItem.isLargeFile) {
-                            onConfirmLargeFileAction = { onAttachmentDownloadClick(attachmentItem) }
                             shouldShowSizeWarningDialog = true
                             return@BitwardenStandardIconButton
                         }
@@ -157,7 +144,7 @@ fun AttachmentItemContent(
             dismissButtonText = stringResource(BitwardenString.no),
             onConfirmClick = {
                 shouldShowSizeWarningDialog = false
-                onConfirmLargeFileAction()
+                onAttachmentDownloadClick(attachmentItem)
             },
             onDismissClick = { shouldShowSizeWarningDialog = false },
             onDismissRequest = { shouldShowSizeWarningDialog = false },

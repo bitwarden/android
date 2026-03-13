@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.item.component
+package com.bitwarden.ui.platform.components.preview
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -6,8 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,15 +21,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
-import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,62 +31,25 @@ private const val MIN_ZOOM_SCALE = 1f
 private const val TARGET_BITMAP_SIZE = 2048
 
 /**
- * Displays a secure, temporary image attachment in a full-screen dialog with zoom and pan
- * capabilities. The dialog can be dismissed by clicking the close button or pressing the back
- * button.
- *
- * @param attachmentFile The temporary [File] object representing the decrypted image.
- * @param onDismissRequest A lambda to be invoked when the dialog is dismissed.
- * @param onLoaded A security-critical callback invoked once the [attachmentFile] has been read
- * from disk. It signals that the temporary file can be deleted to minimize its on-disk lifetime.
+ * Displays a preview of the [file] if it's an image.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttachmentPreviewDialog(
-    attachmentFile: File,
-    onDismissRequest: () -> Unit,
-    onLoaded: () -> Unit,
-) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false,
-        ),
-    ) {
-        StatusBarsAppearanceAffect()
-        BitwardenScaffold(
-            topBar = {
-                BitwardenTopAppBar(
-                    title = attachmentFile.name,
-                    scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                    onNavigationIconClick = onDismissRequest,
-                )
-            },
-            modifier = Modifier.semantics { testTagsAsResourceId = true },
-        ) {
-            AttachmentPreviewContent(
-                attachmentFile = attachmentFile,
-                onError = onDismissRequest,
-                onLoaded = onLoaded,
-            )
-        }
-    }
-}
-
-@Composable
-private fun AttachmentPreviewContent(
-    attachmentFile: File,
+fun ImagePreviewContent(
+    file: File,
+    onMissingFile: () -> Unit,
     onLoaded: () -> Unit,
     onError: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var scale by remember { mutableFloatStateOf(MIN_ZOOM_SCALE) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     var painter by remember { mutableStateOf<BitmapPainter?>(null) }
 
-    LaunchedEffect(attachmentFile) {
+    LaunchedEffect(file) {
+        val attachmentFile = file.takeIf { it.exists() } ?: run {
+            onMissingFile()
+            return@LaunchedEffect
+        }
         val bitmap = withContext(Dispatchers.IO) {
             try {
                 decodeDownsampledBitmap(file = attachmentFile)
@@ -113,7 +65,7 @@ private fun AttachmentPreviewContent(
 
     painter?.let {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
             Image(
