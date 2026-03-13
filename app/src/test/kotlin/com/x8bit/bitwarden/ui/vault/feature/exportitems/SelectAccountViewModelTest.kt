@@ -164,6 +164,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         val organizationId = "mockOrganizationId-1"
         val accountInOrg = DEFAULT_ACCOUNT.copy(
             isExportable = false,
+            creationDate = null,
             organizations = listOf(
                 createMockOrganization(
                     number = 1,
@@ -294,6 +295,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

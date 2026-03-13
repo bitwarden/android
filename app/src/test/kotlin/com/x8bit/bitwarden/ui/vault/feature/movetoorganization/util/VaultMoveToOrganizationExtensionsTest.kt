@@ -129,6 +129,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             ),
         ),
     )

@@ -390,6 +390,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -476,6 +477,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -3730,6 +3732,7 @@ private val DEFAULT_ACTIVE_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = DEFAULT_FIRST_TIME_STATE,
     isExportable = true,
+    creationDate = Instant.parse("2023-10-01T12:00:00Z"),
 )
 
 private val DEFAULT_INACTIVE_ACCOUNT = UserState.Account(
@@ -3751,6 +3754,7 @@ private val DEFAULT_INACTIVE_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = DEFAULT_FIRST_TIME_STATE,
     isExportable = true,
+    creationDate = Instant.parse("2023-10-01T12:00:00Z"),
 )
 
 private val DEFAULT_USER_STATE = UserState(

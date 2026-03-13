@@ -298,6 +298,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

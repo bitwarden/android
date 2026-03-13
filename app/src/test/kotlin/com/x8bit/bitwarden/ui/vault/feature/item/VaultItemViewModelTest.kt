@@ -3032,6 +3032,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         )
 
         private val DEFAULT_USER_STATE: UserState = UserState(
