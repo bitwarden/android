@@ -508,9 +508,10 @@ Scanning will happen automatically.</string>
     <string name="remove_master_password">Remove master password</string>
     <string name="leave_organization">Leave organization</string>
     <string name="leave_organization_name">Leave %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
     <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="how_to_manage_my_vault">How to manage My vault</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
@@ -1184,7 +1185,7 @@ Do you want to switch to this account?</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
