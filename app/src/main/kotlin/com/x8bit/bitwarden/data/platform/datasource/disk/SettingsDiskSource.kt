@@ -124,6 +124,24 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether the premium upgrade banner has been dismissed.
+     */
+    fun getPremiumUpgradeBannerDismissed(userId: String): Boolean?
+
+    /**
+     * Stores whether the premium upgrade banner has been dismissed.
+     */
+    fun storePremiumUpgradeBannerDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getPremiumUpgradeBannerDismissed] for the given [userId].
+     */
+    fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

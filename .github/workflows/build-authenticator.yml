@@ -49,35 +49,10 @@ jobs:
       version_number: ${{ inputs.version-code }}
       patch_version: ${{ inputs.patch_version && '999' || '' }}
 
-  build:
-    name: Build Authenticator
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Log inputs to job summary
-        uses: bitwarden/android/.github/actions/log-inputs@main
-        with:
-          inputs: "${{ toJson(inputs) }}"
-
-      - name: Check out repo
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
-      - name: Check Authenticator
-        run: bundle exec fastlane check
-
-      - name: Build Authenticator
-        run: bundle exec fastlane buildAuthenticatorDebug
-
   publish_playstore:
     name: Publish Authenticator Play Store artifacts
     needs:
       - version
-      - build
     runs-on: ubuntu-24.04
     permissions:
       id-token: write

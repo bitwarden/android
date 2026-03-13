@@ -185,7 +185,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
         composeTestRule
-            .onNodeWithContentDescription("Help with server geolocations.")
+            .onNodeWithContentDescription("Help with server geolocations, External link")
             .performScrollTo()
             .performClick()
 
@@ -262,7 +262,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     fun `when terms and conditions custom action invoked should send TermsClick`() {
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
-            .performCustomAccessibilityAction("Terms of Service")
+            .performCustomAccessibilityAction("Terms of Service, External link")
 
         verify { viewModel.trySendAction(StartRegistrationAction.TermsClick) }
     }
@@ -271,7 +271,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     fun `when privacy policy custom action invoked should send TermsClick`() {
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
-            .performCustomAccessibilityAction("Privacy Policy")
+            .performCustomAccessibilityAction("Privacy Policy, External link")
 
         verify { viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick) }
     }

@@ -15,6 +15,7 @@ import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.createMockFileSendResponseJson
 import com.bitwarden.network.model.createMockSend
 import com.bitwarden.network.model.createMockSendJsonRequest
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -669,6 +670,27 @@ class SendManagerTest {
             val result = sendManager.deleteSend(sendId)
 
             assertEquals(DeleteSendResult.Error(error = error), result)
+        }
+
+    @Test
+    fun `deleteSend with CookieRedirectException should return error with user-friendly message`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val sendId = "mockId-1"
+            val error = CookieRedirectException(hostname = "example.com")
+            coEvery {
+                sendsService.deleteSend(sendId = sendId)
+            } returns error.asFailure()
+
+            val result = sendManager.deleteSend(sendId)
+
+            assertEquals(
+                DeleteSendResult.Error(
+                    errorMessage = error.message,
+                    error = error,
+                ),
+                result,
+            )
         }
 
     @Test

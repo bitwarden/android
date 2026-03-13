@@ -148,7 +148,7 @@ fun VerificationCodeScreen(
             is VerificationCodeState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message.invoke(),
-                    onTryAgainClick = verificationCodeHandler.refreshClick,
+                    onButtonClick = verificationCodeHandler.refreshClick,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

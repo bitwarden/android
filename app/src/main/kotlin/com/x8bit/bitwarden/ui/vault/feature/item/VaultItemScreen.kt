@@ -353,7 +353,7 @@ private fun VaultItemContent(
     when (viewState) {
         is VaultItemState.ViewState.Error -> BitwardenErrorContent(
             message = viewState.message(),
-            onTryAgainClick = vaultCommonItemTypeHandlers.onRefreshClick,
+            onButtonClick = vaultCommonItemTypeHandlers.onRefreshClick,
             modifier = modifier,
         )
 

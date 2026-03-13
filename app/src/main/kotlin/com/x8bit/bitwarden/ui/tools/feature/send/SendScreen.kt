@@ -194,7 +194,7 @@ fun SendScreen(
 
             is SendState.ViewState.Error -> BitwardenErrorContent(
                 message = viewState.message(),
-                onTryAgainClick = { viewModel.trySendAction(SendAction.RefreshClick) },
+                onButtonClick = { viewModel.trySendAction(SendAction.RefreshClick) },
                 modifier = modifier,
             )
 
