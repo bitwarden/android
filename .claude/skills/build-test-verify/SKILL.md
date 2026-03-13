@@ -39,14 +39,14 @@ If builds fail resolving the Bitwarden SDK, verify `GITHUB_TOKEN` in `user.prope
 
 **IMPORTANT**: The app module uses the `standard` flavor. Always use `testStandardDebugUnitTest`, NOT `testDebugUnitTest`.
 
-**IMPORTANT**: Always pipe test output through a filter that captures failures on the first run. Gradle suppresses detailed failure output by default, so use `2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30` or similar to see pass/fail results and assertion details without needing a second run.
+**IMPORTANT**: Always pipe test output through a filter that captures failures on the first run. Gradle suppresses detailed failure output by default, so use `2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30` to see pass/fail results and assertion details without needing a second run.
 
 ```bash
 # App module tests (correct flavor!)
-./gradlew app:testStandardDebugUnitTest 2>&1 | grep -E "FAILED|BUILD|expected:|actual:" | head -30
+./gradlew app:testStandardDebugUnitTest 2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30
 
 # Run specific test classes
-./gradlew app:testStandardDebugUnitTest --tests "com.x8bit.bitwarden.SomeTest" 2>&1 | grep -E "FAILED|BUILD|expected:|actual:" | head -30
+./gradlew app:testStandardDebugUnitTest --tests "com.x8bit.bitwarden.SomeTest" 2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30
 
 # Run all unit tests across all modules
 ./gradlew test
