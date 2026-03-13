@@ -523,6 +523,29 @@ class SettingsRepositoryImpl(
         }
     }
 
+    override fun getPremiumUpgradeBannerDismissedFlow(): StateFlow<Boolean> {
+        val userId = activeUserId ?: return MutableStateFlow(value = false)
+        return settingsDiskSource
+            .getPremiumUpgradeBannerDismissedFlow(userId = userId)
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .getPremiumUpgradeBannerDismissed(userId = userId)
+                    ?: false,
+            )
+    }
+
+    override fun dismissPremiumUpgradeBanner() {
+        activeUserId?.let {
+            settingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = it,
+                isDismissed = true,
+            )
+        }
+    }
+
     override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
         val userId = activeUserId
             ?: return BiometricsKeyResult.Error(error = NoActiveUserException())
