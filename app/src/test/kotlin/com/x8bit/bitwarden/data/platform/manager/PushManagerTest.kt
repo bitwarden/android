@@ -279,6 +279,18 @@ class PushManagerTest {
                     )
                 }
             }
+
+            @Test
+            fun `onMessageReceived with policy changed to fullSyncFlow`() = runTest {
+                val activeUserId = authDiskSource.userState?.activeUserId
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(POLICY_CHANGED_NOTIFICATION_MAP)
+                    assertEquals(
+                        activeUserId,
+                        awaitItem(),
+                    )
+                }
+            }
         }
 
         @Nested
@@ -961,6 +973,23 @@ private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
       "Date": "2023-10-27T12:00:00.000Z",
       "Reason": 0
     }""",
+)
+
+private val POLICY_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "25",
+    "payload" to """{                                                                                                                                                                                                                             
+        "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                   
+        "Policy": {                                                                                                                                                                                                                                 
+          "Id": "69642eee-80fc-476b-8954-b40c00a97f20",                                                                                                                                                                                             
+          "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                 
+          "Type": 6,                                                                                                                                                                                                                                
+          "Data": null,                                                                                                                                                                                                                             
+          "Enabled": true,                                                                                                                                                                                                                          
+          "CreationDate": "2026-03-13T10:17:07.0891504Z",                                                                                                                                                                                           
+          "RevisionDate": "2026-03-13T10:17:07.0892162Z"                                                                                                                                                                                            
+        }                                                                                                                                                                                                                                           
+      }""",
 )
 
 private val SYNC_CIPHER_CREATE_NOTIFICATION_MAP = mapOf(
