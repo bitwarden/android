@@ -87,10 +87,8 @@ class FolderManagerImpl(
         folderId: String,
         folderView: FolderView,
     ): UpdateFolderResult {
-        val userId = activeUserId ?: return UpdateFolderResult.Error(
-            errorMessage = null,
-            error = NoActiveUserException(),
-        )
+        val userId = activeUserId
+            ?: return UpdateFolderResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptFolder(userId = userId, folder = folderView)
             .flatMap { folder ->
@@ -112,7 +110,7 @@ class FolderManagerImpl(
                                 .fold(
                                     onSuccess = { UpdateFolderResult.Success(it) },
                                     onFailure = {
-                                        UpdateFolderResult.Error(errorMessage = null, error = it)
+                                        UpdateFolderResult.Error(error = it)
                                     },
                                 )
                         }
@@ -122,7 +120,12 @@ class FolderManagerImpl(
                         }
                     }
                 },
-                onFailure = { UpdateFolderResult.Error(it.message, error = it) },
+                onFailure = {
+                    UpdateFolderResult.Error(
+                        error = it,
+                        errorMessage = it.message,
+                    )
+                },
             )
     }
 
