@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,6 +23,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -30,6 +34,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
  * @param isEnabled Whether the button is enabled.
+ * @param isExternalLink Indicates that this button launches an external link.
  * @param cardStyle The optional card style to surround the button.
  * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
  * `null`.
@@ -41,13 +46,24 @@ fun BitwardenFilledButton(
     modifier: Modifier = Modifier,
     icon: Painter? = null,
     isEnabled: Boolean = true,
+    isExternalLink: Boolean = false,
     colors: ButtonColors = bitwardenFilledButtonColors(),
     cardStyle: CardStyle? = null,
     cardInsets: PaddingValues = PaddingValues(horizontal = 16.dp),
 ) {
+    val formattedContentDescription = if (isExternalLink) {
+        stringResource(
+            id = BitwardenString.external_link_format,
+            formatArgs = arrayOf(label),
+        )
+    } else {
+        label
+    }
     Button(
         modifier = modifier
-            .semantics(mergeDescendants = true) {}
+            .semantics(mergeDescendants = true) {
+                contentDescription = formattedContentDescription
+            }
             .cardStyle(cardStyle = cardStyle, padding = cardInsets),
         onClick = throttledClick(onClick = onClick),
         enabled = isEnabled,
@@ -69,6 +85,7 @@ fun BitwardenFilledButton(
         Text(
             text = label,
             style = BitwardenTheme.typography.labelLarge,
+            modifier = Modifier.semantics { hideFromAccessibility() },
         )
     }
 }

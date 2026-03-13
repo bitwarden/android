@@ -182,6 +182,7 @@ private fun CookieAcquisitionContent(
             label = stringResource(id = BitwardenString.launch_browser),
             onClick = handler.onLaunchBrowserClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -202,6 +203,7 @@ private fun CookieAcquisitionContent(
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.why_am_i_seeing_this),
             onClick = handler.onWhyAmISeeingThisClick,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
