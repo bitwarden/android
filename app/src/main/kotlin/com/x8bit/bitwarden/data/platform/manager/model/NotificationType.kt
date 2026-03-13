@@ -60,6 +60,9 @@ enum class NotificationType {
 
     @SerialName("16")
     AUTH_REQUEST_RESPONSE,
+
+    @SerialName("25")
+    POLICY_CHANGED,
 }
 
 @Keep
