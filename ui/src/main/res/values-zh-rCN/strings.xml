@@ -42,7 +42,7 @@
     <string name="master_password">主密码</string>
     <string name="master_password_required">主密码（必填）</string>
     <string name="new_master_password_required">新主密码（必填）</string>
-    <string name="more">更多</string>
+    <string name="more_options">更多选项</string>
     <string name="my_vault">我的密码库</string>
     <string name="name">名称</string>
     <string name="item_name_required">项目名称 （必填）</string>
@@ -199,6 +199,8 @@
     <string name="copy_totp_automatically">自动复制 TOTP</string>
     <string name="premium_required">使用此功能需要高级会员资格。</string>
     <string name="attachment_deleted">附件已删除</string>
+    <string name="attachments_unavailable">附件功能不可用</string>
+    <string name="attachments_are_a_premium_feature">附件是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="choose_file">选择文件</string>
     <string name="file">文件</string>
     <string name="no_file_chosen">未选择文件</string>
@@ -494,7 +496,7 @@
     <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
     <string name="send_file_premium_required">免费账户仅限于共享文本。要使用文件 Send，需要高级会员。</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您当前的方案不包含对此功能的访问权限。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="password_prompt">主密码重新提示</string>
     <string name="password_confirmation">确认主密码</string>
     <string name="password_confirmation_desc">此操作受到保护，要继续，请重新输入主密码以验证您的身份。</string>
@@ -762,7 +764,7 @@
     <string name="write_this_password_down_and_keep_it_somewhere_safe">写下此密码并将其保存在安全的地方。</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">了解其他防止账户被锁住的方法</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">了解防止账户被锁住的方法</annotation></string>
-    <string name="help_with_server_geolocations">帮助确定服务器位置。</string>
+    <string name="help_with_server_geolocations">帮助确定服务器位置</string>
     <string name="email_address_required">电子邮箱地址（必填）</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">选择电子邮件中的链接以验证您的电子邮箱地址并继续创建您的账户。</string>
     <string name="change_email_address">更改电子邮箱地址</string>
@@ -831,6 +833,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">填写表单然后<annotation emphasis="bold">导入已保存的密码文件</annotation>。</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">为了您的安全，请务必<annotation emphasis="bold">删除已保存的密码文件</annotation>。</string>
     <string name="need_help_check_out_import_help">需要帮助吗？请查看 <annotation link="importHelp">导入帮助</annotation>。</string>
+    <string name="import_help">导入帮助</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">保存导出的文件</annotation>到计算机上您可以轻松找到的某个位置。</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">这是一个无法识别的 Bitwarden 服务器。您可能需要向您的提供商查询或更新您的服务器。</string>
     <string name="syncing_logins_loading_message">正在同步登录…</string>
@@ -1190,14 +1193,14 @@
     <string name="unarchiving">正在取消存档</string>
     <string name="item_moved_to_archived">项目已移动到归档</string>
     <string name="item_moved_to_vault">项目已移动到密码库</string>
-    <string name="archive_unavailable">归档不可用</string>
-    <string name="archiving_items_is_a_premium_feature">归档项目是一项高级版功能。您的当前方案不包含对此功能的访问权限。</string>
+    <string name="archive_unavailable">归档功能不可用</string>
+    <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
     <string name="this_item_is_archived">此项目已归档。</string>
     <string name="introducing_archive">归档介绍</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">将您暂时不需要的项目安全地存放在视线之外。</string>
     <string name="go_to_archive">前往归档</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">此项目已归档。保存更改会将其恢复到您的密码库。</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">此项目已归档。保存更改会将其恢复到您的密码库中。</string>
     <string name="your_premium_subscription_ended">您的高级版订阅已结束</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">要重新获取归档内容的访问权限，请重启您的高级版订阅。如果您在重启前编辑了某个已归档项目的详细信息，它将被移回您的密码库中。</string>
     <string name="restart_premium">重启高级版</string>
@@ -1212,4 +1215,5 @@
     <string name="launch_browser">启动浏览器</string>
     <string name="continue_without_syncing">继续而不同步</string>
     <string name="external_link">外部链接</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部链接</string>
 </resources>

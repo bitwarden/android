@@ -42,7 +42,7 @@
     <string name="master_password">Pääsalasana</string>
     <string name="master_password_required">Pääsalasana (pakollinen)</string>
     <string name="new_master_password_required">Uusi pääsalasana (pakollinen)</string>
-    <string name="more">Lisää</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">Oma holvi</string>
     <string name="name">Nimi</string>
     <string name="item_name_required">Kohteen nimi (pakollinen)</string>
@@ -200,6 +200,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="copy_totp_automatically">Kopioi TOTP-koodi automaattisesti</string>
     <string name="premium_required">Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</string>
     <string name="attachment_deleted">Tiedostoliite poistettiin</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Valitse tiedosto</string>
     <string name="file">Tiedosto</string>
     <string name="no_file_chosen">Tiedostoa ei ole valittu.</string>
@@ -836,6 +838,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Tätä ei tunnistettu Bitwarden-palvelimeksi. Tarkista tiedot palveluntarjoajaltasi tai päivitä palvelimesi.</string>
     <string name="syncing_logins_loading_message">Kirjautumistietoja synkronoidaan...</string>
@@ -1220,4 +1223,5 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
 </resources>
