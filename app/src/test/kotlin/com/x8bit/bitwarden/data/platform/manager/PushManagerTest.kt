@@ -281,7 +281,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with policy changed to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with policy changed emit to fullSyncFlow`() = runTest {
                 val activeUserId = authDiskSource.userState?.activeUserId
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(POLICY_CHANGED_NOTIFICATION_MAP)
