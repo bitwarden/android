@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.CookieAcquisiti
 data class CookieAcquisitionHandler(
     val onLaunchBrowserClick: () -> Unit,
     val onContinueWithoutSyncingClick: () -> Unit,
-    val onWhyAmISeeingThisClick: () -> Unit,
     val onDismissDialogClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -32,11 +31,6 @@ data class CookieAcquisitionHandler(
                 onContinueWithoutSyncingClick = {
                     viewModel.trySendAction(
                         CookieAcquisitionAction.ContinueWithoutSyncingClick,
-                    )
-                },
-                onWhyAmISeeingThisClick = {
-                    viewModel.trySendAction(
-                        CookieAcquisitionAction.WhyAmISeeingThisClick,
                     )
                 },
                 onDismissDialogClick = {
