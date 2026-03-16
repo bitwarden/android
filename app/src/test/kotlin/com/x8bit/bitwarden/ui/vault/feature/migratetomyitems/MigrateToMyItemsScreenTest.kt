@@ -8,6 +8,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
@@ -31,7 +32,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         MigrateToMyItemsState(
             organizationId = "test-org-id",
-            organizationName = "Test Organization",
+            organizationName = ORGANIZATION_NAME,
             dialog = null,
         ),
     )
@@ -56,7 +57,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `title should display with organization name`() {
         composeTestRule
-            .onNodeWithText("Transfer items to Test Organization")
+            .onNodeWithText("Transfer items to $ORGANIZATION_NAME")
             .assertIsDisplayed()
     }
 
@@ -64,7 +65,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     fun `description text should be displayed`() {
         composeTestRule
             .onNodeWithText(
-                "Test Organization is requiring all items to be owned by the " +
+                "$ORGANIZATION_NAME is requiring all items to be owned by the " +
                     "organization for security and compliance. Click accept to transfer " +
                     "ownership of your items.",
                 substring = true,
@@ -92,7 +93,13 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Why am I seeing this link click should send HelpLinkClicked action`() {
-        composeTestRule.onNodeWithText("Why am I seeing this?").performClick()
+        composeTestRule
+            .onNodeWithText(
+                "$ORGANIZATION_NAME is requiring all items to be owned by the " +
+                    "organization for security and compliance. " +
+                    "Click accept to transfer ownership of your items. Learn more",
+            )
+            .performCustomAccessibilityAction(label = "Learn more, External link")
 
         verify {
             viewModel.trySendAction(MigrateToMyItemsAction.HelpLinkClicked)
@@ -104,7 +111,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(
             MigrateToMyItemsEvent.NavigateToLeaveOrganization(
                 organizationId = "test-org-id",
-                organizationName = "Test Organization",
+                organizationName = ORGANIZATION_NAME,
             ),
         )
         assertTrue(onNavigateToLeaveOrganizationCalled)
@@ -123,14 +130,14 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     fun `Loading dialog should display when dialog state is Loading`() {
         mutableStateFlow.value = MigrateToMyItemsState(
             organizationId = "test-org-id",
-            organizationName = "Test Organization",
+            organizationName = ORGANIZATION_NAME,
             dialog = MigrateToMyItemsState.DialogState.Loading(
-                message = "Migrating items to Test Organization...".asText(),
+                message = "Migrating items to $ORGANIZATION_NAME...".asText(),
             ),
         )
 
         composeTestRule
-            .onNodeWithText("Migrating items to Test Organization...")
+            .onNodeWithText("Migrating items to $ORGANIZATION_NAME...")
             .assertIsDisplayed()
     }
 
@@ -138,7 +145,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     fun `Error dialog should display when dialog state is Error`() {
         mutableStateFlow.value = MigrateToMyItemsState(
             organizationId = "test-org-id",
-            organizationName = "Test Organization",
+            organizationName = ORGANIZATION_NAME,
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = "An error has occurred".asText(),
                 message = "Failed to migrate items".asText(),
@@ -158,7 +165,7 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
     fun `Error dialog dismiss should send DismissDialogClicked action`() {
         mutableStateFlow.value = MigrateToMyItemsState(
             organizationId = "test-org-id",
-            organizationName = "Test Organization",
+            organizationName = ORGANIZATION_NAME,
             dialog = MigrateToMyItemsState.DialogState.Error(
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = "Failed to migrate items".asText(),
@@ -175,3 +182,5 @@ class MigrateToMyItemsScreenTest : BitwardenComposeTest() {
         }
     }
 }
+
+private const val ORGANIZATION_NAME = "Test Organization"
