@@ -12,7 +12,6 @@ val InitUserCryptoMethod.logTag: String
         is InitUserCryptoMethod.DecryptedKey -> "Decrypted Key (Never Lock/Biometrics)"
         is InitUserCryptoMethod.DeviceKey -> "Device Key"
         is InitUserCryptoMethod.KeyConnector -> "Key Connector"
-        is InitUserCryptoMethod.KeyConnectorUrl -> "Key Connector Url"
         is InitUserCryptoMethod.Pin -> "Pin"
         is InitUserCryptoMethod.PinEnvelope -> "Pin Envelope"
         is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
