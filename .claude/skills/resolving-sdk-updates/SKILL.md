@@ -18,7 +18,7 @@ Sequential five-phase workflow for diagnosing and resolving build failures cause
 
 ## Important
 
-- **SDK repo**: `bitwarden/sdk-internal` (private)
+- **SDK repo**: `bitwarden/sdk-internal`
 - **Artifact**: `com.bitwarden:sdk-android` published to GitHub Packages
 - **Version catalog**: `gradle/libs.versions.toml` (key: `sdk-android`)
 - **Update branch convention**: `sdlc/sdk-update`
