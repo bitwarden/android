@@ -201,6 +201,12 @@ class PushManagerImpl @Inject constructor(
                     }
             }
 
+            NotificationType.POLICY_CHANGED -> {
+                activeUserId?.let {
+                    mutableFullSyncSharedFlow.tryEmit(it)
+                }
+            }
+
             NotificationType.SYNC_CIPHER_DELETE,
             NotificationType.SYNC_LOGIN_DELETE,
                 -> {
