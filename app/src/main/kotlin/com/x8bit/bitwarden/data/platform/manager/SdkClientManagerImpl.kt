@@ -26,11 +26,9 @@ class SdkClientManagerImpl(
                     repository = sdkRepoFactory.getServerCommunicationConfigRepository(),
                     platformApi = sdkPlatformApiFactory.getServerCommunicationConfigPlatformApi(),
                 )
-                userId?.let {
-                    platform().state().apply {
-                        registerCipherRepository(sdkRepoFactory.getCipherRepository(userId = it))
-                    }
-                }
+                platform().state().registerClientManagedRepositories(
+                    repositories = sdkRepoFactory.getRepositories(userId = userId),
+                )
             }
     },
 ) : SdkClientManager {
