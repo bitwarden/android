@@ -9,6 +9,7 @@ description: >
   update", "resolve SDK breaking changes", "check the SDK PR", "SDK version bump",
   "sdk-android", "sdk-internal". Do NOT use for general dependency updates unrelated to the
   Bitwarden SDK.
+allowed-tools: Bash(git branch --show-current), Bash(git diff *), Bash(gh run list *), Bash(gh run view *), Bash(gh pr view *), Bash(gh pr diff *)
 ---
 
 # Resolving SDK Updates
@@ -28,7 +29,7 @@ CRITICAL: Before applying any fix, always read the `sdk-internal` PR diff to und
 
 - **Current branch**: !`git branch --show-current`
 - **SDK version diff vs main**: !`git diff main -- gradle/libs.versions.toml | grep sdk-android || echo "No SDK version change detected"`
-- **Latest CI failure (current branch)**: !`gh run list --branch $(git branch --show-current) --status failure --limit 1 --json databaseId,event,conclusion -q '.[0]' 2>/dev/null || echo "No failures found"`
+- **Latest CI failure (sdlc/sdk-update)**: !`gh run list --branch sdlc/sdk-update --status failure --limit 1 --json databaseId,event,conclusion -q '.[0]' 2>/dev/null`
 
 ## Proactive Behavior
 
