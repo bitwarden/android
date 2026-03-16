@@ -60,12 +60,12 @@ class BillingServiceTest : BaseServiceTest() {
 
 private const val CHECKOUT_SESSION_RESPONSE_JSON = """
 {
-  "checkoutUrl": "https://checkout.stripe.com/c/pay/test_session_123"
+  "checkoutSessionUrl": "https://checkout.stripe.com/c/pay/test_session_123"
 }
 """
 
 private val CHECKOUT_SESSION_RESPONSE = CheckoutSessionResponseJson(
-    checkoutUrl = "https://checkout.stripe.com/c/pay/test_session_123",
+    checkoutSessionUrl = "https://checkout.stripe.com/c/pay/test_session_123",
 )
 
 private const val PORTAL_URL_RESPONSE_JSON = """
