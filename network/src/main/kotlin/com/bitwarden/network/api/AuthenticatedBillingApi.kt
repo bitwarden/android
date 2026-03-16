@@ -3,6 +3,7 @@ package com.bitwarden.network.api
 import com.bitwarden.network.model.CheckoutSessionRequestJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.NetworkResult
+import com.bitwarden.network.model.PortalSessionRequestJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -24,5 +25,7 @@ internal interface AuthenticatedBillingApi {
      * Creates a Stripe customer portal session for managing the premium subscription.
      */
     @POST("/account/billing/vnext/portal-session")
-    suspend fun getPortalUrl(): NetworkResult<PortalUrlResponseJson>
+    suspend fun getPortalUrl(
+        @Body body: PortalSessionRequestJson,
+    ): NetworkResult<PortalUrlResponseJson>
 }

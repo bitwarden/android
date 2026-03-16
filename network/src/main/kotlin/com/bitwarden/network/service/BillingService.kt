@@ -15,6 +15,8 @@ interface BillingService {
 
     /**
      * Creates a Stripe customer portal session for managing the premium subscription.
+     *
+     * @param returnUrl The URL to redirect the user to after visiting the portal.
      */
-    suspend fun getPortalUrl(): Result<PortalUrlResponseJson>
+    suspend fun getPortalUrl(returnUrl: String): Result<PortalUrlResponseJson>
 }

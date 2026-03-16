@@ -43,7 +43,7 @@ class BillingServiceTest : BaseServiceTest() {
     fun `getPortalUrl when response is Failure should return Failure`() = runTest {
         val response = MockResponse().setResponseCode(400)
         server.enqueue(response)
-        val actual = service.getPortalUrl()
+        val actual = service.getPortalUrl(returnUrl = RETURN_URL)
         assertTrue(actual.isFailure)
     }
 
@@ -53,7 +53,7 @@ class BillingServiceTest : BaseServiceTest() {
             .setBody(PORTAL_URL_RESPONSE_JSON)
             .setResponseCode(200)
         server.enqueue(response)
-        val actual = service.getPortalUrl()
+        val actual = service.getPortalUrl(returnUrl = RETURN_URL)
         assertEquals(PORTAL_URL_RESPONSE.asSuccess(), actual)
     }
 }
@@ -77,3 +77,5 @@ private const val PORTAL_URL_RESPONSE_JSON = """
 private val PORTAL_URL_RESPONSE = PortalUrlResponseJson(
     url = "https://billing.stripe.com/p/session/test_portal_456",
 )
+
+private const val RETURN_URL = "https://vault.bitwarden.com/#/settings/subscription"
