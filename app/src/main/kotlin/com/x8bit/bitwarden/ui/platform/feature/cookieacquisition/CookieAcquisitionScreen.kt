@@ -34,7 +34,6 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -69,10 +68,6 @@ fun CookieAcquisitionScreen(
                     authTabData = event.authTabData,
                     launcher = authTabLaunchers.cookie,
                 )
-            }
-
-            is CookieAcquisitionEvent.NavigateToHelp -> {
-                intentManager.launchUri(event.uri.toUri())
             }
 
             CookieAcquisitionEvent.NavigateBack -> onDismiss()
@@ -198,17 +193,6 @@ private fun CookieAcquisitionContent(
                 .standardHorizontalMargin(),
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        BitwardenTextButton(
-            label = stringResource(id = BitwardenString.why_am_i_seeing_this),
-            onClick = handler.onWhyAmISeeingThisClick,
-            isExternalLink = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -227,7 +211,6 @@ private fun CookieAcquisitionScreen_preview() {
                 handler = CookieAcquisitionHandler(
                     onLaunchBrowserClick = {},
                     onContinueWithoutSyncingClick = {},
-                    onWhyAmISeeingThisClick = {},
                     onDismissDialogClick = {},
                 ),
                 modifier = Modifier.fillMaxSize(),
@@ -250,7 +233,6 @@ private fun CookieAcquisitionScreen_darkPreview() {
                 handler = CookieAcquisitionHandler(
                     onLaunchBrowserClick = {},
                     onContinueWithoutSyncingClick = {},
-                    onWhyAmISeeingThisClick = {},
                     onDismissDialogClick = {},
                 ),
                 modifier = Modifier.fillMaxSize(),

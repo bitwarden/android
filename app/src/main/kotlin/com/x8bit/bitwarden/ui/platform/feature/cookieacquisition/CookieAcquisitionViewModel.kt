@@ -27,7 +27,6 @@ import javax.inject.Inject
 private const val KEY_STATE = "state"
 private const val PROXY_URL = "/proxy-cookie-redirect-connector.html"
 private const val COOKIE_CALLBACK_URL = "bitwarden://sso-cookie-vendor"
-private const val HELP_URL = "https://bitwarden.com/help"
 
 /**
  * ViewModel for the Cookie Acquisition screen.
@@ -79,7 +78,6 @@ class CookieAcquisitionViewModel @Inject constructor(
                 handleContinueWithoutSyncingClick()
             }
 
-            CookieAcquisitionAction.WhyAmISeeingThisClick -> handleWhyAmISeeingThisClick()
             CookieAcquisitionAction.DismissDialogClick -> handleDismissDialogClick()
             is CookieAcquisitionAction.Internal.CookieAcquisitionResultReceived -> {
                 handleCookieAcquisitionResultReceived(action)
@@ -101,10 +99,6 @@ class CookieAcquisitionViewModel @Inject constructor(
     private fun handleContinueWithoutSyncingClick() {
         cookieAcquisitionRequestManager.setPendingCookieAcquisition(data = null)
         sendEvent(CookieAcquisitionEvent.NavigateBack)
-    }
-
-    private fun handleWhyAmISeeingThisClick() {
-        sendEvent(CookieAcquisitionEvent.NavigateToHelp(uri = HELP_URL))
     }
 
     private fun handleDismissDialogClick() {
@@ -175,11 +169,6 @@ sealed class CookieAcquisitionEvent {
     ) : CookieAcquisitionEvent()
 
     /**
-     * Navigate to the help page.
-     */
-    data class NavigateToHelp(val uri: String) : CookieAcquisitionEvent()
-
-    /**
      * Navigate back, dismissing the cookie acquisition screen.
      *
      * Implements [BackgroundEvent] because the cookie callback result may arrive while
@@ -201,11 +190,6 @@ sealed class CookieAcquisitionAction {
      * User clicked the "Continue without syncing" button.
      */
     data object ContinueWithoutSyncingClick : CookieAcquisitionAction()
-
-    /**
-     * User clicked the "Why am I seeing this?" link.
-     */
-    data object WhyAmISeeingThisClick : CookieAcquisitionAction()
 
     /**
      * User dismissed the error dialog.
