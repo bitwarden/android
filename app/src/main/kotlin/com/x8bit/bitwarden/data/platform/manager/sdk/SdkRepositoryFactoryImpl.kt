@@ -2,11 +2,12 @@ package com.x8bit.bitwarden.data.platform.manager.sdk
 
 import com.bitwarden.core.ClientManagedTokens
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.sdk.CipherRepository
+import com.bitwarden.sdk.Repositories
 import com.bitwarden.sdk.ServerCommunicationConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkCipherRepository
+import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkLocalUserDataKeyStateRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkTokenRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.ServerCommunicationConfigRepositoryImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -20,12 +21,15 @@ class SdkRepositoryFactoryImpl(
     private val configDiskSource: ConfigDiskSource,
     private val authDiskSource: AuthDiskSource,
 ) : SdkRepositoryFactory {
-    override fun getCipherRepository(
-        userId: String,
-    ): CipherRepository =
-        SdkCipherRepository(
-            userId = userId,
-            vaultDiskSource = vaultDiskSource,
+    override fun getRepositories(userId: String?): Repositories =
+        Repositories(
+            cipher = getSdkRepository(userId = userId),
+            folder = null,
+            userKeyState = null,
+            localUserDataKeyState = SdkLocalUserDataKeyStateRepository(
+                authDiskSource = authDiskSource,
+            ),
+            ephemeralPinEnvelopeState = null,
         )
 
     override fun getClientManagedTokens(
@@ -41,4 +45,10 @@ class SdkRepositoryFactoryImpl(
             cookieDiskSource = cookieDiskSource,
             configDiskSource = configDiskSource,
         )
+
+    private fun getSdkRepository(
+        userId: String?,
+    ): SdkCipherRepository? = userId?.let {
+        SdkCipherRepository(userId = it, vaultDiskSource = vaultDiskSource)
+    }
 }

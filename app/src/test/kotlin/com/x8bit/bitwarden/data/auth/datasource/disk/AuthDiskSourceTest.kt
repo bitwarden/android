@@ -449,6 +449,28 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getLocalUserDataKey should pull from SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        fakeSharedPreferences.edit {
+            putString("${userKeyBaseKey}_$mockUserId", mockLocalUserKey)
+        }
+        val actual = authDiskSource.getLocalUserDataKey(userId = mockUserId)
+        assertEquals(mockLocalUserKey, actual)
+    }
+
+    @Test
+    fun `storeLocalUserDataKey should update SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        authDiskSource.storeLocalUserDataKey(userId = mockUserId, wrappedKey = mockLocalUserKey)
+        val actual = fakeSharedPreferences.getString("${userKeyBaseKey}_$mockUserId", null)
+        assertEquals(mockLocalUserKey, actual)
+    }
+
+    @Test
     fun `getPrivateKey should pull from SharedPreferences`() {
         val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
         val mockUserId = "mockUserId"
