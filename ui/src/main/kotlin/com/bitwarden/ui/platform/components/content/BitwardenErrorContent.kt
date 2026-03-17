@@ -14,13 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
-import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -29,17 +28,14 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param message The text content to display.
  * @param modifier The [Modifier] to be applied to the layout.
  * @param illustrationData Optional illustration to display above the text.
- * @param buttonText The text to be displayed on the button. This will not be used if the
- * [onButtonClick] is null.
- * @param onButtonClick An optional callback to invoke when the button is clicked.
+ * @param buttonData Optional button to display below the text.
  */
 @Composable
 fun BitwardenErrorContent(
     message: String,
     modifier: Modifier = Modifier,
     illustrationData: IconData? = null,
-    buttonText: String = stringResource(id = BitwardenString.try_again),
-    onButtonClick: (() -> Unit)? = null,
+    buttonData: BitwardenButtonData? = null,
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -62,11 +58,12 @@ fun BitwardenErrorContent(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
-        onButtonClick?.let {
+        buttonData?.let {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenTextButton(
-                label = buttonText,
-                onClick = it,
+            BitwardenFilledButton(
+                label = it.label(),
+                onClick = it.onClick,
+                icon = it.icon,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }

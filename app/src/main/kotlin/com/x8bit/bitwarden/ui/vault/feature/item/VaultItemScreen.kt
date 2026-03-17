@@ -25,6 +25,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -39,6 +40,7 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -340,6 +342,7 @@ private fun VaultItemDialogs(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultItemContent(
     viewState: VaultItemState.ViewState,
@@ -353,7 +356,10 @@ private fun VaultItemContent(
     when (viewState) {
         is VaultItemState.ViewState.Error -> BitwardenErrorContent(
             message = viewState.message(),
-            onButtonClick = vaultCommonItemTypeHandlers.onRefreshClick,
+            buttonData = BitwardenButtonData(
+                label = BitwardenString.try_again.asText(),
+                onClick = vaultCommonItemTypeHandlers.onRefreshClick,
+            ),
             modifier = modifier,
         )
 

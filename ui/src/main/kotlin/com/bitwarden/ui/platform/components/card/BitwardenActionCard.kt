@@ -142,6 +142,7 @@ fun BitwardenActionCard(
             BitwardenTextButton(
                 label = it.label(),
                 onClick = it.onClick,
+                icon = it.icon,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .nullableTestTag(tag = it.testTag)
