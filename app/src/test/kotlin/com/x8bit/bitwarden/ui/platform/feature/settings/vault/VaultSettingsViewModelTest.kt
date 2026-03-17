@@ -11,6 +11,7 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -40,6 +41,9 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolImport)
         } returns mutableFeatureFlagFlow
+    }
+    private val gmsManager = mockk<GmsManager> {
+        every { isVersionAtLeast(any()) } returns true
     }
     private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val policyManager = mockk<PolicyManager> {
@@ -220,10 +224,47 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `showImportItemsChevron should be false when GMS version is insufficient`() {
+        every { gmsManager.isVersionAtLeast(any()) } returns false
+        val viewModel = createViewModel()
+        assertEquals(
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportVault when GMS version is insufficient`() =
+        runTest {
+            every { gmsManager.isVersionAtLeast(any()) } returns false
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `showImportItemsChevron should be false when feature flag and GMS sufficient but policy exists`() {
+        val viewModel = createViewModel()
+        mutableFeatureFlagFlow.tryEmit(true)
+        mutablePoliciesFlow.tryEmit(listOf(mockk()))
+        assertEquals(
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
         featureFlagManager = featureFlagManager,
+        gmsManager = gmsManager,
         policyManager = policyManager,
     )
 }

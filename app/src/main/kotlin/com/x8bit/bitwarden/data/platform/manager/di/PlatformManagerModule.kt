@@ -47,6 +47,8 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -335,6 +337,12 @@ object PlatformManagerModule {
         autofillEnabledManager = autofillEnabledManager,
         thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideGmsManager(
+        @ApplicationContext context: Context,
+    ): GmsManager = GmsManagerImpl(context = context)
 
     @Provides
     @Singleton
