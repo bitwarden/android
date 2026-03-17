@@ -281,7 +281,7 @@ Would add security layer against brute force. Consider discussing threat model w
 
 **Inline Comment 5** (on `app/vault/unlock/UnlockScreen.kt:134`):
 ```markdown
-💭 **QUESTION**: Can we use BitwardenTextField?
+❓ **QUESTION**: Can we use BitwardenTextField?
 
 <details>
 <summary>Details</summary>
