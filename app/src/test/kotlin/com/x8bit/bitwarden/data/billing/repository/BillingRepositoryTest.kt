@@ -3,11 +3,12 @@ package com.x8bit.bitwarden.data.billing.repository
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.service.BillingService
+import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
+import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class BillingRepositoryTest {
@@ -18,7 +19,7 @@ class BillingRepositoryTest {
     )
 
     @Test
-    fun `getCheckoutSessionUrl when service returns success should return checkout URL`() =
+    fun `getCheckoutSessionUrl when service returns success should return Success`() =
         runTest {
             val expectedUrl =
                 "https://checkout.stripe.com/c/pay/test_session_123"
@@ -32,11 +33,11 @@ class BillingRepositoryTest {
 
             val result = repository.getCheckoutSessionUrl()
 
-            assertEquals(Result.success(expectedUrl), result)
+            assertEquals(CheckoutSessionResult.Success(url = expectedUrl), result)
         }
 
     @Test
-    fun `getCheckoutSessionUrl when service returns failure should return failure`() =
+    fun `getCheckoutSessionUrl when service returns failure should return Error`() =
         runTest {
             val exception = RuntimeException("Network error")
             coEvery {
@@ -45,12 +46,17 @@ class BillingRepositoryTest {
 
             val result = repository.getCheckoutSessionUrl()
 
-            assertTrue(result.isFailure)
-            assertEquals(exception, result.exceptionOrNull())
+            assertEquals(
+                CheckoutSessionResult.Error(
+                    message = "Network error",
+                    error = exception,
+                ),
+                result,
+            )
         }
 
     @Test
-    fun `getPortalUrl when service returns success should return portal URL`() =
+    fun `getPortalUrl when service returns success should return Success`() =
         runTest {
             val expectedUrl =
                 "https://billing.stripe.com/p/session/test_portal_456"
@@ -64,11 +70,11 @@ class BillingRepositoryTest {
 
             val result = repository.getPortalUrl()
 
-            assertEquals(Result.success(expectedUrl), result)
+            assertEquals(CustomerPortalResult.Success(url = expectedUrl), result)
         }
 
     @Test
-    fun `getPortalUrl when service returns failure should return failure`() =
+    fun `getPortalUrl when service returns failure should return Error`() =
         runTest {
             val exception = RuntimeException("Network error")
             coEvery {
@@ -77,7 +83,12 @@ class BillingRepositoryTest {
 
             val result = repository.getPortalUrl()
 
-            assertTrue(result.isFailure)
-            assertEquals(exception, result.exceptionOrNull())
+            assertEquals(
+                CustomerPortalResult.Error(
+                    message = "Network error",
+                    error = exception,
+                ),
+                result,
+            )
         }
 }
