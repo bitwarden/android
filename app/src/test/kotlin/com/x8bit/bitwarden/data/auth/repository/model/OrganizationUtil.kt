@@ -17,6 +17,10 @@ fun createMockOrganization(
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
     shouldUseEvents: Boolean = false,
+    maxCollections: Int? = null,
+    canCreateNewCollections: Boolean = false,
+    canEditAnyCollection: Boolean = false,
+    canDeleteAnyCollection: Boolean = false,
 ): Organization =
     Organization(
         id = id,
@@ -28,4 +32,8 @@ fun createMockOrganization(
         userIsClaimedByOrganization = userIsClaimedByOrganization,
         limitItemDeletion = limitItemDeletion,
         shouldUseEvents = shouldUseEvents,
+        maxCollections = maxCollections,
+        canCreateNewCollections = canCreateNewCollections,
+        canEditAnyCollection = canEditAnyCollection,
+        canDeleteAnyCollection = canDeleteAnyCollection,
     )

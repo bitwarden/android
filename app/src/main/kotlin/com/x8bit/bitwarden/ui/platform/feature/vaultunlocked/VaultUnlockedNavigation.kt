@@ -36,6 +36,11 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.folderAd
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigateToFolderAddEdit
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.feature.settings.collections.collectionsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.collections.addedit.collectionAddEditDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.collections.addedit.navigateToCollectionAddEdit
+import com.x8bit.bitwarden.ui.platform.feature.settings.collections.model.CollectionAddEditType
+import com.x8bit.bitwarden.ui.platform.feature.settings.collections.navigateToCollections
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavbarRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
@@ -104,6 +109,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
         )
         vaultUnlockedNavBarDestination(
+            onNavigateToCollections = { navController.navigateToCollections() },
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
             onNavigateToVaultAddItem = { navController.navigateToVaultAddEdit(it) },
@@ -247,6 +253,25 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
 
         folderAddEditDestination(onNavigateBack = { navController.popBackStack() })
+        collectionsDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddCollectionScreen = { organizationId ->
+                navController.navigateToCollectionAddEdit(
+                    CollectionAddEditType.AddItem(organizationId = organizationId),
+                )
+            },
+            onNavigateToEditCollectionScreen = { collectionId, organizationId ->
+                navController.navigateToCollectionAddEdit(
+                    CollectionAddEditType.EditItem(
+                        collectionId = collectionId,
+                        organizationId = organizationId,
+                    ),
+                )
+            },
+        )
+        collectionAddEditDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
         generatorModalDestination(onNavigateBack = { navController.popBackStack() })
         searchDestination(
             onNavigateBack = { navController.popBackStack() },

@@ -16,6 +16,7 @@ import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.EventService
+import com.bitwarden.network.service.CollectionService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
@@ -105,6 +106,11 @@ interface BitwardenServiceClient {
      * Provides access to the Event service.
      */
     val eventService: EventService
+
+    /**
+     * Provides access to the Collection service.
+     */
+    val collectionService: CollectionService
 
     /**
      * Provides access to the Folder service.

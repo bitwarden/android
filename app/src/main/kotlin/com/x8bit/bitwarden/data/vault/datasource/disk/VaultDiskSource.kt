@@ -83,6 +83,11 @@ interface VaultDiskSource {
     fun getCollectionsFlow(userId: String): Flow<List<SyncResponseJson.Collection>>
 
     /**
+     * Deletes a collection from the data source for the given [userId] and [collectionId].
+     */
+    suspend fun deleteCollection(userId: String, collectionId: String)
+
+    /**
      * Retrieves all domains from the data source for a given [userId].
      */
     fun getDomainsFlow(userId: String): Flow<SyncResponseJson.Domains?>

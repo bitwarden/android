@@ -418,6 +418,9 @@ data class SyncResponseJson(
          *
          * @property shouldManageResetPassword If reset password should be managed.
          * @property shouldManagePolicies If policies should be managed.
+         * @property canCreateNewCollections If the user can create new collections.
+         * @property canEditAnyCollection If the user can edit any collection.
+         * @property canDeleteAnyCollection If the user can delete any collection.
          */
         @Serializable
         data class Permissions(
@@ -426,6 +429,15 @@ data class SyncResponseJson(
 
             @SerialName("managePolicies")
             val shouldManagePolicies: Boolean,
+
+            @SerialName("createNewCollections")
+            val canCreateNewCollections: Boolean = false,
+
+            @SerialName("editAnyCollection")
+            val canEditAnyCollection: Boolean = false,
+
+            @SerialName("deleteAnyCollection")
+            val canDeleteAnyCollection: Boolean = false,
         )
     }
 

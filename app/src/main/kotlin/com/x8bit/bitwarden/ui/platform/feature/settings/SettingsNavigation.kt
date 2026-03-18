@@ -106,6 +106,7 @@ fun SavedStateHandle.toSettingsArgs(): SettingsArgs {
 @Suppress("LongParameterList")
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
+    onNavigateToCollections: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
@@ -163,6 +164,7 @@ fun NavGraphBuilder.settingsGraph(
         )
         vaultSettingsDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToCollections = onNavigateToCollections,
             onNavigateToExportVault = onNavigateToExportVault,
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
