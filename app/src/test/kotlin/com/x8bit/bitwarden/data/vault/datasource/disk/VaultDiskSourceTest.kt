@@ -246,6 +246,30 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `deleteSelectedFolders should call deleteSelectedFolders`() = runTest {
+        assertFalse(foldersDao.deleteSelectedFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteSelectedFolders(USER_ID, listOf(FOLDER_1.id))
+
+        assertTrue(foldersDao.deleteSelectedFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
+    fun `deleteAllFolders should call deleteAllFolders`() = runTest {
+        assertFalse(foldersDao.deleteFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteAllFolders(USER_ID)
+
+        assertTrue(foldersDao.deleteFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
     fun `saveFolder should call insertFolder`() = runTest {
         assertFalse(foldersDao.insertFolderCalled)
         assertEquals(0, foldersDao.storedFolders.size)
@@ -254,6 +278,31 @@ class VaultDiskSourceTest {
 
         assertTrue(foldersDao.insertFolderCalled)
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
+    }
+
+    @Test
+    fun `saveFolders should call insertFolders`() = runTest {
+        assertFalse(foldersDao.insertFoldersCalled)
+        assertEquals(0, foldersDao.storedFolders.size)
+
+        vaultDiskSource.saveFolders(USER_ID, listOf(FOLDER_1))
+
+        assertTrue(foldersDao.insertFoldersCalled)
+        assertEquals(1, foldersDao.storedFolders.size)
+        val storedFolderEntity = foldersDao.storedFolders.first()
+        assertEquals(FOLDER_ENTITY, storedFolderEntity)
+    }
+
+    @Test
+    fun `getFolders should return all FoldersDao folders`() = runTest {
+        val folderEntities = listOf(FOLDER_ENTITY)
+        val folders = listOf(FOLDER_1)
+
+        val result1 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Folder>(), result1)
+        foldersDao.insertFolders(folderEntities)
+        val result2 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(folders, result2)
     }
 
     @Test
