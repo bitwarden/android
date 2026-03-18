@@ -75,6 +75,7 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleSaveToBitwardenDismiss() {
+        hasHandledScan = false
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
