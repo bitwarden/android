@@ -1237,7 +1237,8 @@ class VaultItemViewModel @Inject constructor(
             is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = BitwardenString.unable_to_download_file.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_download_file.asText(),
                         error = result.error,
                     ),
                 )
