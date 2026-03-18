@@ -115,10 +115,8 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
-
-                // Second scan — only NavigateBack, no new TOTP result
                 viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
-                assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+                expectNoEvents()
             }
 
             // emitTotpCodeResult called exactly once across both actions

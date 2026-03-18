@@ -274,7 +274,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
-            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+            expectNoEvents()
         }
         verify(exactly = 1) { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
     }
@@ -296,7 +296,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidQrCode))
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
-            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+            expectNoEvents()
         }
         verify(exactly = 1) {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
