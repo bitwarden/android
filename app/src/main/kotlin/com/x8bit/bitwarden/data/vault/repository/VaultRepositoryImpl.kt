@@ -444,7 +444,7 @@ class VaultRepositoryImpl(
         val userId = activeUserId
             ?: return ExportVaultDataResult.Error(error = NoActiveUserException())
         val folders = vaultDiskSource
-            .getFolders(userId)
+            .getFoldersFlow(userId)
             .firstOrNull()
             .orEmpty()
             .map { it.toEncryptedSdkFolder() }

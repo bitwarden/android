@@ -427,7 +427,7 @@ class VaultSyncManagerImpl(
         userId: String,
     ): Flow<DataState<DomainsData>> =
         vaultDiskSource
-            .getDomains(userId = userId)
+            .getDomainsFlow(userId = userId)
             .onStart { mutableDomainsStateFlow.updateToPendingOrLoading() }
             .map { DataState.Loaded(data = it.toDomainsData()) }
             .onEach { mutableDomainsStateFlow.value = it }
@@ -436,7 +436,7 @@ class VaultSyncManagerImpl(
         userId: String,
     ): Flow<DataState<List<FolderView>>> =
         vaultDiskSource
-            .getFolders(userId = userId)
+            .getFoldersFlow(userId = userId)
             .onStart { mutableFoldersStateFlow.updateToPendingOrLoading() }
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)
@@ -454,7 +454,7 @@ class VaultSyncManagerImpl(
         userId: String,
     ): Flow<DataState<List<CollectionView>>> =
         vaultDiskSource
-            .getCollections(userId = userId)
+            .getCollectionsFlow(userId = userId)
             .onStart { mutableCollectionsStateFlow.updateToPendingOrLoading() }
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)
@@ -483,7 +483,7 @@ class VaultSyncManagerImpl(
         userId: String,
     ): Flow<DataState<SendData>> =
         vaultDiskSource
-            .getSends(userId = userId)
+            .getSendsFlow(userId = userId)
             .onStart { mutableSendDataStateFlow.updateToPendingOrLoading() }
             .map {
                 vaultLockManager.waitUntilUnlocked(userId = userId)

@@ -156,7 +156,7 @@ class FolderManagerImpl(
         val isUpdate = syncFolderUpsertData.isUpdate
         val revisionDate = syncFolderUpsertData.revisionDate
         val localFolder = vaultDiskSource
-            .getFolders(userId = userId)
+            .getFoldersFlow(userId = userId)
             .first()
             .find { it.id == folderId }
         val isValidCreate = !isUpdate && localFolder == null

@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.SendTypeJson
@@ -15,7 +16,6 @@ import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.createMockFileSendResponseJson
 import com.bitwarden.network.model.createMockSend
 import com.bitwarden.network.model.createMockSendJsonRequest
-import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -129,7 +129,9 @@ class SendManagerTest {
         val send = createMockSend(number = 1, id = sendId)
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { vaultDiskSource.getSends(userId = userId) } returns MutableStateFlow(listOf(send))
+        coEvery {
+            vaultDiskSource.getSendsFlow(userId = userId)
+        } returns MutableStateFlow(listOf(send))
 
         mutableSyncSendUpsertFlow.tryEmit(
             SyncSendUpsertData(
@@ -153,7 +155,9 @@ class SendManagerTest {
         val sendId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { vaultDiskSource.getSends(userId = userId) } returns MutableStateFlow(emptyList())
+        coEvery {
+            vaultDiskSource.getSendsFlow(userId = userId)
+        } returns MutableStateFlow(emptyList())
 
         mutableSyncSendUpsertFlow.tryEmit(
             SyncSendUpsertData(
@@ -182,7 +186,9 @@ class SendManagerTest {
             revisionDate = FIXED_CLOCK.instant(),
         )
         val updatedSend = createMockSend(number = number)
-        coEvery { vaultDiskSource.getSends(userId = userId) } returns MutableStateFlow(listOf(send))
+        coEvery {
+            vaultDiskSource.getSendsFlow(userId = userId)
+        } returns MutableStateFlow(listOf(send))
         coEvery { sendsService.getSend(sendId = sendId) } returns updatedSend.asSuccess()
         coEvery { vaultDiskSource.saveSend(userId = userId, send = updatedSend) } just runs
 
@@ -223,7 +229,7 @@ class SendManagerTest {
                 revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
-                vaultDiskSource.getSends(userId = userId)
+                vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(listOf(sendView))
 
             mutableSyncSendUpsertFlow.tryEmit(
@@ -254,7 +260,7 @@ class SendManagerTest {
             }
             coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
             coEvery {
-                vaultDiskSource.getSends(userId = userId)
+                vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(emptyList())
 
             mutableSyncSendUpsertFlow.tryEmit(
@@ -284,7 +290,7 @@ class SendManagerTest {
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
-                vaultDiskSource.getSends(userId = userId)
+                vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(emptyList())
             val send = mockk<SyncResponseJson.Send>()
             coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
@@ -319,7 +325,7 @@ class SendManagerTest {
                 revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
-                vaultDiskSource.getSends(userId = userId)
+                vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(listOf(sendView))
 
             val send = mockk<SyncResponseJson.Send>()
@@ -355,7 +361,7 @@ class SendManagerTest {
             revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
         )
         coEvery {
-            vaultDiskSource.getSends(userId = userId)
+            vaultDiskSource.getSendsFlow(userId = userId)
         } returns MutableStateFlow(listOf(sendView))
 
         mutableSyncSendUpsertFlow.tryEmit(
@@ -369,7 +375,7 @@ class SendManagerTest {
 
         fakeSettingsDiskSource.assertLastSyncTime(userId = userId, expected = null)
         coVerify(exactly = 1) {
-            vaultDiskSource.getSends(userId = userId)
+            vaultDiskSource.getSendsFlow(userId = userId)
         }
         coVerify(exactly = 0) {
             sendsService.getSend(sendId = sendId)
