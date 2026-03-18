@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
+import com.x8bit.bitwarden.data.vault.manager.CollectionManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
@@ -74,6 +75,7 @@ class VaultRepositoryImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val cipherManager: CipherManager,
+    private val collectionManager: CollectionManager,
     private val folderManager: FolderManager,
     private val sendManager: SendManager,
     private val vaultLockManager: VaultLockManager,
@@ -84,6 +86,7 @@ class VaultRepositoryImpl(
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
+    CollectionManager by collectionManager,
     FolderManager by folderManager,
     SendManager by sendManager,
     VaultLockManager by vaultLockManager,

@@ -10,6 +10,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.CollectionManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -32,6 +33,7 @@ import javax.crypto.Cipher
 @Suppress("TooManyFunctions")
 interface VaultRepository :
     CipherManager,
+    CollectionManager,
     FolderManager,
     SendManager,
     VaultLockManager,

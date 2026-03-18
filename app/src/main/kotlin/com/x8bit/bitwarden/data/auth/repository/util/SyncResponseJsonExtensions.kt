@@ -28,6 +28,10 @@ fun SyncResponseJson.Profile.Organization.toOrganization(): Organization? =
             userIsClaimedByOrganization = this.userIsClaimedByOrganization,
             limitItemDeletion = this.limitItemDeletion,
             shouldUseEvents = this.shouldUseEvents,
+            maxCollections = this.maxCollections,
+            canCreateNewCollections = this.permissions.canCreateNewCollections,
+            canEditAnyCollection = this.permissions.canEditAnyCollection,
+            canDeleteAnyCollection = this.permissions.canDeleteAnyCollection,
         )
     }
 

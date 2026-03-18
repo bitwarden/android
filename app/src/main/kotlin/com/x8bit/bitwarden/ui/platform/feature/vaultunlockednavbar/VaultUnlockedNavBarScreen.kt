@@ -56,6 +56,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
+    onNavigateToCollections: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
@@ -86,6 +87,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSearchVault = onNavigateToSearchVault,
         onNavigateToAddEditSend = onNavigateToAddEditSend,
         onNavigateToViewSend = onNavigateToViewSend,
+        navigateToCollections = onNavigateToCollections,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
         navigateToExportVault = onNavigateToExportVault,
         navigateToFolders = onNavigateToFolders,
@@ -131,6 +133,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
+    navigateToCollections: () -> Unit,
     navigateToDeleteAccount: () -> Unit,
     navigateToExportVault: () -> Unit,
     navigateToFolders: () -> Unit,
@@ -215,6 +218,7 @@ private fun VaultUnlockedNavBarScaffold(
             )
             settingsGraph(
                 navController = navController,
+                onNavigateToCollections = navigateToCollections,
                 onNavigateToDeleteAccount = navigateToDeleteAccount,
                 onNavigateToExportVault = navigateToExportVault,
                 onNavigateToFolders = navigateToFolders,

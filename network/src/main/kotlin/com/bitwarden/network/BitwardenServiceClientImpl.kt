@@ -27,6 +27,8 @@ import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.DownloadServiceImpl
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.EventServiceImpl
+import com.bitwarden.network.service.CollectionService
+import com.bitwarden.network.service.CollectionServiceImpl
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.FolderServiceImpl
 import com.bitwarden.network.service.HaveIBeenPwnedService
@@ -151,6 +153,13 @@ internal class BitwardenServiceClientImpl(
 
     override val eventService: EventService by lazy {
         EventServiceImpl(eventApi = retrofits.authenticatedEventsRetrofit.create())
+    }
+
+    override val collectionService: CollectionService by lazy {
+        CollectionServiceImpl(
+            collectionsApi = retrofits.authenticatedApiRetrofit.create(),
+            json = clientJson,
+        )
     }
 
     override val folderService: FolderService by lazy {

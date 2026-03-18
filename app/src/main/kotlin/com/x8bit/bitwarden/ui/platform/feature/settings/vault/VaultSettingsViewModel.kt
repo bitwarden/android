@@ -72,6 +72,7 @@ class VaultSettingsViewModel @Inject constructor(
 
     override fun handleAction(action: VaultSettingsAction): Unit = when (action) {
         VaultSettingsAction.BackClick -> handleBackClicked()
+        VaultSettingsAction.CollectionsButtonClick -> handleCollectionsButtonClicked()
         VaultSettingsAction.ExportVaultClick -> handleExportVaultClicked()
         VaultSettingsAction.FoldersButtonClick -> handleFoldersButtonClicked()
         VaultSettingsAction.ImportItemsClick -> handleImportItemsClicked()
@@ -129,6 +130,10 @@ class VaultSettingsViewModel @Inject constructor(
         sendEvent(VaultSettingsEvent.NavigateBack)
     }
 
+    private fun handleCollectionsButtonClicked() {
+        sendEvent(VaultSettingsEvent.NavigateToCollections)
+    }
+
     private fun handleExportVaultClicked() {
         sendEvent(VaultSettingsEvent.NavigateToExportVault)
     }
@@ -176,6 +181,11 @@ sealed class VaultSettingsEvent {
     data object NavigateToImportItems : VaultSettingsEvent()
 
     /**
+     * Navigate to the Collections screen.
+     */
+    data object NavigateToCollections : VaultSettingsEvent()
+
+    /**
      * Navigate to the Export Vault screen.
      */
     data object NavigateToExportVault : VaultSettingsEvent()
@@ -199,6 +209,11 @@ sealed class VaultSettingsAction {
      * User clicked back button.
      */
     data object BackClick : VaultSettingsAction()
+
+    /**
+     * Indicates that the user clicked the Collections button.
+     */
+    data object CollectionsButtonClick : VaultSettingsAction()
 
     /**
      * Indicates that the user clicked the Export Vault button.

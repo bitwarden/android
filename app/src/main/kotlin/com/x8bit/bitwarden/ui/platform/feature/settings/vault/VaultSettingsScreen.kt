@@ -49,6 +49,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToCollections: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
@@ -61,6 +62,7 @@ fun VaultSettingsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultSettingsEvent.NavigateBack -> onNavigateBack()
+            VaultSettingsEvent.NavigateToCollections -> onNavigateToCollections()
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
@@ -125,6 +127,19 @@ fun VaultSettingsScreen(
                 cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("FoldersLabel")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
+
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.collections),
+                onClick = {
+                    viewModel.trySendAction(VaultSettingsAction.CollectionsButtonClick)
+                },
+                withDivider = false,
+                cardStyle = CardStyle.Middle(),
+                modifier = Modifier
+                    .testTag("CollectionsLabel")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )

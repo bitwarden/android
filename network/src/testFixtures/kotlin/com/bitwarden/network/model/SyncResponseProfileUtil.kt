@@ -149,10 +149,16 @@ fun createMockOrganizationKeys(
 fun createMockPermissions(
     shouldManageResetPassword: Boolean = false,
     shouldManagePolicies: Boolean = false,
+    canCreateNewCollections: Boolean = false,
+    canEditAnyCollection: Boolean = false,
+    canDeleteAnyCollection: Boolean = false,
 ): SyncResponseJson.Profile.Permissions =
     SyncResponseJson.Profile.Permissions(
         shouldManageResetPassword = shouldManageResetPassword,
         shouldManagePolicies = shouldManagePolicies,
+        canCreateNewCollections = canCreateNewCollections,
+        canEditAnyCollection = canEditAnyCollection,
+        canDeleteAnyCollection = canDeleteAnyCollection,
     )
 
 /**

@@ -200,6 +200,10 @@ class VaultDiskSourceImpl(
         )
     }
 
+    override suspend fun deleteCollection(userId: String, collectionId: String) {
+        collectionsDao.deleteCollection(userId = userId, collectionId = collectionId)
+    }
+
     override fun getCollections(
         userId: String,
     ): Flow<List<SyncResponseJson.Collection>> =
