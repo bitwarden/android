@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.billing.repository.model
 
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
+
 /**
  * Models the result of creating a Stripe checkout session.
  */
@@ -13,10 +15,11 @@ sealed class CheckoutSessionResult {
     ) : CheckoutSessionResult()
 
     /**
-     * There was an error creating the checkout session.
+     * Generic error while creating a checkout session. The optional [errorMessage] may be
+     * displayed directly in the UI when present.
      */
     data class Error(
-        val message: String?,
-        val error: Throwable?,
+        val error: Throwable,
+        val errorMessage: String? = error.userFriendlyMessage,
     ) : CheckoutSessionResult()
 }

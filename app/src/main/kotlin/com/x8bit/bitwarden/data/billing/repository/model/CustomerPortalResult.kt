@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.billing.repository.model
 
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
+
 /**
  * Models the result of retrieving the Stripe customer portal URL.
  */
@@ -13,10 +15,11 @@ sealed class CustomerPortalResult {
     ) : CustomerPortalResult()
 
     /**
-     * There was an error retrieving the customer portal URL.
+     * Generic error while retrieving the customer portal URL. The optional [errorMessage] may
+     * be displayed directly in the UI when present.
      */
     data class Error(
-        val message: String?,
-        val error: Throwable?,
+        val error: Throwable,
+        val errorMessage: String? = error.userFriendlyMessage,
     ) : CustomerPortalResult()
 }

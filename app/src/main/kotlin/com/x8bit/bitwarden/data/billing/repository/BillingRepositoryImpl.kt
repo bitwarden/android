@@ -16,12 +16,7 @@ class BillingRepositoryImpl(
             .createCheckoutSession()
             .fold(
                 onSuccess = { CheckoutSessionResult.Success(url = it.checkoutSessionUrl) },
-                onFailure = {
-                    CheckoutSessionResult.Error(
-                        message = it.message,
-                        error = it,
-                    )
-                },
+                onFailure = { CheckoutSessionResult.Error(error = it) },
             )
 
     override suspend fun getPortalUrl(): CustomerPortalResult =
@@ -29,11 +24,6 @@ class BillingRepositoryImpl(
             .getPortalUrl()
             .fold(
                 onSuccess = { CustomerPortalResult.Success(url = it.url) },
-                onFailure = {
-                    CustomerPortalResult.Error(
-                        message = it.message,
-                        error = it,
-                    )
-                },
+                onFailure = { CustomerPortalResult.Error(error = it) },
             )
 }

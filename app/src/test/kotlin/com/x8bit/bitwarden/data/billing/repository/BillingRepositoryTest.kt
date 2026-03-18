@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.billing.repository
 
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.service.BillingService
@@ -25,11 +27,7 @@ class BillingRepositoryTest {
                 "https://checkout.stripe.com/c/pay/test_session_123"
             coEvery {
                 billingService.createCheckoutSession()
-            } returns Result.success(
-                CheckoutSessionResponseJson(
-                    checkoutSessionUrl = expectedUrl,
-                ),
-            )
+            } returns CheckoutSessionResponseJson(checkoutSessionUrl = expectedUrl).asSuccess()
 
             val result = repository.getCheckoutSessionUrl()
 
@@ -42,15 +40,12 @@ class BillingRepositoryTest {
             val exception = RuntimeException("Network error")
             coEvery {
                 billingService.createCheckoutSession()
-            } returns Result.failure(exception)
+            } returns exception.asFailure()
 
             val result = repository.getCheckoutSessionUrl()
 
             assertEquals(
-                CheckoutSessionResult.Error(
-                    message = "Network error",
-                    error = exception,
-                ),
+                CheckoutSessionResult.Error(error = exception),
                 result,
             )
         }
@@ -62,11 +57,7 @@ class BillingRepositoryTest {
                 "https://billing.stripe.com/p/session/test_portal_456"
             coEvery {
                 billingService.getPortalUrl()
-            } returns Result.success(
-                PortalUrlResponseJson(
-                    url = expectedUrl,
-                ),
-            )
+            } returns PortalUrlResponseJson(url = expectedUrl).asSuccess()
 
             val result = repository.getPortalUrl()
 
@@ -79,15 +70,12 @@ class BillingRepositoryTest {
             val exception = RuntimeException("Network error")
             coEvery {
                 billingService.getPortalUrl()
-            } returns Result.failure(exception)
+            } returns exception.asFailure()
 
             val result = repository.getPortalUrl()
 
             assertEquals(
-                CustomerPortalResult.Error(
-                    message = "Network error",
-                    error = exception,
-                ),
+                CustomerPortalResult.Error(error = exception),
                 result,
             )
         }
