@@ -59,22 +59,21 @@ User Request (UI Action)
 ### Workflow Skills
 
 > **Quick start**: Use `/plan-android-work <task>` to refine requirements and plan,
-> then `/work-on-android <task>` for implementation.
+> then `/work-on-android <task>` for implementation,
+> then `/review-android <PR#>` to review the result.
 
-**Planning Phase:**
+Planning: 1–2 | Implementation: 3–7 | Review & PR: 8–10
 
 1. `refining-android-requirements` - Gap analysis and structured spec from any input source
 2. `planning-android-implementation` - Architecture design and phased task breakdown
-
-**Implementation Phase:**
-
 3. `implementing-android-code` - Patterns, gotchas, and templates for writing code
 4. `testing-android-code` - Test patterns and templates for verifying code
 5. `build-test-verify` - Build, test, lint, and deploy commands
 6. `perform-android-preflight-checklist` - Quality gate before committing
 7. `committing-android-changes` - Commit message format and pre-commit workflow
-8. `reviewing-changes` - Code review checklists for MVVM/Compose patterns
-9. `creating-android-pull-request` - PR creation workflow and templates
+8. `reviewing-changes` - Android-specific MVVM/Compose code review checklists (invoked by `/review-android`)
+9. `/review-android` - Full review workflow: PR context gathering → Android checklist → output
+10. `creating-android-pull-request` - PR creation workflow and templates
 
 ---
 
@@ -127,7 +126,7 @@ In addition to the Key Principles above, follow these rules:
 - **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
 - **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
 - **Before committing**: Use `perform-android-preflight-checklist` skill, then `committing-android-changes` skill for message format
-- **Code review**: Use `reviewing-changes` skill for MVVM/Compose review checklists
+- **Code review**: Use `/review-android` for the full review workflow; `reviewing-changes` skill for checklist-only
 - **Creating PRs**: Use `creating-android-pull-request` skill for PR workflow and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)
