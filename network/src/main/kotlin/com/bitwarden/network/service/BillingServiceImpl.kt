@@ -3,7 +3,6 @@ package com.bitwarden.network.service
 import com.bitwarden.network.api.AuthenticatedBillingApi
 import com.bitwarden.network.model.CheckoutSessionRequestJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
-import com.bitwarden.network.model.PortalSessionRequestJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.util.toResult
 
@@ -21,13 +20,9 @@ internal class BillingServiceImpl(
             )
             .toResult()
 
-    override suspend fun getPortalUrl(
-        returnUrl: String,
-    ): Result<PortalUrlResponseJson> =
+    override suspend fun getPortalUrl(): Result<PortalUrlResponseJson> =
         authenticatedBillingApi
-            .getPortalUrl(
-                body = PortalSessionRequestJson(returnUrl = returnUrl),
-            )
+            .getPortalUrl()
             .toResult()
 }
 
