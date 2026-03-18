@@ -6,6 +6,8 @@ import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.util.toResult
 
+private const val PLATFORM = "android"
+
 /**
  * The default implementation of the [BillingService].
  */
@@ -25,5 +27,3 @@ internal class BillingServiceImpl(
             .getPortalUrl()
             .toResult()
 }
-
-private const val PLATFORM = "android"
