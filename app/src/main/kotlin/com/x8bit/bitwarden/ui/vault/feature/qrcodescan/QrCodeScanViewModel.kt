@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -42,10 +43,6 @@ class QrCodeScanViewModel @Inject constructor(
     // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
         if (hasHandledScan) {
-            // There is a possible race condition where the QrCodeScan is received before the
-            // EventsEffect has been initiated, this ensures the user navigates back when
-            // the scan has been handled.
-            sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
         hasHandledScan = true
@@ -69,8 +66,9 @@ sealed class QrCodeScanEvent {
 
     /**
      * Navigate back.
+     * Added BackgroundEvent as QrCodeScan might be fired before events are consumed
      */
-    data object NavigateBack : QrCodeScanEvent()
+    data object NavigateBack : QrCodeScanEvent(), BackgroundEvent
 
     /**
      * Navigate to manual code entry screen.

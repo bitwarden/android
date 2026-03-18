@@ -69,6 +69,7 @@ fun QrCodeScanScreen(
             }
         }
     }
+
     // This screen should always look like it's in dark mode
     CompositionLocalProvider(LocalBitwardenColorScheme provides darkBitwardenColorScheme) {
         StatusBarsAppearanceAffect()

@@ -9,6 +9,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWith
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -89,10 +90,6 @@ class QrCodeScanViewModel @Inject constructor(
 
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
         if (hasHandledScan) {
-            // There is a possible race condition where the QrCodeScan is received before the
-            // EventsEffect has been initiated, this ensures the user navigates back when
-            // the scan has been handled.
-            sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
         hasHandledScan = true
@@ -206,8 +203,9 @@ sealed class QrCodeScanEvent {
 
     /**
      * Navigate back.
+     * Added BackgroundEvent as QrCodeScan might be fired before events are consumed
      */
-    data object NavigateBack : QrCodeScanEvent()
+    data object NavigateBack : QrCodeScanEvent(), BackgroundEvent
 
     /**
      * Navigate to manual code entry screen.
