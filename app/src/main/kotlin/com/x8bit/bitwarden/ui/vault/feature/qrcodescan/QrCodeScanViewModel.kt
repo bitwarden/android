@@ -16,6 +16,12 @@ class QrCodeScanViewModel @Inject constructor(
 ) : BaseViewModel<Unit, QrCodeScanEvent, QrCodeScanAction>(
     initialState = Unit,
 ) {
+    /**
+     * Guards against duplicate QR code scans being processed. Once a scan has been handled,
+     * subsequent [QrCodeScanAction.QrCodeScanReceive] actions are ignored.
+     */
+    private var hasHandledScan: Boolean = false
+
     override fun handleAction(action: QrCodeScanAction) {
         when (action) {
             is QrCodeScanAction.CloseClick -> handleCloseClick()
@@ -35,6 +41,14 @@ class QrCodeScanViewModel @Inject constructor(
 
     // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
+        if (hasHandledScan) {
+            // There is a possible race condition where the QrCodeScan is received before the
+            // EventsEffect has been initiated, this ensures the user navigates back when
+            // the scan has been handled.
+            sendEvent(QrCodeScanEvent.NavigateBack)
+            return
+        }
+        hasHandledScan = true
         val qrCode = action.qrCode
         qrCode
             .getTotpDataOrNull()

@@ -104,6 +104,27 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `QrCodeScanReceive scan already handled should emit NavigateBack without emitting code`() =
+        runTest {
+            val viewModel = createViewModel()
+            val validCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP"
+            val result = TotpCodeResult.Success(validCode)
+            every { validCode.getTotpDataOrNull() } returns mockk()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
+                assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+
+                // Second scan — only NavigateBack, no new TOTP result
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
+                assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+            }
+
+            // emitTotpCodeResult called exactly once across both actions
+            verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
+        }
+
     private fun createViewModel(): QrCodeScanViewModel =
         QrCodeScanViewModel(
             vaultRepository = vaultRepository,

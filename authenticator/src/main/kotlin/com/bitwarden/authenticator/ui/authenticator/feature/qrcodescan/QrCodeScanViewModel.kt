@@ -35,6 +35,12 @@ class QrCodeScanViewModel @Inject constructor(
      */
     private var pendingSuccessfulScan: TotpCodeResult.TotpCodeScan? = null
 
+    /**
+     * Guards against duplicate QR code scans being processed. Once a scan has been handled,
+     * subsequent [QrCodeScanAction.QrCodeScanReceive] actions are ignored.
+     */
+    private var hasHandledScan: Boolean = false
+
     override fun handleAction(action: QrCodeScanAction) {
         when (action) {
             is QrCodeScanAction.CloseClick -> handleCloseClick()
@@ -82,6 +88,14 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
+        if (hasHandledScan) {
+            // There is a possible race condition where the QrCodeScan is received before the
+            // EventsEffect has been initiated, this ensures the user navigates back when
+            // the scan has been handled.
+            sendEvent(QrCodeScanEvent.NavigateBack)
+            return
+        }
+        hasHandledScan = true
         val scannedCode = action.qrCode
         if (scannedCode.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
             handleTotpUriReceive(scannedCode)
@@ -90,7 +104,6 @@ class QrCodeScanViewModel @Inject constructor(
         } else {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             sendEvent(QrCodeScanEvent.NavigateBack)
-            return
         }
     }
 

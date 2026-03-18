@@ -259,6 +259,51 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             verify { authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError) }
         }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on QrCodeScanReceive second scan after valid TOTP scan is ignored`() = runTest {
+        val viewModel = createViewModel()
+        every { settingsRepository.defaultSaveOption } returns DefaultSaveOption.LOCAL
+        every {
+            authenticatorRepository.sharedCodesStateFlow.value
+        } returns SharedVerificationCodesState.Success(emptyList())
+        every {
+            authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT)
+        } just runs
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
+            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+        }
+        verify(exactly = 1) { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on QrCodeScanReceive second scan after error scan is ignored`() = runTest {
+        val viewModel = createViewModel()
+        val invalidQrCode = "otpauth://totp/secret=SECRET"
+        every { invalidQrCode.getTotpDataOrNull() } returns null
+        every {
+            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
+        } just runs
+        every { settingsRepository.defaultSaveOption } returns DefaultSaveOption.LOCAL
+        every {
+            authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT)
+        } just runs
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidQrCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
+            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+            assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+        }
+        verify(exactly = 1) {
+            authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
+        }
+        verify(exactly = 0) { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
+    }
+
     private fun createViewModel() = QrCodeScanViewModel(
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorRepository = authenticatorRepository,
