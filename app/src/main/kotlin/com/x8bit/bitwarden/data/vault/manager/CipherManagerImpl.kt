@@ -801,7 +801,7 @@ class CipherManagerImpl(
         if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
             // Check if there are any collections in common
             shouldUpdate = vaultDiskSource
-                .getCollections(userId = userId)
+                .getCollectionsFlow(userId = userId)
                 .first()
                 .any { collectionIds?.contains(it.id) == true }
         }

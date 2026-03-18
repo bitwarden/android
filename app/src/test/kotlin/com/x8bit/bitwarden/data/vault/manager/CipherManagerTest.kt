@@ -2616,7 +2616,7 @@ class CipherManagerTest {
                 vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
             } returns originalCipher
             coEvery {
-                vaultDiskSource.getCollections(userId = userId)
+                vaultDiskSource.getCollectionsFlow(userId = userId)
             } returns MutableStateFlow(listOf(collection))
             coEvery {
                 ciphersService.getCipher(cipherId = cipherId)
@@ -2660,7 +2660,7 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { vaultDiskSource.getCipher(any(), any()) } returns originalCipher
             coEvery {
-                vaultDiskSource.getCollections(userId = userId)
+                vaultDiskSource.getCollectionsFlow(userId = userId)
             } returns MutableStateFlow(listOf(collection))
 
             coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()

@@ -33,7 +33,7 @@ class FakeFoldersDao : FoldersDao {
         foldersFlow.tryEmit(storedFolders.toList())
     }
 
-    override fun getAllFolders(userId: String): Flow<List<FolderEntity>> =
+    override fun getAllFoldersFlow(userId: String): Flow<List<FolderEntity>> =
         foldersFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
 
     override suspend fun insertFolders(folders: List<FolderEntity>) {
