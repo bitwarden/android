@@ -23,7 +23,7 @@ import timber.log.Timber
 @Suppress("LongParameterList")
 internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
-    private val baseUrlInterceptors: BaseUrlInterceptors,
+    baseUrlInterceptors: BaseUrlInterceptors,
     cookieInterceptor: CookieInterceptor,
     headersInterceptor: HeadersInterceptor,
     json: Json,
@@ -115,9 +115,7 @@ internal class RetrofitsImpl(
     private val baseRetrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .addCallAdapterFactory(
-                NetworkResultCallAdapterFactory(baseUrlInterceptors.baseUrlsProvider),
-            )
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .client(baseOkHttpClient)
     }
 

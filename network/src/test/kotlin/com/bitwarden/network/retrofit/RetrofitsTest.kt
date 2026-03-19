@@ -37,7 +37,6 @@ class RetrofitsTest {
         mockIntercept { isAuthInterceptorCalled = true }
     }
     private val baseUrlInterceptors = mockk<BaseUrlInterceptors> {
-        every { baseUrlsProvider } returns mockk(relaxed = true)
         every { apiInterceptor } returns mockk {
             mockIntercept { isApiInterceptorCalled = true }
         }

@@ -1,8 +1,7 @@
 package com.bitwarden.network.core
 
-import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.NetworkResult
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import com.bitwarden.network.util.UNKNOWN_HOST_REGEX
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
@@ -25,12 +24,11 @@ private const val NO_CONTENT_RESPONSE_CODE: Int = 204
 internal class NetworkResultCall<T>(
     private val backingCall: Call<T>,
     private val successType: Type,
-    private val baseUrlsProvider: BaseUrlsProvider? = null,
 ) : Call<NetworkResult<T>> {
     override fun cancel(): Unit = backingCall.cancel()
 
     override fun clone(): Call<NetworkResult<T>> =
-        NetworkResultCall(backingCall, successType, baseUrlsProvider)
+        NetworkResultCall(backingCall, successType)
 
     override fun enqueue(callback: Callback<NetworkResult<T>>): Unit = backingCall.enqueue(
         object : Callback<T> {
@@ -73,20 +71,10 @@ internal class NetworkResultCall<T>(
     private fun Throwable.toFailure(): NetworkResult<T> {
         val originalUrl = backingCall.request().url.toUrl()
 
-        // Check if this is a hardcoded default URL that will be replaced by BaseUrlInterceptor
-        // Match against the defaults from RetrofitsImpl.kt line 111 and EnvironmentUrlDataJson
-        val actualHost = baseUrlsProvider?.let { provider ->
-            when (originalUrl.host) {
-                "api.bitwarden.com" -> provider.getBaseApiUrl().toHttpUrlOrNull()?.host
-                "identity.bitwarden.com" -> provider.getBaseIdentityUrl().toHttpUrlOrNull()?.host
-                "events.bitwarden.com" -> provider.getBaseEventsUrl().toHttpUrlOrNull()?.host
-                else -> null
-            }
-        }
+        val extractedHost = message?.let { UNKNOWN_HOST_REGEX.find(it)?.groupValues?.getOrNull(1) }
 
-        // Rebuild the URL without query params, using actual host if available
-        val url = if (actualHost != null) {
-            "${originalUrl.protocol}://$actualHost${originalUrl.path}"
+        val url = if (extractedHost != null) {
+            "${originalUrl.protocol}://$extractedHost${originalUrl.path}"
         } else {
             "${originalUrl.protocol}://${originalUrl.authority}${originalUrl.path}"
         }

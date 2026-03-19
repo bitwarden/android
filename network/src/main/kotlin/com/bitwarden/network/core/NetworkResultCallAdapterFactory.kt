@@ -1,6 +1,5 @@
 package com.bitwarden.network.core
 
-import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.NetworkResult
 import retrofit2.Call
 import retrofit2.CallAdapter
@@ -11,9 +10,7 @@ import java.lang.reflect.Type
 /**
  * A [retrofit2.CallAdapter.Factory] for wrapping network requests into [NetworkResult].
  */
-internal class NetworkResultCallAdapterFactory(
-    private val baseUrlsProvider: BaseUrlsProvider,
-) : CallAdapter.Factory() {
+internal class NetworkResultCallAdapterFactory : CallAdapter.Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,
@@ -28,10 +25,7 @@ internal class NetworkResultCallAdapterFactory(
         val requestType = getParameterUpperBound(0, containerType)
 
         return if (getRawType(returnType) == Call::class.java) {
-            NetworkResultCallAdapter<Any>(
-                successType = requestType,
-                baseUrlsProvider = baseUrlsProvider,
-            )
+            NetworkResultCallAdapter<Any>(successType = requestType)
         } else {
             null
         }

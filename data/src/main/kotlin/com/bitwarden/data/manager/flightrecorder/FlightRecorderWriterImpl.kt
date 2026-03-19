@@ -10,10 +10,8 @@ import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.ServerConfigRepository
-import com.bitwarden.network.interceptor.BaseUrlsProvider
-import com.bitwarden.network.util.redactHostnamesInMessage
+import com.bitwarden.network.util.redactSelfHostedHostnames
 import kotlinx.coroutines.withContext
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import timber.log.Timber
 import java.io.BufferedWriter
 import java.io.File
@@ -35,7 +33,6 @@ internal class FlightRecorderWriterImpl(
     private val fileManager: FileManager,
     private val dispatcherManager: DispatcherManager,
     private val buildInfoManager: BuildInfoManager,
-    private val baseUrlsProvider: BaseUrlsProvider,
     private val serverConfigRepository: ServerConfigRepository,
 ) : FlightRecorderWriter {
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
@@ -113,32 +110,15 @@ internal class FlightRecorderWriterImpl(
                         bw.append(it)
                     }
                     bw.append(" – ")
-                    bw.append(message.redactUrls()) // Apply hostname redaction
+                    bw.append(message.redactSelfHostedHostnames())
                     throwable?.let {
                         bw.append(" – ")
-                        bw.append(it.getStackTraceString().redactUrls()) // Also redact stack traces
+                        bw.append(it.getStackTraceString().redactSelfHostedHostnames())
                     }
                     bw.newLine()
                 }
             }
         }
-    }
-
-    /**
-     * Redacts ONLY the user's configured self-hosted server hostname.
-     *
-     * Preserves ALL Bitwarden domains (including QA/dev).
-     */
-    private fun String.redactUrls(): String {
-        // Get configured hostnames from BaseUrlsProvider
-        val configuredHosts = setOf(
-            baseUrlsProvider.getBaseApiUrl().toHttpUrlOrNull()?.host,
-            baseUrlsProvider.getBaseIdentityUrl().toHttpUrlOrNull()?.host,
-            baseUrlsProvider.getBaseEventsUrl().toHttpUrlOrNull()?.host,
-        ).filterNotNull().toSet()
-
-        // Delegate to HostnameRedactionUtil for all redaction logic
-        return this.redactHostnamesInMessage(configuredHosts)
     }
 }
 

@@ -1,9 +1,6 @@
 package com.bitwarden.network.core
 
-import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.NetworkResult
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -16,18 +13,12 @@ import retrofit2.http.GET
 
 class NetworkResultCallAdapterTest {
 
-    private val mockBaseUrlsProvider = mockk<BaseUrlsProvider> {
-        every { getBaseApiUrl() } returns "https://api.bitwarden.com"
-        every { getBaseIdentityUrl() } returns "https://identity.bitwarden.com"
-        every { getBaseEventsUrl() } returns "https://events.bitwarden.com"
-    }
-
     private val server: MockWebServer = MockWebServer().apply { start() }
     private val testService: FakeService =
         Retrofit.Builder()
             .baseUrl(server.url("/").toString())
             // add the adapter being tested
-            .addCallAdapterFactory(NetworkResultCallAdapterFactory(mockBaseUrlsProvider))
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .build()
             .create()
 

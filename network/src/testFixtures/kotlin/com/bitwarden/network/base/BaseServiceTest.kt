@@ -2,7 +2,6 @@ package com.bitwarden.network.base
 
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.network.core.NetworkResultCallAdapterFactory
-import com.bitwarden.network.interceptor.BaseUrlsProvider
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
@@ -23,15 +22,9 @@ abstract class BaseServiceTest {
 
     protected val urlPrefix: String get() = "http://${server.hostName}:${server.port}"
 
-    private val fakeBaseUrlsProvider = object : BaseUrlsProvider {
-        override fun getBaseApiUrl(): String = "https://api.bitwarden.com"
-        override fun getBaseIdentityUrl(): String = "https://identity.bitwarden.com"
-        override fun getBaseEventsUrl(): String = "https://events.bitwarden.com"
-    }
-
     protected val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(url.toString())
-        .addCallAdapterFactory(NetworkResultCallAdapterFactory(fakeBaseUrlsProvider))
+        .addCallAdapterFactory(NetworkResultCallAdapterFactory())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
