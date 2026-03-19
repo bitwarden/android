@@ -480,6 +480,55 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick with deleteCipherAttachment error with errorMessage should display that message`() =
+        runTest {
+            val cipherId = "mockId-1"
+            val attachmentId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val initialState = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+            )
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.deleteCipherAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                    cipherView = cipherView,
+                )
+            } returns DeleteAttachmentResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AttachmentsAction.DeleteClick(attachmentId))
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AttachmentsState.DialogState.Loading(
+                            message = BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `DeleteClick with deleteCipherAttachment success should emit ShowSnackbar`() = runTest {
         val cipherId = "mockId-1"
@@ -660,6 +709,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

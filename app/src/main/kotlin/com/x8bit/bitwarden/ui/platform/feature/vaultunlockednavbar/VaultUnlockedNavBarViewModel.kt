@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -276,10 +276,10 @@ sealed class VaultUnlockedNavBarEvent {
     }
 
     /**
-     * Shortcut events should to be considered [BackgroundEvent] as they are fired
-     * outside of normal lifecycle aware events and should not be ignored by filter.
+     * Shortcut events should to be considered [DeferredBackgroundEvent] as they are fired
+     * outside normal lifecycle aware events and should not be ignored by filter.
      */
-    sealed class Shortcut : VaultUnlockedNavBarEvent(), BackgroundEvent {
+    sealed class Shortcut : VaultUnlockedNavBarEvent(), DeferredBackgroundEvent {
         /**
          * Navigate to the Generator screen via a shortcut.
          */

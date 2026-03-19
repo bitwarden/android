@@ -9,6 +9,7 @@ import com.bitwarden.network.provider.RefreshTokenProvider
 import com.bitwarden.network.provider.TokenProvider
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
+import com.bitwarden.network.service.BillingService
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DevicesService
@@ -69,6 +70,11 @@ interface BitwardenServiceClient {
      * Provides access to the Authentication Requests service.
      */
     val authRequestsService: AuthRequestsService
+
+    /**
+     * Provides access to the Billing service.
+     */
+    val billingService: BillingService
 
     /**
      * Provides access to the Ciphers service.

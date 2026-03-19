@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.PushNotificationLogOutReason
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -63,6 +64,8 @@ class PushManagerImpl @Inject constructor(
     private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
+    private val mutablePremiumStatusChangedSharedFlow =
+        bufferedMutableSharedFlow<PremiumStatusChangedData>()
     private val mutableSyncCipherDeleteSharedFlow =
         bufferedMutableSharedFlow<SyncCipherDeleteData>()
     private val mutableSyncCipherUpsertSharedFlow =
@@ -85,6 +88,9 @@ class PushManagerImpl @Inject constructor(
 
     override val passwordlessRequestFlow: SharedFlow<PasswordlessRequestData>
         get() = mutablePasswordlessRequestSharedFlow.asSharedFlow()
+
+    override val premiumStatusChangedFlow: SharedFlow<PremiumStatusChangedData>
+        get() = mutablePremiumStatusChangedSharedFlow.asSharedFlow()
 
     override val syncCipherDeleteFlow: SharedFlow<SyncCipherDeleteData>
         get() = mutableSyncCipherDeleteSharedFlow.asSharedFlow()
@@ -193,6 +199,12 @@ class PushManagerImpl @Inject constructor(
                             ),
                         )
                     }
+            }
+
+            NotificationType.POLICY_CHANGED -> {
+                activeUserId?.let {
+                    mutableFullSyncSharedFlow.tryEmit(it)
+                }
             }
 
             NotificationType.SYNC_CIPHER_DELETE,
@@ -304,6 +316,25 @@ class PushManagerImpl @Inject constructor(
                         )
                     }
                     ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(it) }
+            }
+
+            NotificationType.PREMIUM_STATUS_CHANGED -> {
+                json
+                    .decodeFromString<NotificationPayload.PremiumStatusChangedNotification>(
+                        string = notification.payload,
+                    )
+                    .takeIf { it.userId != null && it.isPremium != null }
+                    ?.let { payload ->
+                        mutablePremiumStatusChangedSharedFlow.tryEmit(
+                            PremiumStatusChangedData(
+                                userId = requireNotNull(payload.userId),
+                                isPremium = requireNotNull(payload.isPremium),
+                            ),
+                        )
+                        mutableFullSyncSharedFlow.tryEmit(
+                            requireNotNull(payload.userId),
+                        )
+                    }
             }
         }
     }

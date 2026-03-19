@@ -36,6 +36,10 @@ class FlagKeyTest {
             FlagKey.SendEmailVerification.keyName,
             "pm-19051-send-email-verification",
         )
+        assertEquals(
+            FlagKey.MobilePremiumUpgrade.keyName,
+            "PM-31697-premium-upgrade-path",
+        )
     }
 
     @Test
@@ -49,6 +53,7 @@ class FlagKeyTest {
                 FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.ArchiveItems,
                 FlagKey.SendEmailVerification,
+                FlagKey.MobilePremiumUpgrade,
             ).all {
                 !it.defaultValue
             },

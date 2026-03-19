@@ -100,6 +100,7 @@ fun BitwardenEmptyContent(
             BitwardenFilledButton(
                 label = it.label(),
                 onClick = it.onClick,
+                icon = it.icon,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -116,6 +117,7 @@ fun BitwardenEmptyContent(
             BitwardenOutlinedButton(
                 label = it.label(),
                 onClick = it.onClick,
+                icon = it.icon,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()

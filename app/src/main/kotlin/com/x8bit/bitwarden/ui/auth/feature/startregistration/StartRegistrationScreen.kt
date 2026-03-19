@@ -274,8 +274,14 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val strTerms = stringResource(id = BitwardenString.terms_of_service)
-    val strPrivacy = stringResource(id = BitwardenString.privacy_policy)
+    val strTerms = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.terms_of_service)),
+    )
+    val strPrivacy = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.privacy_policy)),
+    )
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,

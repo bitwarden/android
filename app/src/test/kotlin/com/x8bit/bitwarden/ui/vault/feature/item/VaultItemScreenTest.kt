@@ -767,17 +767,21 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(
-                "A premium membership is required to use this feature.",
+                text = "Attachments are a Premium feature. " +
+                    "Your current plan does not include access to this feature.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = "Okay")
+            .onAllNodesWithText(text = "Upgrade to premium")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
         composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
+        }
     }
 
     @Suppress("MaxLineLength")

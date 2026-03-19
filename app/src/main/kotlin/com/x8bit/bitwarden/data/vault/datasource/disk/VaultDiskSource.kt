@@ -80,12 +80,12 @@ interface VaultDiskSource {
     /**
      * Retrieves all collections from the data source for a given [userId].
      */
-    fun getCollections(userId: String): Flow<List<SyncResponseJson.Collection>>
+    fun getCollectionsFlow(userId: String): Flow<List<SyncResponseJson.Collection>>
 
     /**
      * Retrieves all domains from the data source for a given [userId].
      */
-    fun getDomains(userId: String): Flow<SyncResponseJson.Domains?>
+    fun getDomainsFlow(userId: String): Flow<SyncResponseJson.Domains?>
 
     /**
      * Deletes a folder from the data source for the given [userId] and [folderId].
@@ -100,34 +100,34 @@ interface VaultDiskSource {
     /**
      * Retrieves all folders from the data source for a given [userId].
      */
-    fun getFolders(userId: String): Flow<List<SyncResponseJson.Folder>>
+    fun getFoldersFlow(userId: String): Flow<List<SyncResponseJson.Folder>>
 
     /**
-     * Saves a send to the data source for the given [userId].
+     * Saves a Send to the data source for the given [userId].
      */
     suspend fun saveSend(userId: String, send: SyncResponseJson.Send)
 
     /**
-     * Deletes a send from the data source for the given [userId] and [sendId].
+     * Deletes a Send from the data source for the given [userId] and [sendId].
      */
     suspend fun deleteSend(userId: String, sendId: String)
 
     /**
      * Retrieves all sends from the data source for a given [userId].
      */
-    fun getSends(userId: String): Flow<List<SyncResponseJson.Send>>
+    fun getSendsFlow(userId: String): Flow<List<SyncResponseJson.Send>>
 
     /**
      * Replaces all [vault] data for a given [userId] with the new `vault`.
      *
-     * This will always cause the [getCiphersFlow], [getCollections], and [getFolders] functions to
-     * re-emit even if the underlying data has not changed.
+     * This will always cause the [getCiphersFlow], [getCollectionsFlow], and [getFoldersFlow]
+     * functions to re-emit even if the underlying data has not changed.
      */
     suspend fun replaceVaultData(userId: String, vault: SyncResponseJson)
 
     /**
-     * Trigger re-emissions from the [getCiphersFlow], [getCollections], [getFolders], and [getSends]
-     * functions.
+     * Trigger re-emissions from the [getCiphersFlow], [getCollectionsFlow], [getFoldersFlow],
+     * and [getSendsFlow] functions.
      */
     suspend fun resyncVaultData(userId: String)
 

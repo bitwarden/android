@@ -1183,7 +1183,8 @@ class VaultItemViewModel @Inject constructor(
             is DeleteCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1211,7 +1212,8 @@ class VaultItemViewModel @Inject constructor(
             is RestoreCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1235,7 +1237,8 @@ class VaultItemViewModel @Inject constructor(
             is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = BitwardenString.unable_to_download_file.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_download_file.asText(),
                         error = result.error,
                     ),
                 )
@@ -1291,7 +1294,8 @@ class VaultItemViewModel @Inject constructor(
             is ArchiveCipherResult.Error -> {
                 updateDialogState(
                     dialog = VaultItemState.DialogState.Generic(
-                        message = BitwardenString.unable_to_archive_selected_item.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_archive_selected_item.asText(),
                         error = result.error,
                     ),
                 )
@@ -1315,7 +1319,8 @@ class VaultItemViewModel @Inject constructor(
             is UnarchiveCipherResult.Error -> {
                 updateDialogState(
                     dialog = VaultItemState.DialogState.Generic(
-                        message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                        message = result.errorMessage?.asText()
+                            ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                         error = result.error,
                     ),
                 )

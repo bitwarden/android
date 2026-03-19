@@ -676,7 +676,8 @@ class SearchViewModel @Inject constructor(
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -697,7 +698,8 @@ class SearchViewModel @Inject constructor(
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -1503,7 +1505,7 @@ sealed class SearchAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates a result for updating a cipher during the autofill-and-save process.

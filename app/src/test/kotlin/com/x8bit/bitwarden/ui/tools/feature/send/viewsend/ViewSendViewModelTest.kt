@@ -162,6 +162,46 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on DeleteClick with error message should display error message`() = runTest {
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        val sendView = createMockSendView(number = 1)
+        every {
+            sendView.toViewSendViewStateContent(baseWebSendUrl = any(), clock = FIXED_CLOCK)
+        } returns DEFAULT_CONTENT_VIEW_STATE
+        val errorMessage = "User-friendly error"
+        val throwable = Throwable("Fail!")
+        coEvery {
+            vaultRepository.deleteSend(sendId = "send_id")
+        } returns DeleteSendResult.Error(errorMessage = errorMessage, error = throwable)
+        mutableSendStateFlow.value = DataState.Loaded(data = sendView)
+
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(ViewSendAction.DeleteClick)
+            assertEquals(
+                initialState.copy(
+                    dialogState = ViewSendState.DialogState.Loading(
+                        message = BitwardenString.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialogState = ViewSendState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
+                        throwable = throwable,
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on DeleteClick with success should navigate back`() = runTest {
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         val sendView = createMockSendView(number = 1)

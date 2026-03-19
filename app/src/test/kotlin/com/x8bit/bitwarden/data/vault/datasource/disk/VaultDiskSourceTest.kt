@@ -209,12 +209,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getCollections should emit all CollectionsDao updates`() = runTest {
+    fun `getCollectionsFlow should emit all CollectionsDao updates`() = runTest {
         val collectionEntities = listOf(COLLECTION_ENTITY)
         val collection = listOf(COLLECTION_1)
 
         vaultDiskSource
-            .getCollections(USER_ID)
+            .getCollectionsFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Collection>(), awaitItem())
                 collectionsDao.insertCollections(collectionEntities)
@@ -223,9 +223,9 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getDomains should emit DomainsDao updates`() = runTest {
+    fun `getDomainsFlow should emit DomainsDao updates`() = runTest {
         vaultDiskSource
-            .getDomains(USER_ID)
+            .getDomainsFlow(USER_ID)
             .test {
                 expectNoEvents()
                 domainsDao.insertDomains(DOMAINS_ENTITY)
@@ -257,12 +257,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getFolders should emit all FoldersDao updates`() = runTest {
+    fun `getFoldersFlow should emit all FoldersDao updates`() = runTest {
         val folderEntities = listOf(FOLDER_ENTITY)
         val folders = listOf(FOLDER_1)
 
         vaultDiskSource
-            .getFolders(USER_ID)
+            .getFoldersFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Folder>(), awaitItem())
                 foldersDao.insertFolders(folderEntities)
@@ -300,12 +300,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getSends should emit all SendsDao updates`() = runTest {
+    fun `getSendsFlow should emit all SendsDao updates`() = runTest {
         val sendEntities = listOf(SEND_ENTITY)
         val sends = listOf(SEND_1)
 
         vaultDiskSource
-            .getSends(USER_ID)
+            .getSendsFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Send>(), awaitItem())
                 sendsDao.insertSends(sendEntities)

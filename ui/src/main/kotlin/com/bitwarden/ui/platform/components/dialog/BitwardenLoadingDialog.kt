@@ -10,6 +10,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -40,6 +41,7 @@ fun BitwardenLoadingDialog(
         ),
         onDismissRequest = {},
     ) {
+        StatusBarsAppearanceAffect()
         BitwardenLoadingContent(
             text = text,
             modifier = Modifier

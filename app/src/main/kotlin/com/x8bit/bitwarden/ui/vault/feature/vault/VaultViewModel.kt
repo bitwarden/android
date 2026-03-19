@@ -33,6 +33,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.MINIMUM_CXP_GMS_VERSION
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -46,6 +48,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
@@ -112,6 +115,7 @@ class VaultViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val gmsManager: GmsManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -996,7 +1000,9 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
     ) {
         viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled) {
+            if (action.isCredentialExchangeProtocolExportEnabled &&
+                gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION)
+            ) {
                 credentialExchangeRegistryManager.register()
             } else {
                 credentialExchangeRegistryManager.unregister()
@@ -1017,7 +1023,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
                             error = result.error,
                         ),
                     )
@@ -1038,7 +1045,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                             error = result.error,
                         ),
                     )
@@ -1198,7 +1206,8 @@ class VaultViewModel @Inject constructor(
             isPremium = state.isPremium,
             hasMasterPassword = state.hasMasterPassword,
             errorTitle = BitwardenString.an_error_has_occurred.asText(),
-            errorMessage = BitwardenString.generic_error_message.asText(),
+            errorMessage = vaultData.error.userFriendlyMessage?.asText()
+                ?: BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             isArchiveEnabled = state.isArchiveEnabled,
@@ -2289,7 +2298,7 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates that the flight recorder data was received.

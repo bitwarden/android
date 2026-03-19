@@ -65,7 +65,7 @@ jobs:
         run: ./gradlew :testharness:assembleDebug
 
       - name: Upload Test Harness APK
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: com.bitwarden.testharness.dev-debug.apk
           path: testharness/build/outputs/apk/debug/com.bitwarden.testharness.dev.apk
@@ -77,7 +77,7 @@ jobs:
             > ./com.bitwarden.testharness.dev.apk-sha256.txt
 
       - name: Upload Test Harness SHA file
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: com.bitwarden.testharness.dev.apk-sha256.txt
           path: ./com.bitwarden.testharness.dev.apk-sha256.txt

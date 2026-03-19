@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -163,6 +164,48 @@ class PushManagerTest {
                 }
             }
 
+        @Test
+        fun `onMessageReceived with premium status changed emits to premiumStatusChangedFlow`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        PremiumStatusChangedData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            isPremium = true,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with premium status changed also emits to fullSyncFlow`() =
+            runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with premium status changed with null fields does not emit`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP,
+                    )
+                    expectNoEvents()
+                }
+            }
+
         @Nested
         inner class LoggedOutUserState {
             @BeforeEach
@@ -232,6 +275,18 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
                         "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived with policy changed emit to fullSyncFlow`() = runTest {
+                val activeUserId = authDiskSource.userState?.activeUserId
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(POLICY_CHANGED_NOTIFICATION_MAP)
+                    assertEquals(
+                        activeUserId,
                         awaitItem(),
                     )
                 }
@@ -920,6 +975,23 @@ private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
     }""",
 )
 
+private val POLICY_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "25",
+    "payload" to """{                                                                                                                                                                                                                             
+        "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                   
+        "Policy": {                                                                                                                                                                                                                                 
+          "Id": "69642eee-80fc-476b-8954-b40c00a97f20",                                                                                                                                                                                             
+          "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                 
+          "Type": 6,                                                                                                                                                                                                                                
+          "Data": null,                                                                                                                                                                                                                             
+          "Enabled": true,                                                                                                                                                                                                                          
+          "CreationDate": "2026-03-13T10:17:07.0891504Z",                                                                                                                                                                                           
+          "RevisionDate": "2026-03-13T10:17:07.0892162Z"                                                                                                                                                                                            
+        }                                                                                                                                                                                                                                           
+      }""",
+)
+
 private val SYNC_CIPHER_CREATE_NOTIFICATION_MAP = mapOf(
     "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
     "type" to "1",
@@ -1061,5 +1133,23 @@ private val SYNC_VAULT_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Premium": true
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": null,
+      "Premium": null
     }""",
 )

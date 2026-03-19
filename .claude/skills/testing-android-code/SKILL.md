@@ -263,6 +263,7 @@ Common testing mistakes in Bitwarden. **For complete details and examples:** See
 - **Null stream testing** - Test null returns from ContentResolver operations
 - **bufferedMutableSharedFlow** - Use with `.onSubscription { emit(state) }` in Fakes
 - **Test factory methods** - Accept domain state types, not SavedStateHandle
+- **@Suppress("MaxLineLength")** - Only add when the `fun` declaration line **actually exceeds 100 chars** — do not copy the pattern blindly
 
 ---
 

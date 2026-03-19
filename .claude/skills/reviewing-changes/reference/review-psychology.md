@@ -5,7 +5,6 @@ Effective code review feedback is clear, actionable, and constructive. This guid
 ## Table of Contents
 
 **Guidelines:**
-- [Core Directives](#core-directives)
 - [Phrasing Templates](#phrasing-templates)
   - [Critical Issues (Prescriptive)](#critical-issues-prescriptive)
   - [Suggested Improvements (Exploratory)](#suggested-improvements-exploratory)
@@ -13,17 +12,6 @@ Effective code review feedback is clear, actionable, and constructive. This guid
   - [Test Suggestions](#test-suggestions)
 - [When to Be Prescriptive vs Ask Questions](#when-to-be-prescriptive-vs-ask-questions)
 - [Special Cases](#special-cases)
-
----
-
-## Core Directives
-
-- **Keep positive feedback minimal**: For clean PRs with no issues, use 2-3 line approval only. When acknowledging good practices in PRs with issues, use single bullet list with no elaboration. Never create elaborate sections praising correct implementations.
-- Ask questions for design decisions, be prescriptive for clear violations
-- Focus on code, not people ("This code..." not "You...")
-- Use I-statements for subjective feedback ("Hard for me to understand...")
-- Explain rationale with every recommendation
-- Avoid: "just", "simply", "obviously", "easy"
 
 ---
 

@@ -4,15 +4,6 @@
 
 ### First Pass: High-Level Assessment
 
-<thinking>
-Before diving into details:
-1. What is this feature supposed to do?
-2. How does it fit into the existing architecture?
-3. What are the security implications?
-4. What's the scope? (files touched, modules affected)
-5. What are the highest-risk areas?
-</thinking>
-
 **1. Understand the feature:**
 - Read PR description - what problem does this solve?
 - Identify user-facing changes vs internal changes
@@ -29,15 +20,6 @@ Before diving into details:
 - Are there obvious compilation or null safety issues?
 
 ### Second Pass: Architecture Deep-Dive
-
-<thinking>
-Verify architectural integrity:
-1. Does this follow MVVM + UDF pattern?
-2. Is Hilt DI used correctly?
-3. Is state management proper (StateFlow, immutability)?
-4. Are modules organized correctly?
-5. Is error handling robust (Result types)?
-</thinking>
 
 **4. MVVM + UDF Pattern Compliance:**
 - ViewModels properly structured?
@@ -60,15 +42,6 @@ Verify architectural integrity:
 
 ### Third Pass: Details and Quality
 
-<thinking>
-Check quality and completeness:
-1. Is code quality high? (null safety, documentation, naming)
-2. Are tests comprehensive? (unit + integration)
-3. Are there edge cases not covered?
-4. Is documentation clear?
-5. Are there any code smells or anti-patterns?
-</thinking>
-
 **8. Testing:**
 - Unit tests for ViewModels and repositories?
 - Test coverage for edge cases and error scenarios?
@@ -86,144 +59,13 @@ Check quality and completeness:
 
 ## Architecture Review
 
-### MVVM Pattern Compliance
+Read `reference/architectural-patterns.md` for full patterns and code examples.
 
-Read `reference/architectural-patterns.md` for detailed patterns.
-
-**ViewModels must:**
-- Use `@HiltViewModel` annotation
-- Use `@Inject constructor`
-- Expose `StateFlow<T>`, NOT `MutableStateFlow<T>` publicly
-- Delegate business logic to Repository/Manager
-- Avoid direct Android framework dependencies (except ViewModel, SavedStateHandle)
-
-**Common Violations:**
-```kotlin
-// ❌ BAD - Exposes mutable state
-class FeatureViewModel @Inject constructor() : ViewModel() {
-    val state: MutableStateFlow<State> = MutableStateFlow(State.Initial)
-}
-
-// ✅ GOOD - Exposes immutable state
-class FeatureViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow<State>(State.Initial)
-    val state: StateFlow<State> = _state.asStateFlow()
-}
-
-// ❌ BAD - Business logic in ViewModel
-fun onSubmit() {
-    val encrypted = encryptionManager.encrypt(password) // Should be in Repository
-    _state.value = State.Success
-}
-
-// ✅ GOOD - Business logic in Repository, state updated via internal event
-fun onSubmit() {
-    viewModelScope.launch {
-        // The result of the async operation is captured
-        val result = repository.submitData(password)
-        // A single event is sent with the result, not updating state directly
-        sendAction(FeatureAction.Internal.SubmissionComplete(result))
-    }
-}
-
-// The ViewModel has a handler that processes the internal event
-private fun handleInternalAction(action: FeatureAction.Internal) {
-    when (action) {
-        is FeatureAction.Internal.SubmissionComplete -> {
-            // The event handler evaluates the result and updates state
-            action.result.fold(
-                onSuccess = { _state.value = State.Success },
-                onFailure = { _state.value = State.Error(it) }
-            )
-        }
-    }
-}
-```
-
-**UI Layer must:**
-- Only observe state, never modify
-- Pass user actions as events to ViewModel
-- Contain no business logic
-- Use existing UI components from `:ui` module where possible
-
-### Hilt Dependency Injection
-
-Reference: `docs/ARCHITECTURE.md#dependency-injection`
-
-**Required Patterns:**
-- ViewModels: `@HiltViewModel` + `@Inject constructor`
-- Repositories: `@Inject constructor` on implementation
-- Inject interfaces, not concrete implementations
-- Modules must provide proper scoping (`@Singleton`, `@ViewModelScoped`)
-
-**Common Violations:**
-```kotlin
-// ❌ BAD - Manual instantiation
-class FeatureViewModel : ViewModel() {
-    private val repository = FeatureRepositoryImpl()
-}
-
-// ✅ GOOD - Injected interface
-@HiltViewModel
-class FeatureViewModel @Inject constructor(
-    private val repository: FeatureRepository  // Interface, not implementation
-) : ViewModel()
-
-// ❌ BAD - Injecting implementation
-class FeatureViewModel @Inject constructor(
-    private val repository: FeatureRepositoryImpl  // Should inject interface
-)
-
-// ✅ GOOD - Interface injection
-class FeatureViewModel @Inject constructor(
-    private val repository: FeatureRepository  // Interface
-)
-```
-
-### Module Organization
-
-Reference: `docs/ARCHITECTURE.md#module-structure`
-
-**Correct Placement:**
-- `:core` - Shared utilities (cryptography, analytics, logging)
-- `:data` - Repositories, database, domain models
-- `:network` - API clients, network utilities
-- `:ui` - Reusable Compose components, theme
-- `:app` - Feature screens, ViewModels, navigation
-- `:authenticator` - Authenticator app (separate from password manager)
-
-**Check:**
-- UI code in `:ui` or `:app` modules
-- Data models in `:data`
-- Network clients in `:network`
-- No circular dependencies between modules
-
-### Error Handling
-
-Reference: `docs/ARCHITECTURE.md#error-handling`
-
-**Required Pattern - Use Result types:**
-```kotlin
-// ✅ GOOD - Result type
-suspend fun fetchData(): Result<Data> = runCatching {
-    apiService.getData()
-}
-
-// ViewModel handles Result
-repository.fetchData().fold(
-    onSuccess = { data -> _state.value = State.Success(data) },
-    onFailure = { error -> _state.value = State.Error(error) }
-)
-
-// ❌ BAD - Exception-based in business logic
-suspend fun fetchData(): Data {
-    try {
-        return apiService.getData()
-    } catch (e: Exception) {
-        throw FeatureException(e)  // Don't throw in business logic
-    }
-}
-```
+**Check these four areas:**
+- **MVVM/UDF**: ViewModel exposes `StateFlow` (not `MutableStateFlow`), business logic in Repository, UI is stateless
+- **Hilt DI**: `@HiltViewModel` + `@Inject constructor`, inject interfaces not implementations, no manual instantiation
+- **Module placement**: UI in `:ui`/`:app`, data in `:data`, network in `:network`, no circular dependencies
+- **Error handling**: `Result<T>` / `runCatching` throughout — no thrown exceptions from data layer
 
 ## Security Review
 
@@ -366,15 +208,4 @@ Use `reference/review-psychology.md` for phrasing guidance.
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-See `examples/review-outputs.md` for comprehensive feature review example.
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
