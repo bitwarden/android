@@ -487,6 +487,10 @@ private fun ActionCard(
     modifier: Modifier = Modifier,
 ) {
     when (actionCardState) {
+        VaultState.ActionCardState.UpgradePremium -> {
+            // UI implementation in PM-33515.
+        }
+
         VaultState.ActionCardState.IntroducingArchive -> {
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.introducing_archive),

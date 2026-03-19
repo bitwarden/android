@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -107,6 +108,7 @@ class VaultViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val clock: Clock,
     private val policyManager: PolicyManager,
+    private val premiumStateManager: PremiumStateManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -237,6 +239,16 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        premiumStateManager
+            .isPremiumUpgradeBannerEligibleFlow
+            .map {
+                VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive(
+                    isEligible = it,
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -385,6 +397,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradePremium -> {
+                premiumStateManager.dismissPremiumUpgradeBanner()
+            }
+
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
@@ -393,9 +409,15 @@ class VaultViewModel @Inject constructor(
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradePremium -> {
+                // Navigation to Plan screen wired in PM-33515/PM-33516.
+            }
+
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
-                sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
+                sendEvent(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                )
             }
         }
     }
@@ -956,6 +978,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
+
+            is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
+                handlePremiumUpgradeBannerEligibilityReceive(action)
+            }
         }
     }
 
@@ -1065,6 +1091,14 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
+        }
+    }
+
+    private fun handlePremiumUpgradeBannerEligibilityReceive(
+        action: VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPremiumUpgradeBannerEligible = action.isEligible)
         }
     }
 
@@ -1481,6 +1515,7 @@ data class VaultState(
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
+    val isPremiumUpgradeBannerEligible: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1488,9 +1523,13 @@ data class VaultState(
      */
     val actionCard: ActionCardState?
         get() = (viewState as? ViewState.Content)?.let {
-            ActionCardState.IntroducingArchive.takeIf {
-                isPremium && !isIntroducingArchiveActionCardDismissed && isArchiveEnabled
-            }
+            ActionCardState.UpgradePremium
+                .takeIf { isPremiumUpgradeBannerEligible }
+                ?: ActionCardState.IntroducingArchive.takeIf {
+                    isPremium &&
+                        !isIntroducingArchiveActionCardDismissed &&
+                        isArchiveEnabled
+                }
         }
 
     /**
@@ -1807,6 +1846,11 @@ data class VaultState(
      * Represents an action card to be displayed.
      */
     sealed class ActionCardState {
+        /**
+         * Indicates that the user is eligible for a premium upgrade.
+         */
+        data object UpgradePremium : ActionCardState()
+
         /**
          * Indicates that the archive feature is ready for use.
          */
@@ -2363,6 +2407,14 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the premium upgrade banner eligibility has been
+         * updated.
+         */
+        data class PremiumUpgradeBannerEligibilityReceive(
+            val isEligible: Boolean,
         ) : Internal()
     }
 }
