@@ -5,20 +5,42 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.service.BillingService
+import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class BillingRepositoryTest {
 
+    private val mutableIsInAppBillingSupportedFlow = MutableStateFlow(false)
+    private val playBillingManager = mockk<PlayBillingManager> {
+        every {
+            isInAppBillingSupportedFlow
+        } returns mutableIsInAppBillingSupportedFlow
+    }
     private val billingService = mockk<BillingService>()
     private val repository = BillingRepositoryImpl(
+        playBillingManager = playBillingManager,
         billingService = billingService,
     )
+
+    @Test
+    fun `isInAppBillingSupportedFlow should delegate to PlayBillingManager`() =
+        runTest {
+            assertFalse(repository.isInAppBillingSupportedFlow.value)
+
+            mutableIsInAppBillingSupportedFlow.value = true
+
+            assertTrue(repository.isInAppBillingSupportedFlow.value)
+        }
 
     @Test
     fun `getCheckoutSessionUrl when service returns success should return Success`() =
