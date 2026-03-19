@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -68,7 +68,7 @@ sealed class QrCodeScanEvent {
      * Navigate back.
      * Added BackgroundEvent as QrCodeScan might be fired before events are consumed
      */
-    data object NavigateBack : QrCodeScanEvent(), BackgroundEvent
+    data object NavigateBack : QrCodeScanEvent(), DeferredBackgroundEvent
 
     /**
      * Navigate to manual code entry screen.
