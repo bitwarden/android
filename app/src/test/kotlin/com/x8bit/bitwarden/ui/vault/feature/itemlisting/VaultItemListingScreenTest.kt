@@ -50,7 +50,6 @@ import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -2056,7 +2055,10 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
-        val result = GetPasswordCredentialResult.Success(createMockLoginView(1))
+        val result = GetPasswordCredentialResult.Success(
+            username = "mockUsername-1",
+            password = "mockPassword-1",
+        )
         mutableEventFlow.tryEmit(
             VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
         )
