@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -121,10 +122,19 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
             // emitTotpCodeResult called exactly once across both actions
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
+            val expectedState = DEFAULT_STATE.copy(hasHandledScan = true)
+            assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-    private fun createViewModel(): QrCodeScanViewModel =
+    private fun createViewModel(
+        initialState: QrCodeScanState? = DEFAULT_STATE,
+    ): QrCodeScanViewModel =
         QrCodeScanViewModel(
+            savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
             vaultRepository = vaultRepository,
         )
+
+    private val DEFAULT_STATE = QrCodeScanState(
+        hasHandledScan = false,
+    )
 }

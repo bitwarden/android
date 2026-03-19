@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
@@ -91,7 +92,10 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(false))
             }
             val expectedState =
-                DEFAULT_STATE.copy(dialog = QrCodeScanState.DialogState.SaveToBitwardenError)
+                DEFAULT_STATE.copy(
+                    hasHandledScan = true,
+                    dialog = QrCodeScanState.DialogState.SaveToBitwardenError,
+                )
             assertEquals(expectedState, viewModel.stateFlow.value)
             verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(VALID_TOTP_CODE) }
         }
@@ -170,7 +174,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on SaveToBitwardenErrorDismiss recieve should clear dialog state`() {
+    fun `on SaveToBitwardenErrorDismiss receive should clear dialog state`() {
         val viewModel = createViewModel()
         every {
             authenticatorBridgeManager.startAddTotpLoginItemFlow(VALID_TOTP_CODE)
@@ -179,13 +183,19 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
         viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(false))
         val expectedState =
-            DEFAULT_STATE.copy(dialog = QrCodeScanState.DialogState.SaveToBitwardenError)
+            DEFAULT_STATE.copy(
+                hasHandledScan = true,
+                dialog = QrCodeScanState.DialogState.SaveToBitwardenError,
+            )
         assertEquals(expectedState, viewModel.stateFlow.value)
         verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(VALID_TOTP_CODE) }
 
         // Clear dialog:
         viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss)
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -199,7 +209,10 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         } just runs
         viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(VALID_TOTP_CODE))
         verify { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE.copy(hasHandledScan = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -219,7 +232,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
             }
             verify { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(DEFAULT_STATE.copy(hasHandledScan = true), viewModel.stateFlow.value)
         }
 
     @Test
@@ -239,7 +252,10 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
             }
             verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(VALID_TOTP_CODE) }
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(
+                DEFAULT_STATE.copy(hasHandledScan = true),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Test
@@ -277,6 +293,10 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             expectNoEvents()
         }
         verify(exactly = 1) { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
+        assertEquals(
+            DEFAULT_STATE.copy(hasHandledScan = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -304,7 +324,10 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         verify(exactly = 0) { authenticatorRepository.emitTotpCodeResult(VALID_TOTP_RESULT) }
     }
 
-    private fun createViewModel() = QrCodeScanViewModel(
+    private fun createViewModel(
+        initialState: QrCodeScanState? = DEFAULT_STATE,
+    ) = QrCodeScanViewModel(
+        savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorRepository = authenticatorRepository,
         settingsRepository = settingsRepository,
@@ -312,6 +335,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 }
 
 private val DEFAULT_STATE = QrCodeScanState(
+    hasHandledScan = false,
     dialog = null,
 )
 private const val VALID_TOTP_CODE = "otpauth://totp/Label?secret=SECRET&issuer=Issuer"

@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
 import android.os.Parcelable
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
@@ -17,6 +18,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+private const val KEY_STATE = "state"
+
 /**
  * Handles [QrCodeScanAction] and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
  */
@@ -26,8 +29,13 @@ class QrCodeScanViewModel @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val authenticatorRepository: AuthenticatorRepository,
     private val settingsRepository: SettingsRepository,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<QrCodeScanState, QrCodeScanEvent, QrCodeScanAction>(
-    initialState = QrCodeScanState(dialog = null),
+    initialState = savedStateHandle[KEY_STATE]
+        ?: QrCodeScanState(
+            hasHandledScan = false,
+            dialog = null,
+        ),
 ) {
 
     /**
@@ -35,12 +43,6 @@ class QrCodeScanViewModel @Inject constructor(
      * default save location.
      */
     private var pendingSuccessfulScan: TotpCodeResult.TotpCodeScan? = null
-
-    /**
-     * Guards against duplicate QR code scans being processed. Once a scan has been handled,
-     * subsequent [QrCodeScanAction.QrCodeScanReceive] actions are ignored.
-     */
-    private var hasHandledScan: Boolean = false
 
     override fun handleAction(action: QrCodeScanAction) {
         when (action) {
@@ -75,9 +77,11 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleSaveToBitwardenDismiss() {
-        hasHandledScan = false
         mutableStateFlow.update {
-            it.copy(dialog = null)
+            it.copy(
+                hasHandledScan = false,
+                dialog = null,
+            )
         }
     }
 
@@ -90,10 +94,12 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
-        if (hasHandledScan) {
+        if (state.hasHandledScan) {
             return
         }
-        hasHandledScan = true
+        mutableStateFlow.update {
+            it.copy(hasHandledScan = true)
+        }
         val scannedCode = action.qrCode
         if (scannedCode.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
             handleTotpUriReceive(scannedCode)
@@ -177,6 +183,7 @@ class QrCodeScanViewModel @Inject constructor(
 @Parcelize
 data class QrCodeScanState(
     val dialog: DialogState?,
+    val hasHandledScan: Boolean,
 ) : Parcelable {
 
     /**
@@ -204,7 +211,7 @@ sealed class QrCodeScanEvent {
 
     /**
      * Navigate back.
-     * Added BackgroundEvent as QrCodeScan might be fired before events are consumed
+     * Added DeferredBackgroundEvent as QrCodeScan might be fired before events are consumed
      */
     data object NavigateBack : QrCodeScanEvent(), DeferredBackgroundEvent
 
