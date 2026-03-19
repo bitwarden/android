@@ -2549,11 +2549,28 @@ class VaultItemListingViewModel @Inject constructor(
             bitwardenCredentialManager.isUserVerified = false
             clearDialogState()
 
-            val event = selectedCipher.login
+            val event = selectedCipher
+                .login
                 ?.let { credential ->
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        GetPasswordCredentialResult.Success(credential = credential),
-                    )
+                    credential
+                        .password
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.let { password ->
+                            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                                GetPasswordCredentialResult.Success(
+                                    username = credential.username,
+                                    password = password,
+                                ),
+                            )
+                        }
+                        ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                            @Suppress("MaxLineLength")
+                            GetPasswordCredentialResult.Error(
+                                message = BitwardenString
+                                    .password_operation_failed_because_the_selected_item_does_not_have_a_valid_password
+                                    .asText(),
+                            ),
+                        )
                 }
                 ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
                     GetPasswordCredentialResult.Error(

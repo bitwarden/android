@@ -14,7 +14,6 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -228,8 +227,12 @@ class CredentialProviderCompletionManagerTest {
         @Suppress("MaxLineLength")
         @Test
         fun `completePasswordGet should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
-            credentialProviderCompletionManager
-                .completePasswordGet(GetPasswordCredentialResult.Success(createMockLoginView(1)))
+            credentialProviderCompletionManager.completePasswordGet(
+                GetPasswordCredentialResult.Success(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                ),
+            )
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialResponse(any(), any())
