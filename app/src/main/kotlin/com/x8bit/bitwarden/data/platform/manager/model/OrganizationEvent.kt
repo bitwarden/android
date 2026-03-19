@@ -135,22 +135,10 @@ sealed class OrganizationEvent {
      * folder as required by the organization's personal vault ownership policy.
      */
     data class ItemOrganizationAccepted(
-        override val cipherId: String? = null,
         override val organizationId: String,
     ) : OrganizationEvent() {
+        override val cipherId: String? = null
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED
-    }
-
-    /**
-     * Tracks when a user chooses to leave an organization instead of migrating their personal
-     * ciphers to their organization's My Items folder.
-     */
-    data class ItemOrganizationDeclined(
-        override val cipherId: String? = null,
-        override val organizationId: String,
-    ) : OrganizationEvent() {
-        override val type: OrganizationEventType
-            get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_DECLINED
     }
 }
