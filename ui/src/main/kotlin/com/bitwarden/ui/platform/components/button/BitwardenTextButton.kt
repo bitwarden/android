@@ -17,10 +17,36 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.color.bitwardenTextButtonColors
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+
+/**
+ * Represents a Bitwarden-styled [TextButton].
+ *
+ * @param buttonData The data for the button.
+ * @param modifier The [Modifier] to be applied to the button.
+ * @param contentColor The color for the label text and icon.
+ */
+@Composable
+fun BitwardenTextButton(
+    buttonData: BitwardenButtonData,
+    modifier: Modifier = Modifier,
+    contentColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+) {
+    BitwardenTextButton(
+        label = buttonData.label(),
+        onClick = buttonData.onClick,
+        icon = buttonData.icon,
+        isExternalLink = buttonData.isExternalLink,
+        isEnabled = buttonData.isEnabled,
+        contentColor = contentColor,
+        modifier = modifier.nullableTestTag(tag = buttonData.testTag),
+    )
+}
 
 /**
  * Represents a Bitwarden-styled [TextButton].
