@@ -20,7 +20,7 @@ enum class SnackbarRelay {
 
     /**
      * A separate instance of the [CIPHER_UNARCHIVED] relay to avoid the View Cipher screen being
-     * both a producer and consumer of it's own event.
+     * both a producer and consumer of its own event.
      */
     CIPHER_UNARCHIVED_VIEW,
     CIPHER_CREATED,
@@ -36,6 +36,7 @@ enum class SnackbarRelay {
     LOGIN_APPROVAL,
     LOGIN_SUCCESS,
     LOGINS_IMPORTED,
+    PREMIUM_UPGRADED,
     SEND_DELETED,
     SEND_UPDATED,
     LEFT_ORGANIZATION,

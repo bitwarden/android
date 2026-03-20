@@ -198,6 +198,7 @@ class MainViewModel @Inject constructor(
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
+            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult()
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -245,6 +246,11 @@ class MainViewModel @Inject constructor(
         authRepository.setCookieCallbackResult(
             result = action.cookieCallbackResult.getCookieCallbackResult(),
         )
+    }
+
+    private fun handlePremiumCheckoutResult() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.PremiumCheckoutResult
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -553,6 +559,13 @@ sealed class MainAction {
      */
     data class CookieAcquisitionResult(
         val cookieCallbackResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
+     * Receive the result from the premium checkout flow.
+     */
+    data class PremiumCheckoutResult(
+        val authResult: AuthTabIntent.AuthResult,
     ) : MainAction()
 
     /**

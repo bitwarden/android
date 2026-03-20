@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -13,6 +16,7 @@ import kotlinx.serialization.Serializable
 /**
  * The type-safe route for the vault screen.
  */
+@OmitFromCoverage
 @Serializable
 data object VaultRoute
 
@@ -32,6 +36,7 @@ fun NavGraphBuilder.vaultDestination(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithRootPushTransitions<VaultRoute> {
         VaultScreen(
@@ -46,6 +51,7 @@ fun NavGraphBuilder.vaultDestination(
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToAboutScreen = onNavigateToAboutScreen,
             onNavigateToAutofillScreen = onNavigateToAutofillScreen,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

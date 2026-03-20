@@ -1189,6 +1189,21 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `on PremiumCheckoutResult should set PremiumCheckoutResult special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =

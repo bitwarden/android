@@ -223,6 +223,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
+                SnackbarRelay.PREMIUM_UPGRADED,
                 SnackbarRelay.LEFT_ORGANIZATION,
                 SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
             ),
@@ -410,7 +411,7 @@ class VaultViewModel @Inject constructor(
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
             VaultState.ActionCardState.UpgradePremium -> {
-                // Navigation to Plan screen wired in PM-33515/PM-33516.
+                sendEvent(VaultEvent.NavigateToUpgradePremium)
             }
 
             VaultState.ActionCardState.IntroducingArchive -> {
@@ -2037,6 +2038,11 @@ sealed class VaultEvent {
      * Navigate to Autofill settings screen.
      */
     data object NavigateToAutofillSettings : VaultEvent()
+
+    /**
+     * Navigate to the premium upgrade plan screen.
+     */
+    data object NavigateToUpgradePremium : VaultEvent()
 }
 
 /**

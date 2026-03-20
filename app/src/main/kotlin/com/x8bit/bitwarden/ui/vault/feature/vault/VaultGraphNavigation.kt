@@ -34,6 +34,7 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     navigation<VaultGraphRoute>(
         startDestination = VaultRoute,
@@ -52,6 +53,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToAboutScreen = onNavigateToAboutScreen,
             onNavigateToAutofillScreen = onNavigateToAutofillScreen,
+            onNavigateToPlan = onNavigateToPlan,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
