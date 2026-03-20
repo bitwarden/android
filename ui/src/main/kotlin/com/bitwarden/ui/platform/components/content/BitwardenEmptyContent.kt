@@ -98,13 +98,10 @@ fun BitwardenEmptyContent(
 
         primaryButton?.let {
             BitwardenFilledButton(
-                label = it.label(),
-                onClick = it.onClick,
-                icon = it.icon,
+                buttonData = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .nullableTestTag(tag = it.testTag),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -115,13 +112,10 @@ fun BitwardenEmptyContent(
 
         secondaryButton?.let {
             BitwardenOutlinedButton(
-                label = it.label(),
-                onClick = it.onClick,
-                icon = it.icon,
+                buttonData = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .nullableTestTag(tag = it.testTag),
+                    .standardHorizontalMargin(),
             )
         }
 
