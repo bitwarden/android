@@ -208,6 +208,7 @@ class RootNavViewModel @Inject constructor(
 
                     SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
+                    SpecialCircumstance.PremiumCheckoutResult,
                     SpecialCircumstance.VaultShortcut,
                     SpecialCircumstance.SendShortcut,
                     is SpecialCircumstance.SearchShortcut,
@@ -283,6 +284,7 @@ class RootNavViewModel @Inject constructor(
         when (specialCircumstance) {
             is SpecialCircumstance.AccountSecurityShortcut,
             is SpecialCircumstance.GeneratorShortcut,
+            is SpecialCircumstance.PremiumCheckoutResult,
             is SpecialCircumstance.SearchShortcut,
             is SpecialCircumstance.SendShortcut,
             is SpecialCircumstance.ShareNewSend,

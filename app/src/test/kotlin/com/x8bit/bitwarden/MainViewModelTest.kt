@@ -71,6 +71,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLang
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
+import com.x8bit.bitwarden.ui.platform.util.isPremiumCheckoutCallback
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import io.mockk.coEvery
 import io.mockk.every
@@ -200,6 +201,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         mockkObject(
             ProviderCreateCredentialRequest.Companion,
@@ -231,6 +233,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         unmockkObject(
             ProviderCreateCredentialRequest.Companion,
@@ -861,6 +864,40 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with a password generator deeplink data should set the special circumstance to GeneratorShortcut`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(mockIsPasswordGeneratorShortcut = true)
@@ -1264,6 +1301,7 @@ private fun createMockIntent(
     mockIsMyVaultShortcut: Boolean = false,
     mockIsPasswordGeneratorShortcut: Boolean = false,
     mockIsAccountSecurityShortcut: Boolean = false,
+    mockIsPremiumCheckoutCallback: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
     mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
 ): Intent = mockk<Intent> {
@@ -1275,6 +1313,7 @@ private fun createMockIntent(
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut
     every { isAccountSecurityShortcut } returns mockIsAccountSecurityShortcut
+    every { isPremiumCheckoutCallback } returns mockIsPremiumCheckoutCallback
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
     every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
 }
