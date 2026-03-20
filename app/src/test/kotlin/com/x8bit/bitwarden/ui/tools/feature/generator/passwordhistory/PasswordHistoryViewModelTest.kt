@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordHistoryView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Clock
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.FormatStyle
@@ -182,6 +184,47 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, actualState)
         }
     }
+
+    @Test
+    fun `when VaultRepository emits Loaded state the state updates correctly in a sorted order`() =
+        runTest {
+            val cipher = createMockCipherView(
+                number = 1,
+                passwordHistory = listOf(
+                    createMockPasswordHistoryView(number = 1, clock = fixedClock),
+                    createMockPasswordHistoryView(
+                        number = 2,
+                        clock = Clock.offset(fixedClock, Duration.ofMinutes(5)),
+                    ),
+                ),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(cipher)
+            val viewModel = createViewModel(
+                initialState = createPasswordHistoryState(
+                    passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                val expectedState = createPasswordHistoryState(
+                    viewState = PasswordHistoryState.ViewState.Content(
+                        passwords = listOf(
+                            PasswordHistoryState.GeneratedPassword(
+                                password = "mockPassword-2",
+                                date = "10/27/23, 12:05\u202FPM",
+                            ),
+                            PasswordHistoryState.GeneratedPassword(
+                                password = "mockPassword-1",
+                                date = "10/27/23, 12:00\u202FPM",
+                            ),
+                        ),
+                    ),
+                    passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+                )
+                val actualState = awaitItem()
+                assertEquals(expectedState, actualState)
+            }
+        }
 
     @Test
     fun `when password history updates the state updates correctly`() = runTest {
