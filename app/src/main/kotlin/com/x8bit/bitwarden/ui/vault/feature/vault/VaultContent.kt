@@ -496,14 +496,7 @@ private fun ActionCard(
                     id = BitwardenString
                         .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
                 ),
-                actionText = stringResource(id = BitwardenString.upgrade_to_premium),
-                leadingContent = {
-                    Icon(
-                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_shield),
-                        contentDescription = null,
-                        tint = BitwardenTheme.colorScheme.icon.secondary,
-                    )
-                },
+                actionText = stringResource(id = BitwardenString.upgrade_to_premium_title),
                 onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
