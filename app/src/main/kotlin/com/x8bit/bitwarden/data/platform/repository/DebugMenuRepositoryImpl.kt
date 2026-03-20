@@ -74,4 +74,12 @@ class DebugMenuRepositoryImpl(
     override fun clearSsoCookies() {
         cookieDiskSource.clearCookies()
     }
+
+    override fun resetPremiumUpgradeBannerDismiss() {
+        val currentUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storePremiumUpgradeBannerDismissed(
+            userId = currentUserId,
+            isDismissed = null,
+        )
+    }
 }

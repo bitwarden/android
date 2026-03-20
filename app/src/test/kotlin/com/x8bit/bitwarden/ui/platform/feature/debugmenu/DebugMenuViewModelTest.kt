@@ -152,6 +152,16 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ResetPremiumUpgradeBanner should call resetPremiumUpgradeBannerDismiss on DebugMenuRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ResetPremiumUpgradeBanner)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.resetPremiumUpgradeBannerDismiss()
+        }
+    }
+
     @Test
     fun `TriggerCookieAcquisition should set pending cookie acquisition`() =
         runTest {
