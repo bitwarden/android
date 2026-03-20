@@ -11,6 +11,7 @@
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
     <string name="delete">Delete</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Do you really want to delete? This cannot be undone.</string>
     <string name="edit">Edit</string>
@@ -379,6 +380,7 @@ Scanning will happen automatically.</string>
     <string name="capitalize">Capitalize</string>
     <string name="include_number">Include number</string>
     <string name="download">Download</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Your login session has expired.</string>
     <string name="biometrics_direction">Biometric verification</string>
     <string name="device_verification">Device verification</string>
@@ -1226,4 +1228,8 @@ Do you want to switch to this account?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
 </resources>

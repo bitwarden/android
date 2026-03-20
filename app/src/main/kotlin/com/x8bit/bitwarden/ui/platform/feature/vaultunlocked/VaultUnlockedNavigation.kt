@@ -52,6 +52,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.navigateToPreviewAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.previewAttachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -198,6 +200,13 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
+            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
+                navController.navigateToPreviewAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                    fileName = fileName,
+                )
+            },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -262,6 +271,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
         importLoginsScreenDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        previewAttachmentDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }
