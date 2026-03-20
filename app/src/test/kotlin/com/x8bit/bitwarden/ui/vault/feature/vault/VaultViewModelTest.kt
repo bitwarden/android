@@ -30,10 +30,11 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -93,6 +94,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -228,6 +230,14 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow.value
     }
 
+    private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every {
+            isPremiumUpgradeBannerEligibleFlow
+        } returns mutablePremiumUpgradeBannerEligibleFlow
+        every { dismissPremiumUpgradeBanner() } just runs
+    }
+
     @AfterEach
     fun tearDown() {
         unmockkStatic(FlightRecorderDataSet::toSnackbarData)
@@ -311,6 +321,83 @@ class VaultViewModelTest : BaseViewModelTest() {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
         }
+
+    @Test
+    fun `PremiumUpgradeBannerEligibleFlow updates should update state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutablePremiumUpgradeBannerEligibleFlow.value = true
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        isPremiumUpgradeBannerEligible = true,
+                    ),
+                    awaitItem(),
+                )
+                mutablePremiumUpgradeBannerEligibleFlow.value = false
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `DismissActionCardClick with UpgradePremium should call dismissPremiumUpgradeBanner`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(
+                    VaultState.ActionCardState.UpgradePremium,
+                ),
+            )
+
+            verify(exactly = 1) {
+                premiumStateManager.dismissPremiumUpgradeBanner()
+            }
+        }
+
+    @Test
+    fun `actionCard should return UpgradePremium when eligible and content is showing`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = true,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.UpgradePremium,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return IntroducingArchive when not eligible for premium upgrade`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = false,
+            isPremium = true,
+            isArchiveEnabled = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.IntroducingArchive,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return null when not eligible for either card`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = false,
+            isPremium = false,
+            isArchiveEnabled = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertNull(state.actionCard)
+    }
 
     @Test
     fun `UserState updates with a null value should do nothing`() {
@@ -3723,6 +3810,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             environmentRepository = environmentRepository,
             clipboardManager = clipboardManager,
             policyManager = policyManager,
+            premiumStateManager = premiumStateManager,
             clock = clock,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
@@ -3858,4 +3946,25 @@ private fun createMockVaultState(
         restrictItemTypesPolicyOrgIds = emptyList(),
         isArchiveEnabled = true,
         isIntroducingArchiveActionCardDismissed = false,
+        isPremiumUpgradeBannerEligible = false,
     )
+
+private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
+    itemTypesCount = 0,
+    loginItemsCount = 0,
+    cardItemsCount = 0,
+    identityItemsCount = 0,
+    secureNoteItemsCount = 0,
+    sshKeyItemsCount = 0,
+    totpItemsCount = 0,
+    favoriteItems = emptyList(),
+    folderItems = emptyList(),
+    noFolderItems = emptyList(),
+    collectionItems = emptyList(),
+    trashItemsCount = 0,
+    archivedItemsCount = null,
+    archiveEnabled = false,
+    archiveSubText = null,
+    archiveEndIcon = null,
+    showCardGroup = true,
+)
