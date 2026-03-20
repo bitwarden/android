@@ -120,7 +120,6 @@ fun VaultData.toViewState(
     totpData: TotpData?,
     isPremiumUser: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
-    isArchiveEnabled: Boolean,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = decryptCipherListResult
         .successes
@@ -169,7 +168,6 @@ fun VaultData.toViewState(
                         isAutofill = autofillSelectionData != null,
                         isFido2Creation = createCredentialRequestData != null,
                         isPremiumUser = isPremiumUser,
-                        isArchiveEnabled = isArchiveEnabled,
                     ),
                 ),
             displayFolderList = folderList.map { folderView ->
@@ -411,7 +409,6 @@ private fun List<CipherListView>.toDisplayItemList(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -421,7 +418,6 @@ private fun List<CipherListView>.toDisplayItemList(
             isAutofill = isAutofill,
             isFido2Creation = isFido2Creation,
             isPremiumUser = isPremiumUser,
-            isArchiveEnabled = isArchiveEnabled,
         )
     }
 
@@ -444,7 +440,6 @@ private fun CipherListView.toDisplayItem(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -470,7 +465,6 @@ private fun CipherListView.toDisplayItem(
         overflowOptions = this.toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
-            isArchiveEnabled = isArchiveEnabled,
         ),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,

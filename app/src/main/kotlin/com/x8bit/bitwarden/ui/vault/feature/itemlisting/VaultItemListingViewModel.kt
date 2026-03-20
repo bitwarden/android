@@ -11,7 +11,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
@@ -58,7 +57,6 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -152,7 +150,6 @@ class VaultItemListingViewModel @Inject constructor(
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -194,7 +191,6 @@ class VaultItemListingViewModel @Inject constructor(
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
-            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
         )
     },
 ) {
@@ -239,12 +235,6 @@ class VaultItemListingViewModel @Inject constructor(
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1684,10 +1674,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handleCredentialOperationFailureReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultItemListingsAction.Internal.ArchiveCipherReceive -> {
                 handleArchiveCipherReceive(action)
             }
@@ -1706,12 +1692,6 @@ class VaultItemListingViewModel @Inject constructor(
             message = action.message,
             error = action.error,
         )
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleArchiveCipherReceive(
@@ -2663,7 +2643,6 @@ class VaultItemListingViewModel @Inject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-                            isArchiveEnabled = state.isArchiveEnabled,
                         )
                     }
 
@@ -2871,7 +2850,6 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
-    val isArchiveEnabled: Boolean,
 ) {
     /**
      * Indicates what action card to display.
@@ -3954,13 +3932,6 @@ sealed class VaultItemListingsAction {
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
         ) : Internal(), BackgroundEvent
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
-        ) : Internal()
 
         /**
          * Indicates that an error occurred while decrypting a cipher.
