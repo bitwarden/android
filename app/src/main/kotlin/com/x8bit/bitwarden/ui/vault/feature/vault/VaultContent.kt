@@ -496,7 +496,7 @@ private fun ActionCard(
                     id = BitwardenString
                         .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
                 ),
-                actionText = stringResource(id = BitwardenString.upgrade_to_premium_title),
+                actionText = stringResource(id = BitwardenString.upgrade_to_premium),
                 onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,

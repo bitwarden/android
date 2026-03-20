@@ -1205,8 +1205,7 @@ Do you want to switch to this account?</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium" comment="Sentence case version used in dialogs">Upgrade to premium</string>
-    <string name="upgrade_to_premium_title" comment="Title case version used in action cards and screen title">Upgrade to Premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>

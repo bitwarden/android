@@ -158,7 +158,6 @@ fun DebugMenuScreen(
                         DebugMenuAction.ResetPremiumUpgradeBanner,
                     )
                 },
-                isEnabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
