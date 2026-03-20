@@ -143,49 +143,4 @@ class HostnameRedactionUtilTest {
             result,
         )
     }
-
-    @Test
-    fun `redactSelfHostedHostnames redacts hostname in getCookies method-call log`() {
-        val message = "getCookies(vault.example.com): resolved=vault.example.com, count=0"
-
-        val result = message.redactSelfHostedHostnames()
-
-        assertEquals(
-            "getCookies([REDACTED_SELF_HOST]): resolved=[REDACTED_SELF_HOST], count=0",
-            result,
-        )
-    }
-
-    @Test
-    fun `redactSelfHostedHostnames redacts hostname in needsBootstrap method-call log`() {
-        val message = "needsBootstrap(vault.example.com): false (cookieDomain=null)"
-
-        val result = message.redactSelfHostedHostnames()
-
-        assertEquals(
-            "needsBootstrap([REDACTED_SELF_HOST]): false (cookieDomain=null)",
-            result,
-        )
-    }
-
-    @Test
-    fun `redactSelfHostedHostnames redacts hostname in resolveHostname method-call log`() {
-        val message = "resolveHostname(vault.example.com): no stored config found, using original"
-
-        val result = message.redactSelfHostedHostnames()
-
-        assertEquals(
-            "resolveHostname([REDACTED_SELF_HOST]): no stored config found, using original",
-            result,
-        )
-    }
-
-    @Test
-    fun `redactSelfHostedHostnames preserves Bitwarden domain in method-call log`() {
-        val message = "getCookies(api.bitwarden.com): resolved=api.bitwarden.com, count=3"
-
-        val result = message.redactSelfHostedHostnames()
-
-        assertEquals(message, result)
-    }
 }

@@ -1,7 +1,6 @@
 package com.bitwarden.network.core
 
 import com.bitwarden.network.model.NetworkResult
-import com.bitwarden.network.util.UNKNOWN_HOST_REGEX
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
@@ -16,6 +15,8 @@ import java.lang.reflect.Type
  * The integer code value for a "No Content" response.
  */
 private const val NO_CONTENT_RESPONSE_CODE: Int = 204
+
+private val UNKNOWN_HOST_REGEX = Regex("""Unable to resolve host "([^"]+)"""")
 
 /**
  * A [Call] for wrapping a network request into a [NetworkResult].
