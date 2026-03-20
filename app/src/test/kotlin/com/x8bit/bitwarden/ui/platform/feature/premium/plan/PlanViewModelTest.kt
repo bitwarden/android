@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -36,7 +37,9 @@ class PlanViewModelTest : BaseViewModelTest() {
     private val mockAuthRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
-    private val mockBillingRepository: BillingRepository = mockk()
+    private val mockBillingRepository: BillingRepository = mockk {
+        coEvery { getPremiumPlanPricing() } returns DEFAULT_PRICING_SUCCESS
+    }
     private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> =
         mockk {
             every { sendSnackbarData(any(), any()) } just runs
@@ -339,8 +342,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
-                    dialogState = PlanState.DialogState
-                        .WaitingForPayment,
+                    dialogState = PlanState.DialogState.WaitingForPayment,
                 ),
             )
 
@@ -473,6 +475,63 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     // endregion Free user path
 
+    // region Pricing fetch
+
+    @Test
+    fun `pricing fetch failure should transition to Error ViewState`() =
+        runTest {
+            coEvery {
+                mockBillingRepository.getPremiumPlanPricing()
+            } returns PremiumPlanPricingResult.Error(
+                error = RuntimeException("Network error"),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_LOADING_STATE.copy(
+                        viewState = PlanState.ViewState.Error,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `RetryPricingClick should transition to Loading then Free on success`() =
+        runTest {
+            coEvery {
+                mockBillingRepository.getPremiumPlanPricing()
+            } returns PremiumPlanPricingResult.Error(
+                error = RuntimeException("Network error"),
+            ) andThen DEFAULT_PRICING_SUCCESS
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_LOADING_STATE.copy(
+                        viewState = PlanState.ViewState.Error,
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(PlanAction.RetryPricingClick)
+
+                assertEquals(
+                    DEFAULT_LOADING_STATE,
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_FREE_STATE,
+                    awaitItem(),
+                )
+            }
+        }
+
+    // endregion Pricing fetch
+
     private fun createViewModel(
         initialState: PlanState? = null,
         planMode: PlanMode = PlanMode.Modal,
@@ -519,10 +578,22 @@ private val DEFAULT_USER_STATE = UserState(
     hasPendingAccountAddition = false,
 )
 
+private val DEFAULT_LOADING_STATE = PlanState(
+    planMode = PlanMode.Modal,
+    viewState = PlanState.ViewState.Free(
+        rate = "$1.67",
+    ),
+    dialogState = null,
+)
+
 private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
     viewState = PlanState.ViewState.Free(
-        rate = "$1.65",
+        rate = "$1.67",
     ),
     dialogState = null,
+)
+
+private val DEFAULT_PRICING_SUCCESS = PremiumPlanPricingResult.Success(
+    monthlyRate = "$1.67",
 )

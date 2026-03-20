@@ -12,6 +12,7 @@ data class PlanHandlers(
     val onUpgradeNowClick: () -> Unit,
     val onDismissError: () -> Unit,
     val onRetryClick: () -> Unit,
+    val onRetryPricingClick: () -> Unit,
     val onCancelWaiting: () -> Unit,
     val onGoBackClick: () -> Unit,
 ) {
@@ -26,6 +27,7 @@ data class PlanHandlers(
             onUpgradeNowClick = { viewModel.trySendAction(PlanAction.UpgradeNowClick) },
             onDismissError = { viewModel.trySendAction(PlanAction.DismissError) },
             onRetryClick = { viewModel.trySendAction(PlanAction.RetryClick) },
+            onRetryPricingClick = { viewModel.trySendAction(PlanAction.RetryPricingClick) },
             onCancelWaiting = { viewModel.trySendAction(PlanAction.CancelWaiting) },
             onGoBackClick = { viewModel.trySendAction(PlanAction.GoBackClick) },
         )

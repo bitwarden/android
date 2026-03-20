@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 /**
  * The screen for the plan -- shows upgrade flow for free users.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanScreen(
@@ -126,6 +127,18 @@ private fun FreeDialogs(
                 confirmButtonText = stringResource(id = BitwardenString.try_again),
                 dismissButtonText = stringResource(id = BitwardenString.close),
                 onConfirmClick = handlers.onRetryClick,
+                onDismissClick = handlers.onDismissError,
+                onDismissRequest = handlers.onDismissError,
+            )
+        }
+
+        is PlanState.DialogState.GetPricingError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(BitwardenString.try_again),
+                dismissButtonText = stringResource(BitwardenString.okay),
+                onConfirmClick = handlers.onRetryPricingClick,
                 onDismissClick = handlers.onDismissError,
                 onDismissRequest = handlers.onDismissError,
             )
@@ -297,6 +310,7 @@ private fun PlanScreenFreeAccount_preview() {
                     onRetryClick = {},
                     onCancelWaiting = {},
                     onGoBackClick = {},
+                    onRetryPricingClick = {},
                 ),
             )
         }

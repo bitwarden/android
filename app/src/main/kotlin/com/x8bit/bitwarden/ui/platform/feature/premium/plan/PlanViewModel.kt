@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -30,6 +31,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val PLACEHOLDER_RATE = "--"
 
 /**
  * The callback URL for the premium checkout custom tab.
@@ -37,14 +39,9 @@ private const val KEY_STATE = "state"
 const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-upgrade-callback"
 
 /**
- * Placeholder rate until dynamic pricing is available.
- * TODO: [PM-33946] Replace with dynamic pricing from GET /api/plans/premium.
- */
-private const val PLACEHOLDER_RATE = "$1.65"
-
-/**
  * View model for the plan screen, handling the free-user upgrade flow.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -80,6 +77,13 @@ class PlanViewModel @Inject constructor(
             .map { PlanAction.Internal.UserStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            val result = billingRepository.getPremiumPlanPricing()
+            sendAction(
+                PlanAction.Internal.PricingResultReceive(result),
+            )
+        }
     }
 
     override fun handleAction(action: PlanAction) {
@@ -91,6 +95,10 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.DismissError -> handleDismissError()
             is PlanAction.RetryClick -> handleRetryClick()
+            is PlanAction.RetryPricingClick -> {
+                handleRetryPricingClick()
+            }
+
             is PlanAction.CancelWaiting -> handleCancelWaiting()
             is PlanAction.GoBackClick -> handleGoBackClick()
             is PlanAction.Internal.CheckoutUrlReceive -> {
@@ -99,6 +107,10 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.Internal.UserStateUpdateReceive -> {
                 handleUserStateUpdateReceive(action)
+            }
+
+            is PlanAction.Internal.PricingResultReceive -> {
+                handlePricingResultReceive(action)
             }
         }
     }
@@ -206,6 +218,49 @@ class PlanViewModel @Inject constructor(
         (state.viewState as? PlanState.ViewState.Free)
             ?.let(block)
     }
+
+    private fun handlePricingResultReceive(
+        action: PlanAction.Internal.PricingResultReceive,
+    ) {
+        mutableStateFlow.update {
+            when (val result = action.result) {
+                is PremiumPlanPricingResult.Success -> {
+                    it.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = result.monthlyRate,
+                        ),
+                    )
+                }
+
+                is PremiumPlanPricingResult.Error -> {
+                    it.copy(
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleRetryPricingClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.Loading(
+                    message = BitwardenString.loading.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            sendAction(
+                PlanAction.Internal.PricingResultReceive(
+                    result = billingRepository.getPremiumPlanPricing(),
+                ),
+            )
+        }
+    }
 }
 
 /**
@@ -283,15 +338,22 @@ data class PlanState(
         ) : DialogState()
 
         /**
-         * Error dialog shown when the checkout session could not
-         * be loaded.
+         * Error dialog shown when the checkout session could not be loaded.
          */
         @Parcelize
         data object CheckoutError : DialogState()
 
         /**
-         * Waiting dialog shown after the browser has been launched
-         * for checkout.
+         * Error dialog shown when pricing information cannot be retrieved.
+         */
+        @Parcelize
+        data class GetPricingError(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Waiting dialog shown after the browser has been launched for checkout.
          */
         @Parcelize
         data object WaitingForPayment : DialogState()
@@ -344,6 +406,11 @@ sealed class PlanAction {
     data object RetryClick : PlanAction()
 
     /**
+     * The user clicked retry on the pricing error screen.
+     */
+    data object RetryPricingClick : PlanAction()
+
+    /**
      * The user dismissed the waiting for payment dialog.
      */
     data object CancelWaiting : PlanAction()
@@ -371,6 +438,13 @@ sealed class PlanAction {
          */
         data class UserStateUpdateReceive(
             val userState: UserState?,
+        ) : Internal()
+
+        /**
+         * A pricing result has been received from the repository.
+         */
+        data class PricingResultReceive(
+            val result: PremiumPlanPricingResult,
         ) : Internal()
     }
 }

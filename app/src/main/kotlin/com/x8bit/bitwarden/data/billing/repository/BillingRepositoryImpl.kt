@@ -4,7 +4,10 @@ import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import kotlinx.coroutines.flow.StateFlow
+import java.text.NumberFormat
+import java.util.Locale
 
 /**
  * The default implementation of [BillingRepository].
@@ -32,4 +35,24 @@ class BillingRepositoryImpl(
                 onSuccess = { CustomerPortalResult.Success(url = it.url) },
                 onFailure = { CustomerPortalResult.Error(error = it) },
             )
+
+    override suspend fun getPremiumPlanPricing(): PremiumPlanPricingResult =
+        billingService
+            .getPremiumPlan()
+            .fold(
+                onSuccess = {
+                    val monthlyPrice = it.seat.price / MONTHS_PER_YEAR
+                    val formatted = NumberFormat
+                        .getCurrencyInstance(Locale.US)
+                        .format(monthlyPrice)
+                    PremiumPlanPricingResult.Success(
+                        monthlyRate = formatted,
+                    )
+                },
+                onFailure = {
+                    PremiumPlanPricingResult.Error(error = it)
+                },
+            )
 }
+
+private const val MONTHS_PER_YEAR = 12

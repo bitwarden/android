@@ -4,10 +4,12 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
+import com.bitwarden.network.model.PremiumPlanResponseJson
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -101,4 +103,54 @@ class BillingRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `getPremiumPlanPricing when service returns success should return formatted pricing`() =
+        runTest {
+            coEvery {
+                billingService.getPremiumPlan()
+            } returns PremiumPlanResponseJson(
+                name = "Premium",
+                legacyYear = null,
+                isAvailable = true,
+                seat = PremiumPlanResponseJson.PurchasableJson(
+                    stripePriceId = "premium-annually-2026",
+                    price = ANNUAL_PRICE,
+                    provided = 0,
+                ),
+                storage = PremiumPlanResponseJson.PurchasableJson(
+                    stripePriceId = "personal-storage-gb-annually",
+                    price = 4.00,
+                    provided = 5,
+                ),
+            ).asSuccess()
+
+            val result = repository.getPremiumPlanPricing()
+
+            assertEquals(
+                PremiumPlanPricingResult.Success(
+                    monthlyRate = EXPECTED_MONTHLY_RATE,
+                ),
+                result,
+            )
+        }
+
+    @Test
+    fun `getPremiumPlanPricing when service returns failure should return Error`() =
+        runTest {
+            val exception = RuntimeException("Network error")
+            coEvery {
+                billingService.getPremiumPlan()
+            } returns exception.asFailure()
+
+            val result = repository.getPremiumPlanPricing()
+
+            assertEquals(
+                PremiumPlanPricingResult.Error(error = exception),
+                result,
+            )
+        }
 }
+
+private const val ANNUAL_PRICE = 19.99
+private const val EXPECTED_MONTHLY_RATE = "$1.67"
