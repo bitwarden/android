@@ -1565,7 +1565,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Unlock advanced security features")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assertIsDisplayed()
     }
 
@@ -1577,7 +1577,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assertIsDisplayed()
             .performClick()
 
