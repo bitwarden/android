@@ -173,7 +173,6 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `on SaveToBitwardenErrorDismiss receive should clear dialog state`() {
         val viewModel = createViewModel()
         every {
@@ -259,7 +258,6 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `on QrCodeScanReceive when code is invalid should emit result and navigate back`() =
         runTest {
             val viewModel = createViewModel()
@@ -276,7 +274,6 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `on QrCodeScanReceive second scan after valid TOTP scan is ignored`() = runTest {
         val viewModel = createViewModel()
         every { settingsRepository.defaultSaveOption } returns DefaultSaveOption.LOCAL
@@ -300,7 +297,6 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `on QrCodeScanReceive second scan after error scan is ignored`() = runTest {
         val viewModel = createViewModel()
         val invalidQrCode = "otpauth://totp/secret=SECRET"
@@ -325,7 +321,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        initialState: QrCodeScanState? = DEFAULT_STATE,
+        initialState: QrCodeScanState? = null,
     ) = QrCodeScanViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
         authenticatorBridgeManager = authenticatorBridgeManager,

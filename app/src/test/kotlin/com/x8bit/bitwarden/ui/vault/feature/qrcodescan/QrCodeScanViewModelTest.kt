@@ -127,7 +127,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
 
     private fun createViewModel(
-        initialState: QrCodeScanState? = DEFAULT_STATE,
+        initialState: QrCodeScanState? = null,
     ): QrCodeScanViewModel =
         QrCodeScanViewModel(
             savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
