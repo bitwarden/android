@@ -13,8 +13,6 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
-import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +32,6 @@ private const val KEY_STATE = "state"
 class LeaveOrganizationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    private val organizationEventManager: OrganizationEventManager,
     private val vaultMigrationManager: VaultMigrationManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LeaveOrganizationState, LeaveOrganizationEvent, LeaveOrganizationAction>(
@@ -109,11 +106,6 @@ class LeaveOrganizationViewModel @Inject constructor(
                     relay = SnackbarRelay.LEFT_ORGANIZATION,
                     data = BitwardenSnackbarData(
                         message = BitwardenString.you_left_the_organization.asText(),
-                    ),
-                )
-                organizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined(
-                        organizationId = state.organizationId,
                     ),
                 )
                 mutableStateFlow.update {
