@@ -241,6 +241,14 @@ class VaultDiskSourceImpl(
         foldersDao.deleteFolder(userId = userId, folderId = folderId)
     }
 
+    override suspend fun deleteSelectedFolders(userId: String, folderIds: List<String>) {
+        foldersDao.deleteSelectedFolders(userId = userId, folderIds = folderIds)
+    }
+
+    override suspend fun deleteAllFolders(userId: String) {
+        foldersDao.deleteAllFolders(userId = userId)
+    }
+
     override suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder) {
         foldersDao.insertFolder(
             folder = FolderEntity(
@@ -251,6 +259,44 @@ class VaultDiskSourceImpl(
             ),
         )
     }
+
+    override suspend fun saveFolders(userId: String, folders: List<SyncResponseJson.Folder>) {
+        foldersDao.insertFolders(
+            folders = folders.map { folder ->
+                FolderEntity(
+                    id = folder.id,
+                    userId = userId,
+                    name = folder.name,
+                    revisionDate = folder.revisionDate,
+                )
+            },
+        )
+    }
+
+    override suspend fun getFolder(
+        userId: String,
+        folderId: String,
+    ): SyncResponseJson.Folder? =
+        foldersDao
+            .getFolder(userId = userId, folderId = folderId)
+            ?.let { folder ->
+                SyncResponseJson.Folder(
+                    id = folder.id,
+                    name = folder.name,
+                    revisionDate = folder.revisionDate,
+                )
+            }
+
+    override suspend fun getFolders(userId: String): List<SyncResponseJson.Folder> =
+        foldersDao
+            .getAllFolders(userId = userId)
+            .map { folder ->
+                SyncResponseJson.Folder(
+                    id = folder.id,
+                    name = folder.name,
+                    revisionDate = folder.revisionDate,
+                )
+            }
 
     override fun getFoldersFlow(
         userId: String,
