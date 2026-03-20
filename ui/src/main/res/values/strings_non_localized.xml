@@ -30,6 +30,9 @@
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>
+    <string name="cookies">Cookies</string>
+    <string name="premium">Premium</string>
+    <string name="reset_premium_upgrade_banner">Reset premium upgrade banner</string>
     <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
     <string name="import_format_label_2fas_json">2FAS (no password)</string>

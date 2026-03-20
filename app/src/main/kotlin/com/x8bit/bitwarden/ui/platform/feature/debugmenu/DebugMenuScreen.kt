@@ -110,6 +110,15 @@ fun DebugMenuScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenHorizontalDivider()
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenListHeaderText(
+                label = stringResource(BitwardenString.cookies),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
             Spacer(Modifier.height(height = 8.dp))
             BitwardenFilledButton(
                 label = stringResource(BitwardenString.trigger_cookie_acquisition),
@@ -125,6 +134,28 @@ fun DebugMenuScreen(
                 onClick = {
                     viewModel.trySendAction(
                         DebugMenuAction.ClearSsoCookies,
+                    )
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenHorizontalDivider()
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenListHeaderText(
+                label = stringResource(BitwardenString.premium),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(BitwardenString.reset_premium_upgrade_banner),
+                onClick = {
+                    viewModel.trySendAction(
+                        DebugMenuAction.ResetPremiumUpgradeBanner,
                     )
                 },
                 isEnabled = true,
