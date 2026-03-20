@@ -10,6 +10,7 @@ import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.ServerConfigRepository
+import com.bitwarden.network.util.redactHostnamesInMessage
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.BufferedWriter
@@ -17,6 +18,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.URI
 import java.time.Clock
 import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
@@ -34,6 +36,19 @@ internal class FlightRecorderWriterImpl(
     private val buildInfoManager: BuildInfoManager,
     private val serverConfigRepository: ServerConfigRepository,
 ) : FlightRecorderWriter {
+    private val configuredHosts: Set<String>
+        get() {
+            val environment = serverConfigRepository.serverConfigStateFlow.value
+                ?.serverData?.environment ?: return emptySet()
+            return listOfNotNull(
+                environment.vaultUrl,
+                environment.apiUrl,
+                environment.identityUrl,
+                environment.notificationsUrl,
+                environment.ssoUrl,
+            ).mapNotNull { runCatching { URI(it).host }.getOrNull() }.toSet()
+        }
+
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
         fileManager.delete(File(File(fileManager.logsDirectory), data.fileName))
     }
@@ -98,6 +113,7 @@ internal class FlightRecorderWriterImpl(
         val formattedTime = clock
             .instant()
             .toFormattedPattern(pattern = LOG_TIME_PATTERN, clock = clock)
+        val hosts = configuredHosts
         withContext(context = dispatcherManager.io) {
             runCatching {
                 BufferedWriter(FileWriter(logFile, true)).use { bw ->
@@ -109,10 +125,10 @@ internal class FlightRecorderWriterImpl(
                         bw.append(it)
                     }
                     bw.append(" – ")
-                    bw.append(message)
+                    bw.append(message.redactHostnamesInMessage(hosts))
                     throwable?.let {
                         bw.append(" – ")
-                        bw.append(it.getStackTraceString())
+                        bw.append(it.getStackTraceString().redactHostnamesInMessage(hosts))
                     }
                     bw.newLine()
                 }
