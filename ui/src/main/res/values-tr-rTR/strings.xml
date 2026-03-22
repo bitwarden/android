@@ -508,10 +508,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="remove_master_password">Ana parolayı kaldır</string>
     <string name="leave_organization">Kuruluştan ayrıl</string>
     <string name="leave_organization_name">%1$s kuruluşundan ayrılınsın mı?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">%1$s kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">[%1$s] kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
     <string name="leave_organization_button">%1$s kuruluşundan ayrıl</string>
     <string name="leave_organization_warning">Reddederseniz kişisel kayıtlarınız hesabınızda kalır, ancak paylaşılan kayıtlara ve kuruluş özelliklerine erişiminizi kaybedersiniz.</string>
-    <string name="how_to_manage_my_vault">Kasamı nasıl yönetebilirim</string>
+    <string name="contact_your_admin_to_regain_access">Erişiminizi yeniden kazanmak için yöneticinizle iletişime geçin.</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</string>
@@ -939,6 +939,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
@@ -1203,6 +1204,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archive_unavailable">Arşiv kullanılamıyor</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
+    <string name="unlock_advanced_security_features">Gelişmiş güvenlik özelliklerinin kilidini açın</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium paket size daha fazla güvenlik ve kontrol olanağı sunan ek araçlara erişmenizi sağlar.</string>
     <string name="this_item_is_archived">Bu kayıt arşivlendi.</string>
     <string name="introducing_archive">Arşiv özelliğiyle tanışın</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Şu anda ihtiyacınız olmayan kayıtlara gözden uzak, güvenli bir yerde saklayın.</string>

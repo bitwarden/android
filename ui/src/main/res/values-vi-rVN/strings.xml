@@ -506,10 +506,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời khỏi %1$s không?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời khỏi [%1$s] không?</string>
     <string name="leave_organization_button">Rời khỏi %1$s</string>
     <string name="leave_organization_warning">Bằng cách từ chối, các mục cá nhân sẽ ở lại trong tài khoản của bạn, nhưng bạn sẽ mất quyền truy cập vào các mục được chia sẻ và tính năng tổ chức.\n\nLiên hệ với quản trị viên của bạn để lấy lại quyền truy cập.</string>
-    <string name="how_to_manage_my_vault">Cách quản lý Kho lưu trữ</string>
+    <string name="contact_your_admin_to_regain_access">Liên hệ quản trị viên của bạn để lấy lại quyền truy cập.</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
@@ -934,6 +934,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Thao tác thông tin đăng nhập thất bại vì yêu cầu không hợp lệ.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Thao tác thông tin đăng nhập thất bại vì yêu cầu không được hỗ trợ.</string>
@@ -1199,6 +1200,8 @@ các vấn đề.</string>
     <string name="archive_unavailable">Lưu trữ không khả dụng</string>
     <string name="archiving_items_is_a_premium_feature">Lưu trữ mục là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="upgrade_to_premium">Nâng cấp lên bản cao cấp</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Mục này đã được lưu trữ.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>

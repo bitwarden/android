@@ -512,10 +512,10 @@
     <string name="remove_master_password">הסר סיסמה ראשית</string>
     <string name="leave_organization">עזוב ארגון</string>
     <string name="leave_organization_name">לעזוב את %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">האם אתם בטוחים שברצונכם לעזוב את %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">האם אתם בטוחים שברצונכם לעזוב את [%1$s]?</string>
     <string name="leave_organization_button">עזיבת %1$s</string>
     <string name="leave_organization_warning">אם תסרבו, הפריטים הפרטיים שלכם יישארו בחשבון שלכם, אך תאבדו את הגישה לפריטים משותפים ולתכולות של הארגון.\n\nצרו קשר עם מנהל המערכת שלכם לשחזור הגישה.</string>
-    <string name="how_to_manage_my_vault">איך לנהל את הכספת שלי</string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
     <string name="fido2_return_to_app">חזור ליישום</string>
     <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
@@ -952,6 +952,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">פעולת מפתח גישה נכשלה בגלל שלא נבחר פריט.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה נתמכת.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">פעולת הסיסמה נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">פעולת הסיסמה נכשלה בגלל שלא נבחר פריט.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה תקינה.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה איננה נתמכת.</string>
@@ -1222,6 +1223,8 @@
     <string name="archive_unavailable">הארכיב אינו זמין</string>
     <string name="archiving_items_is_a_premium_feature">ארכוב פריטים היא תכולת פרמיום. התכנית הנוכחית שלך אינה כוללת גישה לתכולה זו.</string>
     <string name="upgrade_to_premium">שדרוג לפרמיום</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">פריט זה בארכיב.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>

@@ -508,10 +508,10 @@ Het scannen gebeurt automatisch.</string>
     <string name="remove_master_password">Hoofdwachtwoord verwijderen</string>
     <string name="leave_organization">Organisatie verlaten</string>
     <string name="leave_organization_name">%1$s verlaten?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Weet je zeker dat je %1$s wilt verlaten?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Weet je zeker dat je [%1$s] wilt verlaten?</string>
     <string name="leave_organization_button">%1$s verlaten</string>
     <string name="leave_organization_warning">Door te weigeren, blijven je persoonlijke items in je account, maar verlies je toegang tot gedeelde items en organisatiefunctionaliteit.\n\nNeem contact op met je beheerder om weer toegang te krijgen.</string>
-    <string name="how_to_manage_my_vault">Hoe Mijn kluis beheren</string>
+    <string name="contact_your_admin_to_regain_access">Neem contact op met je beheerder om weer toegang te krijgen.</string>
     <string name="fido2_authenticate_web_authn">Authenticeer WebAuthn</string>
     <string name="fido2_return_to_app">Terug naar de app</string>
     <string name="reset_password_auto_enroll_invite_warning">Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</string>
@@ -940,6 +940,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Wachtwoord-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Wachtwoord-bewerking mislukt omdat het geselecteerde item geen geldig wachtwoord heeft.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Wachtwoord-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Bewerking op inloggegeven mislukt omdat het verzoek ongeldig is.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Bewerking op inloggegeven mislukt omdat het verzoek niet ondersteund is.</string>
@@ -1204,6 +1205,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="archive_unavailable">Archief niet beschikbaar</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
+    <string name="unlock_advanced_security_features">Geavanceerde beveiligingsfuncties ontgrendelen</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Een Premium-abonnement geeft je meer tools om veilig en in controle te blijven.</string>
     <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
     <string name="introducing_archive">Archief introduceren</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Houd voorwerpen die je nu niet nodig hebt, veilig maar uit zicht.</string>

@@ -512,10 +512,10 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete opustit %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete odejít?</string>
     <string name="leave_organization_button">Opustit %1$s</string>
-    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace.\n\nKontaktujte svého správce pro opětovné udělení přístupu.</string>
-    <string name="how_to_manage_my_vault">Jak spravovat můj trezor</string>
+    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace. <annotation link="learnMore">Více informací</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Obraťte se na svého správce, abyste znovu získali přístup.</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -951,6 +951,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operace hesla se nezdařila, protože vybraná položka neexistuje.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operace hesla se nezdařila, protože vybraná položka nemá platné heslo.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operace hesla se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operace přístupových údajů se nezdařila, protože je požadavek neplatný.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operace přístupových údajů se nezdařila, protože je požadavek nepodporovaný.</string>
@@ -1203,7 +1204,7 @@ při opakování problémů.</string>
     <string name="resending">Opakované odesílání</string>
     <string name="you_left_the_organization">Opustili jste organizaci</string>
     <string name="transfer_items_to_org">Převést položky do %1$s</string>
-    <string name="transfer_items_description">%1$s vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko pro převod vlastnictví Vašich položek.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko potvrďte převod vlastnictví Vašich položek. <annotation link="learnMore">Více informací</annotation></string>
     <string name="decline_and_leave">Odmítnout a opustit</string>
     <string name="why_am_i_seeing_this">Proč se mi toto zobrazuje?</string>
     <string name="migrating_items_to_x">Přesouvání položek do %s</string>
@@ -1223,6 +1224,8 @@ při opakování problémů.</string>
     <string name="archive_unavailable">Archiv je nedostupný</string>
     <string name="archiving_items_is_a_premium_feature">Archivace položek je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="upgrade_to_premium">Aktualizovat na Premium</string>
+    <string name="unlock_advanced_security_features">Odemknout pokročilé bezpečnostní funkce</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Předplatné Premium Vám dává více nástrojů k bezpečí a kontrole.</string>
     <string name="this_item_is_archived">Tato položka je archivována.</string>
     <string name="introducing_archive">Představujeme Archiv</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Uchovávejte položky, které momentálně nepotřebujete. V bezpečí, nepozorovaně.</string>
