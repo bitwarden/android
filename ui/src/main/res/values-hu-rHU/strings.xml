@@ -507,10 +507,10 @@
     <string name="remove_master_password">Mesterjelszó eltávolítása</string>
     <string name="leave_organization">Kilépés a szervezetből</string>
     <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni %1$s szervezetet?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni [%1$s] szervezetet?</string>
     <string name="leave_organization_button">%1$s elhagyása</string>
     <string name="leave_organization_warning">Az elutasítással a személyes elemek a fiókban maradnak, de elveszítjük hozzáférést a megosztott elemekhez és a szervezeti funkciókhoz.\n\nVegyük fel a kkapcsolatot az adminisztrátorral a visszaszerzéshez.</string>
-    <string name="how_to_manage_my_vault">Hogyan kezeljük a saját széfet</string>
+    <string name="contact_your_admin_to_regain_access">Lépjünk kapcsolatba az adminisztrátorral a hozzáférés visszaszerzéséért.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
@@ -939,6 +939,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">A jelszó művelet nem sikerült, mert a kiválasztott elem nem rendelkezik érvényes jelszóval.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
@@ -1203,6 +1204,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="archive_unavailable">Az archívum nem elérhető.</string>
     <string name="archiving_items_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="upgrade_to_premium">Áttérés Prémium csomagra</string>
+    <string name="unlock_advanced_security_features">Fejlett biztonsági funkciók feloldása</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Prémium előfizetés több eszközt biztosít a biztonság és az irányítás megőrzéséhez.</string>
     <string name="this_item_is_archived">Ez az elem archiválva van.</string>
     <string name="introducing_archive">Archívum bemutatása</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Tartsuk biztonságban azokat az elemeket, amelyekre jelenleg nincs szükség, de ne lássuk azokat.</string>

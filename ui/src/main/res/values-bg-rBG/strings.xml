@@ -508,10 +508,10 @@
     <string name="remove_master_password">Премахване на главната парола</string>
     <string name="leave_organization">Напускане на организацията</string>
     <string name="leave_organization_name">Напускане на %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Наистина ли искате да напуснете %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Наистина ли искате да напуснете [%1$s]?</string>
     <string name="leave_organization_button">Напускане на %1$s</string>
     <string name="leave_organization_warning">Ако откажете, Вашите собствени елементи ще останат в акаунта Ви, но ще загубите достъп до споделените елементи и функционалностите на организацията.\n\nСвържете се с администратора си, ако искате отново да получите достъп.</string>
-    <string name="how_to_manage_my_vault">Как да управлявам трезора си</string>
+    <string name="contact_your_admin_to_regain_access">Свържете се с администратор, за да получите достъп отново.</string>
     <string name="fido2_authenticate_web_authn">Идентификация WebAuthn</string>
     <string name="fido2_return_to_app">Назад към приложението</string>
     <string name="reset_password_auto_enroll_invite_warning">Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</string>
@@ -940,6 +940,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операцията с паролата беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Операцията с паролата беше неуспешна, тъй като избраният елемент няма правилно зададена парола.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операцията с паролата беше неуспешна, тъй като няма избран елемент.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Операцията с данни за вписване беше неуспешна, тъй като заявката е грешна.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Операцията с данни за вписване беше неуспешна, тъй като заявката не се поддържа.</string>
@@ -1206,6 +1207,8 @@
     <string name="archive_unavailable">Архивирането не е налично</string>
     <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="upgrade_to_premium">Надградете до Платения план</string>
+    <string name="unlock_advanced_security_features">Отключване на разширените функционалности по сигурността</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Платеният план предоставя повече инструменти за защита и управление.</string>
     <string name="this_item_is_archived">Този елемент е архивиран.</string>
     <string name="introducing_archive">Представяме архива</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Съхранявайте елементите, които не Ви трябват точно в момента, на сигурно, но незабележимо място.</string>

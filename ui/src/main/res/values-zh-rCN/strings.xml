@@ -449,9 +449,9 @@
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
     <string name="who_can_view">谁可以查看</string>
-    <string name="anyone_with_the_link">拥有此链接的任何人</string>
+    <string name="anyone_with_the_link">拥有链接的任何人</string>
     <string name="anyone_with_link_can_view_send">拥有此链接的任何人都可以查看此 Send</string>
-    <string name="specific_people">指定人员</string>
+    <string name="specific_people">指定的人员</string>
     <string name="specific_people_verification_info">分享此 Send 链接后，个人需要使用验证码验证他们的电子邮箱才能查看此 Send</string>
     <string name="anyone_with_password">拥有您设置的密码的任何人</string>
     <string name="add_email">添加电子邮箱</string>
@@ -506,10 +506,10 @@
     <string name="remove_master_password">移除主密码</string>
     <string name="leave_organization">退出组织</string>
     <string name="leave_organization_name">退出 %1$s？</string>
-    <string name="are_you_sure_you_want_to_leave_organization">确定要退出 %1$s 吗？</string>
+    <string name="are_you_sure_you_want_to_leave_organization">确定要退出吗？</string>
     <string name="leave_organization_button">退出 %1$s</string>
-    <string name="leave_organization_warning">拒绝后，您的个人项目将保留在您的账户中，但您将失去对共享项目和组织功能的访问权限。\n\n联系您的管理员以重新获取访问权限。</string>
-    <string name="how_to_manage_my_vault">如何管理我的密码库</string>
+    <string name="leave_organization_warning">拒绝后，您的个人项目将保留在您的账户中，但您将失去对共享项目和组织功能的访问权限。<annotation link="learnMore">进一步了解</annotation></string>
+    <string name="contact_your_admin_to_regain_access">联系您的管理员以重新获取访问权限。</string>
     <string name="fido2_authenticate_web_authn">验证 WebAuthn</string>
     <string name="fido2_return_to_app">返回 App</string>
     <string name="reset_password_auto_enroll_invite_warning">此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</string>
@@ -934,6 +934,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">由于所选项目没有有效的密码，密码操作失败。</string>
     <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">由于请求无效，凭据操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">由于请求不受支持，凭据操作失败。</string>
@@ -1176,7 +1177,7 @@
     <string name="resending">正在重新发送</string>
     <string name="you_left_the_organization">您已退出该组织</string>
     <string name="transfer_items_to_org">转移项目到 %1$s</string>
-    <string name="transfer_items_description">出于安全和合规考虑，%1$s 要求所有项目归组织所有。点击「接受」以转移您的项目的所有权。</string>
+    <string name="transfer_items_description">出于安全和合规考虑，<annotation arg="0">%1$s</annotation>要求所有项目归组织所有。点击「接受」以转移您的项目的所有权。<annotation link="learnMore">进一步了解</annotation></string>
     <string name="decline_and_leave">拒绝并退出</string>
     <string name="why_am_i_seeing_this">为什么我会看到这个？</string>
     <string name="migrating_items_to_x">正在迁移项目到 %s</string>
@@ -1196,6 +1197,8 @@
     <string name="archive_unavailable">归档功能不可用</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
+    <string name="unlock_advanced_security_features">解锁高级安全功能</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">高级版方案为您提供更多工具，助您保持安全并掌控一切。</string>
     <string name="this_item_is_archived">此项目已归档。</string>
     <string name="introducing_archive">归档介绍</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">将您暂时不需要的项目安全地存放在视线之外。</string>
