@@ -165,7 +165,7 @@ class PushManagerTest {
             }
 
         @Test
-        fun `onMessageReceived with premium status changed emits to premiumStatusChangedFlow`() =
+        fun `onMessageReceived with Premium status changed emits to premiumStatusChangedFlow`() =
             runTest {
                 pushManager.premiumStatusChangedFlow.test {
                     pushManager.onMessageReceived(
@@ -182,7 +182,7 @@ class PushManagerTest {
             }
 
         @Test
-        fun `onMessageReceived with premium status changed also emits to fullSyncFlow`() =
+        fun `onMessageReceived with Premium status changed also emits to fullSyncFlow`() =
             runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(
@@ -196,7 +196,7 @@ class PushManagerTest {
             }
 
         @Test
-        fun `onMessageReceived with premium status changed with null fields does not emit`() =
+        fun `onMessageReceived with Premium status changed with null fields does not emit`() =
             runTest {
                 pushManager.premiumStatusChangedFlow.test {
                     pushManager.onMessageReceived(

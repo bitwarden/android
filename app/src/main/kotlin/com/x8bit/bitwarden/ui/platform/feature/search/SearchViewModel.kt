@@ -1169,7 +1169,7 @@ data class SearchState(
         ) : DialogState()
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -1443,7 +1443,7 @@ sealed class SearchAction {
     ) : SearchAction()
 
     /**
-     * User clicked the upgrade to premium button.
+     * User clicked the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : SearchAction()
 

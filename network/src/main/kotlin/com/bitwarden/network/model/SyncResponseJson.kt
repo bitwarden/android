@@ -144,7 +144,7 @@ data class SyncResponseJson(
      *
      * @property providerOrganizations A list of provider organizations
      * associated with the profile (nullable).
-     * @property isPremiumFromOrganization If the profile is premium from organization.
+     * @property isPremiumFromOrganization If the profile is Premium from organization.
      * @property shouldForcePasswordReset If the profile should force password reset.
      * @property avatarColor The avatar color of the profile (nullable).
      * @property isEmailVerified If the profile has a verified email.
@@ -152,7 +152,7 @@ data class SyncResponseJson(
      * @property privateKey The private key of the profile (nullable).
      * @property accountKeys The account keys associated with the profile. This is temporarily
      * nullable to maintain backwards compatibility.
-     * @property isPremium If the profile is premium.
+     * @property isPremium If the profile is Premium.
      * @property culture The culture of the profile (nullable).
      * @property name The name of the profile (nullable).
      * @property organizations A list of organizations associated with the profile (nullable).
@@ -250,7 +250,7 @@ data class SyncResponseJson(
          * @property shouldUseDirectory If the organization should use a directory.
          * @property key The key of the organization (nullable).
          * @property providerName The provider name of the organization (nullable).
-         * @property shouldUsersGetPremium If users of the organization get premium.
+         * @property shouldUsersGetPremium If users of the organization get Premium.
          * @property maxStorageGb The max storage in Gb of the organization (nullable).
          * @property identifier The identifier of the organization (nullable).
          * @property use2fa If the organization uses 2FA.

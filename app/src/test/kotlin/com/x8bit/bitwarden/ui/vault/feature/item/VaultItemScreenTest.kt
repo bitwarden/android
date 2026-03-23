@@ -263,7 +263,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
@@ -759,7 +759,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `attachment download click for non-premium users should show an error dialog`() {
+    fun `attachment download click for non-Premium users should show an error dialog`() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(

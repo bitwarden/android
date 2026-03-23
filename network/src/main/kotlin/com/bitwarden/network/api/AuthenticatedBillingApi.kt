@@ -13,7 +13,7 @@ import retrofit2.http.POST
 internal interface AuthenticatedBillingApi {
 
     /**
-     * Creates a Stripe checkout session for premium upgrade.
+     * Creates a Stripe checkout session for Premium upgrade.
      */
     @POST("/account/billing/vnext/premium/checkout")
     suspend fun createCheckoutSession(
@@ -21,7 +21,7 @@ internal interface AuthenticatedBillingApi {
     ): NetworkResult<CheckoutSessionResponseJson>
 
     /**
-     * Creates a Stripe customer portal session for managing the premium subscription.
+     * Creates a Stripe customer portal session for managing the Premium subscription.
      */
     @POST("/account/billing/vnext/portal-session")
     suspend fun getPortalUrl(): NetworkResult<PortalUrlResponseJson>

@@ -758,7 +758,7 @@ class VaultAddItemStateExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toCipherView without premium should delete the archive date from the original cipher`() {
+    fun `toCipherView without Premium should delete the archive date from the original cipher`() {
         val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
             notes = null,
             fields = emptyList(),

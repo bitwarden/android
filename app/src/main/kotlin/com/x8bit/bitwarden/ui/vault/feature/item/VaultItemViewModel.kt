@@ -1698,14 +1698,14 @@ data class VaultItemState(
                  * @property passwordRevisionDate An optional string indicating the last time the
                  * password was changed.
                  * @property totpCodeItemData The optional data related the TOTP code.
-                 * @property isPremiumUser Indicates if the user has subscribed to a premium
+                 * @property isPremiumUser Indicates if the user has subscribed to a Premium
                  * account.
                  * @property canViewTotpCode Indicates if the user can view an associated TOTP code.
                  * @property fido2CredentialCreationDateText Optional creation date and time of the
                  * FIDO2 credential associated with the login item.
                  *
                  * **NOTE** [canViewTotpCode] currently supports a deprecated edge case where an
-                 * organization supports TOTP but not through the current premium model.
+                 * organization supports TOTP but not through the current Premium model.
                  * This additional field is added to allow for [isPremiumUser] to be an independent
                  * value.
                  * @see [CipherView.organizationUseTotp]
@@ -1891,7 +1891,7 @@ data class VaultItemState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -2050,7 +2050,7 @@ sealed class VaultItemAction {
         data object UnarchiveClick : Common()
 
         /**
-         * The user has clicked the upgrade to premium button.
+         * The user has clicked the upgrade to Premium button.
          */
         data object UpgradeToPremiumClick : Common()
 

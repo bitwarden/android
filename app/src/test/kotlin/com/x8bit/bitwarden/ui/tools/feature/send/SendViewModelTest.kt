@@ -147,7 +147,7 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendSelected with file type and non premium user should display dialog`() {
+    fun `AddSendSelected with file type and non Premium user should display dialog`() {
         val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))

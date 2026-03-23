@@ -3112,7 +3112,7 @@ data class VaultItemListingState(
         ) : DialogState()
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -3123,7 +3123,7 @@ data class VaultItemListingState(
      */
     sealed class ActionCardState {
         /**
-         * Indicates that your premium subscription has lapsed.
+         * Indicates that your Premium subscription has lapsed.
          */
         data object PremiumSubscription : ActionCardState()
     }
@@ -3682,7 +3682,7 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
-     * Click the upgrade to premium button.
+     * Click the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : VaultItemListingsAction()
 

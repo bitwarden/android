@@ -222,7 +222,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `premium action card restart premium button click should send UpgradeToPremiumClick`() {
+    fun `Premium action card restart Premium button click should send UpgradeToPremiumClick`() {
         composeTestRule
             .onNodeWithText(text = "Your Premium subscription ended")
             .assertDoesNotExist()

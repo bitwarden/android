@@ -86,7 +86,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick should display error dialog when user is not premium`() = runTest {
+    fun `SaveClick should display error dialog when user is not Premium`() = runTest {
         val cipherView = createMockCipherView(number = 1)
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,

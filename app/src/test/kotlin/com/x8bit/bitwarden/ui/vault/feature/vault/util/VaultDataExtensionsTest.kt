@@ -343,7 +343,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 1 for totpItemsCount if user has premium and has one totp item`() {
+    fun `toViewState should return 1 for totpItemsCount if user has Premium and has one totp item`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -390,7 +390,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 0 for totpItemsCount if user does not have premium and has any totp items`() {
+    fun `toViewState should return 0 for totpItemsCount if user does not have Premium and has any totp items`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -437,7 +437,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 1 for totpItemsCount if user does not have premium and has at least 1 totp items with org TOTP true`() {
+    fun `toViewState should return 1 for totpItemsCount if user does not have Premium and has at least 1 totp items with org TOTP true`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -485,7 +485,7 @@ class VaultDataExtensionsTest {
     }
 
     @Test
-    fun `toViewState should omit non org related totp codes when user does not have premium`() {
+    fun `toViewState should omit non org related totp codes when user does not have Premium`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,

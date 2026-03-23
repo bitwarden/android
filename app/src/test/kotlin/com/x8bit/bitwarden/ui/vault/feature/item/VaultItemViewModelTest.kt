@@ -248,7 +248,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+        fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
             mutableUserStateFlow.update {
                 it?.copy(accounts = listOf(DEFAULT_USER_ACCOUNT.copy(isPremium = false)))
             }

@@ -124,12 +124,12 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Retrieves the stored value of whether the premium upgrade banner has been dismissed.
+     * Retrieves the stored value of whether the Premium upgrade banner has been dismissed.
      */
     fun getPremiumUpgradeBannerDismissed(userId: String): Boolean?
 
     /**
-     * Stores whether the premium upgrade banner has been dismissed.
+     * Stores whether the Premium upgrade banner has been dismissed.
      */
     fun storePremiumUpgradeBannerDismissed(
         userId: String,
