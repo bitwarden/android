@@ -90,6 +90,19 @@ class PremiumStateManagerImpl(
                 initialValue = false,
             )
 
+    override val isInAppUpgradeAvailableFlow: StateFlow<Boolean> =
+        combine(
+            billingRepository.isInAppBillingSupportedFlow,
+            featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
+        ) { isInAppBillingSupported, featureFlagEnabled ->
+            isInAppBillingSupported && featureFlagEnabled
+        }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false,
+            )
+
     override fun dismissPremiumUpgradeBanner() {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return
         settingsDiskSource.storePremiumUpgradeBannerDismissed(

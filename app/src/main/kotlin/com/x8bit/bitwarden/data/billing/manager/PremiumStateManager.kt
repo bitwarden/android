@@ -17,6 +17,11 @@ interface PremiumStateManager {
     val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
 
     /**
+     * Emits `true` when the in-app upgrade flow is available, or `false` otherwise.
+     */
+    val isInAppUpgradeAvailableFlow: StateFlow<Boolean>
+
+    /**
      * Marks the Premium upgrade banner as dismissed for the current user.
      */
     fun dismissPremiumUpgradeBanner()
