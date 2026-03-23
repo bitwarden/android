@@ -250,6 +250,7 @@ private fun ViewStateContent(
             label = stringResource(id = BitwardenString.share),
             onClick = onShareClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
+            isExternalLink = true,
             cardStyle = CardStyle.Bottom,
             cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier

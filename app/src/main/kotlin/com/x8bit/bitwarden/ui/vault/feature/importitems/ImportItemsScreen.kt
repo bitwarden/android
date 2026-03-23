@@ -168,6 +168,7 @@ private fun ImportItemsContent(
             BitwardenTextRow(
                 text = stringResource(BitwardenString.import_from_another_app),
                 onClick = onImportFromAnotherAppClick,
+                isExternalLink = true,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier.fillMaxWidth(),
             )

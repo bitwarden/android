@@ -66,7 +66,8 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class ShareUrlClick(val sendUrl: String) : SendAction() {
             override val title: Text get() = BitwardenString.share_link.asText()
-            override val contentDescription: Text get() = title
+            override val contentDescription: Text
+                get() = BitwardenString.external_link_format.asText(title)
         }
 
         /**
