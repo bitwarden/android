@@ -400,9 +400,16 @@ class VaultViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         mutableStateFlow.update { it.copy(dialog = null) }
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-        sendEvent(VaultEvent.NavigateToUrl(url = url))
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultEvent.NavigateToUpgradePremium)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+            sendEvent(VaultEvent.NavigateToUrl(url = url))
+        }
     }
 
     private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {

@@ -113,6 +113,7 @@ fun VaultAddEditScreen(
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -210,6 +211,8 @@ fun VaultAddEditScreen(
             VaultAddEditEvent.NavigateToAppSettings -> {
                 intentManager.startAppSettingsActivity()
             }
+
+            VaultAddEditEvent.NavigateToPlanModal -> onNavigateToPlan()
         }
     }
 

@@ -22,6 +22,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -90,6 +91,7 @@ class AddEditSendViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val featureFlagManager: FeatureFlagManager,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -648,15 +650,19 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepo
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
-        sendEvent(
-            AddEditSendEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(AddEditSendEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepo
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     @Suppress("LongMethod")
@@ -1113,6 +1119,11 @@ sealed class AddEditSendEvent {
      * Navigate to the Premium upgrade page.
      */
     data class NavigateToPremium(val uri: String) : AddEditSendEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : AddEditSendEvent()
 }
 
 /**

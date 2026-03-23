@@ -63,6 +63,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListing = { navController.navigateToVaultItemListing(it) },
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToPlan = onNavigateToPlan,
         )
 
         vaultVerificationCodeDestination(

@@ -58,6 +58,7 @@ fun SearchScreen(
     onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
+    onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SearchViewModel = hiltViewModel(),
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
@@ -111,6 +112,7 @@ fun SearchScreen(
             }
 
             is SearchEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
+            SearchEvent.NavigateToPlanModal -> onNavigateToPlan()
             is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
             is SearchEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }

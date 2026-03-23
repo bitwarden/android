@@ -106,6 +106,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     parentFolderName = it,
                 )
             },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
@@ -189,6 +190,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     showOnlyCollections = showOnlyCollections,
                 )
             },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         vaultMoveToOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -209,6 +211,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 )
             },
             onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         cardScanDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -232,6 +235,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
             onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -259,6 +263,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToViewSend = { navController.navigateToViewSend(it) },
             onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },

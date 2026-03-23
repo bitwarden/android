@@ -47,6 +47,7 @@ fun NavGraphBuilder.vaultItemDestination(
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
     onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithSlideTransitions<VaultItemRoute> {
         VaultItemScreen(
@@ -56,6 +57,7 @@ fun NavGraphBuilder.vaultItemDestination(
             onNavigateToAttachments = onNavigateToAttachments,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateToPreviewAttachment = onNavigateToPreviewAttachment,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }
