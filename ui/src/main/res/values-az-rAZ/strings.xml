@@ -508,10 +508,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="remove_master_password">Ana parolu sil</string>
     <string name="leave_organization">Təşkilatı tərk et</string>
     <string name="leave_organization_name">%1$s tərk edilsin?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">%1$s tərk etmək istədiyinizə əminsiniz?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">[%1$s] tərk etmək istədiyinizə əminsiniz?</string>
     <string name="leave_organization_button">%1$s - tərk et</string>
     <string name="leave_organization_warning">Rədd cavabı versəniz, fərdi elementləriniz hesabınızda qalacaq, paylaşılan elementlərə və təşkilat özəlliklərinə erişimi itirəcəksiniz.\n\nErişimi təkrar qazanmaq üçün admininizlə əlaqə saxlayın.</string>
-    <string name="how_to_manage_my_vault">Seyfimi necə idarə edim</string>
+    <string name="contact_your_admin_to_regain_access">Erişimi təkrar qazanmaq üçün admininizlə əlaqə saxlayın.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn kimlik doğrulama</string>
     <string name="fido2_return_to_app">Tətbiqə qayıt</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu təşkilat, sizi \"parol sıfırlama\"da avtomatik olaraq qeydiyyata alan müəssisə siyasətinə sahibdir. Qeydiyyat, təşkilat administratorlarına ana parolunuzu dəyişdirmə icazəsi verəcək.</string>
@@ -939,6 +939,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilmiş element mövcud olmadığı üçün parol əməliyyatı uğursuz oldu.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Seçilmiş elementın yararlı bir parolu olmadığı üçün parol əməliyyatı uğursuz oldu.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün parol əməliyyatı uğursuz oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Sorğu yararsız olduğu üçün kimlik məlumatı əməliyyatı uğursuz oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün kimlik məlumatı əməliyyatı uğursuz oldu.</string>
@@ -1205,6 +1206,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="archive_unavailable">Arxiv əlçatmazdır</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
     <string name="introducing_archive">Tanış olun, Arxivləmə</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">İndi ehtiyacınız olmayanları etibarlı və gözdən uzaq yerdə saxlayın.</string>

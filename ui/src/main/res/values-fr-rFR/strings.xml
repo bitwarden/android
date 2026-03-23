@@ -508,10 +508,10 @@ La numérisation se fera automatiquement.</string>
     <string name="remove_master_password">Supprimer le mot de passe principal</string>
     <string name="leave_organization">Quitter l’organisation</string>
     <string name="leave_organization_name">Quitter %1$s ?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Êtes-vous sûr de vouloir quitter %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Êtes-vous sûr de vouloir quitter [%1$s]?</string>
     <string name="leave_organization_button">Quitter %1$s</string>
     <string name="leave_organization_warning">En refusant, vos éléments personnels resteront dans votre compte, mais vous perdrez l\'accès aux éléments partagés et aux fonctionnalités de l\'organisation.\n\nContacter votre administrateur pour retrouver vos accès.</string>
-    <string name="how_to_manage_my_vault">Comment gérer mon coffre ?</string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">Authentifier WebAuthn</string>
     <string name="fido2_return_to_app">Retourner à l’application</string>
     <string name="reset_password_auto_enroll_invite_warning">Cette organisation dispose d\'une politique d\'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L\'inscription permettra aux administrateurs de l\'organisation de changer votre mot de passe principal.</string>
@@ -940,6 +940,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">L\'opération de clé de passe a échoué car aucun élément n\'a été sélectionné.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">L\'opération de clé de passe a échoué car la demande n\'est pas prise en charge.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">L\'opération de mot de passe a échoué car l\'élément sélectionné n\'existe pas.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">L\'opération de mot de passe a échoué car aucun élément n\'a été sélectionné.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Opération d\'identification échouée car la requête n\'est pas valide.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Opération d\'identification échouée car la requête n\'est pas prise en charge.</string>
@@ -1184,7 +1185,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="resending">Nouvel envoi en cours</string>
     <string name="you_left_the_organization">Vous avez quitté l\'organisation</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
@@ -1203,7 +1204,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>

@@ -508,10 +508,10 @@ Skanningen sker automatiskt.</string>
     <string name="remove_master_password">Ta bort huvudlösenord</string>
     <string name="leave_organization">Lämna organisation</string>
     <string name="leave_organization_name">Lämna %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna [%1$s]?</string>
     <string name="leave_organization_button">Lämna %1$s</string>
     <string name="leave_organization_warning">Genom att avböja kommer dina personliga saker att finnas kvar på ditt konto, men du kommer att förlora åtkomst till delade objekt och organisationsfunktioner.\n\nKontakta administratören för att återfå åtkomst.</string>
-    <string name="how_to_manage_my_vault">Hur man hanterar Mitt valv</string>
+    <string name="contact_your_admin_to_regain_access">Kontakta administratören för att återfå åtkomst.</string>
     <string name="fido2_authenticate_web_authn">Autentisera WebAuthn</string>
     <string name="fido2_return_to_app">Återvänd till app</string>
     <string name="reset_password_auto_enroll_invite_warning">Denna organisation har en företagspolicy som automatiskt registrerar dig för lösenordsåterställning. Deltagandet gör det möjligt för organisationsadministratörer att ändra ditt huvudlösenord.</string>
@@ -940,6 +940,7 @@ Vill du byta till detta konto?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Åtgärden för inloggningsnyckel misslyckades eftersom inget objekt valdes.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsnyckel misslyckades eftersom begäran inte stöds.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för lösenord misslyckades därför att det valda objektet inte finns.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Åtgärd för lösenord misslyckades därför att inget objekt valdes.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran är ogiltig.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran inte stöds.</string>
@@ -1204,6 +1205,8 @@ Vill du byta till detta konto?</string>
     <string name="archive_unavailable">Arkivet inte tillgängligt</string>
     <string name="archiving_items_is_a_premium_feature">Arkivering av objekt är en Premium-funktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="upgrade_to_premium">Uppgradera till premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Detta objekt är arkiverat.</string>
     <string name="introducing_archive">Introducerar arkiv</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Håll objekt som du inte behöver just nu är säkra, men utom synhåll.</string>

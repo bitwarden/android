@@ -506,10 +506,10 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="remove_master_password">Hapus sandi utama</string>
     <string name="leave_organization">Tinggalkan Organisasi</string>
     <string name="leave_organization_name">Tinggalkan %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Apakah Anda yakin ingin keluar %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Apakah Anda yakin ingin keluar [%1$s]?</string>
     <string name="leave_organization_button">Keluar %1$s</string>
     <string name="leave_organization_warning">Dengan menolak, item pribadi akan tetap ada di akun Anda, tetapi Anda akan kehilangan akses ke item bersama dan fitur organisasi.\n\nHubungi admin untuk memulihkan akses.</string>
-    <string name="how_to_manage_my_vault">Bagaimana cara mengelola Brankas Saya</string>
+    <string name="contact_your_admin_to_regain_access">Hubungi administrator Anda untuk memulihkan akses.</string>
     <string name="fido2_authenticate_web_authn">Otentikasi WebAuthn</string>
     <string name="fido2_return_to_app">Kembali ke apl</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisasi ini memiliki kebijakan enterprise yang akan otomatis mendaftarkan Anda ke reset sandi. Pendaftaran ini memungkinkan administrator organisasi mengubah sandi utama Anda.</string>
@@ -934,6 +934,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operasi kunci sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operasi kunci sandi gagal karena permintaan tidak didukung.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operasi sandi gagal karena item yang dipilih tidak ada.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operasi sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operasi kredensial gagal karena permintaan tidak valid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operasi kredensial gagal karena permintaan tidak didukung.</string>
@@ -1195,6 +1196,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="archive_unavailable">Arsip tidak tersedia</string>
     <string name="archiving_items_is_a_premium_feature">Mengarsipkan item adalah fitur Premium. Paket Anda saat ini tidak termasuk akses ke fitur ini.</string>
     <string name="upgrade_to_premium">Tingkatkan ke premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Item ini diarsipkan.</string>
     <string name="introducing_archive">Memperkenalkan Arsip</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Simpan item yang belum Anda perlukan dengan aman tanpa terlihat.</string>

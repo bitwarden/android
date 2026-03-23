@@ -203,7 +203,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="premium_required">Konto premium jest wymagane, aby skorzystać z tej funkcji.</string>
     <string name="attachment_deleted">Załącznik został usunięty</string>
     <string name="attachments_unavailable">Załączniki są niedostępne</string>
-    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="attachments_are_a_premium_feature">Załączniki są funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="choose_file">Wybierz plik</string>
     <string name="file">Plik</string>
     <string name="no_file_chosen">Nie wybrano pliku</string>
@@ -512,10 +512,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="remove_master_password">Usuń hasło główne</string>
     <string name="leave_organization">Opuść organizację</string>
     <string name="leave_organization_name">Opuścić organizację %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację?</string>
     <string name="leave_organization_button">Opuść organizację %1$s</string>
-    <string name="leave_organization_warning">Odrzucenie spowoduje, że Twoje osobiste elementy pozostaną na koncie, ale stracisz dostęp do udostępnionych elementów oraz funkcji organizacji.\n\nSkontaktuj się z administratorem, aby odzyskać dostęp.</string>
-    <string name="how_to_manage_my_vault">Jak zarządzać sejfem</string>
+    <string name="leave_organization_warning">Odrzucenie spowoduje, że Twoje osobiste elementy pozostaną na koncie, ale stracisz dostęp do udostępnionych elementów oraz funkcji organizacji. <annotation link="learnMore">Dowiedz się więcej</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Skontaktuj się z administratorem, aby odzyskać dostęp.</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
@@ -775,7 +775,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapisz to hasło i przechowuj je w bezpiecznym miejscu.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Dowiedz się więcej o innych sposobach zapobiegania blokowaniu konta</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Dowiedz się więcej o sposobach zapobiegania blokowaniu konta</annotation></string>
-    <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera.</string>
+    <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera</string>
     <string name="email_address_required">Adres e-mail (wymagane)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Kliknij link w wiadomości, aby zweryfikować adres e-mail i utworzyć konto.</string>
     <string name="change_email_address">Zmień adres e-mail</string>
@@ -847,7 +847,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Wypełnij formularz i <annotation emphasis="bold">zaimportuj plik z hasłami.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Upewnij się, że <annotation emphasis="bold">usunąłeś zapisany plik.</annotation></string>
     <string name="need_help_check_out_import_help">Potrzebujesz pomocy? Sprawdź <annotation link="importHelp">pomoc dotyczącą importowania</annotation>.</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">Pomoc dotyczącą importowania</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Zapisz wyeksportowany plik</annotation> na komputerze.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">To nie jest serwer Bitwarden. Sprawdź dostawcę lub zaktualizuj serwer.</string>
     <string name="syncing_logins_loading_message">Synchronizacja danych logowania…</string>
@@ -951,6 +951,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacja klucza dostępu nie powiodła się, ponieważ nie wybrano żadnego elementu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacja klucza dostępu nie powiodła się, ponieważ żądanie nie jest obsługiwane.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacja hasła nie powiodła się, ponieważ element nie istnieje.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operacja hasła nie powiodła się, ponieważ element nie ma prawidłowego hasła.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacja hasła nie powiodła się, ponieważ nie wybrano elementu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operacja nie powiodła się, ponieważ żądanie jest nieprawidłowe.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operacja nie powiodła się, ponieważ żądanie jest nieobsługiwane.</string>
@@ -1201,7 +1202,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="resending">Ponowne wysyłanie</string>
     <string name="you_left_the_organization">Nie należysz już do tej organizacji</string>
     <string name="transfer_items_to_org">Przenieś elementy do organizacji %1$s</string>
-    <string name="transfer_items_description">Organizacja %1$s wymaga, aby wszystkie elementy były ich własnością. Kliknij „Akceptuj”, aby przenieść własność swoich elementów.</string>
+    <string name="transfer_items_description">Organizacja <annotation arg="0">%1$s</annotation> wymaga, aby wszystkie elementy były ich własnością. Kliknij „Akceptuj”, aby przenieść własność swoich elementów. <annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="decline_and_leave">Odrzuć i wyjdź</string>
     <string name="why_am_i_seeing_this">Dlaczego to widzę?</string>
     <string name="migrating_items_to_x">Przenoszenie elementów do organizacji %s</string>
@@ -1219,8 +1220,10 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
     <string name="item_moved_to_vault">Element został przeniesiony do archiwum</string>
     <string name="archive_unavailable">Archiwum jest niedostępne</string>
-    <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie obejmuje dostępu do tej funkcji.</string>
+    <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
     <string name="introducing_archive">Przedstawiamy archiwum</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Zachowaj elementy, których teraz nie potrzebujesz.</string>
@@ -1240,5 +1243,5 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="launch_browser">Uruchom przeglądarkę</string>
     <string name="continue_without_syncing">Kontynuuj bez synchronizacji</string>
     <string name="external_link">Link zewnętrzny</string>
-    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
 </resources>

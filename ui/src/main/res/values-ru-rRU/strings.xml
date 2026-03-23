@@ -512,10 +512,10 @@
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
     <string name="leave_organization_name">Покинуть %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть [%1$s]?</string>
     <string name="leave_organization_button">Покинуть %1$s</string>
     <string name="leave_organization_warning">В случае отказа ваши личные данные останутся в вашем аккаунте, но вы потеряете доступ к общим элементам и возможностям организации.\n\nОбратитесь к своему администратору, чтобы восстановить доступ.</string>
-    <string name="how_to_manage_my_vault">Как управлять моим хранилищем</string>
+    <string name="contact_your_admin_to_regain_access">Свяжитесь с вашим администратором для восстановления доступа.</string>
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
     <string name="reset_password_auto_enroll_invite_warning">В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль.</string>
@@ -952,6 +952,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операция с паролем не удалась, поскольку выбранный элемент не существует.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Операция с паролем не удалась, поскольку у выбранного элемента нет действительного пароля.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операция с паролем не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Операция с учетными данными не удалась, поскольку запрос некорректен.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Операция с учетными данными не удалась, поскольку запрос не поддерживается.</string>
@@ -1222,6 +1223,8 @@
     <string name="archive_unavailable">Архив недоступен</string>
     <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="upgrade_to_premium">Обновить до Премиум</string>
+    <string name="unlock_advanced_security_features">Разблокировать дополнительные функции безопасности</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум дает вам больше возможностей по обеспечения безопасности и контроля.</string>
     <string name="this_item_is_archived">Этот элемент архивирован.</string>
     <string name="introducing_archive">Представляем архив</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Храните элементы, которые вам сейчас не нужны, в безопасности, но вне поля зрения.</string>

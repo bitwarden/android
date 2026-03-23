@@ -510,10 +510,10 @@ Nolasīšana notiks automātiski.</string>
     <string name="remove_master_password">Noņemt galveno paroli</string>
     <string name="leave_organization">Pamest apvienību</string>
     <string name="leave_organization_name">Pamest %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Vai tiešām pamest %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Vai tiešām pamest [%1$s]?</string>
     <string name="leave_organization_button">Pamest %1$s</string>
     <string name="leave_organization_warning">Pēc noraidīšanas personīgie vienumi paliks Tavā kontā, bet Tu zaudēsi piekļuvi kopīgotajiem vienumiem un apvienību iespējām.\n\nJāsazinās ar savu pārvaldītāju, lai atgūdu piekļuvi.</string>
-    <string name="how_to_manage_my_vault">Kā pārvaldīt savu glabātavu</string>
+    <string name="contact_your_admin_to_regain_access">Jāsazinās ar savu pārvaldītāju, lai atgūtu piekļuvi.</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
@@ -946,6 +946,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Darbība ar paroli neizdevās, jo atlasītais vienums nepastāv.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Darbība ar paroli neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Darbība ar piekļuves datiem neizdevās, jo pieprasījums ir nederīgs.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves datiem neizdevās, jo tika izmantots neatbalstīts pieprasījums.</string>
@@ -1213,6 +1214,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="archive_unavailable">Arhīvs nav pieejams</string>
     <string name="archiving_items_is_a_premium_feature">Vienumu ievietošana arhīvā ir Premium iespēja. Pašreizējais plāns neiekļauj piekļuvi tai.</string>
     <string name="upgrade_to_premium">Uzlabot uz Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Šis vienums ir ievietots arhīvā.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
