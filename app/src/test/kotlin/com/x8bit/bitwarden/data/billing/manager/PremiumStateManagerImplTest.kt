@@ -90,7 +90,7 @@ class PremiumStateManagerImplTest {
     }
 
     @Test
-    fun `ineligible when user is premium should emit false`() = runTest {
+    fun `ineligible when user is Premium should emit false`() = runTest {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
         )

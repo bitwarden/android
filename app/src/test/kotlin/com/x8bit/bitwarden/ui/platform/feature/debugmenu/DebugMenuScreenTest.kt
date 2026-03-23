@@ -160,9 +160,9 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `reset premium upgrade banner should send ResetPremiumUpgradeBanner action`() {
+    fun `reset Premium upgrade banner should send ResetPremiumUpgradeBanner action`() {
         composeTestRule
-            .onNodeWithText("Reset premium upgrade banner")
+            .onNodeWithText("Reset Premium upgrade banner")
             .performScrollTo()
             .performClick()
 

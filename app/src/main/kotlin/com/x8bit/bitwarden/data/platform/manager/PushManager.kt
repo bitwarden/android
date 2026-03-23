@@ -31,7 +31,7 @@ interface PushManager {
     val passwordlessRequestFlow: Flow<PasswordlessRequestData>
 
     /**
-     * Flow that represents premium status change notifications.
+     * Flow that represents Premium status change notifications.
      */
     val premiumStatusChangedFlow: Flow<PremiumStatusChangedData>
 

@@ -42,7 +42,7 @@ data class UserState(
      * @property name The user's name (if applicable).
      * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
      * @property environment The [Environment] associated with the user's account.
-     * @property isPremium `true` if the account has a premium membership.
+     * @property isPremium `true` if the account has a Premium membership.
      * @property isLoggedIn `true` if the account is logged in, or `false` if it requires additional
      * authentication to view their vault.
      * @property isVaultUnlocked Whether the user's vault is currently unlocked.

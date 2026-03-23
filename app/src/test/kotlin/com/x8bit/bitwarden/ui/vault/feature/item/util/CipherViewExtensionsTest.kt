@@ -39,7 +39,7 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content with Premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             previousState = null,
@@ -72,7 +72,7 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without premium`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content without Premium`() {
         val isPremiumUser = false
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
@@ -109,7 +109,7 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without premium but with org totp access`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content without Premium but with org totp access`() {
         val isPremiumUser = false
         val cipherView = createCipherView(
             type = CipherType.LOGIN,

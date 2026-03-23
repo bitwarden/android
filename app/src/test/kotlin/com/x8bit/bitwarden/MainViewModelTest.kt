@@ -864,7 +864,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
@@ -881,7 +881,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveNewIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveNewIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,

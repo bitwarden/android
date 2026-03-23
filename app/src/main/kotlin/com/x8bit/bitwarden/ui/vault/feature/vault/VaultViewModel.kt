@@ -621,7 +621,7 @@ class VaultViewModel @Inject constructor(
             ?.archivedItemsCount
             ?: 0
         if (state.isPremium || archivedItemsCount > 0) {
-            // We still navigate even if the user does not have premium, since they have previously
+            // We still navigate even if the user does not have Premium, since they have previously
             // archived ciphers to view.
             sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
         } else {
@@ -1489,7 +1489,7 @@ class VaultViewModel @Inject constructor(
  * @property viewState The specific view state representing loading, no items, or content state.
  * @property dialog Information about any dialogs that may need to be displayed.
  * @property isSwitchingAccounts Whether we are actively switching accounts.
- * @property isPremium Whether the user is a premium user.
+ * @property isPremium Whether the user is a Premium user.
  */
 @Parcelize
 data class VaultState(
@@ -1847,7 +1847,7 @@ data class VaultState(
      */
     sealed class ActionCardState {
         /**
-         * Indicates that the user is eligible for a premium upgrade.
+         * Indicates that the user is eligible for a Premium upgrade.
          */
         data object UpgradePremium : ActionCardState()
 
@@ -1863,7 +1863,7 @@ data class VaultState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -2260,7 +2260,7 @@ sealed class VaultAction {
     data object SelectAddItemType : VaultAction()
 
     /**
-     * User clicked the upgrade to premium button.
+     * User clicked the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : VaultAction()
 
@@ -2410,7 +2410,7 @@ sealed class VaultAction {
         ) : Internal()
 
         /**
-         * Indicates that the premium upgrade banner eligibility has been
+         * Indicates that the Premium upgrade banner eligibility has been
          * updated.
          */
         data class PremiumUpgradeBannerEligibilityReceive(

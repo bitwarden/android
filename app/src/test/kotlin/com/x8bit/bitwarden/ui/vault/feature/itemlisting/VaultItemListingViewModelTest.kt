@@ -1073,7 +1073,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         mutableUserStateFlow.update {
             it?.copy(accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)))
         }
@@ -1746,7 +1746,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddVaultItemClick for file send item with premium should emit NavigateToAddVaultItem`() =
+    fun `AddVaultItemClick for file send item with Premium should emit NavigateToAddVaultItem`() =
         runTest {
             val viewModel = createVaultItemListingViewModel(
                 createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
@@ -1761,7 +1761,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `AddVaultItemClick for file send item without premium should display error dialog`() =
+    fun `AddVaultItemClick for file send item without Premium should display error dialog`() =
         runTest {
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
