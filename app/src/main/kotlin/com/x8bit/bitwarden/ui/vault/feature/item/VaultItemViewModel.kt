@@ -275,6 +275,10 @@ class VaultItemViewModel @Inject constructor(
                 handleAttachmentDownloadClick(action)
             }
 
+            is VaultItemAction.Common.AttachmentPreviewClick -> {
+                handleAttachmentPreviewClick(action)
+            }
+
             is VaultItemAction.Common.AttachmentFileLocationReceive -> {
                 handleAttachmentFileLocationReceive(action)
             }
@@ -405,6 +409,18 @@ class VaultItemViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleAttachmentPreviewClick(
+        action: VaultItemAction.Common.AttachmentPreviewClick,
+    ) {
+        sendEvent(
+            event = VaultItemEvent.NavigateToPreviewAttachment(
+                cipherId = state.vaultItemId,
+                attachmentId = action.attachment.id,
+                fileName = action.attachment.title,
+            ),
+        )
     }
 
     private fun handleAttachmentFileLocationReceive(
@@ -1246,11 +1262,7 @@ class VaultItemViewModel @Inject constructor(
 
             is DownloadAttachmentResult.Success -> {
                 temporaryAttachmentData = result.file
-                sendEvent(
-                    VaultItemEvent.NavigateToSelectAttachmentSaveLocation(
-                        fileName = action.fileName,
-                    ),
-                )
+                sendEvent(VaultItemEvent.NavigateToSelectAttachmentSaveLocation(action.fileName))
             }
         }
     }
@@ -1986,6 +1998,15 @@ sealed class VaultItemEvent {
     ) : VaultItemEvent()
 
     /**
+     * Navigates to preview the attachment.
+     */
+    data class NavigateToPreviewAttachment(
+        val cipherId: String,
+        val attachmentId: String,
+        val fileName: String,
+    ) : VaultItemEvent()
+
+    /**
      * Displays the given [data] in a snackbar.
      */
     data class ShowSnackbar(
@@ -2120,6 +2141,13 @@ sealed class VaultItemAction {
          * The user has clicked the download button.
          */
         data class AttachmentDownloadClick(
+            val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
+        ) : Common()
+
+        /**
+         * The user has clicked the preview button.
+         */
+        data class AttachmentPreviewClick(
             val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
         ) : Common()
 
