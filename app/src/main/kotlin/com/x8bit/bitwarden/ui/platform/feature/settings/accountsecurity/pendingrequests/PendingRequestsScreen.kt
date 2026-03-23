@@ -79,9 +79,7 @@ fun PendingRequestsScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(PendingRequestsAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(PendingRequestsAction.RefreshPull) },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
@@ -113,9 +111,7 @@ fun PendingRequestsScreen(
     BitwardenModalBottomSheet(
         showBottomSheet = !hideBottomSheet,
         sheetTitle = stringResource(BitwardenString.enable_notifications),
-        onDismiss = remember(viewModel) {
-            { viewModel.trySendAction(PendingRequestsAction.HideBottomSheet) }
-        },
+        onDismiss = { viewModel.trySendAction(PendingRequestsAction.HideBottomSheet) },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
     ) { animatedOnDismiss ->
@@ -136,8 +132,8 @@ fun PendingRequestsScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(PendingRequestsAction.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PendingRequestsAction.CloseClick)
                 },
             )
         },
@@ -151,19 +147,11 @@ fun PendingRequestsScreen(
                 PendingRequestsContent(
                     modifier = Modifier.fillMaxSize(),
                     state = viewState,
-                    onDeclineAllRequestsConfirm = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                PendingRequestsAction.DeclineAllRequestsConfirm,
-                            )
-                        }
+                    onDeclineAllRequestsConfirm = {
+                        viewModel.trySendAction(PendingRequestsAction.DeclineAllRequestsConfirm)
                     },
-                    onNavigateToLoginApproval = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                PendingRequestsAction.PendingRequestRowClick(it),
-                            )
-                        }
+                    onNavigateToLoginApproval = {
+                        viewModel.trySendAction(PendingRequestsAction.PendingRequestRowClick(it))
                     },
                 )
             }

@@ -7,9 +7,10 @@ import androidx.compose.ui.graphics.Color
  * The default [BitwardenColorScheme] for dark mode.
  */
 val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = true,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray200,
-        secondary = PrimitiveColors.gray600,
+        secondary = PrimitiveColors.gray500,
         interaction = PrimitiveColors.blue400,
         reversed = PrimitiveColors.gray1200,
         codePink = PrimitiveColors.pink200,
@@ -38,10 +39,10 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue400,
-        backgroundDisabled = PrimitiveColors.gray900,
+        backgroundDisabled = PrimitiveColors.gray1000,
         backgroundReversed = PrimitiveColors.gray1100,
         foreground = PrimitiveColors.gray1100,
-        foregroundDisabled = PrimitiveColors.gray500,
+        foregroundDisabled = PrimitiveColors.gray900,
         foregroundReversed = PrimitiveColors.blue400,
     ),
     outlineButton = BitwardenColorScheme.OutlineButtonColors(
@@ -84,6 +85,7 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
  * The default [BitwardenColorScheme] for light mode.
  */
 val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = false,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray1300,
         secondary = PrimitiveColors.gray700,
@@ -131,7 +133,7 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
     ),
     toggleButton = BitwardenColorScheme.ToggleButtonColors(
         backgroundOn = PrimitiveColors.blue500,
-        backgroundOff = PrimitiveColors.gray500,
+        backgroundOff = PrimitiveColors.gray600,
         switch = PrimitiveColors.gray100,
     ),
     sliderButton = BitwardenColorScheme.SliderButtonColors(
@@ -167,6 +169,7 @@ fun dynamicBitwardenColorScheme(
 ): BitwardenColorScheme {
     val defaultTheme = if (isDarkTheme) darkBitwardenColorScheme else lightBitwardenColorScheme
     return BitwardenColorScheme(
+        isDarkTheme = isDarkTheme,
         text = BitwardenColorScheme.TextColors(
             primary = materialColorScheme.onBackground,
             secondary = materialColorScheme.onSurface,
@@ -269,10 +272,10 @@ private data object PrimitiveColors {
     val gray300: Color = Color(color = 0xFFE6E9EF)
     val gray400: Color = Color(color = 0xFFD3D9E3)
     val gray500: Color = Color(color = 0xFF96A3BB)
-    val gray600: Color = Color(color = 0xFF8898B5)
+    val gray600: Color = Color(color = 0xFF7F8FAD)
     val gray700: Color = Color(color = 0xFF5A6D91)
     val gray800: Color = Color(color = 0xFF79808E)
-    val gray900: Color = Color(color = 0xFF525B6A)
+    val gray900: Color = Color(color = 0xFF657185)
     val gray1000: Color = Color(color = 0xFF303946)
     val gray1100: Color = Color(color = 0xFF202733)
     val gray1200: Color = Color(color = 0xFF121A27)

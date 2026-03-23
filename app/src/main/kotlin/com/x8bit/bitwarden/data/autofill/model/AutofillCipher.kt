@@ -14,7 +14,7 @@ sealed class AutofillCipher {
     abstract val iconRes: Int
 
     /**
-     * Whether or not TOTP is enabled for this cipher.
+     * Whether TOTP is enabled for this cipher.
      */
     abstract val isTotpEnabled: Boolean
 

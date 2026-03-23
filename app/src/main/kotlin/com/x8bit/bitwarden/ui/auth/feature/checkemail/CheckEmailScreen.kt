@@ -173,6 +173,7 @@ private fun CheckEmailContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.open_email_app),
             onClick = onOpenEmailAppClick,
+            isExternalLink = true,
             modifier = Modifier
                 .testTag("OpenEmailApp")
                 .fillMaxWidth()

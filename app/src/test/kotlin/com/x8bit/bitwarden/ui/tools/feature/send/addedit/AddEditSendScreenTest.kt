@@ -303,7 +303,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -342,7 +342,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -357,7 +357,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -376,7 +376,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -395,7 +395,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -978,7 +978,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Upgrade to premium")
+            .onNodeWithText("Upgrade to Premium")
             .performClick()
 
         verify { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }

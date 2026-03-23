@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -34,6 +32,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun AttachmentItemContent(
     attachmentItem: VaultItemState.ViewState.Content.Common.AttachmentItem,
     onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
@@ -91,24 +90,17 @@ fun AttachmentItemContent(
     }
 
     if (shouldShowPremiumWarningDialog) {
-        AlertDialog(
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = BitwardenString.attachments_unavailable),
+            message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
+            confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            onConfirmClick = {
+                shouldShowPremiumWarningDialog = false
+                onUpgradeToPremiumClick()
+            },
+            onDismissClick = { shouldShowPremiumWarningDialog = false },
             onDismissRequest = { shouldShowPremiumWarningDialog = false },
-            confirmButton = {
-                BitwardenTextButton(
-                    label = stringResource(BitwardenString.okay),
-                    onClick = { shouldShowPremiumWarningDialog = false },
-                )
-            },
-            text = {
-                Text(
-                    text = stringResource(BitwardenString.premium_required),
-                    style = BitwardenTheme.typography.bodyMedium,
-                )
-            },
-            containerColor = BitwardenTheme.colorScheme.background.primary,
-            iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
-            titleContentColor = BitwardenTheme.colorScheme.text.primary,
-            textContentColor = BitwardenTheme.colorScheme.text.primary,
         )
     }
 

@@ -90,8 +90,8 @@ fun ExportVaultScreen(
     }
 
     var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
-    val confirmExportVaultClicked = remember(viewModel) {
-        { viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked) }
+    val confirmExportVaultClicked = {
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
     }
     if (shouldShowConfirmationDialog) {
         BitwardenTwoButtonDialog(
@@ -120,9 +120,7 @@ fun ExportVaultScreen(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
                 throwable = dialog.error,
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(ExportVaultAction.DialogDismiss) }
-                },
+                onDismissRequest = { viewModel.trySendAction(ExportVaultAction.DialogDismiss) },
             )
         }
 
@@ -144,8 +142,8 @@ fun ExportVaultScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ExportVaultAction.CloseButtonClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(ExportVaultAction.CloseButtonClick)
                 },
             )
         },
@@ -155,21 +153,19 @@ fun ExportVaultScreen(
     ) {
         ExportVaultScreenContent(
             state = state,
-            onConfirmFilePasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.ConfirmFilePasswordInputChange(it)) }
+            onConfirmFilePasswordInputChanged = {
+                viewModel.trySendAction(ExportVaultAction.ConfirmFilePasswordInputChange(it))
             },
-            onExportFormatOptionSelected = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.ExportFormatOptionSelect(it)) }
+            onExportFormatOptionSelected = {
+                viewModel.trySendAction(ExportVaultAction.ExportFormatOptionSelect(it))
             },
-            onFilePasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(it)) }
+            onFilePasswordInputChanged = {
+                viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(it))
             },
-            onPasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(it)) }
+            onPasswordInputChanged = {
+                viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(it))
             },
-            onSendCodeClicked = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.SendCodeClick) }
-            },
+            onSendCodeClicked = { viewModel.trySendAction(ExportVaultAction.SendCodeClick) },
             onExportVaultClick = { shouldShowConfirmationDialog = true },
             modifier = Modifier.fillMaxSize(),
         )

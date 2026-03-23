@@ -112,6 +112,7 @@ fun AttachmentsContent(
             BitwardenOutlinedButton(
                 label = stringResource(id = BitwardenString.choose_file),
                 onClick = attachmentsHandlers.onChooseFileClick,
+                isExternalLink = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()

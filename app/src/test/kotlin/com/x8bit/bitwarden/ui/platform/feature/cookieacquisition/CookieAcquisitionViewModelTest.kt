@@ -102,20 +102,6 @@ class CookieAcquisitionViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `WhyAmISeeingThisClick should emit NavigateToHelp event`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CookieAcquisitionAction.WhyAmISeeingThisClick)
-            assertEquals(
-                CookieAcquisitionEvent.NavigateToHelp(
-                    uri = "https://bitwarden.com/help",
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
     fun `CookieCallbackResult Success should store cookies and emit NavigateBack`() =
         runTest {
             val cookies = mapOf("sessionToken" to "abc123")

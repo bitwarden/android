@@ -44,6 +44,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -53,7 +54,6 @@ import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -162,9 +162,7 @@ fun AutoFillScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(AutoFillAction.BackClick) },
             )
         },
     ) {
@@ -203,11 +201,20 @@ private fun AutoFillScreenContent(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
+        val autofillServicesLabel = stringResource(id = BitwardenString.autofill_services)
         BitwardenSwitch(
-            label = stringResource(id = BitwardenString.autofill_services),
+            label = autofillServicesLabel,
             supportingText = stringResource(
                 id = BitwardenString.autofill_services_explanation_long,
             ),
+            contentDescription = if (state.isAutoFillServicesEnabled) {
+                autofillServicesLabel
+            } else {
+                stringResource(
+                    id = BitwardenString.external_link_format,
+                    formatArgs = arrayOf(autofillServicesLabel),
+                )
+            },
             isChecked = state.isAutoFillServicesEnabled,
             onCheckedChange = autoFillHandlers.onAutofillServicesClick,
             cardStyle = CardStyle.Full,
@@ -265,11 +272,12 @@ private fun AutoFillScreenContent(
             BitwardenTextRow(
                 text = stringResource(BitwardenString.privileged_apps),
                 onClick = autoFillHandlers.onPrivilegedAppsClick,
-                tooltip = TooltipData(
+                helpData = BitwardenHelpButtonData(
                     contentDescription = stringResource(
                         id = BitwardenString.learn_more_about_privileged_apps,
                     ),
                     onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+                    isExternalLink = false,
                 ),
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
@@ -398,7 +406,7 @@ private fun AutofillCallToActionCard(
                     trailingContent = {
                         Icon(
                             painter = rememberVectorPainter(BitwardenDrawable.ic_chevron_right),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = BitwardenString.external_link),
                             tint = BitwardenTheme.colorScheme.icon.primary,
                         )
                     },

@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -80,16 +79,12 @@ fun FoldersScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(FoldersAction.CloseButtonClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(FoldersAction.CloseButtonClick) },
             )
         },
         floatingActionButton = {
             BitwardenFloatingActionButton(
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
-                },
+                onClick = { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) },
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                 contentDescription = stringResource(id = BitwardenString.add_item),
                 modifier = Modifier
@@ -103,9 +98,7 @@ fun FoldersScreen(
             is FoldersState.ViewState.Content -> {
                 FoldersContent(
                     foldersList = viewState.folderList.toImmutableList(),
-                    onItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(FoldersAction.FolderClick(it)) }
-                    },
+                    onItemClick = { viewModel.trySendAction(FoldersAction.FolderClick(it)) },
                     modifier = Modifier.fillMaxSize(),
                 )
             }

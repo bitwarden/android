@@ -33,9 +33,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.MINIMUM_CXP_GMS_VERSION
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -46,6 +49,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
@@ -59,6 +63,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
@@ -103,6 +108,7 @@ class VaultViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val clock: Clock,
     private val policyManager: PolicyManager,
+    private val premiumStateManager: PremiumStateManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -111,14 +117,22 @@ class VaultViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val gmsManager: GmsManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val accountSummaries = userState.toAccountSummaries()
-        val activeAccountSummary = userState.toActiveAccountSummary()
-        val vaultFilterData = userState.activeAccount.toVaultFilterData(
+        val userState = authRepository.userStateFlow.value
+        val accountSummaries = userState?.toAccountSummaries().orEmpty()
+        val activeAccount = userState?.activeAccount ?: run {
+            // We use this empty account to avoid a crash that can occur during a race condition.
+            // The state-based navigation brought us here but the UserState has now been set to
+            // null, we just need to wait here a short while longer and state-based navigation will
+            // get us out of here.
+            UserState.EMPTY_ACCOUNT
+        }
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
+        val vaultFilterData = activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any(),
@@ -131,11 +145,11 @@ class VaultViewModel @Inject constructor(
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            isPremium = userState.activeAccount.isPremium,
+            isPremium = activeAccount.isPremium,
             isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
-            baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
-            hasMasterPassword = userState.activeAccount.hasMasterPassword,
+            baseIconUrl = activeAccount.environment.environmentUrlData.baseIconUrl,
+            hasMasterPassword = activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
             flightRecorderSnackBar = settingsRepository
@@ -225,6 +239,16 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        premiumStateManager
+            .isPremiumUpgradeBannerEligibleFlow
+            .map {
+                VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive(
+                    isEligible = it,
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -373,6 +397,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradePremium -> {
+                premiumStateManager.dismissPremiumUpgradeBanner()
+            }
+
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
@@ -381,9 +409,15 @@ class VaultViewModel @Inject constructor(
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradePremium -> {
+                // Navigation to Plan screen wired in PM-33515/PM-33516.
+            }
+
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
-                sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
+                sendEvent(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                )
             }
         }
     }
@@ -944,6 +978,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
+
+            is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
+                handlePremiumUpgradeBannerEligibilityReceive(action)
+            }
         }
     }
 
@@ -988,7 +1026,9 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
     ) {
         viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled) {
+            if (action.isCredentialExchangeProtocolExportEnabled &&
+                gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION)
+            ) {
                 credentialExchangeRegistryManager.register()
             } else {
                 credentialExchangeRegistryManager.unregister()
@@ -1009,7 +1049,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
                             error = result.error,
                         ),
                     )
@@ -1030,7 +1071,8 @@ class VaultViewModel @Inject constructor(
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                             error = result.error,
                         ),
                     )
@@ -1049,6 +1091,14 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
+        }
+    }
+
+    private fun handlePremiumUpgradeBannerEligibilityReceive(
+        action: VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPremiumUpgradeBannerEligible = action.isEligible)
         }
     }
 
@@ -1190,7 +1240,8 @@ class VaultViewModel @Inject constructor(
             isPremium = state.isPremium,
             hasMasterPassword = state.hasMasterPassword,
             errorTitle = BitwardenString.an_error_has_occurred.asText(),
-            errorMessage = BitwardenString.generic_error_message.asText(),
+            errorMessage = vaultData.error.userFriendlyMessage?.asText()
+                ?: BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             isArchiveEnabled = state.isArchiveEnabled,
@@ -1437,7 +1488,7 @@ class VaultViewModel @Inject constructor(
  * @property accountSummaries List of all the current accounts.
  * @property viewState The specific view state representing loading, no items, or content state.
  * @property dialog Information about any dialogs that may need to be displayed.
- * @property isSwitchingAccounts Whether or not we are actively switching accounts.
+ * @property isSwitchingAccounts Whether we are actively switching accounts.
  * @property isPremium Whether the user is a premium user.
  */
 @Parcelize
@@ -1464,6 +1515,7 @@ data class VaultState(
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
+    val isPremiumUpgradeBannerEligible: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1471,9 +1523,13 @@ data class VaultState(
      */
     val actionCard: ActionCardState?
         get() = (viewState as? ViewState.Content)?.let {
-            ActionCardState.IntroducingArchive.takeIf {
-                isPremium && !isIntroducingArchiveActionCardDismissed && isArchiveEnabled
-            }
+            ActionCardState.UpgradePremium
+                .takeIf { isPremiumUpgradeBannerEligible }
+                ?: ActionCardState.IntroducingArchive.takeIf {
+                    isPremium &&
+                        !isIntroducingArchiveActionCardDismissed &&
+                        isArchiveEnabled
+                }
         }
 
     /**
@@ -1500,8 +1556,7 @@ data class VaultState(
     sealed class ViewState : Parcelable {
 
         /**
-         * Determines whether or not the Floating Action Button (FAB) should be shown for the
-         * given state.
+         * Determines whether the Floating Action Button (FAB) should be shown for the given state.
          */
         abstract val hasFab: Boolean
 
@@ -1791,6 +1846,11 @@ data class VaultState(
      * Represents an action card to be displayed.
      */
     sealed class ActionCardState {
+        /**
+         * Indicates that the user is eligible for a premium upgrade.
+         */
+        data object UpgradePremium : ActionCardState()
+
         /**
          * Indicates that the archive feature is ready for use.
          */
@@ -2282,7 +2342,7 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates that the flight recorder data was received.
@@ -2347,6 +2407,14 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the premium upgrade banner eligibility has been
+         * updated.
+         */
+        data class PremiumUpgradeBannerEligibilityReceive(
+            val isEligible: Boolean,
         ) : Internal()
     }
 }

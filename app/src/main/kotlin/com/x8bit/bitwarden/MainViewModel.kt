@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
+import com.x8bit.bitwarden.ui.platform.util.isPremiumCheckoutCallback
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -333,6 +334,7 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
+        val hasPremiumCheckoutCallback = intent.isPremiumCheckoutCallback
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
         val importCredentialsRequest = intent.getProviderImportCredentialsRequest()
         val credentialProviderRequest =
@@ -392,6 +394,11 @@ class MainViewModel @Inject constructor(
                         // Send task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
                     )
+            }
+
+            hasPremiumCheckoutCallback -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.PremiumCheckoutResult
             }
 
             hasGeneratorShortcut -> {

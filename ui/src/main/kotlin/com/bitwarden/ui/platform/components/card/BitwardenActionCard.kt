@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -140,11 +139,9 @@ fun BitwardenActionCard(
         )
         secondaryButton?.let {
             BitwardenTextButton(
-                label = it.label(),
-                onClick = it.onClick,
+                buttonData = it,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .nullableTestTag(tag = it.testTag)
                     .fillMaxWidth(),
             )
         }

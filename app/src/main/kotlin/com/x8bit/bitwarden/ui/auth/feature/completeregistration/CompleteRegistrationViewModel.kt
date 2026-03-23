@@ -432,7 +432,7 @@ data class CompleteRegistrationState(
     val minimumPasswordLength: Int,
 ) : Parcelable {
     /**
-     * Whether or not the provided master password is considered strong.
+     * Whether the provided master password is considered strong.
      */
     val isMasterPasswordStrong: Boolean
         get() = when (passwordStrengthState) {

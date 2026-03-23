@@ -42,7 +42,7 @@
     <string name="master_password">รหัสผ่านหลัก</string>
     <string name="master_password_required">รหัสผ่านหลัก (จำเป็น)</string>
     <string name="new_master_password_required">รหัสผ่านหลักใหม่ (จำเป็น)</string>
-    <string name="more">เพิ่มเติม</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">ตู้เซฟของฉัน</string>
     <string name="name">ชื่อ</string>
     <string name="item_name_required">ชื่อรายการ (จำเป็น)</string>
@@ -199,6 +199,8 @@
     <string name="copy_totp_automatically">คัดลอก TOTP อัตโนมัติ</string>
     <string name="premium_required">จำเป็นต้องมีสมาชิกระดับพรีเมียมเพื่อใช้คุณลักษณะนี้</string>
     <string name="attachment_deleted">ลบสิ่งที่แนบมา</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">เลือกไฟล์</string>
     <string name="file">ไฟล์</string>
     <string name="no_file_chosen">ไม่มีไฟล์ที่เลือก</string>
@@ -831,6 +833,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">กรอกแบบฟอร์มและ <annotation emphasis="bold">นำเข้าไฟล์รหัสผ่านที่บันทึกไว้ของคุณ</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">เพื่อความปลอดภัย โปรดแน่ใจว่าได้ <annotation emphasis="bold">ลบไฟล์รหัสผ่านที่บันทึกไว้ของคุณ</annotation></string>
     <string name="need_help_check_out_import_help">ต้องการความช่วยเหลือหรือไม่ ดู<annotation link="importHelp">วิธีนำเข้า</annotation></string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">บันทึกไฟล์ที่ส่งออก</annotation> ไว้ในตำแหน่งบนคอมพิวเตอร์ที่คุณหาได้ง่าย</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">นี่ไม่ใช่เซิร์ฟเวอร์ Bitwarden ที่รู้จัก คุณอาจต้องตรวจสอบกับผู้ให้บริการของคุณหรืออัปเดตเซิร์ฟเวอร์</string>
     <string name="syncing_logins_loading_message">กำลังซิงค์ข้อมูลเข้าสู่ระบบ…</string>
@@ -856,7 +859,7 @@
     <string name="copy_fingerprint">คัดลอกลายนิ้วมือ</string>
     <string name="enable_notifications">เปิดการแจ้งเตือน</string>
     <plurals name="notifications_content_description">
-        <item quantity="other">%d notifications</item>
+        <item quantity="other">%d การแจ้งเตือน</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">เข้าสู่ระบบอย่างรวดเร็วและง่ายดายข้ามอุปกรณ์</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden สามารถแจ้งเตือนคุณทุกครั้งที่คุณได้รับคำขอเข้าสู่ระบบใหม่จากอุปกรณ์อื่น</string>
@@ -1210,5 +1213,6 @@
     <string name="sync_with_browser_description">เมื่อต้องการเชื่อมต่อกับ %1$s ให้ซิงค์เบราว์เซอร์เริ่มต้นกับแอปมือถือ Bitwarden เมื่อเบราว์เซอร์เปิดขึ้น ให้เข้าสู่ระบบให้เสร็จสิ้นหากได้รับแจ้ง\nเมื่อซิงค์เสร็จแล้ว ระบบจะพากลับมาที่แอปนี้</string>
     <string name="launch_browser">เปิดบราว์เซอร์</string>
     <string name="continue_without_syncing">ดำเนินการต่อโดยไม่ซิงค์</string>
-    <string name="external_link">External link</string>
+    <string name="external_link">ลิงก์ภายนอก</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
 </resources>

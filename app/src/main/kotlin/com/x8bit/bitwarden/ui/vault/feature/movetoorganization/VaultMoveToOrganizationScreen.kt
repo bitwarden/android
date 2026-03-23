@@ -6,7 +6,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -42,20 +41,14 @@ fun VaultMoveToOrganizationScreen(
     }
     VaultMoveToOrganizationScaffold(
         state = state,
-        closeClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.BackClick) }
+        closeClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.BackClick) },
+        moveClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick) },
+        dismissClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.DismissClick) },
+        organizationSelect = {
+            viewModel.trySendAction(VaultMoveToOrganizationAction.OrganizationSelect(it))
         },
-        moveClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick) }
-        },
-        dismissClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.DismissClick) }
-        },
-        organizationSelect = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.OrganizationSelect(it)) }
-        },
-        collectionSelect = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.CollectionSelect(it)) }
+        collectionSelect = {
+            viewModel.trySendAction(VaultMoveToOrganizationAction.CollectionSelect(it))
         },
     )
 }

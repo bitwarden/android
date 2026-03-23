@@ -92,7 +92,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -1155,6 +1154,46 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createVaultItemListingViewModel()
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.archiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns ArchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            assertEquals(
+                createVaultItemListingState(
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `UnarchiveClick with UnarchiveCipherResult Success should emit a ShowSnackbar event`() =
         runTest {
@@ -1214,6 +1253,46 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createVaultItemListingViewModel()
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.unarchiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns UnarchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            assertEquals(
+                createVaultItemListingState(
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
@@ -5451,15 +5530,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 number = 1,
                 totp = "mockTotp-1",
             )
-            val mockLoginView = createMockLoginView(
-                number = 1,
-                totp = "mockTotp-1",
-                clock = clock,
-                password = "mockPassword-1",
-                fido2Credentials = null,
-            )
-            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(1)
-                .copy(cipherId = "mockId-1")
+            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
                     passwordGetRequest = mockGetPasswordRequest,
@@ -5498,7 +5569,69 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        result = GetPasswordCredentialResult.Success(mockLoginView),
+                        result = GetPasswordCredentialResult.Success(
+                            username = "mockUsername-1",
+                            password = "mockPassword-1",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertNull(viewModel.stateFlow.value.dialogState)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserVerificationSuccess should set isUserVerified to true, and emit CompleteGetPassword with error result`() =
+        runTest {
+            val mockLoginListView = createMockLoginListView(
+                number = 1,
+                totp = "mockTotp-1",
+            )
+            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(number = 1)
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderGetPasswordRequest(
+                    passwordGetRequest = mockGetPasswordRequest,
+                )
+            every {
+                ProviderGetCredentialRequest.fromBundle(any())
+            } returns mockk(relaxed = true) {
+                every {
+                    credentialOptions
+                } returns listOf(
+                    mockk<GetPasswordOption>(relaxed = true),
+                )
+            }
+            every {
+                vaultRepository
+                    .decryptCipherListResultStateFlow
+                    .value
+                    .data
+            } returns createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Login(mockLoginListView),
+                    ),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationSuccess(
+                    selectedCipherView = createMockCipherView(number = 1, password = ""),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                        result = GetPasswordCredentialResult.Error(
+                            message = BitwardenString
+                                .password_operation_failed_because_the_selected_item_does_not_have_a_valid_password
+                                .asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -6098,6 +6231,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

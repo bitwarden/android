@@ -150,6 +150,28 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `clear SSO cookies should send ClearSsoCookies action`() {
+        composeTestRule
+            .onNodeWithText("Clear SSO cookies")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ClearSsoCookies) }
+    }
+
+    @Test
+    fun `reset premium upgrade banner should send ResetPremiumUpgradeBanner action`() {
+        composeTestRule
+            .onNodeWithText("Reset premium upgrade banner")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(DebugMenuAction.ResetPremiumUpgradeBanner)
+        }
+    }
+
+    @Test
     fun `reset all coach mark tours should send ResetCoachMarkTourStatuses action`() {
         composeTestRule
             .onNodeWithText("Reset all coach mark tours")

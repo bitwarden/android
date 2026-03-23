@@ -496,6 +496,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         ),
         UserState.Account(
             userId = USER_ID_2,
@@ -516,6 +517,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

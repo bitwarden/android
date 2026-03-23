@@ -33,11 +33,11 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
-                CipherKeyEncryption,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 ArchiveItems,
                 SendEmailVerification,
+                MobilePremiumUpgrade,
             )
         }
     }
@@ -57,14 +57,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-export-mobile"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Cipher Key Encryption feature.
-     */
-    data object CipherKeyEncryption : FlagKey<Boolean>() {
-        override val keyName: String = "cipher-key-encryption"
         override val defaultValue: Boolean = false
     }
 
@@ -113,6 +105,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SendEmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "pm-19051-send-email-verification"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the mobile premium upgrade feature.
+     */
+    data object MobilePremiumUpgrade : FlagKey<Boolean>() {
+        override val keyName: String = "PM-31697-premium-upgrade-path"
         override val defaultValue: Boolean = false
     }
 

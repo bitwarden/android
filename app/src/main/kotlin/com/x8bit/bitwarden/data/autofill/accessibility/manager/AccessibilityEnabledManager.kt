@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.manager
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * A container for values specifying whether or not the accessibility service is enabled.
+ * A container for values specifying whether the accessibility service is enabled.
  */
 interface AccessibilityEnabledManager {
     /**

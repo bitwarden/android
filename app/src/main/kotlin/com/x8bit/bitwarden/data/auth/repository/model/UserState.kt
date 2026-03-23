@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import java.time.Instant
 
 /**
  * Represents the overall "user state" of the current active user as well as any users that may be
@@ -43,7 +45,7 @@ data class UserState(
      * @property isPremium `true` if the account has a premium membership.
      * @property isLoggedIn `true` if the account is logged in, or `false` if it requires additional
      * authentication to view their vault.
-     * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
+     * @property isVaultUnlocked Whether the user's vault is currently unlocked.
      * @property needsPasswordReset If the user needs to reset their password.
      * @property needsMasterPassword Indicates whether the user needs to create a password (e.g.
      * they logged in using SSO and don't yet have one). NOTE: This should **not** be used to
@@ -55,6 +57,7 @@ data class UserState(
      * user's vault is enabled.
      * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
      * @property isUsingKeyConnector Indicates if the account is currently using a key connector.
+     * @property creationDate The date the account was created, if available.
      */
     data class Account(
         val userId: String,
@@ -76,6 +79,7 @@ data class UserState(
         val onboardingStatus: OnboardingStatus,
         val firstTimeState: FirstTimeState,
         val isExportable: Boolean,
+        val creationDate: Instant?,
     ) {
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.
@@ -96,4 +100,33 @@ data class UserState(
         val hasLoginApprovingDevice: Boolean,
         val hasResetPasswordPermission: Boolean,
     )
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * A basic empty account model.
+         */
+        val EMPTY_ACCOUNT: Account = Account(
+            userId = "",
+            name = null,
+            email = "",
+            avatarColorHex = "".toHexColorRepresentation(),
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            organizations = emptyList(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            needsMasterPassword = false,
+            hasMasterPassword = true,
+            trustedDevice = null,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(),
+            isExportable = false,
+            creationDate = null,
+        )
+    }
 }

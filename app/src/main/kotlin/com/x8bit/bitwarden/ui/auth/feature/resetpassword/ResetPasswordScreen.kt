@@ -16,7 +16,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -75,9 +74,7 @@ fun ResetPasswordScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(ResetPasswordAction.DialogDismiss) }
-                },
+                onDismissRequest = { viewModel.trySendAction(ResetPasswordAction.DialogDismiss) },
             )
         }
 
@@ -89,9 +86,7 @@ fun ResetPasswordScreen(
     }
 
     var shouldShowLogoutConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    val onLogoutClicked = remember(viewModel) {
-        { viewModel.trySendAction(ResetPasswordAction.ConfirmLogoutClick) }
-    }
+    val onLogoutClicked = { viewModel.trySendAction(ResetPasswordAction.ConfirmLogoutClick) }
     if (shouldShowLogoutConfirmationDialog) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = BitwardenString.log_out),
@@ -120,13 +115,10 @@ fun ResetPasswordScreen(
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(ResetPasswordAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(ResetPasswordAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(BitwardenString.log_out),
@@ -140,20 +132,20 @@ fun ResetPasswordScreen(
     ) {
         ResetPasswordScreenContent(
             state = state,
-            onCurrentPasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(it)) }
+            onCurrentPasswordInputChanged = {
+                viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(it))
             },
-            onPasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(it)) }
+            onPasswordInputChanged = {
+                viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(it))
             },
-            onRetypePasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(it)) }
+            onRetypePasswordInputChanged = {
+                viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(it))
             },
-            onPasswordHintInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged(it)) }
+            onPasswordHintInputChanged = {
+                viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged(it))
             },
-            onLearnToPreventLockout = remember(viewModel) {
-                { viewModel.trySendAction(ResetPasswordAction.LearnHowPreventLockoutClick) }
+            onLearnToPreventLockout = {
+                viewModel.trySendAction(ResetPasswordAction.LearnHowPreventLockoutClick)
             },
             modifier = Modifier.fillMaxSize(),
         )

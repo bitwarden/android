@@ -1,19 +1,20 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
-import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -160,7 +161,7 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow item click should display menu`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -180,7 +181,7 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on sync click should send SyncClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -196,7 +197,7 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on lock click should send LockClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -212,7 +213,7 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on about send click should send AboutSendClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -451,7 +452,9 @@ class SendScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText(DEFAULT_SEND_ITEM.name)
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -461,8 +464,10 @@ class SendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertDoesNotExist()
+            .onNodeWithText(DEFAULT_SEND_ITEM.name)
+            .onChildren()
+            .filter(hasContentDescription("More options"))
+            .assertCountEquals(0)
     }
 
     @Test
@@ -474,7 +479,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -483,9 +488,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -504,7 +514,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -513,9 +523,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -540,7 +555,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -549,9 +564,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -576,7 +596,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -585,9 +605,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -612,7 +637,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -621,9 +646,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -648,7 +678,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -657,9 +687,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -684,7 +719,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -693,9 +728,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -719,7 +759,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -728,9 +768,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -760,7 +805,7 @@ class SendScreenTest : BitwardenComposeTest() {
                     fileTypeCount = 1,
                     sendItems = listOf(
                         DEFAULT_SEND_ITEM,
-                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
                     ),
                 ),
             )
@@ -769,9 +814,14 @@ class SendScreenTest : BitwardenComposeTest() {
 
         // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
         composeTestRule
-            .onAllNodesWithContentDescription("Options")
-            .apply { onLast().performScrollTo() }
-            .onFirst()
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 

@@ -9,7 +9,7 @@ Use this framework to classify findings during code review. Clear prioritization
 - [⚠️ IMPORTANT (Should Fix)](#important-should-fix)
 - [♻️ DEBT (Technical Debt)](#debt-technical-debt)
 - [🎨 SUGGESTED (Nice to Have)](#suggested-nice-to-have)
-- [💭 QUESTION (Seeking Clarification)](#question-seeking-clarification)
+- [❓ QUESTION (Seeking Clarification)](#question-seeking-clarification)
 - [Optional (Acknowledge But Don't Require)](#optional-acknowledge-but-dont-require)
 
 **Guidelines:**
@@ -170,13 +170,12 @@ Will require rework when experimentation framework launches.
 
 ## 🎨 **SUGGESTED** (Nice to Have)
 
-These are improvement opportunities but not required. Consider the effort vs. benefit before requesting changes.
+Improvements with measurable value only. A finding qualifies as SUGGESTED if it provides: security gain, cyclomatic complexity reduction, bug class prevention, or elimination of an O(n²) pattern. Subjective style preferences, vague simplifications, and naming nitpicks do not qualify — leave those out entirely or raise in conversation.
 
 ### Code Quality
-- Minor style inconsistencies (if not caught by linter)
-- Opportunities for DRY improvements
-- Better variable naming for clarity
-- Simplification opportunities
+- Extractable duplicated logic that reduces measurable complexity or improves testability
+- Patterns that would prevent a recurring bug class in this module
+- Architecture improvements that eliminate tight coupling with measurable impact
 
 **Example**:
 ```
@@ -208,7 +207,7 @@ Could be extracted to separate validator class for reusability and testing.
 
 ---
 
-## 💭 **QUESTION** (Seeking Clarification)
+## ❓ **QUESTION** (Seeking Clarification)
 
 Questions about requirements, unclear intent, or potential conflicts that require human knowledge to answer. Open inquiries that cannot be resolved through code inspection alone.
 

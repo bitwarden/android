@@ -41,7 +41,7 @@ private const val ANDROID_APP_URI_SCHEME: String = "androidapp://"
 fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHARACTER
 
 /**
- * Whether or not string is a valid email address.
+ * Whether the string is a valid email address.
  *
  * By default, this function will [useStrictValidation] by asserting that:
  * * The string starts with a string of characters including periods, underscores, percent symbols,
@@ -54,7 +54,7 @@ fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHAR
  * When [useStrictValidation] is `false`, this function will only assert that the string contains an
  * '@' symbol.
  *
- * @param useStrictValidation Whether or not to use strict validation. Defaults to `true`.
+ * @param useStrictValidation Whether to use strict validation. Defaults to `true`.
  */
 fun String.isValidEmail(useStrictValidation: Boolean = true): Boolean =
     if (useStrictValidation) {

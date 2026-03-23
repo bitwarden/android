@@ -23,18 +23,23 @@ class SdkRepositoryFactoryTests {
     )
 
     @Test
-    fun `getCipherRepository should create a new client`() {
+    fun `getRepositories should create a new client`() {
         val userId = "userId"
-        val firstClient = sdkRepoFactory.getCipherRepository(userId = userId)
+        val firstClient = sdkRepoFactory.getRepositories(userId = userId)
 
         // Additional calls for the same userId should create a repo
-        val secondClient = sdkRepoFactory.getCipherRepository(userId = userId)
+        val secondClient = sdkRepoFactory.getRepositories(userId = userId)
         assertNotEquals(firstClient, secondClient)
 
         // Additional calls for different userIds should return a different repo
         val otherUserId = "otherUserId"
-        val thirdClient = sdkRepoFactory.getCipherRepository(userId = otherUserId)
+        val thirdClient = sdkRepoFactory.getRepositories(userId = otherUserId)
         assertNotEquals(firstClient, thirdClient)
+
+        // Null should get its own client too
+        val fourthClient = sdkRepoFactory.getRepositories(userId = null)
+        assertNotEquals(firstClient, fourthClient)
+        assertNotEquals(thirdClient, fourthClient)
     }
 
     @Test

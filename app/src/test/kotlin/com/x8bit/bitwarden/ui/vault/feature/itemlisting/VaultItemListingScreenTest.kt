@@ -1,13 +1,17 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -46,7 +50,6 @@ import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -187,13 +190,13 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `overflow menu should update according to state`() {
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
 
         mutableStateFlow.value = STATE_FOR_AUTOFILL
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .assertDoesNotExist()
     }
 
@@ -1352,7 +1355,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow item click should display menu`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1368,7 +1371,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `on sync click should send SyncClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1384,7 +1387,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `on lock click should send LockClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1413,7 +1416,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1456,7 +1461,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1482,8 +1489,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertIsDisplayed()
+            .onAllNodesWithContentDescription("More options")
+            .assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(
@@ -1492,8 +1499,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertDoesNotExist()
+            .onAllNodesWithContentDescription("More options")
+            .assertCountEquals(1)
     }
 
     @Test
@@ -1511,7 +1518,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -1537,7 +1546,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1556,7 +1567,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1575,7 +1588,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1593,7 +1608,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1611,7 +1628,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1647,7 +1666,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -2034,7 +2055,10 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
-        val result = GetPasswordCredentialResult.Success(createMockLoginView(1))
+        val result = GetPasswordCredentialResult.Success(
+            username = "mockUsername-1",
+            password = "mockPassword-1",
+        )
         mutableEventFlow.tryEmit(
             VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
         )
@@ -2492,7 +2516,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

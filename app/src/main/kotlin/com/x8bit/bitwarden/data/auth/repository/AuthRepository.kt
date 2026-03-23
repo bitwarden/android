@@ -136,7 +136,7 @@ interface AuthRepository :
     val organizations: List<Organization>
 
     /**
-     * Whether or not the welcome carousel should be displayed, based on the feature flag and
+     * Whether the welcome carousel should be displayed, based on the feature flag and
      * whether the user has ever logged in or created an account before.
      */
     val showWelcomeCarousel: Boolean

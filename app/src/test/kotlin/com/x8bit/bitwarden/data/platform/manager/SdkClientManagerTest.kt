@@ -22,7 +22,7 @@ class SdkClientManagerTest {
         every { loadLibrary(any()) } returns Result.success(Unit)
     }
     private val sdkRepoFactory: SdkRepositoryFactory = mockk {
-        every { getCipherRepository(userId = any()) } returns mockk()
+        every { getRepositories(userId = any()) } returns mockk()
     }
     private val sdkPlatformApiFactory: SdkPlatformApiFactory = mockk {
         every { getServerCommunicationConfigPlatformApi() } returns mockk()

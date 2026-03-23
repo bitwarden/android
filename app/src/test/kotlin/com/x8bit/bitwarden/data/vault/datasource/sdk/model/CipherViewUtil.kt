@@ -34,7 +34,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
  * Create a mock [CipherView].
  *
  * @param number the number to create the cipher with.
- * @param isDeleted whether or not the cipher has been deleted.
+ * @param isDeleted whether the cipher has been deleted.
  * @param cipherType the type of cipher to create.
  */
 @Suppress("LongParameterList")
@@ -61,6 +61,9 @@ fun createMockCipherView(
     card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
     isArchived: Boolean = false,
+    passwordHistory: List<PasswordHistoryView> = listOf(
+        createMockPasswordHistoryView(number = number, clock),
+    ),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -92,7 +95,7 @@ fun createMockCipherView(
         },
         sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
         favorite = false,
-        passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
+        passwordHistory = passwordHistory,
         permissions = createMockSdkCipherPermissions(),
         reprompt = repromptType,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },

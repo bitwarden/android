@@ -17,10 +17,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.CipherKeyEncryption.keyName,
-            "cipher-key-encryption",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -40,6 +36,10 @@ class FlagKeyTest {
             FlagKey.SendEmailVerification.keyName,
             "pm-19051-send-email-verification",
         )
+        assertEquals(
+            FlagKey.MobilePremiumUpgrade.keyName,
+            "PM-31697-premium-upgrade-path",
+        )
     }
 
     @Test
@@ -48,12 +48,12 @@ class FlagKeyTest {
             listOf(
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.CipherKeyEncryption,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.ArchiveItems,
                 FlagKey.SendEmailVerification,
+                FlagKey.MobilePremiumUpgrade,
             ).all {
                 !it.defaultValue
             },

@@ -31,7 +31,7 @@ interface CollectionsDao {
      * Retrieves all collections from the database for a given [userId].
      */
     @Query("SELECT * FROM collections WHERE user_id = :userId")
-    fun getAllCollections(userId: String): Flow<List<CollectionEntity>>
+    fun getAllCollectionsFlow(userId: String): Flow<List<CollectionEntity>>
 
     /**
      * Deletes all the stored collections associated with the given [userId]. This will return the

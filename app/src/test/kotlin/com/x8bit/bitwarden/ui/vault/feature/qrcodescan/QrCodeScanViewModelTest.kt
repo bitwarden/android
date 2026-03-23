@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -104,8 +105,36 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(): QrCodeScanViewModel =
+    @Test
+    fun `QrCodeScanReceive scan already handled should emit NavigateBack without emitting code`() =
+        runTest {
+            val viewModel = createViewModel()
+            val validCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP"
+            val result = TotpCodeResult.Success(validCode)
+            every { validCode.getTotpDataOrNull() } returns mockk()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
+                assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
+                expectNoEvents()
+            }
+
+            // emitTotpCodeResult called exactly once across both actions
+            verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
+            val expectedState = DEFAULT_STATE.copy(hasHandledScan = true)
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    private fun createViewModel(
+        initialState: QrCodeScanState? = null,
+    ): QrCodeScanViewModel =
         QrCodeScanViewModel(
+            savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
             vaultRepository = vaultRepository,
         )
+
+    private val DEFAULT_STATE = QrCodeScanState(
+        hasHandledScan = false,
+    )
 }

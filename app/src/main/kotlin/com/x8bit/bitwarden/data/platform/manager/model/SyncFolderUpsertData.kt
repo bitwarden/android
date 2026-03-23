@@ -9,7 +9,7 @@ import java.time.Instant
  * @property folderId The folder ID.
  * @property revisionDate The folder's revision date. This is used to determine if the local copy of
  * the folder is out-of-date.
- * @property isUpdate Whether or not this is an update of an existing folder.
+ * @property isUpdate Whether this is an update of an existing folder.
  */
 data class SyncFolderUpsertData(
     val userId: String,

@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.manager.model.DownloadResult
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
@@ -2615,7 +2616,7 @@ class CipherManagerTest {
                 vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
             } returns originalCipher
             coEvery {
-                vaultDiskSource.getCollections(userId = userId)
+                vaultDiskSource.getCollectionsFlow(userId = userId)
             } returns MutableStateFlow(listOf(collection))
             coEvery {
                 ciphersService.getCipher(cipherId = cipherId)
@@ -2659,7 +2660,7 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { vaultDiskSource.getCipher(any(), any()) } returns originalCipher
             coEvery {
-                vaultDiskSource.getCollections(userId = userId)
+                vaultDiskSource.getCollectionsFlow(userId = userId)
             } returns MutableStateFlow(listOf(collection))
 
             coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()
@@ -2932,6 +2933,114 @@ class CipherManagerTest {
             vaultDiskSource.saveCipher(userId = userId, cipher = any())
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hardDeleteCipher with CookieRedirectException should return DeleteCipherResult Error with errorMessage`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            val error = CookieRedirectException("test.host")
+            coEvery {
+                ciphersService.hardDeleteCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.hardDeleteCipher(cipherId)
+
+            assertEquals(
+                DeleteCipherResult.Error(
+                    errorMessage = "Your request was interrupted because " +
+                        "the app needed to re-authenticate. Please try again.",
+                    error = error,
+                ),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softDeleteCipher with CookieRedirectException should return DeleteCipherResult Error with errorMessage`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val encryptionContext = createMockEncryptionContext(number = 1)
+            val error = CookieRedirectException("test.host")
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns encryptionContext.asSuccess()
+            coEvery {
+                ciphersService.softDeleteCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.softDeleteCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(
+                DeleteCipherResult.Error(
+                    errorMessage = "Your request was interrupted because " +
+                        "the app needed to re-authenticate. Please try again.",
+                    error = error,
+                ),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `restoreCipher with CookieRedirectException should return RestoreCipherResult Error with errorMessage`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val error = CookieRedirectException("test.host")
+            coEvery {
+                ciphersService.restoreCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.restoreCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(
+                RestoreCipherResult.Error(
+                    errorMessage = "Your request was interrupted because " +
+                        "the app needed to re-authenticate. Please try again.",
+                    error = error,
+                ),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `archiveCipher with CookieRedirectException should return ArchiveCipherResult Error with errorMessage`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            val error = CookieRedirectException("test.host")
+            coEvery {
+                ciphersService.archiveCipher(cipherId = cipherId)
+            } returns error.asFailure()
+
+            val result = cipherManager.archiveCipher(
+                cipherId = cipherId,
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(
+                ArchiveCipherResult.Error(
+                    errorMessage = "Your request was interrupted because " +
+                        "the app needed to re-authenticate. Please try again.",
+                    error = error,
+                ),
+                result,
+            )
+        }
 
     private fun setupMockUri(
         url: String,

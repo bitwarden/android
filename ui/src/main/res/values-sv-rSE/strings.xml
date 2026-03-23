@@ -42,7 +42,7 @@
     <string name="master_password">Huvudlösenord</string>
     <string name="master_password_required">Huvudlösenord (obligatoriskt)</string>
     <string name="new_master_password_required">Nytt huvudlösenord (krävs)</string>
-    <string name="more">Mer</string>
+    <string name="more_options">Fler alternativ</string>
     <string name="my_vault">Mitt valv</string>
     <string name="name">Namn</string>
     <string name="item_name_required">Objektnamn (krävs)</string>
@@ -200,6 +200,8 @@ Skanningen sker automatiskt.</string>
     <string name="copy_totp_automatically">Kopiera TOTP automatiskt</string>
     <string name="premium_required">Ett premium-medlemskap krävs för att använda den här funktionen.</string>
     <string name="attachment_deleted">Bilaga borttagen</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Välj fil</string>
     <string name="file">Fil</string>
     <string name="no_file_chosen">Ingen fil vald</string>
@@ -836,6 +838,7 @@ Vill du byta till detta konto?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fyll i formuläret och <annotation emphasis="bold">importera din sparade lösenordsfil.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">För din egen säkerhets skull bör du <annotation emphasis="bold">ta bort din sparade lösenordsfil.</annotation></string>
     <string name="need_help_check_out_import_help">Behöver du hjälp? Kolla in <annotation link="importHelp">importhjälp</annotation>.</string>
+    <string name="import_help">importhjälp</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Spara den exporterade filen</annotation> på ett ställe på datorn som du lätt kan hitta.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Detta är inte en erkänd Bitwarden-server. Du kan behöva kontrollera med din leverantör eller uppdatera din server.</string>
     <string name="syncing_logins_loading_message">Synkroniserar inloggningar…</string>
@@ -1219,5 +1222,6 @@ Vill du byta till detta konto?</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">Starta webbläsare</string>
     <string name="continue_without_syncing">Fortsätt utan att synkronisera</string>
-    <string name="external_link">External link</string>
+    <string name="external_link">Extern länk</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, extern länk</string>
 </resources>

@@ -297,6 +297,7 @@ dependencies {
     standardImplementation(libs.google.firebase.cloud.messaging)
     standardImplementation(platform(libs.google.firebase.bom))
     standardImplementation(libs.google.firebase.crashlytics)
+    standardImplementation(libs.google.billing)
     standardImplementation(libs.google.play.review)
 
     // Pull in test fixtures from other modules

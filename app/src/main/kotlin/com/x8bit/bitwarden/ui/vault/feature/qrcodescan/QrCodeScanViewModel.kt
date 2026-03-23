@@ -1,11 +1,18 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * Handles [QrCodeScanAction] and launches [QrCodeScanEvent] for the [QrCodeScanScreen].
@@ -13,8 +20,10 @@ import javax.inject.Inject
 @HiltViewModel
 class QrCodeScanViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
-) : BaseViewModel<Unit, QrCodeScanEvent, QrCodeScanAction>(
-    initialState = Unit,
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<QrCodeScanState, QrCodeScanEvent, QrCodeScanAction>(
+    initialState = savedStateHandle[KEY_STATE]
+        ?: QrCodeScanState(hasHandledScan = false),
 ) {
     override fun handleAction(action: QrCodeScanAction) {
         when (action) {
@@ -35,6 +44,12 @@ class QrCodeScanViewModel @Inject constructor(
 
     // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
+        if (state.hasHandledScan) {
+            return
+        }
+        mutableStateFlow.update {
+            it.copy(hasHandledScan = true)
+        }
         val qrCode = action.qrCode
         qrCode
             .getTotpDataOrNull()
@@ -55,8 +70,9 @@ sealed class QrCodeScanEvent {
 
     /**
      * Navigate back.
+     * Added DeferredBackgroundEvent as QrCodeScan might be fired before events are consumed
      */
-    data object NavigateBack : QrCodeScanEvent()
+    data object NavigateBack : QrCodeScanEvent(), DeferredBackgroundEvent
 
     /**
      * Navigate to manual code entry screen.
@@ -89,3 +105,11 @@ sealed class QrCodeScanAction {
      */
     data object CameraSetupErrorReceive : QrCodeScanAction()
 }
+
+/**
+ * Represents the state of the QrCodeScan screen.
+ */
+@Parcelize
+data class QrCodeScanState(
+    val hasHandledScan: Boolean,
+) : Parcelable

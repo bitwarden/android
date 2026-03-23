@@ -78,12 +78,12 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     val isCrashLoggingEnabledFlow: Flow<Boolean?>
 
     /**
-     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean?
 
     /**
-     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     * Whether the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean?
 
@@ -132,7 +132,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     )
 
     /**
-     * Gets whether or not the user has enabled screen capture.
+     * Gets whether the user has enabled screen capture.
      */
     fun getScreenCaptureAllowed(): Boolean?
 
@@ -142,7 +142,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getScreenCaptureAllowedFlow(): Flow<Boolean?>
 
     /**
-     * Stores whether or not [isScreenCaptureAllowed].
+     * Stores whether [isScreenCaptureAllowed].
      */
     fun storeScreenCaptureAllowed(isScreenCaptureAllowed: Boolean?)
 }

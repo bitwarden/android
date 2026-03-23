@@ -42,7 +42,7 @@
     <string name="master_password">Hlavní heslo</string>
     <string name="master_password_required">Hlavní heslo (vyžadováno)</string>
     <string name="new_master_password_required">Nové hlavní heslo (vyžadováno)</string>
-    <string name="more">Více</string>
+    <string name="more_options">Více voleb</string>
     <string name="my_vault">Můj trezor</string>
     <string name="name">Název</string>
     <string name="item_name_required">Název položky (povinné)</string>
@@ -166,7 +166,7 @@
     <string name="items_for_uri">Položky pro %1$s</string>
     <string name="no_items_for_uri">Žádné položky ve Vašem trezoru pro %1$s.</string>
     <string name="no_items_for_vault">Žádné položky ve Vašem trezoru se shodou s \"%1$s\"</string>
-    <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
+    <string name="search_for_a_login_or_add_a_new_login">Hledat přihlášení nebo přidat nové přihlášení</string>
     <string name="disabled">Zakázáno</string>
     <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
     <string name="autofill_noun">Automatické vyplňování</string>
@@ -202,6 +202,8 @@ Načtení proběhne automaticky.</string>
     <string name="copy_totp_automatically">Automaticky kopírovat TOTP</string>
     <string name="premium_required">Pro použití této funkce je potřebné členství Premium.</string>
     <string name="attachment_deleted">Příloha byla smazána</string>
+    <string name="attachments_unavailable">Přílohy nejsou k dispozici</string>
+    <string name="attachments_are_a_premium_feature">Přílohy jsou prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="choose_file">Vybrat soubor</string>
     <string name="file">Soubor</string>
     <string name="no_file_chosen">Není vybrán žádný soubor</string>
@@ -217,7 +219,7 @@ Načtení proběhne automaticky.</string>
     <string name="custom_environment_footer">Pro pokročilé uživatele. Můžete zadat základní URL každé služby zvlášť.</string>
     <string name="environment_saved">URL vlastního prostředí byly uloženy.</string>
     <string name="identity_url">URL serveru identity</string>
-    <string name="self_hosted_environment">Vlastní hostované prostředí</string>
+    <string name="self_hosted_environment">Prostředí vlastního serveru</string>
     <string name="self_hosted_environment_footer">Zadejte základní URL vlastní hostované aplikace Bitwarden.</string>
     <string name="server_url">URL serveru</string>
     <string name="web_vault_url">URL serveru webového trezoru</string>
@@ -240,7 +242,7 @@ Načtení proběhne automaticky.</string>
     <string name="cardholder_name">Jméno držitele karty</string>
     <string name="city_town">Město</string>
     <string name="company">Společnost</string>
-    <string name="country">Stát</string>
+    <string name="country">Země</string>
     <string name="december">prosinec</string>
     <string name="dr">Dr.</string>
     <string name="expiration_month">Měsíc expirace</string>
@@ -451,7 +453,7 @@ Načtení proběhne automaticky.</string>
     <string name="type_file">Soubor</string>
     <string name="deletion_date">Datum smazání</string>
     <string name="deletion_time">Čas smazání</string>
-    <string name="deletion_date_info">Tento Send bude trvale smazán v určený datum a čas.</string>
+    <string name="deletion_date_info">Tento Send bude trvale smazán v určený den a čas.</string>
     <string name="who_can_view">Kdo může zobrazit</string>
     <string name="anyone_with_the_link">Kdokoli s odkazem</string>
     <string name="anyone_with_link_can_view_send">Kdokoli s tímto odkazem může zobrazit tento Send</string>
@@ -470,7 +472,7 @@ Načtení proběhne automaticky.</string>
     <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
     <string name="current_access_count">Aktuální počet přístupů: %s</string>
     <string name="new_password">Nové heslo</string>
-    <string name="password_info">Vyžadovat totot heslo pro přístup k tomuto Send.</string>
+    <string name="password_info">Vyžadovat toto heslo pro přístup k tomuto Send.</string>
     <string name="remove_password">Odebrat heslo</string>
     <string name="removing_send_password">Odebírání hesla</string>
     <string name="password_removed">Heslo bylo odebráno</string>
@@ -532,7 +534,7 @@ Načtení proběhne automaticky.</string>
     </plurals>
     <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Vaše organizace nastavila maximální časový limit relace na %1$s a %2$s.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Vaše organizace nastavila maximální časový limit relace na %1$s.</string>
-    <string name="this_setting_is_managed_by_your_organization">Tato nastavení je spravováno Vaší organizací.</string>
+    <string name="this_setting_is_managed_by_your_organization">Toto nastavení je spravováno Vaší organizací.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_never">Vaše organizace nastavila výchozí časový limit relace na Nikdy.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Vaše organizace nastavila výchozí časový limit relace na Restart aplikace.</string>
     <string name="vault_timeout_to_large">Časový limit Vašeho trezoru překračuje omezení stanovená Vaší organizací.</string>
@@ -649,7 +651,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="weak_and_exposed_master_password">Slabé a odhalené hlavní heslo</string>
     <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</string>
     <string name="there_are_no_items_that_match_the_search">Neexistují žádné položky, které by odpovídaly hledání</string>
-    <string name="self_hosted">Vlastní hosting</string>
+    <string name="self_hosted">Vlastní server</string>
     <string name="region">Oblast</string>
     <string name="update_weak_master_password_warning">Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
     <string name="current_master_password_required">Aktuální hlavní heslo (vyžadováno)</string>
@@ -728,7 +730,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="continue_to_complete_web_authn_verification">Pokračujte pro dokončení ověření WebAuthn.</string>
     <string name="launch_web_authn">Otevřít WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Při spouštění dvoufaktorového ověření WebAuthn došlo k chybě</string>
-    <string name="self_hosted_server_url">Adresa URL serveru vlastního hostování</string>
+    <string name="self_hosted_server_url">Adresa URL vlastního serveru</string>
     <string name="credential_operation_failed_because_user_could_not_be_verified">Operace s přihlašovacími údaji selhala, protože nebylo možné ověřit uživatele.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operace přístupového klíče se nezdařila, protože uživatele nelze ověřit.</string>
     <string name="user_verification_direction">Ověření uživatele</string>
@@ -773,7 +775,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapište si toto heslo a uschovejte jej někam do bezpečí.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Více o dalších způsobech, jak zabránit uzamčení účtu</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Více o způsobech, jak zabránit uzamčení účtu</annotation></string>
-    <string name="help_with_server_geolocations">Nápověda ke geolokaci serverů.</string>
+    <string name="help_with_server_geolocations">Nápověda ke geolokaci serverů</string>
     <string name="email_address_required">E-mailová adresa (povinná)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Klepnutím na odkaz v e-mailu ověřte svou e-mailovou adresu a pokračujte ve vytváření účtu.</string>
     <string name="change_email_address">Změnit e-mailovou adresu</string>
@@ -845,6 +847,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulář a <annotation emphasis="bold">importujte soubor s uloženým heslem.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Z důvodu bezpečnosti nezapomeňte <annotation emphasis="bold">smazat soubor s uloženým heslem.</annotation></string>
     <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na <annotation link="importHelp">nápovědu pro import</annotation>.</string>
+    <string name="import_help">nápověda pro import</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný soubor</annotation> někde na Vašem počítači, kde jej můžete snadno najít.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
     <string name="syncing_logins_loading_message">Synchronizování přihlašovacích údajů...</string>
@@ -955,7 +958,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Operace s přihlašovacími údaji se nezdařila, protože byl uživatel uzamčen.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operace s přihlašovacími údaji se nezdařila, protože vybraná položka neexistuje.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Operace s přihlašovacími údaji se nezdařila, protože ověření uživatele bylo zrušeno.</string>
-    <string name="self_host_server_url">Adresa URL serveru vlastního hostování</string>
+    <string name="self_host_server_url">Adresa URL vlastního serveru</string>
     <string name="use_brave_autofill_integration">Použít integraci automatického vyplňování Brave</string>
     <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Použít integraci automatického vyplňování Chrome Beta</string>
@@ -1207,7 +1210,7 @@ při opakování problémů.</string>
     <string name="failed_to_migrate_items_to_x">Nepodařilo se přesunout položky do %s</string>
     <string name="search_archive">Hledat v archivu</string>
     <string name="archive_noun">Archiv</string>
-    <string name="archive_verb">Archiv</string>
+    <string name="archive_verb">Archivovat</string>
     <string name="unarchive">Odebrat z archivu</string>
     <string name="archived">Archivováno</string>
     <string name="hidden_items">Skryté položky</string>
@@ -1239,4 +1242,5 @@ při opakování problémů.</string>
     <string name="launch_browser">Otevřít prohlížeč</string>
     <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
     <string name="external_link">Externí odkaz</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externí odkaz</string>
 </resources>

@@ -413,7 +413,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Sync").assertDoesNotExist()
         composeTestRule.onNodeWithText("Lock").assertDoesNotExist()
 
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule.onNode(isPopup()).assertIsDisplayed()
         composeTestRule
@@ -429,7 +429,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `sync click in the overflow menu should send SyncClick`() {
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule
             .onAllNodesWithText("Sync")
@@ -442,7 +442,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `lock click in the overflow menu should send LockClick`() {
         // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
 
         composeTestRule
             .onAllNodesWithText("Lock")
@@ -874,7 +874,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1359,7 +1359,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1430,7 +1430,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1555,6 +1555,61 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `UpgradePremium action card should display when eligible`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremiumUpgradeBannerEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Unlock advanced security features")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradePremium action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremiumUpgradeBannerEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.UpgradePremium,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `UpgradePremium action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremiumUpgradeBannerEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.UpgradePremium),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
@@ -1674,7 +1729,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1745,7 +1800,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule

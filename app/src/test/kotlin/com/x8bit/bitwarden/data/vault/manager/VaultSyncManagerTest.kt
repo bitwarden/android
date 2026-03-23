@@ -1275,10 +1275,10 @@ class VaultSyncManagerTest {
         sendsFlow: Flow<List<SyncResponseJson.Send>> = bufferedMutableSharedFlow(),
     ) {
         coEvery { vaultDiskSource.getCiphersFlow(userId = userId) } returns ciphersFlow
-        coEvery { vaultDiskSource.getCollections(userId = userId) } returns collectionsFlow
-        coEvery { vaultDiskSource.getDomains(userId = userId) } returns domainsFlow
-        coEvery { vaultDiskSource.getFolders(userId = userId) } returns foldersFlow
-        coEvery { vaultDiskSource.getSends(userId = userId) } returns sendsFlow
+        coEvery { vaultDiskSource.getCollectionsFlow(userId = userId) } returns collectionsFlow
+        coEvery { vaultDiskSource.getDomainsFlow(userId = userId) } returns domainsFlow
+        coEvery { vaultDiskSource.getFoldersFlow(userId = userId) } returns foldersFlow
+        coEvery { vaultDiskSource.getSendsFlow(userId = userId) } returns sendsFlow
     }
 
     private fun setupEmptyDecryptionResults(

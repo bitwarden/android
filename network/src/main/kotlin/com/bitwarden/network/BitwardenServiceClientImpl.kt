@@ -15,6 +15,8 @@ import com.bitwarden.network.retrofit.RetrofitsImpl
 import com.bitwarden.network.service.AccountsServiceImpl
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.AuthRequestsServiceImpl
+import com.bitwarden.network.service.BillingService
+import com.bitwarden.network.service.BillingServiceImpl
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.CiphersServiceImpl
 import com.bitwarden.network.service.ConfigService
@@ -112,6 +114,12 @@ internal class BitwardenServiceClientImpl(
     override val authRequestsService: AuthRequestsService by lazy {
         AuthRequestsServiceImpl(
             authenticatedAuthRequestsApi = retrofits.authenticatedApiRetrofit.create(),
+        )
+    }
+
+    override val billingService: BillingService by lazy {
+        BillingServiceImpl(
+            authenticatedBillingApi = retrofits.authenticatedApiRetrofit.create(),
         )
     }
 

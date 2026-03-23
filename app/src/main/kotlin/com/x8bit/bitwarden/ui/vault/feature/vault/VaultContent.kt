@@ -487,6 +487,22 @@ private fun ActionCard(
     modifier: Modifier = Modifier,
 ) {
     when (actionCardState) {
+        VaultState.ActionCardState.UpgradePremium -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(
+                    id = BitwardenString.unlock_advanced_security_features,
+                ),
+                cardSubtitle = stringResource(
+                    id = BitwardenString
+                        .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
+                ),
+                actionText = stringResource(id = BitwardenString.upgrade_to_premium),
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
         VaultState.ActionCardState.IntroducingArchive -> {
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.introducing_archive),

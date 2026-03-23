@@ -37,8 +37,8 @@ data class AccountJson(
      *
      * @property userId The ID of the user.
      * @property email The user's email address.
-     * @property isEmailVerified Whether or not the user's email is verified.
-     * @property isTwoFactorEnabled If the profile has two factor authentication enabled.
+     * @property isEmailVerified Whether the user's email is verified.
+     * @property isTwoFactorEnabled If the profile has two-factor authentication enabled.
      * @property name The user's name (if applicable).
      * @property stamp The account's security stamp (if applicable).
      * @property organizationId The ID of the associated organization (if applicable).

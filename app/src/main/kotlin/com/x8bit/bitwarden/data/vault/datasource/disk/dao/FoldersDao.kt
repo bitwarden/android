@@ -31,7 +31,7 @@ interface FoldersDao {
      * Retrieves all folders from the database for a given [userId].
      */
     @Query("SELECT * FROM folders WHERE user_id = :userId")
-    fun getAllFolders(
+    fun getAllFoldersFlow(
         userId: String,
     ): Flow<List<FolderEntity>>
 

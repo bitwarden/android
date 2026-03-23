@@ -139,7 +139,10 @@ class ViewSendViewModel @Inject constructor(
                     it.copy(
                         dialogState = ViewSendState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -255,7 +258,7 @@ data class ViewSendState(
         }
 
     /**
-     * Whether or not the fab is visible.
+     * Whether the fab is visible.
      */
     val isFabVisible: Boolean get() = viewState is ViewState.Content
 

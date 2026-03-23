@@ -27,6 +27,7 @@ import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -99,9 +100,7 @@ fun VaultItemListingScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
@@ -457,21 +456,19 @@ private fun VaultItemListingScaffold(
                         contentDescription = stringResource(id = BitwardenString.search_vault),
                         onClick = vaultItemListingHandlers.searchIconClick,
                     )
-                    if (state.shouldShowOverflowMenu) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.sync),
-                                    onClick = vaultItemListingHandlers.syncClick,
-                                ),
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.lock),
-                                    onClick = vaultItemListingHandlers.lockClick,
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.shouldShowOverflowMenu,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.sync),
+                                onClick = vaultItemListingHandlers.syncClick,
                             ),
-                        )
-                    }
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.lock),
+                                onClick = vaultItemListingHandlers.lockClick,
+                            ),
+                        ),
+                    )
                 },
             )
         },
@@ -530,7 +527,10 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = state.viewState.message(),
-                    onTryAgainClick = vaultItemListingHandlers.refreshClick,
+                    buttonData = BitwardenButtonData(
+                        label = BitwardenString.try_again.asText(),
+                        onClick = vaultItemListingHandlers.refreshClick,
+                    ),
                     modifier = Modifier.fillMaxSize(),
                 )
             }

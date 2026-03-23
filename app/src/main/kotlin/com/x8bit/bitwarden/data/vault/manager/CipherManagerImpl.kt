@@ -85,10 +85,7 @@ class CipherManagerImpl(
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
-            ?: return CreateCipherResult.Error(
-                error = NoActiveUserException(),
-                errorMessage = null,
-            )
+            ?: return CreateCipherResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -111,7 +108,7 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = { CreateCipherResult.Error(error = it) },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
                     it
@@ -124,7 +121,7 @@ class CipherManagerImpl(
         collectionIds: List<String>,
     ): CreateCipherResult {
         val userId = activeUserId
-            ?: return CreateCipherResult.Error(errorMessage = null, error = NoActiveUserException())
+            ?: return CreateCipherResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -157,7 +154,7 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = { CreateCipherResult.Error(error = it) },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
                     it
@@ -169,7 +166,8 @@ class CipherManagerImpl(
         cipherId: String,
         cipherView: CipherView,
     ): ArchiveCipherResult {
-        val userId = activeUserId ?: return ArchiveCipherResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return ArchiveCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .archiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -204,7 +202,8 @@ class CipherManagerImpl(
         cipherId: String,
         cipherView: CipherView,
     ): UnarchiveCipherResult {
-        val userId = activeUserId ?: return UnarchiveCipherResult.Error(NoActiveUserException())
+        val userId = activeUserId
+            ?: return UnarchiveCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .unarchiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -368,7 +367,7 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): UpdateCipherResult {
         val userId = activeUserId
-            ?: return UpdateCipherResult.Error(errorMessage = null, error = NoActiveUserException())
+            ?: return UpdateCipherResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -399,7 +398,7 @@ class CipherManagerImpl(
                 }
             }
             .fold(
-                onFailure = { UpdateCipherResult.Error(errorMessage = null, error = it) },
+                onFailure = { UpdateCipherResult.Error(error = it) },
                 onSuccess = { it },
             )
     }
@@ -802,7 +801,7 @@ class CipherManagerImpl(
         if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
             // Check if there are any collections in common
             shouldUpdate = vaultDiskSource
-                .getCollections(userId = userId)
+                .getCollectionsFlow(userId = userId)
                 .first()
                 .any { collectionIds?.contains(it.id) == true }
         }

@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -67,21 +66,15 @@ fun MasterPasswordGuidanceScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(MasterPasswordGuidanceAction.CloseAction)
-                    }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(MasterPasswordGuidanceAction.CloseAction)
                 },
             )
         },
     ) {
         MasterPasswordGuidanceContent(
-            onTryPasswordGeneratorAction = remember(viewModel) {
-                {
-                    viewModel.trySendAction(
-                        MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
-                    )
-                }
+            onTryPasswordGeneratorAction = {
+                viewModel.trySendAction(MasterPasswordGuidanceAction.TryPasswordGeneratorAction)
             },
             modifier = Modifier
                 .fillMaxSize()

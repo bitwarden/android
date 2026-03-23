@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -108,9 +107,7 @@ fun StartRegistrationScreen(
 
     StartRegistrationDialogs(
         dialog = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ErrorDialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(ErrorDialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -277,8 +274,14 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val strTerms = stringResource(id = BitwardenString.terms_of_service)
-    val strPrivacy = stringResource(id = BitwardenString.privacy_policy)
+    val strTerms = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.terms_of_service)),
+    )
+    val strPrivacy = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.privacy_policy)),
+    )
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,

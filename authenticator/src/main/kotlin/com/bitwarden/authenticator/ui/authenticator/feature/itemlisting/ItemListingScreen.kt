@@ -23,7 +23,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -134,11 +133,9 @@ fun ItemListingScreen(
 
     ItemListingDialogs(
         dialog = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ItemListingAction.DialogDismiss) }
-        },
-        onConfirmDeleteClick = remember(viewModel) {
-            { viewModel.trySendAction(ItemListingAction.ConfirmDeleteClick(it)) }
+        onDismissRequest = { viewModel.trySendAction(ItemListingAction.DialogDismiss) },
+        onConfirmDeleteClick = {
+            viewModel.trySendAction(ItemListingAction.ConfirmDeleteClick(it))
         },
     )
 
@@ -171,9 +168,7 @@ fun ItemListingScreen(
                             contentDescription = BitwardenString.scan_a_qr_code.asText(),
                             testTag = "ScanQRCodeButton",
                         ),
-                        onFabOptionClick = remember(viewModel) {
-                            { launcher.launch(Manifest.permission.CAMERA) }
-                        },
+                        onFabOptionClick = { launcher.launch(Manifest.permission.CAMERA) },
                     ),
                     ExpandableFabOption(
                         label = BitwardenString.enter_key_manually.asText(),
@@ -182,8 +177,8 @@ fun ItemListingScreen(
                             contentDescription = BitwardenString.enter_key_manually.asText(),
                             testTag = "EnterSetupKeyButton",
                         ),
-                        onFabOptionClick = remember(viewModel) {
-                            { viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick) }
+                        onFabOptionClick = {
+                            viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick)
                         },
                     ),
                 ),
@@ -203,36 +198,29 @@ fun ItemListingScreen(
             is ItemListingState.ViewState.Content -> {
                 ItemListingContent(
                     state = currentState,
-                    onItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.ItemClick(it)) }
+                    onItemClick = { viewModel.trySendAction(ItemListingAction.ItemClick(it)) },
+                    onDropdownMenuClick = { action, item ->
+                        viewModel.trySendAction(
+                            ItemListingAction.DropdownMenuClick(menuAction = action, item = item),
+                        )
                     },
-                    onDropdownMenuClick = remember(viewModel) {
-                        { action, item ->
-                            viewModel.trySendAction(
-                                ItemListingAction.DropdownMenuClick(
-                                    menuAction = action,
-                                    item = item,
-                                ),
-                            )
-                        }
+                    onDownloadBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick)
                     },
-                    onDownloadBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick) }
+                    onDismissDownloadBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss)
                     },
-                    onDismissDownloadBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss) }
+                    onSyncWithBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick)
                     },
-                    onSyncWithBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
+                    onDismissSyncWithBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
                     },
-                    onDismissSyncWithBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
+                    onSyncLearnMoreClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick)
                     },
-                    onSyncLearnMoreClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
-                    },
-                    onSectionExpandedClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SectionExpandedClick(it)) }
+                    onSectionExpandedClick = {
+                        viewModel.trySendAction(ItemListingAction.SectionExpandedClick(it))
                     },
                 )
             }
@@ -244,23 +232,21 @@ fun ItemListingScreen(
             is ItemListingState.ViewState.NoItems -> {
                 EmptyItemListingContent(
                     actionCardState = currentState.actionCard,
-                    onAddCodeClick = remember(viewModel) {
-                        { launcher.launch(Manifest.permission.CAMERA) }
+                    onAddCodeClick = { launcher.launch(Manifest.permission.CAMERA) },
+                    onDownloadBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick)
                     },
-                    onDownloadBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick) }
+                    onDismissDownloadBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss)
                     },
-                    onDismissDownloadBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss) }
+                    onSyncWithBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick)
                     },
-                    onSyncWithBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
+                    onSyncLearnMoreClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick)
                     },
-                    onSyncLearnMoreClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
-                    },
-                    onDismissSyncWithBitwardenClick = remember(viewModel) {
-                        { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
+                    onDismissSyncWithBitwardenClick = {
+                        viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
                     },
                 )
             }

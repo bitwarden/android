@@ -18,7 +18,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -86,9 +85,7 @@ fun RecordedLogsScreen(
 
     RecordedLogsDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(RecordedLogsAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(RecordedLogsAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -98,18 +95,16 @@ fun RecordedLogsScreen(
                 title = stringResource(id = BitwardenString.recorded_logs_title),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(RecordedLogsAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(RecordedLogsAction.BackClick) },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     RecordedLogsOverflowMenu(
                         isOverflowEnabled = state.viewState.isOverflowEnabled,
-                        onDeleteAllClick = remember(viewModel) {
-                            { viewModel.trySendAction(RecordedLogsAction.DeleteAllClick) }
+                        onDeleteAllClick = {
+                            viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
                         },
-                        onShareAllClick = remember(viewModel) {
-                            { viewModel.trySendAction(RecordedLogsAction.ShareAllClick) }
+                        onShareAllClick = {
+                            viewModel.trySendAction(RecordedLogsAction.ShareAllClick)
                         },
                     )
                 },
@@ -122,11 +117,11 @@ fun RecordedLogsScreen(
             is RecordedLogsState.ViewState.Content -> {
                 RecordedLogsContent(
                     viewState = viewState,
-                    onShareItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(RecordedLogsAction.ShareClick(it)) }
+                    onShareItemClick = {
+                        viewModel.trySendAction(RecordedLogsAction.ShareClick(it))
                     },
-                    onDeleteItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(RecordedLogsAction.DeleteClick(it)) }
+                    onDeleteItemClick = {
+                        viewModel.trySendAction(RecordedLogsAction.DeleteClick(it))
                     },
                 )
             }
@@ -173,7 +168,6 @@ private fun RecordedLogsOverflowMenu(
         )
     }
     BitwardenOverflowActionItem(
-        contentDescription = stringResource(BitwardenString.more),
         modifier = modifier,
         menuItemDataList = persistentListOf(
             OverflowMenuItemData(
@@ -315,7 +309,6 @@ private fun LogRow(
         }
         Spacer(modifier = Modifier.width(width = 12.dp))
         BitwardenOverflowActionItem(
-            contentDescription = stringResource(BitwardenString.more),
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = stringResource(id = BitwardenString.share),

@@ -431,7 +431,7 @@ class FolderManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val folder = createMockFolder(number = number)
         coEvery {
-            vaultDiskSource.getFolders(userId = userId)
+            vaultDiskSource.getFoldersFlow(userId = userId)
         } returns MutableStateFlow(listOf(folder))
 
         mutableSyncFolderUpsertFlow.tryEmit(
@@ -457,7 +457,7 @@ class FolderManagerTest {
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
-            vaultDiskSource.getFolders(userId = userId)
+            vaultDiskSource.getFoldersFlow(userId = userId)
         } returns MutableStateFlow(emptyList())
 
         mutableSyncFolderUpsertFlow.tryEmit(
@@ -484,7 +484,7 @@ class FolderManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val folder = createMockFolder(number = number)
         coEvery {
-            vaultDiskSource.getFolders(userId = userId)
+            vaultDiskSource.getFoldersFlow(userId = userId)
         } returns MutableStateFlow(listOf(folder))
 
         mutableSyncFolderUpsertFlow.tryEmit(
@@ -512,7 +512,7 @@ class FolderManagerTest {
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
-                vaultDiskSource.getFolders(userId = userId)
+                vaultDiskSource.getFoldersFlow(userId = userId)
             } returns MutableStateFlow(emptyList())
             val folder = mockk<SyncResponseJson.Folder>()
             coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
@@ -547,7 +547,7 @@ class FolderManagerTest {
                 revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
             )
             coEvery {
-                vaultDiskSource.getFolders(userId = userId)
+                vaultDiskSource.getFoldersFlow(userId = userId)
             } returns MutableStateFlow(listOf(folderView))
             val folder = mockk<SyncResponseJson.Folder>()
             coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
@@ -582,7 +582,7 @@ class FolderManagerTest {
             revisionDate = FIXED_CLOCK.instant().minus(5, ChronoUnit.MINUTES),
         )
         coEvery {
-            vaultDiskSource.getFolders(userId = userId)
+            vaultDiskSource.getFoldersFlow(userId = userId)
         } returns MutableStateFlow(listOf(folderView))
 
         mutableSyncFolderUpsertFlow.tryEmit(
@@ -596,7 +596,7 @@ class FolderManagerTest {
 
         fakeSettingsDiskSource.assertLastSyncTime(userId = userId, expected = null)
         coVerify(exactly = 1) {
-            vaultDiskSource.getFolders(userId = userId)
+            vaultDiskSource.getFoldersFlow(userId = userId)
         }
         coVerify(exactly = 0) {
             folderService.getFolder(folderId = folderId)

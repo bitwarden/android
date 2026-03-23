@@ -139,16 +139,18 @@ class PasswordHistoryViewModel @Inject constructor(
     }
 
     private fun List<PasswordHistoryView>?.toViewState(): PasswordHistoryState.ViewState {
-        val passwords = this?.map { passwordHistoryView ->
-            GeneratedPassword(
-                password = passwordHistoryView.password,
-                date = passwordHistoryView.lastUsedDate.toFormattedDateTimeStyle(
-                    dateStyle = FormatStyle.SHORT,
-                    timeStyle = FormatStyle.SHORT,
-                    clock = clock,
-                ),
-            )
-        }
+        val passwords = this
+            ?.sortedByDescending { it.lastUsedDate }
+            ?.map { passwordHistoryView ->
+                GeneratedPassword(
+                    password = passwordHistoryView.password,
+                    date = passwordHistoryView.lastUsedDate.toFormattedDateTimeStyle(
+                        dateStyle = FormatStyle.SHORT,
+                        timeStyle = FormatStyle.SHORT,
+                        clock = clock,
+                    ),
+                )
+            }
         return if (passwords?.isNotEmpty() == true) {
             PasswordHistoryState.ViewState.Content(passwords)
         } else {

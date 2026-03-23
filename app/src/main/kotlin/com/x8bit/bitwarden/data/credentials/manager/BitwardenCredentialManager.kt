@@ -57,7 +57,7 @@ interface BitwardenCredentialManager {
     ): Fido2CredentialAssertionResult
 
     /**
-     * Whether or not the user has authentication attempts remaining.
+     * Whether the user has authentication attempts remaining.
      */
     fun hasAuthenticationAttemptsRemaining(): Boolean
 
