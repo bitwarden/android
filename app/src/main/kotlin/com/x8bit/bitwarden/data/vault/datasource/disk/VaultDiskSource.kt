@@ -93,9 +93,34 @@ interface VaultDiskSource {
     suspend fun deleteFolder(userId: String, folderId: String)
 
     /**
+     * Deletes folders with the given [folderIds] from the data source for the given [userId].
+     */
+    suspend fun deleteSelectedFolders(userId: String, folderIds: List<String>)
+
+    /**
+     * Deletes all folders from the data source for the given [userId].
+     */
+    suspend fun deleteAllFolders(userId: String)
+
+    /**
      * Saves a folder to the data source for the given [userId].
      */
     suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder)
+
+    /**
+     * Saves multiple folders to the data source for the given [userId].
+     */
+    suspend fun saveFolders(userId: String, folders: List<SyncResponseJson.Folder>)
+
+    /**
+     * Retrieves a folder from the data source for a given [userId] and [folderId].
+     */
+    suspend fun getFolder(userId: String, folderId: String): SyncResponseJson.Folder?
+
+    /**
+     * Retrieves all folders from the data source for a given [userId].
+     */
+    suspend fun getFolders(userId: String): List<SyncResponseJson.Folder>
 
     /**
      * Retrieves all folders from the data source for a given [userId].

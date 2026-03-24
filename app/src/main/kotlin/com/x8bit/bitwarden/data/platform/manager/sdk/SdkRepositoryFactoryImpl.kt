@@ -23,7 +23,7 @@ class SdkRepositoryFactoryImpl(
 ) : SdkRepositoryFactory {
     override fun getRepositories(userId: String?): Repositories =
         Repositories(
-            cipher = getSdkRepository(userId = userId),
+            cipher = getSdkCipherRepository(userId = userId),
             folder = null,
             userKeyState = null,
             localUserDataKeyState = SdkLocalUserDataKeyStateRepository(
@@ -46,7 +46,7 @@ class SdkRepositoryFactoryImpl(
             configDiskSource = configDiskSource,
         )
 
-    private fun getSdkRepository(
+    private fun getSdkCipherRepository(
         userId: String?,
     ): SdkCipherRepository? = userId?.let {
         SdkCipherRepository(userId = it, vaultDiskSource = vaultDiskSource)
