@@ -451,6 +451,7 @@ private fun ItemListingContent(
 
             SharedCodesDisplayState.Error -> {
                 item(key = "shared_codes_error") {
+                    Spacer(modifier = Modifier.height(height = 8.dp))
                     Text(
                         text = stringResource(BitwardenString.shared_codes_error),
                         color = BitwardenTheme.colorScheme.text.secondary,
