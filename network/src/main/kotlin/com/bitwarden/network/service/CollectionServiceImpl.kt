@@ -1,6 +1,7 @@
 package com.bitwarden.network.service
 
 import com.bitwarden.network.api.CollectionsApi
+import com.bitwarden.network.model.CollectionDetailsResponseJson
 import com.bitwarden.network.model.CollectionJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCollectionResponseJson
@@ -62,6 +63,17 @@ internal class CollectionServiceImpl(
     ): Result<SyncResponseJson.Collection> =
         collectionsApi
             .getCollection(
+                organizationId = organizationId,
+                collectionId = collectionId,
+            )
+            .toResult()
+
+    override suspend fun getCollectionDetails(
+        organizationId: String,
+        collectionId: String,
+    ): Result<CollectionDetailsResponseJson> =
+        collectionsApi
+            .getCollectionDetails(
                 organizationId = organizationId,
                 collectionId = collectionId,
             )

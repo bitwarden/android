@@ -176,7 +176,7 @@ private fun CollectionsContent(
                 BitwardenTextRow(
                     text = it.name,
                     description = it.organizationName.toAnnotatedString(),
-                    onClick = { onItemClick(it.id, it.organizationName) },
+                    onClick = { onItemClick(it.id, it.organizationId) },
                     textTestTag = "CollectionName",
                     cardStyle = collectionsList.toListItemCardStyle(index = index),
                     modifier = Modifier

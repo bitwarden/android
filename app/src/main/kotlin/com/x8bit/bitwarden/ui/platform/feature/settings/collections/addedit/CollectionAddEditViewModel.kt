@@ -131,6 +131,7 @@ class CollectionAddEditViewModel @Inject constructor(
         sendEvent(CollectionAddEditEvent.NavigateBack)
     }
 
+    @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
         if (content.collectionName.isEmpty()) {
             mutableStateFlow.update {
@@ -170,7 +171,7 @@ class CollectionAddEditViewModel @Inject constructor(
                     val result = vaultRepository.createCollection(
                         organizationId = collectionAddEditType.organizationId,
                         collectionView = CollectionView(
-                            id = "",
+                            id = null,
                             organizationId = collectionAddEditType.organizationId,
                             name = content.collectionName,
                             externalId = null,

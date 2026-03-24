@@ -87,6 +87,7 @@ class ServerCommunicationConfigRepositoryTest {
                             AcquiredCookie(name = "session", value = "abc123"),
                             AcquiredCookie(name = "csrf", value = "def456"),
                         ),
+                        vaultUrl = null,
                     ),
                 ),
             ),
@@ -140,6 +141,7 @@ class ServerCommunicationConfigRepositoryTest {
                             AcquiredCookie(name = "session", value = "xyz789"),
                             AcquiredCookie(name = "token", value = "uvw456"),
                         ),
+                        vaultUrl = null,
                     ),
                 ),
             )
@@ -185,6 +187,7 @@ class ServerCommunicationConfigRepositoryTest {
                     cookieName = "session",
                     cookieDomain = hostname,
                     cookieValue = null,
+                    vaultUrl = null,
                 ),
             ),
         )

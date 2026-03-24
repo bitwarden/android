@@ -77,6 +77,7 @@ class CollectionManagerImpl(
             )
     }
 
+    @Suppress("LongMethod")
     override suspend fun updateCollection(
         organizationId: String,
         collectionId: String,
@@ -84,14 +85,29 @@ class CollectionManagerImpl(
     ): UpdateCollectionResult {
         val userId = activeUserId
             ?: return UpdateCollectionResult.Error(error = NoActiveUserException())
-        return vaultSdkSource
-            .encryptCollection(userId = userId, collectionView = collectionView)
-            .flatMap { collection ->
-                collectionService.updateCollection(
-                    organizationId = organizationId,
-                    collectionId = collectionId,
-                    body = CollectionJsonRequest(name = collection.name),
-                )
+        return collectionService
+            .getCollectionDetails(
+                organizationId = organizationId,
+                collectionId = collectionId,
+            )
+            .flatMap { details ->
+                vaultSdkSource
+                    .encryptCollection(
+                        userId = userId,
+                        collectionView = collectionView,
+                    )
+                    .flatMap { collection ->
+                        collectionService.updateCollection(
+                            organizationId = organizationId,
+                            collectionId = collectionId,
+                            body = CollectionJsonRequest(
+                                name = collection.name,
+                                externalId = details.externalId,
+                                groups = details.groups,
+                                users = details.users,
+                            ),
+                        )
+                    }
             }
             .fold(
                 onSuccess = { response ->

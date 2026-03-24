@@ -15,4 +15,5 @@ data class CollectionDisplayItem(
     val id: String,
     val name: String,
     val organizationName: String,
+    val organizationId: String,
 ) : Parcelable

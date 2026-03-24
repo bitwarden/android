@@ -13,6 +13,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.collections.model.CollectionDisplayItem
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlin.collections.find
 
 /**
  * Handles [CollectionsAction],
@@ -174,16 +176,17 @@ class CollectionsViewModel @Inject constructor(
 }
 
 private fun List<CollectionView>.toDisplayItems(
-    organizations: List<com.x8bit.bitwarden.data.auth.repository.model.Organization>,
+    organizations: List<Organization>,
 ): List<CollectionDisplayItem> =
     map { collection ->
         CollectionDisplayItem(
             id = collection.id.toString(),
             name = collection.name,
             organizationName = organizations
-                .find { it.id == collection.organizationId.toString() }
+                .find { it.id == collection.organizationId }
                 ?.name
                 .orEmpty(),
+            organizationId = collection.organizationId,
         )
     }
 

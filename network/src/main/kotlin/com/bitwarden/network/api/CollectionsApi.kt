@@ -1,5 +1,6 @@
 package com.bitwarden.network.api
 
+import com.bitwarden.network.model.CollectionDetailsResponseJson
 import com.bitwarden.network.model.CollectionJsonRequest
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.SyncResponseJson
@@ -32,6 +33,15 @@ internal interface CollectionsApi {
         @Path("orgId") organizationId: String,
         @Path("collectionId") collectionId: String,
     ): NetworkResult<SyncResponseJson.Collection>
+
+    /**
+     * Gets a collection with access details (groups and users).
+     */
+    @GET("organizations/{orgId}/collections/{collectionId}/details")
+    suspend fun getCollectionDetails(
+        @Path("orgId") organizationId: String,
+        @Path("collectionId") collectionId: String,
+    ): NetworkResult<CollectionDetailsResponseJson>
 
     /**
      * Updates a collection.
