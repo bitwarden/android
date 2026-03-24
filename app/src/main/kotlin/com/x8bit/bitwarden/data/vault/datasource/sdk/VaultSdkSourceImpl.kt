@@ -335,15 +335,16 @@ class VaultSdkSourceImpl(
                 .decryptList(collections = collectionList)
         }
 
-    // TODO: Replace stub with actual SDK call once encryptCollection is available
-    //  in the published Bitwarden SDK. The SDK changes have been implemented in the
-    //  SDK repo but are not yet released. Once available, this should delegate to:
-    //  getClient(userId).vault().collections().encrypt(collectionView = collectionView)
     override suspend fun encryptCollection(
         userId: String,
         collectionView: CollectionView,
     ): Result<Collection> =
-        Result.failure(UnsupportedOperationException("Not yet implemented in SDK"))
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .vault()
+                .collections()
+                .encrypt(collectionView = collectionView)
+        }
 
     override suspend fun decryptSend(
         userId: String,
