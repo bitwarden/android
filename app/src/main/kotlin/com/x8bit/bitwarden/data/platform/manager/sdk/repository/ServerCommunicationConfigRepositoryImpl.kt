@@ -45,6 +45,7 @@ class ServerCommunicationConfigRepositoryImpl(
                     idpLoginUrl = serverCommunicationConfig.bootstrap.idpLoginUrl,
                     cookieName = serverCommunicationConfig.bootstrap.cookieName,
                     cookieDomain = serverCommunicationConfig.bootstrap.cookieDomain,
+                    vaultUrl = null,
                     cookieValue = acquiredCookies,
                 ),
             ),
