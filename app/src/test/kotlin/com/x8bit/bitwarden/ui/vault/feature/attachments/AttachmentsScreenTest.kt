@@ -32,6 +32,7 @@ import org.junit.Test
 
 class AttachmentsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToPreviewCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<AttachmentsEvent>()
@@ -50,6 +51,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
             AttachmentsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToPreview = { _, _, _ -> onNavigateToPreviewCalled = true },
             )
         }
     }
@@ -58,6 +60,18 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AttachmentsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToPreview should call onNavigateToPreview`() {
+        mutableEventFlow.tryEmit(
+            AttachmentsEvent.NavigateToPreview(
+                cipherId = "cipherId",
+                attachmentId = "attachmentId",
+                fileName = "file.png",
+            ),
+        )
+        assertTrue(onNavigateToPreviewCalled)
     }
 
     @Test

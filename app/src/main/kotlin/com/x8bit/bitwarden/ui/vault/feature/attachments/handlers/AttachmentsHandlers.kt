@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments.handlers
 
 import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsAction
+import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsState
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsViewModel
 
 /**
@@ -13,6 +14,7 @@ data class AttachmentsHandlers(
     val onChooseFileClick: () -> Unit,
     val onFileChoose: (FileData) -> Unit,
     val onDeleteClick: (attachmentId: String) -> Unit,
+    val onItemClick: (attachment: AttachmentsState.AttachmentItem) -> Unit,
     val onDismissRequest: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -25,13 +27,10 @@ data class AttachmentsHandlers(
             AttachmentsHandlers(
                 onBackClick = { viewModel.trySendAction(AttachmentsAction.BackClick) },
                 onSaveClick = { viewModel.trySendAction(AttachmentsAction.SaveClick) },
-                onChooseFileClick = {
-                    viewModel.trySendAction(AttachmentsAction.ChooseFileClick)
-                },
+                onChooseFileClick = { viewModel.trySendAction(AttachmentsAction.ChooseFileClick) },
                 onFileChoose = { viewModel.trySendAction(AttachmentsAction.FileChoose(it)) },
-                onDeleteClick = {
-                    viewModel.trySendAction(AttachmentsAction.DeleteClick(it))
-                },
+                onDeleteClick = { viewModel.trySendAction(AttachmentsAction.DeleteClick(it)) },
+                onItemClick = { viewModel.trySendAction(AttachmentsAction.ItemClick(it)) },
                 onDismissRequest = {
                     viewModel.trySendAction(AttachmentsAction.DismissDialogClick)
                 },

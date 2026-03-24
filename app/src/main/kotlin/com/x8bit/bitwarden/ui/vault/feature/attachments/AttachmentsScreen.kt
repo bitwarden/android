@@ -41,6 +41,7 @@ fun AttachmentsScreen(
     viewModel: AttachmentsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
+    onNavigateToPreview: (cipherId: String, attachmentId: String, fileName: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val attachmentsHandlers = remember(viewModel) { AttachmentsHandlers.create(viewModel) }
@@ -61,6 +62,9 @@ fun AttachmentsScreen(
             }
 
             is AttachmentsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+            is AttachmentsEvent.NavigateToPreview -> {
+                onNavigateToPreview(event.cipherId, event.attachmentId, event.fileName)
+            }
         }
     }
 
