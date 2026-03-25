@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -34,6 +35,8 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LazyListScope.vaultAddEditCardItems(
     cardState: VaultAddEditState.ViewState.Content.ItemType.Card,
+    isCardScannerEnabled: Boolean,
+    onScanCardClick: () -> Unit,
     cardHandlers: VaultAddEditCardTypeHandlers,
 ) {
     item {
@@ -45,6 +48,20 @@ fun LazyListScope.vaultAddEditCardItems(
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+    }
+
+    if (isCardScannerEnabled) {
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.scan_card),
+                onClick = onScanCardClick,
+                modifier = Modifier
+                    .testTag("ScanCardButton")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
     }
 
     item {
