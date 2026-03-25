@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
@@ -27,7 +26,6 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -81,7 +79,6 @@ class VaultItemViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -94,7 +91,6 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
-            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
         )
     },
 ) {
@@ -229,12 +225,6 @@ class VaultItemViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_UPDATED,
             )
             .map { VaultItemAction.Internal.SnackbarDataReceived(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultItemAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -1056,10 +1046,6 @@ class VaultItemViewModel @Inject constructor(
                 handleIsIconLoadingDisabledUpdateReceive(action)
             }
 
-            is VaultItemAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultItemAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultItemAction.Internal.UnarchiveCipherReceive -> {
                 handleUnarchiveCipherReceive(action)
@@ -1295,12 +1281,6 @@ class VaultItemViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isIconLoadingDisabled = action.isDisabled) }
     }
 
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultItemAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
-    }
-
     private fun handleArchiveCipherReceive(action: VaultItemAction.Internal.ArchiveCipherReceive) {
         when (val result = action.result) {
             is ArchiveCipherResult.Error -> {
@@ -1439,7 +1419,6 @@ data class VaultItemState(
     val dialog: DialogState?,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val isArchiveEnabled: Boolean,
     val hasPremium: Boolean,
 ) : Parcelable {
 
@@ -1506,21 +1485,19 @@ data class VaultItemState(
      * Helper to determine if the UI should display the archive button.
      */
     val displayArchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            viewState.asContentOrNull()
-                ?.common
-                ?.currentCipher
-                ?.let { it.archivedDate == null && it.deletedDate == null } == true
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.currentCipher
+            ?.let { it.archivedDate == null && it.deletedDate == null } == true
 
     /**
      * Helper to determine if the UI should display the unarchive button.
      */
     val displayUnarchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            viewState.asContentOrNull()
-                ?.common
-                ?.currentCipher
-                ?.let { it.archivedDate != null && it.deletedDate == null } == true
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.currentCipher
+            ?.let { it.archivedDate != null && it.deletedDate == null } == true
 
     val canAssignToCollections: Boolean
         get() = viewState.asContentOrNull()
@@ -2361,13 +2338,6 @@ sealed class VaultItemAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal()
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

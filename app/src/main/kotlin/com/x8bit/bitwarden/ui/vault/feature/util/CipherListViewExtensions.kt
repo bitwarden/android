@@ -19,7 +19,6 @@ import kotlinx.collections.immutable.toImmutableList
 fun CipherListView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
 ): List<ListingItemOverflowAction.VaultAction> =
     this
         .id
@@ -88,13 +87,9 @@ fun CipherListView.toOverflowActions(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = it)
                 },
                 ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
-                    .takeIf {
-                        this.archivedDate == null && deletedDate == null && isArchiveEnabled
-                    },
+                    .takeIf { this.archivedDate == null && deletedDate == null },
                 ListingItemOverflowAction.VaultAction.UnarchiveClick(cipherId = cipherId)
-                    .takeIf {
-                        this.archivedDate != null && deletedDate == null && isArchiveEnabled
-                    },
+                    .takeIf { this.archivedDate != null && deletedDate == null },
             )
         }
         .orEmpty()

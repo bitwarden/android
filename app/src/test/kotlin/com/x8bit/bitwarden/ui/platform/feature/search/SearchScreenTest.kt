@@ -1071,7 +1071,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private fun createStateForAutofill(

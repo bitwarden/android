@@ -2568,7 +2568,6 @@ private val DEFAULT_STATE: VaultState = VaultState(
     cipherDecryptionFailureIds = persistentListOf(),
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
-    isArchiveEnabled = true,
     isIntroducingArchiveActionCardDismissed = false,
 )
 
@@ -2586,7 +2585,6 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
     archivedItemsCount = 0,
-    archiveEnabled = true,
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,

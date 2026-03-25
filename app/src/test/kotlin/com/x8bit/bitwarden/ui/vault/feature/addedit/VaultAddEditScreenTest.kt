@@ -4499,7 +4499,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4515,7 +4514,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4531,7 +4529,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4547,7 +4544,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4573,7 +4569,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4589,7 +4584,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4605,7 +4599,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

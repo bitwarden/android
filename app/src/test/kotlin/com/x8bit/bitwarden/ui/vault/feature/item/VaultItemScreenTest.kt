@@ -3334,7 +3334,6 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     baseIconUrl = "https://example.com/",
     isIconLoadingDisabled = true,
     hasPremium = false,
-    isArchiveEnabled = true,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

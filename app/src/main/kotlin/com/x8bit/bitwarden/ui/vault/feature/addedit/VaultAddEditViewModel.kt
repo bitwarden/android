@@ -5,7 +5,6 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
@@ -34,7 +33,6 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -119,7 +117,6 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass", "LongParameterList", "LongMethod")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
@@ -177,7 +174,6 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
-                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -270,12 +266,6 @@ class VaultAddEditViewModel @Inject constructor(
                     shouldShowCoachMarkTour = shouldShowTour,
                 )
             }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1649,10 +1639,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUnarchiveCipherReceive(action)
             }
 
-            is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
@@ -1862,12 +1848,6 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
@@ -2427,7 +2407,6 @@ data class VaultAddEditState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
-    private val isArchiveEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -2484,8 +2463,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the archive button.
      */
     val displayArchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -2495,8 +2473,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the unarchive button.
      */
     val displayUnarchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -3833,13 +3810,6 @@ sealed class VaultAddEditAction {
          */
         data class AvailableFoldersReceive(
             val folderData: DataState<List<FolderView>>,
-        ) : Internal()
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
     }
 }

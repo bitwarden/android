@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -30,7 +29,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -104,7 +102,6 @@ class SearchViewModel @Inject constructor(
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SearchState, SearchEvent, SearchAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -140,7 +137,6 @@ class SearchViewModel @Inject constructor(
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
                 isPremium = userState.activeAccount.isPremium,
                 restrictItemTypesPolicyOrgIds = persistentListOf(),
-                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             )
         },
 ) {
@@ -178,12 +174,6 @@ class SearchViewModel @Inject constructor(
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { SearchAction.Internal.SnackbarDataReceived(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { SearchAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -640,10 +630,6 @@ class SearchViewModel @Inject constructor(
                 handleDecryptCipherErrorReceive(action)
             }
 
-            is SearchAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is SearchAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is SearchAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
         }
@@ -661,12 +647,6 @@ class SearchViewModel @Inject constructor(
                 ),
             )
         }
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: SearchAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleArchiveCipherReceive(action: SearchAction.Internal.ArchiveCipherReceive) {
@@ -1017,7 +997,6 @@ class SearchViewModel @Inject constructor(
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
                                 isPremiumUser = state.isPremium,
-                                isArchiveEnabled = state.isArchiveEnabled,
                             )
                     }
 
@@ -1084,7 +1063,6 @@ data class SearchState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
-    val isArchiveEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -1536,13 +1514,6 @@ sealed class SearchAction {
          */
         data class DecryptCipherErrorReceive(
             val error: Throwable?,
-        ) : Internal()
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
     }
 }
