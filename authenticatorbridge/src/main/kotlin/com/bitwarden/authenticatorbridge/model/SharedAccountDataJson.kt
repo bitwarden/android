@@ -23,8 +23,6 @@ internal data class SharedAccountDataJson(
      * @property name name associated with the account.
      * @property email email associated with the account.
      * @property environmentLabel environment associated with the account.
-     * @property totpUris list of totp URIs associated with the account. This is for legacy use
-     * only.
      * @property cipherData list of ciphers containing totp URIs associated with the account.
      */
     @Serializable
@@ -41,13 +39,8 @@ internal data class SharedAccountDataJson(
         @SerialName("environmentLabel")
         val environmentLabel: String,
 
-        // TODO: PM-34085 Remove totpUris.
-        @SerialName("totpUris")
-        val totpUris: List<String>,
-
-        // TODO: PM-34085 Make cipherData nonnull.
         @SerialName("cipherData")
-        val cipherData: List<CipherJson>?,
+        val cipherData: List<CipherJson>,
     )
 
     /**
