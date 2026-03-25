@@ -36,6 +36,9 @@ user.properties
 /app/src/standardRelease/google-services.json
 /authenticator/src/google-services.json
 
+# Claude Code outputs
+.claude/outputs/
+
 # Python
 .python-version
 __pycache__/

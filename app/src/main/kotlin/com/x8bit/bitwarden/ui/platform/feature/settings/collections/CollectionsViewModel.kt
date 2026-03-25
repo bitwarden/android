@@ -77,6 +77,7 @@ class CollectionsViewModel @Inject constructor(
     }
 
     private fun handleCollectionClick(action: CollectionsAction.CollectionClick) {
+        if (!action.canManage) return
         sendEvent(
             CollectionsEvent.NavigateToEditCollectionScreen(
                 collectionId = action.collectionId,
@@ -180,14 +181,16 @@ private fun List<CollectionView>.toDisplayItems(
     organizations: List<Organization>,
 ): List<CollectionDisplayItem> =
     map { collection ->
+        val org = organizations.find { it.id == collection.organizationId }
         CollectionDisplayItem(
             id = collection.id.toString(),
             name = collection.name,
-            organizationName = organizations
-                .find { it.id == collection.organizationId }
-                ?.name
-                .orEmpty(),
+            organizationName = org?.name.orEmpty(),
             organizationId = collection.organizationId,
+            canManage = collection.manage ||
+                org?.role == OrganizationType.OWNER ||
+                org?.role == OrganizationType.ADMIN ||
+                org?.canEditAnyCollection == true,
         )
     }
 
@@ -276,6 +279,7 @@ sealed class CollectionsAction {
     data class CollectionClick(
         val collectionId: String,
         val organizationId: String,
+        val canManage: Boolean,
     ) : CollectionsAction()
 
     /**

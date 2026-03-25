@@ -71,6 +71,7 @@ class CollectionManagerTest {
             fakeAuthDiskSource.userState = null
             val result = collectionManager.createCollection(
                 organizationId = DEFAULT_ORG_ID,
+                organizationUserId = null,
                 collectionView = mockk(),
             )
             assertEquals(
@@ -95,6 +96,7 @@ class CollectionManagerTest {
 
             val result = collectionManager.createCollection(
                 organizationId = DEFAULT_ORG_ID,
+                organizationUserId = null,
                 collectionView = DEFAULT_COLLECTION_VIEW,
             )
             assertEquals(CreateCollectionResult.Error(error = error), result)
@@ -123,6 +125,7 @@ class CollectionManagerTest {
 
             val result = collectionManager.createCollection(
                 organizationId = DEFAULT_ORG_ID,
+                organizationUserId = null,
                 collectionView = DEFAULT_COLLECTION_VIEW,
             )
             assertEquals(CreateCollectionResult.Error(error = error), result)
@@ -166,6 +169,7 @@ class CollectionManagerTest {
 
             val result = collectionManager.createCollection(
                 organizationId = DEFAULT_ORG_ID,
+                organizationUserId = null,
                 collectionView = DEFAULT_COLLECTION_VIEW,
             )
             assertEquals(

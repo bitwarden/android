@@ -256,6 +256,9 @@ class CollectionAddEditViewModel @Inject constructor(
     private fun handleVaultDataReceive(
         action: CollectionAddEditAction.Internal.VaultDataReceive,
     ) {
+        // Don't overwrite user's in-progress edits with sync data.
+        if (state.viewState is CollectionAddEditState.ViewState.Content) return
+
         when (val vaultDataState = action.vaultDataState) {
             is DataState.Error -> {
                 mutableStateFlow.update {

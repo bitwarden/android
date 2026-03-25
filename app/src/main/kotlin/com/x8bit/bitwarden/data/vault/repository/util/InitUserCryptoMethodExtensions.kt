@@ -15,6 +15,5 @@ val InitUserCryptoMethod.logTag: String
         is InitUserCryptoMethod.KeyConnectorUrl -> "Key Connector URL"
         is InitUserCryptoMethod.Pin -> "Pin"
         is InitUserCryptoMethod.PinEnvelope -> "Pin Envelope"
-        is InitUserCryptoMethod.KeyConnectorUrl -> "Key Connector Url"
         is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
     }

@@ -117,11 +117,12 @@ fun CollectionsScreen(
             is CollectionsState.ViewState.Content -> {
                 CollectionsContent(
                     collectionsList = viewState.collectionList.toImmutableList(),
-                    onItemClick = { collectionId, organizationId ->
+                    onItemClick = { item ->
                         viewModel.trySendAction(
                             CollectionsAction.CollectionClick(
-                                collectionId = collectionId,
-                                organizationId = organizationId,
+                                collectionId = item.id,
+                                organizationId = item.organizationId,
+                                canManage = item.canManage,
                             ),
                         )
                     },
@@ -148,7 +149,7 @@ fun CollectionsScreen(
 @Composable
 private fun CollectionsContent(
     collectionsList: ImmutableList<CollectionDisplayItem>,
-    onItemClick: (collectionId: String, organizationId: String) -> Unit,
+    onItemClick: (item: CollectionDisplayItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (collectionsList.isEmpty()) {
@@ -176,7 +177,7 @@ private fun CollectionsContent(
                 BitwardenTextRow(
                     text = it.name,
                     description = it.organizationName.toAnnotatedString(),
-                    onClick = { onItemClick(it.id, it.organizationId) },
+                    onClick = { onItemClick(it) },
                     textTestTag = "CollectionName",
                     cardStyle = collectionsList.toListItemCardStyle(index = index),
                     modifier = Modifier

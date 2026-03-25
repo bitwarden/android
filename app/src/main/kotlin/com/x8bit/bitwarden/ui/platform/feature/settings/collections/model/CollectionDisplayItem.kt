@@ -9,6 +9,8 @@ import kotlinx.parcelize.Parcelize
  * @param id The id of the collection.
  * @param name The name of the collection.
  * @param organizationName The name of the organization the collection belongs to.
+ * @param organizationId The id of the organization.
+ * @param canManage Whether the user can manage (edit/delete) this collection.
  */
 @Parcelize
 data class CollectionDisplayItem(
@@ -16,4 +18,5 @@ data class CollectionDisplayItem(
     val name: String,
     val organizationName: String,
     val organizationId: String,
+    val canManage: Boolean,
 ) : Parcelable
