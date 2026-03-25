@@ -257,6 +257,13 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
+                navController.navigateToPreviewAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                    fileName = fileName,
+                )
+            },
         )
         setupUnlockDestination(
             onNavigateBack = {

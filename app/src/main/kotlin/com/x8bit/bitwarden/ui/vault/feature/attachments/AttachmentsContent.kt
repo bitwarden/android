@@ -70,6 +70,7 @@ fun AttachmentsContent(
                 AttachmentListEntry(
                     attachmentItem = it,
                     onDeleteClick = attachmentsHandlers.onDeleteClick,
+                    onItemClick = attachmentsHandlers.onItemClick,
                     cardStyle = viewState.attachments.toListItemCardStyle(index = index),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -141,6 +142,7 @@ fun AttachmentsContent(
 private fun AttachmentListEntry(
     attachmentItem: AttachmentsState.AttachmentItem,
     onDeleteClick: (attachmentId: String) -> Unit,
+    onItemClick: (attachment: AttachmentsState.AttachmentItem) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
@@ -163,7 +165,11 @@ private fun AttachmentListEntry(
     Row(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingStart = 16.dp,
+                onClick = { onItemClick(attachmentItem) },
+            )
             .testTag("AttachmentRow"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
