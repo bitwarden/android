@@ -12,6 +12,7 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCollectionResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCollectionResult
@@ -38,6 +39,7 @@ private const val SLASH_CHAR = "/"
 @Suppress("TooManyFunctions", "LargeClass")
 class CollectionAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val relayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<CollectionAddEditState, CollectionAddEditEvent, CollectionAddEditAction>(
@@ -168,8 +170,12 @@ class CollectionAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             when (collectionAddEditType) {
                 is CollectionAddEditType.AddItem -> {
+                    val org = authRepository.organizations.find {
+                        it.id == collectionAddEditType.organizationId
+                    }
                     val result = vaultRepository.createCollection(
                         organizationId = collectionAddEditType.organizationId,
+                        organizationUserId = org?.organizationUserId,
                         collectionView = CollectionView(
                             id = null,
                             organizationId = collectionAddEditType.organizationId,

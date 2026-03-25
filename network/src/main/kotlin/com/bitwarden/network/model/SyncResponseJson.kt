@@ -337,6 +337,9 @@ data class SyncResponseJson(
             @SerialName("userId")
             val userId: String?,
 
+            @SerialName("organizationUserId")
+            val organizationUserId: String?,
+
             @SerialName("useEvents")
             val shouldUseEvents: Boolean,
 
@@ -368,6 +371,12 @@ data class SyncResponseJson(
 
             @SerialName("limitItemDeletion")
             val limitItemDeletion: Boolean = false,
+
+            @SerialName("limitCollectionCreation")
+            val limitCollectionCreation: Boolean = false,
+
+            @SerialName("limitCollectionDeletion")
+            val limitCollectionDeletion: Boolean = false,
         )
 
         /**

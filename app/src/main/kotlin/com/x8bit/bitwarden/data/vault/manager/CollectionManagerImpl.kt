@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.network.model.CollectionAccessSelectionJson
 import com.bitwarden.network.model.CollectionJsonRequest
 import com.bitwarden.network.model.UpdateCollectionResponseJson
 import com.bitwarden.network.service.CollectionService
@@ -27,16 +28,31 @@ class CollectionManagerImpl(
 
     override suspend fun createCollection(
         organizationId: String,
+        organizationUserId: String?,
         collectionView: CollectionView,
     ): CreateCollectionResult {
         val userId = activeUserId
             ?: return CreateCollectionResult.Error(error = NoActiveUserException())
+        // Grant the creating user manage access, matching web client behavior.
+        val users = organizationUserId?.let {
+            listOf(
+                CollectionAccessSelectionJson(
+                    id = it,
+                    readOnly = false,
+                    hidePasswords = false,
+                    manage = true,
+                ),
+            )
+        }
         return vaultSdkSource
             .encryptCollection(userId = userId, collectionView = collectionView)
             .flatMap {
                 collectionService.createCollection(
                     organizationId = organizationId,
-                    body = CollectionJsonRequest(name = it.name),
+                    body = CollectionJsonRequest(
+                        name = it.name,
+                        users = users,
+                    ),
                 )
             }
             .onSuccess {

@@ -11,9 +11,11 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCollectionResult
 interface CollectionManager {
     /**
      * Attempt to create a collection in the given [organizationId].
+     * The [organizationUserId] is used to grant the creating user manage access.
      */
     suspend fun createCollection(
         organizationId: String,
+        organizationUserId: String?,
         collectionView: CollectionView,
     ): CreateCollectionResult
 

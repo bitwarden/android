@@ -12,6 +12,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.bitwarden.network.model.OrganizationType
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -88,7 +89,7 @@ class CollectionsViewModel @Inject constructor(
         // For now, use the first org with create permission.
         // TODO: If multiple orgs, show org picker (pending G1 decision).
         val org = authRepository.organizations.firstOrNull {
-            it.canCreateNewCollections
+            it.canManageCollections
         }
         if (org != null) {
             sendEvent(CollectionsEvent.NavigateToAddCollectionScreen(org.id))
@@ -128,7 +129,7 @@ class CollectionsViewModel @Inject constructor(
                             collectionList = vaultDataState.data
                                 .toDisplayItems(organizations),
                             showAddButton = organizations.any {
-                                org -> org.canCreateNewCollections
+                                org -> org.canManageCollections
                             },
                         ),
                     )
@@ -165,7 +166,7 @@ class CollectionsViewModel @Inject constructor(
                             collectionList = vaultDataState.data
                                 .toDisplayItems(organizations),
                             showAddButton = organizations.any {
-                                org -> org.canCreateNewCollections
+                                org -> org.canManageCollections
                             },
                         ),
                     )
