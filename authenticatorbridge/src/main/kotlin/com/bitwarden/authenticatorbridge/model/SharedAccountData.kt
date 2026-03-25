@@ -30,16 +30,13 @@ data class SharedAccountData(
      * Models a single shared cipher containing a totp.
      *
      * @param uri the totp URI.
-     * @param legacyUri the legacy totp URI.
      * @param id unique ID for this item.
      * @param name the name of the cipher.
      * @param username the username of the item.
      * @param isFavorite indicates that this item is a favorite.
      */
-    data class CipherData constructor(
+    data class CipherData(
         val uri: String,
-        // TODO: PM-34085 Remove the legacyUri.
-        val legacyUri: String?,
         val id: String,
         val name: String,
         val username: String?,

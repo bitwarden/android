@@ -176,7 +176,6 @@ private val SHARED_ACCOUNT_DATA = SharedAccountData(
             cipherData = listOf(
                 SharedAccountData.CipherData(
                     uri = "test.com",
-                    legacyUri = "test.com",
                     id = "1234",
                     name = "test",
                     username = null,
