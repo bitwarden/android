@@ -227,6 +227,8 @@ Scanning will happen automatically.</string>
     <string name="copy_security_code">Copy security code</string>
     <string name="number">Number</string>
     <string name="security_code">Security code</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Card</string>
     <string name="type_identity">Identity</string>
     <string name="type_login">Login</string>

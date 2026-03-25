@@ -37,6 +37,7 @@ firebaseBom = "34.10.0"
 glide = "5.0.5"
 glideCompose = "1.0.0-beta01"
 googleBilling = "8.3.0"
+googleMlkitTextRecognition = "16.0.1"
 googleGuava = "33.5.0-jre"
 googleProtoBufJava = "4.34.0"
 googleProtoBufPlugin = "0.9.6"
@@ -110,6 +111,7 @@ google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
+google-mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "googleMlkitTextRecognition" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
