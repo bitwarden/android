@@ -10,6 +10,8 @@ import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManagerImpl
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -59,6 +61,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideCardScanManager(): CardScanManager = CardScanManagerImpl()
 
     @Provides
     @Singleton
