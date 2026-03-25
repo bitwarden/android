@@ -358,6 +358,24 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `ActionCardClick with UpgradePremium should emit NavigateToUpgradePremium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.UpgradePremium,
+                    ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToUpgradePremium,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `actionCard should return UpgradePremium when eligible and content is showing`() {
         val contentViewState = DEFAULT_CONTENT_VIEW_STATE
         val state = createMockVaultState(viewState = contentViewState).copy(
@@ -3353,6 +3371,22 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
+
+    @Test
+    fun `when PREMIUM_UPGRADED relay emits, snackbar is shown`() =
+        runTest {
+            val viewModel = createViewModel()
+            val expectedSnackbarData = BitwardenSnackbarData(
+                message = BitwardenString.upgraded_to_premium.asText(),
+            )
+            viewModel.eventFlow.test {
+                mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
+                assertEquals(
+                    VaultEvent.ShowSnackbar(expectedSnackbarData),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `when account switch action is handled, clear snackbar relay buffer should be called`() =

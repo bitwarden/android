@@ -78,6 +78,7 @@ import org.junit.Test
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
     private var onNavigateToAutofillCalled = false
+    private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -121,6 +122,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -2293,6 +2295,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `when NavigateToAutofillSettings is sent, it should call onNavigateToAutofillSettings`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToAutofillSettings)
         assertTrue(onNavigateToAutofillCalled)
+    }
+
+    @Test
+    fun `when NavigateToUpgradePremium is sent, it should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToUpgradePremium)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test

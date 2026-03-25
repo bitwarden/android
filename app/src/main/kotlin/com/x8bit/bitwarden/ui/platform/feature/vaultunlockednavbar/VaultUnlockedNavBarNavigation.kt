@@ -52,6 +52,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithStayTransitions<VaultUnlockedNavbarRoute> {
         VaultUnlockedNavBarScreen(
@@ -75,6 +76,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToFlightRecorder = onNavigateToFlightRecorder,
             onNavigateToRecordedLogs = onNavigateToRecordedLogs,
             onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }
