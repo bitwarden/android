@@ -1183,7 +1183,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = username.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1220,7 +1220,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1279,7 +1279,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1678,7 +1678,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1851,7 +1851,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1910,7 +1910,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -2350,7 +2350,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                         VaultState.ViewState.VaultItem.SshKey(
                             id = "mockId",
                             name = "mockSshKey".asText(),
-                            overflowOptions = emptyList(),
+                            overflowOptions = persistentListOf(),
                             shouldShowMasterPasswordReprompt = false,
                             hasDecryptionError = false,
                         ),

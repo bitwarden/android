@@ -20,7 +20,7 @@ fun CipherListView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
     isArchiveEnabled: Boolean,
-): List<ListingItemOverflowAction.VaultAction> =
+): ImmutableList<ListingItemOverflowAction.VaultAction> =
     this
         .id
         ?.let { cipherId ->
@@ -98,6 +98,7 @@ fun CipherListView.toOverflowActions(
             )
         }
         .orEmpty()
+        .toImmutableList()
 
 /**
  * Checks if the list is empty and if not returns an icon in a list.

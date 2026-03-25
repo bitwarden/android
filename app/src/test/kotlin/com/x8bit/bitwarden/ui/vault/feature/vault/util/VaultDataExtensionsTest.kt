@@ -103,7 +103,7 @@ class VaultDataExtensionsTest {
                         startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
                         startIconTestTag = "LoginCipherIcon",
                         extraIconList = mockCipher.toFailureCipherListView().toLabelIcons(),
-                        overflowOptions = emptyList(),
+                        overflowOptions = persistentListOf(),
                         shouldShowMasterPasswordReprompt = false,
                         username = null,
                         hasDecryptionError = true,
@@ -1291,7 +1291,7 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
     VaultState.ViewState.VaultItem.SshKey(
         id = "mockId-$number",
         name = "mockName-$number".asText(),
-        overflowOptions = listOf(
+        overflowOptions = persistentListOf(
             ListingItemOverflowAction.VaultAction.ViewClick(
                 cipherId = "mockId-$number",
                 cipherType = CipherType.SSH_KEY,

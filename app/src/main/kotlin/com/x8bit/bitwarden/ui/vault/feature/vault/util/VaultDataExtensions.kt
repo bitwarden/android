@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import kotlinx.collections.immutable.persistentListOf
 
 private const val ANDROID_URI = "androidapp://"
 private const val IOS_URI = "iosapp://"
@@ -304,7 +305,7 @@ private fun CipherListView.toVaultItemOrNull(
                 usePasskeyDefaultIcon = false,
             ),
             overflowOptions = if (hasDecryptionError) {
-                emptyList()
+                persistentListOf()
             } else {
                 toOverflowActions(
                     hasMasterPassword = hasMasterPassword,

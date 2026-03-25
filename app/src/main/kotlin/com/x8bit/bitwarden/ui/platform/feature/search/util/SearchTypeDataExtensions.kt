@@ -29,6 +29,9 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 
@@ -199,8 +202,7 @@ fun List<CipherListView>.toViewState(
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
                     isArchiveEnabled = isArchiveEnabled,
-                )
-                    .sortAlphabetically(),
+                ),
             )
         }
 
@@ -219,17 +221,20 @@ private fun List<CipherListView>.toDisplayItemList(
     isAutofill: Boolean,
     isPremiumUser: Boolean,
     isArchiveEnabled: Boolean,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseIconUrl = baseIconUrl,
-            hasMasterPassword = hasMasterPassword,
-            isIconLoadingDisabled = isIconLoadingDisabled,
-            isAutofill = isAutofill,
-            isPremiumUser = isPremiumUser,
-            isArchiveEnabled = isArchiveEnabled,
-        )
-    }
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseIconUrl = baseIconUrl,
+                hasMasterPassword = hasMasterPassword,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                isAutofill = isAutofill,
+                isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
 @Suppress("LongParameterList")
 private fun CipherListView.toDisplayItem(
@@ -263,9 +268,8 @@ private fun CipherListView.toDisplayItem(
             // Only valid for autofill
             .filter { isAutofill }
             // Only Login types get the save option
-            .filter {
-                this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
-            },
+            .filter { this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE) }
+            .toImmutableList(),
         shouldDisplayMasterPasswordReprompt = hasMasterPassword &&
             reprompt == CipherRepromptType.PASSWORD,
         itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type.toSdkCipherType()),
@@ -364,8 +368,7 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                )
-                    .sortAlphabetically(),
+                ),
             )
         }
 
@@ -379,13 +382,16 @@ fun List<SendView>.toViewState(
 private fun List<SendView>.toDisplayItemList(
     baseWebSendUrl: String,
     clock: Clock,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseWebSendUrl = baseWebSendUrl,
-            clock = clock,
-        )
-    }
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseWebSendUrl = baseWebSendUrl,
+                clock = clock,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
@@ -411,7 +417,7 @@ private fun SendView.toDisplayItem(
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
-        autofillSelectionOptions = emptyList(),
+        autofillSelectionOptions = persistentListOf(),
         shouldDisplayMasterPasswordReprompt = false,
         itemType = SearchState.DisplayItem.ItemType.Sends(type = this.type),
     )

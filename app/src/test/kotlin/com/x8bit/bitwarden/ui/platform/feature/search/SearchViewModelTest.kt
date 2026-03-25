@@ -1444,7 +1444,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1484,7 +1484,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -1556,7 +1556,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1597,7 +1597,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -1675,7 +1675,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1797,7 +1797,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1837,7 +1837,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -2031,7 +2031,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherListView = createMockCipherListView(number = 1)
         val ciphers = listOf(cipherListView)
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -2138,7 +2138,7 @@ private val AUTOFILL_SELECTION_DATA =
 private val INITIAL_STATE_FOR_AUTOFILL =
     DEFAULT_STATE.copy(
         viewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         ),
         autofillSelectionData = AUTOFILL_SELECTION_DATA,
     )
