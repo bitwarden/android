@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.bumptech.glide)
+    implementation(libs.google.mlkit.text.recognition)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
