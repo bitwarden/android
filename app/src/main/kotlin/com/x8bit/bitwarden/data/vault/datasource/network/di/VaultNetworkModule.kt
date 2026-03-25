@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.di
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.DownloadService
+import com.bitwarden.network.service.CollectionService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
@@ -24,6 +25,12 @@ object VaultNetworkModule {
     fun provideCiphersService(
         bitwardenServiceClient: BitwardenServiceClient,
     ): CiphersService = bitwardenServiceClient.ciphersService
+
+    @Provides
+    @Singleton
+    fun providesCollectionService(
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): CollectionService = bitwardenServiceClient.collectionService
 
     @Provides
     @Singleton

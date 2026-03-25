@@ -335,6 +335,17 @@ class VaultSdkSourceImpl(
                 .decryptList(collections = collectionList)
         }
 
+    override suspend fun encryptCollection(
+        userId: String,
+        collectionView: CollectionView,
+    ): Result<Collection> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .vault()
+                .collections()
+                .encrypt(collectionView = collectionView)
+        }
+
     override suspend fun decryptSend(
         userId: String,
         send: Send,

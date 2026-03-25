@@ -14,7 +14,9 @@
     <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Do you really want to delete? This cannot be undone.</string>
+    <string name="do_you_really_want_to_delete_collection">Do you really want to delete this collection? This cannot be undone.</string>
     <string name="edit">Edit</string>
+    <string name="edit_collection">Edit collection</string>
     <string name="edit_folder">Edit folder</string>
     <string name="email">Email</string>
     <string name="email_address">Email address</string>
@@ -119,6 +121,7 @@
     <string name="never">Never</string>
     <string name="new_item_created">Item added</string>
     <string name="no_cards">There are no cards in your vault.</string>
+    <string name="new_collection">New collection</string>
     <string name="new_card">New card</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
@@ -278,6 +281,10 @@ Scanning will happen automatically.</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
     <string name="go_to_my_vault">Go to my vault</string>
+    <string name="collection_created">New collection created.</string>
+    <string name="collection_deleted">Collection deleted.</string>
+    <string name="collection_name_slash_error">Collection name cannot contain the \u201c/\u201d character.</string>
+    <string name="collection_updated">Collection saved</string>
     <string name="collections">Collections</string>
     <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">There are no items in this folder.</string>

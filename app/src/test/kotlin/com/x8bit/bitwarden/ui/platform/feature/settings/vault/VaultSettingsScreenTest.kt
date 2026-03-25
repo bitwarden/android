@@ -28,6 +28,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
+    private var onNavigateToCollectionsCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
@@ -46,6 +47,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
+                onNavigateToCollections = { onNavigateToCollectionsCalled = true },
             )
         }
     }

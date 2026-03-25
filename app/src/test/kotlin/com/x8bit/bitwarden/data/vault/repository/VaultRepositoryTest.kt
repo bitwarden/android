@@ -129,6 +129,7 @@ class VaultRepositoryTest {
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+        collectionManager = mockk(),
     )
 
     @BeforeEach

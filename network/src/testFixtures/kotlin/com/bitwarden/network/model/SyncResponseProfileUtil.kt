@@ -86,6 +86,7 @@ fun createMockOrganizationNetwork(
     use2fa: Boolean = false,
     familySponsorshipToDelete: Boolean? = false,
     userId: String? = "mockUserId-$number",
+    organizationUserId: String? = "mockOrgUserId-$number",
     shouldUseEvents: Boolean = false,
     familySponsorshipFriendlyName: String? = "mockFamilySponsorshipFriendlyName-$number",
     shouldUseTotp: Boolean = false,
@@ -96,6 +97,8 @@ fun createMockOrganizationNetwork(
     status: OrganizationStatusType = OrganizationStatusType.ACCEPTED,
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
+    limitCollectionCreation: Boolean = false,
+    limitCollectionDeletion: Boolean = false,
 ): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
@@ -120,6 +123,7 @@ fun createMockOrganizationNetwork(
         use2fa = use2fa,
         familySponsorshipToDelete = familySponsorshipToDelete,
         userId = userId,
+        organizationUserId = organizationUserId,
         shouldUseEvents = shouldUseEvents,
         familySponsorshipFriendlyName = familySponsorshipFriendlyName,
         shouldUseTotp = shouldUseTotp,
@@ -130,6 +134,8 @@ fun createMockOrganizationNetwork(
         status = status,
         userIsClaimedByOrganization = userIsClaimedByOrganization,
         limitItemDeletion = limitItemDeletion,
+        limitCollectionCreation = limitCollectionCreation,
+        limitCollectionDeletion = limitCollectionDeletion,
     )
 
 /**
@@ -149,10 +155,16 @@ fun createMockOrganizationKeys(
 fun createMockPermissions(
     shouldManageResetPassword: Boolean = false,
     shouldManagePolicies: Boolean = false,
+    canCreateNewCollections: Boolean = false,
+    canEditAnyCollection: Boolean = false,
+    canDeleteAnyCollection: Boolean = false,
 ): SyncResponseJson.Profile.Permissions =
     SyncResponseJson.Profile.Permissions(
         shouldManageResetPassword = shouldManageResetPassword,
         shouldManagePolicies = shouldManagePolicies,
+        canCreateNewCollections = canCreateNewCollections,
+        canEditAnyCollection = canEditAnyCollection,
+        canDeleteAnyCollection = canDeleteAnyCollection,
     )
 
 /**

@@ -226,7 +226,7 @@ configurations.all {
     resolutionStrategy.dependencySubstitution {
         if ((userProperties["localSdk"] as String?).toBoolean()) {
             substitute(module("com.bitwarden:sdk-android"))
-                .using(module("com.bitwarden:sdk-android:LOCAL"))
+                .using(module("com.bitwarden:sdk-android.dev:LOCAL"))
         }
     }
 }

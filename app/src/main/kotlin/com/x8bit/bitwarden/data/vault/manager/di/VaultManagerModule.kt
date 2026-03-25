@@ -7,6 +7,7 @@ import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.network.service.CollectionService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
@@ -28,6 +29,8 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CipherManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.CollectionManager
+import com.x8bit.bitwarden.data.vault.manager.CollectionManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
@@ -112,6 +115,20 @@ object VaultManagerModule {
         reviewPromptManager = reviewPromptManager,
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCollectionManager(
+        collectionService: CollectionService,
+        vaultDiskSource: VaultDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        authDiskSource: AuthDiskSource,
+    ): CollectionManager = CollectionManagerImpl(
+        authDiskSource = authDiskSource,
+        collectionService = collectionService,
+        vaultDiskSource = vaultDiskSource,
+        vaultSdkSource = vaultSdkSource,
     )
 
     @Provides
