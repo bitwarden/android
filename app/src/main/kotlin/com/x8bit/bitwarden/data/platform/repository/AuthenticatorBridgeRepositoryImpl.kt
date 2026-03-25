@@ -48,6 +48,7 @@ class AuthenticatorBridgeRepositoryImpl(
             }
         }
 
+    @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
         return authDiskSource
             .userState
@@ -88,7 +89,7 @@ class AuthenticatorBridgeRepositoryImpl(
                 }
 
                 // Vault is unlocked, query vault disk source for totp logins:
-                val totpUris = vaultDiskSource
+                val cipherData = vaultDiskSource
                     .getTotpCiphers(userId = userId)
                     // Filter out any deleted and archived ciphers.
                     .filter { it.deletedDate == null && it.archivedDate == null }
@@ -97,10 +98,23 @@ class AuthenticatorBridgeRepositoryImpl(
                             .decryptCipher(userId = userId, cipher = it.toEncryptedSdkCipher())
                             .getOrNull()
                             ?.let { decryptedCipher ->
-                                val rawTotp = decryptedCipher.login?.totp
+                                val cipherId = decryptedCipher.id ?: return@let null
                                 val cipherName = decryptedCipher.name
                                 val username = decryptedCipher.login?.username
-                                rawTotp.sanitizeTotpUri(issuer = cipherName, username = username)
+                                decryptedCipher.login?.totp?.let { rawTotp ->
+                                    SharedAccountData.CipherData(
+                                        uri = rawTotp,
+                                        // TODO: PM-34085 Remove the legacyUri.
+                                        legacyUri = rawTotp.sanitizeTotpUri(
+                                            issuer = cipherName,
+                                            username = username,
+                                        ),
+                                        id = cipherId,
+                                        name = cipherName,
+                                        username = username,
+                                        isFavorite = decryptedCipher.favorite,
+                                    )
+                                }
                             }
                     }
 
@@ -116,7 +130,7 @@ class AuthenticatorBridgeRepositoryImpl(
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault()
                         .label,
-                    totpUris = totpUris,
+                    cipherData = cipherData,
                 )
             }
             .let(::SharedAccountData)
