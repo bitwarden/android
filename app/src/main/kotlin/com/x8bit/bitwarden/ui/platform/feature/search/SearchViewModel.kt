@@ -1112,7 +1112,7 @@ data class SearchState(
          */
         @Parcelize
         data class Content(
-            val displayItems: List<DisplayItem>,
+            val displayItems: ImmutableList<DisplayItem>,
         ) : ViewState() {
             override val hasVaultFilter: Boolean get() = true
         }
@@ -1188,9 +1188,9 @@ data class SearchState(
         val totpCode: String?,
         val iconData: IconData,
         val extraIconList: ImmutableList<IconData>,
-        val overflowOptions: List<ListingItemOverflowAction>,
+        val overflowOptions: ImmutableList<ListingItemOverflowAction>,
         val overflowTestTag: String?,
-        val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val autofillSelectionOptions: ImmutableList<AutofillSelectionOption>,
         val shouldDisplayMasterPasswordReprompt: Boolean,
         val itemType: ItemType,
     ) : Parcelable {

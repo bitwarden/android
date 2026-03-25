@@ -1709,7 +1709,7 @@ data class VaultState(
             /**
              * The overflow options to be displayed for the vault item.
              */
-            abstract val overflowOptions: List<ListingItemOverflowAction.VaultAction>
+            abstract val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>
 
             /**
              * Whether to prompt the user for their password when they select an overflow option.
@@ -1738,7 +1738,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
                 val username: Text?,
@@ -1762,7 +1762,7 @@ data class VaultState(
                 ),
                 override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
                 private val brand: VaultCardBrand? = null,
@@ -1795,7 +1795,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val fullName: Text?,
@@ -1815,7 +1815,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
@@ -1833,7 +1833,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
             ) : VaultItem() {

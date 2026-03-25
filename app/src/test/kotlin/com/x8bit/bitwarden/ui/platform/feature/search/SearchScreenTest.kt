@@ -45,6 +45,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
@@ -226,7 +227,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -241,7 +242,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -417,7 +418,7 @@ class SearchScreenTest : BitwardenComposeTest() {
     fun `clicking on item when reprompt is required should show master password dialog`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(number = 1).copy(
                         shouldDisplayMasterPasswordReprompt = true,
                     ),
@@ -595,7 +596,9 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForCipher(number = number)),
+                    displayItems = persistentListOf(
+                        createMockDisplayItemForCipher(number = number),
+                    ),
                 ),
             )
         }
@@ -617,7 +620,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
                 ),
             )
         }
@@ -754,7 +757,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1)
                             .copy(shouldDisplayMasterPasswordReprompt = true),
                     ),
@@ -783,7 +786,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1)
                             .copy(shouldDisplayMasterPasswordReprompt = true),
                     ),
@@ -832,7 +835,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = number)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = number)),
                 ),
             )
         }
@@ -854,7 +857,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = 1)),
                 ),
             )
         }
@@ -962,7 +965,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = 1)),
                 ),
             )
         }
@@ -1079,12 +1082,11 @@ private fun createStateForAutofill(
 ): SearchState = DEFAULT_STATE
     .copy(
         viewState = SearchState.ViewState.Content(
-            displayItems = listOf(
-                createMockDisplayItemForCipher(number = 1)
-                    .copy(
-                        autofillSelectionOptions = AutofillSelectionOption.entries,
-                        shouldDisplayMasterPasswordReprompt = isRepromptRequired,
-                    ),
+            displayItems = persistentListOf(
+                createMockDisplayItemForCipher(number = 1).copy(
+                    autofillSelectionOptions = AutofillSelectionOption.entries.toImmutableList(),
+                    shouldDisplayMasterPasswordReprompt = isRepromptRequired,
+                ),
             ),
         ),
     )
