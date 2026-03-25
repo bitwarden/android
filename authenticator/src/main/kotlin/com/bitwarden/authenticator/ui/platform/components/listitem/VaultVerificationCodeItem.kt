@@ -154,7 +154,9 @@ fun VaultVerificationCodeItem(
 
         Text(
             modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode.chunked(size = 3).joinToString(separator = " "),
+            text = authCode
+                .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                .joinToString(separator = " "),
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )
