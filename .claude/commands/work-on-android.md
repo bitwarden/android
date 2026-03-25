@@ -41,7 +41,7 @@ Invoke `Skill(perform-android-preflight-checklist)` to perform a quality gate ch
 
 ### Phase 5: Commit
 
-Invoke the `Skill(committing-android-changes)` to stage and commit the changes with a properly formatted commit message.
+Invoke `Skill(committing-android-changes)` to stage and commit the changes with a properly formatted commit message.
 
 **Before advancing**: Confirm the commit was successful and ask if the user wants to proceed to review and PR creation, or stop here.
 

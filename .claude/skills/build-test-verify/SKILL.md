@@ -100,7 +100,7 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 
 ```bash
 # Detekt on staged files only (preferred during development)
-git add -A && ./gradlew -Pprecommit=true detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
+git add -u && ./gradlew -Pprecommit=true detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
 
 # Detekt on all files (full scan, use sparingly)
 ./gradlew detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
