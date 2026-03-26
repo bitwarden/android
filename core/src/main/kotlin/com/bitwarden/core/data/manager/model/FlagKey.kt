@@ -37,6 +37,7 @@ sealed class FlagKey<out T : Any> {
                 MigrateMyVaultToMyItems,
                 ArchiveItems,
                 SendEmailVerification,
+                CardScanner,
                 MobilePremiumUpgrade,
             )
         }
@@ -105,6 +106,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SendEmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "pm-19051-send-email-verification"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the card scanner feature.
+     */
+    data object CardScanner : FlagKey<Boolean>() {
+        override val keyName: String = "card-scanner-mobile"
         override val defaultValue: Boolean = false
     }
 
