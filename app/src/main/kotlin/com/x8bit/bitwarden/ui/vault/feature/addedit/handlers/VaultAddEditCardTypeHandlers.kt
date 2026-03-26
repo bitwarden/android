@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
  * @property onSecurityCodeVisibilityChange Handles the action when the security code visibility
  * changes.
  * @property onNumberVisibilityChange Handles the action when the number visibility changes.
+ * @property onScanCardClick Handles the action when the scan card button is clicked.
  */
 @Suppress("MaxLineLength")
 data class VaultAddEditCardTypeHandlers(
@@ -29,6 +30,7 @@ data class VaultAddEditCardTypeHandlers(
     val onSecurityCodeTextChange: (String) -> Unit,
     val onSecurityCodeVisibilityChange: (Boolean) -> Unit,
     val onNumberVisibilityChange: (Boolean) -> Unit,
+    val onScanCardClick: (Boolean) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -37,6 +39,7 @@ data class VaultAddEditCardTypeHandlers(
          * Creates an instance of [VaultAddEditCardTypeHandlers] by binding actions
          * to the provided [VaultAddEditViewModel].
          */
+        @Suppress("LongMethod")
         fun create(viewModel: VaultAddEditViewModel): VaultAddEditCardTypeHandlers =
             VaultAddEditCardTypeHandlers(
                 onCardHolderNameTextChange = { newCardHolderName ->
@@ -91,6 +94,13 @@ data class VaultAddEditCardTypeHandlers(
                 onNumberVisibilityChange = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.CardType.NumberVisibilityChange(isVisible = it),
+                    )
+                },
+                onScanCardClick = { isGranted ->
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                            isGranted = isGranted,
+                        ),
                     )
                 },
             )

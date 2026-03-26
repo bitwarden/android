@@ -99,6 +99,7 @@ import kotlinx.coroutines.launch
 fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
+    onNavigateToCardScanScreen: () -> Unit,
     viewModel: VaultAddEditViewModel = hiltViewModel(),
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -127,6 +128,10 @@ fun VaultAddEditScreen(
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
                 onNavigateToQrCodeScanScreen()
+            }
+
+            is VaultAddEditEvent.NavigateToCardScan -> {
+                onNavigateToCardScanScreen()
             }
 
             is VaultAddEditEvent.NavigateToManualCodeEntry -> {
@@ -393,6 +398,7 @@ fun VaultAddEditScreen(
                         identityItemTypeHandlers = identityItemTypeHandlers,
                         cardItemTypeHandlers = cardItemTypeHandlers,
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
+                        isCardScannerEnabled = state.isCardScannerEnabled,
                         lazyListState = lazyListState,
                         onPreviousCoachMark = {
                             coroutineScope.launch {

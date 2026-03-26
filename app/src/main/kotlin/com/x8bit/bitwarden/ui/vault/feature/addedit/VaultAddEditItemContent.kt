@@ -51,6 +51,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
+    isCardScannerEnabled: Boolean,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     permissionsManager: PermissionsManager,
@@ -64,7 +65,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         onResult = { isGranted ->
             when (state.type) {
                 is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> Unit
-                is VaultAddEditState.ViewState.Content.ItemType.Card -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Card -> {
+                    cardItemTypeHandlers.onScanCardClick(isGranted)
+                }
+
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.SshKey -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
@@ -236,6 +240,14 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             is VaultAddEditState.ViewState.Content.ItemType.Card -> {
                 vaultAddEditCardItems(
                     cardState = state.type,
+                    isCardScannerEnabled = isCardScannerEnabled,
+                    onScanCardClick = {
+                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                            cardItemTypeHandlers.onScanCardClick(true)
+                        } else {
+                            launcher.launch(Manifest.permission.CAMERA)
+                        }
+                    },
                     cardHandlers = cardItemTypeHandlers,
                 )
             }
