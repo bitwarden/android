@@ -7,7 +7,6 @@ import com.bitwarden.sdk.ServerCommunicationConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkCipherRepository
-import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkLocalUserDataKeyStateRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkTokenRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.ServerCommunicationConfigRepositoryImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -26,10 +25,6 @@ class SdkRepositoryFactoryImpl(
             cipher = getSdkRepository(userId = userId),
             folder = null,
             userKeyState = null,
-            localUserDataKeyState = SdkLocalUserDataKeyStateRepository(
-                authDiskSource = authDiskSource,
-            ),
-            ephemeralPinEnvelopeState = null,
         )
 
     override fun getClientManagedTokens(
