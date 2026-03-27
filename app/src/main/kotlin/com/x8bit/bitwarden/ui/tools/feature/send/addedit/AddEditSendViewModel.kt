@@ -17,6 +17,7 @@ import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.FolderData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -138,6 +139,15 @@ class AddEditSendViewModel @Inject constructor(
                             )
                         }
 
+                        SendItemType.FOLDER -> {
+                            AddEditSendState.ViewState.Content.SendType.Folder(
+                                uri = null,
+                                name = null,
+                                fileCount = null,
+                                totalSizeBytes = null,
+                            )
+                        }
+
                         SendItemType.TEXT -> {
                             AddEditSendState.ViewState.Content.SendType.Text(
                                 input = "",
@@ -197,6 +207,8 @@ class AddEditSendViewModel @Inject constructor(
         AddEditSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddEditSendAction.SaveClick -> handleSaveClick()
         is AddEditSendAction.ChooseFileClick -> handleChooseFileClick(action)
+        AddEditSendAction.ChooseFolderClick -> handleChooseFolderClick()
+        is AddEditSendAction.FolderChoose -> handleFolderChoose(action)
         is AddEditSendAction.NameChange -> handleNameChange(action)
         is AddEditSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
         is AddEditSendAction.TextChange -> handleTextChange(action)
@@ -750,6 +762,44 @@ class AddEditSendViewModel @Inject constructor(
                         return@onContent
                     }
                 }
+
+            (content.selectedType as? AddEditSendState.ViewState.Content.SendType.Folder)
+                ?.let { folderType ->
+                    if (!state.isPremium) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = BitwardenString.send.asText(),
+                                    message = BitwardenString.send_file_premium_required.asText(),
+                                ),
+                            )
+                        }
+                        return@onContent
+                    }
+                    if (folderType.uri == null) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = BitwardenString.an_error_has_occurred.asText(),
+                                    message = BitwardenString.choose_folder.asText(),
+                                ),
+                            )
+                        }
+                        return@onContent
+                    }
+                    if ((folderType.totalSizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = BitwardenString.an_error_has_occurred.asText(),
+                                    message = BitwardenString.max_file_size.asText(),
+                                ),
+                            )
+                        }
+                        return@onContent
+                    }
+                }
+
             if (!networkConnectionManager.isNetworkConnected) {
                 mutableStateFlow.update {
                     it.copy(
@@ -771,12 +821,23 @@ class AddEditSendViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val addSendType = state.addEditSendType) {
                     AddEditSendType.AddItem -> {
-                        val fileType = content
-                            .selectedType as? AddEditSendState.ViewState.Content.SendType.File
-                        val result = vaultRepo.createSend(
-                            sendView = content.toSendView(clock),
-                            fileUri = fileType?.uri,
-                        )
+                        val folderType = content
+                            .selectedType as? AddEditSendState.ViewState.Content.SendType.Folder
+                        val result = if (folderType != null) {
+                            vaultRepo.createFolderSend(
+                                sendView = content.toSendView(clock),
+                                folderUri = requireNotNull(folderType.uri),
+                                folderName = requireNotNull(folderType.name),
+                            )
+                        } else {
+                            val fileType = content
+                                .selectedType
+                                as? AddEditSendState.ViewState.Content.SendType.File
+                            vaultRepo.createSend(
+                                sendView = content.toSendView(clock),
+                                fileUri = fileType?.uri,
+                            )
+                        }
                         sendAction(AddEditSendAction.Internal.CreateSendResultReceive(result))
                     }
 
@@ -816,6 +877,34 @@ class AddEditSendViewModel @Inject constructor(
 
     private fun handleChooseFileClick(action: AddEditSendAction.ChooseFileClick) {
         sendEvent(AddEditSendEvent.ShowChooserSheet(action.isCameraPermissionGranted))
+    }
+
+    private fun handleChooseFolderClick() {
+        sendEvent(AddEditSendEvent.ShowFolderChooser)
+    }
+
+    private fun handleFolderChoose(action: AddEditSendAction.FolderChoose) {
+        if (action.folderData.fileCount <= 0) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddEditSendState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .the_selected_folder_is_empty
+                            .asText(),
+                    ),
+                )
+            }
+            return
+        }
+        updateFolderContent {
+            it.copy(
+                uri = action.folderData.uri,
+                name = action.folderData.folderName,
+                fileCount = action.folderData.fileCount,
+                totalSizeBytes = action.folderData.totalSizeBytes,
+            )
+        }
     }
 
     private fun handleMaxAccessCountChange(action: AddEditSendAction.MaxAccessCountChange) {
@@ -905,6 +994,17 @@ class AddEditSendViewModel @Inject constructor(
                 ?.let { currentContent.copy(selectedType = block(it)) }
         }
     }
+
+    private inline fun updateFolderContent(
+        crossinline block: (
+            AddEditSendState.ViewState.Content.SendType.Folder,
+        ) -> AddEditSendState.ViewState.Content.SendType.Folder,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.selectedType as? AddEditSendState.ViewState.Content.SendType.Folder)
+                ?.let { currentContent.copy(selectedType = block(it)) }
+        }
+    }
 }
 
 /**
@@ -930,11 +1030,13 @@ data class AddEditSendState(
         get() = when (addEditSendType) {
             AddEditSendType.AddItem -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.add_file_send.asText()
+                SendItemType.FOLDER -> BitwardenString.add_folder_send.asText()
                 SendItemType.TEXT -> BitwardenString.add_text_send.asText()
             }
 
             is AddEditSendType.EditItem -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.edit_file_send.asText()
+                SendItemType.FOLDER -> BitwardenString.edit_folder_send.asText()
                 SendItemType.TEXT -> BitwardenString.edit_text_send.asText()
             }
         }
@@ -1021,6 +1123,17 @@ data class AddEditSendState(
                 ) : SendType()
 
                 /**
+                 * Sending a folder (zipped as a file).
+                 */
+                @Parcelize
+                data class Folder(
+                    val uri: Uri?,
+                    val name: String?,
+                    val fileCount: Int?,
+                    val totalSizeBytes: Long?,
+                ) : SendType()
+
+                /**
                  * Sending text.
                  */
                 @Parcelize
@@ -1094,6 +1207,11 @@ sealed class AddEditSendEvent {
      * Show file chooser sheet.
      */
     data class ShowChooserSheet(val withCameraOption: Boolean) : AddEditSendEvent()
+
+    /**
+     * Show folder chooser.
+     */
+    data object ShowFolderChooser : AddEditSendEvent()
 
     /**
      * Show share sheet.
@@ -1198,6 +1316,16 @@ sealed class AddEditSendAction {
     data class ChooseFileClick(
         val isCameraPermissionGranted: Boolean,
     ) : AddEditSendAction()
+
+    /**
+     * User clicked the choose folder button.
+     */
+    data object ChooseFolderClick : AddEditSendAction()
+
+    /**
+     * User has chosen a folder.
+     */
+    data class FolderChoose(val folderData: FolderData) : AddEditSendAction()
 
     /**
      * User toggled the "hide text by default" toggle.

@@ -17,6 +17,8 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.sdk.MakeSendFolderFileUniFfiEntry
+import com.bitwarden.sdk.MakeSendFolderFileUniFfiResult
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -277,6 +279,21 @@ interface VaultSdkSource {
         path: String,
         destinationFilePath: String,
     ): Result<File>
+
+    /**
+     * Creates a zip archive from the given folder [files] on disk for the user with the given
+     * [userId]. The SDK reads files directly from disk and writes the resulting zip to
+     * [outputZipPath], returning a [MakeSendFolderFileUniFfiResult] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun makeSendFolderFile(
+        userId: String,
+        folderName: String,
+        files: List<MakeSendFolderFileUniFfiEntry>,
+        outputZipPath: String,
+    ): Result<MakeSendFolderFileUniFfiResult>
 
     /**
      * Decrypts a [Send] for the user with the given [userId], returning a [SendView] wrapped in a

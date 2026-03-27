@@ -12,6 +12,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.FolderData
 import java.time.Clock
 
 /**
@@ -98,6 +99,16 @@ interface IntentManager {
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
      */
     fun createDocumentIntent(fileName: String): Intent
+
+    /**
+     * Creates an intent for choosing a folder from the device.
+     */
+    fun createFolderChooserIntent(): Intent
+
+    /**
+     * Processes the [activityResult] and attempts to get the relevant folder data from it.
+     */
+    fun getFolderDataFromActivityResult(activityResult: ActivityResult): FolderData?
 
     @Suppress("UndocumentedPublicClass")
     @OmitFromCoverage

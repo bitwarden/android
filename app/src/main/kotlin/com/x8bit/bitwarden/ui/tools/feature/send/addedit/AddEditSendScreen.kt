@@ -66,6 +66,11 @@ fun AddEditSendScreen(
             addSendHandlers.onFileChoose(it)
         }
     }
+    val folderChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
+        intentManager.getFolderDataFromActivityResult(activityResult)?.let {
+            addSendHandlers.onFolderChoose(it)
+        }
+    }
 
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     BackHandler(
@@ -82,6 +87,12 @@ fun AddEditSendScreen(
             is AddEditSendEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
                     intentManager.createFileChooserIntent(event.withCameraOption),
+                )
+            }
+
+            is AddEditSendEvent.ShowFolderChooser -> {
+                folderChooserLauncher.launch(
+                    intentManager.createFolderChooserIntent(),
                 )
             }
 

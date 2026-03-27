@@ -7,7 +7,9 @@ import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.sdkAgnosticTransferTo
+import androidx.documentfile.provider.DocumentFile
 import com.bitwarden.data.manager.model.DownloadResult
+import com.bitwarden.data.manager.model.FolderDiskEntry
 import com.bitwarden.data.manager.model.ZipFileResult
 import com.bitwarden.network.service.DownloadService
 import kotlinx.coroutines.withContext
@@ -46,6 +48,13 @@ internal class FileManagerImpl(
         withContext(dispatcherManager.io) {
             files.forEach { it.delete() }
         }
+    }
+
+    override suspend fun createTempFileInCache(
+        prefix: String,
+        suffix: String,
+    ): File = withContext(dispatcherManager.io) {
+        File.createTempFile(prefix, suffix, context.cacheDir)
     }
 
     @Suppress("NestedBlockDepth")
@@ -194,6 +203,71 @@ internal class FileManagerImpl(
                 File(context.filesDir, tempFileName)
             }
         }
+
+    override suspend fun writeFolderFilesToCache(
+        folderUri: Uri,
+    ): Result<List<FolderDiskEntry>> =
+        runCatching {
+            withContext(dispatcherManager.io) {
+                val rootDocument = DocumentFile.fromTreeUri(context, folderUri)
+                    ?: throw IllegalStateException("Cannot access folder")
+                val entries = mutableListOf<FolderDiskEntry>()
+                streamDocumentTreeToCache(
+                    document = rootDocument,
+                    parentPath = "",
+                    entries = entries,
+                )
+                entries
+            }
+        }
+
+    private fun streamDocumentTreeToCache(
+        document: DocumentFile,
+        parentPath: String,
+        entries: MutableList<FolderDiskEntry>,
+    ) {
+        document.listFiles().forEach { child ->
+            val childPath = if (parentPath.isEmpty()) {
+                child.name.orEmpty()
+            } else {
+                "$parentPath/${child.name.orEmpty()}"
+            }
+            if (child.isDirectory) {
+                streamDocumentTreeToCache(
+                    document = child,
+                    parentPath = childPath,
+                    entries = entries,
+                )
+            } else {
+                val tempFile = File.createTempFile(
+                    "send_folder_file_",
+                    null,
+                    context.cacheDir,
+                )
+                context
+                    .contentResolver
+                    .openInputStream(child.uri)
+                    ?.use { inputStream ->
+                        FileOutputStream(tempFile).use { outputStream ->
+                            val buffer = ByteArray(BUFFER_SIZE)
+                            var length: Int
+                            while (
+                                inputStream.read(buffer).also { length = it } != -1
+                            ) {
+                                outputStream.write(buffer, 0, length)
+                            }
+                        }
+                    }
+                    ?: throw IllegalStateException("Cannot read file: $childPath")
+                entries.add(
+                    FolderDiskEntry(
+                        relativePath = childPath,
+                        diskPath = tempFile.absolutePath,
+                    ),
+                )
+            }
+        }
+    }
 }
 
 /**

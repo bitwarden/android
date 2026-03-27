@@ -59,17 +59,31 @@ fun AddEditSendState.ViewState.Content.toSendView(
 private fun AddEditSendState.ViewState.Content.SendType.toSendType(): SendType =
     when (this) {
         is AddEditSendState.ViewState.Content.SendType.File -> SendType.FILE
+        is AddEditSendState.ViewState.Content.SendType.Folder -> SendType.FILE
         is AddEditSendState.ViewState.Content.SendType.Text -> SendType.TEXT
     }
 
 private fun AddEditSendState.ViewState.Content.toSendFileView(): SendFileView? =
-    (this.selectedType as? AddEditSendState.ViewState.Content.SendType.File)?.let {
-        SendFileView(
-            id = null,
-            fileName = it.name.orEmpty(),
-            size = null,
-            sizeName = null,
-        )
+    when (val type = this.selectedType) {
+        is AddEditSendState.ViewState.Content.SendType.File -> {
+            SendFileView(
+                id = null,
+                fileName = type.name.orEmpty(),
+                size = null,
+                sizeName = null,
+            )
+        }
+
+        is AddEditSendState.ViewState.Content.SendType.Folder -> {
+            SendFileView(
+                id = null,
+                fileName = "${type.name.orEmpty()}.zip",
+                size = null,
+                sizeName = null,
+            )
+        }
+
+        else -> null
     }
 
 private fun AddEditSendState.ViewState.Content.toSendTextView(): SendTextView? =

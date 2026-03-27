@@ -21,6 +21,8 @@ import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.sdk.VaultClient
+import com.bitwarden.sdk.MakeSendFolderFileUniFfiEntry
+import com.bitwarden.sdk.MakeSendFolderFileUniFfiResult
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -259,6 +261,22 @@ class VaultSdkSourceImpl(
                     encryptedFilePath = destinationFilePath,
                 )
             File(destinationFilePath)
+        }
+
+    override suspend fun makeSendFolderFile(
+        userId: String,
+        folderName: String,
+        files: List<MakeSendFolderFileUniFfiEntry>,
+        outputZipPath: String,
+    ): Result<MakeSendFolderFileUniFfiResult> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .sends()
+                .makeSendFolderFile(
+                    folderName = folderName,
+                    files = files,
+                    destination = outputZipPath,
+                )
         }
 
     override suspend fun encryptAttachment(

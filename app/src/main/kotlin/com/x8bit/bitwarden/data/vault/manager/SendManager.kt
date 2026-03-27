@@ -19,6 +19,16 @@ interface SendManager {
     suspend fun createSend(sendView: SendView, fileUri: Uri?): CreateSendResult
 
     /**
+     * Attempt to create a folder send. The folder at [folderUri] will be zipped via the SDK
+     * and uploaded as a file send. [folderName] is the display name of the selected folder.
+     */
+    suspend fun createFolderSend(
+        sendView: SendView,
+        folderUri: Uri,
+        folderName: String,
+    ): CreateSendResult
+
+    /**
      * Attempt to delete a send.
      */
     suspend fun deleteSend(sendId: String): DeleteSendResult

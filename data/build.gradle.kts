@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":network"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.documentfile)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.google.hilt.android)
