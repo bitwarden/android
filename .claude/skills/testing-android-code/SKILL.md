@@ -284,6 +284,10 @@ module/src/testFixtures/kotlin/com/bitwarden/.../
 └── model/*Util.kt
 ```
 
+### Test Constants Placement
+
+Declare test constants as top-level `private const val` at the **bottom** of the file, after the class closing brace. Do NOT use `companion object` for test constants.
+
 ### Test Naming
 
 - Classes: `*Test.kt`, `*ScreenTest.kt`, `*ViewModelTest.kt`
