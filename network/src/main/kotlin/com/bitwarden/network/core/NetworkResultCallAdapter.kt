@@ -13,5 +13,6 @@ internal class NetworkResultCallAdapter<T>(
 ) : CallAdapter<T, Call<NetworkResult<T>>> {
 
     override fun responseType(): Type = successType
-    override fun adapt(call: Call<T>): Call<NetworkResult<T>> = NetworkResultCall(call, successType)
+    override fun adapt(call: Call<T>): Call<NetworkResult<T>> =
+        NetworkResultCall(call, successType)
 }

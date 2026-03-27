@@ -16,6 +16,8 @@ import java.lang.reflect.Type
  */
 private const val NO_CONTENT_RESPONSE_CODE: Int = 204
 
+private val UNKNOWN_HOST_REGEX = Regex("""Unable to resolve host "([^"]+)"""")
+
 /**
  * A [Call] for wrapping a network request into a [NetworkResult].
  */
@@ -26,7 +28,8 @@ internal class NetworkResultCall<T>(
 ) : Call<NetworkResult<T>> {
     override fun cancel(): Unit = backingCall.cancel()
 
-    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(backingCall, successType)
+    override fun clone(): Call<NetworkResult<T>> =
+        NetworkResultCall(backingCall, successType)
 
     override fun enqueue(callback: Callback<NetworkResult<T>>): Unit = backingCall.enqueue(
         object : Callback<T> {
@@ -67,8 +70,16 @@ internal class NetworkResultCall<T>(
     fun executeForResult(): NetworkResult<T> = requireNotNull(execute().body())
 
     private fun Throwable.toFailure(): NetworkResult<T> {
-        // We rebuild the URL without query params, we do not want to log those
-        val url = backingCall.request().url.toUrl().run { "$protocol://$authority$path" }
+        val originalUrl = backingCall.request().url.toUrl()
+
+        val extractedHost = message?.let { UNKNOWN_HOST_REGEX.find(it)?.groupValues?.getOrNull(1) }
+
+        val url = if (extractedHost != null) {
+            "${originalUrl.protocol}://$extractedHost${originalUrl.path}"
+        } else {
+            "${originalUrl.protocol}://${originalUrl.authority}${originalUrl.path}"
+        }
+
         Timber.w(this, "Network Error: $url")
         return NetworkResult.Failure(this)
     }
