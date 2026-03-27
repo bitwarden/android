@@ -1626,6 +1626,7 @@ data class VaultItemState(
                     val url: String,
                     val isLargeFile: Boolean,
                     val isDownloadAllowed: Boolean,
+                    val isImageType: Boolean = false,
                 ) : Parcelable
 
                 /**

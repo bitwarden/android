@@ -20,6 +20,7 @@ import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
+import com.x8bit.bitwarden.ui.vault.feature.media.MediaType
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
@@ -99,6 +100,9 @@ fun CipherView.toViewState(
                                 false
                             },
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
+                            isImageType = MediaType.fromFileName(
+                                it.fileName.orEmpty(),
+                            ) == MediaType.IMAGE,
                         )
                     }
                 }

@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.media.MediaPreviewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.util.shortName
 
@@ -44,6 +45,7 @@ import com.x8bit.bitwarden.ui.vault.util.shortName
 fun VaultItemCardContent(
     commonState: VaultItemState.ViewState.Content.Common,
     cardState: VaultItemState.ViewState.Content.ItemType.Card,
+    mediaInlineStates: Map<String, MediaPreviewState>,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     modifier: Modifier = Modifier,
@@ -275,35 +277,93 @@ fun VaultItemCardContent(
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item(key = "attachmentsHeader") {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.attachments),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .animateItem(),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
+            val imageAttachments = attachments.filter { it.isImageType }
+            val nonImageAttachments = attachments.filter { !it.isImageType }
+
+            if (imageAttachments.isNotEmpty()) {
+                item(key = "imageAttachmentsHeader") {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = BitwardenString.attachments),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .standardHorizontalMargin()
+                            .padding(horizontal = 16.dp)
+                            .animateItem(),
+                    )
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                }
+                itemsIndexed(
+                    items = imageAttachments,
+                    key = { index, _ -> "imageAttachment_$index" },
+                ) { index, attachmentItem ->
+                    ImageAttachmentItemContent(
+                        modifier = Modifier
+                            .standardHorizontalMargin()
+                            .fillMaxWidth()
+                            .animateItem(),
+                        attachmentItem = attachmentItem,
+                        previewState = mediaInlineStates[attachmentItem.id]
+                            ?: MediaPreviewState.Masked,
+                        cardStyle = imageAttachments.toListItemCardStyle(
+                            index = index,
+                        ),
+                        onAttachmentPreviewClick = { id ->
+                            val item = imageAttachments.firstOrNull { it.id == id }
+                            if (item != null) {
+                                vaultCommonItemTypeHandlers
+                                    .onAttachmentPreviewClick(item)
+                            }
+                        },
+                        onAttachmentImageViewClick = vaultCommonItemTypeHandlers
+                            .onAttachmentImageViewClick,
+                        onBitmapRenderComplete = vaultCommonItemTypeHandlers
+                            .onBitmapRenderComplete,
+                        onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                            .onAttachmentDownloadClick,
+                        onUpgradeToPremiumClick = vaultCommonItemTypeHandlers
+                            .onUpgradeToPremiumClick,
+                    )
+                }
             }
-            itemsIndexed(
-                items = attachments,
-                key = { index, _ -> "attachment_$index" },
-            ) { index, attachmentItem ->
-                AttachmentItemContent(
-                    modifier = Modifier
-                        .testTag("CipherAttachment")
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .animateItem(),
-                    attachmentItem = attachmentItem,
-                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
-                        .onAttachmentDownloadClick,
-                    onAttachmentPreviewClick = vaultCommonItemTypeHandlers.onAttachmentPreviewClick,
-                    onUpgradeToPremiumClick = vaultCommonItemTypeHandlers.onUpgradeToPremiumClick,
-                    cardStyle = attachments.toListItemCardStyle(index = index),
-                )
+
+            if (nonImageAttachments.isNotEmpty()) {
+                if (imageAttachments.isEmpty()) {
+                    item(key = "attachmentsHeader") {
+                        Spacer(modifier = Modifier.height(height = 16.dp))
+                        BitwardenListHeaderText(
+                            label = stringResource(id = BitwardenString.attachments),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .standardHorizontalMargin()
+                                .padding(horizontal = 16.dp)
+                                .animateItem(),
+                        )
+                        Spacer(modifier = Modifier.height(height = 8.dp))
+                    }
+                }
+                itemsIndexed(
+                    items = nonImageAttachments,
+                    key = { index, _ -> "attachment_$index" },
+                ) { index, attachmentItem ->
+                    AttachmentItemContent(
+                        modifier = Modifier
+                            .testTag("CipherAttachment")
+                            .fillMaxWidth()
+                            .standardHorizontalMargin()
+                            .animateItem(),
+                        attachmentItem = attachmentItem,
+                        onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                            .onAttachmentDownloadClick,
+                        onAttachmentPreviewClick = vaultCommonItemTypeHandlers
+                            .onAttachmentPreviewClick,
+                        onUpgradeToPremiumClick = vaultCommonItemTypeHandlers
+                            .onUpgradeToPremiumClick,
+                        cardStyle = nonImageAttachments.toListItemCardStyle(
+                            index = index,
+                        ),
+                    )
+                }
             }
         }
 
