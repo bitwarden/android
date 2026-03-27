@@ -169,6 +169,7 @@
                 <data android:scheme="https" />
                 <data android:host="bitwarden.com" />
                 <data android:host="bitwarden.eu" />
+                <data android:host="bitwarden.pw" />
                 <data android:pathPattern="/duo-callback" />
                 <data android:pathPattern="/sso-callback" />
                 <data android:pathPattern="/webauthn-callback" />
