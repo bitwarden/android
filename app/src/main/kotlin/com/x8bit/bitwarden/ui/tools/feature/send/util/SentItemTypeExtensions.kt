@@ -11,5 +11,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 val SendItemType.selectionText: Text
     get() = when (this) {
         SendItemType.FILE -> BitwardenString.file.asText()
+        SendItemType.FOLDER -> BitwardenString.folder.asText()
         SendItemType.TEXT -> BitwardenString.text.asText()
     }

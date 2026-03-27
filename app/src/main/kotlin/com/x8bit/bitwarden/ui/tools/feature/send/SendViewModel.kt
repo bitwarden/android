@@ -304,7 +304,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleAddSendSelected(action: SendAction.AddSendSelected) {
-        if (action.sendType == SendItemType.FILE) {
+        if (action.sendType == SendItemType.FILE || action.sendType == SendItemType.FOLDER) {
             if (state.policyDisablesSend) {
                 mutableStateFlow.update {
                     it.copy(

@@ -129,6 +129,14 @@ fun AddEditSendContent(
                 )
             }
 
+            is AddEditSendState.ViewState.Content.SendType.Folder -> {
+                FolderTypeContent(
+                    folderType = type,
+                    addSendHandlers = addSendHandlers,
+                    isAddMode = isAddMode,
+                )
+            }
+
             is AddEditSendState.ViewState.Content.SendType.Text -> {
                 TextTypeContent(
                     textType = type,
@@ -369,6 +377,86 @@ private fun ColumnScope.FileTypeContent(
                 style = BitwardenTheme.typography.bodyMedium,
             )
         }
+    }
+}
+
+@Composable
+private fun ColumnScope.FolderTypeContent(
+    folderType: AddEditSendState.ViewState.Content.SendType.Folder,
+    addSendHandlers: AddEditSendHandlers,
+    isAddMode: Boolean,
+) {
+    Spacer(modifier = Modifier.height(height = 8.dp))
+    if (isAddMode) {
+        folderType.name?.let { folderName ->
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .defaultMinSize(minHeight = 60.dp)
+                    .cardStyle(cardStyle = CardStyle.Full, paddingHorizontal = 16.dp),
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = folderName,
+                        color = BitwardenTheme.colorScheme.text.primary,
+                        style = BitwardenTheme.typography.bodyLarge,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(tag = "SendCurrentFolderNameLabel"),
+                    )
+                    if (folderType.fileCount != null && folderType.totalSizeBytes != null) {
+                        Spacer(modifier = Modifier.height(height = 4.dp))
+                        Text(
+                            text = stringResource(
+                                id = BitwardenString.folder_info,
+                                folderType.fileCount,
+                                formatFileSize(folderType.totalSizeBytes),
+                            ),
+                            color = BitwardenTheme.colorScheme.text.secondary,
+                            style = BitwardenTheme.typography.bodySmall,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
+        BitwardenOutlinedButton(
+            label = stringResource(id = BitwardenString.choose_folder),
+            onClick = addSendHandlers.onChooseFolderClick,
+            isExternalLink = true,
+            modifier = Modifier
+                .testTag(tag = "SendChooseFolderButton")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        Text(
+            text = stringResource(id = BitwardenString.required_max_folder_size),
+            color = BitwardenTheme.colorScheme.text.secondary,
+            style = BitwardenTheme.typography.bodySmall,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+    }
+}
+
+/**
+ * Formats a file size in bytes to a human-readable string.
+ */
+private fun formatFileSize(bytes: Long): String {
+    val kb = 1024.0
+    val mb = kb * 1024
+    return when {
+        bytes >= mb -> "%.1f MB".format(bytes / mb)
+        bytes >= kb -> "%.1f KB".format(bytes / kb)
+        else -> "$bytes B"
     }
 }
 

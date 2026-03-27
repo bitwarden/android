@@ -3,6 +3,7 @@ package com.bitwarden.data.manager.file
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.manager.model.DownloadResult
+import com.bitwarden.data.manager.model.FolderDiskEntry
 import com.bitwarden.data.manager.model.ZipFileResult
 import java.io.File
 
@@ -26,6 +27,12 @@ interface FileManager {
      * Deletes [files] from disk.
      */
     suspend fun delete(vararg files: File)
+
+    /**
+     * Creates a temporary file in the private cache directory with the given [prefix] and
+     * [suffix]. Returns the created [File].
+     */
+    suspend fun createTempFileInCache(prefix: String, suffix: String): File
 
     /**
      * Downloads a file temporarily to cache from [url]. A successful [DownloadResult] will contain
@@ -61,4 +68,11 @@ interface FileManager {
      * reference.
      */
     suspend fun writeUriToCache(fileUri: Uri): Result<File>
+
+    /**
+     * Streams all files from a folder tree identified by [folderUri] (a tree URI from
+     * `ACTION_OPEN_DOCUMENT_TREE`) to temporary files in the cache directory. Returns a flat
+     * list of [FolderDiskEntry] mapping relative paths to their on-disk locations.
+     */
+    suspend fun writeFolderFilesToCache(folderUri: Uri): Result<List<FolderDiskEntry>>
 }
