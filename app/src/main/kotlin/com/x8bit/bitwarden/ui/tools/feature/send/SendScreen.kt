@@ -122,6 +122,7 @@ fun SendScreen(
 
     SendDialogs(
         dialogState = state.dialogState,
+        isSendFolderEnabled = state.isSendFolderEnabled,
         onAddSendSelected = { viewModel.trySendAction(SendAction.AddSendSelected(it)) },
         onDismissRequest = { viewModel.trySendAction(SendAction.DismissDialog) },
     )
@@ -211,6 +212,7 @@ fun SendScreen(
 @Composable
 private fun SendDialogs(
     dialogState: SendState.DialogState?,
+    isSendFolderEnabled: Boolean,
     onAddSendSelected: (SendItemType) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -230,12 +232,14 @@ private fun SendDialogs(
             title = stringResource(id = BitwardenString.type),
             onDismissRequest = onDismissRequest,
         ) {
-            SendItemType.entries.forEach {
-                BitwardenBasicDialogRow(
-                    text = it.selectionText(),
-                    onClick = { onAddSendSelected(it) },
-                )
-            }
+            SendItemType.entries
+                .filter { it != SendItemType.FOLDER || isSendFolderEnabled }
+                .forEach {
+                    BitwardenBasicDialogRow(
+                        text = it.selectionText(),
+                        onClick = { onAddSendSelected(it) },
+                    )
+                }
         }
 
         null -> Unit

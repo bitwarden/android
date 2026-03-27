@@ -38,6 +38,7 @@ sealed class FlagKey<out T : Any> {
                 ArchiveItems,
                 SendEmailVerification,
                 MobilePremiumUpgrade,
+                SendFolder,
             )
         }
     }
@@ -113,6 +114,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object MobilePremiumUpgrade : FlagKey<Boolean>() {
         override val keyName: String = "PM-31697-premium-upgrade-path"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Send Folder feature.
+     */
+    data object SendFolder : FlagKey<Boolean>() {
+        override val keyName: String = "innovation-sprint-2026-send-folder"
         override val defaultValue: Boolean = false
     }
 

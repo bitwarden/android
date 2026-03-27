@@ -16,8 +16,10 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -59,6 +61,7 @@ class SendViewModel @Inject constructor(
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
     private val networkConnectionManager: NetworkConnectionManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -71,6 +74,8 @@ class SendViewModel @Inject constructor(
                 .any(),
             isRefreshing = false,
             isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
+            isSendFolderEnabled = featureFlagManager
+                .getFeatureFlag(key = FlagKey.SendFolder),
         ),
 ) {
 
@@ -475,6 +480,7 @@ data class SendState(
     val policyDisablesSend: Boolean,
     val isRefreshing: Boolean,
     val isPremiumUser: Boolean,
+    val isSendFolderEnabled: Boolean,
 ) : Parcelable {
 
     /**
