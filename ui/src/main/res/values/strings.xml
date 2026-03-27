@@ -486,6 +486,7 @@ Scanning will happen automatically.</string>
     <string name="add_folder_send">New folder Send</string>
     <string name="edit_folder_send">Edit folder Send</string>
     <string name="choose_folder">Choose folder</string>
+    <string name="the_selected_folder_is_empty">The selected folder is empty. Please choose a folder that contains files.</string>
     <string name="folder_info">%1$d files, %2$s</string>
     <string name="required_max_folder_size">Maximum total size: 100 MB.</string>
     <string name="add_text_send">New text Send</string>

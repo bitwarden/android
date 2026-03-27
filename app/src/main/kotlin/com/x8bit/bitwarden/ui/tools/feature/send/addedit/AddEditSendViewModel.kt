@@ -884,6 +884,19 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleFolderChoose(action: AddEditSendAction.FolderChoose) {
+        if (action.folderData.fileCount <= 0) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddEditSendState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .the_selected_folder_is_empty
+                            .asText(),
+                    ),
+                )
+            }
+            return
+        }
         updateFolderContent {
             it.copy(
                 uri = action.folderData.uri,
