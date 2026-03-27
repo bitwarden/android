@@ -49,9 +49,7 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  * doesn't contain a valid autofillId, it isn't an a view setup for autofill, so we return null. If
  * it doesn't have a supported hint and isn't an input field, we also return null.
  */
-fun AssistStructure.ViewNode.toAutofillView(
-    parentWebsite: String?,
-): AutofillView? {
+fun AssistStructure.ViewNode.toAutofillView(): AutofillView? {
     val nonNullAutofillId = this.autofillId ?: return null
     if (this.supportedAutofillHint == null && !this.isInputField) return null
     val autofillOptions = this
@@ -65,7 +63,7 @@ fun AssistStructure.ViewNode.toAutofillView(
         isFocused = this.isFocused,
         textValue = this.autofillValue?.extractTextValue(),
         hasPasswordTerms = this.hasPasswordTerms(),
-        website = this.website ?: parentWebsite,
+        website = this.website,
     )
     return buildAutofillView(
         autofillOptions = autofillOptions,
