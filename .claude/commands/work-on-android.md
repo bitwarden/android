@@ -15,19 +15,19 @@ Work through each phase sequentially. **Confirm with the user before advancing t
 
 ### Phase 1: Implement
 
-Invoke the `implementing-android-code` skill and use it to guide your implementation of the task. Understand what needs to be done, explore the relevant code, and write the implementation.
+Invoke `Skill(implementing-android-code)` to guide your implementation of the task. Understand what needs to be done, explore the relevant code, and write the implementation.
 
 **Before advancing**: Summarize what was implemented and confirm the user is ready to move to testing.
 
 ### Phase 2: Test
 
-Invoke the `testing-android-code` skill and use it to write tests for the changes made in Phase 1. Follow the project's test patterns and conventions.
+Invoke `Skill(testing-android-code)` to write tests for the changes made in Phase 1. Follow the project's test patterns and conventions.
 
 **Before advancing**: Summarize what tests were written and confirm readiness for build verification.
 
 ### Phase 3: Build & Verify
 
-Invoke the `build-test-verify` skill to run tests, lint, and detekt. Ensure everything passes.
+Invoke `Skill(build-test-verify)` to run tests, lint, and detekt. Ensure everything passes.
 
 **If failures occur**: Fix the issues and re-run verification. Do not advance until all checks pass.
 
@@ -35,13 +35,13 @@ Invoke the `build-test-verify` skill to run tests, lint, and detekt. Ensure ever
 
 ### Phase 4: Self-Review
 
-Invoke the `perform-android-preflight-checklist` skill to perform a quality gate check on all changes. Address any issues found.
+Invoke `Skill(perform-android-preflight-checklist)` to perform a quality gate check on all changes. Address any issues found.
 
 **Before advancing**: Share the self-review results and confirm readiness to commit.
 
 ### Phase 5: Commit
 
-Invoke the `committing-android-changes` skill to stage and commit the changes with a properly formatted commit message.
+Invoke `Skill(committing-android-changes)` to stage and commit the changes with a properly formatted commit message.
 
 **Before advancing**: Confirm the commit was successful and ask if the user wants to proceed to review and PR creation, or stop here.
 
@@ -56,7 +56,7 @@ Launch a subagent with the `/bitwarden-code-review:code-review-local` command to
 
 ### Phase 7: Pull Request
 
-Prompt the user to invoke the `creating-android-pull-request` skill to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
+Prompt the user to invoke `Skill(creating-android-pull-request)` to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
 
 ## Guidelines
 
