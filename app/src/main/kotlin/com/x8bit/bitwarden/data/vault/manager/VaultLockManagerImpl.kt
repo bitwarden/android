@@ -711,6 +711,7 @@ class VaultLockManagerImpl(
             is InitUserCryptoMethod.DecryptedKey,
             is InitUserCryptoMethod.DeviceKey,
             is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.KeyConnectorUrl,
             is InitUserCryptoMethod.Pin,
             is InitUserCryptoMethod.PinEnvelope,
                 -> return
