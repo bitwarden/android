@@ -97,6 +97,7 @@ class MainViewModel @Inject constructor(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+        hasResizeBeenRequested = false,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -221,6 +222,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
+            is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
         }
     }
 
@@ -298,6 +300,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleCookieAcquisitionReady() {
         sendEvent(MainEvent.NavigateToCookieAcquisition)
+    }
+
+    private fun handleResizeHasBeenRequested() {
+        mutableStateFlow.update { it.copy(hasResizeBeenRequested = true) }
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -527,6 +533,7 @@ data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
+    val hasResizeBeenRequested: Boolean,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
@@ -644,6 +651,11 @@ sealed class MainAction {
          * should proceed.
          */
         data object CookieAcquisitionReady : Internal()
+
+        /**
+         * Indicates that resize has been requested on the Activity
+         */
+        data object ResizeHasBeenRequested : Internal()
     }
 }
 
