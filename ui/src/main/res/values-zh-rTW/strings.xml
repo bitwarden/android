@@ -11,6 +11,7 @@
     <string name="copy_password">複製密碼</string>
     <string name="copy_username">複製使用者名稱</string>
     <string name="delete">刪除</string>
+    <string name="preview">預覽</string>
     <string name="deleting">正在刪除…</string>
     <string name="do_you_really_want_to_delete">您確定要刪除嗎？刪除後將無法復原。</string>
     <string name="edit">編輯</string>
@@ -377,6 +378,7 @@
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>
     <string name="download">下載</string>
+    <string name="download_file">下載檔案</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物辨識驗證</string>
     <string name="device_verification">裝置驗證</string>
@@ -935,7 +937,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">通行金鑰操作失敗，因為未選取任何項目。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">通行金鑰操作失敗，因為該請求不受支援。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">密碼操作失敗，因為所選項目不存在。</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">密碼操作失敗，因為所選項目沒有有效的密碼。</string>
     <string name="password_operation_failed_because_no_item_was_selected">密碼操作失敗，因為未選取任何項目。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">憑證操作失敗，因為請求無效。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">憑證操作失敗，因為該請求不受支援。</string>
@@ -1197,8 +1199,8 @@
     <string name="archive_unavailable">封存不可用</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
-    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
+    <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
     <string name="introducing_archive">封存功能介紹</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">將您目前不需要的項目安全保存，同時隱藏於視線之外。</string>
@@ -1219,4 +1221,23 @@
     <string name="continue_without_syncing">不進行同步並繼續</string>
     <string name="external_link">外部連結</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
+    <string name="preview_not_available_for_files">無法預覽 %1$s 類型的檔案。您仍可下載後在裝置上檢視。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 無法解密此檔案，因此無法顯示預覽。</string>
+    <string name="preview_unavailable_for_this_file">此檔案無法預覽。您仍可下載後在裝置上檢視。</string>
+    <string name="preview_unavailable">無法預覽</string>
+    <string name="upgraded_to_premium">升級到 Premium</string>
+    <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
+    <string name="per_month">/ 月</string>
+    <string name="built_in_authenticator">內建驗證器</string>
+    <string name="emergency_access">緊急存取</string>
+    <string name="secure_file_storage">安全檔案儲存</string>
+    <string name="breach_monitoring">外洩監控</string>
+    <string name="upgrade_now">立即升級</string>
+    <string name="stripe_checkout_footer">您將前往 Stripe 的安全結帳頁面完成購買。</string>
+    <string name="opening_checkout">正在開啟結帳頁面…</string>
+    <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
+    <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
+    <string name="payment_not_received_yet">尚未收到付款</string>
+    <string name="return_to_stripe_to_finish">請在瀏覽器中返回 Stripe 完成升級流程。</string>
+    <string name="go_back">返回</string>
 </resources>

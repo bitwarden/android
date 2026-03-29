@@ -11,6 +11,7 @@
     <string name="copy_password">Copïo\'r cyfrinair</string>
     <string name="copy_username">Copïo\'r enw defnyddiwr</string>
     <string name="delete">Dileu</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Ydych chi wir eisiau dileu? Allwch chi ddim dadwneud hyn.</string>
     <string name="edit">Golygu</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Prif gyfrinair</string>
     <string name="master_password_required">Master password (required)</string>
     <string name="new_master_password_required">New master password (required)</string>
-    <string name="more_options">More options</string>
+    <string name="more_options">Mwy o ddewisiadau</string>
     <string name="my_vault">Fy nghell</string>
     <string name="name">Enw</string>
     <string name="item_name_required">Item name (required)</string>
@@ -155,7 +156,7 @@
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Cysoni wedi\'i gwblhau</string>
     <string name="two_step_login">Mewngofnodi dau gam</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Datgloi â biometreg</string>
     <string name="unlock_with_pin">Datgloi â chod PIN</string>
     <string name="verification_code">Cod dilysu</string>
     <string name="view_login">View login</string>
@@ -168,7 +169,7 @@
     <string name="items_for_uri">Eitemau ar gyfer %1$s</string>
     <string name="no_items_for_uri">Does dim eitemau yn eich cell ar gyfer %1$s.</string>
     <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
-    <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
+    <string name="search_for_a_login_or_add_a_new_login">Chwilio am fanylion mewngofnodi neu ychwanegu rhai newydd</string>
     <string name="disabled">Wedi diffodd</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
     <string name="autofill_noun">Autofill</string>
@@ -181,13 +182,13 @@
     <string name="enter_verification_code_email">Rhowch y cod dilysu 6 nod anfonwyd i %1$s.</string>
     <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Cod adfer</string>
-    <string name="remember">Remember</string>
-    <string name="remember_email">Remember email</string>
+    <string name="remember">Cofio</string>
+    <string name="remember_email">Cofio\'r ebost</string>
     <string name="send_verification_code_again">Resend code</string>
     <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
     <string name="verification_email_sent">Verification email sent</string>
-    <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
-    <string name="yubi_key_title">Yubico security key</string>
+    <string name="yubi_key_instruction">I barhau, daliwch eich allwedd ddiogelwch Yubico yn erbyn cefn y ddyfais neu ei mewnosod i borth USB eich dyfais, ac yna gyffwrdd ei botwm.</string>
+    <string name="yubi_key_title">Allwedd ddiogelwch Yubico</string>
     <string name="add_new_attachment">Ychwanegu atodiad newydd</string>
     <string name="attachments">Atodiadau</string>
     <string name="unable_to_download_file">Methu lawrlwytho\'r ffeil.</string>
@@ -387,6 +388,7 @@ Scanning will happen automatically.</string>
     <string name="capitalize">Priflythrennu</string>
     <string name="include_number">Cynnwys rhif</string>
     <string name="download">Lawrlwytho</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Your login session has expired.</string>
     <string name="biometrics_direction">Biometric verification</string>
     <string name="device_verification">Device verification</string>
@@ -460,9 +462,9 @@ Scanning will happen automatically.</string>
     <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
     <string name="who_can_view">Who can view</string>
     <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="anyone_with_link_can_view_send">Gall unrhyw un sydd â\'r ddolen hon weld y Send hwn</string>
     <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="specific_people_verification_info">Ar ôl anfon y ddolen Send hon, bydd rhaid i unigolion ddilysu eu cyfeiriad ebost gan ddefnyddio côd i weld y Send hwn</string>
     <string name="anyone_with_password">Anyone with a password set by you</string>
     <string name="add_email">Add email</string>
     <string name="pending_delete">Pending deletion</string>
@@ -505,7 +507,7 @@ Scanning will happen automatically.</string>
     <string name="about_send">Ynghylch Send</string>
     <string name="hide_email">Cuddio fy nghyfeiriad ebost rhag derbynwyr</string>
     <string name="send_options_policy_in_effect">One or more organization policies are affecting your Send options.</string>
-    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</string>
+    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ailofyn am y prif gyfrinair</string>
     <string name="password_confirmation">Master password confirmation</string>
@@ -611,7 +613,7 @@ select Add TOTP to store the key safely</string>
     <string name="forwarded_email_alias">Forwarded email alias</string>
     <string name="random_word">Gair ar hap</string>
     <string name="email_required_parenthesis">Ebost (gofynnol)</string>
-    <string name="domain_name">domain name</string>
+    <string name="domain_name">enw parth</string>
     <string name="domain_name_required_parenthesis">Enw parth (gofynnol)</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">Allwedd API (gofynnol)</string>
@@ -631,7 +633,7 @@ select Add TOTP to store the key safely</string>
     <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login attempt from:
 %1$s
 Do you want to switch to this account?</string>
-    <string name="new_to_bitwarden">New to Bitwarden?</string>
+    <string name="new_to_bitwarden">Newydd i Bitwarden?</string>
     <string name="get_master_passwordword_hint">Anfon awgrym o\'ch prif gyfrinair</string>
     <string name="logging_in_as_x_on_y">Yn mewngofnodi fel %1$s ar %2$s</string>
     <string name="not_you">Nid chi?</string>
@@ -785,11 +787,11 @@ Do you want to switch to this account?</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
     <string name="help_with_server_geolocations">Help with server geolocations</string>
-    <string name="email_address_required">Email address (required)</string>
+    <string name="email_address_required">Cyfeiriad ebost (gofynnol)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Change email address</string>
     <string name="next">Next</string>
-    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Ni all Bitwarden adfer prif gyfrinair sydd ar goll neu wedi\'i anghofio.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
@@ -845,14 +847,14 @@ Do you want to switch to this account?</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
-    <string name="step_1_of_3">Step 1 of 3</string>
+    <string name="step_1_of_3">Cam 1 o 3</string>
     <string name="export_your_saved_logins">Export your saved logins</string>
     <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
-    <string name="step_2_of_3">Step 2 of 3</string>
+    <string name="step_2_of_3">Cam 2 o 3</string>
     <string name="log_in_to_bitwarden">Mewngofnodi i Bitwarden</string>
-    <string name="step_3_of_3">Step 3 of 3</string>
+    <string name="step_3_of_3">Cam 3 o 3</string>
     <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
@@ -934,14 +936,14 @@ Do you want to switch to this account?</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
     <string name="alias">Alias</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
-    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
+    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Mae cyfrinymadroddion yn gyfrineiriau sy\'n aml yn haws i\'w cofio a\'u teipio na chyfrineirau hap. Maen nhw\'n ddefnyddiol er mwyn mewngofnodi i gyfrifon lle nad yw llenwi awtomatig ar gael, fel gwasanaeth ffrydio ar eich teledu.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
-    <string name="coachmark_1_of_6">1 OF 6</string>
-    <string name="coachmark_2_of_6">2 OF 6</string>
-    <string name="coachmark_3_of_6">3 OF 6</string>
-    <string name="coachmark_4_of_6">4 OF 6</string>
-    <string name="coachmark_5_of_6">5 OF 6</string>
-    <string name="coachmark_6_of_6">6 OF 6</string>
+    <string name="coachmark_1_of_6">1 O 6</string>
+    <string name="coachmark_2_of_6">2 O 6</string>
+    <string name="coachmark_3_of_6">3 O 6</string>
+    <string name="coachmark_4_of_6">4 O 6</string>
+    <string name="coachmark_5_of_6">5 O 6</string>
+    <string name="coachmark_6_of_6">6 O 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
     <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Verify your identity</string>
@@ -997,8 +999,8 @@ Do you want to switch to this account?</string>
     <string name="logging_duration">Logging duration</string>
     <string name="flight_recorder_one_hour">ar ôl awr</string>
     <string name="flight_recorder_eight_hours">8 hours</string>
-    <string name="flight_recorder_twenty_four_hours">24 hours</string>
-    <string name="flight_recorder_one_week">1 week</string>
+    <string name="flight_recorder_twenty_four_hours">24 awr</string>
+    <string name="flight_recorder_one_week">1 wythnos</string>
     <string name="delete_all">Delete all</string>
     <string name="share_all">Share all</string>
     <string name="unable_to_share">Unable to share</string>
@@ -1100,14 +1102,14 @@ Do you want to switch to this account?</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Fersiwn</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
-    <string name="key">Key</string>
+    <string name="key">Allwedd</string>
     <string name="create_verification_code">Create Verification code</string>
-    <string name="key_is_required">Key is required.</string>
+    <string name="key_is_required">Mae angen allwedd.</string>
     <string name="name_is_required">Mae angen enw.</string>
     <string name="import_vault_failure">There was a problem importing your vault.</string>
     <string name="import_vault">Mewnforio</string>
     <string name="import_success">Vault import successful</string>
-    <string name="key_is_invalid">Key is invalid.</string>
+    <string name="key_is_invalid">Mae\'r allwedd yn annilys.</string>
     <string name="backup">Backup</string>
     <string name="data_backup_title">Data backup</string>
     <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
@@ -1123,11 +1125,11 @@ Do you want to switch to this account?</string>
     <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Something went wrong</string>
-    <string name="please_try_again">Please try again</string>
+    <string name="please_try_again">Rhowch gynnig arall arni</string>
     <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Default save option</string>
-    <string name="save_to_bitwarden">Save to Bitwarden</string>
-    <string name="save_here">Save here</string>
+    <string name="save_to_bitwarden">Cadw i Bitwarden</string>
+    <string name="save_here">Cadw yma</string>
     <string name="none">None</string>
     <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
     <string name="verification_code_created">Verification code created</string>
@@ -1166,7 +1168,7 @@ Do you want to switch to this account?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="later">Later</string>
+    <string name="later">Nes ymlaen</string>
     <string name="encryption_settings_updated">Encryption settings updated</string>
     <string name="update_your_encryption_settings">Update your encryption settings</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
@@ -1192,7 +1194,7 @@ Do you want to switch to this account?</string>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
     <string name="not_now">Nid nawr</string>
-    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="import_from_bitwarden">Mewnforio o Bitwarden</string>
     <string name="select_account">Select account</string>
     <string name="no_accounts_available">No accounts available</string>
     <string name="you_dont_have_any_accounts_you_can_import_from">You don’t have any accounts you can import from. Your organization’s security policy may restrict importing items from Bitwarden to another app.</string>
@@ -1220,18 +1222,18 @@ Do you want to switch to this account?</string>
     <string name="loading_vault_data">Loading vault data…</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_to_org">Trosglwyddo eitemau i %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
-    <string name="decline_and_leave">Decline and leave</string>
+    <string name="decline_and_leave">Gwrthod ac ymadael</string>
     <string name="why_am_i_seeing_this">Pam rydw i\'n gweld hyn?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
     <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
+    <string name="archive_noun">Archif</string>
+    <string name="archive_verb">Archif</string>
+    <string name="unarchive">Dadarchifo</string>
+    <string name="archived">Wedi\'i archifo</string>
+    <string name="hidden_items">Eitemau cudd</string>
     <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Archiving</string>
@@ -1243,7 +1245,7 @@ Do you want to switch to this account?</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
-    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="this_item_is_archived">Mae\'r eitem hon wedi\'i harchifo.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
     <string name="go_to_archive">Go to archive</string>
@@ -1263,4 +1265,23 @@ Do you want to switch to this account?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ mis</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Uwchraddio nawr</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
 </resources>

@@ -11,6 +11,7 @@
     <string name="copy_password">Скопировать пароль</string>
     <string name="copy_username">Скопировать имя пользователя</string>
     <string name="delete">Удалить</string>
+    <string name="preview">Предпросмотр</string>
     <string name="deleting">Удаление…</string>
     <string name="do_you_really_want_to_delete">Вы действительно хотите удалить? Это действие необратимо.</string>
     <string name="edit">Изменить</string>
@@ -383,6 +384,7 @@
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>
     <string name="download">Загрузить</string>
+    <string name="download_file">Скачать файл</string>
     <string name="login_expired">Истек срок действия вашей сессии.</string>
     <string name="biometrics_direction">Биометрическая верификация.</string>
     <string name="device_verification">Проверка устройства</string>
@@ -1245,4 +1247,23 @@
     <string name="continue_without_syncing">Продолжить без синхронизации</string>
     <string name="external_link">Внешняя ссылка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, внешняя ссылка</string>
+    <string name="preview_not_available_for_files">Предпросмотр недоступен для %1$s файлов. Вы можете скачать его для просмотра на вашем устройстве.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden не смог расшифровать этот файл, поэтому предпросмотр не может быть отображен.</string>
+    <string name="preview_unavailable_for_this_file">Предпросмотр недоступен для этого файла. Вы можете скачать его для просмотра на вашем устройстве.</string>
+    <string name="preview_unavailable">Предпросмотр недоступен</string>
+    <string name="upgraded_to_premium">Обновлено до Премиум</string>
+    <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
+    <string name="per_month">/ месяц</string>
+    <string name="built_in_authenticator">Встроенный аутентификатор</string>
+    <string name="emergency_access">Экстренный доступ</string>
+    <string name="secure_file_storage">Защищенное хранилище файлов</string>
+    <string name="breach_monitoring">Мониторинг нарушений</string>
+    <string name="upgrade_now">Изменить сейчас</string>
+    <string name="stripe_checkout_footer">Вас перенаправит на защищенную страницу оформления заказа Stripe для завершения покупки.</string>
+    <string name="opening_checkout">Начинается оформление заказа…</string>
+    <string name="secure_checkout_didnt_load">Защищенная оплата не загрузилась</string>
+    <string name="trouble_opening_payment_page">У нас возникли проблемы с открытием страницы оплаты, поэтому попробуйте еще раз.</string>
+    <string name="payment_not_received_yet">Оплата пока не поступила</string>
+    <string name="return_to_stripe_to_finish">Вернитесь на сайт Stripe в браузере, чтобы завершить изменение.</string>
+    <string name="go_back">Вернуться</string>
 </resources>

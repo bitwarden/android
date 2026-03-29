@@ -11,6 +11,7 @@
     <string name="copy_password">Passwort kopieren</string>
     <string name="copy_username">Benutzername kopieren</string>
     <string name="delete">Löschen</string>
+    <string name="preview">Vorschau</string>
     <string name="deleting">Wird gelöscht…</string>
     <string name="do_you_really_want_to_delete">Wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
     <string name="edit">Bearbeiten</string>
@@ -379,6 +380,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="capitalize">Wortanfänge großschreiben</string>
     <string name="include_number">Ziffern einschließen</string>
     <string name="download">Herunterladen</string>
+    <string name="download_file">Datei herunterladen</string>
     <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
     <string name="device_verification">Geräteverifizierung</string>
@@ -1226,4 +1228,23 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="continue_without_syncing">Ohne Synchronisierung fortfahren</string>
     <string name="external_link">Externer Link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externer Link</string>
+    <string name="preview_not_available_for_files">Für %1$s Dateien ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden konnte diese Datei nicht entschlüsseln, daher kann die Vorschau nicht angezeigt werden.</string>
+    <string name="preview_unavailable_for_this_file">Für diese Datei ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="preview_unavailable">Vorschau nicht verfügbar</string>
+    <string name="upgraded_to_premium">Auf Premium upgraden</string>
+    <string name="unlock_premium_features">Schalte mehr erweiterte Funktionen mit einem Premium-Tarif frei.</string>
+    <string name="per_month">/ Monat</string>
+    <string name="built_in_authenticator">Integrierter Authenticator</string>
+    <string name="emergency_access">Notfallzugriff</string>
+    <string name="secure_file_storage">Sichere Dateispeicherung</string>
+    <string name="breach_monitoring">Datendiebstahl-Überwachung</string>
+    <string name="upgrade_now">Jetzt upgraden</string>
+    <string name="stripe_checkout_footer">Du wirst zur sicheren Kaufabwicklung von Stripe weitergeleitet, um deinen Kauf abzuschließen.</string>
+    <string name="opening_checkout">Kaufabwicklung wird geöffnet…</string>
+    <string name="secure_checkout_didnt_load">Die sichere Kaufabwicklung wurde nicht geladen</string>
+    <string name="trouble_opening_payment_page">Wir hatten Probleme beim Öffnen der Zahlungsseite. Bitte versuche es erneut.</string>
+    <string name="payment_not_received_yet">Zahlung noch nicht eingegangen</string>
+    <string name="return_to_stripe_to_finish">Kehre in deinem Browser zu Stripe zurück, um das Upgrade abzuschließen.</string>
+    <string name="go_back">Geh zurück</string>
 </resources>
