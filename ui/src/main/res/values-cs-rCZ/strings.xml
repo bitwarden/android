@@ -11,6 +11,7 @@
     <string name="copy_password">Kopírovat heslo</string>
     <string name="copy_username">Kopírovat uživatelské jméno</string>
     <string name="delete">Smazat</string>
+    <string name="preview">Náhled</string>
     <string name="deleting">Mazání...</string>
     <string name="do_you_really_want_to_delete">Opravdu chcete smazat tuto položku? Akce je nevratná.</string>
     <string name="edit">Upravit</string>
@@ -383,6 +384,7 @@ Načtení proběhne automaticky.</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
     <string name="download">Stáhnout</string>
+    <string name="download_file">Stáhnout soubor</string>
     <string name="login_expired">Platnost přihlášení vypršela.</string>
     <string name="biometrics_direction">Použít biometrii k ověření</string>
     <string name="device_verification">Ověřování zařízení</string>
@@ -501,7 +503,7 @@ Načtení proběhne automaticky.</string>
     <string name="about_send">O Send</string>
     <string name="hide_email">Skrýt mou e-mailovou adresu před příjemci</string>
     <string name="send_options_policy_in_effect">Jedna nebo více zásad organizace ovlivňuje nastavení Send.</string>
-    <string name="send_file_premium_required">Bezplatné účty jsou omezeny pouze na sdílení textu. K používání souborů pomocí Send je vyžadováno prémiové členství.</string>
+    <string name="send_file_premium_required">Bezplatné účty jsou omezeny jen na sdílení textu. K používání souborů pomocí Send je vyžadováno členství Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sdílení s vybranými lidmi je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
@@ -1246,4 +1248,23 @@ při opakování problémů.</string>
     <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
     <string name="external_link">Externí odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externí odkaz</string>
+    <string name="preview_not_available_for_files">Náhled není %1$s souborů k dispozici. Stále si je můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nemohl dešifrovat tento soubor, takže náhled nelze zobrazit.</string>
+    <string name="preview_unavailable_for_this_file">Náhled není pro tento soubor k dispozici. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="preview_unavailable">Náhled je nedostupný</string>
+    <string name="upgraded_to_premium">Aktualizováno na Premium</string>
+    <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
+    <string name="per_month">/ měsíčně</string>
+    <string name="built_in_authenticator">Vestavěný autentifikátor</string>
+    <string name="emergency_access">Nouzový přístup</string>
+    <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
+    <string name="breach_monitoring">Sledování úniků</string>
+    <string name="upgrade_now">Aktualizovat nyní</string>
+    <string name="stripe_checkout_footer">Pro dokončení nákupu přejdete do zabezpečené pokladny Stripe.</string>
+    <string name="opening_checkout">Otevírání pokladny...</string>
+    <string name="secure_checkout_didnt_load">Zabezpečená pokladna se nenačetla</string>
+    <string name="trouble_opening_payment_page">Měli jsme potíže s otevřením platební stránky, zkuste to znovu.</string>
+    <string name="payment_not_received_yet">Platba ještě nebyla přijata</string>
+    <string name="return_to_stripe_to_finish">Vraťte se do Stripe ve Vašem prohlížeči, abyste dokončili aktualizaci.</string>
+    <string name="go_back">Vrátit se</string>
 </resources>

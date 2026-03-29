@@ -11,6 +11,7 @@
     <string name="copy_password">Wachtwoord kopiëren</string>
     <string name="copy_username">Gebruikersnaam kopiëren</string>
     <string name="delete">Verwijderen</string>
+    <string name="preview">Voorbeeld</string>
     <string name="deleting">Verwijderen…</string>
     <string name="do_you_really_want_to_delete">Weet je zeker dat je wilt verwijderen? Je kunt dit niet ongedaan maken.</string>
     <string name="edit">Bewerken</string>
@@ -379,6 +380,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="capitalize">Beginhoofdletters</string>
     <string name="include_number">Cijfer toevoegen</string>
     <string name="download">Downloaden</string>
+    <string name="download_file">Bestand downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
     <string name="device_verification">Apparaat verificatie</string>
@@ -1227,4 +1229,23 @@ Wilt u naar dit account wisselen?</string>
     <string name="continue_without_syncing">Doorgaan zonder synchroniseren</string>
     <string name="external_link">Externe link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externe link</string>
+    <string name="preview_not_available_for_files">Voorbeeld niet beschikbaar voor %1$s bestanden. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden kan dit bestand niet decoderen, dus het voorbeeld kan niet worden weergegeven.</string>
+    <string name="preview_unavailable_for_this_file">Voorbeeld niet beschikbaar voor dit] bestand. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
+    <string name="preview_unavailable">Voorbeeld niet beschikbaar</string>
+    <string name="upgraded_to_premium">Naar Premium opgewaardeerd</string>
+    <string name="unlock_premium_features">Ontgrendel meer geavanceerde functies met een Premium-abonnement.</string>
+    <string name="per_month">/ maand</string>
+    <string name="built_in_authenticator">Ingebouwde authenticator</string>
+    <string name="emergency_access">Noodtoegang</string>
+    <string name="secure_file_storage">Beveiligde bestandsopslag</string>
+    <string name="breach_monitoring">Lek-monitoring</string>
+    <string name="upgrade_now">Nu upgraden</string>
+    <string name="stripe_checkout_footer">Je gaat naar Stripe\'s beveiligde checkout voor het afronden van je aankoop.</string>
+    <string name="opening_checkout">Checkout openen…</string>
+    <string name="secure_checkout_didnt_load">Beveiligde checkout werd niet geladen</string>
+    <string name="trouble_opening_payment_page">We hebben problemen gehad met het openen van de betaalpagina, dus probeer het opnieuw.</string>
+    <string name="payment_not_received_yet">Betaling nog niet ontvangen</string>
+    <string name="return_to_stripe_to_finish">Terug naar Stripe in je browser voor het afronden van opwaarderen.</string>
+    <string name="go_back">Ga terug</string>
 </resources>

@@ -11,6 +11,7 @@
     <string name="copy_password">パスワードをコピー</string>
     <string name="copy_username">ユーザー名をコピー</string>
     <string name="delete">削除</string>
+    <string name="preview">プレビュー</string>
     <string name="deleting">削除中…</string>
     <string name="do_you_really_want_to_delete">本当に削除しますか？この操作は元に戻せません。</string>
     <string name="edit">編集</string>
@@ -377,6 +378,7 @@
     <string name="capitalize">英単語の先頭を大文字にする</string>
     <string name="include_number">数字を含める</string>
     <string name="download">ダウンロード</string>
+    <string name="download_file">ファイルのダウンロード</string>
     <string name="login_expired">ログインセッションの有効期限が切れています。</string>
     <string name="biometrics_direction">生体認証で認証します。</string>
     <string name="device_verification">Device verification</string>
@@ -1218,4 +1220,23 @@
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s、外部リンク</string>
+    <string name="preview_not_available_for_files">%1$s ファイルではプレビューできません。ダウンロードするとデバイスで表示できます。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden はこのファイルを復号できませんでした。プレビューを表示できません。</string>
+    <string name="preview_unavailable_for_this_file">このファイルではプレビューできません。ダウンロードするとデバイスで表示できます。</string>
+    <string name="preview_unavailable">プレビューできません</string>
+    <string name="upgraded_to_premium">プレミアムにアップグレード済み</string>
+    <string name="unlock_premium_features">プレミアムプランでより高度な機能をアンロックしましょう。</string>
+    <string name="per_month">/ 月</string>
+    <string name="built_in_authenticator">認証機能を内蔵</string>
+    <string name="emergency_access">緊急アクセス</string>
+    <string name="secure_file_storage">セキュアなファイルストレージ</string>
+    <string name="breach_monitoring">情報漏洩の監視</string>
+    <string name="upgrade_now">今すぐアップグレード</string>
+    <string name="stripe_checkout_footer">Stripe の安全なチェックアウトで購入できます。</string>
+    <string name="opening_checkout">チェックアウトを開いています…</string>
+    <string name="secure_checkout_didnt_load">セキュアなチェックアウトが読み込まれませんでした</string>
+    <string name="trouble_opening_payment_page">支払いページを開く際に問題がありました。もう一度やり直してください。</string>
+    <string name="payment_not_received_yet">支払いはまだ受信されていません</string>
+    <string name="return_to_stripe_to_finish">アップグレードを完了するには、ブラウザの Stripe に戻ってください。</string>
+    <string name="go_back">戻る</string>
 </resources>

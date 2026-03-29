@@ -11,6 +11,7 @@
     <string name="copy_password">Parolu kopyala</string>
     <string name="copy_username">İstifadəçi adını kopyala</string>
     <string name="delete">Sil</string>
+    <string name="preview">Önizləmə</string>
     <string name="deleting">Silinir…</string>
     <string name="do_you_really_want_to_delete">Həqiqətən silmək istəyirsiniz? Bunun geri dönüşü yoxdur.</string>
     <string name="edit">Düzəliş et</string>
@@ -379,6 +380,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="capitalize">İlk hərfi böyük yaz</string>
     <string name="include_number">Rəqəm əlavə et</string>
     <string name="download">Endir</string>
+    <string name="download_file">Faylı endir</string>
     <string name="login_expired">Seansın müddəti bitdi.</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
     <string name="device_verification">Cihaz doğrulaması</string>
@@ -1206,8 +1208,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="archive_unavailable">Arxiv əlçatmazdır</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
-    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
+    <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium plan, güvəndə qalmağınız və nəzarəti əlinizdə saxlamağınız üçün sizə daha çox alət verir</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
     <string name="introducing_archive">Tanış olun, Arxivləmə</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">İndi ehtiyacınız olmayanları etibarlı və gözdən uzaq yerdə saxlayın.</string>
@@ -1228,4 +1230,23 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="continue_without_syncing">Sinxrn olmadan davam et</string>
     <string name="external_link">Xarici keçid</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Xarici keçidi</string>
+    <string name="preview_not_available_for_files">%1$s fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu faylın şifrəsini aça bilmədi, ona görə də önizləmə nümayiş oluna bilmir.</string>
+    <string name="preview_unavailable_for_this_file">Bu fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
+    <string name="preview_unavailable">Önizləmə mövcud deyil</string>
+    <string name="upgraded_to_premium">\"Premium\"a yüksəldildi</string>
+    <string name="unlock_premium_features">Premium planla daha qabaqcıl özəlliklərin kilidini açın.</string>
+    <string name="per_month">/ ay</string>
+    <string name="built_in_authenticator">Daxili kimlik doğrulayıcı</string>
+    <string name="emergency_access">Fövqəladə hal erişimi</string>
+    <string name="secure_file_storage">Güvənli fayl anbarı</string>
+    <string name="breach_monitoring">Pozuntu monitorinqi</string>
+    <string name="upgrade_now">İndi yüksəlt</string>
+    <string name="stripe_checkout_footer">Satın almanı tamamlamaq üçün Stripe-ın güvənli ödəniş səhifəsinə yönləndiriləcəksiniz.</string>
+    <string name="opening_checkout">Ödəmə səhifəsi açılır…</string>
+    <string name="secure_checkout_didnt_load">Güvənli ödəmə səhifəsi yüklənmədi</string>
+    <string name="trouble_opening_payment_page">Ödəniş səhifəsini açmaqla bağlı çətinliyimiz var, yenidən sınayın.</string>
+    <string name="payment_not_received_yet">Ödəniş hələ alınmayıb</string>
+    <string name="return_to_stripe_to_finish">Yüksəltməni tamamlamaq üçün brauzerinizdə Stripe-a qayıdın.</string>
+    <string name="go_back">Geri qayıt</string>
 </resources>
