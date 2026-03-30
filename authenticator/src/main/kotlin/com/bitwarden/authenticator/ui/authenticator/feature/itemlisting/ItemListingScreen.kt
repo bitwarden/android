@@ -629,6 +629,7 @@ private fun EmptyListingContentPreview() {
 @Composable
 @Preview(showBackground = true)
 private fun ContentPreview() {
+    val email = "longemailaddress+verification+codes@email.com"
     BitwardenTheme {
         ItemListingContent(
             state = ItemListingState.ViewState.Content(
@@ -652,9 +653,7 @@ private fun ContentPreview() {
                     sections = persistentListOf(
                         SharedCodesDisplayState.SharedCodesAccountSection(
                             id = "id",
-                            label =
-                                "longemailaddress+verification+codes@email.com | Bitawrden.eu (1)"
-                                    .asText(),
+                            label = "$email | Bitawrden.eu (1)".asText(),
                             codes = persistentListOf(
                                 VerificationCodeDisplayItem(
                                     id = "",
@@ -670,6 +669,7 @@ private fun ContentPreview() {
                                 ),
                             ),
                             isExpanded = true,
+                            sortKey = email,
                         ),
                     ),
                 ),

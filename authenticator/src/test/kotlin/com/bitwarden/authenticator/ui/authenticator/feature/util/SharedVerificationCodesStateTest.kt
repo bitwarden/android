@@ -64,29 +64,6 @@ class SharedVerificationCodesStateTest {
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
                     label = BitwardenString.shared_accounts_header.asText(
-                        "John@test.com",
-                        "bitwarden.com",
-                        1,
-                    ),
-                    codes = persistentListOf(
-                        VerificationCodeDisplayItem(
-                            authCode = "123456",
-                            periodSeconds = 30,
-                            timeLeftSeconds = 10,
-                            id = "123",
-                            title = "--",
-                            subtitle = null,
-                            favorite = false,
-                            showOverflow = false,
-                            alertThresholdSeconds = ALERT_THRESHOLD,
-                            showMoveToBitwarden = false,
-                        ),
-                    ),
-                    isExpanded = true,
-                ),
-                SharedCodesDisplayState.SharedCodesAccountSection(
-                    id = "user1",
-                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,
@@ -106,6 +83,31 @@ class SharedVerificationCodesStateTest {
                         ),
                     ),
                     isExpanded = true,
+                    sortKey = "Jane@test.com",
+                ),
+                SharedCodesDisplayState.SharedCodesAccountSection(
+                    id = "user1",
+                    label = BitwardenString.shared_accounts_header.asText(
+                        "John@test.com",
+                        "bitwarden.com",
+                        1,
+                    ),
+                    codes = persistentListOf(
+                        VerificationCodeDisplayItem(
+                            authCode = "123456",
+                            periodSeconds = 30,
+                            timeLeftSeconds = 10,
+                            id = "123",
+                            title = "--",
+                            subtitle = null,
+                            favorite = false,
+                            showOverflow = false,
+                            alertThresholdSeconds = ALERT_THRESHOLD,
+                            showMoveToBitwarden = false,
+                        ),
+                    ),
+                    isExpanded = true,
+                    sortKey = "John@test.com",
                 ),
             ),
         )
@@ -156,29 +158,6 @@ class SharedVerificationCodesStateTest {
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
                     label = BitwardenString.shared_accounts_header.asText(
-                        "John@test.com",
-                        "bitwarden.com",
-                        1,
-                    ),
-                    codes = persistentListOf(
-                        VerificationCodeDisplayItem(
-                            authCode = "123456",
-                            periodSeconds = 30,
-                            timeLeftSeconds = 10,
-                            id = "123",
-                            title = "--",
-                            subtitle = null,
-                            favorite = false,
-                            showOverflow = false,
-                            alertThresholdSeconds = ALERT_THRESHOLD,
-                            showMoveToBitwarden = false,
-                        ),
-                    ),
-                    isExpanded = false,
-                ),
-                SharedCodesDisplayState.SharedCodesAccountSection(
-                    id = "user1",
-                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,
@@ -198,6 +177,31 @@ class SharedVerificationCodesStateTest {
                         ),
                     ),
                     isExpanded = false,
+                    sortKey = "Jane@test.com",
+                ),
+                SharedCodesDisplayState.SharedCodesAccountSection(
+                    id = "user1",
+                    label = BitwardenString.shared_accounts_header.asText(
+                        "John@test.com",
+                        "bitwarden.com",
+                        1,
+                    ),
+                    codes = persistentListOf(
+                        VerificationCodeDisplayItem(
+                            authCode = "123456",
+                            periodSeconds = 30,
+                            timeLeftSeconds = 10,
+                            id = "123",
+                            title = "--",
+                            subtitle = null,
+                            favorite = false,
+                            showOverflow = false,
+                            alertThresholdSeconds = ALERT_THRESHOLD,
+                            showMoveToBitwarden = false,
+                        ),
+                    ),
+                    isExpanded = false,
+                    sortKey = "John@test.com",
                 ),
             ),
         )

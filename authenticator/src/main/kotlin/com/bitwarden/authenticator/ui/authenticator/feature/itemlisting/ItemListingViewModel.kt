@@ -23,6 +23,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDi
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.util.sortAlphabetically
 import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -509,6 +510,7 @@ class ItemListingViewModel @Inject constructor(
                             showOverflow = true,
                         )
                     }
+                    .sortAlphabetically()
                     .toImmutableList(),
                 itemList = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
@@ -521,6 +523,7 @@ class ItemListingViewModel @Inject constructor(
                             showOverflow = true,
                         )
                     }
+                    .sortAlphabetically()
                     .toImmutableList(),
                 sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
