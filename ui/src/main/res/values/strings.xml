@@ -206,6 +206,7 @@ Scanning will happen automatically.</string>
     <string name="choose_file">Choose file</string>
     <string name="file">File</string>
     <string name="no_file_chosen">No file chosen</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">There are no attachments.</string>
     <string name="file_source">File Source</string>
     <string name="max_file_size">Maximum file size is 100 MB.</string>

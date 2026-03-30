@@ -104,6 +104,7 @@ fun AttachmentsScreen(
             is AttachmentsState.ViewState.Content -> AttachmentsContent(
                 viewState = viewState,
                 attachmentsHandlers = attachmentsHandlers,
+                isAttachmentUpdatesEnabled = state.isAttachmentUpdatesEnabled,
                 modifier = Modifier.fillMaxSize(),
             )
 

@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
@@ -100,6 +101,29 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("Choose file").performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(AttachmentsAction.ChooseFileClick)
+        }
+    }
+
+    @Test
+    fun `on edit file name should send FileNameChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        extension = "png",
+                        displayName = "cool_file",
+                        uri = mockk(),
+                        sizeBytes = 100L,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("cool_file")
+            .performTextInput("5")
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.FileNameChange(fileName = "cool_file5"))
         }
     }
 
@@ -260,6 +284,7 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
     isPremiumUser = false,
+    isAttachmentUpdatesEnabled = true,
 )
 
 private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -29,8 +30,10 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.nonEditableExtensionVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -39,9 +42,34 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHand
 /**
  * The top level content UI state for the [AttachmentsScreen] when viewing a content.
  */
-@Suppress("LongMethod")
 @Composable
 fun AttachmentsContent(
+    viewState: AttachmentsState.ViewState.Content,
+    attachmentsHandlers: AttachmentsHandlers,
+    isAttachmentUpdatesEnabled: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    if (isAttachmentUpdatesEnabled) {
+        AttachmentsContentV2(
+            viewState = viewState,
+            attachmentsHandlers = attachmentsHandlers,
+            modifier = modifier,
+        )
+    } else {
+        AttachmentsContentV1(
+            viewState = viewState,
+            attachmentsHandlers = attachmentsHandlers,
+            modifier = modifier,
+        )
+    }
+}
+
+/**
+ * The top level content UI state for the [AttachmentsScreen] when viewing a content.
+ */
+@Suppress("LongMethod")
+@Composable
+private fun AttachmentsContentV1(
     viewState: AttachmentsState.ViewState.Content,
     attachmentsHandlers: AttachmentsHandlers,
     modifier: Modifier = Modifier,
@@ -96,7 +124,7 @@ fun AttachmentsContent(
             Text(
                 text = viewState
                     .newAttachment
-                    ?.displayName
+                    ?.completeFileName
                     ?: stringResource(id = BitwardenString.no_file_chosen),
                 color = BitwardenTheme.colorScheme.text.secondary,
                 style = BitwardenTheme.typography.bodySmall,
@@ -128,6 +156,116 @@ fun AttachmentsContent(
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp),
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+/**
+ * The top level content UI state for the [AttachmentsScreen] when viewing a content.
+ */
+@Suppress("LongMethod")
+@Composable
+private fun AttachmentsContentV2(
+    viewState: AttachmentsState.ViewState.Content,
+    attachmentsHandlers: AttachmentsHandlers,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(modifier = modifier) {
+        item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = BitwardenString.attachments),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
+
+        if (viewState.attachments.isEmpty()) {
+            item {
+                Box(
+                    contentAlignment = Alignment.CenterStart,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .defaultMinSize(minHeight = 60.dp)
+                        .cardStyle(cardStyle = CardStyle.Full),
+                ) {
+                    Text(
+                        text = stringResource(id = BitwardenString.no_attachments),
+                        style = BitwardenTheme.typography.bodyLarge,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .testTag(tag = "NoAttachmentsLabel"),
+                    )
+                }
+            }
+        } else {
+            itemsIndexed(items = viewState.attachments) { index, attachment ->
+                AttachmentListEntry(
+                    attachmentItem = attachment,
+                    onDeleteClick = attachmentsHandlers.onDeleteClick,
+                    onItemClick = attachmentsHandlers.onItemClick,
+                    cardStyle = viewState.attachments.toListItemCardStyle(index = index),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .testTag(tag = "AttachmentList"),
+                )
+            }
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = BitwardenString.add_new_attachment),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
+
+        item {
+            BitwardenTextField(
+                label = stringResource(id = BitwardenString.file_name),
+                value = viewState.newAttachment?.displayName
+                    ?: stringResource(id = BitwardenString.no_file_chosen),
+                textFieldTestTag = "SelectedFileNameLabel",
+                onValueChange = attachmentsHandlers.onFileNameChange,
+                enabled = viewState.newAttachment != null,
+                supportingText = stringResource(id = BitwardenString.max_file_size),
+                visualTransformation = nonEditableExtensionVisualTransformation(
+                    fileExtension = viewState.newAttachment?.extension,
+                ),
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.choose_file),
+                onClick = attachmentsHandlers.onChooseFileClick,
+                isExternalLink = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag(tag = "AttachmentSelectFileButton"),
             )
         }
 
