@@ -40,6 +40,10 @@ class FlagKeyTest {
             FlagKey.MobilePremiumUpgrade.keyName,
             "PM-31697-premium-upgrade-path",
         )
+        assertEquals(
+            FlagKey.AttachmentUpdates.keyName,
+            "pm-34224-mobile-attachment-updates",
+        )
     }
 
     @Test
@@ -54,6 +58,7 @@ class FlagKeyTest {
                 FlagKey.ArchiveItems,
                 FlagKey.SendEmailVerification,
                 FlagKey.MobilePremiumUpgrade,
+                FlagKey.AttachmentUpdates,
             ).all {
                 !it.defaultValue
             },
