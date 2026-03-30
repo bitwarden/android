@@ -27,6 +27,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -750,7 +751,7 @@ private val DEFAULT_ATTACHMENT_ITEM: AttachmentsState.AttachmentItem =
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = listOf(DEFAULT_ATTACHMENT_ITEM),
+        attachments = persistentListOf(DEFAULT_ATTACHMENT_ITEM),
         newAttachment = null,
     )
 

@@ -24,6 +24,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -264,14 +265,14 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
 private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = emptyList(),
+        attachments = persistentListOf(),
         newAttachment = null,
     )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = listOf(
+        attachments = persistentListOf(
             AttachmentsState.AttachmentItem(
                 id = "cipherId-1234",
                 title = "cool_file.png",

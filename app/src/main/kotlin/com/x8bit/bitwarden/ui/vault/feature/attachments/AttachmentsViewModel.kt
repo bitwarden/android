@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -389,7 +390,7 @@ data class AttachmentsState(
         data class Content(
             @IgnoredOnParcel
             val originalCipher: CipherView? = null,
-            val attachments: List<AttachmentItem>,
+            val attachments: ImmutableList<AttachmentItem>,
             val newAttachment: NewAttachment?,
         ) : ViewState()
     }
