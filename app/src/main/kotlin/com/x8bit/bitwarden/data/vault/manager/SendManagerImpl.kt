@@ -5,6 +5,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.sdk.MakeSendFolderFileUniFfiEntry
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
@@ -90,6 +91,125 @@ class SendManagerImpl(
 
                     is CreateSendJsonResponse.Success -> {
                         // Save the send immediately, regardless of whether the decrypt succeeds
+                        vaultDiskSource.saveSend(userId = userId, send = createSendResponse.send)
+                        createSendResponse
+                    }
+                }
+            }
+            .flatMap { createSendSuccessResponse ->
+                vaultSdkSource.decryptSend(
+                    userId = userId,
+                    send = createSendSuccessResponse.send.toEncryptedSdkSend(),
+                )
+            }
+            .fold(
+                onFailure = { CreateSendResult.Error(message = null, error = it) },
+                onSuccess = {
+                    reviewPromptManager.registerCreateSendAction()
+                    CreateSendResult.Success(sendView = it)
+                },
+            )
+    }
+
+    @Suppress("LongMethod")
+    override suspend fun createFolderSend(
+        sendView: SendView,
+        folderUri: Uri,
+        folderName: String,
+    ): CreateSendResult {
+        val userId = activeUserId
+            ?: return CreateSendResult.Error(message = null, error = NoActiveUserException())
+
+        val zipFile = fileManager.createTempFileInCache(
+            prefix = "send_folder_",
+            suffix = ".zip",
+        )
+        return fileManager
+            .writeFolderFilesToCache(folderUri)
+            .flatMap { diskEntries ->
+                val sdkEntries = diskEntries.map { entry ->
+                    MakeSendFolderFileUniFfiEntry(
+                        path = entry.relativePath,
+                        source = entry.diskPath,
+                    )
+                }
+                vaultSdkSource
+                    .makeSendFolderFile(
+                        userId = userId,
+                        folderName = folderName,
+                        files = sdkEntries,
+                        outputZipPath = zipFile.absolutePath,
+                    )
+                    .also {
+                        // Clean up individual temp files now that the zip is written.
+                        fileManager.delete(
+                            *diskEntries
+                                .map { java.io.File(it.diskPath) }
+                                .toTypedArray(),
+                        )
+                    }
+            }
+            .flatMap { folderResult ->
+                val folderSendView = sendView.copy(
+                    file = folderResult.file,
+                )
+
+                vaultSdkSource
+                    .encryptSend(userId = userId, sendView = folderSendView)
+                    .flatMap { send ->
+                        vaultSdkSource
+                            .encryptFile(
+                                userId = userId,
+                                send = send,
+                                path = zipFile.absolutePath,
+                                destinationFilePath = zipFile.absolutePath,
+                            )
+                            .flatMap { encryptedFile ->
+                                sendsService
+                                    .createFileSend(
+                                        body = send.toEncryptedNetworkSend(
+                                            fileLength = encryptedFile.length(),
+                                        ),
+                                    )
+                                    .flatMap { sendFileResponse ->
+                                        when (sendFileResponse) {
+                                            is CreateFileSendResponse.Invalid -> {
+                                                CreateSendJsonResponse
+                                                    .Invalid(
+                                                        message = sendFileResponse.message,
+                                                        validationErrors = sendFileResponse
+                                                            .validationErrors,
+                                                    )
+                                                    .asSuccess()
+                                            }
+
+                                            is CreateFileSendResponse.Success -> {
+                                                sendsService
+                                                    .uploadFile(
+                                                        sendFileResponse = sendFileResponse
+                                                            .createFileJsonResponse,
+                                                        encryptedFile = encryptedFile,
+                                                    )
+                                                    .map { CreateSendJsonResponse.Success(it) }
+                                            }
+                                        }
+                                    }
+                            }
+                    }
+            }
+            .also {
+                fileManager.delete(zipFile)
+            }
+            .map { createSendResponse ->
+                when (createSendResponse) {
+                    is CreateSendJsonResponse.Invalid -> {
+                        return CreateSendResult.Error(
+                            message = createSendResponse.firstValidationErrorMessage,
+                            error = null,
+                        )
+                    }
+
+                    is CreateSendJsonResponse.Success -> {
                         vaultDiskSource.saveSend(userId = userId, send = createSendResponse.send)
                         createSendResponse
                     }

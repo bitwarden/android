@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers
 
 import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.FolderData
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
@@ -15,6 +16,8 @@ data class AddEditSendHandlers(
     val onNameChange: (String) -> Unit,
     val onChooseFileClick: (hasPermission: Boolean) -> Unit,
     val onFileChoose: (FileData) -> Unit,
+    val onChooseFolderClick: () -> Unit,
+    val onFolderChoose: (FolderData) -> Unit,
     val onTextChange: (String) -> Unit,
     val onIsHideByDefaultToggle: (Boolean) -> Unit,
     val onMaxAccessCountChange: (Int) -> Unit,
@@ -47,6 +50,12 @@ data class AddEditSendHandlers(
                     viewModel.trySendAction(AddEditSendAction.ChooseFileClick(it))
                 },
                 onFileChoose = { viewModel.trySendAction(AddEditSendAction.FileChoose(it)) },
+                onChooseFolderClick = {
+                    viewModel.trySendAction(AddEditSendAction.ChooseFolderClick)
+                },
+                onFolderChoose = {
+                    viewModel.trySendAction(AddEditSendAction.FolderChoose(it))
+                },
                 onTextChange = { viewModel.trySendAction(AddEditSendAction.TextChange(it)) },
                 onIsHideByDefaultToggle = {
                     viewModel.trySendAction(AddEditSendAction.HideByDefaultToggle(it))

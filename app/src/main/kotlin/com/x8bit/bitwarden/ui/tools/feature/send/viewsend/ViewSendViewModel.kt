@@ -253,7 +253,9 @@ data class ViewSendState(
      */
     val screenDisplayName: Text
         get() = when (sendType) {
-            SendItemType.FILE -> BitwardenString.view_file_send.asText()
+            SendItemType.FILE,
+            SendItemType.FOLDER,
+            -> BitwardenString.view_file_send.asText()
             SendItemType.TEXT -> BitwardenString.view_text_send.asText()
         }
 

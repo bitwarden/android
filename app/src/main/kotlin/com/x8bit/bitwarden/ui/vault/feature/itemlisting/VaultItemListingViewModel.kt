@@ -889,7 +889,9 @@ class VaultItemListingViewModel @Inject constructor(
 
             is VaultItemListingState.ItemListingType.Send -> {
                 when (val sendType = itemListingType.toSendItemType()) {
-                    SendItemType.FILE -> {
+                    SendItemType.FILE,
+                    SendItemType.FOLDER,
+                    -> {
                         if (state.isPremium) {
                             sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
                         } else {

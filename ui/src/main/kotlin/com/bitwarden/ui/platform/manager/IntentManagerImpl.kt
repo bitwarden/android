@@ -30,7 +30,9 @@ import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.core.data.manager.util.fileProviderAuthority
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
+import androidx.documentfile.provider.DocumentFile
 import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.FolderData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.util.getLocalFileData
 import timber.log.Timber
@@ -229,6 +231,49 @@ internal class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
+
+    override fun createFolderChooserIntent(): Intent =
+        Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+
+    override fun getFolderDataFromActivityResult(
+        activityResult: ActivityResult,
+    ): FolderData? {
+        if (activityResult.resultCode != Activity.RESULT_OK) return null
+        val treeUri = activityResult.data?.data ?: return null
+        val rootDocument = DocumentFile.fromTreeUri(activity, treeUri) ?: return null
+        var fileCount = 0
+        var totalSize = 0L
+        countFilesRecursively(rootDocument) { count, size ->
+            fileCount = count
+            totalSize = size
+        }
+        return FolderData(
+            folderName = rootDocument.name ?: "folder",
+            uri = treeUri,
+            fileCount = fileCount,
+            totalSizeBytes = totalSize,
+        )
+    }
+
+    private fun countFilesRecursively(
+        document: DocumentFile,
+        onResult: (fileCount: Int, totalSize: Long) -> Unit,
+    ) {
+        var count = 0
+        var size = 0L
+        fun traverse(doc: DocumentFile) {
+            doc.listFiles().forEach { child ->
+                if (child.isDirectory) {
+                    traverse(child)
+                } else {
+                    count++
+                    size += child.length()
+                }
+            }
+        }
+        traverse(document)
+        onResult(count, size)
+    }
 
     private fun createPlayStoreIntent(packageName: String): Intent {
         val playStoreUri = "https://play.google.com/store/apps/details"
