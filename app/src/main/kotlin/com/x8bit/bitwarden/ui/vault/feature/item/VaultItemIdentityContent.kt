@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -316,10 +315,10 @@ fun VaultItemIdentityContent(
                         .animateItem(),
                 )
             }
-            items(
+            itemsIndexed(
                 items = customFields,
-                key = { "customField_$it" },
-            ) { customField ->
+                key = { index, _ -> "customField_$index" },
+            ) { _, customField ->
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
