@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -216,9 +215,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { register() } returns RegisterExportResult.Success
         coEvery { unregister() } returns UnregisterExportResult.Success
-    }
-    private val gmsManager: GmsManager = mockk {
-        every { isVersionAtLeast(any()) } returns true
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
     private val mutableArchiveItemsFlagFlow = MutableStateFlow(true)
@@ -3796,48 +3792,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but GMS version is insufficient`() =
-        runTest {
-            mutableCxpExportFeatureFlagFlow.value = false
-            every { gmsManager.isVersionAtLeast(any()) } returns false
-            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
-
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = true,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.unregister()
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled and GMS version is sufficient`() =
-        runTest {
-            mutableCxpExportFeatureFlagFlow.value = true
-            every { settingsRepository.isAppRegisteredForExport() } returns true
-            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
-
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = false,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.unregister()
-            }
-        }
-
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -3856,7 +3810,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
-            gmsManager = gmsManager,
             featureFlagManager = featureFlagManager,
         )
 }
