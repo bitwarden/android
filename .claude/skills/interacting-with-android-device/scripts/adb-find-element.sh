@@ -28,36 +28,19 @@ fi
 $ADB shell uiautomator dump /sdcard/view.xml > /dev/null 2>&1 && $ADB pull /sdcard/view.xml . > /dev/null 2>&1
 echo "UI hierarchy saved to: $(pwd)/view.xml" >&2
 
-# Extract coordinates using Python
-python3 << EOF
-import xml.etree.ElementTree as ET
-import sys
+# Extract coordinates from XML using grep + awk
+MATCH=$(grep -o "text=\"[^\"]*${SEARCH_TEXT}[^\"]*\"[^>]*bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"" view.xml | head -1)
 
-try:
-    root = ET.parse('view.xml').getroot()
-    found = False
+if [ -z "$MATCH" ]; then
+    MATCH=$(grep -o "bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"[^>]*text=\"[^\"]*${SEARCH_TEXT}[^\"]*\"" view.xml | head -1)
+fi
 
-    for node in root.iter():
-        text = node.get('text', '')
-        if '$SEARCH_TEXT' in text:
-            bounds = node.get('bounds')
-            if bounds:
-                bounds_str = bounds.strip('[]')
-                parts = bounds_str.split('][')
-                left_top = parts[0].strip('[]').split(',')
-                right_bottom = parts[1].strip('[]').split(',')
-                left, top = int(left_top[0]), int(left_top[1])
-                right, bottom = int(right_bottom[0]), int(right_bottom[1])
-                center_x = (left + right) // 2
-                center_y = (top + bottom) // 2
-                print(f"{center_x} {center_y}")
-                found = True
-                break
+if [ -z "$MATCH" ]; then
+    echo "ERROR: Element with text '$SEARCH_TEXT' not found" >&2
+    exit 1
+fi
 
-    if not found:
-        print("ERROR: Element not found", file=sys.stderr)
-        sys.exit(1)
-except Exception as e:
-    print(f"ERROR: {e}", file=sys.stderr)
-    sys.exit(1)
-EOF
+echo "$MATCH" | grep -o 'bounds="\[[0-9,]*\]\[[0-9,]*\]"' | sed 's/bounds="//;s/"//' | awk -F'[][,]' '{
+    left=$2; top=$3; right=$5; bottom=$6
+    printf "%d %d\n", (left+right)/2, (top+bottom)/2
+}'
