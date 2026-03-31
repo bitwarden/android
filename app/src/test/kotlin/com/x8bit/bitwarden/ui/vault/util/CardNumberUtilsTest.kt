@@ -85,6 +85,18 @@ class CardNumberUtilsTest {
     }
 
     @Test
+    fun `detectCardBrand should detect RuPay`() {
+        assertEquals(
+            VaultCardBrand.RUPAY,
+            "8100000000000005".detectCardBrand(),
+        )
+        assertEquals(
+            VaultCardBrand.RUPAY,
+            "8200000000000004".detectCardBrand(),
+        )
+    }
+
+    @Test
     fun `detectCardBrand should return OTHER for unknown prefixes`() {
         assertEquals(
             VaultCardBrand.OTHER,

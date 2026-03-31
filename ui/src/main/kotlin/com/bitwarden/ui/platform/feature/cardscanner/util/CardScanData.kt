@@ -15,4 +15,10 @@ data class CardScanData(
     val expirationYear: String?,
     val cardholderName: String?,
     val securityCode: String?,
-)
+) {
+    override fun toString(): String = "CardScanData(number=****," +
+        " expirationMonth=$expirationMonth," +
+        " expirationYear=$expirationYear," +
+        " cardholderName=****," +
+        " securityCode=****)"
+}
