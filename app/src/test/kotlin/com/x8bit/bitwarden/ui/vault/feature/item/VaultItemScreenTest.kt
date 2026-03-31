@@ -728,7 +728,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 composeTestRule.onNodeWithTextAfterScroll("boolean").assertIsDisplayed()
 
                 mutableStateFlow.update { currentState ->
-                    updateCommonContent(currentState) { copy(customFields = emptyList()) }
+                    updateCommonContent(currentState) { copy(customFields = persistentListOf()) }
                 }
 
                 composeTestRule.assertScrollableNodeDoesNotExist("CUSTOM FIELDS")
@@ -749,7 +749,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 composeTestRule.onNodeWithTextAfterScroll("11 MB").assertIsDisplayed()
 
                 mutableStateFlow.update { currentState ->
-                    updateCommonContent(currentState) { copy(attachments = emptyList()) }
+                    updateCommonContent(currentState) { copy(attachments = persistentListOf()) }
                 }
 
                 composeTestRule.assertScrollableNodeDoesNotExist("ATTACHMENTS")
@@ -764,7 +764,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(
+                        attachments = persistentListOf(
                             VaultItemState.ViewState.Content.Common.AttachmentItem(
                                 id = "attachment-id",
                                 displaySize = "11 MB",
@@ -808,7 +808,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(
+                        attachments = persistentListOf(
                             VaultItemState.ViewState.Content.Common.AttachmentItem(
                                 id = "attachment-id",
                                 displaySize = "11 MB",
@@ -857,7 +857,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(attachment),
+                        attachments = persistentListOf(attachment),
                     ),
                 ),
             )
@@ -900,7 +900,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(attachment),
+                        attachments = persistentListOf(attachment),
                     ),
                 ),
             )
@@ -932,7 +932,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -971,7 +971,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(hiddenField),
+                                customFields = persistentListOf(hiddenField),
                             ),
                         ),
                     )
@@ -985,7 +985,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(customFields = listOf(hiddenField.copy(isCopyable = false)))
+                        copy(customFields = persistentListOf(hiddenField.copy(isCopyable = false)))
                     }
                 }
 
@@ -1013,7 +1013,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(hiddenField),
+                                customFields = persistentListOf(hiddenField),
                             ),
                         ),
                     )
@@ -1048,7 +1048,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1083,7 +1083,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1097,7 +1097,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(customFields = listOf(textField.copy(isCopyable = false)))
+                        copy(customFields = persistentListOf(textField.copy(isCopyable = false)))
                     }
                 }
 
@@ -1744,7 +1744,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_IDENTITY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1780,7 +1780,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_IDENTITY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1836,7 +1836,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_SSH_KEY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -2081,7 +2081,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        customFields = listOf(linkedFieldUserName, linkedFieldsPassword),
+                        customFields = persistentListOf(linkedFieldUserName, linkedFieldsPassword),
                     ),
                 ),
             )
@@ -2099,7 +2099,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        customFields = listOf(),
+                        customFields = persistentListOf(),
                     ),
                 ),
             )
@@ -3343,7 +3343,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         created = BitwardenString.created.asText(""),
         lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = "Lots of notes",
-        customFields = listOf(
+        customFields = persistentListOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
                 id = "12345",
                 name = "text",
@@ -3364,7 +3364,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
         requiresCloneConfirmation = false,
-        attachments = listOf(
+        attachments = persistentListOf(
             VaultItemState.ViewState.Content.Common.AttachmentItem(
                 id = "attachment-id",
                 displaySize = "11 MB",
@@ -3458,9 +3458,9 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         created = BitwardenString.created.asText("Dec 1, 1969, 05:20 PM"),
         lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = null,
-        customFields = emptyList(),
+        customFields = persistentListOf(),
         requiresCloneConfirmation = false,
-        attachments = emptyList(),
+        attachments = persistentListOf(),
         canDelete = true,
         canRestore = true,
         canAssignToCollections = true,

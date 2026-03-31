@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.item
+package com.x8bit.bitwarden.ui.vault.feature.item.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,13 +26,14 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 
 /**
  * Attachment UI common for all item types.
  */
 @Suppress("LongMethod")
 @Composable
-fun AttachmentItemContent(
+fun VaultItemAttachment(
     attachmentItem: VaultItemState.ViewState.Content.Common.AttachmentItem,
     onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     onAttachmentPreviewClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,

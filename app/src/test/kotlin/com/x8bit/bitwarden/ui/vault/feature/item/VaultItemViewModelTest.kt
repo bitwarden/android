@@ -1190,7 +1190,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isEmpty = true,
                     isPremiumUser = true,
                 ).copy(
-                    customFields = listOf(hiddenField),
+                    customFields = persistentListOf(hiddenField),
                 ),
                 type = createLoginContent(isEmpty = true),
             )
@@ -1226,7 +1226,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 loginState.copy(
                     viewState = loginViewState.copy(
                         common = createCommonContent(isEmpty = true, isPremiumUser = true).copy(
-                            customFields = listOf(hiddenField.copy(isVisible = true)),
+                            customFields = persistentListOf(hiddenField.copy(isVisible = true)),
                         ),
                     ),
                 ),
@@ -3114,7 +3114,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 created = BitwardenString.created.asText("Dec 1, 1969, 05:20 PM"),
                 lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
                 notes = "Lots of notes",
-                customFields = listOf(
+                customFields = persistentListOf(
                     VaultItemState.ViewState.Content.Common.Custom.TextField(
                         id = "12345",
                         name = "text",
@@ -3146,7 +3146,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
                 requiresCloneConfirmation = false,
                 currentCipher = createMockCipherView(number = 1),
-                attachments = listOf(
+                attachments = persistentListOf(
                     VaultItemState.ViewState.Content.Common.AttachmentItem(
                         id = "attachment-id",
                         displaySize = "11 MB",

@@ -365,13 +365,17 @@ class VaultItemViewModel @Inject constructor(
                 currentState.copy(
                     viewState = content.copy(
                         common = content.common.copy(
-                            customFields = content.common.customFields.map { customField ->
-                                if (customField == action.field) {
-                                    action.field.copy(isVisible = action.isVisible)
-                                } else {
-                                    customField
+                            customFields = content
+                                .common
+                                .customFields
+                                .map { customField ->
+                                    if (customField == action.field) {
+                                        action.field.copy(isVisible = action.isVisible)
+                                    } else {
+                                        customField
+                                    }
                                 }
-                            },
+                                .toImmutableList(),
                         ),
                     ),
                 )
@@ -1598,11 +1602,11 @@ data class VaultItemState(
                 val created: Text,
                 val lastUpdated: Text,
                 val notes: String?,
-                val customFields: List<Custom>,
+                val customFields: ImmutableList<Custom>,
                 val requiresCloneConfirmation: Boolean,
                 @IgnoredOnParcel
                 val currentCipher: CipherView? = null,
-                val attachments: List<AttachmentItem>?,
+                val attachments: ImmutableList<AttachmentItem>,
                 val canDelete: Boolean,
                 val canRestore: Boolean,
                 val canAssignToCollections: Boolean,
@@ -1792,7 +1796,7 @@ data class VaultItemState(
                     /**
                      * An ordered list of Card specific elements.
                      */
-                    val propertyList: List<String>
+                    val propertyList: ImmutableList<String>
                         get() = persistentListOfNotNull(
                             identityName,
                             username,
@@ -1828,7 +1832,7 @@ data class VaultItemState(
                     /**
                      * An ordered list of Card specific elements.
                      */
-                    val propertyList: List<Any>
+                    val propertyList: ImmutableList<Any>
                         get() = persistentListOfNotNull(
                             cardholderName,
                             number,

@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +29,14 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
+import com.x8bit.bitwarden.ui.vault.feature.item.component.vaultItemAttachments
+import com.x8bit.bitwarden.ui.vault.feature.item.component.vaultItemCustomFields
+import com.x8bit.bitwarden.ui.vault.feature.item.component.vaultItemHistory
+import com.x8bit.bitwarden.ui.vault.feature.item.component.vaultItemNotes
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -46,7 +46,7 @@ private const val AUTH_CODE_SPACING_INTERVAL = 3
 /**
  * The top level content UI state for the [VaultItemScreen] when viewing a Login cipher.
  */
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("LongMethod")
 @Composable
 fun VaultItemLoginContent(
     commonState: VaultItemState.ViewState.Content.Common,
@@ -186,155 +186,26 @@ fun VaultItemLoginContent(
             }
         }
 
-        commonState.notes?.let { notes ->
-            item(key = "notes") {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.additional_options),
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .animateItem(),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                NotesField(
-                    notes = notes,
-                    onCopyAction = vaultCommonItemTypeHandlers.onCopyNotesClick,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth()
-                        .animateItem(),
-                )
-            }
-        }
+        vaultItemNotes(
+            notes = commonState.notes,
+            vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+        )
 
-        commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
-            item(key = "customFieldsHeader") {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.custom_fields),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .animateItem(),
-                )
-            }
-            itemsIndexed(
-                items = customFields,
-                key = { index, _ -> "customField_$index" },
-            ) { _, customField ->
-                Spacer(modifier = Modifier.height(height = 8.dp))
-                CustomField(
-                    customField = customField,
-                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
-                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
-                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth()
-                        .animateItem(),
-                )
-            }
-        }
+        vaultItemCustomFields(
+            customFields = commonState.customFields,
+            vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+        )
 
-        commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item(key = "attachmentsHeader") {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.attachments),
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .animateItem(),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
-            }
-            itemsIndexed(
-                items = attachments,
-                key = { index, _ -> "attachment_$index" },
-            ) { index, attachmentItem ->
-                AttachmentItemContent(
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth()
-                        .animateItem(),
-                    attachmentItem = attachmentItem,
-                    cardStyle = attachments.toListItemCardStyle(index = index),
-                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
-                        .onAttachmentDownloadClick,
-                    onAttachmentPreviewClick = vaultCommonItemTypeHandlers.onAttachmentPreviewClick,
-                    onUpgradeToPremiumClick = vaultCommonItemTypeHandlers.onUpgradeToPremiumClick,
-                )
-            }
-        }
+        vaultItemAttachments(
+            attachments = commonState.attachments,
+            vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+        )
 
-        item(key = "lastUpdated") {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Text(
-                text = commonState.lastUpdated(),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp)
-                    .animateItem()
-                    .testTag("LoginItemLastUpdated"),
-            )
-        }
-
-        item(key = "created") {
-            Spacer(modifier = Modifier.height(height = 4.dp))
-            Text(
-                text = commonState.created(),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp)
-                    .animateItem()
-                    .testTag("LoginItemCreated"),
-            )
-        }
-
-        loginItemState.passwordRevisionDate?.let { revisionDate ->
-            item(key = "revisionDate") {
-                Spacer(modifier = Modifier.height(height = 4.dp))
-                Text(
-                    text = revisionDate(),
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp)
-                        .animateItem(),
-                )
-            }
-        }
-        commonState.passwordHistoryCount?.let { passwordHistoryCount ->
-            item(key = "passwordHistoryCount") {
-                Spacer(modifier = Modifier.height(height = 4.dp))
-                BitwardenHyperTextLink(
-                    annotatedResId = BitwardenString.password_history_count,
-                    args = arrayOf(passwordHistoryCount.toString()),
-                    annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = BitwardenString.password_history),
-                    onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
-                    style = BitwardenTheme.typography.labelMedium,
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp)
-                        .animateItem(),
-                )
-            }
-        }
+        vaultItemHistory(
+            commonState = commonState,
+            vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+            loginPasswordRevisionDate = loginItemState.passwordRevisionDate,
+        )
 
         item {
             Spacer(modifier = Modifier.height(88.dp))
@@ -354,32 +225,6 @@ private fun Fido2CredentialField(
         onValueChange = { },
         readOnly = true,
         singleLine = true,
-        cardStyle = CardStyle.Full,
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun NotesField(
-    notes: String,
-    onCopyAction: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BitwardenTextField(
-        label = stringResource(id = BitwardenString.notes),
-        value = notes,
-        onValueChange = { },
-        readOnly = true,
-        singleLine = false,
-        actions = {
-            BitwardenStandardIconButton(
-                vectorIconRes = BitwardenDrawable.ic_copy,
-                contentDescription = stringResource(id = BitwardenString.copy_notes),
-                onClick = onCopyAction,
-                modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
-            )
-        },
-        textFieldTestTag = "CipherNotesLabel",
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
