@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
  * A collection of handler functions specifically tailored for managing actions
  * within the context of adding card items to a vault.
  *
- * @property onCardHolderNameTextChange Handles the action when the card holder name text is changed.
+ * @property onCardHolderNameTextChange Handles the action when the cardholder name text is changed.
  * @property onNumberTextChange Handles the action when the number text is changed.
  * @property onBrandSelected Handles the action when a brand is selected.
  * @property onExpirationMonthSelected Handles the action when an expiration month is selected.
@@ -18,8 +18,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
  * @property onSecurityCodeVisibilityChange Handles the action when the security code visibility
  * changes.
  * @property onNumberVisibilityChange Handles the action when the number visibility changes.
+ * @property onScanCardClick Handles the action when the scan card button is clicked.
  */
-@Suppress("MaxLineLength")
 data class VaultAddEditCardTypeHandlers(
     val onCardHolderNameTextChange: (String) -> Unit,
     val onNumberTextChange: (String) -> Unit,
@@ -29,6 +29,7 @@ data class VaultAddEditCardTypeHandlers(
     val onSecurityCodeTextChange: (String) -> Unit,
     val onSecurityCodeVisibilityChange: (Boolean) -> Unit,
     val onNumberVisibilityChange: (Boolean) -> Unit,
+    val onScanCardClick: (Boolean) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -37,6 +38,7 @@ data class VaultAddEditCardTypeHandlers(
          * Creates an instance of [VaultAddEditCardTypeHandlers] by binding actions
          * to the provided [VaultAddEditViewModel].
          */
+        @Suppress("LongMethod")
         fun create(viewModel: VaultAddEditViewModel): VaultAddEditCardTypeHandlers =
             VaultAddEditCardTypeHandlers(
                 onCardHolderNameTextChange = { newCardHolderName ->
@@ -91,6 +93,13 @@ data class VaultAddEditCardTypeHandlers(
                 onNumberVisibilityChange = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.CardType.NumberVisibilityChange(isVisible = it),
+                    )
+                },
+                onScanCardClick = { isGranted ->
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                            isGranted = isGranted,
+                        ),
                     )
                 },
             )

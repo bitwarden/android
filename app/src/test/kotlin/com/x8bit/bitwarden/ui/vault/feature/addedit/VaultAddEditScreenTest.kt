@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -94,6 +96,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
@@ -117,7 +120,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private val biometricsManager: BiometricsManager = mockk {
         every { isUserVerificationSupported } returns true
     }
-
     @Before
     fun setup() {
         setContent(
@@ -136,6 +138,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
+                onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -186,6 +189,45 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToQrCodeScan)
         assertTrue(onNavigateQrCodeScanScreenCalled)
+    }
+
+    @Test
+    fun `on NavigateToCardScan event should invoke onNavigateToCardScanScreen`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToCardScan)
+        assertTrue(onNavigateToCardScanScreenCalled)
+    }
+
+    @Test
+    fun `on FocusCardHolderName event should focus field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+    }
+
+    @Test
+    fun `scan card button should be displayed when isCardScannerEnabled is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = true,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `scan card button should not be displayed when isCardScannerEnabled is false`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = false,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -4500,6 +4542,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4516,6 +4559,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4532,6 +4576,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4548,6 +4593,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4574,6 +4620,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4590,6 +4637,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4606,6 +4654,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

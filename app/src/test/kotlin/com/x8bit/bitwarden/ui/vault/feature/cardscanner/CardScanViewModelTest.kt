@@ -88,14 +88,26 @@ class CardScanViewModelTest : BaseViewModelTest() {
         }
 
         verify(exactly = 1) { cardScanManager.emitCardScanResult(any()) }
+        assertEquals(
+            DEFAULT_STATE.copy(hasHandledScan = true),
+            viewModel.stateFlow.value,
+        )
     }
 
-    private fun createViewModel(): CardScanViewModel =
+    private fun createViewModel(
+        initialState: CardScanState? = null,
+    ): CardScanViewModel =
         CardScanViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = SavedStateHandle().apply {
+                set("state", initialState)
+            },
             cardScanManager = cardScanManager,
         )
 }
+
+private val DEFAULT_STATE = CardScanState(
+    hasHandledScan = false,
+)
 
 private val CARD_SCAN_DATA = CardScanData(
     number = "4111111111111111",
