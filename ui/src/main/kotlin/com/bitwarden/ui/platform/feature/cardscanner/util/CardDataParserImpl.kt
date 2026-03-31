@@ -15,7 +15,6 @@ private val NAME_REGEX = Regex("""^[A-Z][A-Z .'-]+$""")
  */
 class CardDataParserImpl : CardDataParser {
 
-    @Suppress("MagicNumber")
     override fun parseCardData(text: String): CardScanData {
         val panMatch = PAN_REGEX.find(text)
         val number = panMatch

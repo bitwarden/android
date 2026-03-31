@@ -1,5 +1,7 @@
 package com.bitwarden.ui.platform.feature.cardscanner.util
 
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import com.bitwarden.annotation.OmitFromCoverage
 import com.google.mlkit.vision.common.InputImage
@@ -16,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 @OmitFromCoverage
 class CardTextAnalyzerImpl(
-    private val cardDataParser: CardDataParser = CardDataParserImpl(),
+    private val cardDataParser: CardDataParser,
 ) : CardTextAnalyzer {
 
     private val isInAnalysis = AtomicBoolean(false)
@@ -27,7 +29,7 @@ class CardTextAnalyzerImpl(
 
     override lateinit var onCardScanned: (CardScanData) -> Unit
 
-    @Suppress("UnsafeOptInUsageError")
+    @OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
         if (!isInAnalysis.compareAndSet(false, true)) {
             image.close()

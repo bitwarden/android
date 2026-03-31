@@ -10,9 +10,9 @@ package com.bitwarden.ui.platform.feature.cardscanner.util
  * @property securityCode The detected security code.
  */
 data class CardScanData(
-    val number: String? = null,
-    val expirationMonth: String? = null,
-    val expirationYear: String? = null,
-    val cardholderName: String? = null,
-    val securityCode: String? = null,
+    val number: String?,
+    val expirationMonth: String?,
+    val expirationYear: String?,
+    val cardholderName: String?,
+    val securityCode: String?,
 )

@@ -11,9 +11,10 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 @Suppress("CyclomaticComplexMethod", "MagicNumber")
 fun String.detectCardBrand(): VaultCardBrand {
     val digits = sanitizeCardNumber()
-    if (digits.isEmpty()) return VaultCardBrand.OTHER
 
     return when {
+        digits.isEmpty() -> VaultCardBrand.OTHER
+
         // Amex: starts with 34 or 37
         digits.startsWith("34") || digits.startsWith("37") -> VaultCardBrand.AMEX
 
