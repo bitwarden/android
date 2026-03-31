@@ -9,6 +9,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,6 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -47,6 +52,8 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHan
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.media.MediaPreviewState
+import com.x8bit.bitwarden.ui.vault.feature.media.VaultMediaViewerViewModel
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 /**
@@ -57,6 +64,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 @Composable
 fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
+    mediaViewModel: VaultMediaViewerViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToVaultAddEditItem: (args: VaultAddEditArgs) -> Unit,
@@ -68,8 +76,14 @@ fun VaultItemScreen(
         attachmentId: String,
         fileName: String,
     ) -> Unit,
+    onNavigateToMediaViewer: (
+        cipherId: String,
+        attachmentId: String,
+        fileName: String,
+    ) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val mediaInlineStates by mediaViewModel.inlineStates.collectAsStateWithLifecycle()
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
             ?.let {
@@ -122,9 +136,98 @@ fun VaultItemScreen(
             }
 
             is VaultItemEvent.NavigateToPreviewAttachment -> {
-                onNavigateToPreviewAttachment(event.cipherId, event.attachmentId, event.fileName)
+                onNavigateToPreviewAttachment(
+                    event.cipherId,
+                    event.attachmentId,
+                    event.fileName,
+                )
             }
         }
+    }
+
+    // Purge all decrypted files only when this destination is truly
+    // destroyed (e.g., navigating back to the vault list), NOT when
+    // navigating forward to MediaViewerScreen.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                mediaViewModel.purgeAllDecryptedFiles()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    // When content is available, attempt auto-load if configured.
+    val viewState = state.viewState
+    LaunchedEffect(viewState) {
+        if (viewState is VaultItemState.ViewState.Content) {
+            val cipherView = viewState.common.currentCipher
+                ?: return@LaunchedEffect
+            val allImageIds = viewState.common.attachments
+                ?.filter { it.isImageType }
+                ?.map { it.id to it.title }
+                .orEmpty()
+            mediaViewModel.tryAutoLoadAttachments(
+                cipherView = cipherView,
+                allImageAttachmentIds = allImageIds,
+            )
+        }
+    }
+
+    // Build handlers with mediaViewModel-backed image view and burn-after-reading callbacks.
+    val baseHandlers = remember(viewModel) {
+        VaultCommonItemTypeHandlers.create(viewModel = viewModel)
+    }
+    val vaultCommonItemTypeHandlers = remember(baseHandlers, mediaViewModel, state) {
+        baseHandlers.copy(
+            onAttachmentPreviewClick = { attachmentItem ->
+                if (attachmentItem.isImageType) {
+                    // Route image preview through the shared media ViewModel.
+                    val content =
+                        state.viewState as? VaultItemState.ViewState.Content
+                    val cipherView = content?.common?.currentCipher ?: return@copy
+                    val allImageIds = content.common.attachments
+                        ?.filter { it.isImageType }
+                        ?.map { it.id to it.title }
+                        .orEmpty()
+                    mediaViewModel.requestPreview(
+                        cipherView = cipherView,
+                        attachmentId = attachmentItem.id,
+                        fileName = attachmentItem.title,
+                        allImageAttachmentIds = allImageIds,
+                    )
+                } else {
+                    // Non-image: use existing VM handler.
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.AttachmentPreviewClick(
+                            attachmentItem,
+                        ),
+                    )
+                }
+            },
+            onAttachmentImageViewClick = { attachmentId ->
+                // Navigate to fullscreen media viewer with route params.
+                val content =
+                    state.viewState as? VaultItemState.ViewState.Content
+                val cipherId = content?.common?.currentCipher?.id.orEmpty()
+                val attachment = content?.common?.attachments
+                    ?.firstOrNull { it.id == attachmentId }
+                val fileName = attachment?.title.orEmpty()
+                onNavigateToMediaViewer(
+                    cipherId,
+                    attachmentId,
+                    fileName,
+                )
+            },
+            // Inline thumbnails: no burn-after-reading.
+            // Files persist for the page session and are purged
+            // on exit via DisposableEffect above.
+            onBitmapRenderComplete = { _ -> },
+        )
     }
 
     VaultItemDialogs(
@@ -259,11 +362,10 @@ fun VaultItemScreen(
     ) {
         VaultItemContent(
             viewState = state.viewState,
+            mediaInlineStates = mediaInlineStates,
             modifier = Modifier
                 .fillMaxSize(),
-            vaultCommonItemTypeHandlers = remember(viewModel) {
-                VaultCommonItemTypeHandlers.create(viewModel = viewModel)
-            },
+            vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
             vaultLoginItemTypeHandlers = remember(viewModel) {
                 VaultLoginItemTypeHandlers.create(viewModel = viewModel)
             },
@@ -355,6 +457,7 @@ private fun VaultItemDialogs(
 @Composable
 private fun VaultItemContent(
     viewState: VaultItemState.ViewState,
+    mediaInlineStates: Map<String, MediaPreviewState>,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
@@ -378,6 +481,7 @@ private fun VaultItemContent(
                     VaultItemLoginContent(
                         commonState = viewState.common,
                         loginItemState = viewState.type,
+                        mediaInlineStates = mediaInlineStates,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultLoginItemTypeHandlers = vaultLoginItemTypeHandlers,
                         modifier = modifier,
@@ -388,6 +492,7 @@ private fun VaultItemContent(
                     VaultItemCardContent(
                         commonState = viewState.common,
                         cardState = viewState.type,
+                        mediaInlineStates = mediaInlineStates,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultCardItemTypeHandlers = vaultCardItemTypeHandlers,
                         modifier = modifier,
@@ -398,6 +503,7 @@ private fun VaultItemContent(
                     VaultItemIdentityContent(
                         commonState = viewState.common,
                         identityState = viewState.type,
+                        mediaInlineStates = mediaInlineStates,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultIdentityItemTypeHandlers = vaultIdentityItemTypeHandlers,
                         modifier = modifier,
@@ -407,6 +513,7 @@ private fun VaultItemContent(
                 is VaultItemState.ViewState.Content.ItemType.SecureNote -> {
                     VaultItemSecureNoteContent(
                         commonState = viewState.common,
+                        mediaInlineStates = mediaInlineStates,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         modifier = modifier,
                     )
@@ -416,6 +523,7 @@ private fun VaultItemContent(
                     VaultItemSshKeyContent(
                         commonState = viewState.common,
                         sshKeyItemState = viewState.type,
+                        mediaInlineStates = mediaInlineStates,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
                         modifier = modifier,

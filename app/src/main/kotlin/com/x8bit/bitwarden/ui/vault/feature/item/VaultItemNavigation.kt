@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.media.VaultMediaViewerViewModel
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.serialization.Serializable
 
@@ -32,17 +34,28 @@ data class VaultItemArgs(
  */
 fun SavedStateHandle.toVaultItemArgs(): VaultItemArgs {
     val route = this.toRoute<VaultItemRoute>()
-    return VaultItemArgs(vaultItemId = route.vaultItemId, cipherType = route.cipherType)
+    return VaultItemArgs(
+        vaultItemId = route.vaultItemId,
+        cipherType = route.cipherType,
+    )
 }
 
 /**
  * Add the vault item screen to the nav graph.
+ *
+ * @param getSharedMediaViewModel Provider for the NavGraph-scoped
+ *   [VaultMediaViewerViewModel], ensuring the same instance is shared
+ *   between [VaultItemScreen] and the fullscreen MediaViewerScreen.
  */
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemDestination(
+    getSharedMediaViewModel: @Composable () -> VaultMediaViewerViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
-    onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
+    onNavigateToMoveToOrganization: (
+        vaultItemId: String,
+        showOnlyCollections: Boolean,
+    ) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
     onNavigateToPreviewAttachment: (
@@ -50,15 +63,22 @@ fun NavGraphBuilder.vaultItemDestination(
         attachmentId: String,
         fileName: String,
     ) -> Unit,
+    onNavigateToMediaViewer: (
+        cipherId: String,
+        attachmentId: String,
+        fileName: String,
+    ) -> Unit,
 ) {
     composableWithSlideTransitions<VaultItemRoute> {
         VaultItemScreen(
+            mediaViewModel = getSharedMediaViewModel(),
             onNavigateBack = onNavigateBack,
             onNavigateToVaultAddEditItem = onNavigateToVaultEditItem,
             onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
             onNavigateToAttachments = onNavigateToAttachments,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateToPreviewAttachment = onNavigateToPreviewAttachment,
+            onNavigateToMediaViewer = onNavigateToMediaViewer,
         )
     }
 }
