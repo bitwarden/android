@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
@@ -115,6 +116,7 @@ class VaultViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val buildInfoManager: BuildInfoManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -1024,7 +1026,9 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
     ) {
         viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled) {
+            if (action.isCredentialExchangeProtocolExportEnabled &&
+                !buildInfoManager.isFdroid
+            ) {
                 credentialExchangeRegistryManager.register()
             } else {
                 credentialExchangeRegistryManager.unregister()

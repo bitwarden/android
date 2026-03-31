@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -210,6 +211,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { shouldShowDialog } returns false
         every { browserCount } returns 1
         every { delayDialog() } just runs
+    }
+
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
     }
 
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
@@ -3792,6 +3797,30 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but isFdroid is true`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            mutableCxpExportFeatureFlagFlow.value = false
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = true,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+            coVerify(exactly = 0) {
+                credentialExchangeRegistryManager.register()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -3810,6 +3839,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            buildInfoManager = buildInfoManager,
             featureFlagManager = featureFlagManager,
         )
 }

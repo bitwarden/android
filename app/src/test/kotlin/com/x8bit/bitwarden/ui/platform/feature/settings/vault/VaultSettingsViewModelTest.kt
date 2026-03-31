@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.PolicyTypeJson
@@ -28,6 +29,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class VaultSettingsViewModelTest : BaseViewModelTest() {
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
+    }
     private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
@@ -232,7 +236,35 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `showImportItemsChevron should be false when isFdroid is true`() {
+        every { buildInfoManager.isFdroid } returns true
+        val viewModel = createViewModel()
+        assertEquals(
+            VaultSettingsState(
+                showImportActionCard = true,
+                showImportItemsChevron = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportVault when isFdroid is true`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
+        buildInfoManager = buildInfoManager,
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
         featureFlagManager = featureFlagManager,
