@@ -7,6 +7,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.io.Closeable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -19,7 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 @OmitFromCoverage
 class CardTextAnalyzerImpl(
     private val cardDataParser: CardDataParser,
-) : CardTextAnalyzer {
+) : CardTextAnalyzer,
+    Closeable {
 
     private val isInAnalysis = AtomicBoolean(false)
 
@@ -28,6 +30,10 @@ class CardTextAnalyzerImpl(
     )
 
     override lateinit var onCardScanned: (CardScanData) -> Unit
+
+    override fun close() {
+        recognizer.close()
+    }
 
     @OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
