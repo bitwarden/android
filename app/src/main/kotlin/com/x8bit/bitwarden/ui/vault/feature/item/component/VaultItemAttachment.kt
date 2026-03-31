@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -50,7 +51,7 @@ fun VaultItemAttachment(
             .defaultMinSize(minHeight = 60.dp)
             .cardStyle(
                 cardStyle = cardStyle,
-                paddingStart = 16.dp,
+                padding = PaddingValues(start = 16.dp),
                 onClick = {
                     if (!attachmentItem.isDownloadAllowed) {
                         shouldShowPremiumWarningDialog = true
@@ -73,7 +74,7 @@ fun VaultItemAttachment(
             Text(
                 text = attachmentItem.title,
                 color = BitwardenTheme.colorScheme.text.primary,
-                style = BitwardenTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -88,8 +89,8 @@ fun VaultItemAttachment(
             ) {
                 Text(
                     text = attachmentItem.displaySize,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                    style = BitwardenTheme.typography.labelSmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier
                         .testTag("AttachmentSizeLabel"),
                 )

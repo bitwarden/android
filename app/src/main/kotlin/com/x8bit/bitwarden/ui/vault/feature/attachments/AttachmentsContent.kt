@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -305,7 +306,7 @@ private fun AttachmentListEntry(
             .defaultMinSize(minHeight = 60.dp)
             .cardStyle(
                 cardStyle = cardStyle,
-                paddingStart = 16.dp,
+                padding = PaddingValues(start = 16.dp),
                 onClick = { onItemClick(attachmentItem) },
             )
             .testTag("AttachmentRow"),
@@ -314,7 +315,7 @@ private fun AttachmentListEntry(
         Text(
             text = attachmentItem.title,
             color = BitwardenTheme.colorScheme.text.primary,
-            style = BitwardenTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -326,8 +327,8 @@ private fun AttachmentListEntry(
 
         Text(
             text = attachmentItem.displaySize,
-            color = BitwardenTheme.colorScheme.text.primary,
-            style = BitwardenTheme.typography.labelSmall,
+            color = BitwardenTheme.colorScheme.text.secondary,
+            style = BitwardenTheme.typography.bodyMedium,
             modifier = Modifier
                 .testTag("AttachmentSizeLabel"),
         )
