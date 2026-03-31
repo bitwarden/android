@@ -29,10 +29,20 @@ $ADB shell uiautomator dump /sdcard/view.xml > /dev/null 2>&1 && $ADB pull /sdca
 echo "UI hierarchy saved to: $(pwd)/view.xml" >&2
 
 # Extract coordinates from XML using grep + awk
+# Search by text attribute first
 MATCH=$(grep -o "text=\"[^\"]*${SEARCH_TEXT}[^\"]*\"[^>]*bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"" view.xml | head -1)
 
 if [ -z "$MATCH" ]; then
     MATCH=$(grep -o "bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"[^>]*text=\"[^\"]*${SEARCH_TEXT}[^\"]*\"" view.xml | head -1)
+fi
+
+# Fallback: search by content-desc attribute (common in Compose UIs)
+if [ -z "$MATCH" ]; then
+    MATCH=$(grep -o "content-desc=\"[^\"]*${SEARCH_TEXT}[^\"]*\"[^>]*bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"" view.xml | head -1)
+fi
+
+if [ -z "$MATCH" ]; then
+    MATCH=$(grep -o "bounds=\"\[[0-9,]*\]\[[0-9,]*\]\"[^>]*content-desc=\"[^\"]*${SEARCH_TEXT}[^\"]*\"" view.xml | head -1)
 fi
 
 if [ -z "$MATCH" ]; then

@@ -1,13 +1,7 @@
 ---
 name: interacting-with-android-device
 description: Instructions for capturing UI state, comparing with mocks, and interacting with an Android device using universal ADB commands.
-allowed-tools:
-  - Bash(adb *)
-  - Bash(./.claude/skills/interacting-with-android-device/scripts/adb-*)
-  - Bash(sleep *)
-  - Bash(./gradlew install*)
-  - Read
-  - Glob
+allowed-tools: Bash(adb:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-capture.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-find-element.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-tap-and-capture.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh:*), Bash(sleep:*), Bash(./gradlew install*:*), Read, Glob
 ---
 
 # Interacting with Android Device
@@ -18,7 +12,7 @@ Helper scripts in the `.claude/skills/interacting-with-android-device/scripts/` 
 
 **Available scripts:**
 - `adb-capture.sh [--xml] [--screenshot] [--all]` - Capture current device state. Default (no flags): both screenshot and XML hierarchy.
-- `adb-find-element.sh <text>` - Find element by text, return center coordinates (`X Y`). Dumps UI hierarchy, parses XML, calculates center from bounds.
+- `adb-find-element.sh <text>` - Find element by `text` or `content-desc`, return center coordinates (`X Y`). Dumps UI hierarchy, parses XML, calculates center from bounds.
 - `adb-tap-and-capture.sh <x> <y> [wait_seconds=2]` - Tap at coordinates, wait, capture and pull screenshot.
 - `adb-tap-element.sh <text> [wait_seconds=2]` - Find, tap, and capture in one command (recommended). Combines `adb-find-element.sh` + `adb-tap-and-capture.sh`.
 - `adb-navigate.sh <home|back|app-drawer> [wait_seconds=1]` - Navigation actions via keyevent or swipe, then capture screenshot.
