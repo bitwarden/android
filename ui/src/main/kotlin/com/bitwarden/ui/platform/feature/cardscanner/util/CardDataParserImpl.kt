@@ -15,7 +15,7 @@ private val NAME_REGEX = Regex("""^[A-Z][A-Z .'-]+$""")
  */
 class CardDataParserImpl : CardDataParser {
 
-    override fun parseCardData(text: String): CardScanData {
+    override fun parseCardData(text: String): CardScanData? {
         val panMatch = PAN_REGEX.find(text)
         val number = panMatch
             ?.value
@@ -49,13 +49,25 @@ class CardDataParserImpl : CardDataParser {
             }
             ?.value
 
-        return CardScanData(
-            number = number,
-            expirationMonth = expirationMonth,
-            expirationYear = expirationYear,
-            cardholderName = extractCardholderName(text),
-            securityCode = securityCode,
+        val cardholderName = extractCardholderName(text)
+
+        return listOfNotNull(
+            number,
+            expirationMonth,
+            expirationYear,
+            cardholderName,
+            securityCode,
         )
+            .takeIf { it.isNotEmpty() }
+            ?.let {
+                CardScanData(
+                    number = number,
+                    expirationMonth = expirationMonth,
+                    expirationYear = expirationYear,
+                    cardholderName = cardholderName,
+                    securityCode = securityCode,
+                )
+            }
     }
 }
 

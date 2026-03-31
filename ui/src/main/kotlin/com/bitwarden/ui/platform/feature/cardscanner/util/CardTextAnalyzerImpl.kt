@@ -57,9 +57,8 @@ class CardTextAnalyzerImpl(
 
         recognizer.process(inputImage)
             .addOnSuccessListener { result ->
-                result.text
-                    .let(cardDataParser::parseCardData)
-                    .takeIf { it.number != null }
+                cardDataParser.parseCardData(result.text)
+                    ?.takeIf { it.number != null }
                     ?.let(onCardScanned)
             }
             .addOnCompleteListener {

@@ -11,45 +11,76 @@ class CardDataParserImplTest {
     @Test
     fun `parseCardData extracts valid card number with Luhn check`() {
         val text = "4111 1111 1111 1111 12/25"
-        val result = parser.parseCardData(text)
-        assertEquals("4111111111111111", result.number)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData rejects invalid card number failing Luhn`() {
         val text = "4111 1111 1111 1112 12/25"
-        val result = parser.parseCardData(text)
-        assertNull(result.number)
-    }
-
-    @Test
-    fun `parseCardData extracts expiration month and year`() {
-        val text = "4111 1111 1111 1111 12/25"
-        val result = parser.parseCardData(text)
-        assertEquals("12", result.expirationMonth)
-        assertEquals("2025", result.expirationYear)
+        assertEquals(
+            CardScanData(
+                number = null,
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData extracts four digit expiration year`() {
         val text = "4111 1111 1111 1111 06/2028"
-        val result = parser.parseCardData(text)
-        assertEquals("06", result.expirationMonth)
-        assertEquals("2028", result.expirationYear)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "06",
+                expirationYear = "2028",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData extracts standalone CVV not adjacent to other digits`() {
         val text = "4111 1111 1111 1111 12/25 CVV 789"
-        val result = parser.parseCardData(text)
-        assertEquals("789", result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = "789",
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData filters out CVV candidates adjacent to other digits`() {
         val text = "4111 1111 1111 1111 12/25\n5551234567"
-        val result = parser.parseCardData(text)
-        assertNull(result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
@@ -59,15 +90,31 @@ class CardDataParserImplTest {
             12/25
             Call 8005551234
         """.trimIndent()
-        val result = parser.parseCardData(text)
-        assertNull(result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData does not pick up expiry digits as CVV`() {
         val text = "4111 1111 1111 1111 12/25"
-        val result = parser.parseCardData(text)
-        assertNull(result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
@@ -78,15 +125,31 @@ class CardDataParserImplTest {
             5551234567
             456
         """.trimIndent()
-        val result = parser.parseCardData(text)
-        assertEquals("456", result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = "456",
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData extracts four digit CVV for Amex`() {
         val text = "3782 822463 10005 09/26 1234"
-        val result = parser.parseCardData(text)
-        assertEquals("1234", result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "378282246310005",
+                expirationMonth = "09",
+                expirationYear = "2026",
+                cardholderName = null,
+                securityCode = "1234",
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
@@ -96,8 +159,16 @@ class CardDataParserImplTest {
             4111 1111 1111 1111
             12/25
         """.trimIndent()
-        val result = parser.parseCardData(text)
-        assertEquals("JOHN DOE", result.cardholderName)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = "JOHN DOE",
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
@@ -107,8 +178,16 @@ class CardDataParserImplTest {
             4111 1111 1111 1111
             12/25
         """.trimIndent()
-        val result = parser.parseCardData(text)
-        assertNull(result.cardholderName)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
@@ -118,59 +197,100 @@ class CardDataParserImplTest {
             4111 1111 1111 1111
             12/25
         """.trimIndent()
-        val result = parser.parseCardData(text)
-        assertNull(result.cardholderName)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
-    fun `parseCardData handles text with no card data`() {
-        val text = "Hello world, no card here"
-        val result = parser.parseCardData(text)
-        assertNull(result.number)
-        assertNull(result.expirationMonth)
-        assertNull(result.expirationYear)
-        assertNull(result.securityCode)
-        assertNull(result.cardholderName)
+    fun `parseCardData returns null when no card data is found`() {
+        assertNull(parser.parseCardData("Hello world, no card here"))
     }
 
     @Test
     fun `parseCardData handles card number with dashes`() {
         val text = "4111-1111-1111-1111 03/27"
-        val result = parser.parseCardData(text)
-        assertEquals("4111111111111111", result.number)
-        assertEquals("03", result.expirationMonth)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "03",
+                expirationYear = "2027",
+                cardholderName = null,
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData rejects four digit CVV for non-Amex card`() {
         val text = "4111 1111 1111 1111 12/25 1234"
-        val result = parser.parseCardData(text)
-        // Visa expects 3-digit CVV, so "1234" should not match
-        assertNull(result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                // Visa expects 3-digit CVV, so "1234" should not match
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData rejects three digit CVV for Amex card`() {
         val text = "3782 822463 10005 09/26 789"
-        val result = parser.parseCardData(text)
-        // Amex expects 4-digit CID, so "789" should not match
-        assertNull(result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "378282246310005",
+                expirationMonth = "09",
+                expirationYear = "2026",
+                cardholderName = null,
+                // Amex expects 4-digit CID, so "789" should not match
+                securityCode = null,
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
     fun `parseCardData extracts three digit CVV for Visa`() {
         val text = "4111 1111 1111 1111 12/25 CVV 321"
-        val result = parser.parseCardData(text)
-        assertEquals("321", result.securityCode)
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = "321",
+            ),
+            parser.parseCardData(text),
+        )
     }
 
     @Test
-    fun `parseCardData returns no CVV when card number not detected`() {
+    fun `parseCardData returns CVV when card number not detected`() {
         // Without a valid card number, we can't determine brand,
         // so CVV detection falls back to 3-digit (non-Amex default)
         val text = "1234 5678 9012 3456 12/25 789"
-        val result = parser.parseCardData(text)
-        // Card number fails Luhn, so no brand detection possible
-        assertEquals("789", result.securityCode)
+        assertEquals(
+            CardScanData(
+                // Card number fails Luhn, so no brand detection possible
+                number = null,
+                expirationMonth = "12",
+                expirationYear = "2025",
+                cardholderName = null,
+                securityCode = "789",
+            ),
+            parser.parseCardData(text),
+        )
     }
 }
