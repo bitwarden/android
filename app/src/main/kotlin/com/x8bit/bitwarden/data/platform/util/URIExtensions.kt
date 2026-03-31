@@ -60,7 +60,9 @@ fun URI.addSchemeToUriIfNecessary(): URI {
         // provided that scheme does not exist already.
         !uriString.hasHttpProtocol()
     ) {
-        URI("https://$uriString")
+        "https://$uriString"
+            .toUriOrNull()
+            ?: this
     } else {
         this
     }
