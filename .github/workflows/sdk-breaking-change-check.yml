@@ -1,0 +1,59 @@
+name: SDK breaking change check
+run-name: "SDK Breaking Change Check - ${{ inputs.sdk_version }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      sdk_version:
+        description: "SDK version being tested (display string)"
+        required: true
+        type: string
+      source_repo:
+        description: "Source SDK repository"
+        required: true
+        type: string
+      artifacts_run_id:
+        description: "Workflow run ID containing SDK artifacts"
+        required: true
+        type: string
+      sdk_package_version:
+        description: "SDK Maven package version to test against"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  check-compilation:
+    name: Check SDK compilation
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+
+      - name: Log inputs to job summary
+        uses: ./.github/actions/log-inputs
+        with:
+          inputs: ${{ toJson(inputs) }}
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Update SDK Version
+        env:
+          # Always use .dev package - this workflow only runs on PRs, and PR builds
+          # publish to sdk-android.dev (main branch publishes to sdk-android)
+          _SDK_PACKAGE: "com.bitwarden:sdk-android.dev"
+          _SDK_VERSION: ${{ inputs.sdk_package_version }}
+        run: |
+          ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
+        run: |
+          ./gradlew assembleDebug --warn
