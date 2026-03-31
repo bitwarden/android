@@ -3,7 +3,6 @@ name: interacting-with-android-device
 description: Instructions for capturing UI state, comparing with mocks, and interacting with an Android device using universal ADB commands.
 allowed-tools:
   - Bash(adb *)
-
   - Bash(./.claude/skills/interacting-with-android-device/scripts/adb-*)
   - Bash(sleep *)
   - Bash(./gradlew install*)

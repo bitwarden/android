@@ -40,7 +40,13 @@ case $ACTION in
         ;;
     app-drawer)
         echo "Opening app drawer..."
-        $ADB shell input swipe 672 2800 672 500 1000
+        SCREEN_SIZE=$($ADB shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1)
+        SW=$(echo "$SCREEN_SIZE" | cut -dx -f1)
+        SH=$(echo "$SCREEN_SIZE" | cut -dx -f2)
+        CX=$((SW / 2))
+        FROM_Y=$((SH * 93 / 100))
+        TO_Y=$((SH * 17 / 100))
+        $ADB shell input swipe $CX $FROM_Y $CX $TO_Y 1000
         ;;
     *)
         echo "Unknown action: $ACTION"
