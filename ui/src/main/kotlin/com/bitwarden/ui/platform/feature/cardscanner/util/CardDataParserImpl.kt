@@ -7,8 +7,6 @@ private val EXPIRY_REGEX = Regex("""\b(0[1-9]|1[0-2])\s?[/\-]\s?(\d{2}|\d{4})\b"
 private val CVV3_REGEX = Regex("""\b\d{3}\b""")
 private val CVV4_REGEX = Regex("""\b\d{4}\b""")
 
-private val NAME_REGEX = Regex("""^[A-Z][A-Z .'-]+$""")
-
 /**
  * Default [CardDataParser] implementation that uses regex patterns
  * and Luhn validation to extract card details from OCR text.
@@ -49,13 +47,10 @@ class CardDataParserImpl : CardDataParser {
             }
             ?.value
 
-        val cardholderName = extractCardholderName(text)
-
         return listOfNotNull(
             number,
             expirationMonth,
             expirationYear,
-            cardholderName,
             securityCode,
         )
             .takeIf { it.isNotEmpty() }
@@ -64,16 +59,8 @@ class CardDataParserImpl : CardDataParser {
                     number = number,
                     expirationMonth = expirationMonth,
                     expirationYear = expirationYear,
-                    cardholderName = cardholderName,
                     securityCode = securityCode,
                 )
             }
     }
 }
-
-@Suppress("MagicNumber")
-private fun extractCardholderName(text: String): String? =
-    text.lines()
-        .map { it.trim() }
-        .filter { it.length > 3 }
-        .firstOrNull { NAME_REGEX.matches(it) }

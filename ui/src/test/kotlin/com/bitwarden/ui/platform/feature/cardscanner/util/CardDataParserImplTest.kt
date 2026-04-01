@@ -16,7 +16,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -31,7 +30,6 @@ class CardDataParserImplTest {
                 number = null,
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -46,7 +44,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "06",
                 expirationYear = "2028",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -61,7 +58,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = "789",
             ),
             parser.parseCardData(text),
@@ -76,7 +72,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -95,7 +90,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -110,7 +104,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -130,7 +123,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = "456",
             ),
             parser.parseCardData(text),
@@ -145,65 +137,7 @@ class CardDataParserImplTest {
                 number = "378282246310005",
                 expirationMonth = "09",
                 expirationYear = "2026",
-                cardholderName = null,
                 securityCode = "1234",
-            ),
-            parser.parseCardData(text),
-        )
-    }
-
-    @Test
-    fun `parseCardData extracts cardholder name in all caps`() {
-        val text = """
-            JOHN DOE
-            4111 1111 1111 1111
-            12/25
-        """.trimIndent()
-        assertEquals(
-            CardScanData(
-                number = "4111111111111111",
-                expirationMonth = "12",
-                expirationYear = "2025",
-                cardholderName = "JOHN DOE",
-                securityCode = null,
-            ),
-            parser.parseCardData(text),
-        )
-    }
-
-    @Test
-    fun `parseCardData does not extract lowercase name`() {
-        val text = """
-            John Doe
-            4111 1111 1111 1111
-            12/25
-        """.trimIndent()
-        assertEquals(
-            CardScanData(
-                number = "4111111111111111",
-                expirationMonth = "12",
-                expirationYear = "2025",
-                cardholderName = null,
-                securityCode = null,
-            ),
-            parser.parseCardData(text),
-        )
-    }
-
-    @Test
-    fun `parseCardData does not extract short names`() {
-        val text = """
-            JD
-            4111 1111 1111 1111
-            12/25
-        """.trimIndent()
-        assertEquals(
-            CardScanData(
-                number = "4111111111111111",
-                expirationMonth = "12",
-                expirationYear = "2025",
-                cardholderName = null,
-                securityCode = null,
             ),
             parser.parseCardData(text),
         )
@@ -222,7 +156,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "03",
                 expirationYear = "2027",
-                cardholderName = null,
                 securityCode = null,
             ),
             parser.parseCardData(text),
@@ -237,7 +170,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 // Visa expects 3-digit CVV, so "1234" should not match
                 securityCode = null,
             ),
@@ -253,7 +185,6 @@ class CardDataParserImplTest {
                 number = "378282246310005",
                 expirationMonth = "09",
                 expirationYear = "2026",
-                cardholderName = null,
                 // Amex expects 4-digit CID, so "789" should not match
                 securityCode = null,
             ),
@@ -269,7 +200,6 @@ class CardDataParserImplTest {
                 number = "4111111111111111",
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = "321",
             ),
             parser.parseCardData(text),
@@ -287,7 +217,6 @@ class CardDataParserImplTest {
                 number = null,
                 expirationMonth = "12",
                 expirationYear = "2025",
-                cardholderName = null,
                 securityCode = "789",
             ),
             parser.parseCardData(text),
