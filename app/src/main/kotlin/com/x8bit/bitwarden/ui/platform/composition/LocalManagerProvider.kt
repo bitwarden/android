@@ -22,9 +22,9 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
+import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
 import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
-import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardDataParser
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardDataParserImpl

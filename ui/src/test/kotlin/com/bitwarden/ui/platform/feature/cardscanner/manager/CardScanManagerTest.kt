@@ -20,7 +20,6 @@ class CardScanManagerTest {
                         number = "4111111111111111",
                         expirationMonth = "12",
                         expirationYear = "2025",
-                        cardholderName = "JOHN DOE",
                         securityCode = "123",
                     ),
                 )

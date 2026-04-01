@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
 import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import io.mockk.every
 import io.mockk.just
@@ -41,9 +41,7 @@ class CardScanViewModelTest : BaseViewModelTest() {
         }
 
         verify(exactly = 1) {
-            cardScanManager.emitCardScanResult(
-                match { it is CardScanResult.ScanError },
-            )
+            cardScanManager.emitCardScanResult(CardScanResult.ScanError())
         }
     }
 
@@ -115,6 +113,5 @@ private val CARD_SCAN_DATA = CardScanData(
     number = "4111111111111111",
     expirationMonth = "12",
     expirationYear = "2025",
-    cardholderName = "JOHN DOE",
     securityCode = "123",
 )
