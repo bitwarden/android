@@ -87,6 +87,7 @@ fun PreviewAttachmentScreen(
                         onClick = {
                             viewModel.trySendAction(PreviewAttachmentAction.DownloadClick)
                         },
+                        isExternalLink = true,
                         modifier = Modifier.testTag("ToolbarDownloadButton"),
                     )
                 },
@@ -119,6 +120,7 @@ fun PreviewAttachmentScreen(
                     label = BitwardenString.download_file.asText(),
                     icon = rememberVectorPainter(id = BitwardenDrawable.ic_download),
                     onClick = { viewModel.trySendAction(PreviewAttachmentAction.DownloadClick) },
+                    isExternalLink = true,
                     testTag = "ErrorStateDownloadButton",
                 ),
                 modifier = Modifier.fillMaxSize(),

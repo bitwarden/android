@@ -100,6 +100,7 @@ fun VaultItemAttachment(
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_download,
                     contentDescription = stringResource(id = BitwardenString.download),
+                    isExternalLink = true,
                     onClick = {
                         if (!attachmentItem.isDownloadAllowed) {
                             shouldShowPremiumWarningDialog = true

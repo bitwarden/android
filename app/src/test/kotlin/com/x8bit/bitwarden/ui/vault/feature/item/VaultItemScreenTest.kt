@@ -780,7 +780,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithText(
@@ -824,7 +826,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithText(
@@ -864,7 +868,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithText(
@@ -907,7 +913,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule.assertNoDialogExists()
 

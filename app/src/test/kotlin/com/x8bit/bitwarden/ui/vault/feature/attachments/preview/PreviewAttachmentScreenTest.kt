@@ -63,7 +63,7 @@ class PreviewAttachmentScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `download button click should send DownloadClick`() {
-        composeTestRule.onNodeWithContentDescription("Download").performClick()
+        composeTestRule.onNodeWithContentDescription("Download, External link").performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(PreviewAttachmentAction.DownloadClick)
         }

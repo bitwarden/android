@@ -7,12 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -23,6 +25,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick Callback for when the icon button is clicked.
  * @param modifier A [Modifier] for the composable.
  * @param isEnabled Whether the button should be enabled.
+ * @param isExternalLink Whether the icon button is an external link.
+ * @param contentColor The color applied to the icon.
  */
 @Composable
 fun BitwardenStandardIconButton(
@@ -31,6 +35,7 @@ fun BitwardenStandardIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    isExternalLink: Boolean = false,
     contentColor: Color = BitwardenTheme.colorScheme.icon.primary,
 ) {
     BitwardenStandardIconButton(
@@ -39,6 +44,7 @@ fun BitwardenStandardIconButton(
         onClick = onClick,
         modifier = modifier,
         isEnabled = isEnabled,
+        isExternalLink = isExternalLink,
         contentColor = contentColor,
     )
 }
@@ -51,6 +57,8 @@ fun BitwardenStandardIconButton(
  * @param onClick Callback for when the icon button is clicked.
  * @param modifier A [Modifier] for the composable.
  * @param isEnabled Whether the button should be enabled.
+ * @param isExternalLink Whether the icon button is an external link.
+ * @param contentColor The color applied to the icon.
  */
 @Composable
 fun BitwardenStandardIconButton(
@@ -59,11 +67,20 @@ fun BitwardenStandardIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    isExternalLink: Boolean = false,
     contentColor: Color = BitwardenTheme.colorScheme.icon.primary,
 ) {
+    val formattedContentDescription = if (isExternalLink) {
+        stringResource(
+            id = BitwardenString.external_link_format,
+            formatArgs = arrayOf(contentDescription),
+        )
+    } else {
+        contentDescription
+    }
     IconButton(
         modifier = modifier.semantics(mergeDescendants = true) {
-            this.contentDescription = contentDescription
+            this.contentDescription = formattedContentDescription
         },
         onClick = onClick,
         colors = bitwardenStandardIconButtonColors(contentColor = contentColor),
