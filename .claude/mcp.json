@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "android-device": {
+      "type": "stdio",
+      "command": "bash",
+      "args": ["-c", "cd .claude/mcp/android-device-server && npm install --silent >/dev/null 2>&1 && npm run build >/dev/null 2>&1 && exec node build/index.js"]
+    }
+  }
+}

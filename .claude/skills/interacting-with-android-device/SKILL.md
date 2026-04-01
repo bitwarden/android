@@ -1,74 +1,50 @@
 ---
 name: interacting-with-android-device
-description: Instructions for capturing UI state, comparing with mocks, and interacting with an Android device using universal ADB commands.
-allowed-tools: Bash(adb:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-capture.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-find-element.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-tap-and-capture.sh:*), Bash(.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh:*), Bash(sleep:*), Bash(./gradlew install*:*), Read, Glob
+description: Instructions for capturing UI state, comparing with mocks, and interacting with an Android device using MCP tools backed by ADB.
+allowed-tools: mcp__android-device__capture, mcp__android-device__find_element, mcp__android-device__tap_at, mcp__android-device__tap_element, mcp__android-device__navigate, Bash(adb:*), Bash(sleep:*), Bash(./gradlew install*:*), Read, Glob
 ---
 
 # Interacting with Android Device
 
-## Quick Start: Using Helper Scripts
+## Quick Start: MCP Tools
 
-Helper scripts in the `.claude/skills/interacting-with-android-device/scripts/` directory automate repetitive UI testing tasks and reduce token overhead.
+The `android-device` MCP server provides 5 tools for device interaction. These replace the previous shell scripts with proper XML parsing, structured dumpsys parsing, and native obstruction detection.
 
-**Available scripts:**
-- `adb-capture.sh [--xml] [--screenshot] [--all]` - Capture current device state. Default (no flags): both screenshot and XML hierarchy.
-- `adb-find-element.sh <text>` - Find element by `text` or `content-desc`, return center coordinates (`X Y`). Dumps UI hierarchy, parses XML, calculates center from bounds.
-- `adb-tap-and-capture.sh <x> <y> [wait_seconds=2]` - Tap at coordinates, wait, capture and pull screenshot.
-- `adb-tap-element.sh <text> [wait_seconds=2]` - Find, tap, and capture in one command (recommended). Combines `adb-find-element.sh` + `adb-tap-and-capture.sh`.
-- `adb-navigate.sh <home|back|app-drawer> [wait_seconds=1]` - Navigation actions via keyevent or swipe, then capture screenshot.
+**Available tools:**
+- `capture` — Capture UI hierarchy XML and/or screenshot. Params: `{ xml?: boolean, screenshot?: boolean }`. Default: both.
+- `find_element` — Find element by `text` or `content-desc`, return coordinates with **obstruction detection**. Params: `{ text: string }`. Returns JSON with coordinates, bounds, and obstruction status.
+- `tap_at` — Tap at specific coordinates, wait, capture screenshot. Params: `{ x, y, waitSeconds? }`.
+- `tap_element` — Find, tap, and capture in one call (recommended). Params: `{ text, waitSeconds? }`. Auto-adjusts coordinates when obstructed.
+- `navigate` — Navigation actions: home, back, app-drawer. Params: `{ action, waitSeconds? }`. Captures screenshot after action.
 
-**Use these scripts instead of inlining commands** to save tokens and reduce mechanical steps.
-
-To use `adb-find-element.sh` for manual coordinate extraction:
-```bash
-COORDS=$(./.claude/skills/interacting-with-android-device/scripts/adb-find-element.sh "Check for update")
-X=$(echo $COORDS | awk '{print $1}')
-Y=$(echo $COORDS | awk '{print $2}')
-adb shell input tap $X $Y
-```
+**Use these MCP tools instead of raw ADB commands** to save tokens, get structured results, and benefit from automatic obstruction detection.
 
 ## 1. Capturing Current State
-To understand what is currently on the device:
-```bash
-# Capture both screenshot and UI hierarchy XML
-./.claude/skills/interacting-with-android-device/scripts/adb-capture.sh
-
-# Or capture only one
-./.claude/skills/interacting-with-android-device/scripts/adb-capture.sh --xml        # UI hierarchy only
-./.claude/skills/interacting-with-android-device/scripts/adb-capture.sh --screenshot  # Screenshot only
-```
-*   Read `view.xml` to find coordinates (`bounds`) and properties (like `text` or `resource-id`) of UI elements.
-*   Use `screen.png` for visual verification against design mocks.
+To understand what is currently on the device, use the `capture` tool:
+*   It saves `view.xml` (UI hierarchy) and `screen.png` (screenshot) to the working directory
+*   Read `view.xml` to find coordinates (`bounds`) and properties (like `text` or `resource-id`) of UI elements
+*   Use `screen.png` for visual verification against design mocks
 
 ## 2. Interacting with the Device
 
-### Using Scripts (Recommended)
-Use helper scripts to reduce token overhead and automate mechanical steps:
+### Using MCP Tools (Recommended)
 
-*   **Find and tap an element by text**:
-    ```bash
-    ./.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh "System"
-    ```
-    This finds the element, taps it, captures screenshot—all in one command.
+*   **Find and tap an element by text** — use `tap_element`:
+    This finds the element, detects obstructions, taps (with adjusted coordinates if needed), and captures a screenshot — all in one call.
 
-*   **Tap at specific coordinates**:
-    ```bash
-    ./.claude/skills/interacting-with-android-device/scripts/adb-tap-and-capture.sh 332 1367 2
-    ```
-    Parameters: `<x> <y> [wait_seconds]`
+*   **Tap at specific coordinates** — use `tap_at`:
+    When you already have coordinates from `find_element` or manual inspection.
 
-*   **Navigate (home, back, app-drawer)**:
-    ```bash
-    ./.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh home
-    ./.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh back
-    ./.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh app-drawer
-    ```
+*   **Navigate (home, back, app-drawer)** — use `navigate`:
+    Performs the action and captures a screenshot.
 
-### Raw Commands (When Scripts Aren't Sufficient)
+*   **Find element without tapping** — use `find_element`:
+    Returns coordinates and full element info. Useful when you need to inspect before acting.
 
-*   **Finding Coordinates**: From the dumped XML, find the `bounds` attribute of the element you want to interact with. The bounds are in `[left, top][right, bottom]` format. Use the center point for a tap: `x = (left + right) / 2`, `y = (top + bottom) / 2`.
+### Raw ADB Commands (When MCP Tools Aren't Sufficient)
+
 *   **Inputting Text**: First tap the text field, then `adb shell input text "<your_text>"` (Note: handle spaces and special characters with quotes).
-*   **Key Events** (if not using navigate script):
+*   **Key Events**:
     *   Back: `adb shell input keyevent 4`
     *   Home: `adb shell input keyevent 3`
     *   Enter: `adb shell input keyevent 66`
@@ -76,81 +52,81 @@ Use helper scripts to reduce token overhead and automate mechanical steps:
     *   `(x1, y1)` = starting point
     *   `(x2, y2)` = ending point
     *   `duration_ms` = duration in milliseconds (1000ms is typical; adjust for speed/distance)
-    *   **Note**: For expanding containers/drawers, use large distances (e.g., 2400→300 for a 2992px tall screen)
+    *   **Note**: For expanding containers/drawers, use large distances (e.g., 2400->300 for a 2992px tall screen)
 
-## 3. Verification Workflow
+## 3. Obstruction Detection
+
+The `find_element` and `tap_element` tools automatically detect when another element would intercept the tap. This catches:
+*   **System overlays** (Layer 1): TalkBack floating menu, PiP windows, accessibility services — detected via `dumpsys window windows` touchable regions
+*   **In-app elements** (Layer 2): FABs, dialogs, bottom sheets, snackbars — detected by finding the topmost clickable element at the tap point in the UI hierarchy
+
+When obstruction is detected:
+*   Coordinates are **auto-adjusted** to the center of the largest unobstructed strip (top/bottom/left/right of the obstructor)
+*   The response includes the obstructor identity, bounds, and visible region info
+*   If fully obscured (no visible region), the original center is returned as best-effort
+*   **Compose parent wrapper** pattern (identical bounds) is recognized as non-obstruction
+
+## 4. Verification Workflow
 Follow these steps for a complete UI test:
 1.  **Build and Install**: Ensure the latest version of the app is running: `./gradlew installDebug`.
-2.  **Inspect**: Run `adb-capture.sh` to dump the UI hierarchy and take a screenshot.
+2.  **Inspect**: Use `capture` to dump the UI hierarchy and take a screenshot.
 3.  **Compare**: Check the current UI against any mock image files in the project.
-4.  **Interact**: Perform an action (like a button click) using the calculated coordinates and `adb shell input tap`.
-5.  **Wait**: Sleep for a second (`sleep 1`) to allow for animations or network transitions.
-6.  **Verify**: Dump the UI hierarchy again to confirm the UI has updated as expected (e.g., a new screen is shown, or a success message appeared in the XML).
+4.  **Interact**: Use `tap_element` to tap a UI element by text. The tool handles coordinate calculation and obstruction detection automatically.
+5.  **Verify**: Use `capture` again to confirm the UI has updated as expected (e.g., a new screen is shown, or a success message appeared).
 
-## 4. Examples
+## 5. Examples
 
 ### Example: Navigate to Settings and Check for Updates
-**Using scripts:**
-```bash
+```
 # Go to home screen
-./.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh home
+navigate({ action: "home" })
 
 # Open app drawer
-./.claude/skills/interacting-with-android-device/scripts/adb-navigate.sh app-drawer
+navigate({ action: "app-drawer" })
 
-# Find and tap "Settings" app
-./.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh "Settings" 2
-
-# Find and tap "System" option
-./.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh "System" 2
-
-# Find and tap "Software updates"
-./.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh "Software updates" 2
-
-# Find and tap "Check for update" button
-./.claude/skills/interacting-with-android-device/scripts/adb-tap-element.sh "Check for update" 5
+# Find and tap through settings
+tap_element({ text: "Settings", waitSeconds: 2 })
+tap_element({ text: "System", waitSeconds: 2 })
+tap_element({ text: "Software updates", waitSeconds: 2 })
+tap_element({ text: "Check for update", waitSeconds: 5 })
 ```
 
 ### Example: Swiping
-For swipe gestures not covered by the navigation script:
+For swipe gestures not covered by the navigate tool, use raw ADB:
 ```bash
 adb shell input swipe 672 2800 672 500 1000 && sleep 1 && adb shell screencap -p /sdcard/screen.png && adb pull /sdcard/screen.png .
 ```
 
-## 5. Best Practices
+## 6. Best Practices
 
 ### Coordinate Calculation
-*   Always calculate coordinates from the `bounds` attribute in the XML dump, as layouts can vary across different screen sizes.
-*   Parse bounds format `[left,top][right,bottom]` and compute center: `x = (left + right) / 2`, `y = (top + bottom) / 2`
-*   Use shell tools to programmatically extract coordinates rather than estimating from screenshots
-*   When multiple instances of an element exist (e.g., in prediction row and full list), verify you're using the correct one by checking the context
-
-### Command Chaining and Efficiency
-*   For custom operations not covered by scripts, combine tap + wait + capture:
-    ```bash
-    adb shell input tap X Y && sleep N && adb shell screencap -p /sdcard/screen.png && adb pull /sdcard/screen.png .
-    ```
-*   Always include a sleep duration (typically 1-5 seconds) between tap and capture to allow animations and transitions to complete
-*   Pull the screenshot immediately after capture to avoid losing transient UI states
+*   Prefer `find_element` or `tap_element` over manual coordinate calculation — they handle bounds parsing, center computation, and obstruction detection automatically
+*   When multiple instances of an element exist (e.g., in prediction row and full list), check the `find_element` response to verify you're targeting the correct one
 
 ### Navigation and State Evaluation
-*   **Dump XML before interaction**: Always extract the UI hierarchy before tapping to find precise element locations
-*   **Verify after each interaction**: Don't assume an action succeeded—capture a screenshot after every tap to confirm the correct element was activated and the UI changed as expected
+*   **Verify after each interaction**: Don't assume an action succeeded — use `capture` after interactions to confirm the UI changed as expected
 *   **Check both visual and structural state**: Use screenshot for visual verification, XML dump for structural confirmation (element presence, text content, state changes)
-*   **Identify navigation failures early**: If a tap opened the wrong screen, use back button (`adb shell input keyevent 4`) to recover immediately rather than continuing with an incorrect state
+*   **Identify navigation failures early**: If a tap opened the wrong screen, use `navigate({ action: "back" })` to recover immediately
 
 ### Interaction Patterns
 *   **Scrolling before interaction**: When looking for an element, check if it's visible on screen first. If not, scroll using swipe gestures to reveal it
-*   **Use consistent scroll direction**: For vertical scrolling in lists/settings, use downward swipes (higher Y → lower Y) to scroll down
-*   **Handle app crashes gracefully**: Some apps may fail to launch. Don't retry the same action—use back button and try an alternative approach
-*   **Sanitize Input**: When using `adb shell input text`, be mindful of special characters that might need escaping in a terminal shell
-*   **Check Accessibility**: Use the `content-desc` and `text` properties in the XML hierarchy to ensure the UI is accessible for screen readers
+*   **Use consistent scroll direction**: For vertical scrolling in lists/settings, use downward swipes (higher Y -> lower Y) to scroll down
+*   **Handle app crashes gracefully**: Don't retry the same action — use back button and try an alternative approach
+*   **Check Accessibility**: Use the `content-desc` and `text` properties in the UI hierarchy to ensure the UI is accessible for screen readers
 
-## 6. Troubleshooting
+## 7. Troubleshooting
 
 ### Device Not Connected
-If `adb devices` returns an empty list:
+If tools report ADB errors:
 *   Check USB connection or emulator status
 *   Enable USB debugging on the device (Settings > Developer Options > USB Debugging)
 *   Accept the RSA key prompt on the device if asked
 *   Restart the device or disconnect/reconnect the USB cable
+*   Run `adb devices` to verify the device is visible
+
+### MCP Server Not Available
+If tools are not listed in `/mcp`:
+*   Ensure Node.js 18+ is installed
+*   The server auto-builds on first use via `.claude/mcp.json`
+*   Check `.claude/mcp/android-device-server/` exists with `package.json`
+*   Try manual build: `cd .claude/mcp/android-device-server && npm install && npm run build`
