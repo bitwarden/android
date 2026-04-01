@@ -16,8 +16,8 @@ on:
         description: "Workflow run ID containing SDK artifacts"
         required: true
         type: string
-      sdk_package_version:
-        description: "SDK Maven package version to test against"
+      artifact_name:
+        description: "SDK artifact identifier (Maven package version)"
         required: true
         type: string
 
@@ -48,7 +48,7 @@ jobs:
           # Always use .dev package - this workflow only runs on PRs, and PR builds
           # publish to sdk-android.dev (main branch publishes to sdk-android)
           _SDK_PACKAGE: "com.bitwarden:sdk-android.dev"
-          _SDK_VERSION: ${{ inputs.sdk_package_version }}
+          _SDK_VERSION: ${{ inputs.artifact_name }}
         run: |
           ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
 
