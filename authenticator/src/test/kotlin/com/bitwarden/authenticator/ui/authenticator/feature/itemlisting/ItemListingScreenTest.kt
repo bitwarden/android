@@ -570,6 +570,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
         ),
     ),
     isExpanded = true,
+    sortKey = "test@test.com",
 )
 
 private val DEFAULT_STATE = ItemListingState(

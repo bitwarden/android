@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 class CipherListViewExtensionsTest {
 
     @Test
-    fun `toOverflowActions should return all actions for a login cipher when a user has premium`() {
+    fun `toOverflowActions should return all actions for a login cipher when a user has Premium`() {
         val loginListView = createMockLoginListView(
             number = 1,
             username = username,
@@ -72,7 +72,7 @@ class CipherListViewExtensionsTest {
     }
 
     @Test
-    fun `toOverflowActions should not return TOTP action when a user does not have premium`() {
+    fun `toOverflowActions should not return TOTP action when a user does not have Premium`() {
         val type = CipherListViewType.Login(
             createMockLoginListView(
                 number = 1,

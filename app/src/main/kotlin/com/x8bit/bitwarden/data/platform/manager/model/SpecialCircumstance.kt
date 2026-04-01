@@ -135,7 +135,7 @@ sealed class SpecialCircumstance : Parcelable {
     data object VerificationCodeShortcut : SpecialCircumstance()
 
     /**
-     * The app was launched via a premium checkout callback deep link,
+     * The app was launched via a Premium checkout callback deep link,
      * indicating the user is returning from a Stripe checkout session.
      */
     @Parcelize

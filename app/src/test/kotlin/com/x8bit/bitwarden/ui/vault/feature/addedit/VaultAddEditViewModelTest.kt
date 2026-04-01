@@ -2378,7 +2378,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
         val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)

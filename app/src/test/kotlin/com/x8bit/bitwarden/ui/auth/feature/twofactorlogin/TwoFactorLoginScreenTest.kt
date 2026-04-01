@@ -62,6 +62,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
                 sso = mockk(),
                 webAuthn = webAuthnLauncher,
                 cookie = mockk(),
+                premiumCheckout = mockk(),
             ),
             intentManager = intentManager,
             nfcManager = nfcManager,

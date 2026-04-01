@@ -11,6 +11,7 @@
     <string name="copy_password">Jelszó másolása</string>
     <string name="copy_username">Felhasználónév másolása</string>
     <string name="delete">Törlés</string>
+    <string name="preview">Előnézet</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Tényleg törölni akarod? Ezt nem lehet visszavonni.</string>
     <string name="edit">Szerkesztés</string>
@@ -378,6 +379,7 @@
     <string name="capitalize">Nagy kezdőbetű</string>
     <string name="include_number">Szám is</string>
     <string name="download">Letöltés</string>
+    <string name="download_file">Fájl letöltése</string>
     <string name="login_expired">A bejelentkezési munkamenet lejárt.</string>
     <string name="biometrics_direction">Biometrikus ellenőrzés</string>
     <string name="device_verification">Eszköz ellenőrzés</string>
@@ -1226,4 +1228,23 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="continue_without_syncing">Folytatás szinkronizálás nélkül</string>
     <string name="external_link">Külső hivatkozás</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Külső hivatkozás</string>
+    <string name="preview_not_available_for_files">Az előnézet nem érhető el %1$s fájlokhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">A Bitwarden nem tudta visszafejteni ezt a fájlt, így az előnézet nem jeleníthető meg.</string>
+    <string name="preview_unavailable_for_this_file">Az előnézet nem érhető el ehhez a fájlhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="preview_unavailable">Az előnézet nem érhető el.</string>
+    <string name="upgraded_to_premium">Áttérés Prémium csomagra</string>
+    <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
+    <string name="per_month">/ hónap</string>
+    <string name="built_in_authenticator">Beépített hitelesítő</string>
+    <string name="emergency_access">Sürgősségi hozzáférés</string>
+    <string name="secure_file_storage">Biztonságos fájl tárolás</string>
+    <string name="breach_monitoring">Adatszivárgás figyelés</string>
+    <string name="upgrade_now">Áttérés most</string>
+    <string name="stripe_checkout_footer">A vásárlás befejezéséhez keressük fel a Stripe biztonságos pénztárát.</string>
+    <string name="opening_checkout">Pénztár megnyitása…</string>
+    <string name="secure_checkout_didnt_load">A biztonságos pénztár nem töltődött be.</string>
+    <string name="trouble_opening_payment_page">Problémák adódtak a fizetési oldal megnyitásával, úgyhogy próbáljuk újra.</string>
+    <string name="payment_not_received_yet">A fizetés még nem érkezett meg.</string>
+    <string name="return_to_stripe_to_finish">Visszatérés a Stripe-hoz a böngészőben az áttérés befejezéséhez.</string>
+    <string name="go_back">Vissza</string>
 </resources>

@@ -9,12 +9,12 @@ import com.bitwarden.network.model.PortalUrlResponseJson
 interface BillingService {
 
     /**
-     * Creates a Stripe checkout session for premium upgrade.
+     * Creates a Stripe checkout session for Premium upgrade.
      */
     suspend fun createCheckoutSession(): Result<CheckoutSessionResponseJson>
 
     /**
-     * Creates a Stripe customer portal session for managing the premium subscription.
+     * Creates a Stripe customer portal session for managing the Premium subscription.
      */
     suspend fun getPortalUrl(): Result<PortalUrlResponseJson>
 }

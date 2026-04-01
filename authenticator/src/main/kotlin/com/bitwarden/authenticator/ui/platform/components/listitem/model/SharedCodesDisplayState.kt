@@ -33,6 +33,7 @@ sealed class SharedCodesDisplayState : Parcelable {
         val label: Text,
         val codes: ImmutableList<VerificationCodeDisplayItem>,
         val isExpanded: Boolean,
+        val sortKey: String,
     ) : Parcelable
 
     /**

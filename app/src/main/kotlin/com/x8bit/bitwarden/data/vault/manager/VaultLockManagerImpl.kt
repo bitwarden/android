@@ -98,6 +98,7 @@ class VaultLockManagerImpl(
     context: Context,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     /**
      * This [Map] tracks all active timeout [Job]s that are running and their associated data using
@@ -478,7 +479,7 @@ class VaultLockManagerImpl(
                     .map { userId -> vaultTimeoutChangesForUserFlow(userId = userId) }
                     .merge()
             }
-            .launchIn(unconfinedScope)
+            .launchIn(ioScope)
     }
 
     private fun observeUserLogoutResults() {

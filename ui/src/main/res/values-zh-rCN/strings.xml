@@ -11,6 +11,7 @@
     <string name="copy_password">复制密码</string>
     <string name="copy_username">复制用户名</string>
     <string name="delete">删除</string>
+    <string name="preview">预览</string>
     <string name="deleting">正在删除…</string>
     <string name="do_you_really_want_to_delete">您确定要删除吗？这个操作无法撤消。</string>
     <string name="edit">编辑</string>
@@ -197,7 +198,7 @@
     <string name="copy_totp">复制 TOTP</string>
     <string name="copy_totp_automatically_description">如果登录项目包含验证器密钥，当自动填充此登录时，TOTP 验证码将复制到剪贴板。</string>
     <string name="copy_totp_automatically">自动复制 TOTP</string>
-    <string name="premium_required">使用此功能需要高级会员资格。</string>
+    <string name="premium_required">需要高级版成员资格才能使用此功能。</string>
     <string name="attachment_deleted">附件已删除</string>
     <string name="attachments_unavailable">附件功能不可用</string>
     <string name="attachments_are_a_premium_feature">附件是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
@@ -377,6 +378,7 @@
     <string name="capitalize">首字母大写</string>
     <string name="include_number">包含数字</string>
     <string name="download">下载</string>
+    <string name="download_file">下载文件</string>
     <string name="login_expired">您的登录会话已过期。</string>
     <string name="biometrics_direction">生物识别验证</string>
     <string name="device_verification">设备验证</string>
@@ -495,7 +497,7 @@
     <string name="about_send">关于 Send</string>
     <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
-    <string name="send_file_premium_required">免费账户仅限于共享文本。要使用文件 Send，需要高级会员。</string>
+    <string name="send_file_premium_required">免费账户仅限于共享文本。需要高级版成员资格才能使用文件 Send。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="password_prompt">主密码重新提示</string>
     <string name="password_confirmation">确认主密码</string>
@@ -1219,4 +1221,23 @@
     <string name="continue_without_syncing">继续而不同步</string>
     <string name="external_link">外部链接</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部链接</string>
+    <string name="preview_not_available_for_files">%1$s 个文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 无法解密此文件，因此无法显示预览。</string>
+    <string name="preview_unavailable_for_this_file">此文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
+    <string name="preview_unavailable">无法预览</string>
+    <string name="upgraded_to_premium">升级到高级版</string>
+    <string name="unlock_premium_features">使用高级版方案解锁更多高级功能。</string>
+    <string name="per_month">/月</string>
+    <string name="built_in_authenticator">内置身份验证器</string>
+    <string name="emergency_access">紧急访问</string>
+    <string name="secure_file_storage">安全文件存储</string>
+    <string name="breach_monitoring">数据泄露监测</string>
+    <string name="upgrade_now">立即升级</string>
+    <string name="stripe_checkout_footer">您将前往 Stripe 的安全结账页面完成购买。</string>
+    <string name="opening_checkout">正在打开结账页面…</string>
+    <string name="secure_checkout_didnt_load">安全结账页面未能加载</string>
+    <string name="trouble_opening_payment_page">我们无法打开付款页面，请重试。</string>
+    <string name="payment_not_received_yet">尚未收到付款</string>
+    <string name="return_to_stripe_to_finish">返回浏览器中的 Stripe 以完成升级。</string>
+    <string name="go_back">返回</string>
 </resources>

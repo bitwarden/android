@@ -11,6 +11,7 @@
     <string name="copy_password">Kopírovať heslo</string>
     <string name="copy_username">Kopírovať používateľské meno</string>
     <string name="delete">Odstrániť</string>
+    <string name="preview">Náhľad</string>
     <string name="deleting">Odstraňuje sa…</string>
     <string name="do_you_really_want_to_delete">Naozaj chcete odstrániť? Nedá sa to vrátiť späť.</string>
     <string name="edit">Upraviť</string>
@@ -383,6 +384,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="capitalize">Prvé písmeno veľkým</string>
     <string name="include_number">Zahrnúť číslo</string>
     <string name="download">Stiahnuť</string>
+    <string name="download_file">Stiahnuť súbor</string>
     <string name="login_expired">Platnosť relácie prihlásenia vypršala.</string>
     <string name="biometrics_direction">Na overenie použiť biometrické údaje.</string>
     <string name="device_verification">Overenie zariadenia</string>
@@ -1245,4 +1247,23 @@ Chcete prepnúť na tento účet?</string>
     <string name="continue_without_syncing">Pokračovať bez synchronizácie</string>
     <string name="external_link">Externý odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externý odkaz</string>
+    <string name="preview_not_available_for_files">Pre súbory (%1$s) nie je k dispozícii náhľad. Stále si ich môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nedokázal tento súbor dešifrovať, preto nie je možné zobraziť náhľad.</string>
+    <string name="preview_unavailable_for_this_file">Pre tento súbor nie je k dispozícii náhľad. Stále si ho môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="preview_unavailable">Náhľad nie je k dispozícii</string>
+    <string name="upgraded_to_premium">Upgradované na Prémium</string>
+    <string name="unlock_premium_features">S balíkom Prémium získate prístup k pokročilejším funkciám.</string>
+    <string name="per_month">/mesiac</string>
+    <string name="built_in_authenticator">Zabudovaný autentifikátor</string>
+    <string name="emergency_access">Núdzový prístup</string>
+    <string name="secure_file_storage">Bezpečné ukladanie súborov</string>
+    <string name="breach_monitoring">Sledovanie únikov</string>
+    <string name="upgrade_now">Upgradovať teraz</string>
+    <string name="stripe_checkout_footer">Budete presmerovaní na zabezpečenú platobnú stránku služby Stripe, kde dokončíte nákup.</string>
+    <string name="opening_checkout">Otvára sa pokladňa…</string>
+    <string name="secure_checkout_didnt_load">Bezpečná platba sa nenačítala</string>
+    <string name="trouble_opening_payment_page">Mali sme problémy s otvorením platobnej stránky, skúste to znova.</string>
+    <string name="payment_not_received_yet">Platba ešte nebola prijatá</string>
+    <string name="return_to_stripe_to_finish">Vráťte sa do Stripe v prehliadači a dokončite upgrade.</string>
+    <string name="go_back">Prejsť späť</string>
 </resources>

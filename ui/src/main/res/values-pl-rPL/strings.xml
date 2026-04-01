@@ -11,6 +11,7 @@
     <string name="copy_password">Kopiuj hasło</string>
     <string name="copy_username">Kopiuj nazwę użytkownika</string>
     <string name="delete">Usuń</string>
+    <string name="preview">Podgląd</string>
     <string name="deleting">Usuwanie…</string>
     <string name="do_you_really_want_to_delete">Czy na pewno chcesz usunąć? Tej operacji nie można cofnąć.</string>
     <string name="edit">Edytuj</string>
@@ -200,7 +201,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_totp">Kopiuj kod TOTP</string>
     <string name="copy_totp_automatically_description">Automatycznie kopiuje kod TOTP do schowka podczas autouzupełniania.</string>
     <string name="copy_totp_automatically">Kopiuj kod TOTP automatycznie</string>
-    <string name="premium_required">Konto premium jest wymagane, aby skorzystać z tej funkcji.</string>
+    <string name="premium_required">Konto Premium jest wymagane, aby skorzystać z tej funkcji.</string>
     <string name="attachment_deleted">Załącznik został usunięty</string>
     <string name="attachments_unavailable">Załączniki są niedostępne</string>
     <string name="attachments_are_a_premium_feature">Załączniki są funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
@@ -383,6 +384,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>
     <string name="download">Pobierz</string>
+    <string name="download_file">Pobierz plik</string>
     <string name="login_expired">Twoja sesja wygasła.</string>
     <string name="biometrics_direction">Weryfikacja biometryczna</string>
     <string name="device_verification">Weryfikacja urządzenia</string>
@@ -1222,7 +1224,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="archive_unavailable">Archiwum jest niedostępne</string>
     <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
-    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="unlock_advanced_security_features">Odblokuj zaawansowane funkcje bezpieczeństwa</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
     <string name="introducing_archive">Przedstawiamy archiwum</string>
@@ -1244,4 +1246,23 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="continue_without_syncing">Kontynuuj bez synchronizacji</string>
     <string name="external_link">Link zewnętrzny</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Podgląd jest niedostępny</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
 </resources>

@@ -410,6 +410,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                 ),
             ),
             isExpanded = true,
+            sortKey = "mockEmail-2",
         ),
     ),
 )

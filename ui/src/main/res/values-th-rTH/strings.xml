@@ -11,6 +11,7 @@
     <string name="copy_password">คัดลอกรหัสผ่าน</string>
     <string name="copy_username">คัดลอกชื่อผู้ใช้</string>
     <string name="delete">ลบ</string>
+    <string name="preview">Preview</string>
     <string name="deleting">กำลังลบ…</string>
     <string name="do_you_really_want_to_delete">คุณแน่ใจหรือไม่ว่าต้องการลบ? การกระทำนี้ไม่สามารถเลิกทำได้</string>
     <string name="edit">แก้ไข</string>
@@ -377,6 +378,7 @@
     <string name="capitalize">ตัวพิมพ์ใหญ่</string>
     <string name="include_number">รวมตัวเลข</string>
     <string name="download">ดาวน์โหลด</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">เซสชันการเข้าสู่ระบบของคุณหมดอายุแล้ว</string>
     <string name="biometrics_direction">การยืนยันไบโอเมตริก</string>
     <string name="device_verification">การยืนยันอุปกรณ์</string>
@@ -495,7 +497,7 @@
     <string name="about_send">เกี่ยวกับ Send</string>
     <string name="hide_email">ซ่อนที่อยู่อีเมลของฉันจากผู้รับ</string>
     <string name="send_options_policy_in_effect">นโยบายองค์กรอย่างน้อยหนึ่งรายการมีผลต่อตัวเลือก Send ของคุณ</string>
-    <string name="send_file_premium_required">บัญชีฟรีถูกจำกัดให้แชร์ได้เฉพาะข้อความ ต้องเป็นสมาชิกพรีเมียมเพื่อใช้ไฟล์กับ Send</string>
+    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">การแชร์กับบุคคลที่ระบุเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
     <string name="password_prompt">ถามรหัสผ่านหลักซ้ำ</string>
     <string name="password_confirmation">ยืนยันรหัสผ่านหลัก</string>
@@ -1218,4 +1220,23 @@
     <string name="continue_without_syncing">ดำเนินการต่อโดยไม่ซิงค์</string>
     <string name="external_link">ลิงก์ภายนอก</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, ลิ้งก์ภายนอก</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
 </resources>

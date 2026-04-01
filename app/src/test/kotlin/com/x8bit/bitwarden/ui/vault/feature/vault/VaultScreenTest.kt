@@ -78,6 +78,7 @@ import org.junit.Test
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
     private var onNavigateToAutofillCalled = false
+    private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -121,6 +122,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -1181,7 +1183,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = username.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1218,7 +1220,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1277,7 +1279,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1676,7 +1678,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1849,7 +1851,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1908,7 +1910,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -2296,6 +2298,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `when NavigateToUpgradePremium is sent, it should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToUpgradePremium)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
     fun `when ShowSnackbar is sent snackbar should be displayed`() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
@@ -2342,7 +2350,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                         VaultState.ViewState.VaultItem.SshKey(
                             id = "mockId",
                             name = "mockSshKey".asText(),
-                            overflowOptions = emptyList(),
+                            overflowOptions = persistentListOf(),
                             shouldShowMasterPasswordReprompt = false,
                             hasDecryptionError = false,
                         ),

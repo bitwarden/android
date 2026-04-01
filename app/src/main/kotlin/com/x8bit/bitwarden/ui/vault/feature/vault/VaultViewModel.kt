@@ -223,6 +223,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
+                SnackbarRelay.PREMIUM_UPGRADED,
                 SnackbarRelay.LEFT_ORGANIZATION,
                 SnackbarRelay.VAULT_MIGRATED_TO_MY_ITEMS,
             ),
@@ -410,7 +411,7 @@ class VaultViewModel @Inject constructor(
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
             VaultState.ActionCardState.UpgradePremium -> {
-                // Navigation to Plan screen wired in PM-33515/PM-33516.
+                sendEvent(VaultEvent.NavigateToUpgradePremium)
             }
 
             VaultState.ActionCardState.IntroducingArchive -> {
@@ -621,7 +622,7 @@ class VaultViewModel @Inject constructor(
             ?.archivedItemsCount
             ?: 0
         if (state.isPremium || archivedItemsCount > 0) {
-            // We still navigate even if the user does not have premium, since they have previously
+            // We still navigate even if the user does not have Premium, since they have previously
             // archived ciphers to view.
             sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
         } else {
@@ -1489,7 +1490,7 @@ class VaultViewModel @Inject constructor(
  * @property viewState The specific view state representing loading, no items, or content state.
  * @property dialog Information about any dialogs that may need to be displayed.
  * @property isSwitchingAccounts Whether we are actively switching accounts.
- * @property isPremium Whether the user is a premium user.
+ * @property isPremium Whether the user is a Premium user.
  */
 @Parcelize
 data class VaultState(
@@ -1708,7 +1709,7 @@ data class VaultState(
             /**
              * The overflow options to be displayed for the vault item.
              */
-            abstract val overflowOptions: List<ListingItemOverflowAction.VaultAction>
+            abstract val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>
 
             /**
              * Whether to prompt the user for their password when they select an overflow option.
@@ -1737,7 +1738,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
                 val username: Text?,
@@ -1761,7 +1762,7 @@ data class VaultState(
                 ),
                 override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
                 private val brand: VaultCardBrand? = null,
@@ -1794,7 +1795,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val fullName: Text?,
@@ -1814,7 +1815,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
@@ -1832,7 +1833,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
-                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
             ) : VaultItem() {
@@ -1847,7 +1848,7 @@ data class VaultState(
      */
     sealed class ActionCardState {
         /**
-         * Indicates that the user is eligible for a premium upgrade.
+         * Indicates that the user is eligible for a Premium upgrade.
          */
         data object UpgradePremium : ActionCardState()
 
@@ -1863,7 +1864,7 @@ data class VaultState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -2037,6 +2038,11 @@ sealed class VaultEvent {
      * Navigate to Autofill settings screen.
      */
     data object NavigateToAutofillSettings : VaultEvent()
+
+    /**
+     * Navigate to the premium upgrade plan screen.
+     */
+    data object NavigateToUpgradePremium : VaultEvent()
 }
 
 /**
@@ -2260,7 +2266,7 @@ sealed class VaultAction {
     data object SelectAddItemType : VaultAction()
 
     /**
-     * User clicked the upgrade to premium button.
+     * User clicked the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : VaultAction()
 
@@ -2410,7 +2416,7 @@ sealed class VaultAction {
         ) : Internal()
 
         /**
-         * Indicates that the premium upgrade banner eligibility has been
+         * Indicates that the Premium upgrade banner eligibility has been
          * updated.
          */
         data class PremiumUpgradeBannerEligibilityReceive(

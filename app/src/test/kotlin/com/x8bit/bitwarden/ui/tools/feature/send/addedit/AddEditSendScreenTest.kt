@@ -1317,7 +1317,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `auth type chooser should show EMAIL option for premium users`() {
+    fun `auth type chooser should show EMAIL option for Premium users`() {
         mutableStateFlow.update {
             it.copy(
                 isPremium = true,

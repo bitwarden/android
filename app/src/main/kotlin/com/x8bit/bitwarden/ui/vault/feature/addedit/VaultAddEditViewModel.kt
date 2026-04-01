@@ -2943,7 +2943,7 @@ data class VaultAddEditState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         data object ArchiveRequiresPremium : DialogState()
 
@@ -3075,7 +3075,7 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
-     * Navigates to the upgrade-to-premium url.
+     * Navigates to the upgrade-to-Premium url.
      */
     data class NavigateToPremium(
         val uri: String,
@@ -3200,7 +3200,7 @@ sealed class VaultAddEditAction {
         data object UnarchiveClick : Common()
 
         /**
-         * The user has clicked the upgrade to premium dialog.
+         * The user has clicked the upgrade to Premium dialog.
          */
         data object UpgradeToPremiumClick : Common()
 

@@ -106,7 +106,9 @@ fun VaultVerificationCodeItem(
 
         if (!hideAuthCode) {
             Text(
-                text = authCode.chunked(3).joinToString(" "),
+                text = authCode
+                    .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                    .joinToString(separator = " "),
                 style = BitwardenTheme.typography.sensitiveInfoSmall,
                 color = BitwardenTheme.colorScheme.text.primary,
             )

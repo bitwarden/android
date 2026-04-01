@@ -56,7 +56,7 @@ interface DebugMenuRepository {
     fun clearSsoCookies()
 
     /**
-     * Resets the premium upgrade banner dismiss status for the current user.
+     * Resets the Premium upgrade banner dismiss status for the current user.
      */
     fun resetPremiumUpgradeBannerDismiss()
 }

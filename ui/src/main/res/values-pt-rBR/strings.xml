@@ -11,6 +11,7 @@
     <string name="copy_password">Copiar senha</string>
     <string name="copy_username">Copiar nome de usuário</string>
     <string name="delete">Apagar</string>
+    <string name="preview">Prévia</string>
     <string name="deleting">Apagando…</string>
     <string name="do_you_really_want_to_delete">Tem certeza que quer apagar? Isto não pode ser desfeito.</string>
     <string name="edit">Editar</string>
@@ -198,7 +199,7 @@ A leitura será feita automaticamente.</string>
     <string name="copy_totp">Copiar TOTP</string>
     <string name="copy_totp_automatically_description">Se uma credencial tiver uma chave de autenticador, copie o código de verificação TOTP para sua área de transferência ao preenchê-la.</string>
     <string name="copy_totp_automatically">Copiar TOTP automaticamente</string>
-    <string name="premium_required">Uma assinatura Premium é necessária para usar esse recurso.</string>
+    <string name="premium_required">A Premium membership is required to use this feature.</string>
     <string name="attachment_deleted">Anexo apagado</string>
     <string name="attachments_unavailable">Anexos indisponíveis</string>
     <string name="attachments_are_a_premium_feature">Os anexos são um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
@@ -379,6 +380,7 @@ A leitura será feita automaticamente.</string>
     <string name="capitalize">Iniciais maiúsculas</string>
     <string name="include_number">Incluir número</string>
     <string name="download">Baixar</string>
+    <string name="download_file">Baixar arquivo</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
     <string name="device_verification">Verificação do dispositivo</string>
@@ -497,7 +499,7 @@ A leitura será feita automaticamente.</string>
     <string name="about_send">Sobre o Send</string>
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
-    <string name="send_file_premium_required">Contas gratuitas são limitadas para compartilhar apenas texto. É necessário um plano Premium para usar arquivos com o Send.</string>
+    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">O compartilhamento com pessoas específicas é um recurso do Premium. O seu plano atual não inclui acesso a este recurso.</string>
     <string name="password_prompt">Resolicitar senha principal</string>
     <string name="password_confirmation">Confirmação de senha principal</string>
@@ -1227,4 +1229,23 @@ Quer trocar para esta conta?</string>
     <string name="continue_without_syncing">Continuar sem sincronizar</string>
     <string name="external_link">Link externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link externo</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Prévia indisponível</string>
+    <string name="upgraded_to_premium">Atualizado para premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Autenticador integrado</string>
+    <string name="emergency_access">Acesso de emergência</string>
+    <string name="secure_file_storage">Armazenamento seguro de arquivos</string>
+    <string name="breach_monitoring">Monitoramento de vazamentos</string>
+    <string name="upgrade_now">Atualizar agora</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Abrindo checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Voltar</string>
 </resources>

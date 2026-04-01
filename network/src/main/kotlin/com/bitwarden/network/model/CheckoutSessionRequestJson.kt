@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Request object for creating a Stripe checkout session for premium upgrade.
+ * Request object for creating a Stripe checkout session for Premium upgrade.
  *
  * @property platform The platform identifier (e.g., "android" or "ios").
  */

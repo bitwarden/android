@@ -11,6 +11,7 @@
     <string name="copy_password">Copiar palavra-passe</string>
     <string name="copy_username">Copiar nome de utilizador</string>
     <string name="delete">Eliminar</string>
+    <string name="preview">Pré-visualização</string>
     <string name="deleting">A eliminar…</string>
     <string name="do_you_really_want_to_delete">Pretende realmente eliminar? Esta ação não pode ser anulada.</string>
     <string name="edit">Editar</string>
@@ -379,6 +380,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="capitalize">Capitalizar</string>
     <string name="include_number">Incluir número</string>
     <string name="download">Transferir</string>
+    <string name="download_file">Transferir ficheiro</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
     <string name="device_verification">Verificação do dispositivo</string>
@@ -1227,4 +1229,23 @@ Pretende mudar para esta conta?</string>
     <string name="continue_without_syncing">Continuar sem sincronizar</string>
     <string name="external_link">Link externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link externo</string>
+    <string name="preview_not_available_for_files">Pré-visualização indisponível para ficheiros %1$s. Pode ainda transferi-lo para o visualizar no seu dispositivo.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">O Bitwarden não conseguiu desencriptar este ficheiro, pelo que a pré-visualização não pode ser apresentada.</string>
+    <string name="preview_unavailable_for_this_file">Pré-visualização indisponível para este ficheiro. Pode ainda transferi-lo para o visualizar no seu dispositivo.</string>
+    <string name="preview_unavailable">Pré-visualização indisponível</string>
+    <string name="upgraded_to_premium">Atualizado para o Premium</string>
+    <string name="unlock_premium_features">Desbloqueie funcionalidades mais avançadas com um plano Premium.</string>
+    <string name="per_month">/ mês</string>
+    <string name="built_in_authenticator">Autenticador incorporado</string>
+    <string name="emergency_access">Acesso de emergência</string>
+    <string name="secure_file_storage">Armazenamento seguro de ficheiros</string>
+    <string name="breach_monitoring">Monitorização de violações</string>
+    <string name="upgrade_now">Atualizar agora</string>
+    <string name="stripe_checkout_footer">Será encaminhado para o checkout seguro da Stripe para concluir a sua compra.</string>
+    <string name="opening_checkout">A abrir checkout…</string>
+    <string name="secure_checkout_didnt_load">Não foi possível carregar o checkout seguro</string>
+    <string name="trouble_opening_payment_page">Ocorreu um problema ao abrir a página de pagamento, pelo que deverá tentar novamente.</string>
+    <string name="payment_not_received_yet">Pagamento ainda não recebido</string>
+    <string name="return_to_stripe_to_finish">Regresse à Stripe no seu navegador para concluir a atualização.</string>
+    <string name="go_back">Voltar atrás</string>
 </resources>

@@ -15,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +28,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenHelpIconButton
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -42,6 +45,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * and it's contents will be dimmed.
  * @param clickable An optional override for whether the row is clickable or not. Defaults to
  * [isEnabled].
+ * @param isExternalLink Indicates the row is an whether the text is an external link or not.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
  * @param helpData The data required to display a help button.
@@ -58,6 +62,7 @@ fun BitwardenTextRow(
     textTestTag: String? = null,
     isEnabled: Boolean = true,
     clickable: Boolean = isEnabled,
+    isExternalLink: Boolean = false,
     withDivider: Boolean = false,
     helpData: BitwardenHelpButtonData? = null,
     content: (@Composable () -> Unit)? = null,
@@ -85,6 +90,11 @@ fun BitwardenTextRow(
                     .weight(1f),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    val formattedContentDescription = if (isExternalLink) {
+                        stringResource(id = BitwardenString.external_link_format, text)
+                    } else {
+                        text
+                    }
                     Text(
                         text = text,
                         style = BitwardenTheme.typography.bodyLarge,
@@ -93,7 +103,9 @@ fun BitwardenTextRow(
                         } else {
                             BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                         },
-                        modifier = Modifier.nullableTestTag(tag = textTestTag),
+                        modifier = Modifier
+                            .semantics { contentDescription = formattedContentDescription }
+                            .nullableTestTag(tag = textTestTag),
                     )
                     helpData?.let { HelpButton(helpData = it) }
                 }

@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -53,14 +54,17 @@ fun CipherView.toViewState(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            customFields = fields.orEmpty().map { fieldView ->
-                fieldView.toCustomField(
-                    previousState = previousState
-                        ?.common
-                        ?.customFields
-                        ?.find { it.id == fieldView.hashCode().toString() },
-                )
-            },
+            customFields = fields
+                .orEmpty()
+                .map { fieldView ->
+                    fieldView.toCustomField(
+                        previousState = previousState
+                            ?.common
+                            ?.customFields
+                            ?.find { it.id == fieldView.hashCode().toString() },
+                    )
+                }
+                .toImmutableList(),
             created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
@@ -102,7 +106,8 @@ fun CipherView.toViewState(
                         )
                     }
                 }
-                .orEmpty(),
+                .orEmpty()
+                .toImmutableList(),
             canDelete = canDelete,
             canRestore = canRestore,
             canAssignToCollections = canAssignToCollections,

@@ -73,6 +73,10 @@ fun SendListItem(
             ),
             SelectionItemData(
                 text = stringResource(id = BitwardenString.share_link),
+                contentDescription = stringResource(
+                    id = BitwardenString.external_link_format,
+                    formatArgs = arrayOf(stringResource(id = BitwardenString.share_link)),
+                ),
                 onClick = onShareClick,
             ),
             SelectionItemData(

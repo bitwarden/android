@@ -212,7 +212,7 @@ sealed class DebugMenuAction {
     data object ClearSsoCookies : DebugMenuAction()
 
     /**
-     * User has clicked to reset the premium upgrade banner dismiss status.
+     * User has clicked to reset the Premium upgrade banner dismiss status.
      */
     data object ResetPremiumUpgradeBanner : DebugMenuAction()
 

@@ -11,6 +11,7 @@
     <string name="copy_password">Kopiera lösenord</string>
     <string name="copy_username">Kopiera användarnamn</string>
     <string name="delete">Radera</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Raderar…</string>
     <string name="do_you_really_want_to_delete">Vill du verkligen radera? Detta går inte att ångra.</string>
     <string name="edit">Redigera</string>
@@ -379,6 +380,7 @@ Skanningen sker automatiskt.</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
     <string name="download">Ladda ner</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
     <string name="device_verification">Enhetsverifiering</string>
@@ -1227,4 +1229,23 @@ Vill du byta till detta konto?</string>
     <string name="continue_without_syncing">Fortsätt utan att synkronisera</string>
     <string name="external_link">Extern länk</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, extern länk</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
 </resources>

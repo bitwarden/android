@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val HIDDEN_TYPES_COUNT: Int = 2
@@ -157,7 +156,7 @@ fun VaultContent(
                             vaultHandlers.vaultItemClick(favoriteItem)
                         }
                     },
-                    overflowOptions = favoriteItem.overflowOptions.toImmutableList(),
+                    overflowOptions = favoriteItem.overflowOptions,
                     onOverflowOptionClick = { action ->
                         if (favoriteItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
@@ -359,7 +358,7 @@ fun VaultContent(
                             vaultHandlers.vaultItemClick(noFolderItem)
                         }
                     },
-                    overflowOptions = noFolderItem.overflowOptions.toImmutableList(),
+                    overflowOptions = noFolderItem.overflowOptions,
                     onOverflowOptionClick = { action ->
                         if (noFolderItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt

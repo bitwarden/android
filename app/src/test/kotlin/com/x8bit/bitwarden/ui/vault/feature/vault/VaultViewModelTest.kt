@@ -358,6 +358,24 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `ActionCardClick with UpgradePremium should emit NavigateToUpgradePremium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.UpgradePremium,
+                    ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToUpgradePremium,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `actionCard should return UpgradePremium when eligible and content is showing`() {
         val contentViewState = DEFAULT_CONTENT_VIEW_STATE
         val state = createMockVaultState(viewState = contentViewState).copy(
@@ -371,7 +389,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `actionCard should return IntroducingArchive when not eligible for premium upgrade`() {
+    fun `actionCard should return IntroducingArchive when not eligible for Premium upgrade`() {
         val contentViewState = DEFAULT_CONTENT_VIEW_STATE
         val state = createMockVaultState(viewState = contentViewState).copy(
             isPremiumUpgradeBannerEligible = false,
@@ -760,7 +778,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         mutableUserStateFlow.update { userState ->
             userState?.copy(
                 accounts = DEFAULT_USER_STATE.accounts.map { it.copy(isPremium = false) },
@@ -2067,7 +2085,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ArchiveClick with premium should emit NavigateToItemListing event with Archive type`() =
+    fun `ArchiveClick with Premium should emit NavigateToItemListing event with Archive type`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
@@ -2081,7 +2099,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveClick without premium and with archived ciphers should emit NavigateToItemListing event with Archive type`() =
+    fun `ArchiveClick without Premium and with archived ciphers should emit NavigateToItemListing event with Archive type`() =
         runTest {
             mutableUserStateFlow.update {
                 DEFAULT_USER_STATE.copy(
@@ -2119,7 +2137,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveClick without premium and archived ciphers should display the ArchiveRequiresPremium dialog`() =
+    fun `ArchiveClick without Premium and archived ciphers should display the ArchiveRequiresPremium dialog`() =
         runTest {
             mutableUserStateFlow.update {
                 DEFAULT_USER_STATE.copy(
@@ -3353,6 +3371,22 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
+
+    @Test
+    fun `when PREMIUM_UPGRADED relay emits, snackbar is shown`() =
+        runTest {
+            val viewModel = createViewModel()
+            val expectedSnackbarData = BitwardenSnackbarData(
+                message = BitwardenString.upgraded_to_premium.asText(),
+            )
+            viewModel.eventFlow.test {
+                mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
+                assertEquals(
+                    VaultEvent.ShowSnackbar(expectedSnackbarData),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `when account switch action is handled, clear snackbar relay buffer should be called`() =

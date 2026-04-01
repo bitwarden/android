@@ -58,6 +58,21 @@ gh pr create --draft --title "[PM-XXXXX] feat: Short summary" --body "<fill in f
 
 ---
 
+## AI Review Label
+
+Before running `gh pr create`, **always** use the `AskUserQuestion` tool to ask whether to add an AI review label:
+
+- **Question**: "Would you like to add an AI review label to this PR?"
+- **Options**: `ai-review-vnext`, `ai-review`, `No label`
+
+If the user selects a label, include it via the `--label` flag:
+
+```bash
+gh pr create --draft --label "ai-review-vnext" --title "..." --body "..."
+```
+
+---
+
 ## Base Branch
 
 - Default target: `main`

@@ -73,4 +73,14 @@ class VaultSdkFolderExtensionsTest {
             syncFolder,
         )
     }
+
+    @Test
+    fun `toEncryptedNetworkFolderResponse should convert a NetworkFolder to a SdkFolder`() {
+        val sdkFolder = createMockSdkFolder(number = 1)
+        val networkFolder = sdkFolder.toEncryptedNetworkFolderResponse()
+        assertEquals(
+            createMockFolder(number = 1),
+            networkFolder,
+        )
+    }
 }

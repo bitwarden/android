@@ -11,6 +11,7 @@
     <string name="copy_password">Копиране на паролата</string>
     <string name="copy_username">Копиране на потребителското име</string>
     <string name="delete">Изтриване</string>
+    <string name="preview">Преглед</string>
     <string name="deleting">Изтриване…</string>
     <string name="do_you_really_want_to_delete">Наистина ли искате да го изтриете? Действието не може да бъде отменено.</string>
     <string name="edit">Редактиране</string>
@@ -379,6 +380,7 @@
     <string name="capitalize">Главни букви</string>
     <string name="include_number">И цифри</string>
     <string name="download">Изтегляне</string>
+    <string name="download_file">Сваляне на файла</string>
     <string name="login_expired">Сесията ви изтече.</string>
     <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
     <string name="device_verification">Потвърждаване на устройствата</string>
@@ -1229,4 +1231,23 @@
     <string name="continue_without_syncing">Продължаване без синхронизиране</string>
     <string name="external_link">Външна връзка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, външна връзка</string>
+    <string name="preview_not_available_for_files">Не е възможно да се извърши преглед на %1$s файла. Все пак може да ги свалите и прегледате на устройството си.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Битуорден не може да дешифрира този файл, така че той не може да бъде показан.</string>
+    <string name="preview_unavailable_for_this_file">Не е възможно да се извърши преглед на този файл. Все пак може да го свалите и прегледате на устройството си.</string>
+    <string name="preview_unavailable">Преглед не е възможен</string>
+    <string name="upgraded_to_premium">Надградено до Платения план</string>
+    <string name="unlock_premium_features">Отключете още разширени функционалности с Платения план.</string>
+    <string name="per_month">/ месец</string>
+    <string name="built_in_authenticator">Вграден удостоверител</string>
+    <string name="emergency_access">Авариен достъп</string>
+    <string name="secure_file_storage">Сигурно съхранение на файлове</string>
+    <string name="breach_monitoring">Наблюдение за пробиви</string>
+    <string name="upgrade_now">Надграждане сега</string>
+    <string name="stripe_checkout_footer">Ще бъдете прехвърлен(а) към страницата за сигурни разплащания на Stripe, за да завършите покупката си.</string>
+    <string name="opening_checkout">Отваряне на страницата за разплащания…</string>
+    <string name="secure_checkout_didnt_load">Страницата за разплащания не може да бъде заредена</string>
+    <string name="trouble_opening_payment_page">Имаше проблем при отварянето на страницата за разплащания. Моля, опитайте отново.</string>
+    <string name="payment_not_received_yet">Плащането все още не е получено</string>
+    <string name="return_to_stripe_to_finish">Върнете се към Stripe в браузъра си, за да завършите надграждането.</string>
+    <string name="go_back">Връщане назад</string>
 </resources>

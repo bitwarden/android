@@ -864,7 +864,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
@@ -881,7 +881,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveNewIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveNewIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
@@ -1187,6 +1187,21 @@ class MainViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             authRepository.setWebAuthResult(webAuthResult = webAuthResult)
         }
+    }
+
+    @Test
+    fun `on PremiumCheckoutResult should set PremiumCheckoutResult special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
     }
 
     @Suppress("MaxLineLength")

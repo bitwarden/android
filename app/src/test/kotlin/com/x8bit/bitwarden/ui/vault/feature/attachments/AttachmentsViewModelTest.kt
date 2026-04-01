@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -15,7 +16,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
@@ -27,22 +30,36 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class AttachmentsViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
+    }
     private val mutableVaultItemStateFlow =
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(any()) } returns mutableVaultItemStateFlow
+    }
+    private val mutableAttachmentUpdatesFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.AttachmentUpdates)
+        } answers { mutableAttachmentUpdatesFlow.value }
+        every { getFeatureFlagFlow(FlagKey.AttachmentUpdates) } returns mutableAttachmentUpdatesFlow
     }
 
     @BeforeEach
@@ -86,34 +103,119 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick should display error dialog when user is not premium`() = runTest {
-        val cipherView = createMockCipherView(number = 1)
-        val state = DEFAULT_STATE.copy(
-            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
-            dialogState = AttachmentsState.DialogState.Error(
-                title = null,
-                message = BitwardenString.premium_required.asText(),
-                throwable = null,
-            ),
-            isPremiumUser = false,
-        )
-        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
-        mutableUserStateFlow.value = null
+    fun `ItemClick should display RequiresPremium dialog when user is not Premium`() = runTest {
+        mutableUserStateFlow.update {
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+            )
+        }
         val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(state, awaitItem())
-            viewModel.trySendAction(AttachmentsAction.SaveClick)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AttachmentsAction.ItemClick(attachment = DEFAULT_ATTACHMENT_ITEM),
+            )
+            expectNoEvents()
+        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ItemClick should emit NavigateToPreview when user is Premium`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AttachmentsAction.ItemClick(attachment = DEFAULT_ATTACHMENT_ITEM),
+            )
             assertEquals(
-                state.copy(
-                    dialogState = AttachmentsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.premium_required.asText(),
-                        throwable = null,
-                    ),
+                AttachmentsEvent.NavigateToPreview(
+                    cipherId = DEFAULT_STATE.cipherId,
+                    attachmentId = DEFAULT_ATTACHMENT_ITEM.id,
+                    fileName = DEFAULT_ATTACHMENT_ITEM.title,
                 ),
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToUri`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+            assertEquals(
+                AttachmentsEvent.NavigateToUri(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription" +
+                        "/premium?callToAction=upgradeToPremium",
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            environmentRepository.environment
+        }
+    }
+
+    @Test
+    fun `FileNameChange should update the newAttachment state`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        val uri = mockk<Uri>()
+        val newAttachment = AttachmentsState.NewAttachment(
+            uri = uri,
+            extension = "png",
+            displayName = "cool_file",
+            sizeBytes = 100L,
+        )
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+
+        val fileData = FileData(
+            fileName = "cool_file.png",
+            uri = uri,
+            sizeBytes = 100L,
+        )
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+        val viewModel = createViewModel()
+        // Need to populate the VM with a file
+        viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+        // Then alter the name
+        viewModel.trySendAction(AttachmentsAction.FileNameChange(fileName = "cool_file5"))
+
+        assertEquals(
+            initialState.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = newAttachment.copy(displayName = "cool_file5"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick should display error dialog when user is not Premium`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = null
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AttachmentsAction.SaveClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -152,7 +254,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                 newAttachment = AttachmentsState.NewAttachment(
-                    displayName = fileName,
+                    extension = "png",
+                    displayName = "test",
                     uri = uri,
                     sizeBytes = sizeToBig,
                 ),
@@ -197,7 +300,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             val state = DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
-                        displayName = fileName,
+                        extension = "png",
+                        displayName = "test",
                         uri = uri,
                         sizeBytes = sizeJustRight,
                     ),
@@ -272,7 +376,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             val state = DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
-                        displayName = fileName,
+                        extension = "png",
+                        displayName = "test",
                         uri = uri,
                         sizeBytes = sizeJustRight,
                     ),
@@ -343,7 +448,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                 newAttachment = AttachmentsState.NewAttachment(
-                    displayName = fileName,
+                    extension = "png",
+                    displayName = "test",
                     uri = uri,
                     sizeBytes = sizeJustRight,
                 ),
@@ -415,7 +521,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     fun `ChooseFile should update state with new file data`() = runTest {
         val uri = createMockUri()
         val fileData = FileData(
-            fileName = "filename-1",
+            fileName = "filename-1.png",
             uri = uri,
             sizeBytes = 100L,
         )
@@ -429,6 +535,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
+                        extension = "png",
                         displayName = "filename-1",
                         uri = uri,
                         sizeBytes = 100L,
@@ -673,11 +780,28 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `AttachmentUpdatesFlow should update isAttachmentUpdatesEnabled state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableAttachmentUpdatesFlow.update { false }
+            assertEquals(DEFAULT_STATE.copy(isAttachmentUpdatesEnabled = false), awaitItem())
+
+            mutableAttachmentUpdatesFlow.update { true }
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
     private fun createViewModel(
         initialState: AttachmentsState? = null,
     ): AttachmentsViewModel = AttachmentsViewModel(
         authRepo = authRepository,
+        environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
+        featureFlagManager = featureFlagManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
             every {
@@ -687,31 +811,30 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "mockUserId-1",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
+    creationDate = null,
+)
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "mockUserId-1",
-    accounts = listOf(
-        UserState.Account(
-            userId = "mockUserId-1",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            environment = Environment.Us,
-            avatarColorHex = "#aa00aa",
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isExportable = true,
-            creationDate = null,
-        ),
-    ),
+    accounts = listOf(DEFAULT_ACCOUNT),
 )
 
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
@@ -719,18 +842,20 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
     isPremiumUser = true,
+    isAttachmentUpdatesEnabled = true,
 )
+
+private val DEFAULT_ATTACHMENT_ITEM: AttachmentsState.AttachmentItem =
+    AttachmentsState.AttachmentItem(
+        id = "mockId-1",
+        title = "mockFileName-1",
+        displaySize = "mockSizeName-1",
+    )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = listOf(
-            AttachmentsState.AttachmentItem(
-                id = "mockId-1",
-                title = "mockFileName-1",
-                displaySize = "mockSizeName-1",
-            ),
-        ),
+        attachments = persistentListOf(DEFAULT_ATTACHMENT_ITEM),
         newAttachment = null,
     )
 

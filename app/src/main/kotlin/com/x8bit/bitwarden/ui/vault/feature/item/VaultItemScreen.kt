@@ -63,6 +63,11 @@ fun VaultItemScreen(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (
+        cipherId: String,
+        attachmentId: String,
+        fileName: String,
+    ) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
@@ -114,6 +119,10 @@ fun VaultItemScreen(
                 fileChooserLauncher.launch(
                     intentManager.createDocumentIntent(event.fileName),
                 )
+            }
+
+            is VaultItemEvent.NavigateToPreviewAttachment -> {
+                onNavigateToPreviewAttachment(event.cipherId, event.attachmentId, event.fileName)
             }
         }
     }

@@ -17,6 +17,7 @@ data class VaultCommonItemTypeHandlers(
         Boolean,
     ) -> Unit,
     val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
+    val onAttachmentPreviewClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     val onCopyNotesClick: () -> Unit,
     val onPasswordHistoryClick: () -> Unit,
     val onUpgradeToPremiumClick: () -> Unit,
@@ -50,6 +51,9 @@ data class VaultCommonItemTypeHandlers(
                 },
                 onAttachmentDownloadClick = {
                     viewModel.trySendAction(VaultItemAction.Common.AttachmentDownloadClick(it))
+                },
+                onAttachmentPreviewClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.AttachmentPreviewClick(it))
                 },
                 onCopyNotesClick = {
                     viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)

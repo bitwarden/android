@@ -20,7 +20,7 @@ interface BillingRepository {
     suspend fun getCheckoutSessionUrl(): CheckoutSessionResult
 
     /**
-     * Retrieves the Stripe customer portal URL for managing the premium subscription.
+     * Retrieves the Stripe customer portal URL for managing the Premium subscription.
      */
     suspend fun getPortalUrl(): CustomerPortalResult
 }

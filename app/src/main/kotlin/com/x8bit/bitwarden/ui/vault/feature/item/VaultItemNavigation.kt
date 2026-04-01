@@ -38,12 +38,18 @@ fun SavedStateHandle.toVaultItemArgs(): VaultItemArgs {
 /**
  * Add the vault item screen to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (
+        cipherId: String,
+        attachmentId: String,
+        fileName: String,
+    ) -> Unit,
 ) {
     composableWithSlideTransitions<VaultItemRoute> {
         VaultItemScreen(
@@ -52,6 +58,7 @@ fun NavGraphBuilder.vaultItemDestination(
             onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
             onNavigateToAttachments = onNavigateToAttachments,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onNavigateToPreviewAttachment = onNavigateToPreviewAttachment,
         )
     }
 }

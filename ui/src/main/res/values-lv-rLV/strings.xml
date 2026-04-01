@@ -11,6 +11,7 @@
     <string name="copy_password">Ievietot paroli starpliktuvē</string>
     <string name="copy_username">Ievietot lietotājvārdu starpliktuvē</string>
     <string name="delete">Izdzēst</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Izdzēš…</string>
     <string name="do_you_really_want_to_delete">Vai tiešām izdzēst? To nevar atsaukt.</string>
     <string name="edit">Labot</string>
@@ -381,6 +382,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
     <string name="download">Lejupielādēt</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
     <string name="biometrics_direction">Apliecināšana ar biometriju</string>
     <string name="device_verification">Ierīces apliecināšana</string>
@@ -1236,4 +1238,23 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="continue_without_syncing">Turpināt bez vienādošanas</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="upgraded_to_premium">Uzlabots uz Premium</string>
+    <string name="unlock_premium_features">Atslēdz vairāk papildu iespēju ar Premium plānu!</string>
+    <string name="per_month">/ mēnesī</string>
+    <string name="built_in_authenticator">Iebūvēts autentificētājs</string>
+    <string name="emergency_access">Ārkārtas piekļuve</string>
+    <string name="secure_file_storage">Droša datņu krātuve</string>
+    <string name="breach_monitoring">Noplūžu pārraudzīšana</string>
+    <string name="upgrade_now">Uzlabot tagad</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">Mums bija sarežģījumi ar maksājumu lapas atvēršanu, tādēļ jāmēģina vēlreiz.</string>
+    <string name="payment_not_received_yet">Maksājums vēl nav saņemts</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Doties atpakaļ</string>
 </resources>

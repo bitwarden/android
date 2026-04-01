@@ -18,8 +18,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Cre
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
-import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -202,11 +202,11 @@ class VaultAddItemStateExtensionsTest {
                 ),
                 passwordHistory = listOf(
                     PasswordHistoryView(
-                        password = "old_password",
+                        password = "password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
-                        password = "password",
+                        password = "old_password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
@@ -758,7 +758,7 @@ class VaultAddItemStateExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toCipherView without premium should delete the archive date from the original cipher`() {
+    fun `toCipherView without Premium should delete the archive date from the original cipher`() {
         val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
             notes = null,
             fields = emptyList(),
@@ -1104,11 +1104,11 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = listOf(
                     PasswordHistoryView(
-                        password = "old_password",
+                        password = "password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
-                        password = "password",
+                        password = "old_password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(

@@ -68,7 +68,7 @@ class AutofillTotpManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, user not premium and the organization does not use totp should do nothing`() =
+    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, user not Premium and the organization does not use totp should do nothing`() =
         runTest {
             every { settingsRepository.isAutoCopyTotpDisabled } returns false
             every { cipherView.organizationUseTotp } returns false
@@ -91,7 +91,7 @@ class AutofillTotpManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has premium and does not have totp should do nothing`() =
+    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has Premium and does not have totp should do nothing`() =
         runTest {
             every { settingsRepository.isAutoCopyTotpDisabled } returns false
             every { cipherView.organizationUseTotp } returns true
@@ -115,7 +115,7 @@ class AutofillTotpManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has premium and has totp should set the clipboard`() =
+    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has Premium and has totp should set the clipboard`() =
         runTest {
             val generateTotpResult = GenerateTotpResult.Success(
                 code = TOTP_RESULT_VALUE,

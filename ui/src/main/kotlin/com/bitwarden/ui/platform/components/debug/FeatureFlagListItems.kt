@@ -33,6 +33,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.SendEmailVerification,
     FlagKey.MobilePremiumUpgrade,
     FlagKey.ManageDevices,
+    FlagKey.AttachmentUpdates,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -87,4 +88,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
     FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
+    FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
 }

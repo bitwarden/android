@@ -39,6 +39,7 @@ sealed class FlagKey<out T : Any> {
                 SendEmailVerification,
                 MobilePremiumUpgrade,
                 ManageDevices,
+                AttachmentUpdates,
             )
         }
     }
@@ -110,10 +111,18 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the mobile premium upgrade feature.
+     * Data object holding the feature flag key for the mobile Premium upgrade feature.
      */
     data object MobilePremiumUpgrade : FlagKey<Boolean>() {
         override val keyName: String = "PM-31697-premium-upgrade-path"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Attachment Feature Updates.
+     */
+    data object AttachmentUpdates : FlagKey<Boolean>() {
+        override val keyName: String = "pm-34224-mobile-attachment-updates"
         override val defaultValue: Boolean = false
     }
 

@@ -97,6 +97,7 @@ fun VaultScreen(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
+    onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
@@ -177,6 +178,8 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToAutofillSettings -> onNavigateToAutofillScreen()
+
+            VaultEvent.NavigateToUpgradePremium -> onNavigateToPlan()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
