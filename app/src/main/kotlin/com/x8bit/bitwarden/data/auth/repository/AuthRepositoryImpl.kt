@@ -70,6 +70,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -101,6 +103,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -1266,6 +1269,32 @@ class AuthRepositoryImpl(
     override fun setCookieCallbackResult(result: CookieCallbackResult) {
         mutableCookieCallbackResultFlow.tryEmit(result)
     }
+
+    override suspend fun getDevices(): GetDevicesResult =
+        devicesService
+            .getDevices()
+            .fold(
+                onFailure = { GetDevicesResult.Error },
+                onSuccess = { response ->
+                    GetDevicesResult.Success(
+                        devices = response.devices.map { json ->
+                            json.toDeviceInfo()
+                        },
+                    )
+                },
+            )
+
+    override suspend fun getDeviceByIdentifier(): GetDeviceResult =
+        devicesService
+            .getDeviceByIdentifier(authDiskSource.uniqueAppId)
+            .fold(
+                onFailure = { GetDeviceResult.Error },
+                onSuccess = { json ->
+                    GetDeviceResult.Success(
+                        device = json.toDeviceInfo(),
+                    )
+                },
+            )
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService

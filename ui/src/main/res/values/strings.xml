@@ -1227,4 +1227,23 @@ Do you want to switch to this account?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="manage_devices">Manage devices</string>
+    <string name="mobile">Mobile</string>
+    <string name="extension">Extension</string>
+    <string name="web">Web</string>
+    <string name="desktop">Desktop</string>
+    <string name="cli">CLI</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Current session</string>
+    <string name="pending_request">Pending request</string>
+    <string name="active_today">Active today</string>
+    <string name="active_this_week">Active this week</string>
+    <string name="active_last_week">Active last week</string>
+    <string name="active_this_month">Active this month</string>
+    <string name="active_over_thirty_days_ago">Active over 30 days ago</string>
+    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Trusted</string>
 </resources>

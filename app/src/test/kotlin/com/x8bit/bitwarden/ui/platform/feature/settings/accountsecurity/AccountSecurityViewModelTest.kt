@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.model.Environment
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -76,6 +78,16 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         every { isUnlockWithBiometricsEnabledFlow } returns mutableBiometricsUnlockEnabledFlow
         every { isUnlockWithPinEnabledFlow } returns mutablePinUnlockEnabledFlow
+    }
+
+    private val mutableManageDevicesFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.ManageDevices)
+        } answers {
+            mutableManageDevicesFlagFlow.value
+        }
+        every { getFeatureFlagFlow(FlagKey.ManageDevices) } returns mutableManageDevicesFlagFlow
     }
 
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
@@ -881,12 +893,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
+        featureFlagManager: FeatureFlagManager = this.featureFlagManager,
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
         policyManager = policyManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
@@ -961,6 +975,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
+    isManageDevicesEnabled = false,
     userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,

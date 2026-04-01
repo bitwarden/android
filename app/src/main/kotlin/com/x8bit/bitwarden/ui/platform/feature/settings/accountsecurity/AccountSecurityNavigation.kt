@@ -20,6 +20,7 @@ fun NavGraphBuilder.accountSecurityDestination(
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
 ) {
     composableWithPushTransitions<AccountSecurityRoute> {
         AccountSecurityScreen(
@@ -27,6 +28,7 @@ fun NavGraphBuilder.accountSecurityDestination(
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToPendingRequests = onNavigateToPendingRequests,
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
+            onNavigateToManageDevices = onNavigateToManageDevices,
         )
     }
 }

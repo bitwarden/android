@@ -118,6 +118,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute.Standard,
@@ -144,6 +145,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToPendingRequests = onNavigateToPendingRequests,
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
+            onNavigateToManageDevices = onNavigateToManageDevices,
         )
         appearanceDestination(
             isPreAuth = false,

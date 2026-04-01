@@ -2,6 +2,8 @@ package com.bitwarden.network.service
 
 import com.bitwarden.network.api.AuthenticatedDevicesApi
 import com.bitwarden.network.api.UnauthenticatedDevicesApi
+import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.TrustedDeviceKeysRequestJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 import com.bitwarden.network.util.base64UrlEncode
@@ -14,6 +16,14 @@ internal class DevicesServiceImpl(
     private val authenticatedDevicesApi: AuthenticatedDevicesApi,
     private val unauthenticatedDevicesApi: UnauthenticatedDevicesApi,
 ) : DevicesService {
+    override suspend fun getDevices(): Result<DevicesResponseJson> =
+        authenticatedDevicesApi.getDevices().toResult()
+
+    override suspend fun getDeviceByIdentifier(
+        deviceIdentifier: String,
+    ): Result<DeviceResponseJson> =
+        authenticatedDevicesApi.getDeviceByIdentifier(deviceIdentifier).toResult()
+
     override suspend fun getIsKnownDevice(
         emailAddress: String,
         deviceId: String,

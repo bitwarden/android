@@ -93,6 +93,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 onNavigateToPendingRequests = { onNavigateToPendingRequestsCalled = true },
                 onNavigateToSetupUnlockScreen = { onNavigateToUnlockSetupScreenCalled = true },
+                onNavigateToManageDevices = {},
                 viewModel = viewModel,
             )
         }
@@ -1755,6 +1756,7 @@ private val DEFAULT_STATE = AccountSecurityState(
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
+    isManageDevicesEnabled = false,
     userId = USER_ID,
     shouldShowEnableAuthenticatorSync = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,

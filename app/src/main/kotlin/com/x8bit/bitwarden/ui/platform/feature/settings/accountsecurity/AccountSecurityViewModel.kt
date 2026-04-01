@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -51,6 +53,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
+    featureFlagManager: FeatureFlagManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
@@ -65,6 +68,7 @@ class AccountSecurityViewModel @Inject constructor(
                 authRepository.isBiometricIntegrityValid(userId = userId),
             isUnlockWithPasswordEnabled = userState.activeAccount.hasMasterPassword,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
+            isManageDevicesEnabled = featureFlagManager.getFeatureFlag(FlagKey.ManageDevices),
             shouldShowEnableAuthenticatorSync = isBuildVersionAtLeast(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
@@ -139,6 +143,12 @@ class AccountSecurityViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ManageDevices)
+            .map { AccountSecurityAction.Internal.ManageDevicesFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             trySendAction(
                 AccountSecurityAction.Internal.FingerprintResultReceive(
@@ -160,6 +170,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.FingerPrintLearnMoreClick -> handleFingerPrintLearnMoreClick()
         AccountSecurityAction.LockNowClick -> handleLockNowClick()
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
+        AccountSecurityAction.ManageDevicesClick -> handleManageDevicesClick()
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
         is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
         is AccountSecurityAction.CustomVaultTimeoutSelect -> handleCustomVaultTimeoutSelect(action)
@@ -353,6 +364,10 @@ class AccountSecurityViewModel @Inject constructor(
         dismissUnlockNotificationBadge()
     }
 
+    private fun handleManageDevicesClick() {
+        sendEvent(AccountSecurityEvent.NavigateToManageDevices)
+    }
+
     private fun handleInternalAction(action: AccountSecurityAction.Internal) {
         when (action) {
             is AccountSecurityAction.Internal.BiometricsKeyResultReceive -> {
@@ -381,6 +396,10 @@ class AccountSecurityViewModel @Inject constructor(
 
             is AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive -> {
                 handleRemovePinPolicyUpdate(action)
+            }
+
+            is AccountSecurityAction.Internal.ManageDevicesFlagUpdateReceive -> {
+                handleManageDevicesFlagUpdateReceive(action)
             }
         }
     }
@@ -494,6 +513,12 @@ class AccountSecurityViewModel @Inject constructor(
         settingsRepository.vaultTimeoutAction = vaultTimeoutAction
     }
 
+    private fun handleManageDevicesFlagUpdateReceive(
+        action: AccountSecurityAction.Internal.ManageDevicesFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isManageDevicesEnabled = action.isEnabled) }
+    }
+
     private fun dismissUnlockNotificationBadge() {
         if (!state.shouldShowUnlockActionCard) return
         firstTimeActionManager.storeShowUnlockSettingBadge(
@@ -513,6 +538,7 @@ data class AccountSecurityState(
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPasswordEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
+    val isManageDevicesEnabled: Boolean,
     val shouldShowEnableAuthenticatorSync: Boolean,
     val userId: String,
     val vaultTimeout: VaultTimeout,
@@ -692,6 +718,11 @@ sealed class AccountSecurityEvent {
      * Navigate to the setup unlock screen.
      */
     data object NavigateToSetupUnlockScreen : AccountSecurityEvent()
+
+    /**
+     * Navigate to the Manage Devices screen.
+     */
+    data object NavigateToManageDevices : AccountSecurityEvent()
 }
 
 /**
@@ -755,6 +786,11 @@ sealed class AccountSecurityAction {
      * User clicked log out.
      */
     data object LogoutClick : AccountSecurityAction()
+
+    /**
+     * User clicked manage devices.
+     */
+    data object ManageDevicesClick : AccountSecurityAction()
 
     /**
      * User clicked pending login requests.
@@ -871,6 +907,13 @@ sealed class AccountSecurityAction {
          */
         data class PinProtectedLockUpdate(
             val isPinProtected: Boolean,
+        ) : Internal()
+
+        /**
+         * The manage devices feature flag has been updated.
+         */
+        data class ManageDevicesFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }

@@ -1,11 +1,23 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 
 /**
  * Provides an API for interacting with the /devices endpoints.
  */
 interface DevicesService {
+    /**
+     * Retrieves all devices registered to the current user.
+     */
+    suspend fun getDevices(): Result<DevicesResponseJson>
+
+    /**
+     * Get a device by its client-generated identifier.
+     */
+    suspend fun getDeviceByIdentifier(deviceIdentifier: String): Result<DeviceResponseJson>
+
     /**
      * Check whether this device is known (and thus whether Login with Device is available).
      */
