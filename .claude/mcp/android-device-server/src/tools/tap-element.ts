@@ -1,18 +1,14 @@
 /**
  * Tap element tool — find an element by text, tap it, and capture screenshot.
- * Chains find_element + tap_at internally. Uses adjusted coordinates when obstructed.
+ * Uses the shared find-element pipeline for obstruction detection.
  */
 
 import { z } from 'zod';
-import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { ToolDefinition } from '../utils/validation.js';
 import { validateInput } from '../utils/validation.js';
 import * as adb from '../adb/adb.js';
-import { center } from '../geometry/bounds.js';
-import { detectObstruction } from '../geometry/obstruction.js';
-import { parseHierarchy, findElementByText } from '../parsers/xml.js';
-import { parseDumpsysWindows } from '../parsers/dumpsys.js';
+import { findElementWithObstruction } from './find-element-pipeline.js';
 
 const TapElementSchema = z.object({
   text: z.string().min(1),
@@ -36,43 +32,12 @@ const tapElement: ToolDefinition = {
   async handler(input: unknown): Promise<string> {
     const { text, waitSeconds } = validateInput(TapElementSchema, input);
 
-    // Dump hierarchy and parse
-    const xmlPath = resolve('view.xml');
-    await adb.dumpHierarchy(xmlPath);
-    const xml = readFileSync(xmlPath, 'utf-8');
-    const hierarchy = parseHierarchy(xml);
+    const outcome = await findElementWithObstruction(text);
+    if ('error' in outcome) return `Error: ${outcome.error}`;
 
-    // Find the target element
-    const target = findElementByText(hierarchy, text);
-    if (!target || !target.bounds) {
-      return `Error: Element "${text}" not found in the UI hierarchy.`;
-    }
-
-    const tapPoint = center(target.bounds);
-
-    // Obstruction detection
-    let dumpsysOutput: string;
-    try {
-      dumpsysOutput = await adb.dumpsysWindows();
-    } catch {
-      dumpsysOutput = '';
-    }
-    const windows = parseDumpsysWindows(dumpsysOutput);
-
-    const obstruction = detectObstruction({
-      hierarchy,
-      windows,
-      targetElement: target,
-      tapPoint,
-      searchText: text,
-    });
-
-    const effectivePoint = obstruction.obstructed && obstruction.adjustedPoint
-      ? obstruction.adjustedPoint
-      : tapPoint;
-
-    // Build status lines
+    const { target, effectivePoint, obstruction } = outcome.result;
     const lines: string[] = [];
+
     lines.push(`Element found: "${target.text || target.contentDesc}"`);
 
     if (obstruction.obstructed) {
@@ -84,7 +49,6 @@ const tapElement: ToolDefinition = {
       }
     }
 
-    // Tap and capture
     await adb.tap(effectivePoint.x, effectivePoint.y);
     await adb.sleep(waitSeconds ?? 2);
 

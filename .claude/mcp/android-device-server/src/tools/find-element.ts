@@ -1,23 +1,11 @@
 /**
  * Find element tool — locate a UI element by text/content-desc with obstruction detection.
- *
- * This is the most complex tool. It:
- * 1. Dumps the UI hierarchy and parses it into a typed tree
- * 2. Searches for the target element by text or content-desc
- * 3. Runs two-layer obstruction detection (system overlays + in-app elements)
- * 4. Returns coordinates, element info, and obstruction status
  */
 
 import { z } from 'zod';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import type { ToolDefinition } from '../utils/validation.js';
 import { validateInput } from '../utils/validation.js';
-import * as adb from '../adb/adb.js';
-import { center } from '../geometry/bounds.js';
-import { detectObstruction } from '../geometry/obstruction.js';
-import { parseHierarchy, findElementByText } from '../parsers/xml.js';
-import { parseDumpsysWindows } from '../parsers/dumpsys.js';
+import { findElementWithObstruction } from './find-element-pipeline.js';
 
 const FindElementSchema = z.object({
   text: z.string().min(1),
@@ -40,46 +28,10 @@ const findElement: ToolDefinition = {
   async handler(input: unknown): Promise<string> {
     const { text } = validateInput(FindElementSchema, input);
 
-    // Dump hierarchy and parse
-    const xmlPath = resolve('view.xml');
-    await adb.dumpHierarchy(xmlPath);
-    const xml = readFileSync(xmlPath, 'utf-8');
-    const hierarchy = parseHierarchy(xml);
+    const outcome = await findElementWithObstruction(text);
+    if ('error' in outcome) return outcome.error;
 
-    // Find the target element
-    const target = findElementByText(hierarchy, text);
-    if (!target) {
-      return `Element not found: "${text}"\n\nNo element with matching text or content-desc was found in the UI hierarchy.`;
-    }
-
-    if (!target.bounds) {
-      return `Element found but has no bounds: "${text}"`;
-    }
-
-    const tapPoint = center(target.bounds);
-
-    // Run obstruction detection
-    let dumpsysOutput: string;
-    try {
-      dumpsysOutput = await adb.dumpsysWindows();
-    } catch {
-      dumpsysOutput = '';
-    }
-    const windows = parseDumpsysWindows(dumpsysOutput);
-
-    const obstruction = detectObstruction({
-      hierarchy,
-      windows,
-      targetElement: target,
-      tapPoint,
-      searchText: text,
-    });
-
-    // Build response
-    const effectivePoint = obstruction.obstructed && obstruction.adjustedPoint
-      ? obstruction.adjustedPoint
-      : tapPoint;
-
+    const { target, tapPoint, effectivePoint, obstruction } = outcome.result;
     const lines: string[] = [];
 
     if (!obstruction.obstructed) {
