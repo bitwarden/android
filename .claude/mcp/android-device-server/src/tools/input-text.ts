@@ -51,7 +51,14 @@ const inputText: ToolDefinition = {
       await clearField();
     }
 
-    await adb.shell(`input text "${text.replace(/"/g, '\\"')}"`);
+    // Escape characters that the Android shell interprets inside double quotes:
+    // " $ ` \ are all special in sh double-quoted strings.
+    const escaped = text
+      .replace(/\\/g, '\\\\')
+      .replace(/"/g, '\\"')
+      .replace(/\$/g, '\\$')
+      .replace(/`/g, '\\`');
+    await adb.shell(`input text "${escaped}"`);
 
     const lines: string[] = [];
     if (clear) lines.push('Cleared existing content');

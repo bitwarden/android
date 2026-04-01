@@ -129,6 +129,6 @@ If tools report ADB errors:
 ### MCP Server Not Available
 If tools are not listed in `/mcp`:
 *   Ensure Node.js 18+ is installed
-*   The server auto-builds on first use via `.claude/mcp.json`
+*   The server auto-builds on first use via `.mcp.json` at the project root
 *   Check `.claude/mcp/android-device-server/` exists with `package.json`
 *   Try manual build: `cd .claude/mcp/android-device-server && npm install && npm run build`
