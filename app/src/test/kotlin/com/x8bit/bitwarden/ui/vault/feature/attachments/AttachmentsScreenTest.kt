@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
@@ -62,6 +63,15 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AttachmentsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToUri should call launchUri`() {
+        val uriString = "https://www.bitwarden.com"
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateToUri(uri = uriString))
+        verify(exactly = 1) {
+            intentManager.launchUri(uriString.toUri())
+        }
     }
 
     @Test
@@ -237,6 +247,31 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
 
         verify(exactly = 1) {
             viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
+        }
+    }
+
+    @Test
+    fun `requires Premium dialog should be displayed according to state`() {
+        val requiresPremiumMessage = "Attachments unavailable"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(requiresPremiumMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
         }
     }
 

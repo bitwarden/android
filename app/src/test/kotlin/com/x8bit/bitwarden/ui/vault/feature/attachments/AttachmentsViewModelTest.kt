@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
@@ -29,6 +30,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -43,6 +45,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
     }
     private val mutableVaultItemStateFlow =
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
@@ -98,7 +103,30 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick should emit NavigateToPreview`() = runTest {
+    fun `ItemClick should display RequiresPremium dialog when user is not Premium`() = runTest {
+        mutableUserStateFlow.update {
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+            )
+        }
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AttachmentsAction.ItemClick(attachment = DEFAULT_ATTACHMENT_ITEM),
+            )
+            expectNoEvents()
+        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ItemClick should emit NavigateToPreview when user is Premium`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -112,6 +140,24 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToUri`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+            assertEquals(
+                AttachmentsEvent.NavigateToUri(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription" +
+                        "/premium?callToAction=upgradeToPremium",
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            environmentRepository.environment
         }
     }
 
@@ -157,32 +203,19 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should display error dialog when user is not Premium`() = runTest {
         val cipherView = createMockCipherView(number = 1)
-        val state = DEFAULT_STATE.copy(
-            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
-            dialogState = AttachmentsState.DialogState.Error(
-                title = null,
-                message = BitwardenString.premium_required.asText(),
-                throwable = null,
-            ),
-            isPremiumUser = false,
-        )
         mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
         mutableUserStateFlow.value = null
         val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(state, awaitItem())
-            viewModel.trySendAction(AttachmentsAction.SaveClick)
-            assertEquals(
-                state.copy(
-                    dialogState = AttachmentsState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.premium_required.asText(),
-                        throwable = null,
-                    ),
-                ),
-                awaitItem(),
-            )
-        }
+
+        viewModel.trySendAction(AttachmentsAction.SaveClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -766,6 +799,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         initialState: AttachmentsState? = null,
     ): AttachmentsViewModel = AttachmentsViewModel(
         authRepo = authRepository,
+        environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
         featureFlagManager = featureFlagManager,
         savedStateHandle = SavedStateHandle().apply {
@@ -777,31 +811,30 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "mockUserId-1",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
+    creationDate = null,
+)
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "mockUserId-1",
-    accounts = listOf(
-        UserState.Account(
-            userId = "mockUserId-1",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            environment = Environment.Us,
-            avatarColorHex = "#aa00aa",
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isExportable = true,
-            creationDate = null,
-        ),
-    ),
+    accounts = listOf(DEFAULT_ACCOUNT),
 )
 
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -21,6 +22,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -54,7 +56,7 @@ fun AttachmentsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AttachmentsEvent.NavigateBack -> onNavigateBack()
-
+            is AttachmentsEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
             AttachmentsEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
                     intentManager.createFileChooserIntent(withCameraIntents = false),
@@ -70,7 +72,7 @@ fun AttachmentsScreen(
 
     AttachmentsDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = attachmentsHandlers.onDismissRequest,
+        attachmentsHandlers = attachmentsHandlers,
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -123,13 +125,23 @@ fun AttachmentsScreen(
 @Composable
 private fun AttachmentsDialogs(
     dialogState: AttachmentsState.DialogState?,
-    onDismissRequest: () -> Unit,
+    attachmentsHandlers: AttachmentsHandlers,
 ) {
     when (dialogState) {
+        AttachmentsState.DialogState.RequiresPremium -> BitwardenTwoButtonDialog(
+            title = stringResource(id = BitwardenString.attachments_unavailable),
+            message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
+            confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+            onConfirmClick = attachmentsHandlers.onUpgradeToPremiumClick,
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            onDismissClick = attachmentsHandlers.onDismissRequest,
+            onDismissRequest = attachmentsHandlers.onDismissRequest,
+        )
+
         is AttachmentsState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = attachmentsHandlers.onDismissRequest,
             throwable = dialogState.throwable,
         )
 
