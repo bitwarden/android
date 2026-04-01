@@ -1,14 +1,14 @@
 ---
 name: interacting-with-android-device
 description: Instructions for capturing UI state, comparing with mocks, and interacting with an Android device using MCP tools backed by ADB.
-allowed-tools: mcp__android-device__capture, mcp__android-device__find_element, mcp__android-device__tap_at, mcp__android-device__tap_element, mcp__android-device__navigate, Bash(adb:*), Bash(sleep:*), Bash(./gradlew install*:*), Read, Glob
+allowed-tools: mcp__android-device__capture, mcp__android-device__find_element, mcp__android-device__tap_at, mcp__android-device__tap_element, mcp__android-device__navigate, mcp__android-device__input_text, Bash(adb:*), Bash(sleep:*), Bash(./gradlew install*:*), Read, Glob
 ---
 
 # Interacting with Android Device
 
 ## Quick Start: MCP Tools
 
-The `android-device` MCP server provides 5 tools for device interaction. These replace the previous shell scripts with proper XML parsing, structured dumpsys parsing, and native obstruction detection.
+The `android-device` MCP server provides 6 tools for device interaction. These replace the previous shell scripts with proper XML parsing, structured dumpsys parsing, and native obstruction detection.
 
 **Available tools:**
 - `capture` — Capture UI hierarchy XML and/or screenshot. Params: `{ xml?: boolean, screenshot?: boolean }`. Default: both.
@@ -16,6 +16,7 @@ The `android-device` MCP server provides 5 tools for device interaction. These r
 - `tap_at` — Tap at specific coordinates, wait, capture screenshot. Params: `{ x, y, waitSeconds? }`.
 - `tap_element` — Find, tap, and capture in one call (recommended). Params: `{ text, waitSeconds? }`. Auto-adjusts coordinates when obstructed.
 - `navigate` — Navigation actions: home, back, app-drawer. Params: `{ action, waitSeconds? }`. Captures screenshot after action.
+- `input_text` — Type text into the focused field. Params: `{ text, clear? }`. Set `clear: true` to erase existing content first.
 
 **Use these MCP tools instead of raw ADB commands** to save tokens, get structured results, and benefit from automatic obstruction detection.
 
@@ -41,9 +42,10 @@ To understand what is currently on the device, use the `capture` tool:
 *   **Find element without tapping** — use `find_element`:
     Returns coordinates and full element info. Useful when you need to inspect before acting.
 
-### Raw ADB Commands (When MCP Tools Aren't Sufficient)
+*   **Type text into a field** — use `input_text`:
+    Types text into the currently focused field. Set `clear: true` to erase existing content first. Tap the field before calling this if it isn't already focused.
 
-*   **Inputting Text**: First tap the text field, then `adb shell input text "<your_text>"` (Note: handle spaces and special characters with quotes).
+### Raw ADB Commands (When MCP Tools Aren't Sufficient)
 *   **Key Events**:
     *   Back: `adb shell input keyevent 4`
     *   Home: `adb shell input keyevent 3`

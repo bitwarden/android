@@ -18,8 +18,9 @@ import findElement from './tools/find-element.js';
 import tapAt from './tools/tap-at.js';
 import tapElement from './tools/tap-element.js';
 import navigate from './tools/navigate.js';
+import inputText from './tools/input-text.js';
 
-const tools: ToolDefinition[] = [capture, findElement, tapAt, tapElement, navigate];
+const tools: ToolDefinition[] = [capture, findElement, tapAt, tapElement, navigate, inputText];
 
 async function main() {
   const server = new Server(
