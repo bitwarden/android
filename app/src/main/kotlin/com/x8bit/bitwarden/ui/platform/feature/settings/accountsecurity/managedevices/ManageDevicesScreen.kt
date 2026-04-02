@@ -66,6 +66,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 
@@ -194,7 +195,7 @@ private fun ManageDevicesContent(
                 DeviceSessionStatus.Pending -> item.fingerprintPhrase?.let {
                     PendingRequestItem(
                         fingerprintPhrase = item.fingerprintPhrase,
-                        platform = item.typeName,
+                        platform = item.typeName(),
                         firstLoginDate = item.firstLoginDate,
                         isTrusted = item.isTrusted,
                         onNavigateToLoginApproval = onNavigateToLoginApproval,
@@ -209,21 +210,25 @@ private fun ManageDevicesContent(
                     )
                 }
 
-                else -> SessionItem(
-                    platform = item.typeName,
-                    firstLoginDate = item.firstLoginDate,
-                    lastActivityLabel = item.lastActivityLabel,
-                    status = item.status,
-                    isTrusted = item.isTrusted,
-                    cardStyle = state.items.toListItemCardStyle(
-                        index = index,
-                        dividerPadding = 0.dp,
-                    ),
-                    modifier = Modifier
-                        .testTag("LoginRequestCell")
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
+                DeviceSessionStatus.None,
+                DeviceSessionStatus.Current,
+                    -> {
+                    SessionItem(
+                        platform = item.typeName(),
+                        firstLoginDate = item.firstLoginDate,
+                        lastActivityLabel = item.lastActivityLabel,
+                        status = item.status,
+                        isTrusted = item.isTrusted,
+                        cardStyle = state.items.toListItemCardStyle(
+                            index = index,
+                            dividerPadding = 0.dp,
+                        ),
+                        modifier = Modifier
+                            .testTag("LoginRequestCell")
+                            .fillMaxWidth()
+                            .standardHorizontalMargin(),
+                    )
+                }
             }
         }
         item {
@@ -302,7 +307,7 @@ private fun PendingRequestItem(
 private fun SessionItem(
     platform: String,
     firstLoginDate: String,
-    lastActivityLabel: String?,
+    lastActivityLabel: Text?,
     status: DeviceSessionStatus,
     isTrusted: Boolean,
     cardStyle: CardStyle,
@@ -341,7 +346,7 @@ private fun SessionItem(
             lastActivityLabel?.let {
                 DeviceInfoAnnotatedLabel(
                     id = BitwardenString.recently_active,
-                    arg = it,
+                    arg = it(),
                 )
             }
         }

@@ -15,6 +15,7 @@ import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -347,10 +348,10 @@ data class ManageDevicesState(
             data class DeviceItem(
                 val id: String,
                 val name: String,
-                val typeName: String,
+                val typeName: Text,
                 val isTrusted: Boolean,
                 val firstLoginDate: String,
-                val lastActivityLabel: String?,
+                val lastActivityLabel: Text?,
                 val status: DeviceSessionStatus,
                 val fingerprintPhrase: String?,
             ) : Parcelable

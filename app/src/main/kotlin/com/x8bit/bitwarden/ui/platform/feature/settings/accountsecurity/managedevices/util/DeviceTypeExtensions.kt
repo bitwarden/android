@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managed
 
 import androidx.annotation.StringRes
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 
 /**
@@ -9,7 +11,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
  * Returns e.g. "Mobile - Android", "Extension - Chrome", "Desktop - Windows".
  */
 @Suppress("CyclomaticComplexMethod", "MagicNumber")
-fun Int.toReadableDeviceTypeName(resourceManager: ResourceManager): String {
+fun Int.toReadableDeviceTypeName(resourceManager: ResourceManager): Text {
     data class DeviceTypeEntry(@StringRes val categoryResId: Int, val platform: String)
 
     val entry: DeviceTypeEntry = when (this) {
@@ -40,9 +42,13 @@ fun Int.toReadableDeviceTypeName(resourceManager: ResourceManager): String {
         24 -> DeviceTypeEntry(BitwardenString.cli, "MacOs")
         25 -> DeviceTypeEntry(BitwardenString.cli, "Linux")
         26 -> DeviceTypeEntry(BitwardenString.extension, "DuckDuckGo")
-        else -> return resourceManager.getString(BitwardenString.unknown_device)
+        else -> return resourceManager.getString(BitwardenString.unknown_device).asText()
     }
 
     val category = resourceManager.getString(entry.categoryResId)
-    return if (entry.platform.isNotEmpty()) "$category - ${entry.platform}" else category
+    return if (entry.platform.isNotEmpty()) {
+        "$category - ${entry.platform}".asText()
+    } else {
+        category.asText()
+    }
 }

@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util
 
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import java.time.Clock
 import java.time.Instant
@@ -15,7 +17,7 @@ import java.time.temporal.ChronoUnit
  * requiring rounding (unlike the JavaScript equivalent).
  */
 @Suppress("MagicNumber")
-fun Instant?.toLastActivityLabel(clock: Clock, resourceManager: ResourceManager): String? {
+fun Instant?.toLastActivityLabel(clock: Clock, resourceManager: ResourceManager): Text? {
     this ?: return null
     val nowDate = clock.instant().atZone(clock.zone).toLocalDate()
     val activityDate = this.atZone(clock.zone).toLocalDate()
@@ -27,5 +29,5 @@ fun Instant?.toLastActivityLabel(clock: Clock, resourceManager: ResourceManager)
         daysAgo < 30 -> BitwardenString.active_this_month
         else -> BitwardenString.active_over_thirty_days_ago
     }
-    return resourceManager.getString(resId)
+    return resourceManager.getString(resId).asText()
 }
