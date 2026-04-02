@@ -23,11 +23,11 @@ fun Instant?.toLastActivityLabel(clock: Clock, resourceManager: ResourceManager)
     val activityDate = this.atZone(clock.zone).toLocalDate()
     val daysAgo = ChronoUnit.DAYS.between(activityDate, nowDate)
     val resId = when {
-        daysAgo <= 0 -> BitwardenString.active_today
-        daysAgo < 7 -> BitwardenString.active_this_week
-        daysAgo < 14 -> BitwardenString.active_last_week
-        daysAgo < 30 -> BitwardenString.active_this_month
-        else -> BitwardenString.active_over_thirty_days_ago
+        daysAgo <= 0 -> BitwardenString.today
+        daysAgo < 7 -> BitwardenString.past_seven_days
+        daysAgo < 14 -> BitwardenString.past_fourteen_days
+        daysAgo < 30 -> BitwardenString.past_thirty_days
+        else -> BitwardenString.over_thirty_days_ago
     }
     return resourceManager.getString(resId).asText()
 }
