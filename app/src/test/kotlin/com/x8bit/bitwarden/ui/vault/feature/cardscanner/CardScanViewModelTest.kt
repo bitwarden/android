@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
@@ -88,26 +87,13 @@ class CardScanViewModelTest : BaseViewModelTest() {
         }
 
         verify(exactly = 1) { cardScanManager.emitCardScanResult(any()) }
-        assertEquals(
-            DEFAULT_STATE.copy(hasHandledScan = true),
-            viewModel.stateFlow.value,
-        )
     }
 
-    private fun createViewModel(
-        initialState: CardScanState? = null,
-    ): CardScanViewModel =
+    private fun createViewModel(): CardScanViewModel =
         CardScanViewModel(
-            savedStateHandle = SavedStateHandle().apply {
-                set("state", initialState)
-            },
             cardScanManager = cardScanManager,
         )
 }
-
-private val DEFAULT_STATE = CardScanState(
-    hasHandledScan = false,
-)
 
 private val CARD_SCAN_DATA = CardScanData(
     number = "4111111111111111",

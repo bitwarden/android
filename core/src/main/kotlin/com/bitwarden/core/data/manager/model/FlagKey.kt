@@ -114,7 +114,7 @@ sealed class FlagKey<out T : Any> {
      * Data object holding the feature flag key for the card scanner feature.
      */
     data object CardScanner : FlagKey<Boolean>() {
-        override val keyName: String = "card-scanner-mobile"
+        override val keyName: String = "pm-34171-card-scanner"
         override val defaultValue: Boolean = false
     }
 

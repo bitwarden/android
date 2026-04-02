@@ -1,18 +1,14 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
 import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
-
-private const val KEY_STATE = "state"
 
 /**
  * Handles [CardScanAction] and launches [CardScanEvent] for the [CardScanScreen].
@@ -20,11 +16,11 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class CardScanViewModel @Inject constructor(
     private val cardScanManager: CardScanManager,
-    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CardScanState, CardScanEvent, CardScanAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: CardScanState(hasHandledScan = false),
+    initialState = CardScanState,
 ) {
+    private var hasHandledScan = false
+
     override fun handleAction(action: CardScanAction) {
         when (action) {
             is CardScanAction.CloseClick -> handleCloseClick()
@@ -43,8 +39,8 @@ class CardScanViewModel @Inject constructor(
     }
 
     private fun handleCardScanReceive(action: CardScanAction.CardScanReceive) {
-        if (state.hasHandledScan) return
-        mutableStateFlow.update { it.copy(hasHandledScan = true) }
+        if (hasHandledScan) return
+        hasHandledScan = true
         cardScanManager.emitCardScanResult(
             CardScanResult.Success(cardScanData = action.cardScanData),
         )
@@ -91,6 +87,4 @@ sealed class CardScanAction {
  * Represents the state of the card scan screen.
  */
 @Parcelize
-data class CardScanState(
-    val hasHandledScan: Boolean,
-) : Parcelable
+data object CardScanState : Parcelable

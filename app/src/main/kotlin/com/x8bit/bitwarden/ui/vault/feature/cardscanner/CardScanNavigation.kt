@@ -1,14 +1,18 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the card scan screen.
  */
+@OmitFromCoverage
 @Serializable
 data object CardScanRoute
 

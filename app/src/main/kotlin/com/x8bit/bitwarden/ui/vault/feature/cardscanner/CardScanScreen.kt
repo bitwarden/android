@@ -106,12 +106,7 @@ fun CardScanScreen(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxSize()
-                        .background(
-                            color = BitwardenTheme
-                                .colorScheme
-                                .background
-                                .scrim,
-                        )
+                        .background(color = BitwardenTheme.colorScheme.background.scrim)
                         .padding(horizontal = 16.dp),
                 ) {
                     Text(
