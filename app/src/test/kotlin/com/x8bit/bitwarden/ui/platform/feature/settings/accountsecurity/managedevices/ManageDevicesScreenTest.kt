@@ -208,7 +208,7 @@ class ManageDevicesScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ManageDevicesState.ViewState.Content(
                 items = listOf(
-                    DEFAULT_DEVICE_ITEM.copy(typeName = typeName),
+                    DEFAULT_DEVICE_ITEM.copy(typeName = typeName.asText()),
                 ),
             ),
         )
@@ -225,10 +225,10 @@ class ManageDevicesScreenTest : BitwardenComposeTest() {
 private val DEFAULT_DEVICE_ITEM = ManageDevicesState.ViewState.Content.DeviceItem(
     id = "device-1",
     name = "Test Device",
-    typeName = "Mobile - Android",
+    typeName = "Mobile - Android".asText(),
     isTrusted = false,
     firstLoginDate = "Oct 27, 2023, 12:00:00 PM",
-    lastActivityLabel = "Active today",
+    lastActivityLabel = "Active today".asText(),
     status = DeviceSessionStatus.None,
     fingerprintPhrase = null,
 )
