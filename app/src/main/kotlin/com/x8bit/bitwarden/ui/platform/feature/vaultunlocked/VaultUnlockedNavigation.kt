@@ -203,13 +203,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
-            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
-                navController.navigateToPreviewAttachment(
-                    cipherId = cipherId,
-                    attachmentId = attachmentId,
-                    fileName = fileName,
-                )
-            },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -260,13 +254,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
-                navController.navigateToPreviewAttachment(
-                    cipherId = cipherId,
-                    attachmentId = attachmentId,
-                    fileName = fileName,
-                )
-            },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         setupUnlockDestination(
             onNavigateBack = {

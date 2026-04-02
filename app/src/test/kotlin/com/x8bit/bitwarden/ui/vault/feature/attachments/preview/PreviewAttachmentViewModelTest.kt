@@ -306,6 +306,53 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ConfirmDownloadClick should show loading dialog and emit NavigateToSelectAttachmentSaveLocation`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1)
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+            coEvery {
+                vaultRepository.downloadAttachment(
+                    cipherView = cipherView,
+                    attachmentId = DEFAULT_ATTACHMENT_ID,
+                )
+            } returns DownloadAttachmentResult.Success(mockFile)
+            val viewModel = createViewModel(initialState = NON_PREVIEWABLE_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(PreviewAttachmentAction.ConfirmDownloadClick)
+                assertEquals(
+                    PreviewAttachmentEvent.NavigateToSelectAttachmentSaveLocation(
+                        fileName = NON_PREVIEWABLE_STATE.fileName,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `DownloadClick should show confirmation dialog when file is large`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        coEvery {
+            vaultRepository.downloadAttachment(
+                cipherView = cipherView,
+                attachmentId = DEFAULT_ATTACHMENT_ID,
+            )
+        } returns DownloadAttachmentResult.Success(mockFile)
+        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(isLargeFile = true))
+        viewModel.trySendAction(PreviewAttachmentAction.DownloadClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = PreviewAttachmentState.DialogState.DownloadLargeFileConfirmation(
+                    displaySize = DEFAULT_STATE.displaySize,
+                ),
+                isLargeFile = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `DownloadClick should show loading dialog and emit NavigateToSelectAttachmentSaveLocation`() =
         runTest {
             val cipherView = createMockCipherView(number = 1)
@@ -857,6 +904,8 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
                 cipherId = initialState?.cipherId ?: DEFAULT_CIPHER_ID,
                 attachmentId = initialState?.attachmentId ?: DEFAULT_ATTACHMENT_ID,
                 fileName = initialState?.fileName ?: DEFAULT_FILE_NAME,
+                displaySize = "2.89 MB",
+                isLargeFile = false,
             )
         },
     )
@@ -865,11 +914,14 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
 private const val DEFAULT_CIPHER_ID = "mockCipherId"
 private const val DEFAULT_ATTACHMENT_ID = "mockAttachmentId"
 private const val DEFAULT_FILE_NAME = "test.png"
+private const val DEFAULT_DISPLAY_SIZE = "2.89 MB"
 
 private val DEFAULT_STATE = PreviewAttachmentState(
     cipherId = DEFAULT_CIPHER_ID,
     attachmentId = DEFAULT_ATTACHMENT_ID,
     fileName = DEFAULT_FILE_NAME,
+    displaySize = DEFAULT_DISPLAY_SIZE,
+    isLargeFile = false,
     isPreviewable = true,
     viewState = PreviewAttachmentState.ViewState.Loading(),
     dialogState = null,
@@ -879,7 +931,9 @@ private val NON_PREVIEWABLE_STATE = PreviewAttachmentState(
     cipherId = DEFAULT_CIPHER_ID,
     attachmentId = DEFAULT_ATTACHMENT_ID,
     fileName = "test.pdf",
+    displaySize = DEFAULT_DISPLAY_SIZE,
     isPreviewable = false,
+    isLargeFile = false,
     viewState = PreviewAttachmentState.ViewState.Error(
         message = BitwardenString.preview_not_available_for_files.asText("PDF"),
     ),

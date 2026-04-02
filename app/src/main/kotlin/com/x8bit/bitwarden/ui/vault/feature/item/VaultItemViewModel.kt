@@ -423,6 +423,8 @@ class VaultItemViewModel @Inject constructor(
                 cipherId = state.vaultItemId,
                 attachmentId = action.attachment.id,
                 fileName = action.attachment.title,
+                displaySize = action.attachment.displaySize,
+                isLargeFile = action.attachment.isLargeFile,
             ),
         )
     }
@@ -2008,6 +2010,8 @@ sealed class VaultItemEvent {
         val cipherId: String,
         val attachmentId: String,
         val fileName: String,
+        val displaySize: String,
+        val isLargeFile: Boolean,
     ) : VaultItemEvent()
 
     /**

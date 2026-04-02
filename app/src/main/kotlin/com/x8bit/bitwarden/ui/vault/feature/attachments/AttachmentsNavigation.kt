@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import kotlinx.serialization.Serializable
 
 /**
@@ -34,11 +35,7 @@ fun SavedStateHandle.toAttachmentsArgs(): AttachmentsArgs {
  */
 fun NavGraphBuilder.attachmentDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToPreviewAttachment: (
-        cipherId: String,
-        attachmentId: String,
-        fileName: String,
-    ) -> Unit,
+    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
 ) {
     composableWithSlideTransitions<AttachmentsRoute> {
         AttachmentsScreen(

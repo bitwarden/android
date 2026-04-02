@@ -19,6 +19,7 @@ fun CipherView.toViewState(): AttachmentsState.ViewState.Content =
                     id = id,
                     title = it.fileName.orEmpty(),
                     displaySize = it.sizeName.orEmpty(),
+                    isLargeFile = it.isLargeFile(),
                 )
             }
             .toImmutableList(),

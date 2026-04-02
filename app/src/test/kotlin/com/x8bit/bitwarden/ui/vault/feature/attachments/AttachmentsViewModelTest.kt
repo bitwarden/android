@@ -137,6 +137,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     cipherId = DEFAULT_STATE.cipherId,
                     attachmentId = DEFAULT_ATTACHMENT_ITEM.id,
                     fileName = DEFAULT_ATTACHMENT_ITEM.title,
+                    displaySize = DEFAULT_ATTACHMENT_ITEM.displaySize,
+                    isLargeFile = false,
                 ),
                 awaitItem(),
             )
@@ -850,6 +852,7 @@ private val DEFAULT_ATTACHMENT_ITEM: AttachmentsState.AttachmentItem =
         id = "mockId-1",
         title = "mockFileName-1",
         displaySize = "mockSizeName-1",
+        isLargeFile = false,
     )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =

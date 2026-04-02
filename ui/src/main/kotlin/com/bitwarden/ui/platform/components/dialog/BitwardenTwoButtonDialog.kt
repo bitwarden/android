@@ -22,9 +22,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
 import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
@@ -46,10 +48,53 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param dismissTextColor The color of the dismiss text.
  */
 @Composable
-@Suppress("LongMethod")
 fun BitwardenTwoButtonDialog(
     title: String?,
     message: String,
+    confirmButtonText: String,
+    dismissButtonText: String,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+    confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissOnBackPress: Boolean = true,
+    dismissOnClickOutside: Boolean = true,
+) {
+    BitwardenTwoButtonDialog(
+        title = title,
+        message = message.toAnnotatedString(),
+        confirmButtonText = confirmButtonText,
+        dismissButtonText = dismissButtonText,
+        onConfirmClick = onConfirmClick,
+        onDismissClick = onDismissClick,
+        onDismissRequest = onDismissRequest,
+        confirmTextColor = confirmTextColor,
+        dismissTextColor = dismissTextColor,
+        dismissOnBackPress = dismissOnBackPress,
+        dismissOnClickOutside = dismissOnClickOutside,
+    )
+}
+
+/**
+ * Represents a Bitwarden-styled dialog with two buttons.
+ *
+ * @param title the optional title to show.
+ * @param message message to show.
+ * @param confirmButtonText text to show on confirm button.
+ * @param dismissButtonText text to show on dismiss button.
+ * @param onConfirmClick called when the confirm button is clicked.
+ * @param onDismissClick called when the dismiss button is clicked.
+ * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
+ * tapping outside of it).
+ * @param confirmTextColor The color of the confirm text.
+ * @param dismissTextColor The color of the dismiss text.
+ */
+@Composable
+@Suppress("LongMethod")
+fun BitwardenTwoButtonDialog(
+    title: String?,
+    message: AnnotatedString,
     confirmButtonText: String,
     dismissButtonText: String,
     onConfirmClick: () -> Unit,

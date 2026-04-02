@@ -54,7 +54,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
             AttachmentsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToPreview = { _, _, _ -> onNavigateToPreviewCalled = true },
+                onNavigateToPreview = { onNavigateToPreviewCalled = true },
             )
         }
     }
@@ -81,6 +81,8 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
                 cipherId = "cipherId",
                 attachmentId = "attachmentId",
                 fileName = "file.png",
+                displaySize = "10 MB",
+                isLargeFile = true,
             ),
         )
         assertTrue(onNavigateToPreviewCalled)
@@ -337,6 +339,7 @@ private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content
                 id = "cipherId-1234",
                 title = "cool_file.png",
                 displaySize = "10 MB",
+                isLargeFile = true,
             ),
         ),
         newAttachment = null,

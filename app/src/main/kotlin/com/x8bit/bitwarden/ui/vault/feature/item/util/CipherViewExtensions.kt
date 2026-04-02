@@ -19,6 +19,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -97,11 +98,7 @@ fun CipherView.toViewState(
                             title = requireNotNull(it.fileName),
                             displaySize = requireNotNull(it.sizeName),
                             url = requireNotNull(it.url),
-                            isLargeFile = try {
-                                requireNotNull(it.size).toLong() >= 10485760
-                            } catch (_: NumberFormatException) {
-                                false
-                            },
+                            isLargeFile = it.isLargeFile(),
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
                         )
                     }
