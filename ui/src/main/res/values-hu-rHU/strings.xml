@@ -205,6 +205,7 @@
     <string name="choose_file">Fájl kiválasztása</string>
     <string name="file">Fájl</string>
     <string name="no_file_chosen">Nincs kiválasztott fájl</string>
+    <string name="file_name">Fájlnév</string>
     <string name="no_attachments">Nincsenek mellékletek.</string>
     <string name="file_source">Fájl forrás</string>
     <string name="max_file_size">Maximális fájl méret 100 MB.</string>
@@ -1229,9 +1230,11 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="external_link">Külső hivatkozás</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Külső hivatkozás</string>
     <string name="preview_not_available_for_files">Az előnézet nem érhető el %1$s fájlokhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">A Bitwarden nem tudta visszafejteni ezt a fájlt, így az előnézet nem jeleníthető meg.</string>
     <string name="preview_unavailable_for_this_file">Az előnézet nem érhető el ehhez a fájlhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
     <string name="preview_unavailable">Az előnézet nem érhető el.</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Áttérés Prémium csomagra</string>
     <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
     <string name="per_month">/ hónap</string>

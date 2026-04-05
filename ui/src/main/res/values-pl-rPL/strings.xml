@@ -208,6 +208,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="choose_file">Wybierz plik</string>
     <string name="file">Plik</string>
     <string name="no_file_chosen">Nie wybrano pliku</string>
+    <string name="file_name">Nazwa pliku</string>
     <string name="no_attachments">Brak załączników.</string>
     <string name="file_source">Źródło pliku</string>
     <string name="max_file_size">Maksymalny rozmiar pliku to 100 MB.</string>
@@ -1211,7 +1212,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="failed_to_migrate_items_to_x">Nie udało się przenieść elementów do organizacji %s</string>
     <string name="search_archive">Szukaj w archiwum</string>
     <string name="archive_noun">Archiwum</string>
-    <string name="archive_verb">Archiwum</string>
+    <string name="archive_verb">Archiwizuj</string>
     <string name="unarchive">Usuń z archiwum</string>
     <string name="archived">Zarchiwizowano</string>
     <string name="hidden_items">Ukryte elementy</string>
@@ -1247,22 +1248,24 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="external_link">Link zewnętrzny</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Podgląd jest niedostępny</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ month</string>
-    <string name="built_in_authenticator">Built-in authenticator</string>
-    <string name="emergency_access">Emergency access</string>
-    <string name="secure_file_storage">Secure file storage</string>
+    <string name="per_month">/ miesiąc</string>
+    <string name="built_in_authenticator">Wbudowana aplikacja uwierzytelniająca</string>
+    <string name="emergency_access">Dostęp awaryjny</string>
+    <string name="secure_file_storage">Bezpieczne przechowywanie plików</string>
     <string name="breach_monitoring">Breach monitoring</string>
     <string name="upgrade_now">Upgrade now</string>
     <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
-    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="payment_not_received_yet">Nie otrzymano jeszcze płatności</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
 </resources>

@@ -208,6 +208,7 @@
     <string name="choose_file">Выбрать файл</string>
     <string name="file">Файл</string>
     <string name="no_file_chosen">Файл не выбран</string>
+    <string name="file_name">Название файла</string>
     <string name="no_attachments">Нет вложений.</string>
     <string name="file_source">Источник файла</string>
     <string name="max_file_size">Максимальный размер файла 100 МБ.</string>
@@ -1248,9 +1249,11 @@
     <string name="external_link">Внешняя ссылка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, внешняя ссылка</string>
     <string name="preview_not_available_for_files">Предпросмотр недоступен для %1$s файлов. Вы можете скачать его для просмотра на вашем устройстве.</string>
+    <string name="this_file_is_too_large_to_preview">Этот файл слишком велик для предварительного просмотра. Вы можете скачать его, чтобы просмотреть на своем устройстве.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden не смог расшифровать этот файл, поэтому предпросмотр не может быть отображен.</string>
     <string name="preview_unavailable_for_this_file">Предпросмотр недоступен для этого файла. Вы можете скачать его для просмотра на вашем устройстве.</string>
     <string name="preview_unavailable">Предпросмотр недоступен</string>
+    <string name="download_attachment">Скачать вложение</string>
     <string name="upgraded_to_premium">Обновлено до Премиум</string>
     <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
     <string name="per_month">/ месяц</string>

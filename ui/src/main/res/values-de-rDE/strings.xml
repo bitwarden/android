@@ -206,6 +206,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="choose_file">Datei auswählen</string>
     <string name="file">Datei</string>
     <string name="no_file_chosen">Keine Datei ausgewählt</string>
+    <string name="file_name">Dateiname</string>
     <string name="no_attachments">Keine Anhänge verfügbar.</string>
     <string name="file_source">Dateiquelle</string>
     <string name="max_file_size">Die maximale Dateigröße beträgt 100 MB.</string>
@@ -1229,9 +1230,11 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="external_link">Externer Link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externer Link</string>
     <string name="preview_not_available_for_files">Für %1$s Dateien ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="this_file_is_too_large_to_preview">Diese Datei ist zu groß für die Vorschau. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden konnte diese Datei nicht entschlüsseln, daher kann die Vorschau nicht angezeigt werden.</string>
     <string name="preview_unavailable_for_this_file">Für diese Datei ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
     <string name="preview_unavailable">Vorschau nicht verfügbar</string>
+    <string name="download_attachment">Anhang herunterladen</string>
     <string name="upgraded_to_premium">Auf Premium upgraden</string>
     <string name="unlock_premium_features">Schalte mehr erweiterte Funktionen mit einem Premium-Tarif frei.</string>
     <string name="per_month">/ Monat</string>

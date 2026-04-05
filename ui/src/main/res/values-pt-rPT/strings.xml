@@ -206,6 +206,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="choose_file">Escolher ficheiro</string>
     <string name="file">Ficheiro</string>
     <string name="no_file_chosen">Nenhum ficheiro escolhido</string>
+    <string name="file_name">Nome do ficheiro</string>
     <string name="no_attachments">Não existem anexos.</string>
     <string name="file_source">Fonte do ficheiro</string>
     <string name="max_file_size">O tamanho máximo do ficheiro é de 100 MB.</string>
@@ -1230,9 +1231,11 @@ Pretende mudar para esta conta?</string>
     <string name="external_link">Link externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link externo</string>
     <string name="preview_not_available_for_files">Pré-visualização indisponível para ficheiros %1$s. Pode ainda transferi-lo para o visualizar no seu dispositivo.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">O Bitwarden não conseguiu desencriptar este ficheiro, pelo que a pré-visualização não pode ser apresentada.</string>
     <string name="preview_unavailable_for_this_file">Pré-visualização indisponível para este ficheiro. Pode ainda transferi-lo para o visualizar no seu dispositivo.</string>
     <string name="preview_unavailable">Pré-visualização indisponível</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Atualizado para o Premium</string>
     <string name="unlock_premium_features">Desbloqueie funcionalidades mais avançadas com um plano Premium.</string>
     <string name="per_month">/ mês</string>

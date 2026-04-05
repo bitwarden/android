@@ -206,6 +206,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="choose_file">Fayl seç</string>
     <string name="file">Fayl</string>
     <string name="no_file_chosen">Heç bir fayl seçilməyib</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Heç bir qoşma yoxdur.</string>
     <string name="file_source">Fayl mənbəsi</string>
     <string name="max_file_size">Maksimal fayl həcmi 100 MB-dır</string>
@@ -1231,9 +1232,11 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="external_link">Xarici keçid</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Xarici keçidi</string>
     <string name="preview_not_available_for_files">%1$s fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu faylın şifrəsini aça bilmədi, ona görə də önizləmə nümayiş oluna bilmir.</string>
     <string name="preview_unavailable_for_this_file">Bu fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
     <string name="preview_unavailable">Önizləmə mövcud deyil</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">\"Premium\"a yüksəldildi</string>
     <string name="unlock_premium_features">Premium planla daha qabaqcıl özəlliklərin kilidini açın.</string>
     <string name="per_month">/ ay</string>

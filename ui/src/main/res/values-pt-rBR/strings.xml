@@ -189,7 +189,7 @@
     <string name="attachments">Anexos</string>
     <string name="unable_to_download_file">Não é possível baixar o arquivo.</string>
     <string name="downloading">Baixando…</string>
-    <string name="attachment_large_warning">Este anexo tem %1$s de tamanho. Tem certeza que deseja baixá-lo no seu dispositivo?</string>
+    <string name="attachment_large_warning">This file is <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Would you like to download it?</string>
     <string name="authenticator_key">Chave do autenticador</string>
     <string name="verification_code_totp">Código de verificação (TOTP)</string>
     <string name="authenticator_key_added">Chave do autenticador adicionada.</string>
@@ -199,13 +199,14 @@ A leitura será feita automaticamente.</string>
     <string name="copy_totp">Copiar TOTP</string>
     <string name="copy_totp_automatically_description">Se uma credencial tiver uma chave de autenticador, copie o código de verificação TOTP para sua área de transferência ao preenchê-la.</string>
     <string name="copy_totp_automatically">Copiar TOTP automaticamente</string>
-    <string name="premium_required">A Premium membership is required to use this feature.</string>
+    <string name="premium_required">Um plano Premium é necessário para usar esse recurso.</string>
     <string name="attachment_deleted">Anexo apagado</string>
     <string name="attachments_unavailable">Anexos indisponíveis</string>
     <string name="attachments_are_a_premium_feature">Os anexos são um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
     <string name="choose_file">Escolher arquivo</string>
     <string name="file">Arquivo</string>
     <string name="no_file_chosen">Nenhum arquivo escolhido</string>
+    <string name="file_name">Nome do arquivo</string>
     <string name="no_attachments">Não há anexos.</string>
     <string name="file_source">Fonte do arquivo</string>
     <string name="max_file_size">O tamanho máximo do arquivo é de 100 MB.</string>
@@ -499,7 +500,7 @@ A leitura será feita automaticamente.</string>
     <string name="about_send">Sobre o Send</string>
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
-    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
+    <string name="send_file_premium_required">Contas gratuitas são limitadas para compartilhar apenas texto. É necessário um plano Premium para usar arquivos com o Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">O compartilhamento com pessoas específicas é um recurso do Premium. O seu plano atual não inclui acesso a este recurso.</string>
     <string name="password_prompt">Resolicitar senha principal</string>
     <string name="password_confirmation">Confirmação de senha principal</string>
@@ -1229,23 +1230,25 @@ Quer trocar para esta conta?</string>
     <string name="continue_without_syncing">Continuar sem sincronizar</string>
     <string name="external_link">Link externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link externo</string>
-    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
-    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
-    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_not_available_for_files">A pré-visualização está indisponível para %1$s arquivos. Você ainda pode baixá-los para vê-los no seu dispositivo.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">O Bitwarden não pôde descriptografar este arquivo, então a pré-visualização não pode ser exibida.</string>
+    <string name="preview_unavailable_for_this_file">A pré-visualização está indisponível para este arquivo. Você ainda pode baixá-lo para vê-lo no seu dispositivo.</string>
     <string name="preview_unavailable">Prévia indisponível</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Atualizado para premium</string>
-    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ month</string>
+    <string name="unlock_premium_features">Desbloqueie recursos mais avançados com um plano Premium.</string>
+    <string name="per_month">/ mês</string>
     <string name="built_in_authenticator">Autenticador integrado</string>
     <string name="emergency_access">Acesso de emergência</string>
     <string name="secure_file_storage">Armazenamento seguro de arquivos</string>
     <string name="breach_monitoring">Monitoramento de vazamentos</string>
     <string name="upgrade_now">Atualizar agora</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="stripe_checkout_footer">Você irá ao pagamento seguro do Stripe para concluir sua compra.</string>
     <string name="opening_checkout">Abrindo checkout…</string>
-    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
-    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
-    <string name="payment_not_received_yet">Payment not received yet</string>
-    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="secure_checkout_didnt_load">O pagamento seguro não carregou</string>
+    <string name="trouble_opening_payment_page">Tivemos problemas abrindo a página de pagamento, tente novamente.</string>
+    <string name="payment_not_received_yet">Pagamento ainda não recebido</string>
+    <string name="return_to_stripe_to_finish">Volte ao Stripe no seu navegador para concluir seu upgrade.</string>
     <string name="go_back">Voltar</string>
 </resources>

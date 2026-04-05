@@ -205,6 +205,7 @@
     <string name="choose_file">ファイルを選択</string>
     <string name="file">ファイル</string>
     <string name="no_file_chosen">ファイルが選択されていません</string>
+    <string name="file_name">ファイル名</string>
     <string name="no_attachments">添付ファイルがありません。</string>
     <string name="file_source">ファイルソース</string>
     <string name="max_file_size">最大ファイルサイズは100MBです。</string>
@@ -1221,9 +1222,11 @@
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s、外部リンク</string>
     <string name="preview_not_available_for_files">%1$s ファイルではプレビューできません。ダウンロードするとデバイスで表示できます。</string>
+    <string name="this_file_is_too_large_to_preview">このファイルは大きすぎてプレビューできません。ダウンロードするとデバイス上で表示できます。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden はこのファイルを復号できませんでした。プレビューを表示できません。</string>
     <string name="preview_unavailable_for_this_file">このファイルではプレビューできません。ダウンロードするとデバイスで表示できます。</string>
     <string name="preview_unavailable">プレビューできません</string>
+    <string name="download_attachment">添付ファイルをダウンロード</string>
     <string name="upgraded_to_premium">プレミアムにアップグレード済み</string>
     <string name="unlock_premium_features">プレミアムプランでより高度な機能をアンロックしましょう。</string>
     <string name="per_month">/ 月</string>
