@@ -111,8 +111,7 @@ fun GetPasswordOrPasskeyScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .testTag("GetPasswordOrPasskeyOriginField"),
-
-                )
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
