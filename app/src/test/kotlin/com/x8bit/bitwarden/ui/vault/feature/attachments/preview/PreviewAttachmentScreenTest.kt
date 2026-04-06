@@ -248,6 +248,35 @@ class PreviewAttachmentScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `confirm download dialog should display title and message`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PreviewAttachmentState.DialogState.DownloadLargeFileConfirmation(
+                    displaySize = "2.89 MB",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Download Attachment")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "This file is 2.89 MB. Would you like to download it?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(PreviewAttachmentAction.ConfirmDownloadClick)
+        }
+    }
+
+    @Test
     fun `NavigateToSelectAttachmentSaveLocation event should launch file chooser`() {
         val fileName = "test.png"
         mutableEventFlow.tryEmit(
@@ -265,6 +294,8 @@ private val DEFAULT_STATE = PreviewAttachmentState(
     cipherId = "mockCipherId",
     attachmentId = "mockAttachmentId",
     fileName = DEFAULT_FILE_NAME,
+    displaySize = "2.89 MB",
+    isLargeFile = false,
     isPreviewable = true,
     viewState = PreviewAttachmentState.ViewState.Loading(),
     dialogState = null,

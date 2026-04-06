@@ -11,6 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -19,6 +21,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.preview.ImagePreviewContent
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -29,6 +32,7 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 
 /**
@@ -65,6 +69,9 @@ fun PreviewAttachmentScreen(
         dialogState = state.dialogState,
         onDismissRequest = { viewModel.trySendAction(PreviewAttachmentAction.DismissDialog) },
         onCloseClick = { viewModel.trySendAction(PreviewAttachmentAction.CloseClick) },
+        onConfirmDownloadClick = {
+            viewModel.trySendAction(PreviewAttachmentAction.ConfirmDownloadClick)
+        },
     )
 
     BitwardenScaffold(
@@ -139,6 +146,7 @@ private fun PreviewAttachmentDialogs(
     dialogState: PreviewAttachmentState.DialogState?,
     onDismissRequest: () -> Unit,
     onCloseClick: () -> Unit,
+    onConfirmDownloadClick: () -> Unit,
 ) {
     when (dialogState) {
         is PreviewAttachmentState.DialogState.Error -> {
@@ -162,6 +170,25 @@ private fun PreviewAttachmentDialogs(
                 ),
                 confirmButtonLabel = stringResource(id = BitwardenString.close),
                 onDismissRequest = onCloseClick,
+            )
+        }
+
+        is PreviewAttachmentState.DialogState.DownloadLargeFileConfirmation -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.download_attachment),
+                message = annotatedStringResource(
+                    id = BitwardenString.attachment_large_warning,
+                    args = arrayOf(dialogState.displaySize),
+                    style = spanStyleOf(
+                        color = BitwardenTheme.colorScheme.text.primary,
+                        textStyle = BitwardenTheme.typography.bodyMedium,
+                    ),
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.no),
+                onConfirmClick = onConfirmDownloadClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
 

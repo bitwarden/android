@@ -247,6 +247,8 @@ class AttachmentsViewModel @Inject constructor(
                 cipherId = state.cipherId,
                 attachmentId = action.attachment.id,
                 fileName = action.attachment.title,
+                displaySize = action.attachment.displaySize,
+                isLargeFile = action.attachment.isLargeFile,
             ),
         )
     }
@@ -474,6 +476,7 @@ data class AttachmentsState(
         val id: String,
         val title: String,
         val displaySize: String,
+        val isLargeFile: Boolean,
     ) : Parcelable
 
     /**
@@ -527,6 +530,8 @@ sealed class AttachmentsEvent {
         val cipherId: String,
         val attachmentId: String,
         val fileName: String,
+        val displaySize: String,
+        val isLargeFile: Boolean,
     ) : AttachmentsEvent()
 
     /**

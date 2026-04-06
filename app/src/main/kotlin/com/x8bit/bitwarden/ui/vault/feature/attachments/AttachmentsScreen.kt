@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 
 /**
  * Displays the attachments screen.
@@ -43,7 +44,7 @@ fun AttachmentsScreen(
     viewModel: AttachmentsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToPreview: (cipherId: String, attachmentId: String, fileName: String) -> Unit,
+    onNavigateToPreview: (route: PreviewAttachmentRoute) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val attachmentsHandlers = remember(viewModel) { AttachmentsHandlers.create(viewModel) }
@@ -65,7 +66,15 @@ fun AttachmentsScreen(
 
             is AttachmentsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is AttachmentsEvent.NavigateToPreview -> {
-                onNavigateToPreview(event.cipherId, event.attachmentId, event.fileName)
+                onNavigateToPreview(
+                    PreviewAttachmentRoute(
+                        cipherId = event.cipherId,
+                        attachmentId = event.attachmentId,
+                        fileName = event.fileName,
+                        displaySize = event.displaySize,
+                        isLargeFile = event.isLargeFile,
+                    ),
+                )
             }
         }
     }
