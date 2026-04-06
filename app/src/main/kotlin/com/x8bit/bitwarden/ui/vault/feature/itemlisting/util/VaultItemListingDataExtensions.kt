@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.util.toFailureCipherListView
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
@@ -50,33 +51,31 @@ fun CipherListView.determineListingPredicate(
 ): Boolean =
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Vault.Card -> {
-            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
+            type is CipherListViewType.Card && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
-            itemListingType.collectionId in this.collectionIds &&
-                deletedDate == null &&
-                archivedDate == null
+            itemListingType.collectionId in this.collectionIds && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.Folder -> {
-            folderId == itemListingType.folderId && deletedDate == null && archivedDate == null
+            folderId == itemListingType.folderId && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> {
-            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
+            type is CipherListViewType.Identity && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> {
-            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
+            type is CipherListViewType.Login && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
+            type is CipherListViewType.SecureNote && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.SshKey -> {
-            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
+            type is CipherListViewType.SshKey && isActive
         }
 
         is VaultItemListingState.ItemListingType.Vault.Trash -> {

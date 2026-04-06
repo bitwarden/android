@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
@@ -191,8 +192,7 @@ class VaultRepositoryImpl(
                         .filter {
                             it.type is CipherListViewType.Login &&
                                 !it.login?.totp.isNullOrBlank() &&
-                                it.deletedDate == null &&
-                                it.archivedDate == null
+                                it.isActive
                         }
                         .toFilteredList(vaultFilterType)
                 }

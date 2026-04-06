@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import kotlinx.coroutines.CoroutineScope
@@ -116,7 +117,7 @@ private fun DataState<VaultData>.activeVaultItemCount(): Int =
     data
         ?.decryptCipherListResult
         ?.successes
-        ?.count { it.deletedDate == null && it.archivedDate == null }
+        ?.count { it.isActive }
         ?: 0
 
 private const val PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS: Int = 5

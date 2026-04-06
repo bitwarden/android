@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.util.toImportCredentialsRequestDataOrNull
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -94,7 +95,7 @@ class ReviewExportViewModel @Inject constructor(
                                 .value
                                 .data
                                 ?.successes
-                                ?.filter { it.deletedDate == null && it.archivedDate == null }
+                                ?.filter { it.isActive }
                                 .filterRestrictedItemsIfNecessary(),
                         )
                         .fold(
@@ -241,7 +242,7 @@ class ReviewExportViewModel @Inject constructor(
         var secureNoteItemCount = 0
         this@toItemTypeCounts
             ?.successes
-            ?.filter { it.deletedDate == null && it.archivedDate == null }
+            ?.filter { it.isActive }
             .orEmpty()
             .forEach {
                 when {
