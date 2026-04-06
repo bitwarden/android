@@ -191,7 +191,8 @@ class VaultRepositoryImpl(
                         .filter {
                             it.type is CipherListViewType.Login &&
                                 !it.login?.totp.isNullOrBlank() &&
-                                it.deletedDate == null
+                                it.deletedDate == null &&
+                                it.archivedDate == null
                         }
                         .toFilteredList(vaultFilterType)
                 }
