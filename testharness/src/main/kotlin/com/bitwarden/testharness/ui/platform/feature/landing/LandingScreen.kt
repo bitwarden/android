@@ -15,6 +15,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -96,14 +97,18 @@ private fun LandingScreenContent(
                 text = stringResource(id = R.string.autofill),
                 onClick = onAutofillClick,
                 cardStyle = CardStyle.Top(),
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("AutofillCategory"),
             )
 
             BitwardenPushRow(
                 text = stringResource(id = R.string.credential_manager),
                 onClick = onCredentialManagerClick,
                 cardStyle = CardStyle.Bottom,
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("CredentialManagerCategory"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

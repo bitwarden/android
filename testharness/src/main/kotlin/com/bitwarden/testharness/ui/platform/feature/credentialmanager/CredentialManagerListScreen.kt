@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -109,7 +110,9 @@ fun CredentialManagerListScreen(
                 text = stringResource(id = R.string.get_password),
                 onClick = { viewModel.trySendAction(CredentialManagerListAction.GetPasswordClick) },
                 cardStyle = CardStyle.Top(),
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordRow"),
             )
 
             BitwardenPushRow(
@@ -118,14 +121,18 @@ fun CredentialManagerListScreen(
                     viewModel.trySendAction(CredentialManagerListAction.CreatePasswordClick)
                 },
                 cardStyle = CardStyle.Middle(),
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("CreatePasswordRow"),
             )
 
             BitwardenPushRow(
                 text = stringResource(id = R.string.get_passkey),
                 onClick = { viewModel.trySendAction(CredentialManagerListAction.GetPasskeyClick) },
                 cardStyle = CardStyle.Middle(),
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("GetPasskeyRow"),
             )
 
             BitwardenPushRow(
@@ -134,7 +141,9 @@ fun CredentialManagerListScreen(
                     viewModel.trySendAction(CredentialManagerListAction.CreatePasskeyClick)
                 },
                 cardStyle = CardStyle.Middle(),
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("CreatePasskeyRow"),
             )
 
             BitwardenPushRow(
@@ -143,7 +152,9 @@ fun CredentialManagerListScreen(
                     viewModel.trySendAction(CredentialManagerListAction.GetPasswordOrPasskeyClick)
                 },
                 cardStyle = CardStyle.Bottom,
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyRow"),
             )
 
             Spacer(Modifier.height(16.dp))
