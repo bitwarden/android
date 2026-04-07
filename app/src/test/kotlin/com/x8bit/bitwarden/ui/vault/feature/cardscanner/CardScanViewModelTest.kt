@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
@@ -91,6 +92,7 @@ class CardScanViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): CardScanViewModel =
         CardScanViewModel(
+            savedStateHandle = SavedStateHandle(),
             cardScanManager = cardScanManager,
         )
 }
